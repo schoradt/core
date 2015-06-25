@@ -24,7 +24,7 @@
 				<img style="width: 80px;" alt="DAI" src="${contextPath}/img/Logo.png" title="Logo">
 			</td>
 			<td>
-				<h1>OpenInfRA 
+				<h1>penInfRA 
 					<span class="small">(${openInfraVersion})</span>
 				</h1>
 			</td>
