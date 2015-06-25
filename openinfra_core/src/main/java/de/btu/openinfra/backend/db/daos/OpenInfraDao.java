@@ -194,7 +194,6 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	 */
 	public List<TypeModel> read() {
 		String namedQuery = modelClass.getSimpleName() + ".findAll";
-		// TODO limit size hard coded for testing index
 		return em.createNamedQuery(
 				namedQuery, 
 				modelClass).getResultList();
