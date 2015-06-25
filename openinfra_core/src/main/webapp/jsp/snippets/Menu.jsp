@@ -17,11 +17,11 @@
 
 <header class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container" style="width: 100%;">
-  <div id="dai">
+  <div id="header">
 	<table>
 		<tr>
 			<td>
-				<img style="width: 80px;" alt="DAI" src="${contextPath}/img/dai_greif.png" title="DAI">
+				<img style="width: 80px;" alt="DAI" src="${contextPath}/img/Logo.png" title="Logo">
 			</td>
 			<td>
 				<h1>OpenInfRA 
@@ -271,9 +271,9 @@
 <script>
 $(window).scroll(function() {
 	if($(window).scrollTop() > 30) {
-		$('#dai').slideUp();
+		$('#header').slideUp();
 	} else {
-		$('#dai').slideDown(150);
+		$('#header').slideDown(150);
 	}
 });
 
