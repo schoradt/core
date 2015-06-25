@@ -25,7 +25,7 @@
 									OpenInfraSchemas.PROJECTS).getCount()%>
 				</span>
 				<c:set var="create" value="${link}/test" />
-				<%@ include file="../../snippets/EditButtonBar.jsp" %>
+				<%@ include file="../../snippets/ButtonBar.jsp" %>
 			</div>
 		</div>
 		<table class="table">
