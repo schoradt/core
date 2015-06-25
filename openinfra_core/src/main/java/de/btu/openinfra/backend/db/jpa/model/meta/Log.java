@@ -1,0 +1,112 @@
+package de.btu.openinfra.backend.db.jpa.model.meta;
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+
+import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
+
+
+/**
+ * The persistent class for the log database table.
+ * 
+ */
+@Entity
+@Table(schema="meta_data")
+@NamedQuery(name="Log.findAll", query="SELECT l FROM Log l")
+public class Log implements Serializable, OpenInfraModelObject {
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	private UUID id;
+
+	@Column(name="created_on")
+	private Date createdOn;
+
+	private String message;
+
+	@Column(name="user_id")
+	private UUID userId;
+
+	@Column(name="user_name")
+	private String userName;
+
+	//bi-directional many-to-one association to Level
+	@ManyToOne
+	@JoinColumn(name="level")
+	private Level levelBean;
+
+	//bi-directional many-to-one association to Logger
+	@ManyToOne
+	@JoinColumn(name="logger")
+	private Logger loggerBean;
+
+	public Log() {
+	}
+
+	public UUID getId() {
+		return this.id;
+	}
+
+	@Override
+	public void setId(UUID id) {
+		this.id = id;
+	}
+
+	public Date getCreatedOn() {
+		return this.createdOn;
+	}
+
+	public void setCreatedOn(Date createdOn) {
+		this.createdOn = createdOn;
+	}
+
+	public String getMessage() {
+		return this.message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public UUID getUserId() {
+		return this.userId;
+	}
+
+	public void setUserId(UUID userId) {
+		this.userId = userId;
+	}
+
+	public String getUserName() {
+		return this.userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public Level getLevelBean() {
+		return this.levelBean;
+	}
+
+	public void setLevelBean(Level levelBean) {
+		this.levelBean = levelBean;
+	}
+
+	public Logger getLoggerBean() {
+		return this.loggerBean;
+	}
+
+	public void setLoggerBean(Logger loggerBean) {
+		this.loggerBean = loggerBean;
+	}
+
+}

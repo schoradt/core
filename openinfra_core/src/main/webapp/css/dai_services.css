@@ -1,0 +1,85 @@
+@CHARSET "ISO-8859-1";
+
+.boxed {
+  border-width: 1px;
+  border-style: solid;
+  border-color: grey;
+  padding: 0.5em;
+  border-collapse: collapse;
+}
+			
+.center {
+  text-align: center;
+}
+			
+.searchImg {
+  vertical-align: middle;
+}
+			
+.emptyRow {
+  text-align: center;
+  padding: 8px;
+}
+			
+.pointer {
+  cursor: pointer;
+}
+
+.cursorDefault {
+  cursor: default;
+}
+			
+.searchHistory:hover {
+  color: blue;
+  text-decoration: underline;
+}
+			
+.searchHistory {
+  color: blue;
+}
+
+/* +++ Sortable icons +++ */
+th.header { 
+    cursor: pointer;
+}
+
+th.header:before { 
+	font-family: FontAwesome;
+    content: "\f0dc";
+    padding-right: 3px;
+    cursor: pointer;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: inherit;    
+}
+
+th.headerSortUp:before { 
+	font-family: FontAwesome;
+    content: "\f0de";
+    padding-right: 3px;
+    cursor: pointer;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: inherit;      
+}
+
+th.headerSortDown:before { 
+	font-family: FontAwesome;
+    content: "\f0dd";
+    padding-right: 3px;
+    cursor: pointer;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: inherit;  
+} 
+
+thead tr th {
+  border-bottom: 2px solid black;
+  /*border-right: 1px dotted black;*/
+  padding: 1px 5px 1px 5px;
+}
+			
+table td {
+  /*border-right: 1px dotted black;*/
+  padding: 1px 5px 1px 5px;
+}

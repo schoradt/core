@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+     "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<title>iDAI.Arachne</title>	
+        <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+        <script src="../js/dai_services.js" type="text/javascript"></script>
+		<script src="../js/jquery.tablesorter.min.js" type="text/javascript"></script>
+		
+		<!-- Use the compiled and minified bootstrap CSS + theme -->
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/bootstrap/3.3.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+
+		<!-- Use awesome fonts -->
+		<link href="./font-awesome-4.2.0/css/font-awesome.min.css" rel="stylesheet">
+		
+		<!-- Use own style sheet file -->
+		<link rel="stylesheet" href="../css/dai_services.css">
+	</head>
+
+	<body>
+	  <h1>
+	  	<a href="http://arachne.dainst.org/" target="_blank">
+	  		iDAI.Arachne
+	  	</a>
+	  </h1>
+	  <div id="content">
+	  <p>
+		<input id="arachneQuery" type="text" size="55"/>
+		<input id="arachneGo" type="button" value="Suche!"/>
+		<a href="#">
+			<i class="fa fa-info-circle fa-2x searchImg" 
+		   	   id="arachneInfoImg"></i> 
+		</a>
+	  </p>
+	  <p>
+		<span>Vorherige Suche: </span>
+		<span id="arachneSearchHistory"></span>
+	  </p>	  
+
+	   <br/><br/>
+	   
+	   <p>Suchergebnisse:</p>	   
+	   <table id="arachneResult" class="boxed tablesorter">
+		<thead>
+			<tr>
+				<th>&nbsp;</th>
+				<th>Kategorie</th>
+				<th>Titel</th>
+				<th>&nbsp;</th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	   </table>
+	   
+	   <br/>
+	   
+	   <p>Speicher:</p>
+	   <table id="arachneStore" class="boxed tablesorter">
+		<thead>
+			<tr>
+			    <th>&nbsp;</th>
+				<th>Kategorie</th>
+				<th>Titel</th>
+				<th>&nbsp;</th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	   </table>
+	  </div>
+
+	</body>
+</html>

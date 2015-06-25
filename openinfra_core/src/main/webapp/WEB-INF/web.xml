@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This web.xml file is not required when using Servlet 3.0 container,
+     see implementation details http://jersey.java.net/nonav/documentation/latest/jax-rs.html -->
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+    
+    <!-- Remove trailing slashes: http://stackoverflow.com/questions/8711392/spring-mvc-urls-with-trailing-slash-redirection -->
+	<filter>
+	    <filter-name>UrlRewriteFilter</filter-name>
+	    <filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
+	    <init-param>
+	        <param-name>confPath</param-name>
+	        <param-value>/WEB-INF/urlrewrite.xml</param-value>
+	    </init-param>
+	</filter>
+	<filter-mapping>
+	    <filter-name>UrlRewriteFilter</filter-name>
+	    <url-pattern>*</url-pattern>
+	    <dispatcher>REQUEST</dispatcher>
+	</filter-mapping>
+    
+    <!-- More information here: http://blog.dejavu.sk/2013/11/19/registering-resources-and-providers-in-jersey-2/ 
+         and: https://jersey.java.net/apidocs/2.17/jersey/org/glassfish/jersey/servlet/ServletProperties.html-->
+	<servlet>
+		<servlet-name>OpenInfRA Web Application</servlet-name>
+		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+        <init-param>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>de.btu.openinfra.backend.OpenInfraApplication</param-value>
+        </init-param>   
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<!-- Use the following URL in a web browser: http://localhost:8080/openinfra_backend/rest/projects -->
+	<servlet-mapping>
+		<servlet-name>OpenInfRA Web Application</servlet-name>
+		<url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>
+	
+</web-app>

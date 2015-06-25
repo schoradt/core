@@ -1,0 +1,229 @@
+/* Layout */
+html {
+	height:100%; 
+	max-height:100%; 
+	padding:0; 
+	margin:0; 
+}
+body {
+	height:100%; 
+	max-height:100%; 
+	padding:0;
+	margin:0; 
+}
+
+#container {
+	height:100%;
+	width:100%;
+	margin-left:auto;
+	margin-right:auto;
+}
+#x3d {
+        width: 100%;
+        height: 100%;
+        display: block;
+        position:relative;
+
+    }
+#header {
+	height: 100px;
+	width: 100%;
+	margin:0;
+	/*padding:10px;*/
+	margin-left: auto;
+	margin-right: auto;
+	position: absolute;
+}
+
+#content {
+	font-size: 1em;
+	font-family: Arial,Verdana,Helvetica,sans-serif;
+	position:absolute;
+	top:100px;
+	bottom:30px;			
+	width: 100%;
+	margin-left:auto;
+	margin-right:auto;
+}
+		
+body>#content{height:auto;}
+
+#navigation {
+	position:absolute;
+	left: 10px;	
+	width: 150px;
+	margin-left:auto;
+	margin-right:auto;
+}
+body>#navigation{height:auto;}
+
+#center {
+	position:absolute;
+	left: 170px;	
+	width: 800px;
+	margin-left:auto;
+	margin-right:auto;
+}
+body>#center{height:auto;}
+
+#interaktion {
+	position:absolute;
+	left: 980px;	
+	width: fit-content;
+	margin-left:auto;
+	margin-right:auto;
+}
+body>#interaktion{height:auto;}
+
+#footer {
+	height: 30px;
+	width: 100%;
+	margin:0;
+	padding:0;
+	margin-left: auto;
+	margin-right: auto;
+	position: absolute;
+	bottom: 0px;
+	background-color: grey;
+}
+
+/* HTW-Kopf-Layout */
+#header {
+	font-size: 0.85em;
+	padding-top: 1.5em;
+	font-family: Arial,Verdana,Helvetica,sans-serif;
+}
+
+#ls {
+    position: relative;
+	margin: 0;
+    padding-left: 10px;
+}
+
+#servicenav {
+    font-size: 0.9em;
+    position: absolute;
+    right: 10px;
+    top: 0;
+}
+
+#servicenav a {
+    color: #898989;
+}
+
+#kopf {
+	position: absolute;
+	left: 150px;
+	right: 150px;
+	top: 25px;
+	width: 80%;
+	text-align: center;
+	font-size: 2em;
+}
+
+#navbartop {
+    margin-bottom: 0;
+    margin-top: 0;
+    text-align: right;
+    width: 100%;
+	height: 50px;
+	right: 50px;
+	background-image: url("img/hauptnavbg.gif");
+	background-size: 50px;
+}
+#navbartop p {
+    margin-right: 20px;
+    padding-bottom: 5px;
+    padding-top: 5px;
+	color: #EEEEEE;
+}
+#navbartop a:link, #navbartop a:visited, #navbartop a:active {
+    font-size: 110%;
+    font-weight: bold;
+    padding: 5px 2px;
+    text-decoration: none;
+}
+#navbartop a:hover, #navbartop a:visited:hover {
+    font-size: 110%;
+    font-weight: bold;
+    padding: 5px 2px;
+    text-decoration: none;
+}
+
+#navbartop a:link, #navbartop a:visited {
+    color: #EEEEEE;
+}
+
+#navbartop a:hover, #navbartop a:active, #navbartop a:visited:hover {
+    background-color: #FFA11D;
+    color: #EEEEEE;
+}
+
+/* Navigation */
+#navbuttons input{
+	width: 140px;
+}
+
+.ueberschrift{
+	font-size: 1.5em;
+	font-family: Arial,Verdana,Helvetica,sans-serif;
+	font-weight: bold;
+}
+
+#navmodus input{
+	vertical-align: middle;
+	margin-top: -2px;
+}
+
+#navigation ul{
+	margin:0; border:0; padding:10px;
+}
+
+/* Layerbaum stylen*/
+/* Listenpunkte ausblenden */
+#modellListe ul{
+	margin:0; border:0; padding:0; list-style:none;
+}
+/* Listenelemente ausblenden */
+#modellListe ul .subcat{
+	display:none;
+}
+/* Einücken der Elemente */
+#modellListe ul .subcat li{
+	margin:0 10px;
+}
+
+#modellListe input {
+	vertical-align: middle;
+	margin-top: -2px;
+}
+
+/* Tooltip */
+#tooltip{
+	text-align: left;
+	background-color: #E6E6E6;
+	position: relative; display: inline-block;
+    transform: translate(-200%,-500%);
+	z-index:1;
+}
+
+#toggler {
+    position: absolute;
+    float: left;
+    z-index: 1;
+    top: 0px;
+    left: 0px;
+    width: 10em;
+    height: 2em;
+    border: none;
+    background-color: #202021;
+    color: #ccc;
+}
+
+/* Farfelder hinter den Layern */
+#modellListe  .farblayer{
+	width:15px;
+	height:7px;
+	border:none;
+	background-color:white;
+}

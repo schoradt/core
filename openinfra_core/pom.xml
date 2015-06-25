@@ -1,0 +1,160 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>de.btu.openinfra.core</groupId>
+  <artifactId>openinfra_core</artifactId>
+  <version>1.1.0</version>
+  <packaging>war</packaging>
+  <name>openinfra_core</name>
+  
+    <build>
+        <finalName>openinfra_core</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.5.1</version>
+                <inherited>true</inherited>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+            
+            <!-- needed to build jar file when building war file, necessary for
+           		 using backend classes in other maven projects (e.g. plugins)
+           		 http://eureka.ykyuen.info/2009/10/30/maven-dependency-on-jarwar-package/
+            <plugin>
+      			<artifactId>maven-war-plugin</artifactId>
+      			<version>2.6</version>
+      			<configuration>
+        			<attachClasses>true</attachClasses>
+        			<classesClassifier>classes</classesClassifier>
+      			</configuration>
+    		</plugin> -->
+        </plugins>
+    </build>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.glassfish.jersey</groupId>
+                <artifactId>jersey-bom</artifactId>
+                <version>${jersey.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+	    <!-- EclipseLink is used as persistence API and for object relational 
+	         mapping.  -->
+		<dependency>
+		    <groupId>org.eclipse.persistence</groupId>
+		    <artifactId>eclipselink</artifactId>
+		    <version>2.6.0</version>
+		</dependency>
+    
+	    <!-- The PostgreSQL JDBC driver (the PostGIS driver is currently not 
+	         required). -->
+	    <dependency>
+		  <groupId>org.postgresql</groupId>
+		  <artifactId>postgresql</artifactId>
+		  <version>9.4-1201-jdbc41</version>
+	    </dependency>
+	    
+	    <!-- The Servlet API is used to avoid a corresponding failure message in 
+	         Eclipse. -->
+		<dependency>
+		  <groupId>javax.servlet</groupId>
+		  <artifactId>javax.servlet-api</artifactId>
+		  <version>3.1.0</version>
+		  <scope>provided</scope>
+		</dependency>
+			    
+        <!-- The Jersey implementation including MOXY for JSON support. -->
+        <dependency>
+            <groupId>org.glassfish.jersey.containers</groupId>
+            <artifactId>jersey-container-servlet-core</artifactId>
+            <!-- use the following artifactId if you don't need servlet 2.x 
+                 compatibility -->
+            <!-- artifactId>jersey-container-servlet</artifactId -->
+        </dependency>
+        
+        <!-- MOXY for JSON support !! caution : doesn't provide UUID support -->
+        <!-- dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-moxy</artifactId>
+        </dependency-->
+        <!-- Jackson for JSON support -->
+		<dependency>
+		    <groupId>org.glassfish.jersey.media</groupId>
+		    <artifactId>jersey-media-json-jackson</artifactId>
+		</dependency>
+		
+		<!-- JSP as template engine -->
+		<dependency>
+	    <groupId>org.glassfish.jersey.ext</groupId>
+		    <artifactId>jersey-mvc-jsp</artifactId>
+		</dependency>
+		
+		<!-- For testing the application it is recommended to use
+		     the Jersey integrated test framework. It'll automatically start a 
+		     lightweight HTTP server called grizzly. -->
+		<dependency>
+		    <groupId>org.glassfish.jersey.test-framework.providers</groupId>
+		    <artifactId>jersey-test-framework-provider-grizzly2</artifactId>
+		</dependency>
+		
+		<dependency>
+		    <groupId>jstl</groupId>
+		    <artifactId>jstl</artifactId>
+		    <version>1.2</version>
+		</dependency>
+		
+		<!-- This package is used for url rewriting -->
+		<dependency>
+		    <groupId>org.tuckey</groupId>
+		    <artifactId>urlrewritefilter</artifactId>
+		    <version>4.0.4</version>
+		</dependency>
+
+ 		<!-- SLF4J -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        
+		<!-- SolrJ -->
+        <dependency>
+    		<groupId>org.apache.solr</groupId>
+    		<artifactId>solr-solrj</artifactId>
+    		<version>${solr.version}</version>
+		</dependency>
+		
+		<!-- provides string escape used to prevent XSS -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.4</version>
+		</dependency>
+    </dependencies>
+    <properties>
+        <jersey.version>2.18</jersey.version>
+        <slf4j.version>1.7.12</slf4j.version>
+        <solr.version>4.10.4</solr.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+  
+</project>

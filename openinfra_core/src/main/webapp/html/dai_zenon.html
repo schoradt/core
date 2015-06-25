@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+     "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<title>iDAI.Zenon</title>	
+        <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+        <script src="../js/dai_services.js" type="text/javascript"></script>
+		<script src="../js/jquery.tablesorter.min.js" type="text/javascript"></script>	
+		
+		<!-- Use the compiled and minified bootstrap CSS + theme -->
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/bootstrap/3.3.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+		
+		<!-- Use awesome fonts -->
+		<link href="./font-awesome-4.2.0/css/font-awesome.min.css" rel="stylesheet">
+		
+		<!-- Use own style sheet file -->
+		<link rel="stylesheet" href="../css/dai_services.css">
+		
+		<title>DAI-Services</title>
+				
+	</head>
+<body>
+	<body>
+	  <h1><a href="http://zenon.dainst.org/" target="_blank">iDAI.Zenon</a></h1>
+	  <div id="content">
+	  <p>
+		<input id="zenonQuery" type="text" size="55"/>
+		<input id="zenonGo" type="button" value="Suche!" title=""/>
+		<a href="#">
+			<i class="fa fa-info-circle fa-2x searchImg" id="zenonInfoImg"></i>		
+		</a>
+		 
+	  </p>
+	  <p>
+		<span>Vorherige Suche: </span>
+		<span id="zenonSearchHistory"></span>
+	  </p>
+
+	   <br/><br/>
+	   
+	   <p>Suchergebnisse:</p>
+	   <table id="zenonResult" class="boxed tablesorter">
+		<thead>
+			<tr>
+				<th>Typ</th>
+				<th>Imprint</th>
+				<th>Autor(en)/Editor(en)</th>
+				<th>Titel</th>
+				<th>&nbsp;</th>
+			</tr>
+		</thead>
+		<tbody>
+			<!-- Currently empty! Content will be added by ajax request. -->
+		</tbody>
+	   </table>
+	   
+	   <br/>
+
+	   <p>Speicher:</p>
+	   <table id="zenonStore" class="boxed">
+		<thead>
+			<tr>
+				<th>Typ</th>
+				<th>Imprint</th>
+				<th>Autor(en)/Editor(en)</th>
+				<th>Titel</th>
+				<th>Gazetteer</th>
+				<th>&nbsp;</th>
+			</tr>
+		</thead>
+		<tbody>
+			<!-- Currently empty! Content will be added by ajax request. -->
+		</tbody>
+	   </table>	   
+
+	  </div>
+	</body>
+
+</body>
+
+</html>

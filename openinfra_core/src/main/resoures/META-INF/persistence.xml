@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+	<persistence-unit name="openinfra_core">
+	
+		<!-- Register converter classes -->
+	    <class>de.btu.openinfra.backend.db.jpa.converter.PostgresUuidConverter</class>
+	    
+	    <!-- Register entity classes --> 
+		<class>de.btu.openinfra.backend.db.jpa.model.AttributeType</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.AttributeTypeGroup</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.AttributeTypeGroupToTopicCharacteristic</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.AttributeTypeToAttributeTypeGroup</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.AttributeTypeXAttributeType</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.AttributeTypeXAttributeTypePK</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.AttributeValue</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.AttributeValueDomain</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.AttributeValueGeom</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.AttributeValueGeomz</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.AttributeValueValue</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.CharacterCode</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.CountryCode</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.LanguageCode</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.LocalizedCharacterString</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.LocalizedCharacterStringPK</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.Multiplicity</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.Project</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.PtFreeText</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.PtLocale</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.RelationshipType</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.RelationshipTypeToTopicCharacteristic</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.RelationshipTypeToTopicCharacteristicPK</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.TopicInstance</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.TopicInstanceXTopicInstance</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.ValueList</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.ValueListValue</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.ValueListValuesXValueListValue</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.ValueListValuesXValueListValuePK</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.ValueListXValueList</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.ValueListXValueListPK</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.MetaData</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.meta.DatabaseConnection</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.meta.Databases</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.meta.Level</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.meta.Logger</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.meta.Ports</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.meta.Projects</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.meta.Log</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.meta.Schemas</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.meta.Servers</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.meta.Settings</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.meta.Credentials</class>
+	</persistence-unit>
+</persistence>
