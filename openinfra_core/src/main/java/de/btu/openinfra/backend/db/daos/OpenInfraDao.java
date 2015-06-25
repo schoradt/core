@@ -17,7 +17,6 @@ import de.btu.openinfra.backend.OpenInfraPropertyKeys;
 import de.btu.openinfra.backend.db.MetaDataManager;
 import de.btu.openinfra.backend.db.OpenInfraPropertyValues;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
-import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 import de.btu.openinfra.backend.db.pojos.meta.ProjectsPojo;
 
@@ -193,12 +192,12 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	 *  
 	 * @return a list of all model objects
 	 */
-	public List<TopicInstance> read() {
+	public List<TypeModel> read() {
 		String namedQuery = modelClass.getSimpleName() + ".findAll";
 		// TODO limit size hard coded for testing index
 		return em.createNamedQuery(
 				namedQuery, 
-				TopicInstance.class).getResultList();
+				modelClass).getResultList();
 	}
 	
 	/**
