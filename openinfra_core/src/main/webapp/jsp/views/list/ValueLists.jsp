@@ -24,11 +24,11 @@
 									UUID.fromString(request.getAttribute("currentProject").toString()),
 									OpenInfraSchemas.PROJECTS).getCount()%>
 				</span>
-				<c:set var="create" value="${link}/test" />
+				<c:set var="createButton" value="valuelists/new" />
 				<%@ include file="../../snippets/ButtonBar.jsp" %>
 			</div>
 		</div>
-		<table class="table">
+		<table class="table table-hover">
 			<thead>
 				<tr>
 					<th>
@@ -43,6 +43,7 @@
 					<th>
 						UUID
 					</th>
+					<th></th>
 				</tr>
 			</thead>
 			<c:forEach items="${it}" var="pojo">
@@ -73,9 +74,11 @@
 												UUID.fromString(pageContext.getAttribute("currentValueList").toString()))%>
 					</td>
 					<td>
-			    		<a href="valuelists/${pojo.uuid}">
-			    			${pojo.uuid}
-		    			</a>
+			    		${pojo.uuid}
+					</td>
+					<td>
+						<c:set var="detailButton" value="valuelists/${pojo.uuid}" />
+						<%@ include file="../../snippets/ButtonBar.jsp" %>
 					</td>
 	    		</tr>
 			</c:forEach>

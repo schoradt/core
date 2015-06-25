@@ -9,6 +9,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.server.mvc.Template;
 
@@ -61,4 +62,10 @@ public class ValueListResource {
 					valueListId, offset, size);
 	}
 
+    @GET
+    @Path("/new")
+    @Template(name="/views/detail/ValueLists.jsp")
+    public Response index() {
+        return Response.ok().entity("ValueLists").build();
+    }
 }
