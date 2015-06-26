@@ -22,7 +22,7 @@ import javax.xml.transform.stream.StreamSource;
 public class OpenInfraRestApi {
 	
 	/**
-	 * This variable defines the path to the XSL file path.
+	 * This variable defines the path to the XSL file.
 	 */
 	private static final String XSL_FILE = 
 			"de/btu/openinfra/backend/xsl/wadl.xsl";
