@@ -13,7 +13,7 @@ import javax.persistence.Table;
 
 /**
  * The persistent class for the meta_data database table.
- * 
+ *
  */
 @Entity
 @Table(name="meta_data")
@@ -46,10 +46,15 @@ public class MetaData implements Serializable, OpenInfraModelObject {
 	public void setObjectId(UUID objectId) {
 		this.objectId = objectId;
 	}
-	
+
 	@Override
 	public void setId(UUID id) {
 		this.objectId = id;
+	}
+
+	@Override
+    public UUID getId() {
+	    return this.objectId;
 	}
 
 	public String getData() {
