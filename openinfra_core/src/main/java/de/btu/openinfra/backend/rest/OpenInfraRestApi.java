@@ -16,7 +16,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-@Path("/api")
+@Path("/application.html")
 @Singleton
 @Produces({MediaType.TEXT_HTML})
 public class OpenInfraRestApi {
