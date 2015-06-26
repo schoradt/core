@@ -1,8 +1,10 @@
 package de.btu.openinfra.backend.db.daos;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.UUID;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -43,93 +45,11 @@ public class TopicCharacteristicDao
 	}
 
 	/**
-	 * This method reads a list of TopicCharacteristicPojo objects depending on
-	 * the required schema (system or project). Since the system schema doesn't
-	 * provide the project_id column it is necessary to handle this request
-	 * separately.
-	 *
-	 * @param locale  A Java.util locale object.
-	 * @param offset  the number where to start
-	 * @param size    the size of items to provide
-	 * @return        a list of TopicCharacteristicPojo objects
-	 */
-	@Override
-	@SuppressWarnings("unchecked")
-	public List<TopicCharacteristicPojo> read(
-			Locale locale,
-			int offset,
-			int size) {
-		// 1. Define a list of TopicCharacteristics
-		List<TopicCharacteristic> tcList = null;
-		// 2. Create an instance of this list depending on the required schema
-		switch (schema) {
-		// 2.a Create a native query in order to get a list of topic
-		//     characteristics referring to the system schema. This causes an
-		//     unsafe type conversion.
-		case SYSTEM:
-			tcList = em.createNativeQuery(
-					"select id, description, topic "
-					+ "from topic_characteristic",
-					TopicCharacteristic.class).getResultList();
-			break;
-		// 2.b Create a named query in order to get a list of topic
-		//    characteristics referring to the project schema.
-		case PROJECTS:
-			// fall through
-		default:
-			tcList = em.createNamedQuery(
-					"TopicCharacteristic.findAll",
-					TopicCharacteristic.class)
-					.setFirstResult(offset)
-					.setMaxResults(size)
-					.getResultList();
-			break;
-		}
-
-		// 3. Create a list which holds the pojos.
-		List<TopicCharacteristicPojo> pojoList =
-				new LinkedList<TopicCharacteristicPojo>();
-		// 4. Map the TopicCharacteristic objects into TopicCharacteristicPojos
-		for(TopicCharacteristic tc : tcList) {
-			pojoList.add(mapToPojo(locale, tc));
-		}
-		return pojoList;
-	}
-
-	/**
-	 * This method reads a specific TopicCharacteristicPojo object from database
-	 * depending on the required schema (system or project). Since the system
-	 * schema doesn't provide the project_id column it is necessary to handle
-	 * this request separately.
-	 *
-	 * @param id the id of the specific TopicCharacteristic
-	 * @return   the specific TopicCharacteristicPojo
-	 */
-	@Override
-	public TopicCharacteristicPojo read(Locale locale, UUID id) {
-
-		switch (schema) {
-		case SYSTEM:
-			return mapToPojo(
-					locale,
-					(TopicCharacteristic)em.createNativeQuery(
-							"select id, description, topic "
-							+ "from topic_characteristic where id = ?",
-							TopicCharacteristic.class)
-							.setParameter(1, id)
-							.getSingleResult());
-		case PROJECTS:
-			// fall through
-		default:
-			return mapToPojo(
-					locale,
-					em.find(TopicCharacteristic.class, id));
-		} // end switch case
-	}
-
-	/**
 	 * This method returns a list of topic characteristics based on a text
 	 * filter (wildcard: %).
+	 *
+	 * TODO generalize read method with filter for all available list methods
+	 * (insert a generic method in openinfradao)
 	 *
 	 * @param locale the locale
 	 * @param filter the filter as text
@@ -148,15 +68,19 @@ public class TopicCharacteristicDao
 						.setParameter("filter", filter)
 						.getResultList();
 		// 3. Map the model objects to POJOs
-		List<TopicCharacteristicPojo> tcp =
-				new LinkedList<TopicCharacteristicPojo>();
+		Map<UUID, TopicCharacteristicPojo> tcp =
+				new HashMap<UUID, TopicCharacteristicPojo>();
 		for(TopicCharacteristic tc : tcs) {
-			tcp.add(TopicCharacteristicDao.mapToPojoStatically(
-					locale,
-					tc,
-					em.find(MetaData.class, tc.getId())));
+		    UUID id = tc.getId();
+		    if (!tcp.containsKey(id)) {
+		        tcp.put(id, TopicCharacteristicDao.mapToPojoStatically(
+	                    locale,
+	                    tc,
+	                    em.find(MetaData.class, id)));
+		    }
+
 		} // end for
-		return tcp;
+		return new LinkedList<TopicCharacteristicPojo>(tcp.values());
 	}
 
 	@Override
