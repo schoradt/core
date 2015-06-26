@@ -1,0 +1,15 @@
+<projectPojo>
+	<descriptions/>
+	<names>
+		<localizedStrings>
+			<characterString>Palatin</characterString>
+			<locale>
+				<uuid>c0d76ff3-a711-42af-920d-09132a287015</uuid>
+				<characterCode>UTF8</characterCode>
+				<countryCode>DE</countryCode>
+				<languageCode>de</languageCode>
+			</locale>
+		</localizedStrings>
+	</names>
+	<subprojectOf>fd27a347-4e33-4ed7-aebc-eeff6dbf1054</subprojectOf>
+</projectPojo>
