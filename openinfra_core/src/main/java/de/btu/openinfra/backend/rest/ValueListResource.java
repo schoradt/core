@@ -3,7 +3,9 @@ package de.btu.openinfra.backend.rest;
 import java.util.List;
 import java.util.UUID;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -50,6 +52,19 @@ public class ValueListResource {
 						size);
 	}
 
+	@POST
+	public Response create(
+	        @PathParam("projectId") UUID projectId,
+	        @PathParam("schema") String schema,
+	        ValueListPojo pojo) {
+	    // call the create or update method for the DAO and return the uuid
+	    return OpenInfraResponseBuilder.postResponse(
+	                new ValueListDao(
+	                        projectId,
+	                        OpenInfraSchemas.valueOf(schema.toUpperCase()))
+	                        .createOrUpdate(pojo));
+	}
+
 	@GET
 	@Path("{valueListId}")
 	public ValueListPojo get(
@@ -63,6 +78,31 @@ public class ValueListResource {
 						PtLocaleDao.forLanguageTag(language),
 						valueListId);
 	}
+
+	@DELETE
+	@Path("{valueListId}")
+	public Response delete(
+	        @PathParam("projectId") UUID projectId,
+	        @PathParam("valueListId") UUID valueListId,
+            @PathParam("schema") String schema) {
+	    return OpenInfraResponseBuilder.deleteResponse(
+	            new ValueListDao(
+	                    projectId,
+	                    OpenInfraSchemas.valueOf(schema.toUpperCase()))
+	                .delete(valueListId),
+	                valueListId);
+	}
+
+	@GET
+    @Path("/hull")
+    public ValueListPojo getEmptyShell(
+            @QueryParam("language") String language,
+            @PathParam("projectId") UUID projectId) {
+        return new ValueListDao(
+                projectId,
+                OpenInfraSchemas.PROJECTS).createEmptyShell(
+                        PtLocaleDao.forLanguageTag(language));
+    }
 
 	@PUT
     @Path("{valueListId}")

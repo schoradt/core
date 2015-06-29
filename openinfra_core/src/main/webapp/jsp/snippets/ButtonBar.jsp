@@ -1,6 +1,11 @@
 <!-- 
 This snippet will generate different buttons. To make use of them the following
-jstl variables must be set with a value that leads to the appropriated page.
+jstl variables must be set with a value that leads to the appropriated page. The
+value of the jstl variable for the delete button is optional. The value will be
+printed in a hidden input field that can be used to save the UUID of the item
+that should be deleted. To access the hidden input field use #deleteHelper.
+Instead of calling a URL the view must implement a on click event on the id
+"delete".
 <%--
   <c:set var="detailButton" value="" />
   <c:set var="createButton" value="" />
@@ -20,30 +25,33 @@ Warning: The jstl variables will be removed after the button is printed.
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
-<c:if test="${fn:length(detailButton) > 0}">
-	<a href="${detailButton}">
-		<i class="fa fa-info-circle" title="<fmt:message key="detail.button.label"/>"></i>
-	</a>
-	<c:remove var="detailButton"/>
-</c:if>
-
-<c:if test="${fn:length(createButton) > 0}">
-	<a href="${createButton}">
-		<i class="fa fa-plus-square" title="<fmt:message key="create.button.label"/>"></i>
-	</a>
-	<c:remove var="createButton"/>
-</c:if>
+<div id="buttonBar">
+	<c:if test="${detailButton != null}">
+		<a href="${detailButton}">
+			<i class="fa fa-info-circle" title="<fmt:message key="detail.button.label"/>"></i>
+		</a>
+		<c:remove var="detailButton"/>
+	</c:if>
 	
-<c:if test="${fn:length(editButton) > 0}">
-	<a href="${editButton}">
-		<i class="fa fa-pencil-square-o" title="<fmt:message key="edit.button.label"/>"></i>
-	</a>
-	<c:remove var="editButton"/>
-</c:if>
-
-<c:if test="${fn:length(deleteButton) > 0}">
-	<a href="${deleteButton}">
-		<i class="fa fa-trash-o" title="<fmt:message key="delete.button.label"/>"></i>
-	</a>
-	<c:remove var="deleteButton"/>
-</c:if>
+	<c:if test="${createButton != null}">
+		<a href="${createButton}">
+			<i class="fa fa-plus-square" title="<fmt:message key="create.button.label"/>"></i>
+		</a>
+		<c:remove var="createButton"/>
+	</c:if>
+		
+	<c:if test="${editButton != null}">
+		<a href="${editButton}">
+			<i class="fa fa-pencil-square-o" title="<fmt:message key="edit.button.label"/>"></i>
+		</a>
+		<c:remove var="editButton"/>
+	</c:if>
+	
+	<c:if test="${deleteButton != null}">
+		<a href="#" onclick="deleteItem('${deleteButton}')">
+			<i class="fa fa-trash-o" title="<fmt:message key="delete.button.label"/>"></i>
+		</a>
+		
+		<c:remove var="deleteButton"/>
+	</c:if>
+</div>
