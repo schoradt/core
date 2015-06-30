@@ -53,7 +53,7 @@ public class ValueListResource {
 	}
 
 	@POST
-	public Response create(
+	public Response createValueList(
 	        @PathParam("projectId") UUID projectId,
 	        @PathParam("schema") String schema,
 	        ValueListPojo pojo) {
@@ -135,6 +135,20 @@ public class ValueListResource {
 						valueListId,
 						offset,
 						size);
+	}
+
+	@POST
+    @Path("{valueListId}/valuelistvalues")
+	public Response createValueListValue(
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            ValueListValuePojo pojo) {
+        // call the create or update method for the DAO and return the uuid
+        return OpenInfraResponseBuilder.postResponse(
+                    new ValueListValueDao(
+                            projectId,
+                            OpenInfraSchemas.valueOf(schema.toUpperCase()))
+                            .createOrUpdate(pojo));
 	}
 
 	@GET

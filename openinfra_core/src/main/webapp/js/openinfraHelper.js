@@ -99,6 +99,12 @@ OPENINFRA_HELPER.Ajax = {
 						}
 					}
 					break;
+				case "visibility":
+					data.visibility = newData[i];
+					break;
+				case "belongsToValueList":
+					data.belongsToValueList = newData[i];
+					break;
 				default:
 					alert("The property " + i + " is not implemented.");
 					break;

@@ -1,10 +1,15 @@
 package de.btu.openinfra.backend.db.daos;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
 import de.btu.openinfra.backend.db.jpa.model.ValueList;
 import de.btu.openinfra.backend.db.jpa.model.ValueListValue;
+import de.btu.openinfra.backend.db.pojos.DescriptionPojo;
+import de.btu.openinfra.backend.db.pojos.LocalizedString;
+import de.btu.openinfra.backend.db.pojos.NamePojo;
 import de.btu.openinfra.backend.db.pojos.ValueListValuePojo;
 
 /**
@@ -69,7 +74,6 @@ public class ValueListValueDao
 
 	    // return null if the pojo is null
         if (pojo != null) {
-
             // set the description
             vlv.setPtFreeText1(new DescriptionDao(
                     currentProjectId,
@@ -95,5 +99,45 @@ public class ValueListValueDao
             return null;
         }
 	}
+
+	/**
+     * This method creates a ValueListValuePojo shell that contains some
+     * informations about the name, the description and the locale, the
+     * visibility and the value list the value belongs to.
+     *
+     * @param locale the locale the informations should be saved at
+     * @return       the ValueListValuePojo
+     */
+    public ValueListValuePojo createEmptyShell(Locale locale) {
+        // create the return pojo
+        ValueListValuePojo pojo = new ValueListValuePojo();
+
+        PtLocaleDao ptl = new PtLocaleDao(currentProjectId, schema);
+        List<LocalizedString> lcs = new LinkedList<LocalizedString>();
+        LocalizedString ls = new LocalizedString();
+
+        // set an empty character string
+        ls.setCharacterString("");
+
+        // set the locale of the character string
+        ls.setLocale(PtLocaleDao.mapToPojoStatically(
+                locale,
+                ptl.read(locale)));
+        lcs.add(ls);
+
+        // add the localized string for the name
+        pojo.setNames(new NamePojo(lcs, null));
+
+        // add the localized string for the description
+        pojo.setDescriptions(new DescriptionPojo(lcs, null));
+
+        // set the initial visibility
+        pojo.setVisibility(true);
+
+        // set the value list the value belongs to
+        pojo.setBelongsToValueList(null);
+
+        return pojo;
+    }
 
 }

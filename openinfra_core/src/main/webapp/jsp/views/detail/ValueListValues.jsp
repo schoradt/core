@@ -7,7 +7,7 @@
 <html>
 <head>
 	<%@ include file="../../snippets/Head.jsp" %>
-    <title>OpenInfRA <fmt:message key="valuelists.details.label"/></title>
+    <title>OpenInfRA <fmt:message key="valuelistvalues.details.label"/></title>
 </head>
 <body>
 	<%@ include file="../../snippets/Menu.jsp" %>
@@ -35,7 +35,7 @@
 			<!-- Create the header. -->
 			<c:choose>
 			    <c:when test="${!create}">
-					<fmt:message key="valuelists.details.label"/>:
+					<fmt:message key="valuelistvalues.create.label"/>:
 					<c:set var="localizedStrings" value="${it.names.localizedStrings}"/>
 					<c:set var="name">
 						<%@ include file="../../snippets/LocalizedStrings.jsp" %>
@@ -43,7 +43,7 @@
 					<c:out value="${name}"/>
 				</c:when>
 				<c:otherwise>
-					<fmt:message key="valuelists.create.label"/>:
+					<fmt:message key="valuelistvalues.create.label"/>:
 				</c:otherwise>
 			</c:choose>
 		</h2>
@@ -89,6 +89,36 @@
 		    	</c:choose>
 			</div>
 			
+			<!-- Create the visibility check box. -->
+			<div class="form-group">
+				<label for="visibility"><fmt:message key="visibility.label"/></label>
+				<c:choose>
+					<c:when test="${!create}">
+						<c:set var="checked" value=""></c:set>
+						<c:if test="${it.visibility}">
+							<c:set var="checked" value="checked"></c:set>
+						</c:if>
+						<input type="checkbox" id="visibility" ${checked} disabled/>
+					</c:when>
+					<c:otherwise>
+						<input type="checkbox" id="visibility" />
+					</c:otherwise>
+		    	</c:choose>
+			</div>
+			
+			<!-- Create the association field to value lists. -->
+			<div class="form-group">
+				<label for="belongsToValueList"><fmt:message key="association.valuelist.label"/>:</label>
+				<c:choose>
+					<c:when test="${!create}">
+						<input type="text" class="form-control" id="belongsToValueList" value="${it.belongsToValueList}" readonly/>
+					</c:when>
+					<c:otherwise>
+						<input type="text" class="form-control" id="belongsToValueList" value="${param.vl}" />
+					</c:otherwise>
+		    	</c:choose>
+			</div>
+			
 			<!-- Add control buttons. -->
 			<c:set var="edit" value="${!create}" />
 			<%@ include file="../../snippets/ControlButtons.jsp" %>
@@ -115,9 +145,11 @@
 			// build the data object with the information from the input fields
 			data["names"] = $("#name").val();
 			data["descriptions"] = $("#description").val();
+			data["visibility"] = $("#visibility").prop("checked");
+			data["belongsToValueList"] = $("#belongsToValueList").val();
 			
 			// build the URI to POST the data
-			var setUri = basePath + "/valuelists/" + uuid;
+			var setUri = basePath + "/valuelistvalues/" + uuid;
 			var getUri = setUri;
 			var localeId = "<%= pageContext.getAttribute("languageId") %>";
 			// call the putOrPost method and persist the data
@@ -129,12 +161,14 @@
  			// build the data object with the information from the input fields
 			data["names"] = $("#name").val();
 			data["descriptions"] = $("#description").val();
+			data["visibility"] = $("#visibility").prop("checked");
+			data["belongsToValueList"] = $("#belongsToValueList").val();
 			
 			// build the URI to POST the data
-			var setUri = basePath + "/valuelists";
+			var setUri = basePath + "/valuelists/" + $("#belongsToValueList").val() + "/valuelistvalues";
 			
 			// build the URI to retrieve the hull object
-			var getUri = setUri + "/hull";
+			var getUri = basePath + "/valuelists/hull";
 			
 			// call the putOrPost method and persist the data
 			OPENINFRA_HELPER.Ajax.execPutOrPostQuery("POST", getUri, setUri, data);
@@ -144,13 +178,15 @@
 		}); // end click function
 		
 		$("#edit").click(function() {
-			$('#name, #description').prop('readonly', false);
+			$('#name, #description, #belongsToValueList').prop('readonly', false);
+			$('#visibility').prop('disabled', false);
 			$(".view").hide();
 			$(".input").show();
 		});
 		
 		$("#cancel").click(function() {
-			$('#name, #description').prop('readonly', true);
+			$('#name, #description, #belongsToValueList').prop('readonly', true);
+			$('#visibility').prop('disabled', true);
 			$(".view").show();
 			$(".input").hide();
 		});

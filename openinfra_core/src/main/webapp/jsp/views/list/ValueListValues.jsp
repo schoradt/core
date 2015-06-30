@@ -5,7 +5,7 @@
     pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -18,13 +18,16 @@
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<div>
-				<fmt:message key="valuelists.label"/>
-				<span id="badge" class="badge">
-					<%=new ValueListDao(
-									UUID.fromString(request.getAttribute("currentProject").toString()),
-									OpenInfraSchemas.PROJECTS).getCount()%>
+				<fmt:message key="valuelistvalues.label"/>
+				<span class="badge">
+					<c:set var="currentValueList" value="${it[0].belongsToValueList}"/>
+					<%=new ValueListValueDao(
+							UUID.fromString(request.getAttribute("currentProject").toString()),
+							OpenInfraSchemas.PROJECTS).getCount(
+									UUID.fromString(pageContext.getAttribute("currentValueList").toString()))%>
 				</span>
-				<c:set var="createButton" value="valuelists/new" />
+				<!-- add the id of the value list to the create button -->
+				<c:set var="createButton" value="../../valuelistvalues/new?vl=${currentValueList}" />
 				<%@ include file="../../snippets/ButtonBar.jsp" %>
 			</div>
 		</div>
@@ -38,46 +41,31 @@
 						<fmt:message key="description.label"/>
 					</th>
 					<th>
-						<fmt:message key="count.label"/>
+						<fmt:message key="visibility.label"/>
 					</th>
 					<th>
 						UUID
 					</th>
-					<th></th>
 				</tr>
 			</thead>
 			<c:forEach items="${it}" var="pojo">
-				<tr id="tr_${pojo.uuid}">    		
+				<tr id="tr_${pojo.uuid}">
 					<td>
-			  			<c:choose>
-			  				<c:when test="${fn:contains(url, '/rest/system/valuelists/${pojo.uuid}')}">
-			  					<c:set var="link">../valuelists/${pojo.uuid}</c:set>
-			  				</c:when>
-			  				<c:otherwise>
-			  					<c:set var="link">valuelists/${pojo.uuid}/valuelistvalues</c:set>
-			  				</c:otherwise>
-			  			</c:choose>
-			  			<a href="${link}">
-							<c:set var="localizedStrings" value="${pojo.names.localizedStrings}"/>
-							<%@ include file="../../snippets/LocalizedStrings.jsp" %>
-			    		</a>
+						<c:set var="localizedStrings" value="${pojo.names.localizedStrings}"/>
+						<%@ include file="../../snippets/LocalizedStrings.jsp" %>
 					</td>
 					<td>
 						<c:set var="localizedStrings" value="${pojo.descriptions.localizedStrings}"/>
 						<%@ include file="../../snippets/LocalizedStrings.jsp" %>
 					</td>
 					<td>
-						<c:set var="currentValueList" value="${pojo.uuid}"></c:set>
-						<%=new ValueListValueDao(
-										UUID.fromString(request.getAttribute("currentProject").toString()),
-										OpenInfraSchemas.PROJECTS).getCount(
-												UUID.fromString(pageContext.getAttribute("currentValueList").toString()))%>
+						${pojo.visibility}
 					</td>
 					<td>
 			    		${pojo.uuid}
 					</td>
 					<td>
-						<c:set var="detailButton" value="valuelists/${pojo.uuid}" />
+						<c:set var="detailButton" value="../../valuelistvalues/${pojo.uuid}" />
 						<c:set var="deleteButton" value="${pojo.uuid}" />
 						<%@ include file="../../snippets/ButtonBar.jsp" %>
 					</td>
@@ -96,7 +84,7 @@
 			globalUuid = uuid;
 			// execute the delete request
  			OPENINFRA_HELPER.Ajax.execDeleteQuery(
- 					"${contextPath}/rest/projects/${currentProject}/valuelists/" 
+ 					"${contextPath}/rest/projects/${currentProject}/valuelistvalues/" 
  					+ uuid);
 		}
 		

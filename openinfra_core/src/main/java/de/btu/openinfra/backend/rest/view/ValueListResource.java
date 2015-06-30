@@ -49,7 +49,7 @@ public class ValueListResource {
 
 	@GET
 	@Path("{valueListId}/valuelistvalues")
-	@Template(name="/views/list/ValueListsValues.jsp")
+	@Template(name="/views/list/ValueListValues.jsp")
 	public List<ValueListValuePojo> getValueListValues(
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
