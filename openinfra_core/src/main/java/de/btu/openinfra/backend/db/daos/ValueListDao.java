@@ -1,9 +1,14 @@
 package de.btu.openinfra.backend.db.daos;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
 import de.btu.openinfra.backend.db.jpa.model.ValueList;
+import de.btu.openinfra.backend.db.pojos.DescriptionPojo;
+import de.btu.openinfra.backend.db.pojos.LocalizedString;
+import de.btu.openinfra.backend.db.pojos.NamePojo;
 import de.btu.openinfra.backend.db.pojos.ValueListPojo;
 
 /**
@@ -57,10 +62,17 @@ public class ValueListDao extends OpenInfraDao<ValueListPojo, ValueList> {
 
 	    // return null if the pojo is null
         if(pojo != null) {
-            // set the description
-            vl.setPtFreeText1(new DescriptionDao(
-                    currentProjectId,
-                    schema).getPtFreeTextModel(pojo.getDescriptions()));
+            // set the description (is optional)
+            if (pojo.getDescriptions() != null) {
+                vl.setPtFreeText1(new DescriptionDao(
+                        currentProjectId,
+                        schema).getPtFreeTextModel(pojo.getDescriptions()));
+            }
+
+            // in case the name is empty
+            if (pojo.getNames().getLocalizedStrings().get(0).getCharacterString() == "") {
+                return null;
+            }
 
             // set the name
             vl.setPtFreeText2(new NameDao(
@@ -74,4 +86,36 @@ public class ValueListDao extends OpenInfraDao<ValueListPojo, ValueList> {
         } // end if else
 	}
 
+	/**
+     * This method creates a ValueListPojo shell that contains some
+     * informations about the name, the description and the locale.
+     *
+     * @param locale the locale the informations should be saved at
+     * @return       the ValueListPojo
+     */
+	public ValueListPojo createEmptyShell(Locale locale) {
+	    // create the return pojo
+        ValueListPojo pojo = new ValueListPojo();
+
+        PtLocaleDao ptl = new PtLocaleDao(currentProjectId, schema);
+        List<LocalizedString> lcs = new LinkedList<LocalizedString>();
+        LocalizedString ls = new LocalizedString();
+
+        // set an empty character string
+        ls.setCharacterString("");
+
+        // set the locale of the character string
+        ls.setLocale(PtLocaleDao.mapToPojoStatically(
+                locale,
+                ptl.read(locale)));
+        lcs.add(ls);
+
+        // add the localized string for the name
+        pojo.setNames(new NamePojo(lcs, null));
+
+        // add the localized string for the description
+        pojo.setDescriptions(new DescriptionPojo(lcs, null));
+
+        return pojo;
+	}
 }

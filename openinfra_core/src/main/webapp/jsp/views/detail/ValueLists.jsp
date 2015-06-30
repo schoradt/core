@@ -37,10 +37,10 @@
 			    <c:when test="${!create}">
 					<fmt:message key="valuelists.details.label"/>:
 					<c:set var="localizedStrings" value="${it.names.localizedStrings}"/>
-					<c:set var="valuelistname">
+					<c:set var="name">
 						<%@ include file="../../snippets/LocalizedStrings.jsp" %>
 					</c:set>
-					<c:out value="${valuelistname}"/>
+					<c:out value="${name}"/>
 				</c:when>
 				<c:otherwise>
 					<fmt:message key="valuelists.create.label"/>:
@@ -52,45 +52,42 @@
 			<!-- Create the id field. This is only necessary in the edit mode. -->
 			<div class="form-group">
 				<c:if test="${!create}">
-					<label for="valuelistid"><fmt:message key="id.label"/>:</label>
-					<input type="text" class="form-control" id="valuelistid" value="${it.uuid}" readonly/>
+					<label for="id"><fmt:message key="id.label"/>:</label>
+					<input type="text" class="form-control" id="id" value="${it.uuid}" readonly/>
 				</c:if>
 			</div>
 
 			<!-- Create the name field. -->
 			<div class="form-group">
-				<label for="valuelistname"><fmt:message key="name.label"/>:</label>
+				<label for="name"><fmt:message key="name.label"/>:</label>
 				<c:choose>
 					<c:when test="${!create}">
-						<input type="text" class="form-control" id="valuelistname" value="${valuelistname}" readonly/>
-						<input type="hidden" id="valuelistnameLang" value="${it.names.uuid}" readonly/>
+						<input type="text" class="form-control" id="name" value="${name}" readonly/>
+						<input type="hidden" id="language" value="${it.names.uuid}" readonly/>
 					</c:when>
 					<c:otherwise>
-						<input type="text" class="form-control" id="valuelistname" value="" />
+						<input type="text" class="form-control" id="name" value="" />
 					</c:otherwise>
 		    	</c:choose>
 			</div>
 			
 			<!-- Create the description field. -->
 			<div class="form-group">
-			    <label for="valuelistdescription"><fmt:message key="description.label"/>:</label>
+			    <label for="description"><fmt:message key="description.label"/>:</label>
 			    <c:choose>
 				    <c:when test="${!create}">
 					    <c:set var="localizedStrings" value="${it.descriptions.localizedStrings}"/>
-						  <c:set var="valuelistdescription">
+						  <c:set var="description">
 						  	<%@ include file="../../snippets/LocalizedStrings.jsp" %>
 						  </c:set>
-				    	<textarea class="form-control" rows="4" id="valuelistdescription" readonly>${valuelistdescription}</textarea>
-				    	<input type="hidden" id="valuelistdescriptionLang" value="${it.descriptions.uuid}" readonly/>
+				    	<textarea class="form-control" rows="4" id="description" readonly>${description}</textarea>
+				    	<input type="hidden" id="description" value="${it.descriptions.uuid}" readonly/>
 			    	</c:when>
 			    	<c:otherwise>
-			    		<textarea class="form-control" rows="4" id="valuelistdescription"></textarea>
+			    		<textarea class="form-control" rows="4" id="description"></textarea>
 			    	</c:otherwise>
 		    	</c:choose>
 			</div>
-
-			<!-- Add message container. -->
-			<%@ include file="../../snippets/MessageBox.jsp" %>
 			
 			<!-- Add control buttons. -->
 			<c:set var="edit" value="${!create}" />
@@ -101,88 +98,79 @@
 		<hr/>
 	</div>
 	
+	<!-- Add message container. -->
+	<%@ include file="../../snippets/MessageBox.jsp" %>
+	
 	<script type="text/javascript">
+	
+		// create the base path of the application
+		// TODO this path should react dynamicly to the URI (project or system)
+		var basePath = "${contextPath}/rest/projects/${currentProject}";
+		var data = new Object();
+	
 		$("#save").click(function() {
-		  var projectJson = JSON.stringify({
-				  "uuid":$("#valuelistid").val(),
-				  "descriptions":{"uuid":$("#valuelistdescriptionLang").val(),
-					  "localizedStrings":[{"characterString":$("#valuelistdescription").val(),
-					  "locale":{"uuid":"<%= pageContext.getAttribute("languageId") %>"}}]},
-				  "names":{"uuid":$("#valuelistnameLang").val(),
-					  "localizedStrings":[{"characterString":$("#valuelistname").val(),
-					  "locale":{"uuid":"<%= pageContext.getAttribute("languageId") %>"}}]}});
-		  
-			$.ajax({
-				  type: "PUT",
-				  url: "<%= pageContext.getAttribute("forward") %>",
-				  data: projectJson,
-				  contentType: "application/json; charset=utf-8",
-		 		  error: function(xhr){
-				  	  if(xhr.responseText.search('<body>') > -1) {
-						  var source = xhr.responseText.split('<body>')[1];
-					      $('#alert').html(source.split('</body>')[0]);
-						  $('#alert').show();				  		  
-				  	  } // end if
-			  	  }, // end error
-			      success: function(res) {
-			    	  $('#success').text(res.message + ": ");
-			          $('#success').append(res.uuid);
-			          $('#success').show();
-					  $('#valuelistname, #valuelistdescription').prop('readonly', true);
-					  $(".view").show();
-					  $(".input").hide();
-			      } // end success
-			}); // end ajax call
-
- 		}); // end click function
+			// save the uuid of the value list
+			var uuid = $("#id").val();
+			
+			// build the data object with the information from the input fields
+			data["names"] = $("#name").val();
+			data["descriptions"] = $("#description").val();
+			
+			// build the URI to POST the data
+			var setUri = basePath + "/valuelists/" + uuid;
+			var getUri = setUri;
+			var localeId = "<%= pageContext.getAttribute("languageId") %>";
+			// call the putOrPost method and persist the data
+			OPENINFRA_HELPER.Ajax.execPutOrPostQuery("PUT", getUri, setUri, data, localeId);
+		}); // end click function
  		
  		$("#create").click(function() {
- 			alert("not implemented yet");
- 			return null;
- 			  var projectJson = JSON.stringify({
- 					  "uuid":$("#valuelistid").val(),
- 					  "descriptions":{"uuid":$("#valuelistdescriptionLang").val(),
- 						  "localizedStrings":[{"characterString":$("#valuelistdescription").val(),
- 						  "locale":{"uuid":"<%= pageContext.getAttribute("languageId") %>"}}]},
- 					  "names":{"uuid":$("#valuelistnameLang").val(),
- 						  "localizedStrings":[{"characterString":$("#valuelistname").val(),
- 						  "locale":{"uuid":"<%= pageContext.getAttribute("languageId") %>"}}]}});
- 			  
- 				$.ajax({
- 					  type: "POST",
- 					  url: "<%= pageContext.getAttribute("forward") %>",
- 					  data: projectJson,
- 					  contentType: "application/json; charset=utf-8",
- 			 		  error: function(xhr){
- 					  	  if(xhr.responseText.search('<body>') > -1) {
- 							  var source = xhr.responseText.split('<body>')[1];
- 						      $('#alert').html(source.split('</body>')[0]);
- 							  $('#alert').show();				  		  
- 					  	  } // end if
- 				  	  }, // end error
- 				      success: function(res) {
- 				    	  $('#success').text(res.message + ": ");
- 				          $('#success').append(res.uuid);
- 				          $('#success').show();
- 						  $('#valuelistname, #valuelistdescription').prop('readonly', true);
- 						  $(".view").show();
- 						  $(".input").hide();
- 				      } // end success
- 				}); // end ajax call
-
- 	 		}); // end click function
+ 			
+ 			// build the data object with the information from the input fields
+			data["names"] = $("#name").val();
+			data["descriptions"] = $("#description").val();
+			
+			// build the URI to POST the data
+			var setUri = basePath + "/valuelists";
+			
+			// build the URI to retrieve the hull object
+			var getUri = setUri + "/hull";
+			
+			// call the putOrPost method and persist the data
+			OPENINFRA_HELPER.Ajax.execPutOrPostQuery("POST", getUri, setUri, data);
+			
+			// TODO return to the overview page?
+			// TODO change to edit mode?
+		}); // end click function
 		
 		$("#edit").click(function() {
-			$('#valuelistname, #valuelistdescription').prop('readonly', false);
+			$('#name, #description').prop('readonly', false);
 			$(".view").hide();
 			$(".input").show();
 		});
 		
 		$("#cancel").click(function() {
-			$('#valuelistname, #valuelistdescription').prop('readonly', true);
+			$('#name, #description').prop('readonly', true);
 			$(".view").show();
 			$(".input").hide();
 		});
+		
+		// if the ajax request has finished
+		$(document).ajaxStop(function () {
+			// set the message box with the response
+			OPENINFRA_HELPER.MessageBox.setResponse();
+			
+			// check if we are in the edit mode
+			if ($("id") != null) {
+				// TODO set the new values
+				// update the value for the name in the heading
+				// update the value for the name
+				// update the value for the description
+				// update the value for the name in the bread crumb
+			}
+			
+		});
+		
 	</script>
 </body>
 </html>

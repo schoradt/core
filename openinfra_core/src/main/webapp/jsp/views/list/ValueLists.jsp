@@ -19,7 +19,7 @@
 		<div class="panel-heading">
 			<div>
 				<fmt:message key="valuelists.label"/>
-				<span class="badge">
+				<span id="badge" class="badge">
 					<%=new ValueListDao(
 									UUID.fromString(request.getAttribute("currentProject").toString()),
 									OpenInfraSchemas.PROJECTS).getCount()%>
@@ -47,7 +47,7 @@
 				</tr>
 			</thead>
 			<c:forEach items="${it}" var="pojo">
-				<tr>    		
+				<tr id="tr_${pojo.uuid}">    		
 					<td>
 			  			<c:choose>
 			  				<c:when test="${fn:contains(url, '/rest/system/valuelists/${pojo.uuid}')}">
@@ -78,6 +78,7 @@
 					</td>
 					<td>
 						<c:set var="detailButton" value="valuelists/${pojo.uuid}" />
+						<c:set var="deleteButton" value="${pojo.uuid}" />
 						<%@ include file="../../snippets/ButtonBar.jsp" %>
 					</td>
 	    		</tr>
@@ -85,6 +86,37 @@
 		</table>
 	</div>
 	
+	<!-- include the area for the result messages -->
+	<%@ include file="../../snippets/MessageBox.jsp" %>
+	
+	<script type="text/javascript">
+		var globalUuid = "";
+		
+		function deleteItem(uuid) {			
+			globalUuid = uuid;
+			// execute the delete request
+ 			OPENINFRA_HELPER.Ajax.execDeleteQuery(
+ 					"${contextPath}/rest/projects/${currentProject}/valuelists/" 
+ 					+ uuid);
+		}
+		
+		// if the ajax request has finished
+		$(document).ajaxStop(function () {
+			// if the request was successful
+			if (OPENINFRA_HELPER.Ajax.result != null) {
+				// remove the deleted item from the list
+				$('#tr_' + globalUuid).remove();
+				// decrement the badge count
+				$("#badge").text($("#badge").text()-1);
+			}
+				
+			// set the message box with the response
+			OPENINFRA_HELPER.MessageBox.setResponse();
+				
+		});
+		
+		
+	</script>
 
 </body>
 </html>

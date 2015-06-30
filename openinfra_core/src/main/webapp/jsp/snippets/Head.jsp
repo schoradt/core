@@ -48,6 +48,9 @@
 <script src="${contextPath}/js/jquery.tablesorter.min.js"></script>
 <script src="${contextPath}/js/jasny-bootstrap.min.js"></script>
 
+<!-- use openinfra helper class -->
+<script src="${contextPath}/js/openinfraHelper.js"></script>
+
 <!-- Use the non minified bootstrap CSS + theme + jscript in order to provide ie8 support-->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.css">

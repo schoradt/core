@@ -238,35 +238,7 @@
 </ol>
 </header>
 
-
-<div id="confirmProject" class="modal fade">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title"><fmt:message key="delete.project.label"/></h4>
-      </div>
-      <div class="modal-body">
-      	<%
-      		if(request.getAttribute("currentProject") != null && !request.getAttribute("currentProject").equals("") && !request.getAttribute("currentProject").equals("maps")) {
-      	      			pageContext.setAttribute("currentProjectPojo", 
-      	      			new ProjectDao(UUID.fromString(request.getAttribute("currentProject").toString()), OpenInfraSchemas.PROJECTS).read(
-      	      					PtLocaleDao.forLanguageTag(session.getAttribute("language").toString()), 
-      	      					UUID.fromString(request.getAttribute("currentProject").toString())));
-      	      	}
-      	%>
-        <p>
-			<c:set var="localizedStrings" value="${currentProjectPojo.names.localizedStrings}"/>
-			<%@ include file="LocalizedStrings.jsp" %>
-        </p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal"><fmt:message key="cancel.button.label"/></button>
-        <button id="confirmDelete" type="button" class="btn btn-primary"><fmt:message key="delete.button.label"/></button>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+<%@ include file="ConfirmDialog.jsp" %>
 
 <script>
 $(window).scroll(function() {
@@ -283,29 +255,6 @@ $("#xml").click(function() {
 
 $("#json").click(function() {
 	getMediaType("json");
-});
-
-$("#deleteProject").click(function() {
-	$("#confirmProject").modal('show');
-});
-
-$("#confirmDelete").click(function() {
-	$("#confirmProject").modal('hide');
-	$.ajax({
-		url: "${contextPath}/rest/projects/${currentProject}",
-        dataType: "json",
-		type: "DELETE",
-		cache: false,
-		  error: function(xhr){
-		  	  if(xhr.responseText.search('<body>') > -1) {
-				  var source = xhr.responseText.split('<body>')[1];
-			      $('#alert').html(source.split('</body>')[0]);
-				  $('#alert').show();				  		  
-		  	  } // end if
-	  	  } // end error
-	}).done(function(data,status,jqXHR) {
-		alert("geloescht");
-	});
 });
 
 function getMediaType(type) {
