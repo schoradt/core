@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.StringReader;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -37,7 +38,7 @@ public class TopicPDFResource {
 	 * This variable defines the path to the XSL file.
 	 */
 	private static final String XSL_FILE = 
-			"de/btu/openinfra/backend/xsl/fopStyle.xsl"; 
+			"de/btu/openinfra/backend/xsl/Topic.xsl"; 
 	
 	/**
 	 * http://www.e-zest.net/blog/integrating-apache-fop-with-java-project-to-generate-pdf-files/
@@ -56,7 +57,8 @@ public class TopicPDFResource {
 			@PathParam("projectId") UUID projectId,
 			@PathParam("topicInstanceId") UUID topicInstanceId,
 			@QueryParam("geomType") AttributeValueGeomType geomType,
-			@Context UriInfo uriInfo) {
+			@Context UriInfo uriInfo,
+			@Context HttpServletResponse servletResponse) {
 		
 		Client client = ClientBuilder.newClient();
 		WebTarget target = client.target(uriInfo.getAbsolutePath());
@@ -90,6 +92,7 @@ public class TopicPDFResource {
 			ex.printStackTrace();
 		}
 		
+		servletResponse.addHeader("Pragma", "no-cache");
 		return Response.ok().entity(stream.toByteArray()).build();
 	}
 

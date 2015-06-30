@@ -7,7 +7,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class TopicInstancePojo extends OpenInfraPojo {
 	
+	/**
+	 * This variable defines the corresponding topic characteristic this topic
+	 * instance belongs to.
+	 */
 	private TopicCharacteristicPojo topicCharacteristic;
+	/**
+	 * This variable defines the specific values defined by the settings of the
+	 * corresponding topic characteristic.
+	 */
 	private List<AttributeValuePojo> values;
 	
 	public TopicCharacteristicPojo getTopicCharacteristic() {

@@ -19,6 +19,12 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/199
       <xsl:attribute name="start-indent">1mm</xsl:attribute>
       <xsl:attribute name="end-indent">  1mm</xsl:attribute>
    </xsl:attribute-set>
+   <xsl:attribute-set name="block-style-head">
+      <xsl:attribute name="font-size">  12pt</xsl:attribute>
+      <xsl:attribute name="line-height">15pt</xsl:attribute>
+      <xsl:attribute name="start-indent">1mm</xsl:attribute>
+      <xsl:attribute name="end-indent">  1mm</xsl:attribute>
+   </xsl:attribute-set>
                 
                 
    <xsl:template match="/">
@@ -40,7 +46,9 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/199
          <fo:page-sequence master-reference="DIN-A4">
             <fo:static-content flow-name="header">
                <fo:block font-size="14pt" text-align="center">
-                  Angestelltenliste
+               	 <!-- Name of the topic instance -->
+                 <xsl:value-of 
+                 select="topicPojo/topicInstance/topicCharacteristic/topic/names/localizedStrings/characterString"/>
                </fo:block>
             </fo:static-content>
             <fo:static-content flow-name="footer">
@@ -48,100 +56,84 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/199
                   Seite <fo:page-number/> von <fo:page-number-citation ref-id="LastPage"/>
                   <xsl:text> </xsl:text>
                   <xsl:value-of select="java:format(java:java.text.SimpleDateFormat.new
-                                        ('MMMM d, yyyy, h:mm:ss a (zz)'), java:java.util.Date.new())"/>
+                                        ('MMMM dd, yyyy, hh:mm:ss a (zz)'), java:java.util.Date.new())"/>
                </fo:block>
             </fo:static-content>
             <fo:flow flow-name="xsl-region-body">
-	            <fo:block>
-				   <fo:inline>
-		      			<fo:external-graphic src="C:/Users/Tino/Workspace_OpenInfRA_2_0/JerseyTutorial/src/main/webapp/img/header-banner_update.jpg"
-		      			content-height="scale-to-fit" height="15mm"  content-width="140mm" scaling="non-uniform"/>    
-		   			</fo:inline>
-				</fo:block>
-               <xsl:apply-templates/>
                
-               <xsl:for-each select="//employee/bild">
-                <fo:block padding="10mm 10mm 10mm 10mm">
-                <xsl:variable name="imgSrc">
-                	<xsl:value-of select="text()"/>
-                </xsl:variable>
-                bild <xsl:value-of select="$imgSrc"/>
-                <fo:external-graphic src="{$imgSrc}" content-height="scale-to-fit" height="15mm"  content-width="140mm" scaling="non-uniform"/>         
-                </fo:block>
-               </xsl:for-each>
+               <!-- ### ### Apply templates ### ### -->
+               <xsl:apply-templates/>
                
                <fo:block id="LastPage"/>
             </fo:flow>
          </fo:page-sequence>
       </fo:root>
    </xsl:template>
+      
+   <xsl:template match="attributeTypeGroupsToValues">
+       <!-- Name of the attribute type group -->
+       <fo:block white-space-collapse="false" 
+                 white-space-treatment="preserve"
+                 font-size="0pt" line-height="10pt">.
+       </fo:block>
+	   <fo:block font-size="14pt" text-align="left">
+	      <xsl:value-of 
+	      select="attributeTypeGroup/names/localizedStrings/characterString"/>
+	   </fo:block>
+   
+      <fo:table border-style="solid" table-layout="fixed" width="100%">
+         <fo:table-column column-width="5cm"/>
+         <fo:table-column column-width="7cm"/>
+         <fo:table-header>
+            <xsl:call-template name="table-head"/>
+         </fo:table-header>
+         <fo:table-body>
+            <xsl:apply-templates select="attributeTypesToValues"/>
+         </fo:table-body>
+      </fo:table>
+   </xsl:template>
+   
+   <xsl:template match="attributeTypesToValues">
+      <fo:table-row>
+         <fo:table-cell xsl:use-attribute-sets="cell-style">
+            <fo:block xsl:use-attribute-sets="block-style">
+               <fo:inline font-weight="bold">
+               <xsl:value-of 
+               	select="attributeType/names/localizedStrings/characterString"/>
+               </fo:inline>
+            </fo:block>
+         </fo:table-cell>
+         <fo:table-cell xsl:use-attribute-sets="cell-style">
+            <fo:block xsl:use-attribute-sets="block-style">
+             <xsl:apply-templates select="attributeValue"/>
+            </fo:block>
+         </fo:table-cell>
+      </fo:table-row>
+   </xsl:template>
+   
+   <xsl:template match="attributeValue">
+   	<xsl:choose>
+   		<xsl:when test="attributeValueGeom">
+   			<xsl:value-of select="attributeValueGeom/geom"/>
+   		</xsl:when>
+   		<xsl:when test="attributeValueValue">
+   			<xsl:value-of 
+   			select="attributeValueValue/value/localizedStrings/characterString"/>
+   		</xsl:when>
+   	</xsl:choose>
+   </xsl:template>
    
    <!-- Tabellenkopf -->
    <xsl:template name="table-head">
       <fo:table-row>
          <fo:table-cell xsl:use-attribute-sets="cell-style">
-            <fo:block xsl:use-attribute-sets="block-style"
-                      text-align="center">Vorname</fo:block>
+            <fo:block xsl:use-attribute-sets="block-style-head"
+                      text-align="center">Attribut</fo:block>
          </fo:table-cell>
          <fo:table-cell xsl:use-attribute-sets="cell-style">
-            <fo:block xsl:use-attribute-sets="block-style"
-                      text-align="center">Nachname</fo:block>
+            <fo:block xsl:use-attribute-sets="block-style-head"
+                      text-align="center">Wert</fo:block>
          </fo:table-cell>
-         <fo:table-cell xsl:use-attribute-sets="cell-style">
-            <fo:block xsl:use-attribute-sets="block-style"
-                      text-align="center">Email</fo:block>
-         </fo:table-cell>
-         <fo:table-cell xsl:use-attribute-sets="cell-style">
-            <fo:block xsl:use-attribute-sets="block-style"
-                      text-align="center">Department</fo:block>
-         </fo:table-cell>
-      </fo:table-row>
-   </xsl:template>
-   
-   <!-- Adressen-Root-Element-Template -->
-   <xsl:template match="employees">
-      <fo:table border-style="solid" table-layout="fixed" width="100%">
-         <fo:table-column column-width="3cm"/>
-         <fo:table-column column-width="3cm"/>
-         <fo:table-column column-width="5cm"/>
-         <fo:table-column column-width="3cm"/>
-         <fo:table-header>
-            <xsl:call-template name="table-head"/>
-         </fo:table-header>
-         <fo:table-body>
-            <xsl:apply-templates select="employee"/>
-         </fo:table-body>
-      </fo:table>
-   </xsl:template>
-   
-   <!-- Template der 'adresse'-Elemente -->
-   <xsl:template match="employee">
-      <fo:table-row>
-         <fo:table-cell xsl:use-attribute-sets="cell-style">
-            <fo:block xsl:use-attribute-sets="block-style">
-               <fo:inline color="#FF0000"><xsl:value-of select="firstName"/></fo:inline>
-            </fo:block>
-         </fo:table-cell>
-         <fo:table-cell xsl:use-attribute-sets="cell-style">
-            <fo:block xsl:use-attribute-sets="block-style">
-               <xsl:value-of select="lastName"/>
-            </fo:block>
-         </fo:table-cell>
-         <fo:table-cell xsl:use-attribute-sets="cell-style">
-            <fo:block xsl:use-attribute-sets="block-style">
-               <fo:inline color="#0EDF49"><xsl:value-of select="email"/></fo:inline>
-               <!-- gruen 0EDF49 -->
-               <!-- rot FF0000 -->
-            </fo:block>
-         </fo:table-cell>
-         <fo:table-cell xsl:use-attribute-sets="cell-style">
-            <fo:block xsl:use-attribute-sets="block-style">
-               <xsl:value-of select="department/name"/>
-               <xsl:text> </xsl:text>
-               <xsl:value-of select="department/id"/>
-            </fo:block>
-         </fo:table-cell>
-
       </fo:table-row>
    </xsl:template>
    
