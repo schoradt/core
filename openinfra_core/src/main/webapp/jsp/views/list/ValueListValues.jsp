@@ -19,7 +19,7 @@
 		<div class="panel-heading">
 			<div>
 				<fmt:message key="valuelistvalues.label"/>
-				<span class="badge">
+				<span id="badge" class="badge">
 					<c:set var="currentValueList" value="${it[0].belongsToValueList}"/>
 					<%=new ValueListValueDao(
 							UUID.fromString(request.getAttribute("currentProject").toString()),
