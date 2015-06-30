@@ -1,7 +1,9 @@
 /**
+ * The namespace <b>OPENINFRA_HELPER</b> is used for classes and functions which
+ * are related to different front end functionalities.
  * 
- */
-
+ * @namespace 
+ */ 
 var OPENINFRA_HELPER = OPENINFRA_HELPER || {};
 
 /**
@@ -24,10 +26,10 @@ OPENINFRA_HELPER.Ajax = {
 	xhr : null,
 	
 	/**
-	 * This function executes an ajax query to the passed URI and handles the
-	 * success and error cases.
-	 * @param {string} source The id of the source which has called this 
-	 *                        function.
+	 * This function executes a DELETE ajax request to the passed URI and
+	 * handles the success and error cases.
+	 * 
+	 * @param {string} uri The uri of the DELETE request.
 	 */
 	execDeleteQuery : function(uri) {
 		if (uri != "") {
@@ -56,8 +58,9 @@ OPENINFRA_HELPER.Ajax = {
 	 *                        (without parameter!).
 	 * @param {string} setUri The URI to write the data (without parameter!).
 	 * @param {object} data   The data as object.
+	 * @param {uuid}   localeId
 	 */
-	execPutOrPostQuery : function(method, getUri, setUri, newData) {
+	execPutOrPostQuery : function(method, getUri, setUri, newData, localeId) {
 		// retrieve the URL parameter
 		var parameter = window.location.search.substring(1);
 		
@@ -77,16 +80,28 @@ OPENINFRA_HELPER.Ajax = {
 					data.names.localizedStrings[0].characterString = newData[i];
 					break;
 				case "descriptions":
-					if (newData[i] == "") {
-						delete data.descriptions;
+					// check if the description exists before
+					if (data.descriptions.localizedStrings != "") {
+						// if the new data is not set
+						if (newData[i] == "") {
+							// delete the description object
+							delete data.descriptions;
+						} else {
+							// set the new description
+							data.descriptions.localizedStrings[0].characterString = newData[i];
+						}
 					} else {
-						// TODO it is not possible to update a description if it is not present (description hull?)
-						data.descriptions.localizedStrings[0].characterString = newData[i];
+						if (newData[i] != "") {
+							// build a description object
+							data["descriptions"] = 
+								OPENINFRA_HELPER.JSONObjectBuilder.localizedString(
+										newData[i], localeId);
+						}
 					}
 					break;
 				default:
-					break;
 					alert("The property " + i + " is not implemented.");
+					break;
 				} // end switch
 			} // end for
 			
@@ -163,6 +178,7 @@ OPENINFRA_HELPER.MessageBox = {
 	}
 };
 
+
 /**
  * This class contains methods that belongs to the confirm dialog.
  * 
@@ -170,7 +186,9 @@ OPENINFRA_HELPER.MessageBox = {
  * @class ConfirmDialog
  */
 OPENINFRA_HELPER.ConfirmDialog = {
-		/*
+	/**
+	 * This function opens the confirm dialog.
+	 */
 	open : function() {
 	    $("#confirmBox").on("show", function() {    // wire up the OK button to dismiss the modal when shown
 	    	alert("lala");
@@ -196,5 +214,52 @@ OPENINFRA_HELPER.ConfirmDialog = {
 	      "keyboard"  : true,
 	      "show"      : true                     // ensure the modal is shown immediately
 	    });
-	*/
 	}
+};
+
+
+/**
+ * This class contains different object builder functions. This functions will
+ * return JSON parts, filled with the passed values.
+ * 
+ * @memberof OPENINFRA_HELPER
+ * @class ObjectBuilder
+ */
+OPENINFRA_HELPER.JSONObjectBuilder = {
+	/**
+	 * This function returns a localizedString object that can be used to fill
+	 * an empty description or name object.
+	 * 
+	 * @param {string} content The content of the localizedString.
+	 * @param {uuid} localeId  The locale id of the content.
+	 * @returns {object}       A localizedString JSON.
+	 */
+	localizedString : function(content, localeId) {
+		return {
+			"uuid":null,
+			"localizedStrings":[{"characterString":content,
+				"locale":{"uuid":localeId}}]};
+	}
+	
+	
+};
+
+/**
+ * This class contains several different functions.
+ * 
+ *  @memberof OPENINFRA_HELPER
+ *  @class Misc
+ */
+OPENINFRA_HELPER.Misc = {
+	/**
+	 * This function retrieve the base path of the current URL until the
+	 * appearance of the word "rest".
+	 * 
+	 * @returns {string} The base path of the current URL.
+	 */
+	getBasePath : function() {
+		var url = document.location.href;
+		// return the path of the url until the word "rest" appears
+		return url.match(/.+?(?=rest)/);
+	}
+};

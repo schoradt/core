@@ -119,9 +119,9 @@
 			// build the URI to POST the data
 			var setUri = basePath + "/valuelists/" + uuid;
 			var getUri = setUri;
-			
+			var localeId = "<%= pageContext.getAttribute("languageId") %>";
 			// call the putOrPost method and persist the data
-			OPENINFRA_HELPER.Ajax.execPutOrPostQuery("PUT", getUri, setUri, data);
+			OPENINFRA_HELPER.Ajax.execPutOrPostQuery("PUT", getUri, setUri, data, localeId);
 		}); // end click function
  		
  		$("#create").click(function() {
