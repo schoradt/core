@@ -28,9 +28,7 @@ import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
 
 import de.btu.openinfra.backend.db.pojos.AttributeValueGeomType;
-import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
-@Produces({"application/pdf" + OpenInfraResponseBuilder.PDF_PRIORITY})
 @Path("/projects/{projectId}/topicinstances")
 public class TopicPDFResource {
 	
@@ -51,7 +49,8 @@ public class TopicPDFResource {
 	 * @return
 	 */
 	@GET
-	@Path("{topicInstanceId}/topic")
+	@Produces({"application/pdf"})
+	@Path("{topicInstanceId}/topic.pdf")
 	public Response getTopicAsPDF(
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
@@ -60,8 +59,12 @@ public class TopicPDFResource {
 			@Context UriInfo uriInfo,
 			@Context HttpServletResponse servletResponse) {
 		
+		// Remove the PDF extension of the URL and add query parameters
+		String path = uriInfo.getAbsolutePath().toString();
 		Client client = ClientBuilder.newClient();
-		WebTarget target = client.target(uriInfo.getAbsolutePath());
+		WebTarget target = client.target(
+				path.substring(0, path.lastIndexOf(".")) + 
+				"?language=" + language);
 		String xml = target.request(
 				MediaType.APPLICATION_XML).get(String.class);		
 		
@@ -92,8 +95,8 @@ public class TopicPDFResource {
 			ex.printStackTrace();
 		}
 		
-		servletResponse.addHeader("Pragma", "no-cache");
-		return Response.ok().entity(stream.toByteArray()).build();
+		return Response.ok().entity(stream.toByteArray())
+				.type("application/pdf").build();
 	}
 
 }

@@ -19,7 +19,14 @@
 		<c:set var="instanceDesc" value="${instanceDesc} ${item.characterString}"/>
 	</c:forEach>
 	
-	<h2><fmt:message key="topic.label"/> ${instanceDesc} <span class="small">(${it.topicInstance.uuid})</span>:</h2>
+	<div>
+		<h2>
+			<fmt:message key="topic.label"/> ${instanceDesc} <span class="small">(${it.topicInstance.uuid})</span>: 
+		    <a href="${requestUrl}.pdf?language=${language}" target="_blank">
+		    	<i style="cursor: pointer;" class="fa fa-file-pdf-o" title="PDF Export"></i>
+		    </a>
+		</h2>
+	</div>
 	
 	<div class="row">
 		<div class="col-md-8">
@@ -244,6 +251,9 @@
 	  <a class="btn btn-default input" style="display: none;" id="save" role="button">
 	  	<fmt:message key="save.button.label"/>
 	  </a>
+	
+		
+	
 </form>
 <br/>
 </div>
