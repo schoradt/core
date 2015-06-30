@@ -25,33 +25,39 @@ Warning: The jstl variables will be removed after the button is printed.
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
-<div id="buttonBar">
-	<c:if test="${detailButton != null}">
-		<a href="${detailButton}">
-			<i class="fa fa-info-circle" title="<fmt:message key="detail.button.label"/>"></i>
-		</a>
-		<c:remove var="detailButton"/>
-	</c:if>
+	<div id="singleButtonBar">
+		<c:if test="${deleteButton != null}">
+			<a href="#" onclick="deleteItem('${deleteButton}')">
+				<i class="fa fa-trash-o" title="<fmt:message key="delete.button.label"/>"></i>
+			</a>
+			
+			<c:remove var="deleteButton"/>
+		</c:if>
+	</div>
 	
-	<c:if test="${createButton != null}">
-		<a href="${createButton}">
-			<i class="fa fa-plus-square" title="<fmt:message key="create.button.label"/>"></i>
-		</a>
-		<c:remove var="createButton"/>
-	</c:if>
-		
-	<c:if test="${editButton != null}">
-		<a href="${editButton}">
-			<i class="fa fa-pencil-square-o" title="<fmt:message key="edit.button.label"/>"></i>
-		</a>
-		<c:remove var="editButton"/>
-	</c:if>
+	<div id="singleButtonBar">
+		<c:if test="${editButton != null}">
+			<a href="${editButton}">
+				<i class="fa fa-pencil-square-o" title="<fmt:message key="edit.button.label"/>"></i>
+			</a>
+			<c:remove var="editButton"/>
+		</c:if>
+	</div>
 	
-	<c:if test="${deleteButton != null}">
-		<a href="#" onclick="deleteItem('${deleteButton}')">
-			<i class="fa fa-trash-o" title="<fmt:message key="delete.button.label"/>"></i>
-		</a>
-		
-		<c:remove var="deleteButton"/>
-	</c:if>
-</div>
+	<div id="singleButtonBar">
+		<c:if test="${createButton != null}">
+			<a href="${createButton}">
+				<i class="fa fa-plus-square" title="<fmt:message key="create.button.label"/>"></i>
+			</a>
+			<c:remove var="createButton"/>
+		</c:if>
+	</div>
+	
+	<div id="singleButtonBar">
+		<c:if test="${detailButton != null}">
+			<a href="${detailButton}">
+				<i class="fa fa-info-circle" title="<fmt:message key="detail.button.label"/>"></i>
+			</a>
+			<c:remove var="detailButton"/>
+		</c:if>
+	</div>
