@@ -47,11 +47,10 @@ public class OpenInfraResponseBuilder {
 	 */
 	public static final String JSON_PRIORITY = ";qs=.5";
 	/**
-	 * This variable defines the priority of PDF response. Used for older
+	 * This variable defines the priority of PDF response. Used for older 
 	 * browsers which don't provide its own priority setting.
-	 */
+	 */	
 	public static final String PDF_PRIORITY = ";qs=.4";
-
 	/**
 	 * This method builds a response for post requests.
 	 *
