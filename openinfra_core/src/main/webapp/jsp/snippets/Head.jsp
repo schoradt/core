@@ -41,6 +41,9 @@
   <script type='text/javascript' src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.js"></script>
 <![endif]-->
 
+<!-- add the logo as favorite icon -->
+<link rel="icon" href="${contextPath}/img/Logo.png" type="image/png" />
+
 <!-- use jquery -->
 <script src="${contextPath}/js/jquery-1.11.2.min.js"></script>
 <script src="${contextPath}/js/bootstrap-datepicker.min.js"></script>
