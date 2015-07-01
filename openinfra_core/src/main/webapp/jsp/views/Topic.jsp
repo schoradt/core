@@ -20,13 +20,16 @@
 	</c:forEach>
 	
 	<div>
-		<h2>
-			<fmt:message key="topic.label"/> ${instanceDesc} <span class="small">(${it.topicInstance.uuid})</span>: 
-		    <a href="${requestUrl}.pdf?language=${language}" target="_blank">
-		    	<i style="cursor: pointer;" class="fa fa-file-pdf-o" title="PDF Export"></i>
-		    </a>
-		</h2>
+		<span style="color:#A9A9A9;"><fmt:message key="export.label"/>:</span>
+		<a href="${requestUrl}.pdf?language=${language}" target="_blank">
+			<i style="cursor: pointer;" class="fa fa-file-pdf-o fa-lg" title="PDF"></i>
+		</a>
+		<a href="#" target="_blank">
+			<i style="cursor: pointer;" class="fa fa-file-text-o fa-lg" title="CSV"></i>
+		</a>
 	</div>
+	<div><h2><fmt:message key="topic.label"/> ${instanceDesc} <span class="small">(${it.topicInstance.uuid})</span>:</h2></div>
+	
 	
 	<div class="row">
 		<div class="col-md-8">
@@ -217,6 +220,7 @@
 		</div>
 	</div>
 	
+	
 </c:forEach>
 
 	<div class="input" style="display: none;">
@@ -257,6 +261,7 @@
 </form>
 <br/>
 </div>
+
 <!-- Accordion: http://bootsnipp.com/snippets/featured/accordion-menu -->
 <div class="col-md-4">
 	<div id="sidebar">
@@ -303,6 +308,7 @@
 			</div>
 		</div>	
 	</c:if>
+</div>
 </div>
 
 <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
