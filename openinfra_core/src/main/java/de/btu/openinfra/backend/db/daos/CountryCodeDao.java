@@ -52,7 +52,7 @@ public class CountryCodeDao
 	 * @param country the county code as string
 	 * @return        the country code object
 	 */
-	public CountryCode read(String country) {
+	protected CountryCode read(String country) {
 		return em.createNamedQuery(
 				"CountryCode.findByString",
 				CountryCode.class)

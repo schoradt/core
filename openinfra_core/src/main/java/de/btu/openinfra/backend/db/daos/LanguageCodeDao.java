@@ -53,7 +53,7 @@ public class LanguageCodeDao
 	 * @param lang the language code
 	 * @return     a language code object
 	 */
-	public LanguageCode read(String lang) {
+	protected LanguageCode read(String lang) {
 		return em.createNamedQuery(
 				"LanguageCode.findByString",
 				LanguageCode.class)
