@@ -106,3 +106,8 @@ table tr td {
 	cursor: pointer;
 }
 
+/* styling of the commit list on the project page */	
+#githubDiv {
+	height : 600px;
+	overflow: auto;
+}
