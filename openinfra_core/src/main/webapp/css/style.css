@@ -95,7 +95,14 @@ table tr td {
 	font-size: 1.5em;
 }
 
+/* remove the underline and color the text of the buttons */
+#singleButtonBar > a {
+	text-decoration: none;
+	text-color: #778899;
+}
+
 /* styling of the close button of the message boxes */
 #success > div > i, #alert > div > i {
 	cursor: pointer;
 }
+
