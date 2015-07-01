@@ -108,7 +108,7 @@
 			<c:redirect url="${forward}?language=${language}"/>
 		</c:when>
 		<c:otherwise>
-			<c:redirect url="${forward}?language=${language}&${existingParameters}"/>
+			<c:redirect url="${forward}?language=${language}${existingParameters}"/>
 		</c:otherwise>
 	</c:choose>
 	
