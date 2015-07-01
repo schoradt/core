@@ -1,3 +1,5 @@
+<%@page import="de.btu.openinfra.backend.db.daos.ValueListDao"%>
+<%@page import="java.util.UUID"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -109,14 +111,40 @@
 			<!-- Create the association field to value lists. -->
 			<div class="form-group">
 				<label for="belongsToValueList"><fmt:message key="association.valuelist.label"/>:</label>
+				<!-- get a list of all available value lists -->
+				<%
+					pageContext.setAttribute("valueLists", new ValueListDao(
+						UUID.fromString(request.getAttribute("currentProject").toString()),
+						OpenInfraSchemas.PROJECTS).read(
+					        PtLocaleDao.forLanguageTag(session.getAttribute("language").toString()),
+							0, 
+							Integer.MAX_VALUE));
+				%>
+				<!-- decide which entry is selected -->
 				<c:choose>
 					<c:when test="${!create}">
-						<input type="text" class="form-control" id="belongsToValueList" value="${it.belongsToValueList}" readonly/>
+						<c:set var="selection" value="${it.belongsToValueList}" />
+						<c:set var="disabled" value="disabled" />
 					</c:when>
 					<c:otherwise>
-						<input type="text" class="form-control" id="belongsToValueList" value="${param.vl}" />
+						<c:set var="selection" value="${param.vl}" />
+						<c:set var="disabled" value="" />
 					</c:otherwise>
 		    	</c:choose>
+				
+				<select ${disabled} class="form-control" id="belongsToValueList">
+					<c:forEach items="${valueLists}" var="valueList">
+						<c:choose>
+							<c:when test="${valueList.uuid == selection}">
+								<option selected value="${valueList.uuid}">${valueList.names.localizedStrings[0].characterString}</option>
+							</c:when>
+							<c:otherwise>
+								<option value="${valueList.uuid}">${valueList.names.localizedStrings[0].characterString}</option>
+							</c:otherwise>
+						</c:choose>
+					</c:forEach>
+				</select>
+				
 			</div>
 			
 			<!-- Add control buttons. -->
@@ -146,7 +174,9 @@
 			data["names"] = $("#name").val();
 			data["descriptions"] = $("#description").val();
 			data["visibility"] = $("#visibility").prop("checked");
-			data["belongsToValueList"] = $("#belongsToValueList").val();
+			data["belongsToValueList"] = $("#belongsToValueList option:selected").val();
+			
+			
 			
 			// build the URI to POST the data
 			var setUri = basePath + "/valuelistvalues/" + uuid;
@@ -162,7 +192,7 @@
 			data["names"] = $("#name").val();
 			data["descriptions"] = $("#description").val();
 			data["visibility"] = $("#visibility").prop("checked");
-			data["belongsToValueList"] = $("#belongsToValueList").val();
+			data["belongsToValueList"] = $("#belongsToValueList option:selected").val();
 			
 			// build the URI to POST the data
 			var setUri = basePath + "/valuelists/" + $("#belongsToValueList").val() + "/valuelistvalues";
@@ -178,15 +208,15 @@
 		}); // end click function
 		
 		$("#edit").click(function() {
-			$('#name, #description, #belongsToValueList').prop('readonly', false);
-			$('#visibility').prop('disabled', false);
+			$('#name, #description').prop('readonly', false);
+			$('#visibility, #belongsToValueList').prop('disabled', false);
 			$(".view").hide();
 			$(".input").show();
 		});
 		
 		$("#cancel").click(function() {
-			$('#name, #description, #belongsToValueList').prop('readonly', true);
-			$('#visibility').prop('disabled', true);
+			$('#name, #description').prop('readonly', true);
+			$('#visibility, #belongsToValueList').prop('disabled', true);
 			$(".view").show();
 			$(".input").hide();
 		});
