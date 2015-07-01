@@ -77,7 +77,17 @@ OPENINFRA_HELPER.Ajax = {
 				// set the value of the hull object depending on the key
 				switch (i) {
 				case "names":
-					data.names.localizedStrings[0].characterString = newData[i];
+					// check if the name exists before
+					if (data.names.localizedStrings != "") {
+						data.names.localizedStrings[0].characterString = newData[i];
+					} else {
+						if (newData[i] != "") {
+							// build a name object
+							data["names"] = 
+								OPENINFRA_HELPER.JSONObjectBuilder.localizedString(
+										newData[i], localeId, data.names.uuid);
+						}
+					}
 					break;
 				case "descriptions":
 					// check if the description exists before
@@ -95,7 +105,7 @@ OPENINFRA_HELPER.Ajax = {
 							// build a description object
 							data["descriptions"] = 
 								OPENINFRA_HELPER.JSONObjectBuilder.localizedString(
-										newData[i], localeId);
+										newData[i], localeId, data.descriptions.uuid);
 						}
 					}
 					break;
@@ -238,11 +248,12 @@ OPENINFRA_HELPER.JSONObjectBuilder = {
 	 * 
 	 * @param {string} content The content of the localizedString.
 	 * @param {uuid} localeId  The locale id of the content.
+	 * @param {uuid} uuid      The uuid of the localizedString (null is valid)
 	 * @returns {object}       A localizedString JSON.
 	 */
-	localizedString : function(content, localeId) {
+	localizedString : function(content, localeId, uuid) {
 		return {
-			"uuid":null,
+			"uuid":uuid,
 			"localizedStrings":[{"characterString":content,
 				"locale":{"uuid":localeId}}]};
 	}
