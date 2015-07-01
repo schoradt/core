@@ -155,7 +155,7 @@
 				content += "</td>";
 				content += "<td>";
 				content += "<a href='"+ data[i].html_url +"'>";
-				content += data[i].commit.message;
+				content += data[i].commit.message.replace("\n", "<br \><br \>");
 				content += "</a>";
 				content += "</td>";
 				content += "</tr>";
