@@ -17,16 +17,14 @@
 
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<div>
-				<fmt:message key="valuelists.label"/>
-				<span id="badge" class="badge">
-					<%=new ValueListDao(
-									UUID.fromString(request.getAttribute("currentProject").toString()),
-									OpenInfraSchemas.PROJECTS).getCount()%>
-				</span>
-				<c:set var="createButton" value="valuelists/new" />
-				<%@ include file="../../snippets/ButtonBar.jsp" %>
-			</div>
+			<fmt:message key="valuelists.label"/>
+			<span id="badge" class="badge">
+				<%=new ValueListDao(
+								UUID.fromString(request.getAttribute("currentProject").toString()),
+								OpenInfraSchemas.PROJECTS).getCount()%>
+			</span>
+			<c:set var="createButton" value="valuelists/new" />
+			<%@ include file="../../snippets/ButtonBar.jsp" %>
 		</div>
 		<table class="table table-hover">
 			<thead>

@@ -17,19 +17,17 @@
 
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<div>
-				<fmt:message key="valuelistvalues.label"/>
-				<span id="badge" class="badge">
-					<c:set var="currentValueList" value="${it[0].belongsToValueList}"/>
-					<%=new ValueListValueDao(
-							UUID.fromString(request.getAttribute("currentProject").toString()),
-							OpenInfraSchemas.PROJECTS).getCount(
-									UUID.fromString(pageContext.getAttribute("currentValueList").toString()))%>
-				</span>
-				<!-- add the id of the value list to the create button -->
-				<c:set var="createButton" value="../../valuelistvalues/new?vl=${currentValueList}" />
-				<%@ include file="../../snippets/ButtonBar.jsp" %>
-			</div>
+			<fmt:message key="valuelistvalues.label"/>
+			<span id="badge" class="badge">
+				<c:set var="currentValueList" value="${it[0].belongsToValueList}"/>
+				<%=new ValueListValueDao(
+						UUID.fromString(request.getAttribute("currentProject").toString()),
+						OpenInfraSchemas.PROJECTS).getCount(
+								UUID.fromString(pageContext.getAttribute("currentValueList").toString()))%>
+			</span>
+			<!-- add the id of the value list to the create button -->
+			<c:set var="createButton" value="../../valuelistvalues/new?vl=${currentValueList}" />
+			<%@ include file="../../snippets/ButtonBar.jsp" %>
 		</div>
 		<table class="table table-hover">
 			<thead>
