@@ -9,7 +9,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.server.mvc.Template;
 
@@ -65,7 +64,11 @@ public class ValueListResource {
     @GET
     @Path("/new")
     @Template(name="/views/detail/ValueLists.jsp")
-    public Response index() {
-        return Response.ok().entity("ValueLists").build();
+    public ValueListPojo newValueList(
+            @QueryParam("language") String language,
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema) {
+        return new de.btu.openinfra.backend.rest.ValueListResource()
+            .newValueList(language, projectId, schema);
     }
 }
