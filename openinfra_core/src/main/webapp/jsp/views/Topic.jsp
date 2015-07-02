@@ -333,6 +333,11 @@
   </div>
 </div>
 
+<!-- Used for projecting spatial features -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/proj4js/1.1.0/proj4js-combined.min.js"></script>
+<!-- custom projection definitions that should be supported -->
+<script src="${contextPath}/proj/defs.js"></script>
+<!-- Mapping library to draw preview map -->
 <script src="//cdnjs.cloudflare.com/ajax/libs/openlayers/2.13.1/OpenLayers.light.js"></script>
 <script>
 $(document).ready(function() {
@@ -349,6 +354,9 @@ $(document).ready(function() {
 		language: '<%= pageContext.getAttribute("datepickerI18n").toString() %>'
     });
 	
+	// set Proj4js lib path to provide custom projections
+	Proj4js.libPath = "${contextPath}/proj/";
+
 	// init map preview
 	$.ajax({
 		url: url + "/topic?geomType=GEOJSON",
@@ -380,30 +388,37 @@ $(document).ready(function() {
 		});
 	});
 	
-	function initFeaturePreview(geojson) {		
+	function initFeaturePreview(geojsonStr) {
 		var map = new OpenLayers.Map("map", {	
 				theme: null,
-				projection: "EPSG:900913",
-				layers: [new OpenLayers.Layer.OSM()],
+				projection: "EPSG:900913",							// sperical mercator
+				layers: [new OpenLayers.Layer.OSM()], 				// OSM base layer
 				controls: [new OpenLayers.Control.Attribution()]
 			}), 
+			geoJson = JSON.parse(geojsonStr),
 			format = new OpenLayers.Format.GeoJSON(),
 			layer = new OpenLayers.Layer.Vector('Preview'),
-			features = format.read(geojson);
+			features = format.read(geoJson),
+			crs = 'EPSG:4326';
 		
 		map.addLayer(layer);
 		
-		// transfrom to Sperical Mercator
+		// extract crs from geojson if provided otherwise EPSG:4326 is assumed
+		// crs is assumed to be in short notation
+		// Important: CRS/SRID needs to be defined as OL projection for transform
+		if (geoJson.crs && geoJson.crs.type === 'name') {
+			crs = geoJson.crs.properties.name;
+		}
+
+		// transfrom to Sperical Mercator (OSM base layer projection)
 		features.forEach(function(f) {
-			f.geometry.transform('EPSG:4326', 'EPSG:900913');
+			f.geometry.transform(crs, 'EPSG:900913');
 		});
 
         layer.addFeatures(features);
         map.zoomToExtent(layer.getDataExtent());   
         
         // bind click handler to redirect to map
-        // TODO: map to tc layer
-        // TODO: center and select instance of layer 
         $('#map').click(function() {
         	window.open("${contextPath}/rest/projects/maps", "_blank");
         });
