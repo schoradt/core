@@ -1,41 +1,41 @@
 /**
  * The namespace <b>OPENINFRA_HELPER</b> is used for classes and functions which
  * are related to different front end functionalities.
- * 
- * @namespace 
- */ 
+ *
+ * @namespace
+ */
 var OPENINFRA_HELPER = OPENINFRA_HELPER || {};
 
 /**
- * This class contains methods to perform an ajax request. 
+ * This class contains methods to perform an ajax request.
  * @memberof OPENINFRA_HELPER
  * @class Ajax
  */
 OPENINFRA_HELPER.Ajax = {
-	/** 
+	/**
 	 * @property {Object} result The result that will be returned by an ajax
 	 *                           request as OpenInfraResponseBuilder if the
-	 *                           query was successful. 
+	 *                           query was successful.
 	 */
 	result : null,
-	
-	/** 
+
+	/**
 	 * @property {Object} xhr The error result that will be returned by an ajax
 	 *                        request.
 	 */
 	xhr : null,
-	
+
 	/**
 	 * This function executes a DELETE ajax request to the passed URI and
 	 * handles the success and error cases.
-	 * 
+	 *
 	 * @param {string} uri The uri of the DELETE request.
 	 */
 	execDeleteQuery : function(uri) {
 		if (uri != "") {
 			// TODO get the confirm dialog to work
 			//OPENINFRA_HELPER.ConfirmDialog.open();
-			
+
 			$.ajax({
 				type: "DELETE",
 				url: uri,
@@ -48,7 +48,7 @@ OPENINFRA_HELPER.Ajax = {
 			}); // end ajax call
 		}
 	},
-	
+
 	/**
 	 * This method will retrieve a hull object from the passed getUri, fill it
 	 * with data from the data object and put or post it to the REST interface.
@@ -63,7 +63,7 @@ OPENINFRA_HELPER.Ajax = {
 	execPutOrPostQuery : function(method, getUri, setUri, newData, localeId) {
 		// retrieve the URL parameter
 		var parameter = window.location.search.substring(1);
-		
+
 		// get the object
 		$.ajax({
 			url: getUri + "?" + parameter,
@@ -83,7 +83,7 @@ OPENINFRA_HELPER.Ajax = {
 					} else {
 						if (newData[i] != "") {
 							// build a name object
-							data["names"] = 
+							data["names"] =
 								OPENINFRA_HELPER.JSONObjectBuilder.localizedString(
 										newData[i], localeId, data.names.uuid);
 						}
@@ -103,7 +103,7 @@ OPENINFRA_HELPER.Ajax = {
 					} else {
 						if (newData[i] != "") {
 							// build a description object
-							data["descriptions"] = 
+							data["descriptions"] =
 								OPENINFRA_HELPER.JSONObjectBuilder.localizedString(
 										newData[i], localeId, data.descriptions.uuid);
 						}
@@ -120,7 +120,7 @@ OPENINFRA_HELPER.Ajax = {
 					break;
 				} // end switch
 			} // end for
-			
+
 			// set the new data
 			$.ajax({
 				url: setUri,
@@ -143,7 +143,7 @@ OPENINFRA_HELPER.Ajax = {
 /**
  * This class contains methods that modify the message box for operations on
  * the front end. This covers the success and alert message box.
- * 
+ *
  * @memberof OPENINFRA_HELPER
  * @class MessageBox
  */
@@ -157,21 +157,21 @@ OPENINFRA_HELPER.MessageBox = {
 	hide : function(elem) {
 		$(elem).parent().parent().fadeOut();
 	},
-	
+
 
 	/**
 	 * This functions prints the result of the request into the message box that
 	 * will be created by including the snippet MessageBox.jsp.
-	 * 
+	 *
 	 * WARNING:After filling the message box, the properties result and xhr will
 	 * be reseted.
 	 */
 	setResponse : function() {
 		xhr = OPENINFRA_HELPER.Ajax.xhr;
 		result = OPENINFRA_HELPER.Ajax.result;
-		
-		
-		
+
+
+
 		// set the success message
 		if (result != null) {
 			$('#successDiv').text(result.message + ": ");
@@ -180,7 +180,7 @@ OPENINFRA_HELPER.MessageBox = {
 			// reset the result properties
 			OPENINFRA_HELPER.Ajax.result = null;
 		} // end if
-		
+
 		// set the error message
 		if (xhr != null) {
 			if(xhr.responseText.search('<body>') > -1) {
@@ -197,7 +197,7 @@ OPENINFRA_HELPER.MessageBox = {
 
 /**
  * This class contains methods that belongs to the confirm dialog.
- * 
+ *
  * @memberof OPENINFRA_HELPER
  * @class ConfirmDialog
  */
@@ -209,7 +209,7 @@ OPENINFRA_HELPER.ConfirmDialog = {
 	    $("#confirmBox").on("show", function() {    // wire up the OK button to dismiss the modal when shown
 	    	alert("lala");
 	        $("#confirmBox a.btn").on("click", function(e) {
-	        	
+
 	            alert("button pressed");   			// just as an example...
 	            $("#confirmBox").modal('hide');     // dismiss the dialog
 	            return true;
@@ -220,11 +220,11 @@ OPENINFRA_HELPER.ConfirmDialog = {
 	        $("#confirmBox a.btn").off("click");
 	        return false;
 	    });
-	    
+
 	    $("#confirmBox").on("hidden", function() {  // remove the actual elements from the DOM when fully hidden
 	        $("#confirmBox").remove();
 	    });
-	    
+
 	    $("#confirmBox").modal({                    // wire up the actual modal functionality and show the dialog
 	      "backdrop"  : "static",
 	      "keyboard"  : true,
@@ -237,7 +237,7 @@ OPENINFRA_HELPER.ConfirmDialog = {
 /**
  * This class contains different object builder functions. This functions will
  * return JSON parts, filled with the passed values.
- * 
+ *
  * @memberof OPENINFRA_HELPER
  * @class ObjectBuilder
  */
@@ -245,7 +245,7 @@ OPENINFRA_HELPER.JSONObjectBuilder = {
 	/**
 	 * This function returns a localizedString object that can be used to fill
 	 * an empty description or name object.
-	 * 
+	 *
 	 * @param {string} content The content of the localizedString.
 	 * @param {uuid} localeId  The locale id of the content.
 	 * @param {uuid} uuid      The uuid of the localizedString (null is valid)
@@ -257,13 +257,13 @@ OPENINFRA_HELPER.JSONObjectBuilder = {
 			"localizedStrings":[{"characterString":content,
 				"locale":{"uuid":localeId}}]};
 	}
-	
-	
+
+
 };
 
 /**
  * This class contains several different functions.
- * 
+ *
  *  @memberof OPENINFRA_HELPER
  *  @class Misc
  */
@@ -271,7 +271,7 @@ OPENINFRA_HELPER.Misc = {
 	/**
 	 * This function retrieve the base path of the current URL until the
 	 * appearance of the word "rest".
-	 * 
+	 *
 	 * @returns {string} The base path of the current URL.
 	 */
 	getBasePath : function() {
@@ -279,15 +279,35 @@ OPENINFRA_HELPER.Misc = {
 		// return the path of the url until the word "rest" appears
 		return url.match(/.+?(?=rest)/);
 	},
-	
+
 	/**
 	 * This function retrieve the root path of the current URL. This is the part
 	 * that contains the database resource e.g. system or project/uuid
-	 * 
+	 *
 	 * @returns {string} The root path of the current URL.
 	 */
 	getRootPath : function() {
 		var url = document.location.href;
 		return url.match(/system|projects\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/);
+	},
+
+	/**
+	 * This function retrieve the uuid for the passed element from the URL. The
+	 * uuid usually stands behind the element name.
+	 *
+	 * @param {string} elem The name of the element we want to retrieve the uuid.
+	 * @returns             The uuid or null if it was not found.
+	 */
+	getUuid : function(elem) {
+	    var url = document.location.href;
+	    // get the element name and the url with this regex
+	    var reg = RegExp(elem + "\/(([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}))", "g");
+	    if (url.match(reg) == null) {
+	        return null
+        }
+	    var match = url.match(reg)[0];
+	    // because js doesn't support regex look behind we must replace the
+	    // element name and the slash
+	    return match.replace(elem+"/", "");
 	}
 };

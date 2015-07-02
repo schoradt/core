@@ -16,7 +16,7 @@
 	<%@ include file="../../snippets/Menu.jsp" %>
 	
 	<c:set var="currentValueList" value="${it[0].belongsToValueList}"/>
-
+	
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<fmt:message key="valuelistvalues.label"/>
@@ -24,7 +24,7 @@
 				${fn:length(it)}
 			</span>
 			<!-- add the id of the value list to the create button -->
-			<c:set var="createButton" value="../../valuelistvalues/new?vl=${currentValueList}" />
+			<c:set var="createButton" value="../../valuelistvalues/new" />
 			<%@ include file="../../snippets/ButtonBar.jsp" %>
 		</div>
 		<table class="table table-hover">
@@ -98,6 +98,14 @@
 			OPENINFRA_HELPER.MessageBox.setResponse();
 				
 		});
+		
+		$(document).ready(function() {
+		    // add the value list id to the createButtonLink as parameter
+		    var link = $("#createButtonLink").attr("href");
+		    link += "?vl=" + OPENINFRA_HELPER.Misc.getUuid("valuelists");
+		    $("#createButtonLink").attr("href", link);
+		});
+		
 	</script>
 </body>
 </html>
