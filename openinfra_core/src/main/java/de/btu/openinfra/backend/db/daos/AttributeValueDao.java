@@ -51,7 +51,7 @@ public class AttributeValueDao extends OpenInfraValueDao<AttributeValuePojo,
 	 * requested geometry type string from database.
 	 */
 	public static final String GEOM_CLAUSE =
-			"select ST_As%s(geom)"
+			"select %s "
 			+ "from attribute_value_geom%s "
 			+ "where id = cast(? as uuid)";
 

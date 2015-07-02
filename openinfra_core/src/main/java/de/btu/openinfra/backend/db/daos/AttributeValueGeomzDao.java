@@ -74,10 +74,11 @@ public class AttributeValueGeomzDao
 	public AttributeValueGeomzPojo mapToPojo(
 			Locale locale,
 			AttributeValueGeomz modelObject) {
-		Query qGeomz = em.createNativeQuery(String.format(
+		String queryString = String.format(
 				AttributeValueDao.GEOM_CLAUSE, 
-				defaultGeomType.name(), 
-				"z"));				
+				defaultGeomType.getPsqlFnSignature(),
+				"z");
+		Query qGeomz = em.createNativeQuery(queryString);
 		qGeomz.setParameter(1, modelObject.getId());
 		AttributeValueGeomzPojo avgzPojo = 
 				new AttributeValueGeomzPojo();

@@ -73,10 +73,11 @@ public class AttributeValueGeomDao
 			Locale locale,
 			AttributeValueGeom modelObject) {
 	    // get the geometry object with the fitting geometry type
-		Query qGeom = em.createNativeQuery(String.format(
+		String queryString = String.format(
 				AttributeValueDao.GEOM_CLAUSE, 
-				defaultGeomType.name(), 
-				""));
+				defaultGeomType.getPsqlFnSignature(),
+				"");
+		Query qGeom = em.createNativeQuery(queryString);
 		qGeom.setParameter(1, modelObject.getId());
 		AttributeValueGeomPojo avgPojo = new AttributeValueGeomPojo();
 		avgPojo.setGeom(qGeom.getResultList().get(0).toString());
