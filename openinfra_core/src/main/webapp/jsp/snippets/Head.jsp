@@ -11,6 +11,7 @@
 <!-- ######## Define used variables here. This is a central point! ######## -->
 <c:set var="requestUrl" value="${requestScope['javax.servlet.forward.request_uri']}"/>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
+<c:set var="homePage" value="${contextPath}/rest/projects" />
 
 <!-- Set the OpenInfRA version for the current session and make sure that 
 	 it is set only once -->
