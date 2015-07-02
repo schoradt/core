@@ -25,14 +25,13 @@ import javax.persistence.Table;
 	@NamedQuery(name="ValueList.count",
 		query="SELECT COUNT(v) FROM ValueList v "),
 	@NamedQuery(name="ValueList.findAll",
-		query="SELECT v FROM ValueList v"),
+		query="SELECT v FROM ValueList v"),		
 	@NamedQuery(name="ValueList.findAllByLocale",
 		query="SELECT v "
 				+ "FROM ValueList v "
 				+ "INNER JOIN v.ptFreeText2.localizedCharacterStrings p2 "
 				+ "WHERE p2.ptLocale = :ptl "
 				+ "ORDER BY p2.freeText " )
-
 })
 public class ValueList implements Serializable, OpenInfraModelObject {
 	private static final long serialVersionUID = 1L;
