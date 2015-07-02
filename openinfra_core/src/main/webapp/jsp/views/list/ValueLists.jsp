@@ -20,14 +20,7 @@
 		<div class="panel-heading">
 			<fmt:message key="valuelists.label"/>
 			<span id="badge" class="badge">
-			<c:choose>
-				<c:when test="">
-				</c:when>
-			</c:choose>
-			<%=new ValueListDao(
-			        pageContext.getAttribute("currentProject").toString() == "" ? null :
-						UUID.fromString(pageContext.getAttribute("currentProject").toString()),
-							OpenInfraSchemas.valueOf(pageContext.getAttribute("schema").toString().toUpperCase())).getCount()%>
+				${fn:length(it)}
 			</span>
 			<c:set var="createButton" value="valuelists/new" />
 			<%@ include file="../../snippets/ButtonBar.jsp" %>

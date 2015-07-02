@@ -14,17 +14,14 @@
 </head>
 <body>
 	<%@ include file="../../snippets/Menu.jsp" %>
+	
+	<c:set var="currentValueList" value="${it[0].belongsToValueList}"/>
 
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<fmt:message key="valuelistvalues.label"/>
 			<span id="badge" class="badge">
-				<c:set var="currentValueList" value="${it[0].belongsToValueList}"/>
-				<%=new ValueListValueDao(
-				        pageContext.getAttribute("currentProject").toString() == "" ? null :
-							UUID.fromString(pageContext.getAttribute("currentProject").toString()),
-								OpenInfraSchemas.valueOf(pageContext.getAttribute("schema").toString().toUpperCase())).getCount(
-								UUID.fromString(pageContext.getAttribute("currentValueList").toString()))%>
+				${fn:length(it)}
 			</span>
 			<!-- add the id of the value list to the create button -->
 			<c:set var="createButton" value="../../valuelistvalues/new?vl=${currentValueList}" />
