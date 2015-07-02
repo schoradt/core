@@ -114,8 +114,9 @@
 				<!-- get a list of all available value lists -->
 				<%
 					pageContext.setAttribute("valueLists", new ValueListDao(
-						UUID.fromString(request.getAttribute("currentProject").toString()),
-						OpenInfraSchemas.PROJECTS).read(
+					        pageContext.getAttribute("currentProject").toString() == "" ? null :
+								UUID.fromString(pageContext.getAttribute("currentProject").toString()),
+									OpenInfraSchemas.valueOf(pageContext.getAttribute("schema").toString().toUpperCase())).read(
 					        PtLocaleDao.forLanguageTag(session.getAttribute("language").toString()),
 							0, 
 							Integer.MAX_VALUE));
@@ -162,8 +163,7 @@
 	<script type="text/javascript">
 	
 		// create the base path of the application
-		// TODO this path should react dynamicly to the URI (project or system)
-		var basePath = "${contextPath}/rest/projects/${currentProject}";
+		var basePath = "${contextPath}/rest/" + OPENINFRA_HELPER.Misc.getRootPath();
 		var data = new Object();
 	
 		$("#save").click(function() {

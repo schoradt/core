@@ -14,19 +14,17 @@
 </head>
 <body>
 	<%@ include file="../../snippets/Menu.jsp" %>
-
+	
+	<c:set var="currentValueList" value="${it[0].belongsToValueList}"/>
+	
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<fmt:message key="valuelistvalues.label"/>
 			<span id="badge" class="badge">
-				<c:set var="currentValueList" value="${it[0].belongsToValueList}"/>
-				<%=new ValueListValueDao(
-						UUID.fromString(request.getAttribute("currentProject").toString()),
-						OpenInfraSchemas.PROJECTS).getCount(
-								UUID.fromString(pageContext.getAttribute("currentValueList").toString()))%>
+				${fn:length(it)}
 			</span>
 			<!-- add the id of the value list to the create button -->
-			<c:set var="createButton" value="../../valuelistvalues/new?vl=${currentValueList}" />
+			<c:set var="createButton" value="../../valuelistvalues/new" />
 			<%@ include file="../../snippets/ButtonBar.jsp" %>
 		</div>
 		<table class="table table-hover">
@@ -82,8 +80,8 @@
 			globalUuid = uuid;
 			// execute the delete request
  			OPENINFRA_HELPER.Ajax.execDeleteQuery(
- 					"${contextPath}/rest/projects/${currentProject}/valuelistvalues/" 
- 					+ uuid);
+ 					"${contextPath}/rest/" + OPENINFRA_HELPER.Misc.getRootPath()
+ 					+ "/valuelistvalues/" + uuid);
 		}
 		
 		// if the ajax request has finished
@@ -100,6 +98,14 @@
 			OPENINFRA_HELPER.MessageBox.setResponse();
 				
 		});
+		
+		$(document).ready(function() {
+		    // add the value list id to the createButtonLink as parameter
+		    var link = $("#createButtonLink").attr("href");
+		    link += "?vl=" + OPENINFRA_HELPER.Misc.getUuid("valuelists");
+		    $("#createButtonLink").attr("href", link);
+		});
+		
 	</script>
 </body>
 </html>

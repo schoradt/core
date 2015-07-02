@@ -1,3 +1,4 @@
+<%@page import="org.apache.xml.serializer.ToUnknownStream"%>
 <%@page import="de.btu.openinfra.backend.db.daos.ValueListValueDao"%>
 <%@page import="java.util.UUID"%>
 <%@page import="de.btu.openinfra.backend.db.daos.ValueListDao"%>
@@ -19,13 +20,12 @@
 		<div class="panel-heading">
 			<fmt:message key="valuelists.label"/>
 			<span id="badge" class="badge">
-				<%=new ValueListDao(
-								UUID.fromString(request.getAttribute("currentProject").toString()),
-								OpenInfraSchemas.PROJECTS).getCount()%>
+				${fn:length(it)}
 			</span>
 			<c:set var="createButton" value="valuelists/new" />
 			<%@ include file="../../snippets/ButtonBar.jsp" %>
 		</div>
+		
 		<table class="table table-hover">
 			<thead>
 				<tr>
@@ -44,18 +44,11 @@
 					<th></th>
 				</tr>
 			</thead>
+			
 			<c:forEach items="${it}" var="pojo">
 				<tr id="tr_${pojo.uuid}">    		
 					<td>
-			  			<c:choose>
-			  				<c:when test="${fn:contains(url, '/rest/system/valuelists/${pojo.uuid}')}">
-			  					<c:set var="link">../valuelists/${pojo.uuid}</c:set>
-			  				</c:when>
-			  				<c:otherwise>
-			  					<c:set var="link">valuelists/${pojo.uuid}/valuelistvalues</c:set>
-			  				</c:otherwise>
-			  			</c:choose>
-			  			<a href="${link}">
+			  			<a href="valuelists/${pojo.uuid}/valuelistvalues">
 							<c:set var="localizedStrings" value="${pojo.names.localizedStrings}"/>
 							<%@ include file="../../snippets/LocalizedStrings.jsp" %>
 			    		</a>
@@ -67,8 +60,9 @@
 					<td>
 						<c:set var="currentValueList" value="${pojo.uuid}"></c:set>
 						<%=new ValueListValueDao(
-										UUID.fromString(request.getAttribute("currentProject").toString()),
-										OpenInfraSchemas.PROJECTS).getCount(
+						        pageContext.getAttribute("currentProject").toString() == "" ? null :
+									UUID.fromString(pageContext.getAttribute("currentProject").toString()),
+										OpenInfraSchemas.valueOf(pageContext.getAttribute("schema").toString().toUpperCase())).getCount(
 												UUID.fromString(pageContext.getAttribute("currentValueList").toString()))%>
 					</td>
 					<td>
@@ -94,8 +88,8 @@
 			globalUuid = uuid;
 			// execute the delete request
  			OPENINFRA_HELPER.Ajax.execDeleteQuery(
- 					"${contextPath}/rest/projects/${currentProject}/valuelists/" 
- 					+ uuid);
+ 					"${contextPath}/rest/" + OPENINFRA_HELPER.Misc.getRootPath()
+ 					+ "/valuelists/" + uuid);
 		}
 		
 		// if the ajax request has finished

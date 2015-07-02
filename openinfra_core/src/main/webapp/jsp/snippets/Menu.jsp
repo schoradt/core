@@ -21,12 +21,18 @@
 	<table>
 		<tr>
 			<td>
-				<img style="width: 80px;" alt="DAI" src="${contextPath}/img/Logo.png" title="Logo">
+				<a href="${homePage}">
+					<img style="width: 80px;" alt="Logo" src="${contextPath}/img/Logo.png" title="Logo">
+				</a>
 			</td>
 			<td>
-				<h1>penInfRA 
-					<span class="small">(${openInfraVersion})</span>
-				</h1>
+				<h1>
+					<a href="${homePage}">
+						penInfRA
+						<span class="small">(${openInfraVersion})</span>
+					</a>
+					</h1>
+					
 			</td>
 		</tr>
 	</table>

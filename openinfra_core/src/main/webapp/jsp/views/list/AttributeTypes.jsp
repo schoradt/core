@@ -15,14 +15,15 @@
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<fmt:message key="attributetypes.label"></fmt:message>
-			<span class="badge">
+			<span id="badge" class="badge">
 				<%=new AttributeTypeDao(
 								UUID.fromString(request.getAttribute("currentProject").toString()),
 								OpenInfraSchemas.PROJECTS).getCount()%>
 			</span>
+			<c:set var="createButton" value="valuelists/new" />
+			<%@ include file="../../snippets/ButtonBar.jsp" %>
 		</div>
-		
-		<table class="table table-hover rowlink" data-link="row">
+		<table class="table table-hover">
 			<thead>
 				<tr>
 					<th>
@@ -46,7 +47,7 @@
 				</tr>
 			</thead>
 			<c:forEach items="${it}" var="pojo">
-				<tr>    		
+				<tr id="tr_${pojo.uuid}">    		
 					<td>
 						<!-- ghost href for rowlink -->
 			  			<a href="attributetypes/${pojo.uuid}"></a>

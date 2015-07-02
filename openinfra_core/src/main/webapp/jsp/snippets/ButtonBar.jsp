@@ -27,7 +27,7 @@ Warning: The jstl variables will be removed after the button is printed.
 
 	<div id="singleButtonBar">
 		<c:if test="${deleteButton != null}">
-			<a href="#" onclick="deleteItem('${deleteButton}')">
+			<a id="deleteButtonLink" href="#" onclick="deleteItem('${deleteButton}')">
 				<i class="fa fa-trash-o" title="<fmt:message key="delete.button.label"/>"></i>
 			</a>
 			
@@ -37,7 +37,7 @@ Warning: The jstl variables will be removed after the button is printed.
 	
 	<div id="singleButtonBar">
 		<c:if test="${editButton != null}">
-			<a href="${editButton}">
+			<a id="editButtonLink" href="${editButton}">
 				<i class="fa fa-pencil-square-o" title="<fmt:message key="edit.button.label"/>"></i>
 			</a>
 			<c:remove var="editButton"/>
@@ -46,7 +46,7 @@ Warning: The jstl variables will be removed after the button is printed.
 	
 	<div id="singleButtonBar">
 		<c:if test="${createButton != null}">
-			<a href="${createButton}">
+			<a id="createButtonLink" href="${createButton}">
 				<i class="fa fa-plus-square" title="<fmt:message key="create.button.label"/>"></i>
 			</a>
 			<c:remove var="createButton"/>
@@ -55,7 +55,7 @@ Warning: The jstl variables will be removed after the button is printed.
 	
 	<div id="singleButtonBar">
 		<c:if test="${detailButton != null}">
-			<a href="${detailButton}">
+			<a id="detailButtonLink" href="${detailButton}">
 				<i class="fa fa-info-circle" title="<fmt:message key="detail.button.label"/>"></i>
 			</a>
 			<c:remove var="detailButton"/>

@@ -104,8 +104,7 @@
 	<script type="text/javascript">
 	
 		// create the base path of the application
-		// TODO this path should react dynamicly to the URI (project or system)
-		var basePath = "${contextPath}/rest/projects/${currentProject}";
+		var basePath = "${contextPath}/rest/" + OPENINFRA_HELPER.Misc.getRootPath();
 		var data = new Object();
 	
 		$("#save").click(function() {

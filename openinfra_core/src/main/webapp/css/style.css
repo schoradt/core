@@ -11,6 +11,11 @@ table {
     border-collapse: collapse;
 }
 
+/* remove the underline of hovered links */
+a:hover, a:focus {
+	text-decoration: none;
+}
+
 .border {
     border: 1px solid black;
     padding: 3px;
@@ -93,12 +98,6 @@ table tr td {
    to small and 2 to large */
 #singleButtonBar > a > i {
 	font-size: 1.5em;
-}
-
-/* remove the underline and color the text of the buttons */
-#singleButtonBar > a {
-	text-decoration: none;
-	text-color: #778899;
 }
 
 /* styling of the close button of the message boxes */

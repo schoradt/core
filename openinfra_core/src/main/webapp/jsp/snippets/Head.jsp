@@ -11,6 +11,8 @@
 <!-- ######## Define used variables here. This is a central point! ######## -->
 <c:set var="requestUrl" value="${requestScope['javax.servlet.forward.request_uri']}"/>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
+<c:set var="homePage" value="${contextPath}/rest/projects" />
+
 <!-- Set the OpenInfRA version for the current session and make sure that 
 	 it is set only once -->
 <%  if(pageContext.findAttribute("openInfraVersion") == null) {
@@ -21,14 +23,22 @@
 					PageContext.SESSION_SCOPE);
 } %>
 <!-- Set the current project -->
-<% if(pageContext.findAttribute("currentProject") == null)  {
-	pageContext.setAttribute(
-			"currentProject",
-			ProjectDao.getCurrentProject(
-					request.getAttribute("javax.servlet.forward.request_uri").toString()),
-			PageContext.REQUEST_SCOPE);
-} %>
+<c:set var="currentProject">
+<%= ProjectDao.getCurrentProject(
+		request.getAttribute("javax.servlet.forward.request_uri").toString()) %>
+</c:set>
 
+<!-- a global variable that defines if we are in a project or in the system database -->
+<c:choose>
+	<c:when test="${fn:contains(requestUrl, 'rest/system')}">
+		<c:set var="schema" value="system" />
+		<!-- override the project id -->
+		<c:set var="currentProject" value="" />
+	</c:when>
+	<c:otherwise>
+		<c:set var="schema" value="projects" />
+	</c:otherwise>
+</c:choose>
 
 <!-- ######## HTML head tags ######## -->
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
