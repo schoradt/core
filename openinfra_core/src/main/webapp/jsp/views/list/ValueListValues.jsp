@@ -21,8 +21,9 @@
 			<span id="badge" class="badge">
 				<c:set var="currentValueList" value="${it[0].belongsToValueList}"/>
 				<%=new ValueListValueDao(
-						UUID.fromString(request.getAttribute("currentProject").toString()),
-						OpenInfraSchemas.PROJECTS).getCount(
+				        pageContext.getAttribute("currentProject").toString() == "" ? null :
+							UUID.fromString(pageContext.getAttribute("currentProject").toString()),
+								OpenInfraSchemas.valueOf(pageContext.getAttribute("schema").toString().toUpperCase())).getCount(
 								UUID.fromString(pageContext.getAttribute("currentValueList").toString()))%>
 			</span>
 			<!-- add the id of the value list to the create button -->
@@ -82,8 +83,8 @@
 			globalUuid = uuid;
 			// execute the delete request
  			OPENINFRA_HELPER.Ajax.execDeleteQuery(
- 					"${contextPath}/rest/projects/${currentProject}/valuelistvalues/" 
- 					+ uuid);
+ 					"${contextPath}/rest/" + OPENINFRA_HELPER.Misc.getRootPath()
+ 					+ "/valuelistvalues/" + uuid);
 		}
 		
 		// if the ajax request has finished

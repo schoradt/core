@@ -97,11 +97,12 @@ public class ValueListResource {
     @Path("/hull")
     public ValueListPojo getEmptyShell(
             @QueryParam("language") String language,
-            @PathParam("projectId") UUID projectId) {
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema) {
         return new ValueListDao(
-                projectId,
-                OpenInfraSchemas.PROJECTS).createEmptyShell(
-                        PtLocaleDao.forLanguageTag(language));
+                        projectId,
+                        OpenInfraSchemas.valueOf(schema.toUpperCase()))
+                    .createEmptyShell(PtLocaleDao.forLanguageTag(language));
     }
 
 	@PUT

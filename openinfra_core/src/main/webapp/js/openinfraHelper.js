@@ -278,5 +278,16 @@ OPENINFRA_HELPER.Misc = {
 		var url = document.location.href;
 		// return the path of the url until the word "rest" appears
 		return url.match(/.+?(?=rest)/);
+	},
+	
+	/**
+	 * This function retrieve the root path of the current URL. This is the part
+	 * that contains the database resource e.g. system or project/uuid
+	 * 
+	 * @returns {string} The root path of the current URL.
+	 */
+	getRootPath : function() {
+		var url = document.location.href;
+		return url.match(/system|projects\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/);
 	}
 };
