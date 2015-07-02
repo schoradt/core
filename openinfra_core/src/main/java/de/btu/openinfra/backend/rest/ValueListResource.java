@@ -44,7 +44,6 @@ public class ValueListResource {
 			@PathParam("schema") String schema,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
-		System.out.println("Debug: get valuelist value");
 		return new ValueListDao(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
