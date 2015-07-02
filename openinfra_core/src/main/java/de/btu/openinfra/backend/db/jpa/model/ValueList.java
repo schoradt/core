@@ -32,7 +32,6 @@ import javax.persistence.Table;
 				+ "INNER JOIN v.ptFreeText2.localizedCharacterStrings p2 "
 				+ "WHERE p2.ptLocale = :ptl "
 				+ "ORDER BY p2.freeText " )
-		
 })
 public class ValueList implements Serializable, OpenInfraModelObject {
 	private static final long serialVersionUID = 1L;

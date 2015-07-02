@@ -110,7 +110,7 @@ public class ValueListDao extends OpenInfraDao<ValueListPojo, ValueList> {
      * @param locale the locale the informations should be saved at
      * @return       the ValueListPojo
      */
-	public ValueListPojo createEmptyShell(Locale locale) {
+	public ValueListPojo newValueList(Locale locale) {
 	    // create the return pojo
         ValueListPojo pojo = new ValueListPojo();
 

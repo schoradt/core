@@ -20,7 +20,10 @@
 		<div class="panel-heading">
 			<fmt:message key="valuelists.label"/>
 			<span id="badge" class="badge">
-				${fn:length(it)}
+				<%=new ValueListDao(
+			        pageContext.getAttribute("currentProject").toString() == "" ? null :
+						UUID.fromString(pageContext.getAttribute("currentProject").toString()),
+							OpenInfraSchemas.valueOf(pageContext.getAttribute("schema").toString().toUpperCase())).getCount()%>
 			</span>
 			<c:set var="createButton" value="valuelists/new" />
 			<%@ include file="../../snippets/ButtonBar.jsp" %>
