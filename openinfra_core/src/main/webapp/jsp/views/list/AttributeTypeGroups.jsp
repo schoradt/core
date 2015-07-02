@@ -17,7 +17,7 @@
 			<fmt:message key="attributetypegroups.label"/>
 			<span class="badge">
 				<%=new AttributeTypeGroupDao(
-								UUID.fromString(request.getAttribute("currentProject").toString()),
+								UUID.fromString(pageContext.getAttribute("currentProject").toString()),
 								OpenInfraSchemas.PROJECTS).getCount()%>
 			</span>
 		</div>
@@ -53,7 +53,7 @@
 					<td>
 						<c:set var="currentAttributeType" value="${pojo.uuid}"/>
 						<%=new AttributeTypeDao(
-								UUID.fromString(request.getAttribute("currentProject").toString()),
+								UUID.fromString(pageContext.getAttribute("currentProject").toString()),
 								OpenInfraSchemas.PROJECTS).getCount(
 										UUID.fromString(pageContext.getAttribute("currentAttributeType").toString()))%>
 					</td>

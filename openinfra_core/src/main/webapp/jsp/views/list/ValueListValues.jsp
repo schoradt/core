@@ -21,7 +21,11 @@
 		<div class="panel-heading">
 			<fmt:message key="valuelistvalues.label"/>
 			<span id="badge" class="badge">
-				${fn:length(it)}
+				<%=new ValueListValueDao(
+				        pageContext.getAttribute("currentProject").toString() == "" ? null :
+							UUID.fromString(pageContext.getAttribute("currentProject").toString()),
+								OpenInfraSchemas.valueOf(pageContext.getAttribute("schema").toString().toUpperCase())).getCount(
+								UUID.fromString(pageContext.getAttribute("currentValueList").toString()))%>
 			</span>
 			<!-- add the id of the value list to the create button -->
 			<c:set var="createButton" value="../../valuelistvalues/new" />

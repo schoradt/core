@@ -55,7 +55,7 @@
 			<span class="badge">
 				<c:set var="currentCharacteristic" value="${it[0].topicCharacteristic.uuid}"/>
 				<%=new TopicInstanceDao(
-						UUID.fromString(request.getAttribute("currentProject").toString()),
+						UUID.fromString(pageContext.getAttribute("currentProject").toString()),
 						OpenInfraSchemas.PROJECTS).getCount(
 								UUID.fromString(pageContext.getAttribute("currentCharacteristic").toString()))%>
 			</span>
@@ -82,7 +82,7 @@
 							pageContext.setAttribute(
 																"columnName",
 																new AttributeTypeDao(
-																UUID.fromString(request.getAttribute("currentProject").toString()),
+																UUID.fromString(pageContext.getAttribute("currentProject").toString()),
 																OpenInfraSchemas.PROJECTS).read(
 																		PtLocaleDao.forLanguageTag(session.getAttribute("language").toString()), 
 																		UUID.fromString(pageContext.getAttribute("setting").toString())),

@@ -17,7 +17,7 @@
 			<fmt:message key="attributetypes.label"></fmt:message>
 			<span id="badge" class="badge">
 				<%=new AttributeTypeDao(
-								UUID.fromString(request.getAttribute("currentProject").toString()),
+								UUID.fromString(pageContext.getAttribute("currentProject").toString()),
 								OpenInfraSchemas.PROJECTS).getCount()%>
 			</span>
 			<c:set var="createButton" value="valuelists/new" />

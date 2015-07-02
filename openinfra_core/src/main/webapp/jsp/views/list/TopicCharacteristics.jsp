@@ -44,7 +44,7 @@
 			<fmt:message key="topiccharacteristics.label"/>
 			<span class="badge">
 				<%=new TopicCharacteristicDao(
-								UUID.fromString(request.getAttribute("currentProject").toString()),
+								UUID.fromString(pageContext.getAttribute("currentProject").toString()),
 								OpenInfraSchemas.PROJECTS).getCount()%>
 			</span>
 		</div>
@@ -73,7 +73,7 @@
 					<td>
 						<c:set var="currentCharacteristic" value="${pojo.uuid}"/>
 						<%=new TopicInstanceDao(
-								UUID.fromString(request.getAttribute("currentProject").toString()),
+								UUID.fromString(pageContext.getAttribute("currentProject").toString()),
 								OpenInfraSchemas.PROJECTS).getCount(
 										UUID.fromString(pageContext.getAttribute("currentCharacteristic").toString()))%>
 					</td>
