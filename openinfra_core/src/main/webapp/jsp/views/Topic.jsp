@@ -149,7 +149,7 @@
 										<c:set var="currentDomain" value="${atv.attributeType.domain.uuid}"/>
 										<%
 											pageContext.setAttribute("values", new ValueListValueDao(
-																				UUID.fromString(request.getAttribute("currentProject").toString()),
+																				UUID.fromString(pageContext.getAttribute("currentProject").toString()),
 																				OpenInfraSchemas.PROJECTS).read(
 																						PtLocaleDao.forLanguageTag(session.getAttribute("language").toString()), 
 																						UUID.fromString(pageContext.getAttribute("currentDomain").toString()), 
@@ -269,7 +269,7 @@
 			<c:set var="currentInstance" value="${it.topicInstance.uuid}"/>
 			<fmt:message key="please.wait.label"/>:
 			<%=new TopicInstanceAssociationDao(
-					UUID.fromString(request.getAttribute("currentProject").toString()),
+					UUID.fromString(pageContext.getAttribute("currentProject").toString()),
 					OpenInfraSchemas.PROJECTS).getCount(
 							UUID.fromString(pageContext.getAttribute("currentInstance").toString()))%>
 		</p>
