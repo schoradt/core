@@ -31,7 +31,7 @@ public class OpenInfraApplication extends ResourceConfig {
 	public OpenInfraApplication() {
 
 		super();
-		
+
 		System.out.println("Debug test -- github");
 
 		// Register the JSP template engine
@@ -43,7 +43,7 @@ public class OpenInfraApplication extends ResourceConfig {
 		packages("de.btu.openinfra.backend.rest");
 		packages("de.btu.openinfra.plugins.solr.rest");
 	}
-
+// Hallo Welt
 	/**
 	 * This method delivers the OpenInfRA version provided by the Maven
 	 * pom file. In order to change the version number change it in the
