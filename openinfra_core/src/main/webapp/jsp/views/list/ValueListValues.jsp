@@ -13,6 +13,7 @@
 	<title>OpenInfRA <fmt:message key="valuelists.label"/></title>
 </head>
 <body>
+	<!-- include the menu -->
 	<%@ include file="../../snippets/Menu.jsp" %>
 	
 	<c:set var="currentValueList" value="${it[0].belongsToValueList}"/>
@@ -83,7 +84,7 @@
 		function deleteItem(uuid) {
 			globalUuid = uuid;
 			// execute the delete request
- 			OPENINFRA_HELPER.Ajax.execDeleteQuery(
+ 			OPENINFRA_HELPER.Dialogs.confirmDelete(
  					"${contextPath}/rest/" + OPENINFRA_HELPER.Misc.getRootPath()
  					+ "/valuelistvalues/" + uuid);
 		}
