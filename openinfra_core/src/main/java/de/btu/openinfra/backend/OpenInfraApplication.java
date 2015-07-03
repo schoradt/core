@@ -31,6 +31,8 @@ public class OpenInfraApplication extends ResourceConfig {
 	public OpenInfraApplication() {
 		
 		super();
+		
+		System.out.println("Debug test");
 
 		// Register the JSP template engine 
 		property(JspMvcFeature.TEMPLATE_BASE_PATH, "/jsp/");
