@@ -367,13 +367,15 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	 * This method retrieves the count of objects and uses a named query. If the
 	 * query doesn't exists, it will throw an exception.
 	 *
-	 * @return count of objects
+	 * @return count of objects or zero
 	 */
 	public long getCount() {
 		String namedQuery = modelClass.getSimpleName() + ".count";
-		return em.createNamedQuery(
-			namedQuery,
-			Long.class).getSingleResult().longValue();
+		Long count = 0L;
+		count = em.createNamedQuery(
+            namedQuery,
+            Long.class).getSingleResult().longValue();
+		return count;
 	}
 
 	/**

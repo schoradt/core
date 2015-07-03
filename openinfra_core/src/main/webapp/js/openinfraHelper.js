@@ -292,5 +292,14 @@ OPENINFRA_HELPER.Misc = {
 	    // because js doesn't support regex look behind we must replace the
 	    // element name and the slash
 	    return match.replace(elem+"/", "");
+	},
+
+	decrementBadge : function(uuid) {
+	    if (OPENINFRA_HELPER.Ajax.result != null) {
+            // remove the deleted item from the list
+            $('#tr_' + uuid).remove();
+            // decrement the badge count
+            $("#badge").text($("#badge").text()-1);
+        }
 	}
 };
