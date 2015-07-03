@@ -14,8 +14,9 @@
 	<title>OpenInfRA <fmt:message key="valuelists.label"/></title>
 </head>
 <body>
+	<!-- include the menu -->
 	<%@ include file="../../snippets/Menu.jsp" %>
-
+	
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<fmt:message key="valuelists.label"/>
@@ -89,10 +90,10 @@
 		
 		function deleteItem(uuid) {
 			globalUuid = uuid;
-			// execute the delete request
- 			OPENINFRA_HELPER.Ajax.execDeleteQuery(
+			// call the delete confirm dialog
+			OPENINFRA_HELPER.Dialogs.confirmDelete(
  					"${contextPath}/rest/" + OPENINFRA_HELPER.Misc.getRootPath()
- 					+ "/valuelists/" + uuid);
+ 					+ "/valuelists/" + uuid)
 		}
 		
 		// if the ajax request has finished
