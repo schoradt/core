@@ -14,8 +14,9 @@
 	<title>OpenInfRA <fmt:message key="valuelists.label"/></title>
 </head>
 <body>
+	<!-- include the menu -->
 	<%@ include file="../../snippets/Menu.jsp" %>
-
+	
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<fmt:message key="valuelists.label"/>
@@ -89,25 +90,18 @@
 		
 		function deleteItem(uuid) {
 			globalUuid = uuid;
-			// execute the delete request
- 			OPENINFRA_HELPER.Ajax.execDeleteQuery(
+			// call the delete confirm dialog
+			OPENINFRA_HELPER.Dialogs.confirmDelete(
  					"${contextPath}/rest/" + OPENINFRA_HELPER.Misc.getRootPath()
- 					+ "/valuelists/" + uuid);
+ 					+ "/valuelists/" + uuid)
 		}
 		
 		// if the ajax request has finished
 		$(document).ajaxStop(function () {
-			// if the request was successful
-			if (OPENINFRA_HELPER.Ajax.result != null) {
-				// remove the deleted item from the list
-				$('#tr_' + globalUuid).remove();
-				// decrement the badge count
-				$("#badge").text($("#badge").text()-1);
-			}
-				
+		    // try to decrement the badge
+		    OPENINFRA_HELPER.Misc.decrementBadge(globalUuid);
 			// set the message box with the response
 			OPENINFRA_HELPER.MessageBox.setResponse();
-				
 		});
 	</script>
 </body>

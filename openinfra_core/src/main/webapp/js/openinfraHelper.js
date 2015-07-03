@@ -29,23 +29,20 @@ OPENINFRA_HELPER.Ajax = {
 	 * This function executes a DELETE ajax request to the passed URI and
 	 * handles the success and error cases.
 	 *
-	 * @param {string} uri The uri of the DELETE request.
+	 * @param {string} uri The URI of the DELETE request.
 	 */
 	execDeleteQuery : function(uri) {
 		if (uri != "") {
-			// TODO get the confirm dialog to work
-			//OPENINFRA_HELPER.ConfirmDialog.open();
-
-			$.ajax({
-				type: "DELETE",
-				url: uri,
-				error: function(xhr){
-					OPENINFRA_HELPER.Ajax.xhr = xhr;
-				}, // end error
-				success: function(result) {
-					OPENINFRA_HELPER.Ajax.result = result;
-				} // end success
-			}); // end ajax call
+		    $.ajax({
+                type: "DELETE",
+                url: uri,
+                error: function(xhr){
+                    OPENINFRA_HELPER.Ajax.xhr = xhr;
+                }, // end error
+                success: function(result) {
+                    OPENINFRA_HELPER.Ajax.result = result;
+                } // end success
+            }); // end ajax call
 		}
 	},
 
@@ -196,39 +193,25 @@ OPENINFRA_HELPER.MessageBox = {
 
 
 /**
- * This class contains methods that belongs to the confirm dialog.
+ * This class contains methods that opens different dialogs.
  *
  * @memberof OPENINFRA_HELPER
- * @class ConfirmDialog
+ * @class Dialogs
  */
-OPENINFRA_HELPER.ConfirmDialog = {
+OPENINFRA_HELPER.Dialogs = {
 	/**
-	 * This function opens the confirm dialog.
+	 * This function opens the confirm dialog for delete requests.
+	 *
+	 * @param {string} uri The uri for the delete request.
 	 */
-	open : function() {
-	    $("#confirmBox").on("show", function() {    // wire up the OK button to dismiss the modal when shown
-	    	alert("lala");
-	        $("#confirmBox a.btn").on("click", function(e) {
-
-	            alert("button pressed");   			// just as an example...
-	            $("#confirmBox").modal('hide');     // dismiss the dialog
-	            return true;
-	        });
-	    });
-
-	    $("#confirmBox").on("hide", function() {    // remove the event listeners when the dialog is dismissed
-	        $("#confirmBox a.btn").off("click");
-	        return false;
-	    });
-
-	    $("#confirmBox").on("hidden", function() {  // remove the actual elements from the DOM when fully hidden
-	        $("#confirmBox").remove();
-	    });
-
-	    $("#confirmBox").modal({                    // wire up the actual modal functionality and show the dialog
+	confirmDelete : function(uri) {
+	    $("#confirmBox").modal({
 	      "backdrop"  : "static",
 	      "keyboard"  : true,
-	      "show"      : true                     // ensure the modal is shown immediately
+	      "show"      : true
+	    }).one("click", "#confirmBtn", function() {
+	        // execute the delete request
+	        OPENINFRA_HELPER.Ajax.execDeleteQuery(uri);
 	    });
 	}
 };
@@ -309,5 +292,14 @@ OPENINFRA_HELPER.Misc = {
 	    // because js doesn't support regex look behind we must replace the
 	    // element name and the slash
 	    return match.replace(elem+"/", "");
+	},
+
+	decrementBadge : function(uuid) {
+	    if (OPENINFRA_HELPER.Ajax.result != null) {
+            // remove the deleted item from the list
+            $('#tr_' + uuid).remove();
+            // decrement the badge count
+            $("#badge").text($("#badge").text()-1);
+        }
 	}
 };

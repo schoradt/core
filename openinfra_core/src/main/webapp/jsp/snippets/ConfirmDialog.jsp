@@ -20,7 +20,7 @@ message must be set separately.
 				<button type="button" class="btn btn-default" data-dismiss="modal">
 					<fmt:message>cancel.button.label</fmt:message>
 				</button>
-				<button type="button" class="btn btn-primary">
+				<button id="confirmBtn" type="button" class="btn btn-primary" data-dismiss="modal">
 					<fmt:message>ok.button.label</fmt:message>
 				</button>
 				
