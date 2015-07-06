@@ -17,7 +17,7 @@ import org.glassfish.jersey.server.mvc.jsp.JspMvcFeature;
  *
  */
 public class OpenInfraApplication extends ResourceConfig {
-	// alex sein test dingens
+
 	/**
 	 * This variable defines the used persistence context.
 	 */

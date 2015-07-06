@@ -16,18 +16,27 @@
 	<!-- include the menu -->
 	<%@ include file="../../snippets/Menu.jsp" %>
 	
-	<c:set var="currentValueList" value="${it[0].belongsToValueList}"/>
-	
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<fmt:message key="valuelistvalues.label"/>
 			<span id="badge" class="badge">
-				<%=new ValueListValueDao(
-				        pageContext.getAttribute("currentProject").toString() == "" ? null :
-							UUID.fromString(pageContext.getAttribute("currentProject").toString()),
-								OpenInfraSchemas.valueOf(pageContext.getAttribute("schema").toString().toUpperCase())).getCount(
-								UUID.fromString(pageContext.getAttribute("currentValueList").toString()))%>
+				<!-- It is not possible to retrieve the value list id via scriptlet. If
+					 the request returns an empty pojo set the badge count to zero.-->
+				 <c:choose>
+				 	<c:when test="${fn:length(it) == 0}">
+				 		0
+				 	</c:when>
+				 	<c:otherwise>
+				 		<c:set var="currentValueList" value="${it[0].belongsToValueList}"/>
+				 		<%=new ValueListValueDao(
+					        pageContext.getAttribute("currentProject").toString() == "" ? null :
+								UUID.fromString(pageContext.getAttribute("currentProject").toString()),
+									OpenInfraSchemas.valueOf(pageContext.getAttribute("schema").toString().toUpperCase())).getCount(
+									UUID.fromString(pageContext.getAttribute("currentValueList").toString()))%>
+				 	</c:otherwise>
+				 </c:choose>
 			</span>
+				
 			<!-- add the id of the value list to the create button -->
 			<c:set var="createButton" value="../../valuelistvalues/new" />
 			<%@ include file="../../snippets/ButtonBar.jsp" %>
