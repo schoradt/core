@@ -167,8 +167,6 @@ OPENINFRA_HELPER.MessageBox = {
 		xhr = OPENINFRA_HELPER.Ajax.xhr;
 		result = OPENINFRA_HELPER.Ajax.result;
 
-
-
 		// set the success message
 		if (result != null) {
 			$('#successDiv').text(result.message + ": ");
@@ -181,8 +179,27 @@ OPENINFRA_HELPER.MessageBox = {
 		// set the error message
 		if (xhr != null) {
 			if(xhr.responseText.search('<body>') > -1) {
-				var source = xhr.responseText.split('<body>')[1];
-				$('#alertDiv').html(source.split('</body>')[0]);
+			    // get the headline of the error message
+			    var header = xhr.responseText.split('<h1>')[1];
+			    var content = xhr.responseText.split('<body>')[1];
+			    // set the default message block
+			    var message = content.split('</body>')[0];
+
+			    // retrieve the error message depending on the exception
+			    if (header.split('</h1>')[0].contains("javax.persistence.RollbackException")) {
+			        content = xhr.responseText.split('<pre>')[1];
+			        // only set the new message, if we found a constraint string
+			        // TODO the matches maps statically to the german language of the database system and the OpenInfRA constraints
+			        if (content.split('</pre>')[0].search(/Constraint\s\d{1,2}\s-\s.*/) > -1) {
+			            // match constraints
+			            message = content.split('</pre>')[0].match(/Constraint\s\d{1,2}\s-\s.*/);
+			        } else {
+			            // match all other errors
+			            message = content.split('</pre>')[0].match(/FEHLER:.*/);
+			        }
+			    }
+
+				$('#alertDiv').html(message);
 				$('#alert').fadeIn();
 				// reset the xhr properties
 				OPENINFRA_HELPER.Ajax.xhr = null;
