@@ -12,23 +12,15 @@
 <body>
 	<%@ include file="../../snippets/Menu.jsp" %>
 	
-	<!--
-		Force an exception to test if "it" is an object or not. This will
-		determine if the creation mode is called.
-	 -->
-	<c:catch var="createException">
-		<c:if test="${it.uuid != null}"></c:if>
-	</c:catch>
-	
-	<!-- If an exception occurred set the create variable to true. -->
+	<!-- Check if an object was returned and set a respective variable. -->
 	<c:choose>
-		<c:when test="${createException == null}">
-			<c:set var="create" value="false" />
+		<c:when test="${it.uuid == null}">
+			<c:set var="create" value="true" />
 		</c:when>
 		<c:otherwise>
-			<c:set var="create" value="true" />
+			<c:set var="create" value="false" />
 		</c:otherwise>
-	</c:choose>
+ 	</c:choose>
 	
 	<div class="content">
 		<h2>
@@ -133,7 +125,7 @@
 			var setUri = basePath + "/valuelists";
 			
 			// build the URI to retrieve the hull object
-			var getUri = setUri + "/hull";
+			var getUri = setUri + "/new";
 			
 			// call the putOrPost method and persist the data
 			OPENINFRA_HELPER.Ajax.execPutOrPostQuery("POST", getUri, setUri, data);

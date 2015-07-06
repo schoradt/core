@@ -198,7 +198,7 @@
 			var setUri = basePath + "/valuelists/" + $("#belongsToValueList").val() + "/valuelistvalues";
 			
 			// build the URI to retrieve the hull object
-			var getUri = basePath + "/valuelists/hull";
+			var getUri = basePath + "/valuelists/new";
 			
 			// call the putOrPost method and persist the data
 			OPENINFRA_HELPER.Ajax.execPutOrPostQuery("POST", getUri, setUri, data);
