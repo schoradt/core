@@ -171,9 +171,12 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
      * Since the system schema doesn't provide the project_id column for topic
      * characteristic objects it is necessary to handle this request separately.
      * 
-     * The meta data schema is also handled sepeartely.
+     * The meta data schema is also handled separately.
+	 *
 	 *
      * @param locale     A Java.util locale objects.
+	 * @param order      the sort order (ascending or descending)
+	 * @param column     the column to sort
 	 * @param offset     the number where to start
 	 * @param size       the size of items to provide
 	 * @return           a list of objects of type POJO class
@@ -204,17 +207,26 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 		            "select id, description, topic "
                     + "from topic_characteristic",
                     TopicCharacteristic.class).getResultList();
-		} else if(schema == OpenInfraSchemas.META_DATA) {
-			
+		} else if(schema == OpenInfraSchemas.META_DATA || 
+				order == null || column == null) {
+	        // 5.a Construct the name of the named query
+	        String namedQuery = modelClass.getSimpleName() + ".findAll";
+	        // 5.b Retrieve the requested model objects from database
+	        models = em.createNamedQuery(
+	                namedQuery,
+	                modelClass)
+	                .setFirstResult(offset)
+	                .setMaxResults(size)
+	                .getResultList();
 		} else {
-	        // 6. Construct the origin SQL-based named query and replace the
+	        // 5.a Construct the origin SQL-based named query and replace the
 			//    the placeholder by the required column and sort order.
 	        String sqlString = em.createNamedQuery(
 	        		modelClass.getSimpleName() + ".findAllByLocale").unwrap(
 	        				JpaQuery.class).getDatabaseQuery().getSQLString();
 	        sqlString = String.format(sqlString, column.name());
 	        sqlString += " " + order.name();
-	        // 7. Retrieve the requested model objects from database
+	        // 5.b Retrieve the requested model objects from database
 	        models = em.createNativeQuery(
 	        		sqlString,
 	                modelClass)
@@ -222,9 +234,9 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	                .setFirstResult(offset)
 	                .setMaxResults(size)
 	                .getResultList();
-		}
+		} // end if else
 
-		// 8. Finally, map the JPA model objects to POJO objects
+		// 6. Finally, map the JPA model objects to POJO objects
 		for(TypeModel modelItem : models) {
 		    pojos.add(mapToPojo(locale, modelItem));
 		} // end for
