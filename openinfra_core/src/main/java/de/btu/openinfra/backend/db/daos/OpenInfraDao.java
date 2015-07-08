@@ -161,7 +161,9 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	/**
 	 * This is a generic method which provides read access to the selected
 	 * database schema. It is almost the same routine for all DAO classes to
-	 * access the database. If not, this method should be overwritten.
+	 * access the database. If not, this method should be extended in order
+	 * to avoid overrides. Overrides could increase the effort regarding the 
+	 * integration and maintenance of a rights management system.
 	 *
      * Since the system schema doesn't provide the project_id column for topic
      * characteristic objects it is necessary to handle this request separately.
@@ -228,7 +230,7 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	public UUID createOrUpdate(TypePojo pojo)
 			throws RuntimeException {
 	    // TODO handle the geometry cast here as special case
-	    // TODO maybe saving topics in system database must be handle as well
+	    // TODO maybe saving topics in system database must be handled as well
 		// 1. Map the POJO object to a JPA model object
 		MappingResult<TypeModel> result = mapToModel(
 				pojo,

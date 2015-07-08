@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -25,13 +27,20 @@ import javax.persistence.Table;
 	@NamedQuery(name="ValueList.count",
 		query="SELECT COUNT(v) FROM ValueList v "),
 	@NamedQuery(name="ValueList.findAll",
-		query="SELECT v FROM ValueList v"),		
-	@NamedQuery(name="ValueList.findAllByLocale",
-		query="SELECT v "
-				+ "FROM ValueList v "
-				+ "INNER JOIN v.ptFreeText2.localizedCharacterStrings p2 "
-				+ "WHERE p2.ptLocale = :ptl "
-				+ "ORDER BY p2.freeText " )
+		query="SELECT v FROM ValueList v")
+})
+@NamedNativeQueries({
+	@NamedNativeQuery(name="ValueList.findAllByLocale",
+			query="select * "
+				  + "from value_list as vl " 
+			      + "LEFT OUTER JOIN ( "
+			      	+ "select * "
+			      	+ "from value_list as a, localized_character_string as b "
+			      	+ "where a.%s = b.pt_free_text_id "
+			        + "and b.pt_locale_id = cast(? as uuid) ) as sq "
+			        + "on (vl.id = sq.id) "
+			        + "order by free_text ",
+			resultClass=ValueList.class)
 })
 public class ValueList implements Serializable, OpenInfraModelObject {
 	private static final long serialVersionUID = 1L;

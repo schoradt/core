@@ -1,4 +1,4 @@
-package de.btu.openinfra.backend.db.pojos;
+package de.btu.openinfra.backend.db.daos;
 
 import javax.xml.bind.annotation.XmlRootElement;
 

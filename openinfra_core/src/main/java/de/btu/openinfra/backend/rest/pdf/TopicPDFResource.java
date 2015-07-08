@@ -27,7 +27,7 @@ import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
 
-import de.btu.openinfra.backend.db.pojos.AttributeValueGeomType;
+import de.btu.openinfra.backend.db.daos.AttributeValueGeomType;
 
 @Path("/projects/{projectId}/topicinstances")
 public class TopicPDFResource {
