@@ -80,6 +80,7 @@ public class TopicCharacteristic implements Serializable, OpenInfraModelObject {
 	public TopicCharacteristic() {
 	}
 
+	@Override
 	public UUID getId() {
 		return this.id;
 	}

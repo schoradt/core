@@ -42,7 +42,9 @@ public class PtLocaleDao extends OpenInfraDao<PtLocalePojo, PtLocale> {
 	 * @return       a PtLocale object
 	 */
 	public PtLocale read(Locale locale) {
-	    if (locale == null) return null;
+	    if (locale == null) {
+	    	return null;
+	    }
 		// 1. Get country code object
 	    CountryCode cc = null;
 	    if (locale.getCountry() != null && !locale.getCountry().equals("")) {
