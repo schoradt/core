@@ -3,6 +3,7 @@ package de.btu.openinfra.backend;
 import java.util.Locale;
 import java.util.Properties;
 
+import de.btu.openinfra.backend.db.daos.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 
 /**
@@ -52,6 +53,13 @@ public class OpenInfraProperties {
      */
     public static final Locale DEFAULT_LANGUAGE = PtLocaleDao.forLanguageTag(
     		getProperty(OpenInfraPropertyKeys.DEFAULT_LANGUAGE.toString()));
+    
+    /**
+     * This variable defines the default sort order.
+     */
+    public static final OpenInfraSortOrder DEFAULT_ORDER = 
+    		OpenInfraSortOrder.valueOf(getProperty(
+    				OpenInfraPropertyKeys.DEFAULT_ORDER.toString()));
 	
 	/**
 	 * This method retrieves the required information from the property file 

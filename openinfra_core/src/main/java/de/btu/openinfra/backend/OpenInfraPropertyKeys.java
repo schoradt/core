@@ -117,6 +117,16 @@ public enum OpenInfraPropertyKeys {
     	public String toString() {
     		return "de.btu.openinfra.backend.language.default";
     	}
+    },
+    
+    /**
+     * This variable defines the default order key.
+     */
+    DEFAULT_ORDER {
+    	@Override
+    	public String toString() {
+    		return "de.btu.openinfra.backend.order";
+    	}
     }
 
 }
