@@ -6,7 +6,6 @@ import java.util.Locale;
 import java.util.UUID;
 
 import de.btu.openinfra.backend.OpenInfraProperties;
-import de.btu.openinfra.backend.db.pojos.AttributeValueGeomType;
 import de.btu.openinfra.backend.db.pojos.TopicGeomzPojo;
 import de.btu.openinfra.backend.db.pojos.TopicInstancePojo;
 

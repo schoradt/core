@@ -2,6 +2,8 @@ package de.btu.openinfra.backend.db.pojos;
 
 import java.util.UUID;
 
+import de.btu.openinfra.backend.db.daos.AttributeValueGeomType;
+
 
 public class AttributeValueGeomzPojo extends OpenInfraPojo {
 

@@ -14,7 +14,9 @@ import javax.ws.rs.core.MediaType;
 import de.btu.openinfra.backend.db.daos.AttributeTypeDao;
 import de.btu.openinfra.backend.db.daos.AttributeTypeGroupDao;
 import de.btu.openinfra.backend.db.daos.AttributeTypeToAttributeTypeGroupDao;
+import de.btu.openinfra.backend.db.daos.OpenInfraOrderBy;
 import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.daos.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupPojo;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeToAttributeTypeGroupPojo;
@@ -46,12 +48,16 @@ public class AttributeTypeGroupResource {
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
+			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
+			@QueryParam("orderBy") OpenInfraOrderBy orderBy,
 			@QueryParam("offset") int offset, 
 			@QueryParam("size") int size) {
 		return new AttributeTypeGroupDao(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						PtLocaleDao.forLanguageTag(language), 
+						PtLocaleDao.forLanguageTag(language),
+						sortOrder,
+						orderBy,
 						offset, 
 						size);
 	}
@@ -77,12 +83,16 @@ public class AttributeTypeGroupResource {
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@PathParam("attributeTypeGroupId") UUID attributeTypeGroupId,
+			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
+			@QueryParam("orderBy") OpenInfraOrderBy orderBy,
 			@QueryParam("offset") int offset, 
 			@QueryParam("size") int size) {
 		return new AttributeTypeToAttributeTypeGroupDao(
 				projectId, 
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						Locale.forLanguageTag(language), 
+						Locale.forLanguageTag(language),
+						sortOrder,
+						orderBy,
 						offset, 
 						size);
 	}

@@ -12,6 +12,8 @@ import javax.ws.rs.core.MediaType;
 
 import org.glassfish.jersey.server.mvc.Template;
 
+import de.btu.openinfra.backend.db.daos.OpenInfraOrderBy;
+import de.btu.openinfra.backend.db.daos.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.pojos.ValueListPojo;
 import de.btu.openinfra.backend.db.pojos.ValueListValuePojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
@@ -28,10 +30,13 @@ public class ValueListResource {
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
+			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
+			@QueryParam("orderBy") OpenInfraOrderBy orderBy,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new de.btu.openinfra.backend.rest.ValueListResource()
-				.get(language, projectId, schema, offset, size);
+				.get(language, projectId, schema, sortOrder, orderBy, 
+						offset, size);
 	}
 
 	@GET

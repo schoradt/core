@@ -11,7 +11,9 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import de.btu.openinfra.backend.db.daos.LanguageCodeDao;
+import de.btu.openinfra.backend.db.daos.OpenInfraOrderBy;
 import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.daos.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.LanguageCodePojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
@@ -30,12 +32,16 @@ public class LanguageCodesResource {
 	@GET
 	public List<LanguageCodePojo> get(
 			@QueryParam("language") String language,
+			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
+			@QueryParam("orderBy") OpenInfraOrderBy orderBy,
 			@QueryParam("offset") int offset, 
 			@QueryParam("size") int size) {
 		return new LanguageCodeDao(
 				null, 
 				OpenInfraSchemas.SYSTEM ).read(
 						PtLocaleDao.forLanguageTag(language),
+						sortOrder,
+						orderBy,
 						offset, 
 						size);
 	}

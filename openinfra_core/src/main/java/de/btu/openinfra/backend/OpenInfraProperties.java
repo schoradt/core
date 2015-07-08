@@ -1,6 +1,10 @@
 package de.btu.openinfra.backend;
 
+import java.util.Locale;
 import java.util.Properties;
+
+import de.btu.openinfra.backend.db.daos.OpenInfraSortOrder;
+import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 
 /**
  * OpenInfRA properties implemented as singleton.
@@ -27,8 +31,7 @@ public class OpenInfraProperties {
 	 * loading times. 
 	 */
 	public static final int DEFAULT_OFFSET = Integer.parseInt(
-            OpenInfraProperties.getProperty(
-                    OpenInfraPropertyKeys.DEFAULT_OFFSET.toString()));
+            getProperty(OpenInfraPropertyKeys.DEFAULT_OFFSET.toString()));
 	
 	/**
 	 * This variable defines the default size for lists. This should be used
@@ -36,16 +39,27 @@ public class OpenInfraProperties {
 	 * loading times.  
 	 */
 	public static final int DEFAULT_SIZE = Integer.parseInt(
-            OpenInfraProperties.getProperty(
-                    OpenInfraPropertyKeys.DEFAULT_SIZE.toString()));
+           getProperty(OpenInfraPropertyKeys.DEFAULT_SIZE.toString()));
 	
 	/**
      * This variable defines the max size for lists. This should be used
      * when the resource must be restricted due to heavy load to the server.  
      */
     public static final int MAX_SIZE = Integer.parseInt(
-            OpenInfraProperties.getProperty(
-                    OpenInfraPropertyKeys.MAX_SIZE.toString()));
+            getProperty(OpenInfraPropertyKeys.MAX_SIZE.toString()));
+    
+    /**
+     * This variable defines the default language.
+     */
+    public static final Locale DEFAULT_LANGUAGE = PtLocaleDao.forLanguageTag(
+    		getProperty(OpenInfraPropertyKeys.DEFAULT_LANGUAGE.toString()));
+    
+    /**
+     * This variable defines the default sort order.
+     */
+    public static final OpenInfraSortOrder DEFAULT_ORDER = 
+    		OpenInfraSortOrder.valueOf(getProperty(
+    				OpenInfraPropertyKeys.DEFAULT_ORDER.toString()));
 	
 	/**
 	 * This method retrieves the required information from the property file 

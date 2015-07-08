@@ -37,30 +37,6 @@ public class ValueListDao extends OpenInfraDao<ValueListPojo, ValueList> {
 		return mapToPojoStatically(locale, vl);
 	}
 
-	@Override
-	public List<ValueListPojo> read(Locale locale, int offset, int size) {
-	    List<ValueListPojo> ret = new LinkedList<ValueListPojo>();
-
-	    // return an empty pojo if no locale was set
-	    if (locale == null) {
-	        return ret;
-	    }
-
-		List<ValueList> list = em.createNamedQuery(
-                "ValueList.findAllByLocale",
-                ValueList.class)
-                .setFirstResult(offset)
-                .setMaxResults(size)
-                .setParameter("ptl",
-                		new PtLocaleDao(currentProjectId, schema).read(locale))
-                .getResultList();
-
-		for(ValueList vl : list) {
-			ret.add(mapToPojo(locale, vl));
-		}
-		return ret;
-	}
-
 	public static ValueListPojo mapToPojoStatically(
 			Locale locale,
 			ValueList vl) {
@@ -94,7 +70,8 @@ public class ValueListDao extends OpenInfraDao<ValueListPojo, ValueList> {
             }
 
             // in case the name is empty
-            if (pojo.getNames().getLocalizedStrings().get(0).getCharacterString() == "") {
+            if (pojo.getNames().getLocalizedStrings().get(0)
+            		.getCharacterString() == "") {
                 return null;
             }
 

@@ -25,10 +25,7 @@ public class ProjectsResources {
             @QueryParam("offset") int offset,
             @QueryParam("size") int size) {
         return new ProjectsDao(
-                OpenInfraSchemas.META_DATA).read(
-                        null,
-                        offset,
-                        size);
+                OpenInfraSchemas.META_DATA).read(null, offset, size);
     }
 
     @GET

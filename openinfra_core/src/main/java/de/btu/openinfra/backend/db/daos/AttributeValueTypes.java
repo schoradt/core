@@ -1,4 +1,4 @@
-package de.btu.openinfra.backend.db.pojos;
+package de.btu.openinfra.backend.db.daos;
 
 /**
  * A set of attribute value types defined by the database schema definition.

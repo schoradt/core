@@ -12,6 +12,8 @@ import javax.ws.rs.core.MediaType;
 
 import org.glassfish.jersey.server.mvc.Template;
 
+import de.btu.openinfra.backend.db.daos.OpenInfraOrderBy;
+import de.btu.openinfra.backend.db.daos.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupToTopicCharacteristicPojo;
 import de.btu.openinfra.backend.db.pojos.TopicCharacteristicPojo;
 import de.btu.openinfra.backend.db.pojos.TopicInstancePojo;
@@ -30,10 +32,13 @@ public class TopicCharacteristicResource {
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@QueryParam("filter") String filter,
+			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
+			@QueryParam("orderBy") OpenInfraOrderBy orderBy,
 			@PathParam("offset") int offset,
 			@PathParam("size") int size) {
 		return new de.btu.openinfra.backend.rest.TopicCharacteristicResource()
-			.get(language, projectId, schema, filter, offset, size);
+			.get(language, projectId, schema, filter, sortOrder, orderBy, 
+					offset, size);
 	}
 
 	@GET

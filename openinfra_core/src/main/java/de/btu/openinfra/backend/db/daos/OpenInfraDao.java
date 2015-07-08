@@ -11,12 +11,15 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
+import org.eclipse.persistence.jpa.JpaQuery;
+
 import de.btu.openinfra.backend.OpenInfraApplication;
 import de.btu.openinfra.backend.OpenInfraProperties;
 import de.btu.openinfra.backend.OpenInfraPropertyKeys;
 import de.btu.openinfra.backend.db.MetaDataManager;
 import de.btu.openinfra.backend.db.OpenInfraPropertyValues;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
+import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 import de.btu.openinfra.backend.db.pojos.meta.ProjectsPojo;
@@ -157,47 +160,109 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 				OpenInfraApplication.PERSISTENCE_CONTEXT,
 				properties).createEntityManager();
 	}
-
+	
 	/**
-	 * This is a generic method which provides read access to the selected
-	 * database schema. It is almost the same routine for all DAO classes to
-	 * access the database. If not, this method should be overwritten.
-	 *
-     * Since the system schema doesn't provide the project_id column for topic
-     * characteristic objects it is necessary to handle this request separately.
+	 * This is the default generic method which provides read access to the 
+	 * selected database schema without sorting. It is almost the same routine 
+	 * for all DAO classes to access the database.
 	 *
      * @param locale     A Java.util locale objects.
 	 * @param offset     the number where to start
 	 * @param size       the size of items to provide
 	 * @return           a list of objects of type POJO class
 	 */
-	@SuppressWarnings("unchecked")
     public List<TypePojo> read(Locale locale, int offset, int size) {
 		// 1. Define a map which holds the POJO objects
 		List<TypePojo> pojos = new LinkedList<TypePojo>();
 		// 2. Define a list of model objects
 		List<TypeModel> models = null;
-		// 3. Handle topic characteristic objects which belong to the system
-		//    schema separately.
-		if(modelClass == TopicCharacteristic.class &&
-		        schema == OpenInfraSchemas.SYSTEM) {
-		    models =  em.createNativeQuery(
-		            "select id, description, topic "
-                    + "from topic_characteristic",
-                    TopicCharacteristic.class).getResultList();
-		} else {
-	        // 2. Construct the name of the named query
-	        String namedQuery = modelClass.getSimpleName() + ".findAll";
-	        // 3. Retrieve the requested model objects from database
-	        models = em.createNamedQuery(
+		// 3. Define the named query
+	    String namedQuery = modelClass.getSimpleName() + ".findAll";
+	    // 4. Retrieve the requested model objects from database
+	    models = em.createNamedQuery(
 	                namedQuery,
 	                modelClass)
 	                .setFirstResult(offset)
 	                .setMaxResults(size)
 	                .getResultList();
-		}
+		// 5. Finally, map the JPA model objects to POJO objects
+		for(TypeModel modelItem : models) {
+		    pojos.add(mapToPojo(locale, modelItem));
+		} // end for
+		return pojos;
+	}
 
-		// 4. Map the JPA model objects to POJO objects
+	/**
+	 * This is a generic method which provides read access to the selected
+	 * database schema. It is almost the same routine for all DAO classes to
+	 * access the database. If not, this method should be extended in order
+	 * to avoid overrides. Overrides could increase the effort regarding the 
+	 * integration and maintenance of a rights management system.
+	 *
+     * Since the system schema doesn't provide the project_id column for topic
+     * characteristic objects it is necessary to handle this request separately.
+     * 
+     * The meta data schema is also handled separately.
+	 *
+	 *
+     * @param locale     A Java.util locale objects.
+	 * @param order      the sort order (ascending or descending)
+	 * @param column     the column to sort
+	 * @param offset     the number where to start
+	 * @param size       the size of items to provide
+	 * @return           a list of objects of type POJO class
+	 */
+	@SuppressWarnings("unchecked")
+    public List<TypePojo> read(
+    		Locale locale, 
+    		OpenInfraSortOrder order,
+    		OpenInfraOrderBy column,
+    		int offset, 
+    		int size) {
+		// 1. Define a list which holds the POJO objects
+		List<TypePojo> pojos = new LinkedList<TypePojo>();
+		// 2. Define a list of model objects
+		List<TypeModel> models = null;
+		// 3. Use the default values for language and order when null.
+		if(locale == null) {
+			locale = OpenInfraProperties.DEFAULT_LANGUAGE;
+		}
+		if(order == null) {
+			order = OpenInfraProperties.DEFAULT_ORDER;
+		}
+		// 4. Read the required ptlocale object
+		PtLocale ptl = new PtLocaleDao(currentProjectId, schema).read(locale);
+		// 5. Handle topic characteristic objects which belong to the system
+		//    schema separately.
+		// TODO use the language here as well!
+		if(modelClass == TopicCharacteristic.class &&
+		        schema == OpenInfraSchemas.SYSTEM) {
+		    models = em.createNativeQuery(
+		            "select id, description, topic "
+                    + "from topic_characteristic",
+                    TopicCharacteristic.class).getResultList();
+		} else if(column == null) {
+			// 5.a When the column is null redirect to another method
+			return read(locale, offset, size);
+		} else {
+	        // 5.a Construct the origin SQL-based named query and replace the
+			//    the placeholder by the required column and sort order.
+	        String sqlString = em.createNamedQuery(
+	        		modelClass.getSimpleName() + ".findAllByLocaleAndOrder")
+	        		.unwrap(JpaQuery.class).getDatabaseQuery().getSQLString();
+	        sqlString = String.format(sqlString, column.name());
+	        sqlString += " " + order.name();
+	        // 5.b Retrieve the requested model objects from database
+	        models = em.createNativeQuery(
+	        		sqlString,
+	                modelClass)
+	                .setParameter(1, ptl.getId().toString())
+	                .setFirstResult(offset)
+	                .setMaxResults(size)
+	                .getResultList();
+		} // end if else
+
+		// 6. Finally, map the JPA model objects to POJO objects
 		for(TypeModel modelItem : models) {
 		    pojos.add(mapToPojo(locale, modelItem));
 		} // end for
@@ -228,7 +293,7 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	public UUID createOrUpdate(TypePojo pojo)
 			throws RuntimeException {
 	    // TODO handle the geometry cast here as special case
-	    // TODO maybe saving topics in system database must be handle as well
+	    // TODO maybe saving topics in system database must be handled as well
 		// 1. Map the POJO object to a JPA model object
 		MappingResult<TypeModel> result = mapToModel(
 				pojo,
