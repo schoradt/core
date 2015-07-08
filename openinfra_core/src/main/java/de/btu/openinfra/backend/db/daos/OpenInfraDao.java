@@ -223,9 +223,12 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 		List<TypePojo> pojos = new LinkedList<TypePojo>();
 		// 2. Define a list of model objects
 		List<TypeModel> models = null;
-		// 3. Use the default language when the current locale is null.
+		// 3. Use the default values for language and order when null.
 		if(locale == null) {
 			locale = OpenInfraProperties.DEFAULT_LANGUAGE;
+		}
+		if(order == null) {
+			order = OpenInfraProperties.DEFAULT_ORDER;
 		}
 		// 4. Read the required ptlocale object
 		PtLocale ptl = new PtLocaleDao(currentProjectId, schema).read(locale);
@@ -238,8 +241,8 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 		            "select id, description, topic "
                     + "from topic_characteristic",
                     TopicCharacteristic.class).getResultList();
-		} else if(order == null || column == null) {
-			// 5.a When oder or column is null redirect to other method
+		} else if(column == null) {
+			// 5.a When the column is null redirect to another method
 			return read(locale, offset, size);
 		} else {
 	        // 5.a Construct the origin SQL-based named query and replace the
