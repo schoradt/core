@@ -234,21 +234,13 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 		// TODO use the language here as well!
 		if(modelClass == TopicCharacteristic.class &&
 		        schema == OpenInfraSchemas.SYSTEM) {
-		    models =  em.createNativeQuery(
+		    models = em.createNativeQuery(
 		            "select id, description, topic "
                     + "from topic_characteristic",
                     TopicCharacteristic.class).getResultList();
-		} else if(schema == OpenInfraSchemas.META_DATA || 
-				order == null || column == null) {
-	        // 5.a Construct the name of the named query
-	        String namedQuery = modelClass.getSimpleName() + ".findAll";
-	        // 5.b Retrieve the requested model objects from database
-	        models = em.createNamedQuery(
-	                namedQuery,
-	                modelClass)
-	                .setFirstResult(offset)
-	                .setMaxResults(size)
-	                .getResultList();
+		} else if(order == null || column == null) {
+			// 5.a When oder or column is null redirect to other method
+			return read(locale, offset, size);
 		} else {
 	        // 5.a Construct the origin SQL-based named query and replace the
 			//    the placeholder by the required column and sort order.
