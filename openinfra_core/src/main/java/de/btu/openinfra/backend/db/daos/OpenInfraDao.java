@@ -11,12 +11,15 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
+import org.eclipse.persistence.jpa.JpaQuery;
+
 import de.btu.openinfra.backend.OpenInfraApplication;
 import de.btu.openinfra.backend.OpenInfraProperties;
 import de.btu.openinfra.backend.OpenInfraPropertyKeys;
 import de.btu.openinfra.backend.db.MetaDataManager;
 import de.btu.openinfra.backend.db.OpenInfraPropertyValues;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
+import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 import de.btu.openinfra.backend.db.pojos.meta.ProjectsPojo;
@@ -167,6 +170,8 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	 *
      * Since the system schema doesn't provide the project_id column for topic
      * characteristic objects it is necessary to handle this request separately.
+     * 
+     * The meta data schema is also handled sepeartely.
 	 *
      * @param locale     A Java.util locale objects.
 	 * @param offset     the number where to start
@@ -174,32 +179,52 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	 * @return           a list of objects of type POJO class
 	 */
 	@SuppressWarnings("unchecked")
-    public List<TypePojo> read(Locale locale, int offset, int size) {
-		// 1. Define a map which holds the POJO objects
+    public List<TypePojo> read(
+    		Locale locale, 
+    		OpenInfraSortOrder order,
+    		OpenInfraOrderBy column,
+    		int offset, 
+    		int size) {
+		// 1. Define a list which holds the POJO objects
 		List<TypePojo> pojos = new LinkedList<TypePojo>();
 		// 2. Define a list of model objects
 		List<TypeModel> models = null;
-		// 3. Handle topic characteristic objects which belong to the system
+		// 3. Use the default language when the current locale is null.
+		if(locale == null) {
+			locale = OpenInfraProperties.DEFAULT_LANGUAGE;
+		}
+		// 4. Read the required ptlocale object
+		PtLocale ptl = new PtLocaleDao(currentProjectId, schema).read(locale);
+		// 5. Handle topic characteristic objects which belong to the system
 		//    schema separately.
+		// TODO use the language here as well!
 		if(modelClass == TopicCharacteristic.class &&
 		        schema == OpenInfraSchemas.SYSTEM) {
 		    models =  em.createNativeQuery(
 		            "select id, description, topic "
                     + "from topic_characteristic",
                     TopicCharacteristic.class).getResultList();
+		} else if(schema == OpenInfraSchemas.META_DATA) {
+			
 		} else {
-	        // 2. Construct the name of the named query
-	        String namedQuery = modelClass.getSimpleName() + ".findAll";
-	        // 3. Retrieve the requested model objects from database
-	        models = em.createNamedQuery(
-	                namedQuery,
+	        // 6. Construct the origin SQL-based named query and replace the
+			//    the placeholder by the required column and sort order.
+	        String sqlString = em.createNamedQuery(
+	        		modelClass.getSimpleName() + ".findAllByLocale").unwrap(
+	        				JpaQuery.class).getDatabaseQuery().getSQLString();
+	        sqlString = String.format(sqlString, column.name());
+	        sqlString += " " + order.name();
+	        // 7. Retrieve the requested model objects from database
+	        models = em.createNativeQuery(
+	        		sqlString,
 	                modelClass)
+	                .setParameter(1, ptl.getId().toString())
 	                .setFirstResult(offset)
 	                .setMaxResults(size)
 	                .getResultList();
 		}
 
-		// 4. Map the JPA model objects to POJO objects
+		// 8. Finally, map the JPA model objects to POJO objects
 		for(TypeModel modelItem : models) {
 		    pojos.add(mapToPojo(locale, modelItem));
 		} // end for

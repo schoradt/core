@@ -1,7 +1,7 @@
 package de.btu.openinfra.backend.db.daos;
 
 /**
- * OpenInfraOrderBy is an enumeration of the possible sort orderings.
+ * This enumeration defines table columns which should be ordered. 
  * 
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
@@ -9,11 +9,12 @@ package de.btu.openinfra.backend.db.daos;
 public enum OpenInfraOrderBy {
 	
 	/**
-	 * Enumeration value indicating the items are sorted in increasing order.
+	 * Defines the name column.
 	 */
-	ASC,
+	NAME,
 	/**
-	 * Enumeration value indicating the items are sorted in decreasing order.
+	 * Defines the description column.
 	 */
-	DESC
+	DESCRIPTION
+
 }
