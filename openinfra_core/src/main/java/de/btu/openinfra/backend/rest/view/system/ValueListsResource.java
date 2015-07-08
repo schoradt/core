@@ -12,7 +12,9 @@ import javax.ws.rs.core.MediaType;
 
 import org.glassfish.jersey.server.mvc.Template;
 
+import de.btu.openinfra.backend.db.daos.OpenInfraOrderBy;
 import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.daos.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.daos.ValueListDao;
 import de.btu.openinfra.backend.db.pojos.ValueListPojo;
@@ -26,12 +28,16 @@ public class ValueListsResource {
 	@Template(name="/views/list/ValueLists.jsp")
 	public List<ValueListPojo> get(
 			@QueryParam("language") String language,
+			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
+			@QueryParam("orderBy") OpenInfraOrderBy orderBy,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new ValueListDao(
 				null,
 				OpenInfraSchemas.SYSTEM).read(
 						PtLocaleDao.forLanguageTag(language),
+						sortOrder, 
+						orderBy,
 						offset,
 						size);
 	}
