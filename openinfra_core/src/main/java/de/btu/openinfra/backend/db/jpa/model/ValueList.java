@@ -30,7 +30,7 @@ import javax.persistence.Table;
 		query="SELECT v FROM ValueList v")
 })
 @NamedNativeQueries({
-	@NamedNativeQuery(name="ValueList.findAllByLocale",
+	@NamedNativeQuery(name="ValueList.findAllByLocaleAndOrder",
 			query="select * "
 				  + "from value_list as vl " 
 			      + "LEFT OUTER JOIN ( "

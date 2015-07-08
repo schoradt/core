@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -29,7 +31,7 @@ import javax.persistence.Table;
 	@NamedQuery(name="TopicCharacteristic.findByProject",
 		query="SELECT t FROM TopicCharacteristic t "
 					+ "WHERE t.project = :value "),
-    // This query selects an orderd list of TopicCharacteristics by a like 
+    // This query selects an ordered list of TopicCharacteristics by a like 
 	// filter applied on LocalizedCharacterStrings
 	@NamedQuery(name="TopicCharacteristic.findByDescription",
 		query="SELECT t FROM TopicCharacteristic t "
@@ -44,6 +46,20 @@ import javax.persistence.Table;
 						+ "WHERE l.ptLocale = :value "
 						+ "AND l.freeText LIKE :filter)) "
 				+ "ORDER BY lcs.freeText")
+})
+@NamedNativeQueries({
+	@NamedNativeQuery(name="TopicCharacteristic.findAllByLocaleAndOrder",
+			query="select * "
+					+ "from topic_characteristic as tc "
+					+ "LEFT OUTER JOIN ( "
+						+ "select * "
+						+ "from topic_characteristic as a, "
+							+ "localized_character_string as b "
+						+ "where a.description = b.pt_free_text_id "
+						+ "and b.pt_locale_id = cast(? as uuid) ) as sq "
+						+ "on (tc.id = sq.id) "
+						+ "order by free_text ",
+				resultClass=ValueList.class)
 })
 public class TopicCharacteristic implements Serializable, OpenInfraModelObject {
 	private static final long serialVersionUID = 1L;

@@ -248,8 +248,8 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	        // 5.a Construct the origin SQL-based named query and replace the
 			//    the placeholder by the required column and sort order.
 	        String sqlString = em.createNamedQuery(
-	        		modelClass.getSimpleName() + ".findAllByLocale").unwrap(
-	        				JpaQuery.class).getDatabaseQuery().getSQLString();
+	        		modelClass.getSimpleName() + ".findAllByLocaleAndOrder")
+	        		.unwrap(JpaQuery.class).getDatabaseQuery().getSQLString();
 	        sqlString = String.format(sqlString, column.name());
 	        sqlString += " " + order.name();
 	        // 5.b Retrieve the requested model objects from database
