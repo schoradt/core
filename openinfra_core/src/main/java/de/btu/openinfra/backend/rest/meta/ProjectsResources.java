@@ -27,6 +27,8 @@ public class ProjectsResources {
         return new ProjectsDao(
                 OpenInfraSchemas.META_DATA).read(
                         null,
+                        null,
+                        null,
                         offset,
                         size);
     }

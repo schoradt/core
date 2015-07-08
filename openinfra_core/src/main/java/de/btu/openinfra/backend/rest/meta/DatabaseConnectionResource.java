@@ -27,6 +27,8 @@ public class DatabaseConnectionResource {
         return new DatabaseConnectionDao(
                 OpenInfraSchemas.META_DATA).read(
                         null,
+                        null,
+                        null,
                         offset,
                         size);
     }

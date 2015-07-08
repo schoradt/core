@@ -27,6 +27,8 @@ public class LogResource {
         return new LogDao(
                 OpenInfraSchemas.META_DATA).read(
                         null,
+                        null,
+                        null,
                         offset,
                         size);
     }

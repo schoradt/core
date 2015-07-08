@@ -10,7 +10,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import de.btu.openinfra.backend.db.daos.OpenInfraOrderBy;
 import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.daos.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.PtLocalePojo;
 
@@ -30,12 +32,16 @@ public class PtLocaleResource {
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
+			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
+			@QueryParam("orderBy") OpenInfraOrderBy orderBy,
 			@QueryParam("offset") int offset, 
 			@QueryParam("size") int size) {
 		return new PtLocaleDao(
 				projectId, 
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language),
+						sortOrder,
+						orderBy,
 						offset, 
 						size);
 	}

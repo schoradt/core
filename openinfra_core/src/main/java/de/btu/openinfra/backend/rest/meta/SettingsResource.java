@@ -27,6 +27,8 @@ public class SettingsResource {
         return new SettingsDao(
                 OpenInfraSchemas.META_DATA).read(
                         null,
+                        null,
+                        null,
                         offset,
                         size);
     }

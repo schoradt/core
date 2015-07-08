@@ -84,7 +84,12 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 	public List<ProjectPojo> getMainProjects(Locale locale) {
 		// 1. We need to deliver each main Project from metadata database
 		List<ProjectsPojo> projects = new ProjectsDao(
-				OpenInfraSchemas.META_DATA).read(locale, 0,	Integer.MAX_VALUE);
+				OpenInfraSchemas.META_DATA).read(
+						locale, 
+						OpenInfraSortOrder.ASC, 
+						OpenInfraOrderBy.NAME, 
+						0,	
+						Integer.MAX_VALUE);
 		Iterator<ProjectsPojo> it = projects.iterator();
 		// 2. Only keep main projects in the list
 		while (it.hasNext()) {
