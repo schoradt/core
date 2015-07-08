@@ -12,7 +12,6 @@ import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
 import de.btu.openinfra.backend.db.pojos.AttributeValuePojo;
-import de.btu.openinfra.backend.db.pojos.AttributeValueTypes;
 import de.btu.openinfra.backend.db.pojos.TopicInstancePojo;
 
 /**

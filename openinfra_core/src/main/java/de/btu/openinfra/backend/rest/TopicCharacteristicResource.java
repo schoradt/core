@@ -12,6 +12,7 @@ import javax.ws.rs.core.MediaType;
 
 import de.btu.openinfra.backend.OpenInfraProperties;
 import de.btu.openinfra.backend.db.daos.AttributeTypeGroupToTopicCharacteristicDao;
+import de.btu.openinfra.backend.db.daos.AttributeValueGeomType;
 import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.daos.RelationshipTypeDao;
@@ -19,7 +20,6 @@ import de.btu.openinfra.backend.db.daos.TopicCharacteristicDao;
 import de.btu.openinfra.backend.db.daos.TopicGeomzDao;
 import de.btu.openinfra.backend.db.daos.TopicInstanceDao;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupToTopicCharacteristicPojo;
-import de.btu.openinfra.backend.db.pojos.AttributeValueGeomType;
 import de.btu.openinfra.backend.db.pojos.RelationshipTypePojo;
 import de.btu.openinfra.backend.db.pojos.TopicCharacteristicPojo;
 import de.btu.openinfra.backend.db.pojos.TopicGeomzPojo;

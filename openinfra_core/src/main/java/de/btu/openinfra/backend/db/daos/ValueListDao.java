@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
+import org.eclipse.persistence.jpa.JpaQuery;
+
 import de.btu.openinfra.backend.db.jpa.model.ValueList;
 import de.btu.openinfra.backend.db.pojos.DescriptionPojo;
 import de.btu.openinfra.backend.db.pojos.LocalizedString;
@@ -46,15 +48,43 @@ public class ValueListDao extends OpenInfraDao<ValueListPojo, ValueList> {
 	        return ret;
 	    }
 
-		List<ValueList> list = em.createNamedQuery(
-                "ValueList.findAllByLocale",
-                ValueList.class)
-                .setFirstResult(offset)
-                .setMaxResults(size)
-                .setParameter("ptl",
-                		new PtLocaleDao(currentProjectId, schema).read(locale))
+//		List<ValueList> list = em.createNamedQuery(
+//                "ValueList.findAllByLocale",
+//                ValueList.class)
+//                .setFirstResult(offset)
+//                .setMaxResults(size)
+//                .setParameter("ptl",
+//                		new PtLocaleDao(currentProjectId, schema).read(locale))
+//                .getResultList();
+	    
+	    String test = 
+	    		em.createNamedQuery(
+	    				"ValueList.findAllByLocale").unwrap(
+	    						JpaQuery.class).getDatabaseQuery()
+	    						.getSQLString();
+	    test = String.format(test, "name");
+	    
+	    
+	    List<ValueList> list = em.createNativeQuery(
+	    		test + " desc", 
+	    		ValueList.class)
+	    		.setFirstResult(offset)
+	    		.setMaxResults(size)
+	    		.setParameter(1,
+	    				new PtLocaleDao(currentProjectId, schema)
+	    						.read(locale).getId().toString())
                 .getResultList();
-
+	    
+//	    List<ValueList> list = em.createNamedQuery(
+//	    		"ValueList.nfindAllByLocale", 
+//	    		ValueList.class)
+//	    		.setFirstResult(offset)
+//	    		.setMaxResults(size)
+//	    		.setParameter(1,
+//	    				new PtLocaleDao(currentProjectId, schema)
+//	    						.read(locale).getId().toString())
+//                .getResultList();
+	    
 		for(ValueList vl : list) {
 			ret.add(mapToPojo(locale, vl));
 		}
@@ -94,7 +124,8 @@ public class ValueListDao extends OpenInfraDao<ValueListPojo, ValueList> {
             }
 
             // in case the name is empty
-            if (pojo.getNames().getLocalizedStrings().get(0).getCharacterString() == "") {
+            if (pojo.getNames().getLocalizedStrings().get(0)
+            		.getCharacterString() == "") {
                 return null;
             }
 

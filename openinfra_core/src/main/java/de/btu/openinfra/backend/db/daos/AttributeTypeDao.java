@@ -7,7 +7,6 @@ import de.btu.openinfra.backend.db.jpa.model.AttributeType;
 import de.btu.openinfra.backend.db.jpa.model.AttributeTypeGroup;
 import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.pojos.AttributeTypePojo;
-import de.btu.openinfra.backend.db.pojos.AttributeValueTypes;
 
 /**
  * This class represents the AttributeType and is used to access the underlying

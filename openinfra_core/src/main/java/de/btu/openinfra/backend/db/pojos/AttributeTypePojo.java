@@ -2,6 +2,8 @@ package de.btu.openinfra.backend.db.pojos;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import de.btu.openinfra.backend.db.daos.AttributeValueTypes;
+
 @XmlRootElement
 public class AttributeTypePojo extends OpenInfraPojo {
 	

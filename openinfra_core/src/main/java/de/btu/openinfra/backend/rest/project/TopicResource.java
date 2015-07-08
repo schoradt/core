@@ -9,10 +9,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import de.btu.openinfra.backend.db.daos.AttributeValueGeomType;
 import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.daos.TopicDao;
-import de.btu.openinfra.backend.db.pojos.AttributeValueGeomType;
 import de.btu.openinfra.backend.db.pojos.TopicPojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 

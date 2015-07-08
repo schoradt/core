@@ -2,7 +2,7 @@
 <%@page import="java.util.Locale"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-<%@page import="de.btu.openinfra.backend.db.pojos.AttributeValueGeomType"%>
+<%@page import="de.btu.openinfra.backend.db.daos.AttributeValueGeomType"%>
 <%@page import="de.btu.openinfra.backend.db.daos.OpenInfraSchemas"%>
 <%@page import="de.btu.openinfra.backend.db.daos.PtLocaleDao"%>
 <%@page import="java.awt.event.ItemEvent"%>

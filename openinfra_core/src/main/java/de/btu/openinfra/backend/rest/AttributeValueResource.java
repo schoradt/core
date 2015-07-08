@@ -15,11 +15,11 @@ import javax.ws.rs.core.Response;
 import de.btu.openinfra.backend.db.daos.AttributeValueDao;
 import de.btu.openinfra.backend.db.daos.AttributeValueDomainDao;
 import de.btu.openinfra.backend.db.daos.AttributeValueGeomDao;
+import de.btu.openinfra.backend.db.daos.AttributeValueGeomType;
 import de.btu.openinfra.backend.db.daos.AttributeValueGeomzDao;
 import de.btu.openinfra.backend.db.daos.AttributeValueValueDao;
 import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
-import de.btu.openinfra.backend.db.pojos.AttributeValueGeomType;
 import de.btu.openinfra.backend.db.pojos.AttributeValuePojo;
 
 @Path("/projects/{projectId}/attributevalues")
