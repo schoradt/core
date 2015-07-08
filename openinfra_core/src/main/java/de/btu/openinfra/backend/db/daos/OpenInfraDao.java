@@ -160,6 +160,37 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 				OpenInfraApplication.PERSISTENCE_CONTEXT,
 				properties).createEntityManager();
 	}
+	
+	/**
+	 * This is the default generic method which provides read access to the 
+	 * selected database schema without sorting. It is almost the same routine 
+	 * for all DAO classes to access the database.
+	 *
+     * @param locale     A Java.util locale objects.
+	 * @param offset     the number where to start
+	 * @param size       the size of items to provide
+	 * @return           a list of objects of type POJO class
+	 */
+    public List<TypePojo> read(Locale locale, int offset, int size) {
+		// 1. Define a map which holds the POJO objects
+		List<TypePojo> pojos = new LinkedList<TypePojo>();
+		// 2. Define a list of model objects
+		List<TypeModel> models = null;
+		// 3. Define the named query
+	    String namedQuery = modelClass.getSimpleName() + ".findAll";
+	    // 4. Retrieve the requested model objects from database
+	    models = em.createNamedQuery(
+	                namedQuery,
+	                modelClass)
+	                .setFirstResult(offset)
+	                .setMaxResults(size)
+	                .getResultList();
+		// 5. Finally, map the JPA model objects to POJO objects
+		for(TypeModel modelItem : models) {
+		    pojos.add(mapToPojo(locale, modelItem));
+		} // end for
+		return pojos;
+	}
 
 	/**
 	 * This is a generic method which provides read access to the selected

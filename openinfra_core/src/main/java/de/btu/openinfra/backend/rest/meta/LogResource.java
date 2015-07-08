@@ -25,12 +25,7 @@ public class LogResource {
             @QueryParam("offset") int offset,
             @QueryParam("size") int size) {
         return new LogDao(
-                OpenInfraSchemas.META_DATA).read(
-                        null,
-                        null,
-                        null,
-                        offset,
-                        size);
+                OpenInfraSchemas.META_DATA).read(null, offset, size);
     }
 
     @GET
