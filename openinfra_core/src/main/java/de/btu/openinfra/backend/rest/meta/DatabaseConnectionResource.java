@@ -25,10 +25,7 @@ public class DatabaseConnectionResource {
             @QueryParam("offset") int offset,
             @QueryParam("size") int size) {
         return new DatabaseConnectionDao(
-                OpenInfraSchemas.META_DATA).read(
-                        null,
-                        offset,
-                        size);
+                OpenInfraSchemas.META_DATA).read(null, offset, size);
     }
 
     @GET

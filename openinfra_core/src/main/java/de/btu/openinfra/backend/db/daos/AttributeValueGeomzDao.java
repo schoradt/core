@@ -7,7 +7,6 @@ import javax.persistence.Query;
 
 import de.btu.openinfra.backend.db.jpa.model.AttributeValueGeomz;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
-import de.btu.openinfra.backend.db.pojos.AttributeValueGeomType;
 import de.btu.openinfra.backend.db.pojos.AttributeValueGeomzPojo;
 
 /**

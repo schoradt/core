@@ -11,7 +11,9 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import de.btu.openinfra.backend.db.daos.MetaDataDao;
+import de.btu.openinfra.backend.db.daos.OpenInfraOrderBy;
 import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.daos.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.MetaDataPojo;
 
@@ -23,13 +25,17 @@ public class MetaDataResource {
     @GET
     public List<MetaDataPojo> get(
             @QueryParam("language") String language,
-            @PathParam("projectId") UUID projectId, 
+            @PathParam("projectId") UUID projectId,
+			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
+			@QueryParam("orderBy") OpenInfraOrderBy orderBy,
             @QueryParam("offset") int offset,
             @QueryParam("size") int size) {
         return new MetaDataDao(
                 projectId,
                 OpenInfraSchemas.PROJECTS).read(
-                        PtLocaleDao.forLanguageTag(language), 
+                        PtLocaleDao.forLanguageTag(language),
+						sortOrder,
+						orderBy,
                         offset, 
                         size);
     }

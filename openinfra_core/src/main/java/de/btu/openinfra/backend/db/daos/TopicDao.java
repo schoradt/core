@@ -9,7 +9,6 @@ import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupToTopicCharacteristic
 import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupToValues;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeToAttributeTypeGroupPojo;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeToValue;
-import de.btu.openinfra.backend.db.pojos.AttributeValueGeomType;
 import de.btu.openinfra.backend.db.pojos.AttributeValuePojo;
 import de.btu.openinfra.backend.db.pojos.TopicPojo;
 

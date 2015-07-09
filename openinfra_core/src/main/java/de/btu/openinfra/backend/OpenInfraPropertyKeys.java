@@ -107,6 +107,26 @@ public enum OpenInfraPropertyKeys {
         public String toString() {
             return "de.btu.openinfra.backend.rest.maxSize";
         }
+    },
+    
+    /**
+     * This variable defines the default language key.
+     */
+    DEFAULT_LANGUAGE {
+    	@Override
+    	public String toString() {
+    		return "de.btu.openinfra.backend.language.default";
+    	}
+    },
+    
+    /**
+     * This variable defines the default order key.
+     */
+    DEFAULT_ORDER {
+    	@Override
+    	public String toString() {
+    		return "de.btu.openinfra.backend.order";
+    	}
     }
 
 }

@@ -9,7 +9,6 @@ import de.btu.openinfra.backend.db.jpa.model.AttributeTypeToAttributeTypeGroup;
 import de.btu.openinfra.backend.db.jpa.model.AttributeValueGeom;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
 import de.btu.openinfra.backend.db.pojos.AttributeValueGeomPojo;
-import de.btu.openinfra.backend.db.pojos.AttributeValueGeomType;
 
 /**
  * This class represents the AttributeValueGeom and is used to access the 
