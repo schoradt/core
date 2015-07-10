@@ -14,30 +14,7 @@
 <body>
 	<%@ include file="../../snippets/Menu.jsp" %>
 	
-	<div class="row">
-	  <div class="col-lg-6">
-	    <div class="input-group">
-	     <form>
-		      <input type="text" name="filter" value="<c:out value="${param.filter}"/>" class="form-control" placeholder="Name filtern (%und%)">
-		      <span class="input-group-btn">
-		        <button class="btn btn-default" type="submit">
-		        	<fmt:message key="searchbutton.label"/>
-		        </button>
-		      </span>
-		    <!-- Additionally, the form control must also include all existing
-		         parameters as hidden fields -->
-		    <c:forEach items="${param}" var="pageParameter">
-		    	<!-- Don't add the language parameter again! -->
-		    	<c:if test="${pageParameter.key != 'filter'}">
-		    		<input type="hidden" name="${pageParameter.key}" value="${pageParameter.value}"/>
-		    	</c:if>
-      		</c:forEach>
-	     </form>
-	    </div><!-- /input-group -->
-	  </div><!-- /.col-lg-6 -->
-	</div><!-- /.row -->
-	
-	<br/>
+	<%@ include file="../../snippets/FilterAndOrderBy.jsp" %>
 	
 	<div class="panel panel-default">
 		<div class="panel-heading">

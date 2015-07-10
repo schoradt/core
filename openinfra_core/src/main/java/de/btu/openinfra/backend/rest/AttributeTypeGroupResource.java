@@ -1,7 +1,6 @@
 package de.btu.openinfra.backend.rest;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 
 import javax.ws.rs.GET;
@@ -90,7 +89,7 @@ public class AttributeTypeGroupResource {
 		return new AttributeTypeToAttributeTypeGroupDao(
 				projectId, 
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						Locale.forLanguageTag(language),
+						PtLocaleDao.forLanguageTag(language),
 						sortOrder,
 						orderBy,
 						offset, 
