@@ -1,7 +1,15 @@
 package de.btu.openinfra.backend.db.jpa.model;
 
 import java.io.Serializable;
-import javax.persistence.*;
+import java.util.UUID;
+
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 
 /**
@@ -10,12 +18,21 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="attribute_type_x_attribute_type")
-@NamedQuery(name="AttributeTypeXAttributeType.findAll", query="SELECT a FROM AttributeTypeXAttributeType a")
-public class AttributeTypeXAttributeType implements Serializable {
+@NamedQueries({
+	@NamedQuery(name="AttributeTypeXAttributeType.findAll",
+			query="SELECT a FROM AttributeTypeXAttributeType a"),
+	@NamedQuery(name="AttributeTypeXAttributeType.findByAttributeType", 
+			query="SELECT a "
+					+ "FROM AttributeTypeXAttributeType a "
+					+ "WHERE a.attributeType1Bean = :value "),
+})
+public class AttributeTypeXAttributeType implements Serializable, OpenInfraModelObject {
 	private static final long serialVersionUID = 1L;
 
+	private UUID id;
+	
 	@EmbeddedId
-	private AttributeTypeXAttributeTypePK id;
+	private AttributeTypeXAttributeTypePK pik;
 
 	//bi-directional many-to-one association to AttributeType
 	@ManyToOne
@@ -34,13 +51,23 @@ public class AttributeTypeXAttributeType implements Serializable {
 
 	public AttributeTypeXAttributeType() {
 	}
-
-	public AttributeTypeXAttributeTypePK getId() {
-		return this.id;
+	
+	@Override
+	public UUID getId() {
+		return id;
+	}
+	
+	@Override
+	public void setId(UUID id) {
+		this.id = id;
 	}
 
-	public void setId(AttributeTypeXAttributeTypePK id) {
-		this.id = id;
+	public AttributeTypeXAttributeTypePK getPik() {
+		return pik;
+	}
+
+	public void setPik(AttributeTypeXAttributeTypePK pik) {
+		this.pik = pik;
 	}
 
 	public AttributeType getAttributeType1Bean() {
