@@ -17,6 +17,8 @@
 	<!-- include the menu -->
 	<%@ include file="../../snippets/Menu.jsp" %>
 	
+	<%@ include file="../../snippets/FilterAndOrderBy.jsp" %>
+	
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<fmt:message key="valuelists.label"/>
