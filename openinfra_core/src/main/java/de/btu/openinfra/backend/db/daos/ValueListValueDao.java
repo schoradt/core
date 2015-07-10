@@ -74,10 +74,12 @@ public class ValueListValueDao
 
 	    // return null if the pojo is null
         if (pojo != null) {
-            // set the description
-            vlv.setPtFreeText1(new DescriptionDao(
-                    currentProjectId,
-                    schema).getPtFreeTextModel(pojo.getDescriptions()));
+            // set the description (is optional)
+            if (pojo.getDescriptions() != null) {
+                vlv.setPtFreeText1(new DescriptionDao(
+                        currentProjectId,
+                        schema).getPtFreeTextModel(pojo.getDescriptions()));
+            }
 
             // set the name
             vlv.setPtFreeText2(new NameDao(
