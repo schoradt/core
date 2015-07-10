@@ -27,7 +27,8 @@ import javax.persistence.Table;
 					+ "FROM RelationshipTypeToTopicCharacteristic r "
 					+ "WHERE r.topicCharacteristic = :value")
 })
-public class RelationshipTypeToTopicCharacteristic implements Serializable {
+public class RelationshipTypeToTopicCharacteristic implements Serializable,
+	OpenInfraModelObject {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -51,10 +52,12 @@ public class RelationshipTypeToTopicCharacteristic implements Serializable {
 	public RelationshipTypeToTopicCharacteristic() {
 	}
 
+	@Override
 	public UUID getId() {
 		return this.id;
 	}
 
+	@Override
 	public void setId(UUID id) {
 		this.id = id;
 	}

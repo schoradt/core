@@ -18,7 +18,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name="attribute_type_x_attribute_type")
 @NamedQuery(name="AttributeTypeXAttributeType.findAll", query="SELECT a FROM AttributeTypeXAttributeType a")
-public class AttributeTypeXAttributeType implements Serializable {
+public class AttributeTypeXAttributeType implements Serializable, 
+	OpenInfraModelObject {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -42,10 +43,12 @@ public class AttributeTypeXAttributeType implements Serializable {
 	public AttributeTypeXAttributeType() {
 	}
 
+	@Override
 	public UUID getId() {
 		return this.id;
 	}
 
+	@Override
 	public void setId(UUID id) {
 		this.id = id;
 	}

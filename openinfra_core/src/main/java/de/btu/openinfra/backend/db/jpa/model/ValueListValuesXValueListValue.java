@@ -18,7 +18,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name="value_list_values_x_value_list_values")
 @NamedQuery(name="ValueListValuesXValueListValue.findAll", query="SELECT v FROM ValueListValuesXValueListValue v")
-public class ValueListValuesXValueListValue implements Serializable {
+public class ValueListValuesXValueListValue implements Serializable,
+	OpenInfraModelObject {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -42,10 +43,12 @@ public class ValueListValuesXValueListValue implements Serializable {
 	public ValueListValuesXValueListValue() {
 	}
 
+	@Override
 	public UUID getId() {
 		return this.id;
 	}
 
+	@Override
 	public void setId(UUID id) {
 		this.id = id;
 	}
