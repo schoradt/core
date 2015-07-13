@@ -44,8 +44,6 @@ public class AttributeTypeAssociationDao
 			pojo.setUuid(association.getId());
 			pojo.setRelationship(ValueListValueDao.mapToPojoStatically(locale,
 					association.getValueListValue()));
-			pojo.setAttributeType(AttributeTypeDao.mapToPojoStatically(locale,
-					association.getAttributeType1Bean()));
 			pojo.setAssociatedId(association.getAttributeType2Bean().getId());
 			
 			return pojo;

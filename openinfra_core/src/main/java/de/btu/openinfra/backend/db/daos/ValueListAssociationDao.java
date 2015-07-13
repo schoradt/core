@@ -45,8 +45,6 @@ public class ValueListAssociationDao
 			pojo.setRelationship(ValueListValueDao.mapToPojoStatically(locale,
 					association.getValueListValue()));
 			pojo.setAssociatedId(association.getValueList2Bean().getId());
-			pojo.setValueList(ValueListDao.mapToPojoStatically(locale,
-					association.getValueList1Bean()));
 			
 			return pojo;
 		}

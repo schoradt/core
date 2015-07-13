@@ -7,17 +7,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class AttributeTypeAssociationPojo extends OpenInfraPojo {
 
-	private AttributeTypePojo attributeType;
 	private UUID associatedId;
 	private ValueListValuePojo relationship;
-	
-	public AttributeTypePojo getAttributeType() {
-		return attributeType;
-	}
-	
-	public void setAttributeType(AttributeTypePojo attributeType) {
-		this.attributeType = attributeType;
-	}
 	
 	public UUID getAssociatedId() {
 		return associatedId;
