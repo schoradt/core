@@ -1,9 +1,10 @@
 package de.btu.openinfra.backend.db.jpa.model;
 
 import java.io.Serializable;
+import java.util.UUID;
 
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -26,11 +27,12 @@ import javax.persistence.Table;
 					+ "FROM RelationshipTypeToTopicCharacteristic r "
 					+ "WHERE r.topicCharacteristic = :value")
 })
-public class RelationshipTypeToTopicCharacteristic implements Serializable {
+public class RelationshipTypeToTopicCharacteristic implements Serializable,
+	OpenInfraModelObject {
 	private static final long serialVersionUID = 1L;
 
-	@EmbeddedId
-	private RelationshipTypeToTopicCharacteristicPK id;
+	@Id
+	private UUID id;
 
 	//bi-directional many-to-one association to Multiplicity
 	@ManyToOne
@@ -50,11 +52,13 @@ public class RelationshipTypeToTopicCharacteristic implements Serializable {
 	public RelationshipTypeToTopicCharacteristic() {
 	}
 
-	public RelationshipTypeToTopicCharacteristicPK getId() {
+	@Override
+	public UUID getId() {
 		return this.id;
 	}
 
-	public void setId(RelationshipTypeToTopicCharacteristicPK id) {
+	@Override
+	public void setId(UUID id) {
 		this.id = id;
 	}
 

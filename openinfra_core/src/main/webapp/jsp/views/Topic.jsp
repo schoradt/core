@@ -24,7 +24,7 @@
 		<a href="${requestUrl}.pdf?language=${language}" target="_blank">
 			<i style="cursor: pointer;" class="fa fa-file-pdf-o fa-lg" title="PDF"></i>
 		</a>
-		<a href="#" target="_blank">
+		<a href="${requestUrl}.csv?language=${language}">
 			<i style="cursor: pointer;" class="fa fa-file-text-o fa-lg" title="CSV"></i>
 		</a>
 	</div>
