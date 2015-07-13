@@ -2,6 +2,9 @@ package de.btu.openinfra.backend.db.pojos;
 
 import java.util.UUID;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class AttributeTypeAssociationPojo extends OpenInfraPojo {
 
 	private AttributeTypePojo attributeType;
