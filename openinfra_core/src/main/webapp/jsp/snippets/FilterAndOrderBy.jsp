@@ -29,9 +29,9 @@
 			    		<input type="hidden" name="${pageParameter.key}" value="${pageParameter.value}"/>
 			    	</c:if>
 			    </c:forEach>
-			    <if test="${empty param.sortOrder}">
+			    <c:if test="${empty param.sortOrder}">
 			    	<input type="hidden" name="sortOrder" value="ASC"/>
-			    </if>
+			    </c:if>
 			</form>
 	    </div><!-- /input-group -->
 	  </div><!-- /.col-lg-6 -->
