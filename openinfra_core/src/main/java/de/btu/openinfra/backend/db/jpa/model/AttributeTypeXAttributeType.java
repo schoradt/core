@@ -24,7 +24,7 @@ import javax.persistence.Table;
 	@NamedQuery(name="AttributeTypeXAttributeType.findByAttributeType", 
 			query="SELECT a "
 					+ "FROM AttributeTypeXAttributeType a "
-					+ "WHERE a.attributeType1Bean = :value "),
+					+ "WHERE a.attributeType2Bean = :value "),
 })
 public class AttributeTypeXAttributeType implements Serializable, 
 	OpenInfraModelObject {
