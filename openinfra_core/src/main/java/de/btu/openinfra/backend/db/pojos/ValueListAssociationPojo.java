@@ -9,7 +9,16 @@ public class ValueListAssociationPojo extends OpenInfraPojo {
 
 	private UUID associatedId;
 	private ValueListValuePojo relationship;
+	private ValueListPojo valueList;
 	
+	public ValueListPojo getValueList() {
+		return valueList;
+	}
+
+	public void setValueList(ValueListPojo valueList) {
+		this.valueList = valueList;
+	}
+
 	public UUID getAssociatedId() {
 		return associatedId;
 	}

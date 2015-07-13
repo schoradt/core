@@ -23,7 +23,7 @@ import javax.persistence.Table;
 			query="SELECT v FROM ValueListXValueList v"),
 	@NamedQuery(name="ValueListXValueList.findByValueList", 
 			query="SELECT v FROM ValueListXValueList v "
-					+ "WHERE v.valueList1Bean = :value "),
+					+ "WHERE v.valueList2Bean = :value "),
 })
 public class ValueListXValueList implements Serializable,
 	OpenInfraModelObject {
