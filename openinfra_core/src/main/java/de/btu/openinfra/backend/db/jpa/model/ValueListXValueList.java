@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
@@ -17,7 +18,13 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="value_list_x_value_list")
-@NamedQuery(name="ValueListXValueList.findAll", query="SELECT v FROM ValueListXValueList v")
+@NamedQueries({
+	@NamedQuery(name="ValueListXValueList.findAll",
+			query="SELECT v FROM ValueListXValueList v"),
+	@NamedQuery(name="ValueListXValueList.findByValueList", 
+			query="SELECT v FROM ValueListXValueList v "
+					+ "WHERE v.valueList1Bean = :value "),
+})
 public class ValueListXValueList implements Serializable,
 	OpenInfraModelObject {
 	private static final long serialVersionUID = 1L;
