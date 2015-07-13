@@ -30,13 +30,13 @@ import org.apache.fop.apps.MimeConstants;
 import de.btu.openinfra.backend.db.daos.AttributeValueGeomType;
 
 @Path("/projects/{projectId}/topicinstances")
-public class TopicPDFResource {
+public class TopicPdfResource {
 	
 	/**
 	 * This variable defines the path to the XSL file.
 	 */
 	private static final String XSL_FILE = 
-			"de/btu/openinfra/backend/xsl/Topic.xsl"; 
+			"de/btu/openinfra/backend/xsl/TopicPdf.xsl"; 
 	
 	/**
 	 * http://www.e-zest.net/blog/integrating-apache-fop-with-java-project-to-generate-pdf-files/
@@ -51,7 +51,7 @@ public class TopicPDFResource {
 	@GET
 	@Produces({"application/pdf"})
 	@Path("{topicInstanceId}/topic.pdf")
-	public Response getTopicAsPDF(
+	public Response getTopicAsPdf(
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("topicInstanceId") UUID topicInstanceId,
@@ -63,10 +63,10 @@ public class TopicPDFResource {
 		String path = uriInfo.getAbsolutePath().toString();
 		Client client = ClientBuilder.newClient();
 		WebTarget target = client.target(
-				path.substring(0, path.lastIndexOf(".")) + 
+				path.substring(0, path.lastIndexOf(".pdf")) + 
 				"?language=" + language);
 		String xml = target.request(
-				MediaType.APPLICATION_XML).get(String.class);		
+				MediaType.APPLICATION_XML).get(String.class);
 		
 		Fop fop;
 		FopFactory fopf = FopFactory.newInstance();
@@ -85,7 +85,7 @@ public class TopicPDFResource {
 			xslfoTransformer = 
 					transfact.newTransformer(
 							new StreamSource(
-									new TopicPDFResource().getClass()
+									new TopicPdfResource().getClass()
 									.getClassLoader().getResourceAsStream(
 											XSL_FILE)));
 			xslfoTransformer.transform(
