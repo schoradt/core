@@ -19,6 +19,10 @@ a:hover, a:focus {
 	text-decoration: none;
 }
 
+#orderAndFilterRow {
+	padding-bottom: 15px;
+}
+
 .border {
     border: 1px solid black;
     padding: 3px;
