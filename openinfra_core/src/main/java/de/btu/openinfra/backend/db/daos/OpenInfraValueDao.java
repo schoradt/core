@@ -23,7 +23,7 @@ public abstract class OpenInfraValueDao<
 	TypeModel extends OpenInfraModelObject, TypeModelValue> extends
 	OpenInfraDao<TypePojo, TypeModel> {
 
-	private Class<TypeModelValue> valueClass;
+	protected Class<TypeModelValue> valueClass;
 
 	/**
 	 * Mandatory constructor method which calls the super constructor.
