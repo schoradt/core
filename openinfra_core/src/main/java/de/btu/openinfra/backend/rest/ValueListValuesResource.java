@@ -69,6 +69,28 @@ public class ValueListValuesResource {
 						offset,
 						size);
 	}
+	
+	@GET
+	@Path("{associatedValueListValueId}/associations/{valueListValueId}")
+	public List<ValueListValueAssociationPojo> getAssociations(
+			@QueryParam("language") String language,
+			@PathParam("projectId") UUID projectId,
+			@PathParam("schema") String schema,
+			@PathParam("associatedValueListValueId")
+				UUID associatedValueListValueId,
+			@PathParam("valueListValueId") UUID valueListValueId,
+			@QueryParam("offset") int offset,
+			@QueryParam("size") int size) {
+		
+		return new ValueListValueAssociationDao(
+				projectId,
+				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
+						PtLocaleDao.forLanguageTag(language),
+						associatedValueListValueId,
+						valueListValueId,
+						offset,
+						size);
+	}
 
 	@PUT
     @Path("{valueListValueId}")

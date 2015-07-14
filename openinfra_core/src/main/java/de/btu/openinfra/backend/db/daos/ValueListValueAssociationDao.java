@@ -8,7 +8,7 @@ import de.btu.openinfra.backend.db.jpa.model.ValueListValuesXValueListValue;
 import de.btu.openinfra.backend.db.pojos.ValueListValueAssociationPojo;
 
 public class ValueListValueAssociationDao
-	extends OpenInfraValueDao<ValueListValueAssociationPojo,
+	extends OpenInfraValueValueDao<ValueListValueAssociationPojo,
 	ValueListValuesXValueListValue, ValueListValue>{
 
 	public ValueListValueAssociationDao(
