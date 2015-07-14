@@ -22,6 +22,7 @@
 	
 	<c:set var="columns" value="${it[0].topicCharacteristic.settings}"/>
 	<div id="orderAndFilterRow" class="row">
+		<%@ include file="../../snippets/Filter.jsp" %>
 		<%@ include file="../../snippets/OrderBy.jsp" %>
 		<%@ include file="../../snippets/ResetFilterButton.jsp" %>
 	</div>
