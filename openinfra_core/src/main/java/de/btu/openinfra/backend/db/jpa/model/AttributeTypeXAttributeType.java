@@ -29,7 +29,7 @@ import javax.persistence.Table;
 			name="AttributeTypeXAttributeType.findByAssociatedAttributeType", 
 			query="SELECT a "
 					+ "FROM AttributeTypeXAttributeType a "
-					+ "WHERE a.attributeType2Bean = :value1 and "
+					+ "WHERE a.attributeType2Bean = :value1 AND "
 					+ "a.attributeType1Bean = :value2"),
 })
 public class AttributeTypeXAttributeType implements Serializable, 
