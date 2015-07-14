@@ -14,9 +14,7 @@ import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.daos.TopicInstanceAssociationDao;
 import de.btu.openinfra.backend.db.daos.TopicInstanceDao;
-import de.btu.openinfra.backend.db.daos.TopicInstanceParentDao;
 import de.btu.openinfra.backend.db.pojos.TopicInstanceAssociationPojo;
-import de.btu.openinfra.backend.db.pojos.TopicInstanceParentPojo;
 import de.btu.openinfra.backend.db.pojos.TopicInstancePojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
@@ -66,11 +64,11 @@ public class TopicInstanceResource {
 	
 	@GET
 	@Path("{topicInstanceId}/parents")
-	public List<TopicInstanceParentPojo> getParents(			
+	public List<TopicInstanceAssociationPojo> getParents(			
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("topicInstanceId") UUID topicInstanceId) {
-		return new TopicInstanceParentDao(
+		return new TopicInstanceAssociationDao(
 				projectId, 
 				OpenInfraSchemas.PROJECTS).readParents(
 						PtLocaleDao.forLanguageTag(language), 
