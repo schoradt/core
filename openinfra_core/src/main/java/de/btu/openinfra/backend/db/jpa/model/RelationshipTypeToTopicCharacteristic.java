@@ -22,7 +22,7 @@ import javax.persistence.Table;
 	@NamedQuery(name="RelationshipTypeToTopicCharacteristic.findAll", 
 			query="SELECT r FROM RelationshipTypeToTopicCharacteristic r"),
 	@NamedQuery(name="RelationshipTypeToTopicCharacteristic"
-			+ ".findfindByTopicCharacteristic", 
+			+ ".findByTopicCharacteristic", 
 			query="SELECT r "
 					+ "FROM RelationshipTypeToTopicCharacteristic r "
 					+ "WHERE r.topicCharacteristic = :value")
