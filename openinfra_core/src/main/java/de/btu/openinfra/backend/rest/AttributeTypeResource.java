@@ -46,11 +46,33 @@ public class AttributeTypeResource {
 	}
 	
 	@GET
-	@Path("{attributeTypeId}/associations")
+	@Path("{associatedAttributeTypeId}/associations")
 	public List<AttributeTypeAssociationPojo> getAssociations(
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
+			@PathParam("associatedAttributeTypeId") UUID
+				associatedAttributeTypeId,
+			@QueryParam("offset") int offset,
+			@QueryParam("size") int size) {
+		
+		return new AttributeTypeAssociationDao(
+				projectId,
+				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
+						PtLocaleDao.forLanguageTag(language),
+						associatedAttributeTypeId,
+						offset,
+						size);
+	}
+	
+	@GET
+	@Path("{associatedAttributeTypeId}/associations/{attributeTypeId}")
+	public List<AttributeTypeAssociationPojo> getAssociations(
+			@QueryParam("language") String language,
+			@PathParam("projectId") UUID projectId,
+			@PathParam("schema") String schema,
+			@PathParam("associatedAttributeTypeId") UUID
+				associatedAttributeTypeId,
 			@PathParam("attributeTypeId") UUID attributeTypeId,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
@@ -59,6 +81,7 @@ public class AttributeTypeResource {
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language),
+						associatedAttributeTypeId,
 						attributeTypeId,
 						offset,
 						size);

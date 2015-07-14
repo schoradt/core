@@ -8,7 +8,7 @@ import de.btu.openinfra.backend.db.jpa.model.AttributeTypeXAttributeType;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeAssociationPojo;
 
 public class AttributeTypeAssociationDao
-	extends OpenInfraValueDao<AttributeTypeAssociationPojo,
+	extends OpenInfraValueValueDao<AttributeTypeAssociationPojo,
 	AttributeTypeXAttributeType, AttributeType> {
 
 	public AttributeTypeAssociationDao(
