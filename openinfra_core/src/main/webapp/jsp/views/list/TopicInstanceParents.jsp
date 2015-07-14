@@ -1,8 +1,4 @@
-<%@page import="de.btu.openinfra.backend.OpenInfraProperties"%>
-<%@page import="de.btu.openinfra.backend.db.daos.TopicInstanceDao"%>
-<%@page import="java.net.URLEncoder"%>
 <%@page import="de.btu.openinfra.backend.helper.ImgSize"%>
-<%@page import="de.btu.openinfra.backend.helper.ImgUrls"%>
 <%@page import="de.btu.openinfra.backend.helper.ImgUrlHelper"%>
 <%@page import="java.util.UUID"%>
 <%@page import="de.btu.openinfra.backend.db.daos.AttributeTypeDao"%>
@@ -20,35 +16,29 @@
 <body>
 	<%@ include file="../../snippets/Menu.jsp" %>
 	
-	<c:set var="columns" value="${it[0].topicCharacteristic.settings}"/>
-	<div id="orderAndFilterRow" class="row">
-		<%@ include file="../../snippets/Filter.jsp" %>
-		<%@ include file="../../snippets/OrderBy.jsp" %>
-		<%@ include file="../../snippets/ResetFilterButton.jsp" %>
-	</div>
+	
+	<div id="parents">
+		<c:choose>
+		<c:when test="${fn:length(it) gt 0}">
+		<div class="panel panel-default">
+				<div class="panel-heading">
+			    	<h4 class="panel-title">		                    	
+			        	<fmt:message key="parents.label"/>
+			        </h4>
+			   	</div>
+			   	<div class="panel-collapse collapse in">
+			   		<div class="panel-body">
+			   			<div>
+	<c:forEach items="${it}" var="pojo">
 	
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<fmt:message key="topicinstances.label"/>
-			<c:set var="localizedStrings" value="${it[0].topicCharacteristic.descriptions.localizedStrings}"/>
+			<c:set var="localizedStrings" value="${pojo.associatedInstance.topicCharacteristic.descriptions.localizedStrings}"/>
 			<%@ include file="../../snippets/LocalizedStrings.jsp" %>
-			<span class="badge">
-				<c:set var="currentCharacteristic" value="${it[0].topicCharacteristic.uuid}"/>
-				<%=new TopicInstanceDao(
-						UUID.fromString(pageContext.getAttribute("currentProject").toString()),
-						OpenInfraSchemas.PROJECTS).getCount(
-								UUID.fromString(pageContext.getAttribute("currentCharacteristic").toString()))%>
-			</span>
-			<span class="badge">
-				<!-- link topic charateristic to map -->
-				<!-- TODO: test if tc supports geometry attribute and is mapped to geoserver layer -->
-		    	<a href="${contextPath}/rest/projects/maps?tc[0]=${currentCharacteristic}">
-		    		<fmt:message key="maps.label"></fmt:message>
-		        </a>
-		    </span>
+			${pojo.relationshipType.description.names.localizedStrings[0].characterString}
 		</div>
-		<c:set var="columnCount" value="${fn:length(columns)}"/>
-		<c:if test="${columnCount == 0}">
+		<c:set var="settingCount" value="${fn:length(pojo.associatedInstance.topicCharacteristic.settings)}"/>
+		<c:if test="${settingCount == 0}">
 			<div class="panel-body">
 	    		<p><fmt:message key="nosettings.label"/></p>
 	  		</div>
@@ -56,8 +46,9 @@
 		<table class="table">
 			<thead>
 				<tr>
-					<c:forEach items="${columns}" var="column">
-						<th style="width: ${100/columnCount}%">
+					<c:set var="columnName" value=""/>
+					<c:forEach items="${pojo.associatedInstance.topicCharacteristic.settings}" var="setting">
+						<th style="width: ${100/settingCount}%">
 						<%
 							pageContext.setAttribute(
 																"columnName",
@@ -65,14 +56,14 @@
 																UUID.fromString(pageContext.getAttribute("currentProject").toString()),
 																OpenInfraSchemas.PROJECTS).read(
 																		PtLocaleDao.forLanguageTag(session.getAttribute("language").toString()), 
-																		UUID.fromString(pageContext.getAttribute("column").toString())),
+																		UUID.fromString(pageContext.getAttribute("setting").toString())),
 																PageContext.PAGE_SCOPE);
 						%>
 								<c:choose>
 									<c:when test="${columnName.names.localizedStrings[0] != null}">
 										${columnName.names.localizedStrings[0].characterString}
 										<c:if test="${columnName.domain != null}">
-											(<fmt:message key="domain.label"/>)
+											(Domain)
 										</c:if>
 									</c:when>
 									<c:otherwise>
@@ -82,7 +73,7 @@
 							
 						</th>
 					</c:forEach>
-					<c:if test="${columnCount == 0}">
+					<c:if test="${settingCount == 0}">
 						<th>
 							Name
 						</th>
@@ -92,16 +83,16 @@
 					</c:if>
 				</tr>
 			</thead>
-			<c:forEach items="${it}" var="pojo">
+
 				<tr>
-					<c:forEach items="${columns}" var="column">
+					<c:forEach items="${pojo.associatedInstance.topicCharacteristic.settings}" var="setting">
 						<c:set var="found" value="false"/>
-						<c:forEach items="${pojo.values}" var="value">
-							<c:if test="${column == value.attributeTypeId}">
+						<c:forEach items="${pojo.associatedInstance.values}" var="value">
+							<c:if test="${setting == value.attributeTypeId}">
 								<c:set var="found" value="true"/>
 								<td>
 									<c:if test="${value.attributeValueDomain != null}">
-										<a href="../../topicinstances/${pojo.uuid}/topic?language=${language}&geomType=${geomType}">
+										<a href="../../topicinstances/${pojo.associatedInstance.uuid}/topic?language=${language}&geomType=${geomType}">
 											<c:forEach items="${value.attributeValueDomain.domain.names.localizedStrings}" var="item">
 				  								<c:choose>
 					  								<c:when test="${fn:endsWith(item.characterString, '.JPG') || fn:endsWith(item.characterString, '.jpg')}">
@@ -117,7 +108,7 @@
 										</a>
 									</c:if>
 									<c:if test="${value.attributeValueValue != null}">
-										<a href="../../topicinstances/${pojo.uuid}/topic?language=${language}&geomType=${geomType}">
+										<a href="../../topicinstances/${pojo.associatedInstance.uuid}/topic?language=${language}&geomType=${geomType}">
 											<c:forEach items="${value.attributeValueValue.value.localizedStrings}" var="item">
 				  								<c:choose>
 					  								<c:when test="${fn:endsWith(item.characterString, '.JPG') || fn:endsWith(item.characterString, '.jpg')}">
@@ -141,64 +132,39 @@
 							</td>
 						</c:if>
 					</c:forEach>
-					<c:if test="${columnCount == 0}">
+					<c:if test="${settingCount == 0}">
 						<td>
-							<a href="../../topicinstances/${pojo.uuid}/topic?language=${language}">
-								<c:set var="localizedStrings" value="${pojo.topicCharacteristic.descriptions.localizedStrings}"/>
+							<a href="../../topicinstances/${pojo.associatedInstance.uuid}/topic?language=${language}">
+								<c:set var="localizedStrings" value="${pojo.associatedInstance.topicCharacteristic.descriptions.localizedStrings}"/>
 								<%@ include file="../../snippets/LocalizedStrings.jsp" %>
 							</a>
 						</td>
 						<td>
-							<a href="../../topicinstances/${pojo.uuid}/topic?language=${language}">
-								${pojo.uuid}
+							<a href="../../topicinstances/${pojo.associatedInstance.uuid}/topic?language=${language}">
+								${pojo.associatedInstance.uuid}
 							</a>
 						</td>
 					</c:if>
 				</tr>
-			</c:forEach>
-		</table>  
+
+
+
+		</table> 
 	</div>
 	
-	<nav>
-	  <ul class="pager">
-	    <c:set var="navParameter" value=""/>
-		<c:forEach items="${param}" var="pageParameter">
-			<c:if test="${pageParameter.key != 'offset' && pageParameter.key != 'size'}">
-				<c:set var="ppValue" value="${pageParameter.value}"/>
-				<c:set var="navParameter">${navParameter}&${pageParameter.key}=<%=URLEncoder.encode(pageContext.getAttribute("ppValue").toString(), "UTF-8")%> </c:set>
-			</c:if>
-		</c:forEach>
-		<c:set var="size" value="${param.size}"/>
-		<c:set var="offset" value="${param.offset}"/>
-		<c:if test="${param.size == null}">
-			<c:set var="size">
-				<%=OpenInfraProperties.DEFAULT_SIZE%>
-			</c:set>
-			<c:set var="offset">
-				<%=OpenInfraProperties.DEFAULT_OFFSET%>
-			</c:set>
-		</c:if>
-  		<c:if test="${fn:length(it) == size}">
-  			<c:set var="offset" value="${offset + size}"/>
-  			<li class="next">
-  				<a href="${forward}?${navParameter}&offset=${offset}&size=${size}">
-  					<fmt:message key="next.label"/> 
-  					<span aria-hidden="true">&rarr;</span>
-  				</a>
-  			</li>
-  		</c:if>
-  		<c:if test="${(offset > 0) && offset - size != 0}">
-  			<c:set var="offset" value="${offset - (size+size)}"/>
-  			<li class="previous">
-  				<a href="${forward}?${navParameter}&offset=${offset}&size=${size}">
-  					<span aria-hidden="true">&larr;</span> 
-  					<fmt:message key="previous.label"/>
-  				</a>
-  			</li>
-  		</c:if>
-	    
-	  </ul>
-	</nav>
+	
+	</c:forEach>
+			   			</div>
+			   		</div>
+			   	</div>
+			   	</div>
+			</c:when>
+			<c:otherwise>
+				<fmt:message key="noassignedinstances.label"/>
+			</c:otherwise>
+		</c:choose>	
+	</div>
+
 	
 </body>
 </html>

@@ -12,9 +12,6 @@ import javax.ws.rs.core.MediaType;
 
 import org.glassfish.jersey.server.mvc.Template;
 
-import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
-import de.btu.openinfra.backend.db.daos.PtLocaleDao;
-import de.btu.openinfra.backend.db.daos.TopicInstanceAssociationDao;
 import de.btu.openinfra.backend.db.pojos.TopicInstanceAssociationPojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
@@ -33,13 +30,24 @@ public class TopicInstanceResource {
 			@PathParam("topicInstanceId") UUID topicInstanceId,
 			@PathParam("offset") int offset,
 			@PathParam("size") int size) {
-		return new TopicInstanceAssociationDao(
-				projectId,
-				OpenInfraSchemas.PROJECTS).read(
-						PtLocaleDao.forLanguageTag(language),
-						topicInstanceId,
-						offset,
+		return new de.btu.openinfra.backend.rest.project.TopicInstanceResource()
+				.getAssociations(
+						language,
+						projectId,				
+						topicInstanceId, 
+						offset, 
 						size);
+	}
+	
+	@GET
+	@Path("{topicInstanceId}/parents")
+	@Template(name="/views/list/TopicInstanceParents.jsp")
+	public List<TopicInstanceAssociationPojo> getParents(			
+			@QueryParam("language") String language,
+			@PathParam("projectId") UUID projectId,
+			@PathParam("topicInstanceId") UUID topicInstanceId) {
+		return new de.btu.openinfra.backend.rest.project.TopicInstanceResource()
+				.getParents(language, projectId, topicInstanceId);
 	}
 
 }

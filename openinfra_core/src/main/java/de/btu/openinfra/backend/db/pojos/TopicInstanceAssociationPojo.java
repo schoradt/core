@@ -8,6 +8,14 @@ public class TopicInstanceAssociationPojo extends OpenInfraPojo {
 	private TopicInstancePojo associatedInstance;
 	private RelationshipTypePojo relationshipType;
 	
+	public TopicInstanceAssociationPojo() {}
+	public TopicInstanceAssociationPojo(
+			TopicInstancePojo tip, 
+			RelationshipTypePojo rtp) {
+		associatedInstance = tip;
+		relationshipType = rtp;
+	}
+	
 	public RelationshipTypePojo getRelationshipType() {
 		return relationshipType;
 	}
