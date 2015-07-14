@@ -9,13 +9,13 @@ import de.btu.openinfra.backend.db.pojos.AttributeTypeAssociationPojo;
 
 public class AttributeTypeAssociationDao
 	extends OpenInfraValueValueDao<AttributeTypeAssociationPojo,
-	AttributeTypeXAttributeType, AttributeType> {
+	AttributeTypeXAttributeType, AttributeType, AttributeType> {
 
 	public AttributeTypeAssociationDao(
 			UUID currentProjectId,
 			OpenInfraSchemas schema) {
 		super(currentProjectId, schema, AttributeTypeXAttributeType.class,
-				AttributeType.class);
+				AttributeType.class, AttributeType.class);
 	}
 
 	@Override

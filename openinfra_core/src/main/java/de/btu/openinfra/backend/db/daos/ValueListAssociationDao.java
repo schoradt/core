@@ -9,13 +9,13 @@ import de.btu.openinfra.backend.db.pojos.ValueListAssociationPojo;
 
 public class ValueListAssociationDao 
 	extends OpenInfraValueValueDao<ValueListAssociationPojo,
-	ValueListXValueList, ValueList> {
+	ValueListXValueList, ValueList, ValueList> {
 
 	public ValueListAssociationDao(
 			UUID currentProjectId,
 			OpenInfraSchemas schema) {
 		super(currentProjectId, schema, ValueListXValueList.class,
-				ValueList.class);
+				ValueList.class, ValueList.class);
 	}
 
 	@Override
