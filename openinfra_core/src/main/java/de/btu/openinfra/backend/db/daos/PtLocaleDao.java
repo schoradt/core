@@ -60,7 +60,7 @@ public class PtLocaleDao extends OpenInfraDao<PtLocalePojo, PtLocale> {
 		PtLocale ptl = null;
 		if(cc == null) {
 		    ptl = em.createNamedQuery(
-	                "PtLocale.xx",
+	                "PtLocale.noCountry",
 	                PtLocale.class)
 	                .setParameter("languageCode", lc)
 	                .getSingleResult();

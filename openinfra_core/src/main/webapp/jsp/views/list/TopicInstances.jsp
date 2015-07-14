@@ -20,33 +20,12 @@
 <body>
 	<%@ include file="../../snippets/Menu.jsp" %>
 	
-	<div class="row">
-	  <div class="col-lg-6">
-	    <div class="input-group">
-	     <form>
-		      <input type="text" name="filter" value="<c:out value="${param.filter}"/>" class="form-control" placeholder="Filter bsp: %Haus 61%">
-		      <span class="input-group-btn">
-		        <button class="btn btn-default" type="submit">
-		        	<fmt:message key="searchbutton.label"/>
-		        </button>
-		      </span>
-		    <!-- Additionally, the form control must also include all existing
-		         parameters as hidden fields -->
-		    <c:forEach items="${param}" var="pageParameter">
-		    	<!-- Don't add the language parameter again! -->
-		    	<c:if test="${pageParameter.key != 'filter' || pageParameter.key != 'offset'}">
-		    		<input type="hidden" name="${pageParameter.key}" value="${pageParameter.value}"/>
-		    	</c:if>
-      		</c:forEach>
-      		<!-- reset the offset parameter -->
-      		<input type="hidden" name="offset" value="0"/>
-	     </form>
-	    </div><!-- /input-group -->
-	  </div><!-- /.col-lg-6 -->
-	</div><!-- /.row -->
-
-	<br/>
-
+	<c:set var="columns" value="${it[0].topicCharacteristic.settings}"/>
+	<div id="orderAndFilterRow" class="row">
+		<%@ include file="../../snippets/OrderBy.jsp" %>
+		<%@ include file="../../snippets/ResetFilterButton.jsp" %>
+	</div>
+	
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<fmt:message key="topicinstances.label"/>
@@ -67,8 +46,8 @@
 		        </a>
 		    </span>
 		</div>
-		<c:set var="settingCount" value="${fn:length(it[0].topicCharacteristic.settings)}"/>
-		<c:if test="${settingCount == 0}">
+		<c:set var="columnCount" value="${fn:length(columns)}"/>
+		<c:if test="${columnCount == 0}">
 			<div class="panel-body">
 	    		<p><fmt:message key="nosettings.label"/></p>
 	  		</div>
@@ -76,8 +55,8 @@
 		<table class="table">
 			<thead>
 				<tr>
-					<c:forEach items="${it[0].topicCharacteristic.settings}" var="setting">
-						<th style="width: ${100/settingCount}%">
+					<c:forEach items="${columns}" var="column">
+						<th style="width: ${100/columnCount}%">
 						<%
 							pageContext.setAttribute(
 																"columnName",
@@ -85,14 +64,14 @@
 																UUID.fromString(pageContext.getAttribute("currentProject").toString()),
 																OpenInfraSchemas.PROJECTS).read(
 																		PtLocaleDao.forLanguageTag(session.getAttribute("language").toString()), 
-																		UUID.fromString(pageContext.getAttribute("setting").toString())),
+																		UUID.fromString(pageContext.getAttribute("column").toString())),
 																PageContext.PAGE_SCOPE);
 						%>
 								<c:choose>
 									<c:when test="${columnName.names.localizedStrings[0] != null}">
 										${columnName.names.localizedStrings[0].characterString}
 										<c:if test="${columnName.domain != null}">
-											(Domain)
+											(<fmt:message key="domain.label"/>)
 										</c:if>
 									</c:when>
 									<c:otherwise>
@@ -102,7 +81,7 @@
 							
 						</th>
 					</c:forEach>
-					<c:if test="${settingCount == 0}">
+					<c:if test="${columnCount == 0}">
 						<th>
 							Name
 						</th>
@@ -114,10 +93,10 @@
 			</thead>
 			<c:forEach items="${it}" var="pojo">
 				<tr>
-					<c:forEach items="${it[0].topicCharacteristic.settings}" var="setting">
+					<c:forEach items="${columns}" var="column">
 						<c:set var="found" value="false"/>
 						<c:forEach items="${pojo.values}" var="value">
-							<c:if test="${setting == value.attributeTypeId}">
+							<c:if test="${column == value.attributeTypeId}">
 								<c:set var="found" value="true"/>
 								<td>
 									<c:if test="${value.attributeValueDomain != null}">
@@ -161,7 +140,7 @@
 							</td>
 						</c:if>
 					</c:forEach>
-					<c:if test="${settingCount == 0}">
+					<c:if test="${columnCount == 0}">
 						<td>
 							<a href="../../topicinstances/${pojo.uuid}/topic?language=${language}">
 								<c:set var="localizedStrings" value="${pojo.topicCharacteristic.descriptions.localizedStrings}"/>

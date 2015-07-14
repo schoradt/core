@@ -16,7 +16,7 @@ import javax.persistence.Table;
 
 /**
  * The persistent class for the pt_locale database table.
- * 
+ *
  */
 @Entity
 @Table(name="pt_locale")
@@ -28,11 +28,15 @@ import javax.persistence.Table;
 			+ "FROM PtLocale p "
 			+ "WHERE p.countryCode = :countryCode "
 			+ "AND p.languageCode = :languageCode "),
-    @NamedQuery(name="PtLocale.xx", query=""
+    @NamedQuery(name="PtLocale.noCountry", query=""
             + "SELECT p "
             + "FROM PtLocale p "
             + "WHERE p.countryCode IS NULL "
-            + "AND p.languageCode = :languageCode ")			
+            + "AND p.languageCode = :languageCode "),
+	@NamedQuery(name="PtLocale.xx", query=""
+            + "SELECT p "
+            + "FROM PtLocale p "
+            + "WHERE p.countryCode IS NULL ")
 })
 public class PtLocale implements Serializable, OpenInfraModelObject {
 	private static final long serialVersionUID = 1L;
@@ -62,7 +66,8 @@ public class PtLocale implements Serializable, OpenInfraModelObject {
 	public PtLocale() {
 	}
 
-	public UUID getId() {
+	@Override
+    public UUID getId() {
 		return this.id;
 	}
 
