@@ -8,6 +8,12 @@
  * which ads the functionality to retrieve a specific POJO object from database
  * by a specified value.
  * 
+ * There are two exceptions of the aforementioned rule. The following classes
+ * do not implement the above-stated classes:
+ * {@see TopicDao}
+ * {@see TopicInstanceParentDao}
+ * 
+ * 
  * Moreover, there is a distinction between 'ordinary' DAO classes and 'view'
  * DAO classes. Ordinary DAO classes are used for both data access and data 
  * storage. View DAO classes are special view classes which must not be used 

@@ -30,7 +30,11 @@ import javax.persistence.Table;
 	@NamedQuery(name="TopicInstanceXTopicInstance.findByTopicInstance",
 			query="SELECT t "
 					+ "FROM TopicInstanceXTopicInstance t "
-					+ "WHERE t.topicInstance1Bean = :value")
+					+ "WHERE t.topicInstance1Bean = :value"),
+	@NamedQuery(name="TopicInstanceXTopicInstance.findParent", 
+			query="SELECT t "
+					+ "FROM TopicInstanceXTopicInstance t "
+					+ "WHERE t.topicInstance2Bean = :self")
 })
 public class TopicInstanceXTopicInstance implements 
 	Serializable, OpenInfraModelObject {
@@ -57,6 +61,7 @@ public class TopicInstanceXTopicInstance implements
 	public TopicInstanceXTopicInstance() {
 	}
 
+	@Override
 	public UUID getId() {
 		return this.id;
 	}

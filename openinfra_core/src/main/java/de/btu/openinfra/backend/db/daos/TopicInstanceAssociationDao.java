@@ -36,6 +36,18 @@ public class TopicInstanceAssociationDao extends OpenInfraValueDao<
 				TopicInstanceXTopicInstance.class,
 				TopicInstance.class);
 	}
+	
+	public TopicInstanceXTopicInstance readParent(Locale locale, UUID self) {
+		TopicInstanceXTopicInstance txt = 
+				em.createNamedQuery(
+						"TopicInstanceXTopicInstance.findParent", 
+						TopicInstanceXTopicInstance.class)
+						.setParameter(
+								"self", 
+								em.find(TopicInstance.class, self))
+						.getSingleResult();
+		return txt;
+	}
 
 	@Override
 	public TopicInstanceAssociationPojo mapToPojo(
