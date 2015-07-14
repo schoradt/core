@@ -96,22 +96,5 @@
 				</c:forEach>
 			</form>
 		</div><!-- /input-group -->
-	</div><!-- /.col-lg-2 -->
-	
-	<div class="col-lg-2">
-		<div class="input-group">
-			<form>
-				<!-- the reset button for the order by filter -->
-				<input class="btn btn-default" type="submit" value="<fmt:message key="reset.button.label" />">
-				<!-- Additionally, the form control must also include all existing
-					 parameters as hidden fields -->
-				<c:forEach items="${param}" var="pageParameter">
-					<!-- Don't add the sortOrder parameter again! -->
-					<c:if test="${pageParameter.key != 'sortOrder' && pageParameter.key != 'orderBy'}">
-						<input type="hidden" name="${pageParameter.key}" value="${pageParameter.value}"/>
-					</c:if>
-				</c:forEach>
-			</form>
-		</div>
 	</div>
 	
