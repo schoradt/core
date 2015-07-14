@@ -14,7 +14,7 @@ import de.btu.openinfra.backend.db.pojos.TopicInstanceAssociationPojo;
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
  */
-public class TopicInstanceAssociationDao extends OpenInfraValueDao<
+public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
 	TopicInstanceAssociationPojo,
 	TopicInstanceXTopicInstance,
 	TopicInstance> {
