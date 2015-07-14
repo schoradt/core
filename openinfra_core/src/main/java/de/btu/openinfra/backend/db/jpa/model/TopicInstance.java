@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -17,20 +19,20 @@ import javax.persistence.Table;
 
 /**
  * The persistent class for the topic_instance database table.
- * 
+ *
  */
 @Entity
 @Table(name="topic_instance")
 @NamedQueries({
-	@NamedQuery(name="TopicInstance.count", 
+	@NamedQuery(name="TopicInstance.count",
 			query="SELECT COUNT(t) FROM TopicInstance t "),
-	@NamedQuery(name="TopicInstance.countByTopicCharacteristic", 
+	@NamedQuery(name="TopicInstance.countByTopicCharacteristic",
 			query="SELECT COUNT(t) "
 					+ "FROM TopicInstance t "
 					+ "WHERE t.topicCharacteristic = :value"),
-	@NamedQuery(name="TopicInstance.findAll", 
+	@NamedQuery(name="TopicInstance.findAll",
 			query="SELECT t FROM TopicInstance t"),
-	@NamedQuery(name="TopicInstance.findByTopicCharacteristic", 
+	@NamedQuery(name="TopicInstance.findByTopicCharacteristic",
 			query="SELECT t "
 					+ "FROM TopicInstance t "
 					+ "WHERE t.topicCharacteristic = :value "),
@@ -50,10 +52,62 @@ import javax.persistence.Table;
             query="SELECT t "
                     + "FROM AttributeValueGeomz a INNER JOIN a.topicInstance t "
                     + "WHERE t.topicCharacteristic = :value"),
-    @NamedQuery(name="TopicInstance.countByTopicGeomz", 
+    @NamedQuery(name="TopicInstance.countByTopicGeomz",
             query="SELECT COUNT(t) "
                     + "FROM AttributeValueGeomz a INNER JOIN a.topicInstance t "
                     + "WHERE t.topicCharacteristic = :value")
+})
+@NamedNativeQueries({
+    @NamedNativeQuery(name="TopicInstance.findAllByLocaleAndOrderForValues",
+        query="SELECT "
+                + "ti1.*, b.free_text "
+                + "FROM topic_instance ti1 LEFT JOIN ("
+                    + "SELECT "
+                        + "ti2.id, at.name, lcs.free_text "
+                    + "FROM "
+                        + "topic_instance ti2 "
+                        + "JOIN attribute_value_value avv "
+                            + "ON avv.topic_instance_id = ti2.id "
+                        + "JOIN attribute_type_to_attribute_type_group ata "
+                            + "ON ata.id = "
+                            + "avv.attribute_type_to_attribute_type_group_id "
+                        + "JOIN attribute_type at "
+                            + "ON at.id = ata.attribute_type_id "
+                        + "JOIN localized_character_string lcs "
+                            + "ON lcs.pt_free_text_id = avv.value "
+                    + "WHERE "
+                        + "at.id = cast(? AS uuid) AND "
+                        + "lcs.pt_locale_id = cast(? AS uuid)) AS b "
+                        + "ON b.id = ti1.id "
+                + "WHERE ti1.topic_characteristic_id = cast(? AS uuid) "
+                + "ORDER BY b.free_text ",
+            resultClass=ValueList.class),
+    @NamedNativeQuery(name="TopicInstance.findAllByLocaleAndOrderForDomains",
+        query="SELECT "
+                + "ti1.* "
+                + "FROM topic_instance ti1 LEFT JOIN ("
+                    + "SELECT "
+                        + "ti2.id, at.name, lcs.free_text "
+                    + "FROM "
+                        + "topic_instance ti2 "
+                        + "JOIN attribute_value_domain avd "
+                            + "ON avd.topic_instance_id = ti2.id "
+                        + "JOIN attribute_type_to_attribute_type_group ata "
+                            + "ON ata.id = "
+                            + "avd.attribute_type_to_attribute_type_group_id "
+                        + "JOIN attribute_type at "
+                            + "ON at.id = ata.attribute_type_id "
+                        + "JOIN value_list_values vlv "
+                            + "ON vlv.id = avd.domain "
+                        + "JOIN localized_character_string lcs "
+                            + "ON lcs.pt_free_text_id = vlv.name "
+                    + "WHERE "
+                        + "at.id = cast(? AS uuid) AND "
+                        + "lcs.pt_locale_id = cast(? AS uuid)) AS b "
+                        + "ON b.id = ti1.id "
+                + "WHERE ti1.topic_characteristic_id = cast(? AS uuid) "
+                + "ORDER BY b.free_text ",
+            resultClass=ValueList.class),
 })
 public class TopicInstance implements Serializable, OpenInfraModelObject {
 	private static final long serialVersionUID = 1L;
@@ -97,7 +151,8 @@ public class TopicInstance implements Serializable, OpenInfraModelObject {
 	public TopicInstance() {
 	}
 
-	public UUID getId() {
+	@Override
+    public UUID getId() {
 		return this.id;
 	}
 

@@ -160,10 +160,10 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 				OpenInfraApplication.PERSISTENCE_CONTEXT,
 				properties).createEntityManager();
 	}
-	
+
 	/**
-	 * This is the default generic method which provides read access to the 
-	 * selected database schema without sorting. It is almost the same routine 
+	 * This is the default generic method which provides read access to the
+	 * selected database schema without sorting. It is almost the same routine
 	 * for all DAO classes to access the database.
 	 *
      * @param locale     A Java.util locale objects.
@@ -196,12 +196,12 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	 * This is a generic method which provides read access to the selected
 	 * database schema. It is almost the same routine for all DAO classes to
 	 * access the database. If not, this method should be extended in order
-	 * to avoid overrides. Overrides could increase the effort regarding the 
+	 * to avoid overrides. Overrides could increase the effort regarding the
 	 * integration and maintenance of a rights management system.
 	 *
      * Since the system schema doesn't provide the project_id column for topic
      * characteristic objects it is necessary to handle this request separately.
-     * 
+     *
      * The meta data schema is also handled separately.
 	 *
 	 *
@@ -214,10 +214,10 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	 */
 	@SuppressWarnings("unchecked")
     public List<TypePojo> read(
-    		Locale locale, 
+    		Locale locale,
     		OpenInfraSortOrder order,
-    		OpenInfraOrderBy column,
-    		int offset, 
+    		OpenInfraOrderByEnum column,
+    		int offset,
     		int size) {
 		// 1. Define a list which holds the POJO objects
 		List<TypePojo> pojos = new LinkedList<TypePojo>();
@@ -246,7 +246,7 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 			return read(locale, offset, size);
 		} else {
 	        // 5.a Construct the origin SQL-based named query and replace the
-			//    the placeholder by the required column and sort order.
+			//     the placeholder by the required column and sort order.
 	        String sqlString = em.createNamedQuery(
 	        		modelClass.getSimpleName() + ".findAllByLocaleAndOrder")
 	        		.unwrap(JpaQuery.class).getDatabaseQuery().getSQLString();

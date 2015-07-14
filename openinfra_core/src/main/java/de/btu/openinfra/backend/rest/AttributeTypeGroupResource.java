@@ -13,7 +13,7 @@ import javax.ws.rs.core.MediaType;
 import de.btu.openinfra.backend.db.daos.AttributeTypeDao;
 import de.btu.openinfra.backend.db.daos.AttributeTypeGroupDao;
 import de.btu.openinfra.backend.db.daos.AttributeTypeToAttributeTypeGroupDao;
-import de.btu.openinfra.backend.db.daos.OpenInfraOrderBy;
+import de.btu.openinfra.backend.db.daos.OpenInfraOrderByEnum;
 import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
@@ -48,7 +48,7 @@ public class AttributeTypeGroupResource {
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
-			@QueryParam("orderBy") OpenInfraOrderBy orderBy,
+			@QueryParam("orderBy") OpenInfraOrderByEnum orderBy,
 			@QueryParam("offset") int offset, 
 			@QueryParam("size") int size) {
 		return new AttributeTypeGroupDao(
@@ -83,7 +83,7 @@ public class AttributeTypeGroupResource {
 			@PathParam("schema") String schema,
 			@PathParam("attributeTypeGroupId") UUID attributeTypeGroupId,
 			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
-			@QueryParam("orderBy") OpenInfraOrderBy orderBy,
+			@QueryParam("orderBy") OpenInfraOrderByEnum orderBy,
 			@QueryParam("offset") int offset, 
 			@QueryParam("size") int size) {
 		return new AttributeTypeToAttributeTypeGroupDao(

@@ -12,7 +12,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.glassfish.jersey.server.mvc.Template;
 
-import de.btu.openinfra.backend.db.daos.OpenInfraOrderBy;
+import de.btu.openinfra.backend.db.daos.OpenInfraOrderByEnum;
 import de.btu.openinfra.backend.db.daos.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupToTopicCharacteristicPojo;
 import de.btu.openinfra.backend.db.pojos.TopicCharacteristicPojo;
@@ -33,11 +33,11 @@ public class TopicCharacteristicResource {
 			@PathParam("schema") String schema,
 			@QueryParam("filter") String filter,
 			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
-			@QueryParam("orderBy") OpenInfraOrderBy orderBy,
+			@QueryParam("orderBy") OpenInfraOrderByEnum orderBy,
 			@PathParam("offset") int offset,
 			@PathParam("size") int size) {
 		return new de.btu.openinfra.backend.rest.TopicCharacteristicResource()
-			.get(language, projectId, schema, filter, sortOrder, orderBy, 
+			.get(language, projectId, schema, filter, sortOrder, orderBy,
 					offset, size);
 	}
 
@@ -62,11 +62,14 @@ public class TopicCharacteristicResource {
 			@PathParam("schema") String schema,
 			@PathParam("topicCharacteristicId") UUID topicCharacteristicId,
 			@QueryParam("filter") String filter,
+			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
+			@QueryParam("orderBy") String orderBy,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new de.btu.openinfra.backend.rest.TopicCharacteristicResource()
 			.getTopicInstances(language, projectId, schema,
-					topicCharacteristicId, filter, offset, size);
+					topicCharacteristicId, filter, sortOrder, orderBy,
+					offset, size);
 	}
 
 	@GET
