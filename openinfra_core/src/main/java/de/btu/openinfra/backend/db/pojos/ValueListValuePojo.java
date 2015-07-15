@@ -9,8 +9,8 @@ public class ValueListValuePojo extends OpenInfraPojo {
 	
 	private boolean visibility;
 	private UUID belongsToValueList;
-	private NamePojo names;
-	private DescriptionPojo descriptions;
+	private PtFreeTextPojo names;
+	private PtFreeTextPojo descriptions;
 	
 	public boolean getVisibility() {
 		return visibility;
@@ -28,19 +28,19 @@ public class ValueListValuePojo extends OpenInfraPojo {
 		this.belongsToValueList = belongsToValueList;
 	}
 
-	public NamePojo getNames() {
+	public PtFreeTextPojo getNames() {
 		return names;
 	}
 
-	public void setNames(NamePojo names) {
+	public void setNames(PtFreeTextPojo names) {
 		this.names = names;
 	}
 
-	public DescriptionPojo getDescriptions() {
+	public PtFreeTextPojo getDescriptions() {
 		return descriptions;
 	}
 
-	public void setDescriptions(DescriptionPojo descriptions) {
+	public void setDescriptions(PtFreeTextPojo descriptions) {
 		this.descriptions = descriptions;
 	}
 
