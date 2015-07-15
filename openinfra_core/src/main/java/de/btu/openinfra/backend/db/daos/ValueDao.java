@@ -1,5 +1,6 @@
 package de.btu.openinfra.backend.db.daos;
 
+import java.util.Locale;
 import java.util.UUID;
 
 import de.btu.openinfra.backend.db.jpa.model.PtFreeText;
@@ -26,12 +27,20 @@ public class ValueDao extends PtFreeTextDao<ValuePojo>{
 		super(currentProjectId, schema, ValuePojo.class);
 	}
 	
-	public static ValuePojo mapToPojoStatically(PtFreeText ptf) {
+	/**
+	 * 
+	 * @param locale
+	 * @param ptf
+	 * @return
+	 */
+	public static ValuePojo mapToPojoStatically(
+			Locale locale, 
+			PtFreeText ptf) {
 		UUID id = null;
 		if(ptf != null) {
 			id = ptf.getId();
 		} // end if
-		return new ValuePojo(mapToLocalizedStringStatically(null, ptf),	id);
+		return new ValuePojo(mapToLocalizedStringStatically(locale, ptf), id);
 	}
 
 }
