@@ -51,6 +51,7 @@ public class AttributeValueValueDao
 		AttributeValueValuePojo avvPojo = new AttributeValueValuePojo();
 		avvPojo.setTopicInstanceId(avv.getTopicInstance().getId());
 		avvPojo.setValue(ValueDao.mapToPojoStatically(
+				locale,
 				avv.getPtFreeText()));
 		avvPojo.setAttributeTypeToAttributeTypeGroupId(
 		        avv.getAttributeTypeToAttributeTypeGroup().getId());
