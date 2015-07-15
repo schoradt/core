@@ -264,6 +264,11 @@
 
 <!-- Accordion: http://bootsnipp.com/snippets/featured/accordion-menu -->
 <div class="col-md-4">
+		<div id="parents">
+			<fmt:message key="please.wait.label"/>
+			<img style="width: 40%;" src="${contextPath}/img/url.gif"/>
+		</div>
+		<br/>
 	<div id="sidebar">
 		<p>
 			<c:set var="currentInstance" value="${it.topicInstance.uuid}"/>
@@ -345,8 +350,10 @@ $(document).ready(function() {
 	var params = window.location.href.substr(window.location.href.lastIndexOf('?'));
 	var url = window.location.href.substr(0,window.location.href.lastIndexOf('/'));
 	var ass = url + "/associations" + params;
-	
-	$("#sidebar").load(ass + ' #accordion');
+	var pp = url + "/parents" + params;
+
+	$("#sidebar").load(ass + '#accordion');
+	$("#parents").load(pp + '#parents');
 	
 	// ***** Datepicker *****
 	$('.input-group.date').datepicker({
