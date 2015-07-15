@@ -50,7 +50,8 @@ public class AttributeValueValueDao
 			AttributeValueValue avv) {
 		AttributeValueValuePojo avvPojo = new AttributeValueValuePojo();
 		avvPojo.setTopicInstanceId(avv.getTopicInstance().getId());
-		avvPojo.setValue(ValueDao.mapToPojoStatically(
+		avvPojo.setValue(PtFreeTextDao.mapToPojoStatically(
+				locale,
 				avv.getPtFreeText()));
 		avvPojo.setAttributeTypeToAttributeTypeGroupId(
 		        avv.getAttributeTypeToAttributeTypeGroup().getId());
@@ -66,11 +67,12 @@ public class AttributeValueValueDao
 	    // return null if the pojo is null
 	    if (pojo != null) {
 	        // 2. Set the textual information
-	        ValueDao vd = new ValueDao(currentProjectId, schema);
+        	PtFreeTextDao ptfDao = 
+        			new PtFreeTextDao(currentProjectId, schema);
 	        avv.setPtFreeText(
-	                vd.mapToModel(
+	                ptfDao.mapToModel(
 	                        pojo.getValue(), 
-	                        vd.createModelObject(
+	                        ptfDao.createModelObject(
 	                                pojo.getValue().getUuid())).getModelObject());
 	        
 	        // set the attribute type to attribute type group
