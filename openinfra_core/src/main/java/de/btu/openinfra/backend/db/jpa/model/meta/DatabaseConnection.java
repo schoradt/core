@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
@@ -19,7 +20,12 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
  */
 @Entity
 @Table(name="database_connection", schema="meta_data")
-@NamedQuery(name="DatabaseConnection.findAll", query="SELECT d FROM DatabaseConnection d")
+@NamedQueries({
+	@NamedQuery(name="DatabaseConnection.findAll",
+		query="SELECT d FROM DatabaseConnection d"),
+    @NamedQuery(name="DatabaseConnection.count",
+    	query="SELECT COUNT(d) FROM DatabaseConnection d")
+})
 public class DatabaseConnection implements Serializable, OpenInfraModelObject {
 	private static final long serialVersionUID = 1L;
 
@@ -54,6 +60,7 @@ public class DatabaseConnection implements Serializable, OpenInfraModelObject {
 	public DatabaseConnection() {
 	}
 
+	@Override
 	public UUID getId() {
 		return this.id;
 	}
