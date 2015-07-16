@@ -26,7 +26,9 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
     @NamedQuery(name="Settings.findAll",
             query="SELECT s FROM Settings s"),
     @NamedQuery(name="Settings.findByKey",
-            query="SELECT s FROM Settings s WHERE s.key = :value")
+            query="SELECT s FROM Settings s WHERE s.key = :value"),
+    @NamedQuery(name="Settings.count",
+    	query="SELECT COUNT(s) FROM Settings s")
 })
 public class Settings implements Serializable, OpenInfraModelObject {
 	private static final long serialVersionUID = 1L;
@@ -48,6 +50,7 @@ public class Settings implements Serializable, OpenInfraModelObject {
 	public Settings() {
 	}
 
+	@Override
 	public UUID getId() {
 		return this.id;
 	}
