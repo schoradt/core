@@ -21,13 +21,7 @@ import de.btu.openinfra.backend.db.pojos.PtFreeTextPojo;
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
  */
-public abstract class PtFreeTextDao<TypeString extends PtFreeTextPojo>
-	extends OpenInfraDao<TypeString, PtFreeText> {
-
-	/**
-	 * The requested PtFreeTextClass
-	 */
-	private Class<TypeString> ptFreeTextClass;
+public class PtFreeTextDao	extends OpenInfraDao<PtFreeTextPojo, PtFreeText> {
 
 	/**
 	 * Represents a value which cannot be assigned to any language.
@@ -41,18 +35,13 @@ public abstract class PtFreeTextDao<TypeString extends PtFreeTextPojo>
 	 * @param currentProjectId the current project id (this should be null when
 	 *                         the system schema is selected)
 	 * @param schema           the required schema
-	 * @param ptFreeTextClass  defines the required PtFreeText class
 	 */
-	protected PtFreeTextDao(
-			UUID currentProjectId,
-			OpenInfraSchemas schema,
-			Class<TypeString> ptFreeTextClass) {
+	protected PtFreeTextDao(UUID currentProjectId, OpenInfraSchemas schema) {
 		super(currentProjectId, schema, PtFreeText.class);
-		this.ptFreeTextClass = ptFreeTextClass;
 	}
 
 	@Override
-	public TypeString mapToPojo(Locale locale, PtFreeText ptf) {
+	public PtFreeTextPojo mapToPojo(Locale locale, PtFreeText ptf) {
 		// 1. Create a list of the specified object type
 		List<LocalizedString> lsList = new LinkedList<LocalizedString>();
 
@@ -75,17 +64,7 @@ public abstract class PtFreeTextDao<TypeString extends PtFreeTextPojo>
 
 		// 3. Finaly, create a new instance of TypeString and add the list
 		// of LocalizedStrings
-		TypeString newInstance = null;
-		try {
-			newInstance = ptFreeTextClass.newInstance();
-			newInstance.setLocalizedStrings(lsList);
-			newInstance.setUuid(ptf.getId());
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} // end try catch
-		return newInstance;
+		return new PtFreeTextPojo(lsList, ptf.getId());
 	}
 
 	/**
@@ -99,7 +78,7 @@ public abstract class PtFreeTextDao<TypeString extends PtFreeTextPojo>
 	 * @param ptf    the PtFreeText object
 	 * @return       a list of LocalizedStrings
 	 */
-	protected static List<LocalizedString> mapToLocalizedStringStatically(
+	private static List<LocalizedString> mapToLocalizedStringStatically(
 			Locale locale,
 			PtFreeText ptf) {
 		// 1. Create a list of LocalizedStrings
@@ -170,7 +149,7 @@ public abstract class PtFreeTextDao<TypeString extends PtFreeTextPojo>
 	 */
 	@Override
 	public MappingResult<PtFreeText> mapToModel(
-			TypeString pojo,
+			PtFreeTextPojo pojo, 
 			PtFreeText ptf) {
 
         // return null if the pojo is null
@@ -185,8 +164,9 @@ public abstract class PtFreeTextDao<TypeString extends PtFreeTextPojo>
     			lcsList = new LinkedList<LocalizedCharacterString>();
     		} // end if
 
-    		// 3. Now iterate through all LocalizedStrings and look if this locale
-    		//    already exists in the LocalizedCharacterStrings (from PtFreeText)
+    		// 3. Now iterate through all LocalizedStrings and look if this 
+    		// locale already exists in the LocalizedCharacterStrings (from 
+    		// PtFreeText)
     		for(LocalizedString ls : pojo.getLocalizedStrings()) {
     			boolean exists = false;
     			// Use an iterator in order to remove items from list nicely and
@@ -194,8 +174,10 @@ public abstract class PtFreeTextDao<TypeString extends PtFreeTextPojo>
     			Iterator<LocalizedCharacterString> it = lcsList.iterator();
     			while(it.hasNext()) {
     				LocalizedCharacterString lcs = it.next();
-    				// If the locale exists replace the free text string in any case
-    				if(ls.getLocale().getUuid().equals(lcs.getPtLocale().getId())) {
+    				// If the locale exists replace the free text string in any 
+    				// case
+    				if(ls.getLocale().getUuid().equals(lcs.getPtLocale()
+    						.getId())) {
     					exists = true;
     					// It was agreed that the LocalizedCharacterString is
     					// deleted from database when the free text is empty.
@@ -203,7 +185,8 @@ public abstract class PtFreeTextDao<TypeString extends PtFreeTextPojo>
     						it.remove();
     					} else {
     					    // write string and escape it to prevent XSS
-    						lcs.setFreeText(escapeString(ls.getCharacterString()));
+    						lcs.setFreeText(escapeString(
+    								ls.getCharacterString()));
     					} // end if else
     					break;
     				} // end if
@@ -212,7 +195,8 @@ public abstract class PtFreeTextDao<TypeString extends PtFreeTextPojo>
     			// If the locale doesn't exists create a new
     			// LocalizedCharacterString
     			if(!exists && !"".equals(ls.getCharacterString())) {
-    				LocalizedCharacterString lcs = new LocalizedCharacterString();
+    				LocalizedCharacterString lcs = 
+    						new LocalizedCharacterString();
     				lcs.setPtLocale(em.find(
     						PtLocale.class,
     						ls.getLocale().getUuid()));
@@ -222,8 +206,8 @@ public abstract class PtFreeTextDao<TypeString extends PtFreeTextPojo>
     			} // end if
     		}
 
-    		// 4. Finally, add the changed List of LocalizedCharacterStrings to the
-    		//    PtFreeTextObject
+    		// 4. Finally, add the changed List of LocalizedCharacterStrings to 
+    		//    the PtFreeTextObject
     		ptf.setLocalizedCharacterStrings(lcsList);
 
     		// return the model as mapping result
@@ -252,7 +236,7 @@ public abstract class PtFreeTextDao<TypeString extends PtFreeTextPojo>
 	 * @param text the PtFreeText pojo
 	 * @return     the PtFreeText or null if it not exists
 	 */
-	protected PtFreeText getPtFreeTextModel(TypeString text) {
+	protected PtFreeText getPtFreeTextModel(PtFreeTextPojo text) {
 	    // check if the given PtFreeTextDao exists and its text is not null
 	    if(text != null && text.getLocalizedStrings() != null) {
 	        // return the jpa model of the PtFreeText
@@ -261,4 +245,16 @@ public abstract class PtFreeTextDao<TypeString extends PtFreeTextPojo>
         }
         return null;
     }
+	
+	public static PtFreeTextPojo mapToPojoStatically(
+			Locale locale, 
+			PtFreeText ptf) {
+		UUID id = null;
+		if(ptf != null) {
+			id = ptf.getId();
+		} // end if
+		return new PtFreeTextPojo(
+				mapToLocalizedStringStatically(locale, ptf), 
+				id);
+	}
 }
