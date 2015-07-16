@@ -17,7 +17,8 @@ import de.btu.openinfra.backend.db.daos.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.MetaDataPojo;
 
-@Path("/projects/{projectId}/metadata")
+//@Path("/projects/{projectId}/metadata")
+@Path(OpenInfraResponseBuilder.REST_URI + "/metadata")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY, 
 	MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY})
 public class MetaDataResource {
@@ -44,10 +45,11 @@ public class MetaDataResource {
 	@Path("count")
 	@Produces({MediaType.TEXT_PLAIN})
 	public long getCount(
-			@PathParam("projectId") UUID projectId) {
+			@PathParam("projectId") UUID projectId,
+			@PathParam("schema") String schema) {
 		return new MetaDataDao(
                 projectId,
-                OpenInfraSchemas.PROJECTS).getCount();
+                OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount();
 	}
 
     @GET
