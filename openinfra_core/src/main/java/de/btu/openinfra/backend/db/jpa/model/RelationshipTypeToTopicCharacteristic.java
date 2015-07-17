@@ -25,7 +25,13 @@ import javax.persistence.Table;
 			+ ".findByTopicCharacteristic", 
 			query="SELECT r "
 					+ "FROM RelationshipTypeToTopicCharacteristic r "
-					+ "WHERE r.topicCharacteristic = :value")
+					+ "WHERE r.topicCharacteristic = :value"),
+	@NamedQuery(name="RelationshipTypeToTopicCharacteristic"
+			+ ".findByTopicCharacteristicAndRelationshipType", 
+			query="SELECT r "
+					+ "FROM RelationshipTypeToTopicCharacteristic r "
+					+ "WHERE r.topicCharacteristic = :value AND "
+					+ "r.relationshipType = :value2"),
 })
 public class RelationshipTypeToTopicCharacteristic implements Serializable,
 	OpenInfraModelObject {
