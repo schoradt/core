@@ -318,7 +318,7 @@ public class AttributeValueDao extends OpenInfraValueDao<AttributeValuePojo,
 	 * @param locale          the locale the informations should be saved at
 	 * @return                the AttributeValuePojo
 	 */
-	public AttributeValuePojo createEmptyShell(
+	public AttributeValuePojo newAttributeValue(
 	        UUID topicInstanceId,
 	        UUID attributeTypeId,
 	        Locale locale) {
@@ -447,6 +447,51 @@ public class AttributeValueDao extends OpenInfraValueDao<AttributeValuePojo,
 	    }
 
 	    return pojo;
+	}
+
+	/**
+	 * It is not possible to write the AttributeValue directly because of a
+     * constraint. The appropriated AttributeValuePojo must be extracted
+     * and distributed separately to their respective createOrUpdate methods.
+     *
+	 * @param pojo
+	 * @param projectId the id of the project
+	 * @return          the UUID of the created or updated object
+	 */
+	public UUID distributeTypes(AttributeValuePojo pojo, UUID projectId) {
+
+	    UUID id = null;
+
+	    // depending on the AttributeValueType we must distribute the objects
+	    // to their respective createOrUpdate method
+	    switch (pojo.getAttributeValueType()) {
+        case ATTRIBUTE_VALUE_DOMAIN:
+            id = new AttributeValueDomainDao(
+                    projectId,
+                    OpenInfraSchemas.PROJECTS).createOrUpdate(
+                            pojo.getAttributeValueDomain());
+            break;
+        case ATTRIBUTE_VALUE_GEOM:
+            id = new AttributeValueGeomDao(
+                    projectId,
+                    OpenInfraSchemas.PROJECTS).createOrUpdate(
+                            pojo.getAttributeValueGeom());
+            break;
+        case ATTRIBUTE_VALUE_GEOMZ:
+            id = new AttributeValueGeomzDao(
+                    projectId,
+                    OpenInfraSchemas.PROJECTS).createOrUpdate(
+                            pojo.getAttributeValueGeomz());
+            break;
+        case ATTRIBUTE_VALUE_VALUE:
+             id = new AttributeValueValueDao(
+                    projectId,
+                    OpenInfraSchemas.PROJECTS).createOrUpdate(
+                            pojo.getAttributeValueValue());
+            break;
+        }
+
+	    return id;
 	}
 }
 

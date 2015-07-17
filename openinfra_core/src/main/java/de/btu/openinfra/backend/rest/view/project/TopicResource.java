@@ -12,9 +12,6 @@ import javax.ws.rs.core.MediaType;
 import org.glassfish.jersey.server.mvc.Template;
 
 import de.btu.openinfra.backend.db.daos.AttributeValueGeomType;
-import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
-import de.btu.openinfra.backend.db.daos.PtLocaleDao;
-import de.btu.openinfra.backend.db.daos.TopicDao;
 import de.btu.openinfra.backend.db.pojos.TopicPojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
@@ -32,12 +29,8 @@ public class TopicResource {
 			@PathParam("projectId") UUID projectId,
 			@PathParam("topicInstanceId") UUID topicInstanceId,
 			@QueryParam("geomType") AttributeValueGeomType geomType) {
-		return new TopicDao(
-				projectId,
-				OpenInfraSchemas.PROJECTS).read(
-						PtLocaleDao.forLanguageTag(language),
-						topicInstanceId,
-						geomType);
+	    return new de.btu.openinfra.backend.rest.project.TopicResource()
+                       .get(language, projectId, topicInstanceId, geomType);
 	}
 
 }
