@@ -128,10 +128,10 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 			ProjectPojo pojo = new ProjectPojo();		
 			Project parent = p.getProject();
 
-			pojo.setNames(NameDao.mapToPojoStatically(
+			pojo.setNames(PtFreeTextDao.mapToPojoStatically(
 					locale, 
 					p.getPtFreeText2()));
-			pojo.setDescriptions(DescriptionDao.mapToPojoStatically(
+			pojo.setDescriptions(PtFreeTextDao.mapToPojoStatically(
 					locale,
 					p.getPtFreeText1())); 
 			if(parent != null) {
@@ -150,15 +150,13 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 	
 	    // return null if the pojo is null
 	    if (pojo != null) {
+        	PtFreeTextDao ptfDao = 
+        			new PtFreeTextDao(currentProjectId, schema);
     		// set the description
-    		p.setPtFreeText1(new DescriptionDao(
-                    currentProjectId, 
-                    schema).getPtFreeTextModel(pojo.getDescriptions()));
+    		p.setPtFreeText1(ptfDao.getPtFreeTextModel(pojo.getDescriptions()));
     		
     		// set the name
-    		p.setPtFreeText2(new NameDao(
-    		        currentProjectId, 
-    		        schema).getPtFreeTextModel(pojo.getNames()));
+    		p.setPtFreeText2(ptfDao.getPtFreeTextModel(pojo.getNames()));
     		
     		// set the sub project
     		if(pojo.getSubprojectOf() != null) {

@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class TopicCharacteristicPojo extends OpenInfraPojo {
 	
-	private DescriptionPojo descriptions;
+	private PtFreeTextPojo descriptions;
 	private ValueListValuePojo topic;
 	private String projectId;
 	private List<String> settings;
@@ -20,11 +20,11 @@ public class TopicCharacteristicPojo extends OpenInfraPojo {
 		this.settings = settings;
 	}
 
-	public DescriptionPojo getDescriptions() {
+	public PtFreeTextPojo getDescriptions() {
 		return descriptions;
 	}
 
-	public void setDescriptions(DescriptionPojo descriptions) {
+	public void setDescriptions(PtFreeTextPojo descriptions) {
 		this.descriptions = descriptions;
 	}
 

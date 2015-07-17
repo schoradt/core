@@ -61,10 +61,10 @@ public class AttributeTypeDao
 			pojo.setDataType(ValueListValueDao.mapToPojoStatically(
 					locale,
 					at.getValueListValue1()));
-			pojo.setDescriptions(DescriptionDao.mapToPojoStatically(
+			pojo.setDescriptions(PtFreeTextDao.mapToPojoStatically(
 					locale,
 					at.getPtFreeText1()));
-			pojo.setNames(NameDao.mapToPojoStatically(
+			pojo.setNames(PtFreeTextDao.mapToPojoStatically(
 					locale,
 					at.getPtFreeText2()));
 			pojo.setUuid(at.getId());
