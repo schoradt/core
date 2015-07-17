@@ -83,10 +83,10 @@ public class AttributeTypeGroupDao
 				pojo.setSubgroupOf(subgroupOf.getId());
 			} // end if
 
-			pojo.setDescriptions(DescriptionDao.mapToPojoStatically(
+			pojo.setDescriptions(PtFreeTextDao.mapToPojoStatically(
 					locale,
 					atg.getPtFreeText1()));
-			pojo.setNames(NameDao.mapToPojoStatically(
+			pojo.setNames(PtFreeTextDao.mapToPojoStatically(
 					locale,
 					atg.getPtFreeText2()));
 			pojo.setUuid(atg.getId());

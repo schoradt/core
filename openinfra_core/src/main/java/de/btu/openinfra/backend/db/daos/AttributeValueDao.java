@@ -22,9 +22,8 @@ import de.btu.openinfra.backend.db.pojos.AttributeValueGeomzPojo;
 import de.btu.openinfra.backend.db.pojos.AttributeValuePojo;
 import de.btu.openinfra.backend.db.pojos.AttributeValueValuePojo;
 import de.btu.openinfra.backend.db.pojos.LocalizedString;
-import de.btu.openinfra.backend.db.pojos.NamePojo;
+import de.btu.openinfra.backend.db.pojos.PtFreeTextPojo;
 import de.btu.openinfra.backend.db.pojos.ValueListValuePojo;
-import de.btu.openinfra.backend.db.pojos.ValuePojo;
 
 /**
  * This class represents the AttributeValue and is used to access the underlying
@@ -397,9 +396,7 @@ public class AttributeValueDao extends OpenInfraValueDao<AttributeValuePojo,
             avdP.setTopicInstanceId(topicInstanceId);
             // create the value list value object with an empty string
             ValueListValuePojo vlv = new ValueListValuePojo();
-            NamePojo np = new NamePojo();
-            np.setLocalizedStrings(lcs);
-            vlv.setNames(np);
+            vlv.setNames(new PtFreeTextPojo(lcs, null));
             avdP.setDomain(vlv);
 
             // add the attribute value domain object to the return container
@@ -441,9 +438,7 @@ public class AttributeValueDao extends OpenInfraValueDao<AttributeValuePojo,
                 // set the attribute type to attribute type group id
                 avvP.setAttributeTypeToAttributeTypeGroupId(ataId);
                 // add an empty value object
-                ValuePojo vp = new ValuePojo();
-                vp.setLocalizedStrings(lcs);
-                avvP.setValue(vp);
+                avvP.setValue(new PtFreeTextPojo(lcs, null));
 
                 // add the attribute value geomz object to the return container
                 pojo.setAttributeValueValue(avvP);
