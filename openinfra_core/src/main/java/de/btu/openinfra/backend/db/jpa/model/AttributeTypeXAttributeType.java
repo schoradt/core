@@ -24,13 +24,14 @@ import javax.persistence.Table;
 	@NamedQuery(name="AttributeTypeXAttributeType.findByAttributeType", 
 			query="SELECT a "
 					+ "FROM AttributeTypeXAttributeType a "
-					+ "WHERE a.attributeType2Bean = :value "),
+					+ "WHERE a.attributeType1Bean = :value "),
 	@NamedQuery(
-			name="AttributeTypeXAttributeType.findByAssociatedAttributeType", 
+			name="AttributeTypeXAttributeType."
+					+ "findByAttributeTypeAndAttributeType", 
 			query="SELECT a "
 					+ "FROM AttributeTypeXAttributeType a "
-					+ "WHERE a.attributeType2Bean = :value1 AND "
-					+ "a.attributeType1Bean = :value2"),
+					+ "WHERE a.attributeType1Bean = :value AND "
+					+ "a.attributeType2Bean = :value2"),
 })
 public class AttributeTypeXAttributeType implements Serializable, 
 	OpenInfraModelObject {
