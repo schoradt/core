@@ -144,17 +144,22 @@ public class AttributeTypeResource {
 	
 	@GET
 	@Path("{attributeTypeId}/attributetypegroups/{attributeTypeGroupId}")
-	public AttributeTypeGroupToAttributeTypePojo get(
+	public List<AttributeTypeGroupToAttributeTypePojo> get(
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@PathParam("attributeTypeId") UUID attributeTypeId,
-			@PathParam("attributeTypeGroupId") UUID attributeTypeGroupId) {
+			@PathParam("attributeTypeGroupId") UUID attributeTypeGroupId,
+			@QueryParam("offset") int offset,
+			@QueryParam("size") int size) {
 		return new AttributeTypeGroupToAttributeTypeDao(
 				projectId, 
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language),
-						attributeTypeGroupId);
+						attributeTypeId,
+						attributeTypeGroupId,
+						offset,
+						size);
 	}
 
 }
