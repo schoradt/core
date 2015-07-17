@@ -214,19 +214,23 @@ public class TopicCharacteristicResource {
 
 	@GET
 	@Path("{topicCharacteristicId}/attributetypegroups/"
-			+ "{attributeTypeGroupToTopicCharacteristicId}")
-	public AttributeTypeGroupToTopicCharacteristicPojo get(
+			+ "{attributeTypeGroupId}")
+	public List<AttributeTypeGroupToTopicCharacteristicPojo> get(
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@PathParam("topicCharacteristicId") UUID topicCharacteristicId,
-			@PathParam("attributeTypeGroupToTopicCharacteristicId") 
-				UUID attributeTypeGroupToTopicCharacteristicId) {
+			@PathParam("attributeTypeGroupId") UUID attributeTypeGroupId,
+			@QueryParam("offset") int offset, 
+			@QueryParam("size") int size) {
 		return new AttributeTypeGroupToTopicCharacteristicDao(
 				projectId, 
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						PtLocaleDao.forLanguageTag(language), 
-						attributeTypeGroupToTopicCharacteristicId);
+						PtLocaleDao.forLanguageTag(language),
+						topicCharacteristicId,
+						attributeTypeGroupId,
+						offset,
+						size);
 	}
 	
 	@GET

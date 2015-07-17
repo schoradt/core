@@ -28,7 +28,13 @@ import javax.persistence.Table;
 			+ ".findByTopicCharacteristic",
 			query="SELECT a "
 					+ "FROM AttributeTypeGroupToTopicCharacteristic a "
-					+ "WHERE a.topicCharacteristic = :value")
+					+ "WHERE a.topicCharacteristic = :value"),
+	@NamedQuery(name="AttributeTypeGroupToTopicCharacteristic"
+			+ ".findByTopicCharacteristicAndAttributeTypeGroup",
+			query="SELECT a "
+					+ "FROM AttributeTypeGroupToTopicCharacteristic a "
+					+ "WHERE a.topicCharacteristic = :value AND "
+					+ "a.attributeTypeGroup = :value2")
 })
 
 public class AttributeTypeGroupToTopicCharacteristic implements 
@@ -63,6 +69,7 @@ public class AttributeTypeGroupToTopicCharacteristic implements
 	public AttributeTypeGroupToTopicCharacteristic() {
 	}
 
+	@Override
 	public UUID getId() {
 		return this.id;
 	}
