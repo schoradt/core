@@ -63,7 +63,11 @@ public class AttributeTypeGroupToTopicCharacteristicDao extends
 		pojo.setMultiplicity(MultiplicityDao.mapToPojoStatically(
 				atg.getMultiplicityBean()));
 		pojo.setTopicCharacteristicId(atg.getTopicCharacteristic().getId());
-		pojo.setOrder(atg.getOrder());
+		
+		if(atg.getOrder() != null) {
+			pojo.setOrder(atg.getOrder());
+		}
+		
 		pojo.setUuid(atg.getId());
 		return pojo;
 	}
