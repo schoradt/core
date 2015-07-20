@@ -56,7 +56,7 @@ public class AttributeValueValueDao
 		avvPojo.setValue(PtFreeTextDao.mapToPojoStatically(
 				locale,
 				avv.getPtFreeText()));
-		// set the attribute type group the value belongs to
+		// set the attribute type to attribute type group id of the value
 		avvPojo.setAttributeTypeToAttributeTypeGroupId(
 		        avv.getAttributeTypeToAttributeTypeGroup().getId());
 		// set the id of the object

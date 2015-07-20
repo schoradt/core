@@ -59,7 +59,7 @@ public class AttributeValueDomainDao extends
 		avdPojo.setDomain(ValueListValueDao.mapToPojoStatically(
 				locale,
 				avd.getValueListValue()));
-		// set the attribute type group the value belongs to
+		// set the attribute type to attribute type id group of the value
         avdPojo.setAttributeTypeToAttributeTypeGroupId(
                 avd.getAttributeTypeToAttributeTypeGroup().getId());
 		// set the id of the object
