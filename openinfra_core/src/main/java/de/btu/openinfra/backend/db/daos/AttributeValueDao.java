@@ -1,6 +1,5 @@
 package de.btu.openinfra.backend.db.daos;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -210,101 +209,15 @@ public class AttributeValueDao extends OpenInfraValueDao<AttributeValuePojo,
 	public MappingResult<AttributeValue> mapToModel(
 			AttributeValuePojo pojo,
 			AttributeValue av) {
-		// 1. Select the current value type
-		switch (pojo.getAttributeValueType()) {
-		case ATTRIBUTE_VALUE_VALUE:
-		    // set the topic instance
-			av.setTopicInstance(em.find(
-					TopicInstance.class,
-					pojo.getAttributeValueValue().getTopicInstanceId()));
-
-			// create a list with all attribute value values
-			List<AttributeValueValue> avvList =
-					av.getTopicInstance().getAttributeValueValues();
-
-			// create an iterator for this list
-			Iterator<AttributeValueValue> avvIt = avvList.iterator();
-
-			// 2. Iterate over all values and remove the current attribute value
-			//    from list (if it belongs to the list)
-			while(avvIt.hasNext()) {
-				AttributeValueValue avv = avvIt.next();
-				if(avv.getId().equals(
-						pojo.getAttributeValueValue().getUuid())) {
-					avvList.remove(avv);
-					break;
-				} // end if
-			} // end while
-			AttributeValueValueDao avvd = new AttributeValueValueDao(
-					currentProjectId,
-					schema);
-			// add the new value to the list
-			avvList.add(avvd.mapToModel(
-							pojo.getAttributeValueValue(),
-							avvd.createModelObject(
-									pojo.getAttributeValueValue().getUuid()))
-									.getModelObject());
-
-			// add the values to the model
-			av.getTopicInstance().setAttributeValueValues(avvList);
-			break;
-
-		case ATTRIBUTE_VALUE_GEOM:
-		    System.out.println(pojo.getAttributeValueType() + " not implemented yet (AttributeValueDao.mapToModel");
-		    // TODO The mapping from string to geometry is not possible.
-		    /*
-		    // set the topic instance
-		    av.setTopicInstance(em.find(
-                    TopicInstance.class,
-                    pojo.getAttributeValueGeom().getTopicInstanceId()));
-
-		    // create a list with all attribute value values
-            List<AttributeValueGeom> avgList =
-                    av.getTopicInstance().getAttributeValueGeoms();
-
-            // create an iterator for this list
-            Iterator<AttributeValueGeom> avgIt = avgList.iterator();
-
-            // 2. Iterate over all values and remove the current attribute value
-            //    from list (if it belongs to the list)
-            while(avgIt.hasNext()) {
-                AttributeValueGeom avg = avgIt.next();
-                if(avg.getId().equals(
-                        pojo.getAttributeValueGeom().getUuid())) {
-                    avgList.remove(avg);
-                    break;
-                } // end if
-            } // end while
-            AttributeValueGeomDao avgd = new AttributeValueGeomDao(
-                    currentProjectId,
-                    schema);
-            // add the new value to the list
-            avgList.add(avgd.mapToModel(
-                            pojo.getAttributeValueGeom(),
-                            avgd.createModelObject(
-                                    pojo.getAttributeValueGeom().getUuid()))
-                                    .getModelObject());
-
-            // add the values to the model
-            av.getTopicInstance().setAttributeValueGeoms(avgList);
-            */
-            break;
-
-		case ATTRIBUTE_VALUE_GEOMZ:
-            System.out.println(pojo.getAttributeValueType() + " not implemented yet (AttributeValueDao.mapToModel");
-            break;
-		case ATTRIBUTE_VALUE_DOMAIN:
-            System.out.println(pojo.getAttributeValueType() + " not implemented yet (AttributeValueDao.mapToModel");
-            break;
-		default:
-			break;
-		}
-
-		// 3. Create the mapping result
-		MappingResult<AttributeValue> mr = new MappingResult<AttributeValue>();
-		mr.setId(pojo.getUuid());
-		mr.setModelObject(av);
-		return mr;
+	    /*
+	     * This method is not required in this content because the table
+	     * attribute_value can not be written directly. Further the
+	     * attributeValuePojo is a container for the different attributeValue
+	     * types. The logic of this method is distributed to the different
+	     * mapToModel methods of the attributeValue types. See
+	     * distributeTypes().
+	     */
+		return null;
 
 	}
 
@@ -398,6 +311,8 @@ public class AttributeValueDao extends OpenInfraValueDao<AttributeValuePojo,
             ValueListValuePojo vlv = new ValueListValuePojo();
             vlv.setNames(new PtFreeTextPojo(lcs, null));
             avdP.setDomain(vlv);
+            // set the attribute type to attribute type group id
+            avdP.setAttributeTypeToAttributeTypeGroupId(ataId);
 
             // add the attribute value domain object to the return container
             pojo.setAttributeValueDomain(avdP);
@@ -413,7 +328,7 @@ public class AttributeValueDao extends OpenInfraValueDao<AttributeValuePojo,
                 avgP.setAttributeTypeToAttributeTypeGroupId(ataId);
                 // add an empty value
                 avgP.setGeom("");
-                System.out.println("ID: " + ataId);
+
                 // add the attribute value geom object to the return container
                 pojo.setAttributeValueGeom(avgP);
                 break;
