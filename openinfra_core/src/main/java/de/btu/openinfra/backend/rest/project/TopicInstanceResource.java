@@ -76,7 +76,7 @@ public class TopicInstanceResource {
 	
 	@GET
 	@Path("{topicInstanceId}/associations/{associatedTopicInstanceId}")
-	public List<TopicInstanceAssociationPojo> getAssociation(			
+	public List<TopicInstanceAssociationPojo> getAssociations(			
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("topicInstanceId") UUID topicInstanceId,
@@ -91,4 +91,6 @@ public class TopicInstanceResource {
 						topicInstanceId,
 						associatedTopicInstanceId, offset, size);
 	}
+	
+	
 }
