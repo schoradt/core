@@ -5,9 +5,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
-import de.btu.openinfra.backend.db.jpa.model.AttributeTypeGroupToTopicCharacteristic;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
-import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 
 /**
@@ -58,28 +56,13 @@ public abstract class OpenInfraValueDao<
 	 * @return           a list of objects of type POJO class which directly
 	 *                   belong to the TypeModelValue class
 	 */
-	@SuppressWarnings("unchecked")
 	public List<TypePojo> read(
 			Locale locales,
 			UUID valueId,
 			int offset,
 			int size) {
-		
-		TypeModelValue tmv;
 		// 1. Get the specific value object from JPA layer
-		if(modelClass == AttributeTypeGroupToTopicCharacteristic.class &&
-                schema == OpenInfraSchemas.SYSTEM) {
-			tmv = (TypeModelValue) em.createNativeQuery(
-		            "select id, description, topic "
-		                    + "from topic_characteristic where id = ?",
-		                    TopicCharacteristic.class)
-		                    .setParameter(1, valueId)
-		                    .getSingleResult();
-		}
-		else {
-			tmv = em.find(valueClass, valueId);
-		}
-		
+		TypeModelValue tmv = em.find(valueClass, valueId);
 		// 2. Define a list which holds the POJO objects
 		List<TypePojo> pojos = new LinkedList<TypePojo>();
 		// 3. Construct the name of the named query
