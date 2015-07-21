@@ -34,7 +34,18 @@ import javax.persistence.Table;
 			query="SELECT a "
 					+ "FROM AttributeTypeGroupToTopicCharacteristic a "
 					+ "WHERE a.topicCharacteristic = :value AND "
-					+ "a.attributeTypeGroup = :value2")
+					+ "a.attributeTypeGroup = :value2"),	
+	@NamedQuery(name="AttributeTypeGroupToTopicCharacteristic"
+			+ ".findByAttributeTypeGroup",
+			query="SELECT a "
+					+ "FROM AttributeTypeGroupToTopicCharacteristic a "
+					+ "WHERE a.attributeTypeGroup = :value"),
+	@NamedQuery(name="AttributeTypeGroupToTopicCharacteristic"
+			+ ".findByAttributeTypeGroupAndTopicCharacteristic",
+			query="SELECT a "
+					+ "FROM AttributeTypeGroupToTopicCharacteristic a "
+					+ "WHERE a.attributeTypeGroup = :value AND "
+					+ "a.topicCharacteristic = :value2")
 })
 
 public class AttributeTypeGroupToTopicCharacteristic implements 
