@@ -27,13 +27,14 @@ public class MetaDataResource {
     public List<MetaDataPojo> get(
             @QueryParam("language") String language,
             @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
 			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
 			@QueryParam("orderBy") OpenInfraOrderBy orderBy,
             @QueryParam("offset") int offset,
             @QueryParam("size") int size) {
         return new MetaDataDao(
                 projectId,
-                OpenInfraSchemas.PROJECTS).read(
+                OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
                         PtLocaleDao.forLanguageTag(language),
 						sortOrder,
 						orderBy,
@@ -57,10 +58,11 @@ public class MetaDataResource {
     public MetaDataPojo get(
             @QueryParam("language") String language,
             @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
             @PathParam("metaDataId") UUID metaDataId) {
         return new MetaDataDao(
                 projectId,
-                OpenInfraSchemas.PROJECTS).read(
+                OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
                         PtLocaleDao.forLanguageTag(language), 
                         metaDataId);
     }
