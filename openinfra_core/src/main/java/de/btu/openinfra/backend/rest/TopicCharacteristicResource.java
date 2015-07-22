@@ -18,11 +18,12 @@ import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.daos.RelationshipTypeDao;
+import de.btu.openinfra.backend.db.daos.RelationshipTypeToTopicCharacteristicDao;
 import de.btu.openinfra.backend.db.daos.TopicCharacteristicDao;
 import de.btu.openinfra.backend.db.daos.TopicGeomzDao;
 import de.btu.openinfra.backend.db.daos.TopicInstanceDao;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupToTopicCharacteristicPojo;
-import de.btu.openinfra.backend.db.pojos.RelationshipTypePojo;
+import de.btu.openinfra.backend.db.pojos.RelationshipTypeToTopicCharacteristicPojo;
 import de.btu.openinfra.backend.db.pojos.TopicCharacteristicPojo;
 import de.btu.openinfra.backend.db.pojos.TopicGeomzPojo;
 import de.btu.openinfra.backend.db.pojos.TopicInstancePojo;
@@ -213,24 +214,28 @@ public class TopicCharacteristicResource {
 
 	@GET
 	@Path("{topicCharacteristicId}/attributetypegroups/"
-			+ "{attributeTypeGroupToTopicCharacteristicId}")
-	public AttributeTypeGroupToTopicCharacteristicPojo get(
+			+ "{attributeTypeGroupId}")
+	public List<AttributeTypeGroupToTopicCharacteristicPojo> get(
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@PathParam("topicCharacteristicId") UUID topicCharacteristicId,
-			@PathParam("attributeTypeGroupToTopicCharacteristicId") 
-				UUID attributeTypeGroupToTopicCharacteristicId) {
+			@PathParam("attributeTypeGroupId") UUID attributeTypeGroupId,
+			@QueryParam("offset") int offset, 
+			@QueryParam("size") int size) {
 		return new AttributeTypeGroupToTopicCharacteristicDao(
 				projectId, 
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						PtLocaleDao.forLanguageTag(language), 
-						attributeTypeGroupToTopicCharacteristicId);
+						PtLocaleDao.forLanguageTag(language),
+						topicCharacteristicId,
+						attributeTypeGroupId,
+						offset,
+						size);
 	}
 	
 	@GET
 	@Path("{topicCharacteristicId}/relationshiptypes")
-	public List<RelationshipTypePojo> getRelationshipTypes(
+	public List<RelationshipTypeToTopicCharacteristicPojo> getRelationshipTypes(
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
@@ -238,11 +243,32 @@ public class TopicCharacteristicResource {
 			@QueryParam("offset") int offset, 
 			@QueryParam("size") int size) {
 		
-		return new RelationshipTypeDao(
+		return new RelationshipTypeToTopicCharacteristicDao(
 				projectId, 
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language), 
 						topicCharacteristicId, 
+						offset, 
+						size);
+	}
+	
+	@GET
+	@Path("{topicCharacteristicId}/relationshiptypes/{relationShipTypeId}")
+	public List<RelationshipTypeToTopicCharacteristicPojo> getRelationshipTypes(
+			@QueryParam("language") String language,
+			@PathParam("projectId") UUID projectId,
+			@PathParam("schema") String schema,
+			@PathParam("topicCharacteristicId") UUID topicCharacteristicId,
+			@PathParam("relationShipTypeId") UUID relationShipTypeId,
+			@QueryParam("offset") int offset, 
+			@QueryParam("size") int size) {
+		
+		return new RelationshipTypeToTopicCharacteristicDao(
+				projectId, 
+				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
+						PtLocaleDao.forLanguageTag(language), 
+						topicCharacteristicId,
+						relationShipTypeId,
 						offset, 
 						size);
 	}

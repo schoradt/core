@@ -14,10 +14,10 @@ import de.btu.openinfra.backend.db.pojos.TopicInstanceAssociationPojo;
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
  */
-public class TopicInstanceAssociationDao extends OpenInfraValueDao<
+public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
 	TopicInstanceAssociationPojo,
 	TopicInstanceXTopicInstance,
-	TopicInstance> {
+	TopicInstance, TopicInstance> {
 
 	/**
 	 * This is the required constructor which calls the super constructor and
@@ -34,7 +34,7 @@ public class TopicInstanceAssociationDao extends OpenInfraValueDao<
 				currentProjectId,
 				schema,
 				TopicInstanceXTopicInstance.class,
-				TopicInstance.class);
+				TopicInstance.class, TopicInstance.class);
 	}
 
 	@Override

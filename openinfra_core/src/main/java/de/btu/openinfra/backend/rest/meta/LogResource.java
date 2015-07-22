@@ -20,8 +20,6 @@ public class LogResource {
 
     @GET
     public List<LogPojo> get(
-            @QueryParam("language") String language,
-            @PathParam("projectId") UUID projectId,
             @QueryParam("offset") int offset,
             @QueryParam("size") int size) {
         return new LogDao(
@@ -31,13 +29,19 @@ public class LogResource {
     @GET
     @Path("{logId}")
     public LogPojo get(
-            @QueryParam("language") String language, 
-            @PathParam("projectId") UUID projectId,
             @PathParam("logId") UUID logId) {
         return new LogDao(
                 OpenInfraSchemas.META_DATA).read(
                         null , 
                         logId);
     }
+    
+    @GET
+	@Path("count")
+	@Produces({MediaType.TEXT_PLAIN})
+	public long getCount() {
+		return new LogDao(
+				OpenInfraSchemas.META_DATA).getCount();
+	}
 
 }

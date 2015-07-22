@@ -4,6 +4,7 @@ import java.util.Locale;
 import java.util.UUID;
 
 import de.btu.openinfra.backend.db.jpa.model.AttributeType;
+import de.btu.openinfra.backend.db.jpa.model.AttributeTypeGroup;
 import de.btu.openinfra.backend.db.jpa.model.AttributeTypeToAttributeTypeGroup;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupToAttributeTypePojo;
 
@@ -14,9 +15,9 @@ import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupToAttributeTypePojo;
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
  */
-public class AttributeTypeGroupToAttributeTypeDao extends OpenInfraValueDao<
-	AttributeTypeGroupToAttributeTypePojo, AttributeTypeToAttributeTypeGroup,
-	AttributeType> {
+public class AttributeTypeGroupToAttributeTypeDao extends
+	OpenInfraValueValueDao<AttributeTypeGroupToAttributeTypePojo,
+	AttributeTypeToAttributeTypeGroup, AttributeType, AttributeTypeGroup> {
 
 	/**
 	 * This is the required constructor which calls the super constructor and in
@@ -32,7 +33,8 @@ public class AttributeTypeGroupToAttributeTypeDao extends OpenInfraValueDao<
 		super(currentProjectId,
 				schema,
 				AttributeTypeToAttributeTypeGroup.class,
-				AttributeType.class);
+				AttributeType.class,
+				AttributeTypeGroup.class);
 	}
 
 	@Override

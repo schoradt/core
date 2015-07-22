@@ -44,9 +44,8 @@ import javax.persistence.Table;
 				+ "WHERE g.attributeTypeGroup = :value"),
 	@NamedQuery(name="AttributeType.countByAttributeTypeGroup",
 		query="SELECT COUNT(a) "
-				+ "FROM AttributeType a "
-				+ "INNER JOIN a.attributeTypeToAttributeTypeGroups g "
-				+ "WHERE g.attributeTypeGroup = :value"),
+				+ "FROM AttributeTypeToAttributeTypeGroup a "
+				+ "WHERE a.attributeTypeGroup = :value"),
 	@NamedQuery(name="AttributeType.findByDataType",
 	    query="SELECT DISTINCT a "
 	            + "FROM AttributeType a "
@@ -104,6 +103,7 @@ public class AttributeType implements Serializable, OpenInfraModelObject {
 	public AttributeType() {
 	}
 
+	@Override
 	public UUID getId() {
 		return this.id;
 	}

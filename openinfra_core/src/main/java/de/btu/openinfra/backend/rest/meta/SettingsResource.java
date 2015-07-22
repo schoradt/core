@@ -20,8 +20,6 @@ public class SettingsResource {
 
     @GET
     public List<SettingsPojo> get(
-            @QueryParam("language") String language,
-            @PathParam("projectId") UUID projectId, 
             @QueryParam("offset") int offset,
             @QueryParam("size") int size) {
         return new SettingsDao(
@@ -31,13 +29,19 @@ public class SettingsResource {
     @GET
     @Path("{settingsId}")
     public SettingsPojo get(
-            @QueryParam("language") String language, 
-            @PathParam("projectId") UUID projectId, 
             @PathParam("settingsId") UUID settingsId) {
         return new SettingsDao(
                 OpenInfraSchemas.META_DATA).read(
                         null, 
                         settingsId); 
-    } 
+    }
+    
+    @GET
+	@Path("count")
+	@Produces({MediaType.TEXT_PLAIN})
+	public long getCount() {
+		return new SettingsDao(
+				OpenInfraSchemas.META_DATA).getCount();
+	}
 
 }

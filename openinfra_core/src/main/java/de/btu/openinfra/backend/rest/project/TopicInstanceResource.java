@@ -67,25 +67,30 @@ public class TopicInstanceResource {
 	@Produces({MediaType.TEXT_PLAIN})
 	public long getTopicInstanceAssociationCount(
 			@PathParam("projectId") UUID projectId,
-			@PathParam("topicInstanceId") UUID topicInstanceId) {
+			@PathParam("topicInstanceId")
+				UUID topicInstanceId) {
 		return new TopicInstanceAssociationDao(
 				projectId, 
 				OpenInfraSchemas.PROJECTS).getCount(topicInstanceId);
 	}
 	
 	@GET
-	@Path("{topicInstanceId}/associations/{associationId}")
-	public TopicInstanceAssociationPojo getAssociation(			
+	@Path("{topicInstanceId}/associations/{associatedTopicInstanceId}")
+	public List<TopicInstanceAssociationPojo> getAssociations(			
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("topicInstanceId") UUID topicInstanceId,
-			@PathParam("associationId") UUID associationId,
+			@PathParam("associatedTopicInstanceId")
+				UUID associatedTopicInstanceId,
 			@PathParam("offset") int offset, 
 			@PathParam("size") int size) {
 		return new TopicInstanceAssociationDao(
 				projectId, 
 				OpenInfraSchemas.PROJECTS).read(
 						PtLocaleDao.forLanguageTag(language), 
-						associationId);
+						topicInstanceId,
+						associatedTopicInstanceId, offset, size);
 	}
+	
+	
 }
