@@ -65,7 +65,7 @@ function init() {
 			}
 		}
 	}
-	xmlhttp.open("GET","http://gorse.informatik.tu-cottbus.de:8080/openinfra_backend/rest/projects?language=de-DE",true);
+	xmlhttp.open("GET",window.contextPath + "/rest/projects?language=de-DE",true);
 	xmlhttp.setRequestHeader("Accept","application/xml");
 	xmlhttp.send(null);
 
@@ -349,7 +349,7 @@ function changeProject(name){
 			}
 		}
 	}
-	xmlhttp.open("GET","http://gorse.informatik.tu-cottbus.de:8080/openinfra_backend/rest/projects/"+uuid+"/topiccharacteristics?language=de-DE",true);
+	xmlhttp.open("GET",window.contextPath + "/rest/projects/"+uuid+"/topiccharacteristics?language=de-DE",true);
 	xmlhttp.setRequestHeader("Accept","application/xml");
 	xmlhttp.send(null);
 	//Alle bisherigen Modelle aus der Szene löschen
@@ -531,7 +531,7 @@ function onclickTT(element) {
 	
 	var ti_uuid = element.parentNode.parentNode.getAttribute('class');
 	
-	var url = "http://gorse.informatik.tu-cottbus.de:8080/openinfra_backend/rest/projects/"+p_uuid+"/topicinstances/"+ti_uuid+"/topic?language=de-DE";
+	var url = window.contextPath + "/rest/projects/"+p_uuid+"/topicinstances/"+ti_uuid+"/topic?language=de-DE";
 	window.open(url);
 }
 
@@ -803,7 +803,7 @@ function getScene(value,project){
 		}
 	}
 	
-	xmlhttp.open("GET","http://gorse.informatik.tu-cottbus.de:8080/openinfra_backend/rest/projects/"+p_uuid+"/topiccharacteristics/"+topic_uuid+"/topicinstances/geomz?language=de-DE&geomType=X3D",true);
+	xmlhttp.open("GET",window.contextPath + "/rest/projects/"+p_uuid+"/topiccharacteristics/"+topic_uuid+"/topicinstances/geomz?language=de-DE&geomType=X3D",true);
 	xmlhttp.setRequestHeader("Accept","application/xml");
 	xmlhttp.send(null);
 }
