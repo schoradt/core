@@ -142,10 +142,13 @@ public class AttributeValueDao extends OpenInfraValueDao<AttributeValuePojo,
 			// 4.c This is a specific query which must be implemented
 			//     dynamically
 			case ATTRIBUTE_VALUE_GEOM:
-				// We create a fake geom object and set the id of this object
-				// in order to provide the required geom object.
+				// We create a fake geom object and set the properties of this
+			    // object in order to provide the required geom object.
 				AttributeValueGeom avg = new AttributeValueGeom();
 				avg.setId(id);
+				avg.setTopicInstance(av.getTopicInstance());
+                avg.setAttributeTypeToAttributeTypeGroup(
+                        av.getAttributeTypeToAttributeTypeGroup());
 				avPojo.setAttributeValueGeom(
 						new AttributeValueGeomDao(
 								currentProjectId,
@@ -156,10 +159,13 @@ public class AttributeValueDao extends OpenInfraValueDao<AttributeValuePojo,
 			// 4.c This is a specific query which must be implemented
 			//     dynamically
 			case ATTRIBUTE_VALUE_GEOMZ:
-				// We create a fake geom object and set the id of this object
-				// in order to provide the required geom object.
+				// We create a fake geom object and set the properties of this
+                // object in order to provide the required geom object.
 				AttributeValueGeomz avgz = new AttributeValueGeomz();
 				avgz.setId(id);
+				avgz.setTopicInstance(av.getTopicInstance());
+				avgz.setAttributeTypeToAttributeTypeGroup(
+				        av.getAttributeTypeToAttributeTypeGroup());
 				avPojo.setAttributeValueGeomz(
 						new AttributeValueGeomzDao(
 								currentProjectId,
