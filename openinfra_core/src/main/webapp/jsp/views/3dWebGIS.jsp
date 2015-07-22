@@ -9,10 +9,7 @@
 	<title>OpenInfRA <fmt:message key="3dwebgis.label"/></title>
 	
 	<link rel="stylesheet" type="text/css" href="http://www.x3dom.org/x3dom/release/x3dom.css"></link>
-   <link rel="stylesheet" type="text/css" href="${contextPath}/3d/style.css"></link>
-   <script type="text/javascript" src="http://www.x3dom.org/x3dom/release/x3dom.js"></script>
-   <script type="text/javascript" src="${contextPath}/3d/script.js"></script>
-   <script type="text/javascript" src="${contextPath}/3d/jscolor/jscolor.js"></script>
+   	<link rel="stylesheet" type="text/css" href="${contextPath}/3d/style.css"></link>
 </head>
 <body>
 	<%@ include file="../snippets/Menu.jsp" %>
@@ -101,6 +98,13 @@
 		</div>
 
 	</div>
+	<script type="text/javascript">
+   		// TODO: Only a workaround: Globale to make 3D client access context path
+   	 	window.contextPath = "${contextPath}";
+   	</script>
+   	<script type="text/javascript" src="http://www.x3dom.org/x3dom/release/x3dom.js"></script>
+   	<script type="text/javascript" src="${contextPath}/3d/script.js"></script>
+   	<script type="text/javascript" src="${contextPath}/3d/jscolor/jscolor.js"></script>
 
 </body>
 </html>
