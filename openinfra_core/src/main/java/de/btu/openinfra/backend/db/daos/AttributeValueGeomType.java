@@ -39,31 +39,7 @@ public enum AttributeValueGeomType {
 	 * The X3D representation of the geometry type
 	 * (@see http://de.wikipedia.org/wiki/X3D).
 	 */
-	X3D		("ST_asX3D(geom)"),
-
-	/**
-	 * The geometry representation of a well-known text (WTK) type
-	 * (@see http://en.wikipedia.org/wiki/Well-known_text).
-	 */
-	FROM_TEXT    ("ST_GeomFromText"),
-	/**
-     * The geometry representation of the Keyhole Markup Language (KML) type
-     * (@see http://de.wikipedia.org/wiki/Keyhole_Markup_Language).
-     */
-	FROM_KML     ("ST_GeomFromKML"),
-	/**
-     * The geometry representation of the Geography Markup Language (GML) type
-     * (@see http://de.wikipedia.org/wiki/Geography_Markup_Language).
-     */
-	FROM_GML     ("ST_GeomFromGML"),
-	/**
-     * The geometry representation of the GeoJSON type
-     * (@see http://geojson.org/).
-     *
-     * Signature to get GeoJSON String with precision of up to 15 decimals and
-     * with designated projection identifier in long CRS notation (option 4).
-     */
-	FROM_GEOJSON ("ST_GeomFromGeoJSON");
+	X3D		("ST_asX3D(geom)");
 
 	private String psqlFnSignature;
 

@@ -377,7 +377,8 @@ public class AttributeValueDao extends OpenInfraValueDao<AttributeValuePojo,
      *
 	 * @param pojo
 	 * @param projectId the id of the project
-	 * @return          the UUID of the created or updated object
+	 * @return          the UUID of the created or updated object or null if an
+	 *                  error occurs or the geomType is unlike GeoJSON
 	 */
 	public UUID distributeTypes(AttributeValuePojo pojo, UUID projectId) {
 
@@ -393,16 +394,30 @@ public class AttributeValueDao extends OpenInfraValueDao<AttributeValuePojo,
                             pojo.getAttributeValueDomain());
             break;
         case ATTRIBUTE_VALUE_GEOM:
-            id = new AttributeValueGeomDao(
-                    projectId,
-                    OpenInfraSchemas.PROJECTS).createOrUpdate(
-                            pojo.getAttributeValueGeom());
+            // create or update is only available for GEOJSON
+            if (pojo.getAttributeValueGeom().getGeomType()
+                    .equals(AttributeValueGeomType.GEOJSON)) {
+                id = new AttributeValueGeomDao(
+                        projectId,
+                        OpenInfraSchemas.PROJECTS).createOrUpdate(
+                                pojo.getAttributeValueGeom());
+            } else {
+                // return null if the geomType is unlike GeoJSON
+                return null;
+            }
             break;
         case ATTRIBUTE_VALUE_GEOMZ:
-            id = new AttributeValueGeomzDao(
-                    projectId,
-                    OpenInfraSchemas.PROJECTS).createOrUpdate(
-                            pojo.getAttributeValueGeomz());
+            // create or update is only available for GEOJSON
+            if (pojo.getAttributeValueGeomz().getGeomType()
+                    .equals(AttributeValueGeomType.GEOJSON)) {
+                id = new AttributeValueGeomzDao(
+                        projectId,
+                        OpenInfraSchemas.PROJECTS).createOrUpdate(
+                                pojo.getAttributeValueGeomz());
+            } else {
+                // return null if the geomType is unlike GeoJSON
+                return null;
+            }
             break;
         case ATTRIBUTE_VALUE_VALUE:
              id = new AttributeValueValueDao(
