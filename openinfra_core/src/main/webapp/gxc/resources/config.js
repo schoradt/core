@@ -1,11 +1,15 @@
+// Example config - should be server generated in production to seed map client
+// with user specific configuration
+var exampleHost = 'http://gorse.informatik.tu-cottbus.de:8080';
+
 var GXC_ENV = {
   proxy: {
     host: ''
   },
   geoserver: {
-    host: 'http://gorse.informatik.tu-cottbus.de:8080/geoserver'
+    host: exampleHost + '/geoserver'
   },
-  printBaseUrl: 'http://gorse.informatik.tu-cottbus.de:8080/geoserver/pdf',
+  printBaseUrl: exampleHost + '/geoserver/pdf',
   targetId: 'gxc-container',
   viewportItems: [{
     region: 'center',
@@ -121,22 +125,22 @@ var GXC_ENV = {
     zoom: 11
   },
   layers: [{
-    url: 'http://gorse.informatik.tu-cottbus.de:8080/geoserver/wms?',
+    url: exampleHost + '/geoserver/wms?',
     type: 'WMS',
     version: '1.1.1',
     layer: 'baalbek:geom_9709f641-5954-4f1e-8bc2-8f14cda8fced'
   }, {
-    url: 'http://gorse.informatik.tu-cottbus.de:8080/geoserver/wms?',
+    url: exampleHost + '/geoserver/wms?',
     type: 'WMS',
     version: '1.1.1',
     layer: 'baalbek:geom_931818c1-e60d-4500-ab44-b0f29afcc9fc'
   }, {
-    url: 'http://gorse.informatik.tu-cottbus.de:8080/geoserver/wms?',
+    url: exampleHost + '/geoserver/wms?',
     type: 'WMS',
     version: '1.1.1',
     layer: 'baalbek:geom_50d4cb6f-46f1-4422-954c-4c3ec371f063'
   }, {
-    url: 'http://gorse.informatik.tu-cottbus.de:8080/geoserver/wms?',
+    url: exampleHost + '/geoserver/wms?',
     type: 'WMS',
     version: '1.1.1',
     layer: 'baalbek:geom_5f4ff0f0-c325-4925-b565-0516e0cd1eda'
@@ -155,7 +159,7 @@ var GXC_ENV = {
   services: [{
     type: 'WMS',
     title: 'Gorse Testserver',
-    url: 'http://gorse.informatik.tu-cottbus.de:8080/geoserver/wms'
+    url: exampleHost + '/geoserver/wms'
   }, {
     type: 'WMS',
     title: 'CISAR UMN MapServer',
