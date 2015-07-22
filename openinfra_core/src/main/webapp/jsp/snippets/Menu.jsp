@@ -140,7 +140,7 @@
         	</c:when>
         </c:choose>
         <li>
-        	<a href="${pageContext.request.contextPath}/3d/index.html"><fmt:message key="3dwebgis.label"/></a>
+        	<a href="${pageContext.request.contextPath}/3d/index.jsp"><fmt:message key="3dwebgis.label"/></a>
         </li>
       </ul>
       <!-- http://stackoverflow.com/questions/4276061/how-to-internationalize-a-java-web-application -->
