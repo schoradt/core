@@ -69,15 +69,17 @@ try {
     // extract the host
     String host = "";
     host = reqUrl.split("\\/")[2];
-    boolean allowed = false;
 
-    // check if host (with port) is in white list
-    for (String surl : allowedHosts) {
-        if (host.equalsIgnoreCase(surl)) {
-            allowed = true;
-            break;
-        }
-    }
+    boolean allowed = true; // TODO: this is for testing only!
+//     boolean allowed = false;
+//
+//     // check if host (with port) is in white list
+//     for (String surl : allowedHosts) {
+//         if (host.equalsIgnoreCase(surl)) {
+//             allowed = true;
+//             break;
+//         }
+//     }
 
     // do the proxy action (load requested ressource and transport it to client)
     // if host is in white list

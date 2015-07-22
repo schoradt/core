@@ -28,7 +28,7 @@
     <!-- mapping framework -->
     <script src="//cdnjs.cloudflare.com/ajax/libs/openlayers/2.13.1/OpenLayers.js"></script>
 	<!-- gxc app styling -->
-	<link rel="stylesheet" href="${contextPath}/gxc/resources/HTW-all.css"/>
+	<link rel="stylesheet" href="${contextPath}/gxc/resources/GXCFull-all.css"/>
 	
 	<!-- simplistic approach to map tc params to actual geoserver layers -->
 	<script type="text/javascript" src="${contextPath}/gxc/app.js"></script>
