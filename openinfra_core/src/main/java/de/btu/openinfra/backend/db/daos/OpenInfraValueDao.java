@@ -17,6 +17,7 @@ import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
  *
  * @param <TypePojo>
  * @param <TypeModel>
+ * @param <TypeModelValue>
  */
 public abstract class OpenInfraValueDao<
 	TypePojo extends OpenInfraPojo,
