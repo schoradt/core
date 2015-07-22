@@ -14,6 +14,7 @@ import de.btu.openinfra.backend.OpenInfraProperties;
 import de.btu.openinfra.backend.db.daos.AttributeTypeGroupToTopicCharacteristicDao;
 import de.btu.openinfra.backend.db.daos.AttributeValueGeomType;
 import de.btu.openinfra.backend.db.daos.OpenInfraOrderBy;
+import de.btu.openinfra.backend.db.daos.OpenInfraOrderByEnum;
 import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
@@ -29,7 +30,7 @@ import de.btu.openinfra.backend.db.pojos.TopicGeomzPojo;
 import de.btu.openinfra.backend.db.pojos.TopicInstancePojo;
 
 @Path(OpenInfraResponseBuilder.REST_URI + "/topiccharacteristics")
-@Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY, 
+@Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY,
 	MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY})
 public class TopicCharacteristicResource {
 
@@ -40,10 +41,10 @@ public class TopicCharacteristicResource {
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema) {
 		return new TopicCharacteristicDao(
-				projectId, 
+				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount();
 	}
-	
+
 	@GET
 	public List<TopicCharacteristicPojo> get(
 			@QueryParam("language") String language,
@@ -51,29 +52,29 @@ public class TopicCharacteristicResource {
 			@PathParam("schema") String schema,
 			@QueryParam("filter") String filter,
 			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
-			@QueryParam("orderBy") OpenInfraOrderBy orderBy,
-			@PathParam("offset") int offset, 
+			@QueryParam("orderBy") OpenInfraOrderByEnum orderBy,
+			@PathParam("offset") int offset,
 			@PathParam("size") int size) {
 		if(filter != null && filter.length() > 0) {
 			return new TopicCharacteristicDao(
-					projectId, 
+					projectId,
 					OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-							PtLocaleDao.forLanguageTag(language), 
+							PtLocaleDao.forLanguageTag(language),
 							filter);
 		} else {
 			return new TopicCharacteristicDao(
-					projectId, 
+					projectId,
 					OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 							PtLocaleDao.forLanguageTag(language),
 							sortOrder,
 							orderBy,
-							offset, 
+							offset,
 							size);
 		} // end if else
 	}
-	
-	
-	
+
+
+
 	@GET
 	@Path("{topicCharacteristicId}")
 	public TopicCharacteristicPojo get(
@@ -82,12 +83,30 @@ public class TopicCharacteristicResource {
 			@PathParam("schema") String schema,
 			@PathParam("topicCharacteristicId") UUID topicCharacteristicId) {
 		return new TopicCharacteristicDao(
-				projectId, 
+				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language),
 						topicCharacteristicId);
 	}
-	
+
+	/**
+	 * This method will read a list of topic instances for a specific topic
+	 * characteristic id. Additional to the standard query parameter it will
+	 * accept a filter parameter and orderBy parameter. It is possible to set
+	 * both orderBy parameter simultaneously but the
+	 *
+	 * @param language
+	 * @param projectId
+	 * @param schema
+	 * @param topicCharacteristicId
+	 * @param filter
+	 * @param sortOrder
+	 * @param orderByEnum
+	 * @param orderByUuid
+	 * @param offset
+	 * @param size
+	 * @return
+	 */
 	@GET
 	@Path("{topicCharacteristicId}/topicinstances")
 	public List<TopicInstancePojo> getTopicInstances(
@@ -96,34 +115,38 @@ public class TopicCharacteristicResource {
 			@PathParam("schema") String schema,
 			@PathParam("topicCharacteristicId") UUID topicCharacteristicId,
 			@QueryParam("filter") String filter,
-			@QueryParam("offset") int offset, 
+			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
+            @QueryParam("orderBy") String orderBy,
+			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		// Define the specific parameters when not specified correctly
 		if(size == 0) {
 			offset = OpenInfraProperties.DEFAULT_OFFSET;
 			size = OpenInfraProperties.DEFAULT_SIZE;
 		} // end if
-		
+
 		if(filter != null && filter.length() > 0) {
 			return new TopicInstanceDao(
-					projectId, 
+					projectId,
 					OpenInfraSchemas.PROJECTS).read(
 							PtLocaleDao.forLanguageTag(language),
 							topicCharacteristicId,
 							filter,
-							offset, 
+							offset,
 							size);
 		} else {
 			return new TopicInstanceDao(
-					projectId, 
+					projectId,
 					OpenInfraSchemas.PROJECTS).read(
 					PtLocaleDao.forLanguageTag(language),
-					topicCharacteristicId, 
-					offset, 
+					topicCharacteristicId,
+					sortOrder,
+					new OpenInfraOrderBy(orderBy),
+					offset,
 					size);
 		} // end if else
 	}
-	
+
 	@GET
 	@Path("{topicCharacteristicId}/topicinstances/count")
 	@Produces({MediaType.TEXT_PLAIN})
@@ -132,15 +155,15 @@ public class TopicCharacteristicResource {
 			@PathParam("schema") String schema,
 			@PathParam("topicCharacteristicId") UUID topicCharacteristicId) {
 		return new TopicInstanceDao(
-				projectId, 
+				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
 						topicCharacteristicId);
 	}
-	
+
 	/**
 	 * This is a special representation of the topic object. It delivers always
 	 * a list of topic instances with corresponding 3D attribute values as X3D.
-	 * 
+	 *
 	 * @param language
 	 * @param projectId
 	 * @param topicCharacteristicId
@@ -157,7 +180,7 @@ public class TopicCharacteristicResource {
             @PathParam("schema") String schema,
             @PathParam("topicCharacteristicId") UUID topicCharacteristicId,
             @QueryParam("geomType") AttributeValueGeomType geomType,
-            @QueryParam("offset") int offset, 
+            @QueryParam("offset") int offset,
             @QueryParam("size") int size) {
 	    return new TopicGeomzDao(
 	            projectId,
@@ -168,11 +191,11 @@ public class TopicCharacteristicResource {
 	                    offset,
 	                    size);
     }
-	
+
 	/**
      * This is a special representation of the topic object. It delivers always
      * a list of topic instances with corresponding 3D attribute values as X3D.
-     * 
+     *
      * @param language
      * @param projectId
      * @param topicCharacteristicId
@@ -200,15 +223,15 @@ public class TopicCharacteristicResource {
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@PathParam("topicCharacteristicId") UUID topicCharacteristicId,
-			@QueryParam("offset") int offset, 
+			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
-		
+
 		return new AttributeTypeGroupToTopicCharacteristicDao(
-				projectId, 
+				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language),
-						topicCharacteristicId, 
-						offset, 
+						topicCharacteristicId,
+						offset,
 						size);
 	}
 
@@ -224,15 +247,16 @@ public class TopicCharacteristicResource {
 			@QueryParam("offset") int offset, 
 			@QueryParam("size") int size) {
 		return new AttributeTypeGroupToTopicCharacteristicDao(
-				projectId, 
+				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language),
 						topicCharacteristicId,
 						attributeTypeGroupId,
 						offset,
 						size);
+
 	}
-	
+
 	@GET
 	@Path("{topicCharacteristicId}/relationshiptypes")
 	public List<RelationshipTypeToTopicCharacteristicPojo> getRelationshipTypes(
@@ -240,18 +264,18 @@ public class TopicCharacteristicResource {
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@PathParam("topicCharacteristicId") UUID topicCharacteristicId,
-			@QueryParam("offset") int offset, 
+			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		
 		return new RelationshipTypeToTopicCharacteristicDao(
 				projectId, 
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						PtLocaleDao.forLanguageTag(language), 
-						topicCharacteristicId, 
-						offset, 
+						PtLocaleDao.forLanguageTag(language),
+						topicCharacteristicId,
+						offset,
 						size);
 	}
-	
+
 	@GET
 	@Path("{topicCharacteristicId}/relationshiptypes/{relationShipTypeId}")
 	public List<RelationshipTypeToTopicCharacteristicPojo> getRelationshipTypes(
@@ -281,7 +305,7 @@ public class TopicCharacteristicResource {
 			@PathParam("schema") String schema,
 			@PathParam("topicCharacteristicId") UUID topicCharacteristicId) {
 		return new RelationshipTypeDao(
-				projectId, 
+				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
 						topicCharacteristicId);
 	}

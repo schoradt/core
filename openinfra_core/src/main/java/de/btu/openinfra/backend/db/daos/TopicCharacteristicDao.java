@@ -119,7 +119,7 @@ public class TopicCharacteristicDao
 		pojo.setTopic(ValueListValueDao.mapToPojoStatically(
 				locale,
 				tc.getValueListValue()));
-		pojo.setDescriptions(DescriptionDao.mapToPojoStatically(
+		pojo.setDescriptions(PtFreeTextDao.mapToPojoStatically(
 				locale,
 				tc.getPtFreeText()));
 		pojo.setUuid(tc.getId());

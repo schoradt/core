@@ -5,7 +5,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
+import org.eclipse.persistence.jpa.JpaQuery;
+
+import de.btu.openinfra.backend.OpenInfraProperties;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
+import de.btu.openinfra.backend.db.jpa.model.PtLocale;
+import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 
 /**
@@ -58,7 +63,7 @@ public abstract class OpenInfraValueDao<
 	 *                   belong to the TypeModelValue class
 	 */
 	public List<TypePojo> read(
-			Locale locales,
+			Locale locale,
 			UUID valueId,
 			int offset,
 			int size) {
@@ -80,10 +85,184 @@ public abstract class OpenInfraValueDao<
 				.getResultList();
 		// 5. Map the JPA model objects to POJO objects
 		for(TypeModel modelItem : models) {
-			pojos.add(mapToPojo(locales, modelItem));
+			pojos.add(mapToPojo(locale, modelItem));
 		} // end for
 		return pojos;
 	}
+
+	/**
+     * This is a generic method which reads a list of TypePojos defined by
+     * a specific UUID value (e.g. get a list of objects which belong to a
+     * specific object). This method presumes a corresponding named query of
+     * the TypeModel object.
+     *
+     * It provides the possibility to sort the list.
+     *
+     * @param locale     the locale defined by request
+     * @param valueId    the specific id of the required value object
+     * @param order      the sort direction
+     * @param column     the column that should be used for sorting
+     * @param offset     the number where to start
+     * @param size       the size of items to provide
+     * @return           a list of objects of type POJO class which directly
+     *                   belong to the TypeModelValue class
+     */
+    @SuppressWarnings("unchecked")
+    public List<TypePojo> read(
+            Locale locale,
+            UUID valueId,
+            OpenInfraSortOrder order,
+            OpenInfraOrderBy column,
+            int offset,
+            int size) {
+        // Get the specific value object from JPA layer
+        // TODO will be necessary for the not implemented else branch
+        //TypeModelValue tmv = em.find(valueClass, valueId);
+
+        // Define a list which holds the POJO objects
+        List<TypePojo> pojos = new LinkedList<TypePojo>();
+
+        // Define a model object that contains the query result
+        List<TypeModel> models = null;
+
+        // Flag to determine if the query has to run again with a different
+        // locale
+        boolean runAgain = false;
+
+        // Use the default values for language and order when null.
+        if(locale == null) {
+            locale = OpenInfraProperties.DEFAULT_LANGUAGE;
+        }
+        if(order == null) {
+            order = OpenInfraProperties.DEFAULT_ORDER;
+        }
+
+        // get the locale id
+        UUID localeId = new PtLocaleDao(
+                currentProjectId, schema).read(locale).getId();
+
+        // Handle topic instances separately
+        if (column == null || !column.isUuid()) {
+            // If the column is null redirect to another read method
+            return read(locale, valueId, offset, size);
+        } else if (modelClass == TopicInstance.class) {
+            String nativeQueryName = "";
+            // Get the attribute value types from the object with the passed
+            // attribute type id
+            AttributeValueTypes atType = new AttributeTypeDao(
+                    currentProjectId, schema).read(
+                            locale, UUID.fromString(
+                                    column.getContent().toString()))
+                                    .getType();
+
+            // Handle each attribute value type in a different way
+            switch (atType) {
+            case ATTRIBUTE_VALUE_VALUE:
+                // Set the native query name for attribute value value objects
+                nativeQueryName = "findAllByLocaleAndOrderForValues";
+                break;
+            case ATTRIBUTE_VALUE_DOMAIN:
+                // Set the native query name for attribute value domain objects
+                nativeQueryName = "findAllByLocaleAndOrderForDomains";
+                break;
+            default:
+                // Sorting by geometry is not supported
+                return read(locale, valueId, offset, size);
+            }
+
+            // Construct the origin SQL-based named query and append the sort
+            // order.
+            String sqlString = em.createNamedQuery(
+                    modelClass.getSimpleName() + "." + nativeQueryName)
+                    .unwrap(JpaQuery.class).getDatabaseQuery().getSQLString();
+            sqlString += " " + order.name();
+
+            // Retrieve the informations from the database
+            models = em.createNativeQuery(
+                            sqlString,
+                            modelClass)
+                        .setParameter(1, column.getContent())
+                        .setParameter(2, localeId)
+                        .setParameter(3, valueId)
+                        .setFirstResult(offset)
+                        .setMaxResults(size)
+                        .getResultList();
+
+            // Get the first result as topic instance model
+            TopicInstance tim = (TopicInstance)models.get(0);
+
+            // TODO The condition checks are not tested for values with a
+            //      language != xx, a real 0 value and a topic characteristic
+            //      that only contains 1 entry!
+            // Test if the request returns no sufficient result
+            switch (atType) {
+            case ATTRIBUTE_VALUE_VALUE:
+                // Check if only one result was returned and if this is equals
+                // 0. JPA returns the string 0 if the free text is NULL.
+                if (tim.getAttributeValueValues().get(0)
+                        .getPtFreeText()
+                        .getLocalizedCharacterStrings().get(0)
+                        .getFreeText().equals("0") &&
+                    tim.getAttributeValueValues().get(0)
+                        .getPtFreeText()
+                        .getLocalizedCharacterStrings().get(0)
+                        .getFreeText().length() == 1) {
+                    // Set flag to run the query again with the xx locale
+                    runAgain = true;
+                }
+                break;
+            case ATTRIBUTE_VALUE_DOMAIN:
+                // Check if only one result was returned and if this is equals
+                // 0. JPA returns the string 0 if the free text is NULL.
+                if (tim.getAttributeValueDomains().get(0)
+                        .getValueListValue().getPtFreeText2()
+                        .getLocalizedCharacterStrings().get(0)
+                        .getFreeText().equals("0") &&
+                    tim.getAttributeValueDomains().get(0)
+                        .getValueListValue().getPtFreeText2()
+                        .getLocalizedCharacterStrings().get(0)
+                        .getFreeText().length() == 1) {
+                    // Set flag to run the query again with the xx locale
+                    runAgain = true;
+                }
+                break;
+            default:
+                // This part is unreachable because of the previously executed
+                // switch case statement
+                break;
+            }
+
+            // Run the query again with the xx locale instead of the passed
+            // locale
+            if (runAgain) {
+                // Retrieve the uuid of the xx locale
+                localeId = em.createNamedQuery(
+                                "PtLocale.xx",
+                                PtLocale.class)
+                                .getSingleResult().getId();
+
+                // Retrieve the informations from the database with the new
+                // locale
+                models = em.createNativeQuery(
+                        sqlString,
+                        modelClass)
+                    .setParameter(1, column.getContent())
+                    .setParameter(2, localeId)
+                    .setParameter(3, valueId)
+                    .setFirstResult(offset)
+                    .setMaxResults(size)
+                    .getResultList();
+            }
+        } else {
+            // TODO implement this for all the other classes
+        }
+
+        // Map the JPA model objects to POJO objects
+        for(TypeModel modelItem : models) {
+            pojos.add(mapToPojo(locale, modelItem));
+        } // end for
+        return pojos;
+    }
 
 	/**
 	 * This method returns the count of objects referring a specific object.

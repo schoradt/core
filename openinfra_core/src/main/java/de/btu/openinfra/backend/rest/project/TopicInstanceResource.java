@@ -63,6 +63,19 @@ public class TopicInstanceResource {
 	}
 	
 	@GET
+	@Path("{topicInstanceId}/parents")
+	public List<TopicInstanceAssociationPojo> getParents(			
+			@QueryParam("language") String language,
+			@PathParam("projectId") UUID projectId,
+			@PathParam("topicInstanceId") UUID topicInstanceId) {
+		return new TopicInstanceAssociationDao(
+				projectId, 
+				OpenInfraSchemas.PROJECTS).readParents(
+						PtLocaleDao.forLanguageTag(language), 
+						topicInstanceId);
+	}
+	
+	@GET
 	@Path("{topicInstanceId}/associations/count")
 	@Produces({MediaType.TEXT_PLAIN})
 	public long getTopicInstanceAssociationCount(

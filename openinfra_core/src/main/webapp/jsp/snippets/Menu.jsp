@@ -7,7 +7,6 @@
 <%@page import="de.btu.openinfra.backend.db.daos.PtLocaleDao"%>
 <%@page import="java.awt.event.ItemEvent"%>
 <%@page import="de.btu.openinfra.backend.db.pojos.LocalizedString"%>
-<%@page import="de.btu.openinfra.backend.db.pojos.NamePojo"%>
 <%@page import="de.btu.openinfra.backend.db.pojos.ProjectPojo"%>
 <%@page import="de.btu.openinfra.backend.db.daos.ProjectDao"%>
 <%@page import="de.btu.openinfra.backend.OpenInfraApplication"%>
@@ -141,7 +140,14 @@
         	</c:when>
         </c:choose>
         <li>
-        	<a href="${pageContext.request.contextPath}/3d/index.html"><fmt:message key="3dwebgis.label"/></a>
+			<a href="${pageContext.request.contextPath}/rest/projects/maps">
+				<fmt:message key="map.label"/>
+			</a>
+        </li>
+        <li>
+			<a href="${pageContext.request.contextPath}/3d/index.jsp">
+				<fmt:message key="3dwebgis.label"/>
+			</a>
         </li>
       </ul>
       <!-- http://stackoverflow.com/questions/4276061/how-to-internationalize-a-java-web-application -->

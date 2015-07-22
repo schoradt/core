@@ -7,8 +7,8 @@ import de.btu.openinfra.backend.db.daos.AttributeValueTypes;
 @XmlRootElement
 public class AttributeTypePojo extends OpenInfraPojo {
 	
-	private NamePojo names;
-	private DescriptionPojo descriptions;
+	private PtFreeTextPojo names;
+	private PtFreeTextPojo descriptions;
 	private ValueListValuePojo dataType;
 	private ValueListValuePojo unit;
 	private ValueListPojo domain;
@@ -22,19 +22,19 @@ public class AttributeTypePojo extends OpenInfraPojo {
 		this.type = type;
 	}
 
-	public NamePojo getNames() {
+	public PtFreeTextPojo getNames() {
 		return names;
 	}
 
-	public void setNames(NamePojo names) {
+	public void setNames(PtFreeTextPojo names) {
 		this.names = names;
 	}
 
-	public DescriptionPojo getDescriptions() {
+	public PtFreeTextPojo getDescriptions() {
 		return descriptions;
 	}
 
-	public void setDescriptions(DescriptionPojo descriptions) {
+	public void setDescriptions(PtFreeTextPojo descriptions) {
 		this.descriptions = descriptions;
 	}
 

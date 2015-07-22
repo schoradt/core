@@ -8,23 +8,23 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class AttributeTypeGroupPojo extends OpenInfraPojo {
 	
 	// Fields of the object AttributeTypeGroup
-	private NamePojo names;
-	private DescriptionPojo descriptions;
+	private PtFreeTextPojo names;
+	private PtFreeTextPojo descriptions;
 	private UUID subgroupOf;
 	
-	public NamePojo getNames() {
+	public PtFreeTextPojo getNames() {
 		return names;
 	}
 
-	public void setNames(NamePojo names) {
+	public void setNames(PtFreeTextPojo names) {
 		this.names = names;
 	}
 
-	public DescriptionPojo getDescriptions() {
+	public PtFreeTextPojo getDescriptions() {
 		return descriptions;
 	}
 
-	public void setDescriptions(DescriptionPojo descriptions) {
+	public void setDescriptions(PtFreeTextPojo descriptions) {
 		this.descriptions = descriptions;
 	}
 

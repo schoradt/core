@@ -6,7 +6,7 @@ import java.util.UUID;
 public class AttributeValueValuePojo extends OpenInfraPojo {
 
 	private UUID topicInstanceId;
-	private ValuePojo value;
+	private PtFreeTextPojo value;
 	private UUID attributeTypeToAttributeTypeGroupId;
 
 	public UUID getTopicInstanceId() {
@@ -17,11 +17,11 @@ public class AttributeValueValuePojo extends OpenInfraPojo {
 		this.topicInstanceId = topicInstanceId;
 	}
 	
-	public ValuePojo getValue() {
+	public PtFreeTextPojo getValue() {
 		return value;
 	}
 
-	public void setValue(ValuePojo value) {
+	public void setValue(PtFreeTextPojo value) {
 		this.value = value;
 	}
 	
