@@ -13,20 +13,16 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import de.btu.openinfra.backend.db.daos.AttributeValueDao;
-import de.btu.openinfra.backend.db.daos.AttributeValueDomainDao;
-import de.btu.openinfra.backend.db.daos.AttributeValueGeomDao;
 import de.btu.openinfra.backend.db.daos.AttributeValueGeomType;
-import de.btu.openinfra.backend.db.daos.AttributeValueGeomzDao;
-import de.btu.openinfra.backend.db.daos.AttributeValueValueDao;
 import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.AttributeValuePojo;
 
 @Path("/projects/{projectId}/attributevalues")
-@Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY, 
+@Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY,
 	MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY})
 public class AttributeValueResource {
-	
+
 	@GET
 	@Path("{attributeValueId}")
 	public AttributeValuePojo get(
@@ -35,26 +31,26 @@ public class AttributeValueResource {
 			@PathParam("attributeValueId") UUID attributeValueId,
 			@QueryParam("geomType") AttributeValueGeomType geomType) {
 		return new AttributeValueDao(
-				projectId, 
+				projectId,
 				OpenInfraSchemas.PROJECTS).read(
 						PtLocaleDao.forLanguageTag(language),
-						attributeValueId, 
+						attributeValueId,
 						geomType);
 	}
-	
+
 	@PUT
 	@Path("{attributeValueId}")
 	public Response update(
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("attributeValueId") UUID attributeValueId,
-			AttributeValuePojo av) {
-		UUID uuid = new AttributeValueDao(
-    			projectId, 
-    			OpenInfraSchemas.PROJECTS).createOrUpdate(av);
-		return OpenInfraResponseBuilder.putResponse(uuid);
+			AttributeValuePojo pojo) {
+	    UUID id = new AttributeValueDao(
+                projectId,
+                OpenInfraSchemas.PROJECTS).distributeTypes(pojo, projectId);
+        return OpenInfraResponseBuilder.putResponse(id);
 	}
-	
+
 	@GET
 	@Path("geomtypes")
 	public AttributeValueGeomType[] getGeomTypes() {
@@ -62,58 +58,29 @@ public class AttributeValueResource {
 	}
 
 	@GET
-	@Path("/topicinstances/{topicInstanceId}/attributetypes/{attributeTypeId}/hull")
-	public AttributeValuePojo getEmptyShell(
+	@Path("/topicinstances/{topicInstanceId}/attributetypes/{attributeTypeId}"
+	        + "/new")
+	public AttributeValuePojo newAttributeValue(
 	        @QueryParam("language") String language,
             @PathParam("projectId") UUID projectId,
             @PathParam("topicInstanceId") UUID topicInstanceId,
             @PathParam("attributeTypeId") UUID attributeTypeId,
             @QueryParam("geomType") AttributeValueGeomType geomType) {
 	    return new AttributeValueDao(
-                projectId, 
-                OpenInfraSchemas.PROJECTS).createEmptyShell(
+                projectId,
+                OpenInfraSchemas.PROJECTS).newAttributeValue(
                         topicInstanceId,
                         attributeTypeId,
                         PtLocaleDao.forLanguageTag(language));
 	}
-	    
+
 	@POST
     public Response createAttributeValue(
             @PathParam("projectId") UUID projectId,
             AttributeValuePojo pojo) {
-        
-        // It is not possible to write the AttributeValue directly because a
-        // constraint. The appropriated AttributeValuePojo must be extracted
-        // and written separately.
-        UUID id = null;
-        
-        switch (pojo.getAttributeValueType()) {
-        case ATTRIBUTE_VALUE_DOMAIN:
-            id = new AttributeValueDomainDao(
-                    projectId,
-                    OpenInfraSchemas.PROJECTS).createOrUpdate(
-                            pojo.getAttributeValueDomain());
-            break;
-        case ATTRIBUTE_VALUE_GEOM:
-            id = new AttributeValueGeomDao(
-                    projectId,
-                    OpenInfraSchemas.PROJECTS).createOrUpdate(
-                            pojo.getAttributeValueGeom());
-            break;
-        case ATTRIBUTE_VALUE_GEOMZ:
-            id = new AttributeValueGeomzDao(
-                    projectId,
-                    OpenInfraSchemas.PROJECTS).createOrUpdate(
-                            pojo.getAttributeValueGeomz());
-            break;
-        case ATTRIBUTE_VALUE_VALUE:
-             id = new AttributeValueValueDao(
-                    projectId,
-                    OpenInfraSchemas.PROJECTS).createOrUpdate(
-                            pojo.getAttributeValueValue());
-            break;
-        }
-        
+	    UUID id = new AttributeValueDao(
+                projectId,
+                OpenInfraSchemas.PROJECTS).distributeTypes(pojo, projectId);
         return OpenInfraResponseBuilder.postResponse(id);
     }
 }
