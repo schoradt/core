@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
@@ -21,7 +22,12 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
  */
 @Entity
 @Table(schema="meta_data")
-@NamedQuery(name="Log.findAll", query="SELECT l FROM Log l")
+@NamedQueries({
+	@NamedQuery(name="Log.findAll", query="SELECT l FROM Log l"),
+    @NamedQuery(name="Log.count",
+    	query="SELECT COUNT(l) FROM Log l")
+})
+
 public class Log implements Serializable, OpenInfraModelObject {
 	private static final long serialVersionUID = 1L;
 
@@ -52,6 +58,7 @@ public class Log implements Serializable, OpenInfraModelObject {
 	public Log() {
 	}
 
+	@Override
 	public UUID getId() {
 		return this.id;
 	}

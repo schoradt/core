@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
@@ -17,9 +18,24 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="attribute_type_x_attribute_type")
-@NamedQuery(name="AttributeTypeXAttributeType.findAll", query="SELECT a FROM AttributeTypeXAttributeType a")
+@NamedQueries({
+	@NamedQuery(name="AttributeTypeXAttributeType.findAll",
+			query="SELECT a FROM AttributeTypeXAttributeType a"),
+	@NamedQuery(name="AttributeTypeXAttributeType.findByAttributeType", 
+			query="SELECT a "
+					+ "FROM AttributeTypeXAttributeType a "
+					+ "WHERE a.attributeType1Bean = :value "),
+	@NamedQuery(
+			name="AttributeTypeXAttributeType."
+					+ "findByAttributeTypeAndAttributeType", 
+			query="SELECT a "
+					+ "FROM AttributeTypeXAttributeType a "
+					+ "WHERE a.attributeType1Bean = :value AND "
+					+ "a.attributeType2Bean = :value2"),
+})
 public class AttributeTypeXAttributeType implements Serializable, 
 	OpenInfraModelObject {
+
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -45,9 +61,9 @@ public class AttributeTypeXAttributeType implements Serializable,
 
 	@Override
 	public UUID getId() {
-		return this.id;
+		return id;
 	}
-
+	
 	@Override
 	public void setId(UUID id) {
 		this.id = id;

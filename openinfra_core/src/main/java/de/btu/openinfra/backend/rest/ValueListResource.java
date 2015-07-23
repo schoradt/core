@@ -18,8 +18,10 @@ import de.btu.openinfra.backend.db.daos.OpenInfraOrderByEnum;
 import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
+import de.btu.openinfra.backend.db.daos.ValueListAssociationDao;
 import de.btu.openinfra.backend.db.daos.ValueListDao;
 import de.btu.openinfra.backend.db.daos.ValueListValueDao;
+import de.btu.openinfra.backend.db.pojos.ValueListAssociationPojo;
 import de.btu.openinfra.backend.db.pojos.ValueListPojo;
 import de.btu.openinfra.backend.db.pojos.ValueListValuePojo;
 
@@ -54,6 +56,46 @@ public class ValueListResource {
 						PtLocaleDao.forLanguageTag(language),
 						sortOrder,
 						orderBy,
+						offset,
+						size);
+	}
+	
+	@GET
+	@Path("{valueListId}/associations")
+	public List<ValueListAssociationPojo> getAssociations(
+			@QueryParam("language") String language,
+			@PathParam("projectId") UUID projectId,
+			@PathParam("schema") String schema,
+			@PathParam("valueListId") UUID valueListId,
+			@QueryParam("offset") int offset,
+			@QueryParam("size") int size) {
+		
+		return new ValueListAssociationDao(
+				projectId,
+				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
+						PtLocaleDao.forLanguageTag(language),
+						valueListId,
+						offset,
+						size);
+	}
+	
+	@GET
+	@Path("{valueListId}/associations/{associatedValueListId}")
+	public List<ValueListAssociationPojo> getAssociations(
+			@QueryParam("language") String language,
+			@PathParam("projectId") UUID projectId,
+			@PathParam("schema") String schema,
+			@PathParam("valueListId") UUID valueListId,
+			@PathParam("associatedValueListId") UUID associatedValueListId,
+			@QueryParam("offset") int offset,
+			@QueryParam("size") int size) {
+		
+		return new ValueListAssociationDao(
+				projectId,
+				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
+						PtLocaleDao.forLanguageTag(language),
+						valueListId,
+						associatedValueListId,
 						offset,
 						size);
 	}

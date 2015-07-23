@@ -20,8 +20,6 @@ public class DatabaseConnectionResource {
 
     @GET
     public List<DatabaseConnectionPojo> get(
-            @QueryParam("language") String language,
-            @PathParam("projectId") UUID projectId,
             @QueryParam("offset") int offset,
             @QueryParam("size") int size) {
         return new DatabaseConnectionDao(
@@ -31,14 +29,20 @@ public class DatabaseConnectionResource {
     @GET
     @Path("{databaseConnectionId}")
     public DatabaseConnectionPojo get(
-            @QueryParam("language") String language,
-            @PathParam("projectId") UUID projectId,
             @PathParam("databaseConnectionId") UUID databaseConnectionId) {
         return new DatabaseConnectionDao(
                 OpenInfraSchemas.META_DATA).read(
                         null,
                         databaseConnectionId);
     }
+    
+    @GET
+	@Path("count")
+	@Produces({MediaType.TEXT_PLAIN})
+	public long getCount() {
+		return new DatabaseConnectionDao(
+				OpenInfraSchemas.META_DATA).getCount();
+	}
 
 }
 

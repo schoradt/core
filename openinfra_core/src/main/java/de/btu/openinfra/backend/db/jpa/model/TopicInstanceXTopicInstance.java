@@ -31,6 +31,12 @@ import javax.persistence.Table;
 			query="SELECT t "
 					+ "FROM TopicInstanceXTopicInstance t "
 					+ "WHERE t.topicInstance1Bean = :value"),
+	@NamedQuery(
+		name="TopicInstanceXTopicInstance.findByTopicInstanceAndTopicInstance",
+		query="SELECT t "
+			+ "FROM TopicInstanceXTopicInstance t "
+			+ "WHERE t.topicInstance1Bean = :value AND "
+			+ "t.topicInstance2Bean = :value2"),
 	@NamedQuery(name="TopicInstanceXTopicInstance.findParent", 
 			query="SELECT t "
 					+ "FROM TopicInstanceXTopicInstance t "

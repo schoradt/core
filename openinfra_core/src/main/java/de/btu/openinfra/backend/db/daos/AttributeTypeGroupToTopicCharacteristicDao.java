@@ -3,6 +3,7 @@ package de.btu.openinfra.backend.db.daos;
 import java.util.Locale;
 import java.util.UUID;
 
+import de.btu.openinfra.backend.db.jpa.model.AttributeTypeGroup;
 import de.btu.openinfra.backend.db.jpa.model.AttributeTypeGroupToTopicCharacteristic;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupToTopicCharacteristicPojo;
@@ -15,8 +16,9 @@ import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupToTopicCharacteristic
  *
  */
 public class AttributeTypeGroupToTopicCharacteristicDao extends
-	OpenInfraValueDao<AttributeTypeGroupToTopicCharacteristicPojo,
-	AttributeTypeGroupToTopicCharacteristic, TopicCharacteristic> {
+	OpenInfraValueValueDao<AttributeTypeGroupToTopicCharacteristicPojo,
+	AttributeTypeGroupToTopicCharacteristic, TopicCharacteristic,
+	AttributeTypeGroup> {
 
 	/**
 	 * This is the required constructor which calls the super constructor and in
@@ -32,7 +34,7 @@ public class AttributeTypeGroupToTopicCharacteristicDao extends
 		super(currentProjectId,
 		      schema,
 			  AttributeTypeGroupToTopicCharacteristic.class,
-			  TopicCharacteristic.class);
+			  TopicCharacteristic.class, AttributeTypeGroup.class);
 	}
 
 	@Override
@@ -61,7 +63,11 @@ public class AttributeTypeGroupToTopicCharacteristicDao extends
 		pojo.setMultiplicity(MultiplicityDao.mapToPojoStatically(
 				atg.getMultiplicityBean()));
 		pojo.setTopicCharacteristicId(atg.getTopicCharacteristic().getId());
-		pojo.setOrder(atg.getOrder());
+		
+		if(atg.getOrder() != null) {
+			pojo.setOrder(atg.getOrder());
+		}
+		
 		pojo.setUuid(atg.getId());
 		return pojo;
 	}

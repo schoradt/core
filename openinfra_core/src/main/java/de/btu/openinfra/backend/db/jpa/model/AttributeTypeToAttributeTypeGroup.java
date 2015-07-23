@@ -31,10 +31,22 @@ import javax.persistence.Table;
 			query="SELECT a "
 					+ "FROM AttributeTypeToAttributeTypeGroup a "
 					+ "WHERE a.attributeTypeGroup = :value"),
+	@NamedQuery(name="AttributeTypeToAttributeTypeGroup."
+			+ "findByAttributeTypeGroupAndAttributeType",
+			query="SELECT a "
+					+ "FROM AttributeTypeToAttributeTypeGroup a "
+					+ "WHERE a.attributeTypeGroup = :value AND "
+					+ "a.attributeType = :value2"),
 	@NamedQuery(name="AttributeTypeToAttributeTypeGroup.findByAttributeType",
 			query="SELECT a "
 					+ "FROM AttributeTypeToAttributeTypeGroup a "
 					+ "WHERE a.attributeType = :value"),
+	@NamedQuery(name="AttributeTypeToAttributeTypeGroup."
+			+ "findByAttributeTypeAndAttributeTypeGroup",
+			query="SELECT a "
+					+ "FROM AttributeTypeToAttributeTypeGroup a "
+					+ "WHERE a.attributeType = :value AND "
+					+ "a.attributeTypeGroup = :value2"),
 	@NamedQuery(name="AttributeTypeToAttributeTypeGroup.countByAttributeType",
 		query="SELECT COUNT(a) "
 				+ "FROM AttributeTypeToAttributeTypeGroup a "
@@ -98,6 +110,7 @@ public class AttributeTypeToAttributeTypeGroup implements
 	public AttributeTypeToAttributeTypeGroup() {
 	}
 
+	@Override
 	public UUID getId() {
 		return this.id;
 	}

@@ -22,13 +22,14 @@ import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
  *
  * @param <TypePojo>
  * @param <TypeModel>
+ * @param <TypeModelValue>
  */
 public abstract class OpenInfraValueDao<
 	TypePojo extends OpenInfraPojo,
 	TypeModel extends OpenInfraModelObject, TypeModelValue> extends
 	OpenInfraDao<TypePojo, TypeModel> {
 
-	private Class<TypeModelValue> valueClass;
+	protected Class<TypeModelValue> valueClass;
 
 	/**
 	 * Mandatory constructor method which calls the super constructor.

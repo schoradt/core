@@ -119,7 +119,7 @@ public class PtLocaleDao extends OpenInfraDao<PtLocalePojo, PtLocale> {
 	}
 
 	/**
-	 * This mehtod is a wrapper method of the 'forLanguageTag' of the
+	 * This method is a wrapper method of the 'forLanguageTag' of the
 	 * Java.util Locale object. It returns null when the locale string
 	 * is null.
 	 *

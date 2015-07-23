@@ -20,8 +20,6 @@ public class ProjectsResources {
 
     @GET
     public List<ProjectsPojo> get(
-            @QueryParam("language") String language,
-            @PathParam("projectId") UUID projectId,
             @QueryParam("offset") int offset,
             @QueryParam("size") int size) {
         return new ProjectsDao(
@@ -31,13 +29,19 @@ public class ProjectsResources {
     @GET
     @Path("{projectsId}")
     public ProjectsPojo get(
-            @QueryParam("language") String language,
-            @PathParam("projectId") UUID projectId,
             @PathParam("projectsId") UUID projectsId) {
         return new ProjectsDao(
                 OpenInfraSchemas.META_DATA).read(
                         null,
                         projectsId);
     }
+    
+    @GET
+	@Path("count")
+	@Produces({MediaType.TEXT_PLAIN})
+	public long getCount() {
+		return new ProjectsDao(
+				OpenInfraSchemas.META_DATA).getCount();
+	}
 
 }

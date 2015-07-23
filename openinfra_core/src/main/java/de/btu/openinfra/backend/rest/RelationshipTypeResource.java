@@ -15,7 +15,9 @@ import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.daos.RelationshipTypeDao;
+import de.btu.openinfra.backend.db.daos.TopicCharacteristicToRelationshipTypeDao;
 import de.btu.openinfra.backend.db.pojos.RelationshipTypePojo;
+import de.btu.openinfra.backend.db.pojos.TopicCharacteristicToRelationshipTypePojo;
 
 @Path(OpenInfraResponseBuilder.REST_URI + "/relationshiptypes")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY, 
@@ -65,4 +67,46 @@ public class RelationshipTypeResource {
                         PtLocaleDao.forLanguageTag(language),
                         relationshipTypeId);
     }
+    
+    @GET
+	@Path("{relationshipTypeId}/topiccharacteristics")
+	public List<TopicCharacteristicToRelationshipTypePojo>
+    	getTopicCharacteristics(
+			@QueryParam("language") String language,
+			@PathParam("projectId") UUID projectId,
+			@PathParam("schema") String schema,
+			@PathParam("relationshipTypeId") UUID relationshipTypeId,
+			@QueryParam("offset") int offset, 
+			@QueryParam("size") int size) {
+		
+		return new TopicCharacteristicToRelationshipTypeDao(
+				projectId, 
+				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
+						PtLocaleDao.forLanguageTag(language), 
+						relationshipTypeId, 
+						offset, 
+						size);
+	}
+	
+	@GET
+	@Path("{relationshipTypeId}/topiccharacteristics/{topicCharacteristicId}")
+	public List<TopicCharacteristicToRelationshipTypePojo>
+		getTopicCharacteristics(
+			@QueryParam("language") String language,
+			@PathParam("projectId") UUID projectId,
+			@PathParam("schema") String schema,
+			@PathParam("relationshipTypeId") UUID relationshipTypeId,
+			@PathParam("topicCharacteristicId") UUID topicCharacteristicId,
+			@QueryParam("offset") int offset, 
+			@QueryParam("size") int size) {
+		
+		return new TopicCharacteristicToRelationshipTypeDao(
+				projectId, 
+				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
+						PtLocaleDao.forLanguageTag(language), 
+						relationshipTypeId,
+						topicCharacteristicId,
+						offset, 
+						size);
+	}
 }
