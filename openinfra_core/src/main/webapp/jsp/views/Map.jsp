@@ -37,29 +37,43 @@
     	params = Ext.urlDecode(location.search, true),    	
     	layers = [], 
     	p = params.p, 
-    	tcs;
+    	tcs, ti;
     
  	// set proxy host
     config.proxy.host = "${contextPath}/gxc/resources/proxy.jsp?";
     
     // map tc param to array
     if (params.tc) {
-    	if (params.tc.length) {
+    	if (Ext.isArray(params.tc)) {
     		tcs = params.tc;
     	} else {
     		tcs = [params.tc];
     	}
     }
         
-    // each topic  charactersitic mapped to wms layer    
-   	Ext.Array.each(params.tc, function(tc) {
-   		layers.push({
+ 	// Each topic  charactersitic mapped to wms layer of baalbek project.
+ 	// The namespace "baalbek:" is derieved from the geoserver workspace
+ 	// the layers reside in.
+   	Ext.Array.each(tcs, function(tc, index) {
+   		var layerConfig = {
    			type: 'WMS',
    			version: '1.1.1',
-   			url: config.geoserver.host + '/wms',
+   			url: config.geoserver.host + '/wms?',
    			layer: 'baalbek:geom_' + tc
-   		});
-   	});      	
+   		};
+   		
+   		// if topic instance id is given, first layer of
+   		// tcs array will have a preselected feature on map init
+   		if (index === 0 && params.ti) {
+   			Ext.apply(layerConfig, {
+   				select: {
+   					featureId: params.ti
+   				}
+   			});
+   		}
+   		
+   		layers.push(layerConfig);
+   	});
     
     // unshift layers into config array
     config.layers.unshift.apply(config.layers, layers);
