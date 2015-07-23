@@ -37,15 +37,16 @@ public class ValueListValuesResource {
 	}
 
 	@GET
-    @Path("/hull")
-    public ValueListValuePojo getEmptyShell(
+    @Path("/new")
+    public ValueListValuePojo newAttributeValueValues(
             @QueryParam("language") String language,
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema) {
         return new ValueListValueDao(
                         projectId,
                         OpenInfraSchemas.valueOf(schema.toUpperCase()))
-                    .createEmptyShell(PtLocaleDao.forLanguageTag(language));
+                    .newAttributeValueValues(
+                            PtLocaleDao.forLanguageTag(language));
     }
 
 	@PUT
