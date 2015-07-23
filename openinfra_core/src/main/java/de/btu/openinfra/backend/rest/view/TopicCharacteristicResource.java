@@ -66,10 +66,10 @@ public class TopicCharacteristicResource {
 			@QueryParam("orderBy") String orderBy,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
-		return new de.btu.openinfra.backend.rest.TopicCharacteristicResource()
-			.getTopicInstances(language, projectId, schema,
-					topicCharacteristicId, filter, sortOrder, orderBy,
-					offset, size);
+		return new de.btu.openinfra.backend.rest.project.
+		        TopicCharacteristicResource().getTopicInstances(
+		                language, projectId, schema, topicCharacteristicId,
+		                filter, sortOrder, orderBy, offset, size);
 	}
 
 	@GET

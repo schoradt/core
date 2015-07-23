@@ -1,4 +1,4 @@
-package de.btu.openinfra.backend.rest;
+package de.btu.openinfra.backend.rest.project;
 
 import java.util.UUID;
 
@@ -17,6 +17,7 @@ import de.btu.openinfra.backend.db.daos.AttributeValueGeomType;
 import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.AttributeValuePojo;
+import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
 @Path("/projects/{projectId}/attributevalues")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY,
