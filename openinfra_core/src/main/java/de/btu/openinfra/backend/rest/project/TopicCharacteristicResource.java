@@ -22,7 +22,8 @@ import de.btu.openinfra.backend.db.pojos.TopicGeomzPojo;
 import de.btu.openinfra.backend.db.pojos.TopicInstancePojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
-@Path("/projects/{projectId}/topiccharacteristics")
+@Path("/projects/{projectId}/topiccharacteristics/{topicCharacteristicId}"
+        + "/topicinstances")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY,
 	MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY})
 public class TopicCharacteristicResource {
@@ -46,7 +47,6 @@ public class TopicCharacteristicResource {
 	 * @return
 	 */
 	@GET
-	@Path("{topicCharacteristicId}/topicinstances")
 	public List<TopicInstancePojo> getTopicInstances(
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
@@ -86,7 +86,7 @@ public class TopicCharacteristicResource {
 	}
 
 	@GET
-	@Path("{topicCharacteristicId}/topicinstances/count")
+	@Path("count")
 	@Produces({MediaType.TEXT_PLAIN})
 	public long getTopicInstancesCount(
 			@PathParam("projectId") UUID projectId,
@@ -111,7 +111,7 @@ public class TopicCharacteristicResource {
 	 * @return
 	 */
 	@GET
-    @Path("{topicCharacteristicId}/topicinstances/geomz")
+    @Path("geomz")
     public List<TopicGeomzPojo> getTopicInstancesGeomz(
             @QueryParam("language") String language,
             @PathParam("projectId") UUID projectId,
@@ -141,7 +141,7 @@ public class TopicCharacteristicResource {
      * @return
      */
     @GET
-    @Path("{topicCharacteristicId}/topicinstances/geomz/count")
+    @Path("geomz/count")
     public long getTopicInstancesGeomzCount(
             @QueryParam("language") String language,
             @PathParam("projectId") UUID projectId,

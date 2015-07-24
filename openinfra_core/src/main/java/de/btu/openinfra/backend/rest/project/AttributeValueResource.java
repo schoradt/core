@@ -58,23 +58,6 @@ public class AttributeValueResource {
 		return AttributeValueGeomType.values();
 	}
 
-	@GET
-	@Path("/topicinstances/{topicInstanceId}/attributetypes/{attributeTypeId}"
-	        + "/new")
-	public AttributeValuePojo newAttributeValue(
-	        @QueryParam("language") String language,
-            @PathParam("projectId") UUID projectId,
-            @PathParam("topicInstanceId") UUID topicInstanceId,
-            @PathParam("attributeTypeId") UUID attributeTypeId,
-            @QueryParam("geomType") AttributeValueGeomType geomType) {
-	    return new AttributeValueDao(
-                projectId,
-                OpenInfraSchemas.PROJECTS).newAttributeValue(
-                        topicInstanceId,
-                        attributeTypeId,
-                        PtLocaleDao.forLanguageTag(language));
-	}
-
 	@POST
     public Response createAttributeValue(
             @PathParam("projectId") UUID projectId,

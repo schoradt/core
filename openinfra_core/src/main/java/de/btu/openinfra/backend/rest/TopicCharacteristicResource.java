@@ -66,8 +66,6 @@ public class TopicCharacteristicResource {
 		} // end if else
 	}
 
-
-
 	@GET
 	@Path("{topicCharacteristicId}")
 	public TopicCharacteristicPojo get(
