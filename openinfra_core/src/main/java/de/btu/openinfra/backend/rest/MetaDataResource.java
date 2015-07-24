@@ -17,9 +17,8 @@ import de.btu.openinfra.backend.db.daos.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.MetaDataPojo;
 
-//@Path("/projects/{projectId}/metadata")
 @Path(OpenInfraResponseBuilder.REST_URI + "/metadata")
-@Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY, 
+@Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY,
 	MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY})
 public class MetaDataResource {
 
@@ -38,10 +37,10 @@ public class MetaDataResource {
                         PtLocaleDao.forLanguageTag(language),
 						sortOrder,
 						orderBy,
-                        offset, 
+                        offset,
                         size);
     }
-    
+
 	@GET
 	@Path("count")
 	@Produces({MediaType.TEXT_PLAIN})
@@ -63,7 +62,7 @@ public class MetaDataResource {
         return new MetaDataDao(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-                        PtLocaleDao.forLanguageTag(language), 
+                        PtLocaleDao.forLanguageTag(language),
                         metaDataId);
     }
 
