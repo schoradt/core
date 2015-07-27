@@ -102,7 +102,7 @@ public class TopicCharacteristicResource {
 	@GET
     @Path("{topicCharacteristicId}/attributetypegroups/count")
     @Produces({MediaType.TEXT_PLAIN})
-    public long getCharacterCodeCount(
+    public long getAttributeTypeGroupCount(
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema,
             @PathParam("topicCharacteristicId") UUID topicCharacteristicId) {
@@ -177,7 +177,7 @@ public class TopicCharacteristicResource {
 	@GET
 	@Path("{topicCharacteristicId}/relationshiptypes/count")
 	@Produces({MediaType.TEXT_PLAIN})
-	public long getAttributeTypeGroupCount(
+	public long getRelationshipTypeCount(
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@PathParam("topicCharacteristicId") UUID topicCharacteristicId) {

@@ -155,7 +155,7 @@ public class AttributeTypeGroupResource {
 	@GET
     @Path("{attributeTypeGroupId}/topiccharacteristics/count")
     @Produces({MediaType.TEXT_PLAIN})
-    public long getCharacterCodeCount(
+    public long getTopicCharacteristicCount(
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema,
             @PathParam("attributeTypeGroupId") UUID attributeTypeGroupId) {
