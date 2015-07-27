@@ -24,7 +24,7 @@
 		<a href="${requestUrl}.pdf?language=${language}" target="_blank">
 			<i style="cursor: pointer;" class="fa fa-file-pdf-o fa-lg" title="PDF"></i>
 		</a>
-		<a href="#" target="_blank">
+		<a href="${requestUrl}.csv?language=${language}">
 			<i style="cursor: pointer;" class="fa fa-file-text-o fa-lg" title="CSV"></i>
 		</a>
 	</div>
@@ -264,6 +264,11 @@
 
 <!-- Accordion: http://bootsnipp.com/snippets/featured/accordion-menu -->
 <div class="col-md-4">
+		<div id="parents">
+			<fmt:message key="please.wait.label"/>
+			<img style="width: 40%;" src="${contextPath}/img/url.gif"/>
+		</div>
+		<br/>
 	<div id="sidebar">
 		<p>
 			<c:set var="currentInstance" value="${it.topicInstance.uuid}"/>
@@ -345,8 +350,10 @@ $(document).ready(function() {
 	var params = window.location.href.substr(window.location.href.lastIndexOf('?'));
 	var url = window.location.href.substr(0,window.location.href.lastIndexOf('/'));
 	var ass = url + "/associations" + params;
-	
-	$("#sidebar").load(ass + ' #accordion');
+	var pp = url + "/parents" + params;
+
+	$("#sidebar").load(ass + '#accordion');
+	$("#parents").load(pp + '#parents');
 	
 	// ***** Datepicker *****
 	$('.input-group.date').datepicker({
@@ -382,13 +389,13 @@ $(document).ready(function() {
 				}
 				
 				if (geojson) {
-					initFeaturePreview(geojson);
+					initFeaturePreview(data.topicInstance, geojson);
 				}
 			});
 		});
 	});
 	
-	function initFeaturePreview(geojsonStr) {
+	function initFeaturePreview(instance, geojsonStr) {
 		var map = new OpenLayers.Map("map", {	
 				theme: null,
 				projection: "EPSG:900913",							// sperical mercator
@@ -420,7 +427,8 @@ $(document).ready(function() {
         
         // bind click handler to redirect to map
         $('#map').click(function() {
-        	window.open("${contextPath}/rest/projects/maps", "_blank");
+        	var qParams = "?tc=" + instance.topicCharacteristic.uuid + "&ti=" + instance.uuid
+        	window.open("${contextPath}/rest/projects/maps" + qParams, "_blank");
         });
 	};
 	

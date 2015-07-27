@@ -1,5 +1,8 @@
 package de.btu.openinfra.backend.db.daos;
 
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -36,6 +39,56 @@ public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
 				TopicInstanceXTopicInstance.class,
 				TopicInstance.class, TopicInstance.class);
 	}
+	
+	public List<TopicInstanceAssociationPojo> readParents(
+			Locale locale, UUID self) {
+		
+		TopicInstanceDao ti = 
+				new TopicInstanceDao(currentProjectId, schema);
+		
+		List<TopicInstanceAssociationPojo> parents = 
+				new LinkedList<TopicInstanceAssociationPojo>();
+		
+		TopicInstanceXTopicInstance parent = readParent(locale, self);
+				
+		while(true) {
+			if(parent != null) {
+				parents.add(
+						new TopicInstanceAssociationPojo(
+								ti.mapToPojo(
+										locale, 
+										parent.getTopicInstance1Bean()),
+								RelationshipTypeDao.mapToPojoStatically(
+										locale, 
+										parent.getRelationshipType())));			
+				parent = readParent(
+						locale, 
+						parent.getTopicInstance1Bean().getId());
+			} else {
+				break;
+			} // end if else
+		} // end while
+		
+		Collections.reverse(parents);
+		return parents;
+	}
+	
+	private TopicInstanceXTopicInstance readParent(Locale locale, UUID self) {
+		List<TopicInstanceXTopicInstance> txt = 
+				em.createNamedQuery(
+						"TopicInstanceXTopicInstance.findParent", 
+						TopicInstanceXTopicInstance.class)
+						.setParameter(
+								"self", 
+								em.find(TopicInstance.class, self))
+						.getResultList();
+		if(txt != null && txt.size() > 0) {
+			return txt.get(0);
+		} else {
+			return null;
+		}
+	}
+	
 
 	@Override
 	public TopicInstanceAssociationPojo mapToPojo(

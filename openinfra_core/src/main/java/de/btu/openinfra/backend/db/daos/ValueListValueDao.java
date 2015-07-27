@@ -7,9 +7,8 @@ import java.util.UUID;
 
 import de.btu.openinfra.backend.db.jpa.model.ValueList;
 import de.btu.openinfra.backend.db.jpa.model.ValueListValue;
-import de.btu.openinfra.backend.db.pojos.DescriptionPojo;
 import de.btu.openinfra.backend.db.pojos.LocalizedString;
-import de.btu.openinfra.backend.db.pojos.NamePojo;
+import de.btu.openinfra.backend.db.pojos.PtFreeTextPojo;
 import de.btu.openinfra.backend.db.pojos.ValueListValuePojo;
 
 /**
@@ -53,10 +52,10 @@ public class ValueListValueDao
 			ValueListValuePojo vlvPojo = new ValueListValuePojo();
 			vlvPojo.setUuid(vlv.getId());
 			vlvPojo.setVisibility(vlv.getVisibility());
-			vlvPojo.setDescriptions(DescriptionDao.mapToPojoStatically(
+			vlvPojo.setDescriptions(PtFreeTextDao.mapToPojoStatically(
 					locale,
 					vlv.getPtFreeText1()));
-			vlvPojo.setNames(NameDao.mapToPojoStatically(
+			vlvPojo.setNames(PtFreeTextDao.mapToPojoStatically(
 					locale,
 					vlv.getPtFreeText2()));
 			vlvPojo.setBelongsToValueList(
@@ -74,17 +73,16 @@ public class ValueListValueDao
 
 	    // return null if the pojo is null
         if (pojo != null) {
+        	PtFreeTextDao ptfDao =
+        			new PtFreeTextDao(currentProjectId, schema);
             // set the description (is optional)
             if (pojo.getDescriptions() != null) {
-                vlv.setPtFreeText1(new DescriptionDao(
-                        currentProjectId,
-                        schema).getPtFreeTextModel(pojo.getDescriptions()));
+                vlv.setPtFreeText1(
+                		ptfDao.getPtFreeTextModel(pojo.getDescriptions()));
             }
 
             // set the name
-            vlv.setPtFreeText2(new NameDao(
-                    currentProjectId,
-                    schema).getPtFreeTextModel(pojo.getNames()));
+            vlv.setPtFreeText2(ptfDao.getPtFreeTextModel(pojo.getNames()));
 
             // set the value list the value belongs to
             if (pojo.getBelongsToValueList() != null) {
@@ -110,7 +108,7 @@ public class ValueListValueDao
      * @param locale the locale the informations should be saved at
      * @return       the ValueListValuePojo
      */
-    public ValueListValuePojo createEmptyShell(Locale locale) {
+    public ValueListValuePojo newAttributeValueValues(Locale locale) {
         // create the return pojo
         ValueListValuePojo pojo = new ValueListValuePojo();
 
@@ -128,10 +126,10 @@ public class ValueListValueDao
         lcs.add(ls);
 
         // add the localized string for the name
-        pojo.setNames(new NamePojo(lcs, null));
+        pojo.setNames(new PtFreeTextPojo(lcs, null));
 
         // add the localized string for the description
-        pojo.setDescriptions(new DescriptionPojo(lcs, null));
+        pojo.setDescriptions(new PtFreeTextPojo(lcs, null));
 
         // set the initial visibility
         pojo.setVisibility(true);

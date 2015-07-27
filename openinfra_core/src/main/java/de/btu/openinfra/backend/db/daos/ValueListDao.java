@@ -6,9 +6,8 @@ import java.util.Locale;
 import java.util.UUID;
 
 import de.btu.openinfra.backend.db.jpa.model.ValueList;
-import de.btu.openinfra.backend.db.pojos.DescriptionPojo;
 import de.btu.openinfra.backend.db.pojos.LocalizedString;
-import de.btu.openinfra.backend.db.pojos.NamePojo;
+import de.btu.openinfra.backend.db.pojos.PtFreeTextPojo;
 import de.btu.openinfra.backend.db.pojos.ValueListPojo;
 
 /**
@@ -42,10 +41,10 @@ public class ValueListDao extends OpenInfraDao<ValueListPojo, ValueList> {
 			ValueList vl) {
 		if(vl != null) {
 			ValueListPojo vlPojo = new ValueListPojo();
-			vlPojo.setNames(NameDao.mapToPojoStatically(
+			vlPojo.setNames(PtFreeTextDao.mapToPojoStatically(
 					locale,
 					vl.getPtFreeText2()));
-			vlPojo.setDescriptions(DescriptionDao.mapToPojoStatically(
+			vlPojo.setDescriptions(PtFreeTextDao.mapToPojoStatically(
 					locale,
 					vl.getPtFreeText1()));
 			vlPojo.setUuid(vl.getId());
@@ -62,11 +61,12 @@ public class ValueListDao extends OpenInfraDao<ValueListPojo, ValueList> {
 
 	    // return null if the pojo is null
         if(pojo != null) {
+        	PtFreeTextDao ptfDao = 
+        			new PtFreeTextDao(currentProjectId, schema);
             // set the description (is optional)
             if (pojo.getDescriptions() != null) {
-                vl.setPtFreeText1(new DescriptionDao(
-                        currentProjectId,
-                        schema).getPtFreeTextModel(pojo.getDescriptions()));
+                vl.setPtFreeText1(
+                		ptfDao.getPtFreeTextModel(pojo.getDescriptions()));
             }
 
             // in case the name is empty
@@ -76,9 +76,7 @@ public class ValueListDao extends OpenInfraDao<ValueListPojo, ValueList> {
             }
 
             // set the name
-            vl.setPtFreeText2(new NameDao(
-                    currentProjectId,
-                    schema).getPtFreeTextModel(pojo.getNames()));
+            vl.setPtFreeText2(ptfDao.getPtFreeTextModel(pojo.getNames()));
 
             // return the model as mapping result
             return new MappingResult<ValueList>(vl.getId(), vl);
@@ -112,10 +110,10 @@ public class ValueListDao extends OpenInfraDao<ValueListPojo, ValueList> {
         lcs.add(ls);
 
         // add the localized string for the name
-        pojo.setNames(new NamePojo(lcs, null));
+        pojo.setNames(new PtFreeTextPojo(lcs, null));
 
         // add the localized string for the description
-        pojo.setDescriptions(new DescriptionPojo(lcs, null));
+        pojo.setDescriptions(new PtFreeTextPojo(lcs, null));
 
         return pojo;
 	}

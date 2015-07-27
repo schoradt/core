@@ -11,15 +11,14 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import de.btu.openinfra.backend.db.daos.MetaDataDao;
-import de.btu.openinfra.backend.db.daos.OpenInfraOrderBy;
+import de.btu.openinfra.backend.db.daos.OpenInfraOrderByEnum;
 import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.MetaDataPojo;
 
-//@Path("/projects/{projectId}/metadata")
 @Path(OpenInfraResponseBuilder.REST_URI + "/metadata")
-@Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY, 
+@Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY,
 	MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY})
 public class MetaDataResource {
 
@@ -29,7 +28,7 @@ public class MetaDataResource {
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema,
 			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
-			@QueryParam("orderBy") OpenInfraOrderBy orderBy,
+			@QueryParam("orderBy") OpenInfraOrderByEnum orderBy,
             @QueryParam("offset") int offset,
             @QueryParam("size") int size) {
         return new MetaDataDao(
@@ -38,10 +37,10 @@ public class MetaDataResource {
                         PtLocaleDao.forLanguageTag(language),
 						sortOrder,
 						orderBy,
-                        offset, 
+                        offset,
                         size);
     }
-    
+
 	@GET
 	@Path("count")
 	@Produces({MediaType.TEXT_PLAIN})
@@ -63,7 +62,7 @@ public class MetaDataResource {
         return new MetaDataDao(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-                        PtLocaleDao.forLanguageTag(language), 
+                        PtLocaleDao.forLanguageTag(language),
                         metaDataId);
     }
 

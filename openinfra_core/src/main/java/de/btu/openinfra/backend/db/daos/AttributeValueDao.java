@@ -1,6 +1,5 @@
 package de.btu.openinfra.backend.db.daos;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -22,9 +21,8 @@ import de.btu.openinfra.backend.db.pojos.AttributeValueGeomzPojo;
 import de.btu.openinfra.backend.db.pojos.AttributeValuePojo;
 import de.btu.openinfra.backend.db.pojos.AttributeValueValuePojo;
 import de.btu.openinfra.backend.db.pojos.LocalizedString;
-import de.btu.openinfra.backend.db.pojos.NamePojo;
+import de.btu.openinfra.backend.db.pojos.PtFreeTextPojo;
 import de.btu.openinfra.backend.db.pojos.ValueListValuePojo;
-import de.btu.openinfra.backend.db.pojos.ValuePojo;
 
 /**
  * This class represents the AttributeValue and is used to access the underlying
@@ -144,10 +142,13 @@ public class AttributeValueDao extends OpenInfraValueDao<AttributeValuePojo,
 			// 4.c This is a specific query which must be implemented
 			//     dynamically
 			case ATTRIBUTE_VALUE_GEOM:
-				// We create a fake geom object and set the id of this object
-				// in order to provide the required geom object.
+				// We create a fake geom object and set the properties of this
+			    // object in order to provide the required geom object.
 				AttributeValueGeom avg = new AttributeValueGeom();
 				avg.setId(id);
+				avg.setTopicInstance(av.getTopicInstance());
+                avg.setAttributeTypeToAttributeTypeGroup(
+                        av.getAttributeTypeToAttributeTypeGroup());
 				avPojo.setAttributeValueGeom(
 						new AttributeValueGeomDao(
 								currentProjectId,
@@ -158,10 +159,13 @@ public class AttributeValueDao extends OpenInfraValueDao<AttributeValuePojo,
 			// 4.c This is a specific query which must be implemented
 			//     dynamically
 			case ATTRIBUTE_VALUE_GEOMZ:
-				// We create a fake geom object and set the id of this object
-				// in order to provide the required geom object.
+				// We create a fake geom object and set the properties of this
+                // object in order to provide the required geom object.
 				AttributeValueGeomz avgz = new AttributeValueGeomz();
 				avgz.setId(id);
+				avgz.setTopicInstance(av.getTopicInstance());
+				avgz.setAttributeTypeToAttributeTypeGroup(
+				        av.getAttributeTypeToAttributeTypeGroup());
 				avPojo.setAttributeValueGeomz(
 						new AttributeValueGeomzDao(
 								currentProjectId,
@@ -211,101 +215,15 @@ public class AttributeValueDao extends OpenInfraValueDao<AttributeValuePojo,
 	public MappingResult<AttributeValue> mapToModel(
 			AttributeValuePojo pojo,
 			AttributeValue av) {
-		// 1. Select the current value type
-		switch (pojo.getAttributeValueType()) {
-		case ATTRIBUTE_VALUE_VALUE:
-		    // set the topic instance
-			av.setTopicInstance(em.find(
-					TopicInstance.class,
-					pojo.getAttributeValueValue().getTopicInstanceId()));
-
-			// create a list with all attribute value values
-			List<AttributeValueValue> avvList =
-					av.getTopicInstance().getAttributeValueValues();
-
-			// create an iterator for this list
-			Iterator<AttributeValueValue> avvIt = avvList.iterator();
-
-			// 2. Iterate over all values and remove the current attribute value
-			//    from list (if it belongs to the list)
-			while(avvIt.hasNext()) {
-				AttributeValueValue avv = avvIt.next();
-				if(avv.getId().equals(
-						pojo.getAttributeValueValue().getUuid())) {
-					avvList.remove(avv);
-					break;
-				} // end if
-			} // end while
-			AttributeValueValueDao avvd = new AttributeValueValueDao(
-					currentProjectId,
-					schema);
-			// add the new value to the list
-			avvList.add(avvd.mapToModel(
-							pojo.getAttributeValueValue(),
-							avvd.createModelObject(
-									pojo.getAttributeValueValue().getUuid()))
-									.getModelObject());
-
-			// add the values to the model
-			av.getTopicInstance().setAttributeValueValues(avvList);
-			break;
-
-		case ATTRIBUTE_VALUE_GEOM:
-		    System.out.println(pojo.getAttributeValueType() + " not implemented yet (AttributeValueDao.mapToModel");
-		    // TODO The mapping from string to geometry is not possible.
-		    /*
-		    // set the topic instance
-		    av.setTopicInstance(em.find(
-                    TopicInstance.class,
-                    pojo.getAttributeValueGeom().getTopicInstanceId()));
-
-		    // create a list with all attribute value values
-            List<AttributeValueGeom> avgList =
-                    av.getTopicInstance().getAttributeValueGeoms();
-
-            // create an iterator for this list
-            Iterator<AttributeValueGeom> avgIt = avgList.iterator();
-
-            // 2. Iterate over all values and remove the current attribute value
-            //    from list (if it belongs to the list)
-            while(avgIt.hasNext()) {
-                AttributeValueGeom avg = avgIt.next();
-                if(avg.getId().equals(
-                        pojo.getAttributeValueGeom().getUuid())) {
-                    avgList.remove(avg);
-                    break;
-                } // end if
-            } // end while
-            AttributeValueGeomDao avgd = new AttributeValueGeomDao(
-                    currentProjectId,
-                    schema);
-            // add the new value to the list
-            avgList.add(avgd.mapToModel(
-                            pojo.getAttributeValueGeom(),
-                            avgd.createModelObject(
-                                    pojo.getAttributeValueGeom().getUuid()))
-                                    .getModelObject());
-
-            // add the values to the model
-            av.getTopicInstance().setAttributeValueGeoms(avgList);
-            */
-            break;
-
-		case ATTRIBUTE_VALUE_GEOMZ:
-            System.out.println(pojo.getAttributeValueType() + " not implemented yet (AttributeValueDao.mapToModel");
-            break;
-		case ATTRIBUTE_VALUE_DOMAIN:
-            System.out.println(pojo.getAttributeValueType() + " not implemented yet (AttributeValueDao.mapToModel");
-            break;
-		default:
-			break;
-		}
-
-		// 3. Create the mapping result
-		MappingResult<AttributeValue> mr = new MappingResult<AttributeValue>();
-		mr.setId(pojo.getUuid());
-		mr.setModelObject(av);
-		return mr;
+	    /*
+	     * This method is not required in this content because the table
+	     * attribute_value can not be written directly. Further the
+	     * attributeValuePojo is a container for the different attributeValue
+	     * types. The logic of this method is distributed to the different
+	     * mapToModel methods of the attributeValue types. See
+	     * distributeTypes().
+	     */
+		return null;
 
 	}
 
@@ -319,7 +237,7 @@ public class AttributeValueDao extends OpenInfraValueDao<AttributeValuePojo,
 	 * @param locale          the locale the informations should be saved at
 	 * @return                the AttributeValuePojo
 	 */
-	public AttributeValuePojo createEmptyShell(
+	public AttributeValuePojo newAttributeValue(
 	        UUID topicInstanceId,
 	        UUID attributeTypeId,
 	        Locale locale) {
@@ -397,10 +315,10 @@ public class AttributeValueDao extends OpenInfraValueDao<AttributeValuePojo,
             avdP.setTopicInstanceId(topicInstanceId);
             // create the value list value object with an empty string
             ValueListValuePojo vlv = new ValueListValuePojo();
-            NamePojo np = new NamePojo();
-            np.setLocalizedStrings(lcs);
-            vlv.setNames(np);
+            vlv.setNames(new PtFreeTextPojo(lcs, null));
             avdP.setDomain(vlv);
+            // set the attribute type to attribute type group id
+            avdP.setAttributeTypeToAttributeTypeGroupId(ataId);
 
             // add the attribute value domain object to the return container
             pojo.setAttributeValueDomain(avdP);
@@ -416,7 +334,7 @@ public class AttributeValueDao extends OpenInfraValueDao<AttributeValuePojo,
                 avgP.setAttributeTypeToAttributeTypeGroupId(ataId);
                 // add an empty value
                 avgP.setGeom("");
-                System.out.println("ID: " + ataId);
+
                 // add the attribute value geom object to the return container
                 pojo.setAttributeValueGeom(avgP);
                 break;
@@ -441,9 +359,7 @@ public class AttributeValueDao extends OpenInfraValueDao<AttributeValuePojo,
                 // set the attribute type to attribute type group id
                 avvP.setAttributeTypeToAttributeTypeGroupId(ataId);
                 // add an empty value object
-                ValuePojo vp = new ValuePojo();
-                vp.setLocalizedStrings(lcs);
-                avvP.setValue(vp);
+                avvP.setValue(new PtFreeTextPojo(lcs, null));
 
                 // add the attribute value geomz object to the return container
                 pojo.setAttributeValueValue(avvP);
@@ -452,6 +368,66 @@ public class AttributeValueDao extends OpenInfraValueDao<AttributeValuePojo,
 	    }
 
 	    return pojo;
+	}
+
+	/**
+	 * It is not possible to write the AttributeValue directly because of a
+     * constraint. The appropriated AttributeValuePojo must be extracted
+     * and distributed separately to their respective createOrUpdate methods.
+     *
+	 * @param pojo
+	 * @param projectId the id of the project
+	 * @return          the UUID of the created or updated object or null if an
+	 *                  error occurs or the geomType is unlike GeoJSON
+	 */
+	public UUID distributeTypes(AttributeValuePojo pojo, UUID projectId) {
+
+	    UUID id = null;
+
+	    // depending on the AttributeValueType we must distribute the objects
+	    // to their respective createOrUpdate method
+	    switch (pojo.getAttributeValueType()) {
+        case ATTRIBUTE_VALUE_DOMAIN:
+            id = new AttributeValueDomainDao(
+                    projectId,
+                    OpenInfraSchemas.PROJECTS).createOrUpdate(
+                            pojo.getAttributeValueDomain());
+            break;
+        case ATTRIBUTE_VALUE_GEOM:
+            // create or update is only available for GEOJSON
+            if (pojo.getAttributeValueGeom().getGeomType()
+                    .equals(AttributeValueGeomType.GEOJSON)) {
+                id = new AttributeValueGeomDao(
+                        projectId,
+                        OpenInfraSchemas.PROJECTS).createOrUpdate(
+                                pojo.getAttributeValueGeom());
+            } else {
+                // return null if the geomType is unlike GeoJSON
+                return null;
+            }
+            break;
+        case ATTRIBUTE_VALUE_GEOMZ:
+            // create or update is only available for GEOJSON
+            if (pojo.getAttributeValueGeomz().getGeomType()
+                    .equals(AttributeValueGeomType.GEOJSON)) {
+                id = new AttributeValueGeomzDao(
+                        projectId,
+                        OpenInfraSchemas.PROJECTS).createOrUpdate(
+                                pojo.getAttributeValueGeomz());
+            } else {
+                // return null if the geomType is unlike GeoJSON
+                return null;
+            }
+            break;
+        case ATTRIBUTE_VALUE_VALUE:
+             id = new AttributeValueValueDao(
+                    projectId,
+                    OpenInfraSchemas.PROJECTS).createOrUpdate(
+                            pojo.getAttributeValueValue());
+            break;
+        }
+
+	    return id;
 	}
 }
 

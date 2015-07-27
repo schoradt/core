@@ -10,6 +10,7 @@ import java.util.UUID;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 
 import org.eclipse.persistence.jpa.JpaQuery;
 
@@ -21,6 +22,8 @@ import de.btu.openinfra.backend.db.OpenInfraPropertyValues;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
+import de.btu.openinfra.backend.db.pojos.AttributeValueGeomPojo;
+import de.btu.openinfra.backend.db.pojos.AttributeValueGeomzPojo;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 import de.btu.openinfra.backend.db.pojos.meta.ProjectsPojo;
 
@@ -55,6 +58,26 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	 * The currently used schema.
 	 */
 	protected OpenInfraSchemas schema;
+
+	/**
+     * This variable defines the SQL string which is used to insert a new
+     * geometry value into the database.
+     */
+    private static final String GEOM_INSERT_CLAUSE = ""
+            + "INSERT INTO attribute_value_geom%s ("
+            + "attribute_type_to_attribute_type_group_id, "
+            + "topic_instance_id, geom) "
+            + "VALUES (?, ?, %s(?))";
+
+    /**
+     * This variable defines the SQL string which is used to update an existing
+     * geometry value in the database.
+     */
+    private static final String GEOM_UPDATE_CLAUSE = ""
+            + "UPDATE TABLE attribute_value_geom%s SET "
+            + "attribute_type_to_attribute_type_group_id = ?, "
+            + "topic_instance_id = ?, "
+            + "geom = %s(?) WHERE id = ?";
 
 	/**
 	 * This method represents the super constructor in order to create an entity
@@ -160,10 +183,10 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 				OpenInfraApplication.PERSISTENCE_CONTEXT,
 				properties).createEntityManager();
 	}
-	
+
 	/**
-	 * This is the default generic method which provides read access to the 
-	 * selected database schema without sorting. It is almost the same routine 
+	 * This is the default generic method which provides read access to the
+	 * selected database schema without sorting. It is almost the same routine
 	 * for all DAO classes to access the database.
 	 *
      * @param locale     A Java.util locale objects.
@@ -196,12 +219,12 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	 * This is a generic method which provides read access to the selected
 	 * database schema. It is almost the same routine for all DAO classes to
 	 * access the database. If not, this method should be extended in order
-	 * to avoid overrides. Overrides could increase the effort regarding the 
+	 * to avoid overrides. Overrides could increase the effort regarding the
 	 * integration and maintenance of a rights management system.
 	 *
      * Since the system schema doesn't provide the project_id column for topic
      * characteristic objects it is necessary to handle this request separately.
-     * 
+     *
      * The meta data schema is also handled separately.
 	 *
 	 *
@@ -214,10 +237,10 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	 */
 	@SuppressWarnings("unchecked")
     public List<TypePojo> read(
-    		Locale locale, 
+    		Locale locale,
     		OpenInfraSortOrder order,
-    		OpenInfraOrderBy column,
-    		int offset, 
+    		OpenInfraOrderByEnum column,
+    		int offset,
     		int size) {
 		// 1. Define a list which holds the POJO objects
 		List<TypePojo> pojos = new LinkedList<TypePojo>();
@@ -246,7 +269,7 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 			return read(locale, offset, size);
 		} else {
 	        // 5.a Construct the origin SQL-based named query and replace the
-			//    the placeholder by the required column and sort order.
+			//     the placeholder by the required column and sort order.
 	        String sqlString = em.createNamedQuery(
 	        		modelClass.getSimpleName() + ".findAllByLocaleAndOrder")
 	        		.unwrap(JpaQuery.class).getDatabaseQuery().getSQLString();
@@ -307,7 +330,14 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 		EntityTransaction et = em.getTransaction();
 		try {
 			et.begin();
-			em.merge(result.getModelObject());
+			// special handling for geometry classes
+            Query geomQuery = createGeomQuery(pojo);
+            if (geomQuery != null) {
+                // execute the query
+                geomQuery.executeUpdate();
+			} else {
+			    em.merge(result.getModelObject());
+			}
 			et.commit();
 			return result.getId();
 		} catch(RuntimeException ex) {
@@ -316,8 +346,113 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 			} // end if
 			throw ex;
 		} // end try catch
-	}
+    }
 
+	/**
+	 * This special method will create a geometry query for creating or
+	 * updating. Depending on the modelClass different queries will be
+	 * generated.
+	 *
+	 * @param pojo the POJO object which should be stored in the database
+	 * @return     the query or null if the modelClass is not
+	 *             AttributeValueGeom or AttributeValueGeomz
+	 */
+	private Query createGeomQuery(TypePojo pojo) {
+        Query geomQuery = null;
+
+        // handle special cases
+        switch (modelClass.getSimpleName()) {
+        // create the special query for AttributeValueGeomz
+        case "AttributeValueGeomz":
+            if (pojo.getUuid() == null) {
+                // format the prepared INSERT statement
+                String queryString = String.format(
+                        GEOM_INSERT_CLAUSE,
+                        "z",
+                        // set the PostGIS function for the geomType
+                        AttributeValueGeomWriteType.valueOf(
+                                ((AttributeValueGeomzPojo) pojo)
+                                .getGeomType().toString())
+                                .getPsqlFnSignature());
+                geomQuery = em.createNativeQuery(queryString);
+            } else {
+                // TODO: JPA replaces the native query with its own query that
+                // leads to a type error: varchar / geometry
+                // format the prepared UPDATE statement
+                /*
+                String queryString = String.format(
+                        GEOM_UPDATE_CLAUSE,
+                        "z",
+                        // set the PostGIS function for the geomType
+                        AttributeValueGeomWriteType.valueOf(
+                                ((AttributeValueGeomzPojo) pojo)
+                                .getGeomType().toString())
+                                .getPsqlFnSignature());
+                geomQuery = em.createNativeQuery(queryString);
+                // set the id of the entry that should be updated
+                geomQuery.setParameter(4, pojo.getUuid());
+                */
+                System.out.println("currently not working");
+            }
+
+            // set the attributeTypeToAttributeTypeGroup id
+            geomQuery.setParameter(1, ((AttributeValueGeomzPojo) pojo)
+                    .getAttributeTypeToAttributeTypeGroupId());
+            // set the topic instance id
+            geomQuery.setParameter(2, ((AttributeValueGeomzPojo) pojo)
+                    .getTopicInstanceId());
+            // set the geometry value
+            geomQuery.setParameter(3, ((AttributeValueGeomzPojo) pojo)
+                    .getGeom());
+            break;
+        case "AttributeValueGeom":
+            if (pojo.getUuid() == null) {
+                // format the prepared INSERT statement
+                String queryString = String.format(
+                        GEOM_INSERT_CLAUSE,
+                        "",
+                        // set the PostGIS function for the geomType
+                        AttributeValueGeomWriteType.valueOf(
+                                ((AttributeValueGeomPojo) pojo)
+                                .getGeomType().toString())
+                                .getPsqlFnSignature());
+                geomQuery = em.createNativeQuery(queryString);
+            } else {
+                // TODO: JPA replaces the native query with its own query that
+                // leads to a type error: varchar / geometry
+                /*
+                // format the prepared UPDATE statement
+                String queryString = String.format(
+                        GEOM_UPDATE_CLAUSE,
+                        "",
+                        // set the PostGIS function for the geomType
+                        AttributeValueGeomWriteType.valueOf(
+                                ((AttributeValueGeomPojo) pojo)
+                                .getGeomType().toString())
+                                .getPsqlFnSignature());
+                geomQuery = em.createNativeQuery(queryString);
+                // set the id of the entry that should be updated
+                geomQuery.setParameter(4, pojo.getUuid());
+                */
+                System.out.println("currently not working");
+            }
+
+            // set the attributeTypeToAttributeTypeGroup id
+            geomQuery.setParameter(1, ((AttributeValueGeomPojo) pojo)
+                    .getAttributeTypeToAttributeTypeGroupId());
+            // set the topic instance id
+            geomQuery.setParameter(2, ((AttributeValueGeomPojo) pojo)
+                    .getTopicInstanceId());
+            // set the geometry value
+            geomQuery.setParameter(3, ((AttributeValueGeomPojo) pojo)
+                    .getGeom());
+            break;
+        default:
+            // return null if the modelClass is no geometry
+            return null;
+        }
+        return geomQuery;
+	}
 	/**
 	 * This is a generic method which reads a specific pojo object. We decided
 	 * to hide this functionality behind a protected class so that each deriving

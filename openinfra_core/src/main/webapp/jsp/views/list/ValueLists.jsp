@@ -17,7 +17,10 @@
 	<!-- include the menu -->
 	<%@ include file="../../snippets/Menu.jsp" %>
 	
-	<%@ include file="../../snippets/FilterAndOrderBy.jsp" %>
+	<div id="orderAndFilterRow" class="row">
+		<%@ include file="../../snippets/OrderBy.jsp" %>
+		<%@ include file="../../snippets/ResetFilterButton.jsp" %>
+	</div>
 	
 	<div class="panel panel-default">
 		<div class="panel-heading">

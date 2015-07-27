@@ -37,6 +37,10 @@ import javax.persistence.Table;
 			+ "FROM TopicInstanceXTopicInstance t "
 			+ "WHERE t.topicInstance1Bean = :value AND "
 			+ "t.topicInstance2Bean = :value2"),
+	@NamedQuery(name="TopicInstanceXTopicInstance.findParent", 
+			query="SELECT t "
+					+ "FROM TopicInstanceXTopicInstance t "
+					+ "WHERE t.topicInstance2Bean = :self")
 })
 public class TopicInstanceXTopicInstance implements 
 	Serializable, OpenInfraModelObject {
