@@ -51,5 +51,14 @@ public class CountryCodesResource {
 						PtLocaleDao.forLanguageTag(language),
 						countryCodeId);
 	}
+	
+	@GET
+    @Path("count")
+    @Produces({MediaType.TEXT_PLAIN})
+    public long getCountryCodeCount() {
+        return new CountryCodeDao(
+                null,
+                OpenInfraSchemas.SYSTEM).getCount();
+    }
 
 }

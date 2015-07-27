@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import de.btu.openinfra.backend.db.jpa.model.AttributeTypeGroup;
 import de.btu.openinfra.backend.db.jpa.model.AttributeTypeGroupToTopicCharacteristic;
+import de.btu.openinfra.backend.db.jpa.model.MetaData;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
 import de.btu.openinfra.backend.db.pojos.TopicCharacteristicToAttributeTypeGroupPojo;
 
@@ -19,11 +20,6 @@ public class TopicCharacteristicToAttributeTypeGroupDao extends
 	OpenInfraValueValueDao<TopicCharacteristicToAttributeTypeGroupPojo,
 	AttributeTypeGroupToTopicCharacteristic, AttributeTypeGroup,
 	TopicCharacteristic> {
-	
-    /**
-     * Specific dao to call method mapToPojo.
-     */
-	private TopicCharacteristicDao topicCharacteristicDao;
 
 	/**
      * This is the required constructor which calls the super constructor,
@@ -40,9 +36,6 @@ public class TopicCharacteristicToAttributeTypeGroupDao extends
 		super(currentProjectId, schema,
 				AttributeTypeGroupToTopicCharacteristic.class,
 				AttributeTypeGroup.class, TopicCharacteristic.class);
-		
-		topicCharacteristicDao = new TopicCharacteristicDao(currentProjectId,
-			schema);
 	}
 
 	@Override
@@ -56,8 +49,13 @@ public class TopicCharacteristicToAttributeTypeGroupDao extends
 			
 			pojo.setUuid(modelObject.getId());
 			pojo.setTopicCharacteristic(
-				topicCharacteristicDao.mapToPojo(locale,
-					modelObject.getTopicCharacteristic()));
+	                TopicCharacteristicDao.mapToPojoStatically(
+	                        locale,
+	                        modelObject.getTopicCharacteristic(),
+	                        em.find(
+	                                MetaData.class,
+	                                modelObject.getTopicCharacteristic(
+	                                        ).getId())));
 			pojo.setAttributTypeGroupId(
 				modelObject.getAttributeTypeGroup().getId());
 			pojo.setMultiplicity(MultiplicityDao.mapToPojoStatically(

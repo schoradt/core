@@ -25,7 +25,13 @@ import javax.persistence.Table;
 	@NamedQuery(name="AttributeValue.findByTopicInstance",
 			query="SELECT a "
 					+ "FROM AttributeValue a "
-					+ "WHERE a.topicInstance = :value")
+					+ "WHERE a.topicInstance = :value"),
+	@NamedQuery(name="AttributeValue.findByTopicInstanceAndAttributeType",
+    query="SELECT a "
+            + "FROM AttributeValue a, AttributeTypeToAttributeTypeGroup ag "
+            + "WHERE a.topicInstance = :value AND "
+            + "a.attributeTypeToAttributeTypeGroup = ag AND "
+            + "ag.attributeType = :value2")
 })
 public class AttributeValue implements Serializable, OpenInfraModelObject {
 	private static final long serialVersionUID = 1L;
@@ -46,7 +52,8 @@ public class AttributeValue implements Serializable, OpenInfraModelObject {
 	public AttributeValue() {
 	}
 
-	public UUID getId() {
+	@Override
+    public UUID getId() {
 		return this.id;
 	}
 

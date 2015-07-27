@@ -98,6 +98,19 @@ public class TopicCharacteristicResource {
 						offset,
 						size);
 	}
+	
+	@GET
+    @Path("{topicCharacteristicId}/attributetypegroups/count")
+    @Produces({MediaType.TEXT_PLAIN})
+    public long getAttributeTypeGroupCount(
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            @PathParam("topicCharacteristicId") UUID topicCharacteristicId) {
+        return new AttributeTypeGroupToTopicCharacteristicDao(
+                projectId,
+                OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
+                        topicCharacteristicId);
+    }
 
 	@GET
 	@Path("{topicCharacteristicId}/attributetypegroups/"
@@ -164,7 +177,7 @@ public class TopicCharacteristicResource {
 	@GET
 	@Path("{topicCharacteristicId}/relationshiptypes/count")
 	@Produces({MediaType.TEXT_PLAIN})
-	public long getAttributeTypeGroupCount(
+	public long getRelationshipTypeCount(
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@PathParam("topicCharacteristicId") UUID topicCharacteristicId) {
