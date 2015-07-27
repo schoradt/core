@@ -51,7 +51,13 @@ import javax.persistence.Table;
 	                + "countByAttributeTypeGroup",
 	        query="SELECT COUNT(a) "
 	                + "FROM AttributeTypeGroupToTopicCharacteristic a "
-	                + "WHERE a.attributeTypeGroup = :value")
+	                + "WHERE a.attributeTypeGroup = :value"),
+	@NamedQuery(
+            name="AttributeTypeGroupToTopicCharacteristic."
+                    + "countByTopicCharacteristic",
+            query="SELECT COUNT(a) "
+                    + "FROM AttributeTypeGroupToTopicCharacteristic a "
+                    + "WHERE a.topicCharacteristic = :value")
 })
 
 public class AttributeTypeGroupToTopicCharacteristic implements 
