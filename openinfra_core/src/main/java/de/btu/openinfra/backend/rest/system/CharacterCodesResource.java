@@ -57,6 +57,13 @@ public class CharacterCodesResource {
 						PtLocaleDao.forLanguageTag(language),
 						characterCodeId);
 	}
-
 	
+	@GET
+    @Path("count")
+    @Produces({MediaType.TEXT_PLAIN})
+    public long getCharacterCodeCount() {
+        return new CharacterCodeDao(
+                null,
+                OpenInfraSchemas.SYSTEM).getCount();
+	}
 }
