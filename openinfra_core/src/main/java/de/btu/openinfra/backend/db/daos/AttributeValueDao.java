@@ -31,8 +31,9 @@ import de.btu.openinfra.backend.db.pojos.ValueListValuePojo;
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
  */
-public class AttributeValueDao extends OpenInfraValueDao<AttributeValuePojo,
-	AttributeValue, TopicInstance> {
+public class AttributeValueDao extends 
+    OpenInfraValueValueDao<AttributeValuePojo,
+	    AttributeValue, TopicInstance, AttributeType> {
 
 	/**
 	 * This variable defines the default geometry type. The default type is
@@ -63,7 +64,7 @@ public class AttributeValueDao extends OpenInfraValueDao<AttributeValuePojo,
 			UUID currentProjectId,
 			OpenInfraSchemas schema) {
 		super(currentProjectId, schema,
-				AttributeValue.class, TopicInstance.class);
+				AttributeValue.class, TopicInstance.class, AttributeType.class);
 	}
 
 	/**
@@ -80,7 +81,7 @@ public class AttributeValueDao extends OpenInfraValueDao<AttributeValuePojo,
 			OpenInfraSchemas schema,
 			AttributeValueGeomType geomType) {
 		super(currentProjectId, schema,
-				AttributeValue.class, TopicInstance.class);
+				AttributeValue.class, TopicInstance.class, AttributeType.class);
 		if(geomType != null) {
 			defaultGeomType = geomType;
 		} // end if

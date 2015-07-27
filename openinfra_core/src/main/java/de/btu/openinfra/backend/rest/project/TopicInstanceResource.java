@@ -126,6 +126,25 @@ public class TopicInstanceResource {
                         attributeTypeId,
                         PtLocaleDao.forLanguageTag(language));
     }
+	
+	@GET
+    @Path("/{topicInstanceId}/attributetypes/{attributeTypeId}/attributevalues")
+    public List<AttributeValuePojo> getAttributeValues(
+            @QueryParam("language") String language,
+            @PathParam("projectId") UUID projectId,
+            @PathParam("topicInstanceId") UUID topicInstanceId,
+            @PathParam("attributeTypeId") UUID attributeTypeId,
+            @QueryParam("offset") int offset, 
+            @QueryParam("size") int size) {
+        return new AttributeValueDao(
+                projectId,
+                OpenInfraSchemas.PROJECTS).read(
+                        PtLocaleDao.forLanguageTag(language),
+                        topicInstanceId,
+                        attributeTypeId,
+                        offset,
+                        size);
+    }
 
 	@GET
     @Path("{topicInstanceId}/topic")
