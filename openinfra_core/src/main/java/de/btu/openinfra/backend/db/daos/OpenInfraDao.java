@@ -331,10 +331,13 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 		try {
 			et.begin();
 			// special handling for geometry classes
-            Query geomQuery = createGeomQuery(pojo);
-            if (geomQuery != null) {
-                // execute the query
-                geomQuery.executeUpdate();
+			if (modelClass.getSimpleName() == "AttributeValueGeom" ||
+			        modelClass.getSimpleName() == "AttributeValueGeomz") {
+                Query geomQuery = createGeomQuery(pojo);
+                if (geomQuery != null) {
+                    // execute the query
+                    geomQuery.executeUpdate();
+                }
 			} else {
 			    em.merge(result.getModelObject());
 			}
@@ -448,7 +451,8 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
                     .getGeom());
             break;
         default:
-            // return null if the modelClass is no geometry
+            // return null if the modelClass is no geometry, this should never
+            // happen
             return null;
         }
         return geomQuery;
