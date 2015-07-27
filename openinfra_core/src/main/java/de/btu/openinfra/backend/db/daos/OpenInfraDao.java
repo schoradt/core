@@ -180,8 +180,8 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 				url + currentSchema);
 		// 4. Create the final entity manager
 		em = Persistence.createEntityManagerFactory(
-				OpenInfraApplication.PERSISTENCE_CONTEXT,
-				properties).createEntityManager();
+		        OpenInfraApplication.PERSISTENCE_CONTEXT,
+		        properties).createEntityManager();
 	}
 
 	/**
