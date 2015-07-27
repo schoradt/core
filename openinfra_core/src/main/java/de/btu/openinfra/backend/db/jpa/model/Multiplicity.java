@@ -7,6 +7,7 @@ import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
@@ -16,7 +17,13 @@ import javax.persistence.OneToMany;
  * 
  */
 @Entity
-@NamedQuery(name="Multiplicity.findAll", query="SELECT m FROM Multiplicity m")
+
+@NamedQueries({
+    @NamedQuery(name="Multiplicity.count",
+        query="SELECT COUNT(m) FROM Multiplicity m "),
+    @NamedQuery(name="Multiplicity.findAll",
+        query="SELECT m FROM Multiplicity m")
+})
 public class Multiplicity implements Serializable, OpenInfraModelObject {
 	private static final long serialVersionUID = 1L;
 
@@ -44,7 +51,8 @@ public class Multiplicity implements Serializable, OpenInfraModelObject {
 	public Multiplicity() {
 	}
 
-	public UUID getId() {
+	@Override
+    public UUID getId() {
 		return this.id;
 	}
 

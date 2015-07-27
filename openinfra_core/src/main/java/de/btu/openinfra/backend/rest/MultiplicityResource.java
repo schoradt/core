@@ -46,6 +46,17 @@ public class MultiplicityResource {
 						offset,
 						size);
 	}
+	
+	@GET
+    @Path("count")
+    @Produces({MediaType.TEXT_PLAIN})
+    public long getValueListsCount(
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema) {
+        return new MultiplicityDao(
+                projectId,
+                OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount();
+    }
 
 	@GET
 	@Path("{multiplicityId}")
