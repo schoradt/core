@@ -28,7 +28,6 @@ public class TopicCharacteristicResource {
 	public List<TopicInstancePojo> getTopicInstancesView(
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
-			@PathParam("schema") String schema,
 			@PathParam("topicCharacteristicId") UUID topicCharacteristicId,
 			@QueryParam("filter") String filter,
 			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
@@ -37,7 +36,7 @@ public class TopicCharacteristicResource {
 			@QueryParam("size") int size) {
 		return new de.btu.openinfra.backend.rest.project.
 		        TopicCharacteristicResource().getTopicInstances(
-		                language, projectId, schema, topicCharacteristicId,
+		                language, projectId, topicCharacteristicId,
 		                filter, sortOrder, orderBy, offset, size);
 	}
 }
