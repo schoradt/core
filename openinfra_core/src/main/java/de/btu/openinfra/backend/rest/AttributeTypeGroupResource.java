@@ -153,6 +153,19 @@ public class AttributeTypeGroupResource {
 	}
 	
 	@GET
+    @Path("{attributeTypeGroupId}/topiccharacteristics/count")
+    @Produces({MediaType.TEXT_PLAIN})
+    public long getTopicCharacteristicCount(
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            @PathParam("attributeTypeGroupId") UUID attributeTypeGroupId) {
+	    return new TopicCharacteristicToAttributeTypeGroupDao(
+                projectId,
+                OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
+                        attributeTypeGroupId);
+    }
+	
+	@GET
 	@Path("{attributeTypeGroupId}/topiccharacteristics/{topicCharacteristicId}")	
 	public List<TopicCharacteristicToAttributeTypeGroupPojo> 
 		getTopicCharacteristics(

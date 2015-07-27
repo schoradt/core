@@ -24,7 +24,9 @@ import javax.persistence.Table;
 		query="SELECT l FROM LanguageCode l"),
 	@NamedQuery(name="LanguageCode.findByString",
 		query="SELECT l FROM LanguageCode l "
-				+ "WHERE l.languageCode = :value")
+				+ "WHERE l.languageCode = :value"),
+	@NamedQuery(name="LanguageCode.count",
+        query="SELECT COUNT(l) FROM LanguageCode l ")
 })
 public class LanguageCode implements Serializable, OpenInfraModelObject {
 	private static final long serialVersionUID = 1L;
@@ -42,7 +44,8 @@ public class LanguageCode implements Serializable, OpenInfraModelObject {
 	public LanguageCode() {
 	}
 
-	public UUID getId() {
+	@Override
+    public UUID getId() {
 		return this.id;
 	}
 

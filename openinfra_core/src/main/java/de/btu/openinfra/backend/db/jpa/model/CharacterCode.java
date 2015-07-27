@@ -7,6 +7,7 @@ import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -18,7 +19,13 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="character_code")
-@NamedQuery(name="CharacterCode.findAll", query="SELECT c FROM CharacterCode c")
+
+@NamedQueries({
+    @NamedQuery(name="CharacterCode.findAll",
+            query="SELECT c FROM CharacterCode c"),
+    @NamedQuery(name="CharacterCode.count",
+            query="SELECT COUNT(c) FROM CharacterCode c ")
+})
 public class CharacterCode implements Serializable, OpenInfraModelObject {
 	private static final long serialVersionUID = 1L;
 
@@ -35,7 +42,8 @@ public class CharacterCode implements Serializable, OpenInfraModelObject {
 	public CharacterCode() {
 	}
 
-	public UUID getId() {
+	@Override
+    public UUID getId() {
 		return this.id;
 	}
 

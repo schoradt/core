@@ -57,5 +57,14 @@ public class LanguageCodesResource {
 						PtLocaleDao.forLanguageTag(language),
 						languageCodeId);
 	}
+	
+	@GET
+    @Path("count")
+    @Produces({MediaType.TEXT_PLAIN})
+    public long getLanguageCodeCount() {
+        return new LanguageCodeDao(
+                null,
+                OpenInfraSchemas.SYSTEM).getCount();
+    }
 
 }
