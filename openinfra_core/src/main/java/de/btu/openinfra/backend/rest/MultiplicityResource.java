@@ -50,7 +50,7 @@ public class MultiplicityResource {
 	@GET
     @Path("count")
     @Produces({MediaType.TEXT_PLAIN})
-    public long getValueListsCount(
+    public long getMultiplicityCount(
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema) {
         return new MultiplicityDao(
