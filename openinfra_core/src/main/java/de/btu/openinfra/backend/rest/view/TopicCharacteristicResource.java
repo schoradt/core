@@ -16,7 +16,6 @@ import de.btu.openinfra.backend.db.daos.OpenInfraOrderByEnum;
 import de.btu.openinfra.backend.db.daos.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupToTopicCharacteristicPojo;
 import de.btu.openinfra.backend.db.pojos.TopicCharacteristicPojo;
-import de.btu.openinfra.backend.db.pojos.TopicInstancePojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
 @Path(OpenInfraResponseBuilder.REST_URI + "/topiccharacteristics")
@@ -51,25 +50,6 @@ public class TopicCharacteristicResource {
 			@PathParam("topicCharacteristicId") UUID topicCharacteristicId) {
 		return new de.btu.openinfra.backend.rest.TopicCharacteristicResource()
 			.get(language, projectId, schema, topicCharacteristicId);
-	}
-
-	@GET
-	@Template(name="/views/list/TopicInstances.jsp")
-	@Path("{topicCharacteristicId}/topicinstances")
-	public List<TopicInstancePojo> getTopicInstancesView(
-			@QueryParam("language") String language,
-			@PathParam("projectId") UUID projectId,
-			@PathParam("schema") String schema,
-			@PathParam("topicCharacteristicId") UUID topicCharacteristicId,
-			@QueryParam("filter") String filter,
-			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
-			@QueryParam("orderBy") String orderBy,
-			@QueryParam("offset") int offset,
-			@QueryParam("size") int size) {
-		return new de.btu.openinfra.backend.rest.TopicCharacteristicResource()
-			.getTopicInstances(language, projectId, schema,
-					topicCharacteristicId, filter, sortOrder, orderBy,
-					offset, size);
 	}
 
 	@GET

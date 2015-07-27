@@ -73,7 +73,7 @@ public class ValueListValueDao
 
 	    // return null if the pojo is null
         if (pojo != null) {
-        	PtFreeTextDao ptfDao = 
+        	PtFreeTextDao ptfDao =
         			new PtFreeTextDao(currentProjectId, schema);
             // set the description (is optional)
             if (pojo.getDescriptions() != null) {
@@ -108,9 +108,9 @@ public class ValueListValueDao
      * @param locale the locale the informations should be saved at
      * @return       the ValueListValuePojo
      */
-    public ValueListValuePojo createEmptyShell(Locale locale) {
+    public ValueListValuePojo newAttributeValueValues(Locale locale) {
         // create the return pojo
-        ValueListValuePojo pojo = new ValueListValuePojo(); 
+        ValueListValuePojo pojo = new ValueListValuePojo();
 
         PtLocaleDao ptl = new PtLocaleDao(currentProjectId, schema);
         List<LocalizedString> lcs = new LinkedList<LocalizedString>();

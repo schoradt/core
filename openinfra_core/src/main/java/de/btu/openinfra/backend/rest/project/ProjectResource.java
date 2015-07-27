@@ -1,4 +1,4 @@
-package de.btu.openinfra.backend.rest;
+package de.btu.openinfra.backend.rest.project;
 
 import java.util.List;
 import java.util.UUID;
@@ -19,6 +19,7 @@ import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.ProjectDao;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.ProjectPojo;
+import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
 /**
  * This class represents the project resource of the REST API. You can access

@@ -389,13 +389,13 @@ $(document).ready(function() {
 				}
 				
 				if (geojson) {
-					initFeaturePreview(geojson);
+					initFeaturePreview(data.topicInstance, geojson);
 				}
 			});
 		});
 	});
 	
-	function initFeaturePreview(geojsonStr) {
+	function initFeaturePreview(instance, geojsonStr) {
 		var map = new OpenLayers.Map("map", {	
 				theme: null,
 				projection: "EPSG:900913",							// sperical mercator
@@ -427,7 +427,8 @@ $(document).ready(function() {
         
         // bind click handler to redirect to map
         $('#map').click(function() {
-        	window.open("${contextPath}/rest/projects/maps", "_blank");
+        	var qParams = "?tc=" + instance.topicCharacteristic.uuid + "&ti=" + instance.uuid
+        	window.open("${contextPath}/rest/projects/maps" + qParams, "_blank");
         });
 	};
 	
