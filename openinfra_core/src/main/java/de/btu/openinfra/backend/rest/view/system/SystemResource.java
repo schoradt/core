@@ -14,7 +14,9 @@ import org.glassfish.jersey.server.mvc.Template;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
 @Path("/system")
-@Produces(MediaType.TEXT_HTML + OpenInfraResponseBuilder.UTF8_CHARSET)
+@Produces(MediaType.TEXT_HTML +
+        OpenInfraResponseBuilder.UTF8_CHARSET +
+        OpenInfraResponseBuilder.HTML_PRIORITY)
 public class SystemResource {
 
 	@GET

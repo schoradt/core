@@ -13,9 +13,13 @@ import javax.ws.rs.core.MediaType;
 import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.meta.DatabaseConnectionDao;
 import de.btu.openinfra.backend.db.pojos.meta.DatabaseConnectionPojo;
+import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
 @Path("/metadata/dbconnections")
-@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+@Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
+    + OpenInfraResponseBuilder.UTF8_CHARSET,
+    MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
+    + OpenInfraResponseBuilder.UTF8_CHARSET})
 public class DatabaseConnectionResource {
 
     @GET
@@ -35,7 +39,7 @@ public class DatabaseConnectionResource {
                         null,
                         databaseConnectionId);
     }
-    
+
     @GET
 	@Path("count")
 	@Produces({MediaType.TEXT_PLAIN})

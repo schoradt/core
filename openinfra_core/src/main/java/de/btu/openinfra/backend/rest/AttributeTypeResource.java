@@ -22,10 +22,12 @@ import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupToAttributeTypePojo;
 import de.btu.openinfra.backend.db.pojos.AttributeTypePojo;
 
 @Path(OpenInfraResponseBuilder.REST_URI + "/attributetypes")
-@Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY, 
-	MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY})
+@Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
+    + OpenInfraResponseBuilder.UTF8_CHARSET,
+	MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
+	+ OpenInfraResponseBuilder.UTF8_CHARSET})
 public class AttributeTypeResource {
-	
+
 	@GET
 	public List<AttributeTypePojo> get(
 			@QueryParam("language") String language,
@@ -36,15 +38,15 @@ public class AttributeTypeResource {
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new AttributeTypeDao(
-				projectId, 
+				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language),
 						sortOrder,
 						orderBy,
-						offset, 
+						offset,
 						size);
 	}
-	
+
 	@GET
 	@Path("{attributeTypeId}/associations")
 	public List<AttributeTypeAssociationPojo> getAssociations(
@@ -54,7 +56,7 @@ public class AttributeTypeResource {
 			@PathParam("attributeTypeId") UUID attributeTypeId,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
-		
+
 		return new AttributeTypeAssociationDao(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
@@ -63,7 +65,7 @@ public class AttributeTypeResource {
 						offset,
 						size);
 	}
-	
+
 	@GET
 	@Path("{attributeTypeId}/associations/{associatedAttributeTypeId}")
 	public List<AttributeTypeAssociationPojo> getAssociations(
@@ -75,7 +77,7 @@ public class AttributeTypeResource {
 				UUID associatedAttributeTypeId,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
-		
+
 		return new AttributeTypeAssociationDao(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
@@ -85,7 +87,7 @@ public class AttributeTypeResource {
 						offset,
 						size);
 	}
-	
+
 	@GET
 	@Path("count")
 	@Produces({MediaType.TEXT_PLAIN})
@@ -93,10 +95,10 @@ public class AttributeTypeResource {
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema) {
 		return new AttributeTypeDao(
-				projectId, 
+				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount();
 	}
-	
+
 	@GET
 	@Path("{attributeTypeId}")
 	public AttributeTypePojo get(
@@ -105,12 +107,12 @@ public class AttributeTypeResource {
 			@PathParam("schema") String schema,
 			@PathParam("attributeTypeId") UUID attributeTypeId) {
 		return new AttributeTypeDao(
-				projectId, 
+				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language),
 						attributeTypeId);
 	}
-	
+
 	@GET
 	@Path("{attributeTypeId}/attributetypegroups")
 	public List<AttributeTypeGroupToAttributeTypePojo> get(
@@ -121,14 +123,14 @@ public class AttributeTypeResource {
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new AttributeTypeGroupToAttributeTypeDao(
-				projectId, 
+				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language),
-						attributeTypeId, 
-						offset, 
+						attributeTypeId,
+						offset,
 						size);
 	}
-	
+
 	@GET
 	@Path("{attributeTypeId}/attributetypegroups/count")
 	@Produces({MediaType.TEXT_PLAIN})
@@ -137,11 +139,11 @@ public class AttributeTypeResource {
 			@PathParam("schema") String schema,
 			@PathParam("attributeTypeId") UUID attributeTypeId) {
 		return new AttributeTypeGroupToAttributeTypeDao(
-				projectId, 
+				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
 						attributeTypeId);
 	}
-	
+
 	@GET
 	@Path("{attributeTypeId}/attributetypegroups/{attributeTypeGroupId}")
 	public List<AttributeTypeGroupToAttributeTypePojo> get(
@@ -153,7 +155,7 @@ public class AttributeTypeResource {
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new AttributeTypeGroupToAttributeTypeDao(
-				projectId, 
+				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language),
 						attributeTypeId,
