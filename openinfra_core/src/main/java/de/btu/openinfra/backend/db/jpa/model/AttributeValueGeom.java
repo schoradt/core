@@ -7,17 +7,36 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 
 /**
  * The persistent class for the attribute_value_geom database table.
- * 
+ *
  */
 @Entity
 @Table(name="attribute_value_geom")
-@NamedQuery(name="AttributeValueGeom.findAll", query="SELECT a FROM AttributeValueGeom a")
+@NamedQuery(name="AttributeValueGeom.findAll",
+    query="SELECT a FROM AttributeValueGeom a")
+@NamedNativeQueries({
+    @NamedNativeQuery(name="AttributeValueGeom.select",
+            query="SELECT %s "
+                    + "FROM attribute_value_geom "
+                    + "WHERE id = cast(? as uuid)"),
+    @NamedNativeQuery(name="AttributeValueGeom.insert",
+            query="INSERT INTO attribute_value_geom ("
+                    + "attribute_type_to_attribute_type_group_id, "
+                    + "topic_instance_id, geom) "
+                    + "VALUES (?, ?, %s(?))"),
+    @NamedNativeQuery(name="AttributeValueGeom.update",
+            query="UPDATE TABLE attribute_value_geom SET "
+                    + "attribute_type_to_attribute_type_group_id = ?, "
+                    + "topic_instance_id = ?, "
+                    + "geom = %s(?) WHERE id = ?")
+})
 public class AttributeValueGeom implements Serializable, OpenInfraModelObject {
 	private static final long serialVersionUID = 1L;
 
@@ -39,7 +58,8 @@ public class AttributeValueGeom implements Serializable, OpenInfraModelObject {
 	public AttributeValueGeom() {
 	}
 
-	public UUID getId() {
+	@Override
+    public UUID getId() {
 		return this.id;
 	}
 

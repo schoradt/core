@@ -5,6 +5,8 @@ import java.util.UUID;
 
 import javax.persistence.Query;
 
+import org.eclipse.persistence.jpa.JpaQuery;
+
 import de.btu.openinfra.backend.db.jpa.model.AttributeTypeToAttributeTypeGroup;
 import de.btu.openinfra.backend.db.jpa.model.AttributeValueGeomz;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
@@ -74,11 +76,14 @@ public class AttributeValueGeomzDao
 	public AttributeValueGeomzPojo mapToPojo(
 			Locale locale,
 			AttributeValueGeomz avgz) {
-	    // format the SQL statement for retrieving geometry values
-	    String queryString = String.format(
-                AttributeValueDao.GEOM_CLAUSE,
-                defaultGeomType.getPsqlFnSignature(),
-                "z");
+	    // get the NamedNativeQuery
+        String sqlString = em.createNamedQuery(
+                AttributeValueGeomz.class.getSimpleName() + ".select")
+                .unwrap(JpaQuery.class).getDatabaseQuery().getSQLString();
+        // format the SQL statement for retrieving geometry values
+        String queryString = String.format(
+                sqlString,
+                defaultGeomType.getPsqlFnSignature());
 
 	    // add the id parameter to the query
 	    Query qGeom = em.createNativeQuery(queryString);
