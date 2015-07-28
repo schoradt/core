@@ -470,21 +470,24 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	@SuppressWarnings("unchecked")
     public TypePojo read(Locale locale, UUID id) {
 		TypePojo pojo = null;
-		if(modelClass == TopicCharacteristic.class &&
-                schema == OpenInfraSchemas.SYSTEM) {
-		    pojo = mapToPojo(locale, (TypeModel)em.createNativeQuery(
-		            "select id, description, topic "
-                    + "from topic_characteristic where id = ?",
-                    TopicCharacteristic.class)
-                    .setParameter(1, id)
-                    .getSingleResult());
-		} else {
-	        try {
-	            pojo = mapToPojo(locale, em.find(modelClass, id));
-	        } catch(Exception ex) {
-	            ex.printStackTrace();
-	        } // end try catch
-		} // end if else
+		try {
+    		if(modelClass == TopicCharacteristic.class &&
+                    schema == OpenInfraSchemas.SYSTEM) {
+    		    pojo = mapToPojo(locale, (TypeModel)em.createNativeQuery(
+    		            "select id, description, topic "
+                        + "from topic_characteristic where id = ?",
+                        TopicCharacteristic.class)
+                        .setParameter(1, id)
+                        .getSingleResult());
+    		} else {
+    	            TypeModel tm = em.find(modelClass, id);
+    	            if(tm != null) {
+    	                pojo = mapToPojo(locale, tm);
+    	            }
+    		} // end if else
+		} catch(Exception ex) {
+            ex.printStackTrace();
+        } // end try catch
 		return pojo;
 	}
 
