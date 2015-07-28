@@ -272,7 +272,7 @@ public abstract class OpenInfraValueDao<
 	 * This method returns the count of objects referring a specific object.
 	 *
 	 * @param valueId the specific object
-	 * @return        the count of objects or -1 if the value id don't exists
+	 * @return        the count of objects or -1 if the value id doesn't exists
 	 */
 	public Long getCount(UUID valueId) {
 		// 1. Get the specific value object from JPA layer
