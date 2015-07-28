@@ -21,8 +21,10 @@ import de.btu.openinfra.backend.db.pojos.ValueListValueAssociationPojo;
 import de.btu.openinfra.backend.db.pojos.ValueListValuePojo;
 
 @Path(OpenInfraResponseBuilder.REST_URI + "/valuelistvalues")
-@Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY,
-	MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY})
+@Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
+    + OpenInfraResponseBuilder.UTF8_CHARSET,
+	MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
+	+ OpenInfraResponseBuilder.UTF8_CHARSET})
 public class ValueListValuesResource {
 
 	@GET
@@ -51,7 +53,7 @@ public class ValueListValuesResource {
                     .newAttributeValueValues(
                             PtLocaleDao.forLanguageTag(language));
     }
-	
+
 	@GET
 	@Path("{valueListValueId}/associations")
 	public List<ValueListValueAssociationPojo> getAssociations(
@@ -61,7 +63,7 @@ public class ValueListValuesResource {
 			@PathParam("valueListValueId") UUID valueListValueId,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
-		
+
 		return new ValueListValueAssociationDao(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
@@ -70,7 +72,7 @@ public class ValueListValuesResource {
 						offset,
 						size);
 	}
-	
+
 	@GET
 	@Path("{valueListValueId}/associations/{associatedValueListValueId}")
 	public List<ValueListValueAssociationPojo> getAssociations(
@@ -82,7 +84,7 @@ public class ValueListValuesResource {
 				UUID associatedValueListValueId,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
-		
+
 		return new ValueListValueAssociationDao(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(

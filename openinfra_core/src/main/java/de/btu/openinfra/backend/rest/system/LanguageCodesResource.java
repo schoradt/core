@@ -19,45 +19,47 @@ import de.btu.openinfra.backend.db.pojos.LanguageCodePojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
 /**
- * This class represents the LanguageCodes resource of the REST API. 
- * 
+ * This class represents the LanguageCodes resource of the REST API.
+ *
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
  */
 @Path("/system/languagecodes")
-@Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY, 
-    MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY})
+@Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
+    + OpenInfraResponseBuilder.UTF8_CHARSET,
+    MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
+    + OpenInfraResponseBuilder.UTF8_CHARSET})
 public class LanguageCodesResource {
-	
+
 	@GET
 	public List<LanguageCodePojo> get(
 			@QueryParam("language") String language,
 			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
 			@QueryParam("orderBy") OpenInfraOrderByEnum orderBy,
-			@QueryParam("offset") int offset, 
+			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new LanguageCodeDao(
-				null, 
+				null,
 				OpenInfraSchemas.SYSTEM ).read(
 						PtLocaleDao.forLanguageTag(language),
 						sortOrder,
 						orderBy,
-						offset, 
+						offset,
 						size);
 	}
-	
+
 	@GET
 	@Path("{languageCodeId}")
 	public LanguageCodePojo get(
 			@QueryParam("language") String language,
 			@PathParam("languageCodeId") UUID languageCodeId) {
 		return new LanguageCodeDao(
-				null, 
+				null,
 				OpenInfraSchemas.SYSTEM ).read(
 						PtLocaleDao.forLanguageTag(language),
 						languageCodeId);
 	}
-	
+
 	@GET
     @Path("count")
     @Produces({MediaType.TEXT_PLAIN})

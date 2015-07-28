@@ -23,8 +23,10 @@ import de.btu.openinfra.backend.db.pojos.RelationshipTypeToTopicCharacteristicPo
 import de.btu.openinfra.backend.db.pojos.TopicCharacteristicPojo;
 
 @Path(OpenInfraResponseBuilder.REST_URI + "/topiccharacteristics")
-@Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY,
-	MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY})
+@Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
+    + OpenInfraResponseBuilder.UTF8_CHARSET,
+	MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
+	+ OpenInfraResponseBuilder.UTF8_CHARSET})
 public class TopicCharacteristicResource {
 
 	@GET
@@ -98,7 +100,7 @@ public class TopicCharacteristicResource {
 						offset,
 						size);
 	}
-	
+
 	@GET
     @Path("{topicCharacteristicId}/attributetypegroups/count")
     @Produces({MediaType.TEXT_PLAIN})

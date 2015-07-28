@@ -24,8 +24,10 @@ import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
 @Path("/projects/{projectId}/topiccharacteristics/{topicCharacteristicId}"
         + "/topicinstances")
-@Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY,
-	MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY})
+@Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
+    + OpenInfraResponseBuilder.UTF8_CHARSET,
+    MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
+    + OpenInfraResponseBuilder.UTF8_CHARSET})
 public class TopicCharacteristicResource {
 
 	/**

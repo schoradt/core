@@ -13,9 +13,13 @@ import javax.ws.rs.core.MediaType;
 import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.meta.LogDao;
 import de.btu.openinfra.backend.db.pojos.meta.LogPojo;
+import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
 @Path("/metadata/logs")
-@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+@Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
+    + OpenInfraResponseBuilder.UTF8_CHARSET,
+    MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
+    + OpenInfraResponseBuilder.UTF8_CHARSET})
 public class LogResource {
 
     @GET
@@ -32,10 +36,10 @@ public class LogResource {
             @PathParam("logId") UUID logId) {
         return new LogDao(
                 OpenInfraSchemas.META_DATA).read(
-                        null , 
+                        null ,
                         logId);
     }
-    
+
     @GET
 	@Path("count")
 	@Produces({MediaType.TEXT_PLAIN})
