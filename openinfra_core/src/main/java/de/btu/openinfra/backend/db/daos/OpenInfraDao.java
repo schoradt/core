@@ -463,32 +463,18 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	 * class must implement its own read method. This should provide more type
 	 * safety.
 	 *
-     * Since the system schema doesn't provide the project_id column for topic
-     * characteristic objects it is necessary to handle this request separately.
-	 *
      * @param locale             A Java.util locale object.
 	 * @param id                 the UUID of the required model class
 	 * @return                   The requested POJO object if present otherwise
 	 *                           null.
 	 */
-	@SuppressWarnings("unchecked")
     public TypePojo read(Locale locale, UUID id) {
 		TypePojo pojo = null;
 		try {
-    		if(modelClass == TopicCharacteristic.class &&
-                    schema == OpenInfraSchemas.SYSTEM) {
-    		    pojo = mapToPojo(locale, (TypeModel)em.createNativeQuery(
-    		            "select id, description, topic "
-                        + "from topic_characteristic where id = ?",
-                        TopicCharacteristic.class)
-                        .setParameter(1, id)
-                        .getSingleResult());
-    		} else {
-    	            TypeModel tm = em.find(modelClass, id);
-    	            if(tm != null) {
-    	                pojo = mapToPojo(locale, tm);
-    	            }
-    		} // end if else
+            TypeModel tm = em.find(modelClass, id);
+            if(tm != null) {
+                pojo = mapToPojo(locale, tm);
+            }
 		} catch(Exception ex) {
             ex.printStackTrace();
         } // end try catch
