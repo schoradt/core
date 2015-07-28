@@ -89,7 +89,7 @@ public abstract class OpenInfraValueDao<
 	            pojos.add(mapToPojo(locale, modelItem));
 	        } // end for
 		}
-		
+
 		return pojos;
 	}
 
@@ -120,7 +120,7 @@ public abstract class OpenInfraValueDao<
             int size) {
         // Define a list which holds the POJO objects
         List<TypePojo> pojos = new LinkedList<TypePojo>();
-        
+
         // Get the specific value object from JPA layer
         // TODO will be necessary for the not implemented else branch
         // TODO Check: if tmv == null then return pojos
@@ -272,7 +272,7 @@ public abstract class OpenInfraValueDao<
 	 * This method returns the count of objects referring a specific object.
 	 *
 	 * @param valueId the specific object
-	 * @return        the count of objects
+	 * @return        the count of objects or -1 if the value id don't exists
 	 */
 	public Long getCount(UUID valueId) {
 		// 1. Get the specific value object from JPA layer
@@ -289,7 +289,7 @@ public abstract class OpenInfraValueDao<
 	                .getSingleResult()
 	                .longValue();
 		}
-		return null;
+		return -1L;
 	}
 
 }
