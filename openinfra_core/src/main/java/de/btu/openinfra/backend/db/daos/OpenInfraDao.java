@@ -9,7 +9,6 @@ import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
 import javax.persistence.Query;
 
 import org.eclipse.persistence.jpa.JpaQuery;
@@ -179,9 +178,10 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 				OpenInfraPropertyKeys.URL.toString(),
 				url + currentSchema);
 		// 4. Create the final entity manager
-		em = Persistence.createEntityManagerFactory(
+		em = EntityManagerFactoryCache.createEntityManagerFactory(
 		        OpenInfraApplication.PERSISTENCE_CONTEXT,
 		        properties).createEntityManager();
+
 	}
 
 	/**

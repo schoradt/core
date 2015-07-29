@@ -5,11 +5,11 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Persistence;
 
 import de.btu.openinfra.backend.OpenInfraApplication;
 import de.btu.openinfra.backend.OpenInfraProperties;
 import de.btu.openinfra.backend.OpenInfraPropertyKeys;
+import de.btu.openinfra.backend.db.daos.EntityManagerFactoryCache;
 import de.btu.openinfra.backend.db.daos.meta.ProjectsDao;
 import de.btu.openinfra.backend.db.jpa.model.meta.Projects;
 import de.btu.openinfra.backend.db.pojos.meta.ProjectsPojo;
@@ -63,9 +63,9 @@ public class MetaDataManager {
 					url + "currentSchema=" + 
 					OpenInfraPropertyValues.META_DATA_SEARCH_PATH + "," + 
 					OpenInfraPropertyValues.SEARCH_PATH);
-			emMeta = Persistence.createEntityManagerFactory(
-					OpenInfraApplication.PERSISTENCE_CONTEXT, 
-					properties).createEntityManager();
+			emMeta = EntityManagerFactoryCache.createEntityManagerFactory(
+	                OpenInfraApplication.PERSISTENCE_CONTEXT,
+	                properties).createEntityManager();
 		}
 		
 		return ProjectsDao.mapPojoStatically(
