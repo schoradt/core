@@ -39,6 +39,11 @@ import javax.persistence.Table;
 					+ "FROM RelationshipTypeToTopicCharacteristic r "
 					+ "WHERE r.relationshipType = :value"),
 	@NamedQuery(name="RelationshipTypeToTopicCharacteristic"
+            + ".countByRelationshipType", 
+            query="SELECT count(r) "
+                    + "FROM RelationshipTypeToTopicCharacteristic r "
+                    + "WHERE r.relationshipType = :value"),
+	@NamedQuery(name="RelationshipTypeToTopicCharacteristic"
 			+ ".findByRelationshipTypeAndTopicCharacteristic", 
 			query="SELECT r "
 					+ "FROM RelationshipTypeToTopicCharacteristic r "
