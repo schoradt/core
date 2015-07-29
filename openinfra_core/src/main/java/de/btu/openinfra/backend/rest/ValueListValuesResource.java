@@ -77,7 +77,6 @@ public class ValueListValuesResource {
     @Path("{valueListValueId}/associations/count")
 	@Produces({MediaType.TEXT_PLAIN})
     public long getAssociationsCount(
-            @QueryParam("language") String language,
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema,
             @PathParam("valueListValueId") UUID valueListValueId) {
