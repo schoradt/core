@@ -65,6 +65,20 @@ public class AttributeTypeResource {
 						offset,
 						size);
 	}
+	
+	@GET
+    @Path("{attributeTypeId}/associations/count")
+	@Produces({MediaType.TEXT_PLAIN})
+    public long getAssociationsCount(
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            @PathParam("attributeTypeId") UUID attributeTypeId) {
+
+        return new AttributeTypeAssociationDao(
+                projectId,
+                OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
+                        attributeTypeId);
+    }
 
 	@GET
 	@Path("{attributeTypeId}/associations/{associatedAttributeTypeId}")
