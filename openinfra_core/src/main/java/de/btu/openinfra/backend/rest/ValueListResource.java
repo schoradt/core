@@ -80,6 +80,20 @@ public class ValueListResource {
 						offset,
 						size);
 	}
+	
+	@GET
+    @Path("{valueListId}/associations/count")
+	@Produces({MediaType.TEXT_PLAIN})
+    public long getAssociations(
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            @PathParam("valueListId") UUID valueListId) {
+
+        return new ValueListAssociationDao(
+                projectId,
+                OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
+                        valueListId);
+    }
 
 	@GET
 	@Path("{valueListId}/associations/{associatedValueListId}")
