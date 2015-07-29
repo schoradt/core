@@ -84,7 +84,7 @@ public class ValueListResource {
 	@GET
     @Path("{valueListId}/associations/count")
 	@Produces({MediaType.TEXT_PLAIN})
-    public long getAssociations(
+    public long getAssociationsCount(
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema,
             @PathParam("valueListId") UUID valueListId) {
