@@ -76,6 +76,13 @@ public class RelationshipTypeDao extends
 
         // return null if the pojo is null
         if (pojo != null) {
+
+            // in case the description or the relationship type is null
+            if (pojo.getDescription() == null ||
+                    pojo.getRelationshipType() == null) {
+                return null;
+            }
+
             // set the description
             rt.setValueListValue1(em.find(ValueListValue.class,
                     pojo.getDescription().getUuid()));

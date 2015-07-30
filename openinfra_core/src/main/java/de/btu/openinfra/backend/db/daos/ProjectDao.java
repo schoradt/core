@@ -152,24 +152,30 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 
 	    // return null if the pojo is null
 	    if (pojo != null) {
+
+	        // in case the name is null
+            if (pojo.getNames() == null) {
+                return null;
+            }
+
+            // in case the name value is empty
+            if (pojo.getNames().getLocalizedStrings().get(0)
+                    .getCharacterString().equals("")) {
+                return null;
+            }
+
         	PtFreeTextDao ptfDao =
                     new PtFreeTextDao(currentProjectId, schema);
-            // set the description (is optional)
+            // set the description (optional)
             if (pojo.getDescriptions() != null) {
                 p.setPtFreeText1(
                         ptfDao.getPtFreeTextModel(pojo.getDescriptions()));
             }
 
-            // in case the name is empty
-            if (pojo.getNames().getLocalizedStrings().get(0)
-                    .getCharacterString() == "") {
-                return null;
-            }
-
             // set the name
             p.setPtFreeText2(ptfDao.getPtFreeTextModel(pojo.getNames()));
 
-    		// set the sub project
+    		// set the sub project (optional)
     		if(pojo.getSubprojectOf() != null) {
     			p.setProject(em.find(Project.class, pojo.getSubprojectOf()));
     		} // end if
