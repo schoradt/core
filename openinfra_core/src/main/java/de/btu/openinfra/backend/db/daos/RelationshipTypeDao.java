@@ -7,7 +7,6 @@ import de.btu.openinfra.backend.db.jpa.model.RelationshipType;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
 import de.btu.openinfra.backend.db.jpa.model.ValueListValue;
 import de.btu.openinfra.backend.db.pojos.RelationshipTypePojo;
-import de.btu.openinfra.backend.db.pojos.ValueListValuePojo;
 
 /**
  * This class represents the RelationshipType and is used to access the
@@ -103,20 +102,11 @@ public class RelationshipTypeDao extends
         // create the return pojo
         RelationshipTypePojo pojo = new RelationshipTypePojo();
 
-        // retrieve an empty valueListValue object
-        ValueListValueDao vlvDao =
-                new ValueListValueDao(currentProjectId, schema);
-        ValueListValuePojo vlvPojo = vlvDao.newAttributeValueValues(locale);
-
-        // TODO define that the value list value belongs to vl_topic
-        vlvPojo.setBelongsToValueList(null);
         // add value list value for the relationship type
-        pojo.setRelationshipType(vlvPojo);
+        pojo.setRelationshipType(null);
 
-        // TODO define that the value list value belongs to vl_relationship_type
-        vlvPojo.setBelongsToValueList(null);
         // add value list value for the description
-        pojo.setDescription(vlvPojo);
+        pojo.setDescription(null);
 
         return pojo;
     }
