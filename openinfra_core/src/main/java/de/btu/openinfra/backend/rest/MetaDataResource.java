@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -67,6 +68,20 @@ public class MetaDataResource {
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
                         pojo);
         return OpenInfraResponseBuilder.postResponse(id);
+    }
+    
+    @PUT
+    @Path("{metadataId}")
+    public Response update(
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            @PathParam("metadataId") UUID metadataId,
+            MetaDataPojo pojo) {
+        return OpenInfraResponseBuilder.putResponse(
+                new MetaDataDao(
+                        projectId,
+                        OpenInfraSchemas.valueOf(schema.toUpperCase())
+                        ).createOrUpdate(pojo));
     }
 
 	@GET
