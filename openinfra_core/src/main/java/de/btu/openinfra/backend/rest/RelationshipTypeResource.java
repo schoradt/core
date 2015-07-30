@@ -3,12 +3,16 @@ package de.btu.openinfra.backend.rest;
 import java.util.List;
 import java.util.UUID;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import de.btu.openinfra.backend.db.daos.OpenInfraOrderByEnum;
 import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
@@ -111,4 +115,58 @@ public class RelationshipTypeResource {
 						offset,
 						size);
 	}
+
+	@GET
+    @Path("/new")
+    public RelationshipTypePojo newRelationshipType(
+            @QueryParam("language") String language,
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema) {
+        return new RelationshipTypeDao(
+                        projectId,
+                        OpenInfraSchemas.valueOf(schema.toUpperCase()))
+                    .newRelationshipType(PtLocaleDao.forLanguageTag(language));
+    }
+
+	@POST
+    public Response createRelationshipType(
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            RelationshipTypePojo pojo) {
+        // call the create or update method for the DAO and return the uuid
+        return OpenInfraResponseBuilder.postResponse(
+                    new RelationshipTypeDao(
+                            projectId,
+                            OpenInfraSchemas.valueOf(schema.toUpperCase()))
+                            .createOrUpdate(pojo));
+    }
+
+	@PUT
+	@Path("{relationshipTypeId}")
+	public Response update(
+	        @QueryParam("language") String language,
+	        @PathParam("projectId") UUID projectId,
+	        @PathParam("schema") String schema,
+	        @PathParam("relationshipTypeId") UUID relationshipTypeId,
+	        RelationshipTypePojo relationshipType) {
+	    UUID uuid = new RelationshipTypeDao(
+                projectId,
+                OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
+                        relationshipType);
+        return OpenInfraResponseBuilder.postResponse(uuid);
+	}
+
+	@DELETE
+    @Path("{relationshipTypeId}")
+    public Response delete(
+            @PathParam("projectId") UUID projectId,
+            @PathParam("relationshipTypeId") UUID relationshipTypeId,
+            @PathParam("schema") String schema) {
+        return OpenInfraResponseBuilder.deleteResponse(
+                new RelationshipTypeDao(
+                        projectId,
+                        OpenInfraSchemas.valueOf(schema.toUpperCase()))
+                    .delete(relationshipTypeId),
+                    relationshipTypeId);
+    }
 }

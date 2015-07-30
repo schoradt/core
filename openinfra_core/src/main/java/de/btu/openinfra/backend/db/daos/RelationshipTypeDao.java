@@ -5,7 +5,9 @@ import java.util.UUID;
 
 import de.btu.openinfra.backend.db.jpa.model.RelationshipType;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
+import de.btu.openinfra.backend.db.jpa.model.ValueListValue;
 import de.btu.openinfra.backend.db.pojos.RelationshipTypePojo;
+import de.btu.openinfra.backend.db.pojos.ValueListValuePojo;
 
 /**
  * This class represents the RelationshipType and is used to access the
@@ -75,8 +77,13 @@ public class RelationshipTypeDao extends
 
         // return null if the pojo is null
         if (pojo != null) {
+            // set the description
+            rt.setValueListValue1(em.find(ValueListValue.class,
+                    pojo.getDescription().getUuid()));
 
-            // TODO set the model values
+            // set the reference_to
+            rt.setValueListValue2(em.find(ValueListValue.class,
+                    pojo.getRelationshipType().getUuid()));
 
             // return the model as mapping result
             return new MappingResult<RelationshipType>(rt.getId(), rt);
@@ -84,5 +91,34 @@ public class RelationshipTypeDao extends
             return null;
         }
 	}
+
+    /**
+     * This method creates a RelationshipTypePojo shell that contains some
+     * informations about the name, the description and the locale.
+     *
+     * @param locale the locale the informations should be saved at
+     * @return       the RelationshipTypePojo
+     */
+    public RelationshipTypePojo newRelationshipType(Locale locale) {
+        // create the return pojo
+        RelationshipTypePojo pojo = new RelationshipTypePojo();
+
+        // retrieve an empty valueListValue object
+        ValueListValueDao vlvDao =
+                new ValueListValueDao(currentProjectId, schema);
+        ValueListValuePojo vlvPojo = vlvDao.newAttributeValueValues(locale);
+
+        // TODO define that the value list value belongs to vl_topic
+        vlvPojo.setBelongsToValueList(null);
+        // add value list value for the relationship type
+        pojo.setRelationshipType(vlvPojo);
+
+        // TODO define that the value list value belongs to vl_relationship_type
+        vlvPojo.setBelongsToValueList(null);
+        // add value list value for the description
+        pojo.setDescription(vlvPojo);
+
+        return pojo;
+    }
 
 }
