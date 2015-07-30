@@ -24,6 +24,7 @@ import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
 import de.btu.openinfra.backend.db.pojos.AttributeValueGeomPojo;
 import de.btu.openinfra.backend.db.pojos.AttributeValueGeomzPojo;
+import de.btu.openinfra.backend.db.pojos.MetaDataPojo;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 import de.btu.openinfra.backend.db.pojos.meta.ProjectsPojo;
 
@@ -295,34 +296,46 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	 */
 	public UUID createOrUpdate(TypePojo pojo)
 			throws RuntimeException {
-	    // TODO handle the geometry cast here as special case
-	    // TODO maybe saving topics in system database must be handled as well
-		// 1. Map the POJO object to a JPA model object
-		MappingResult<TypeModel> result = mapToModel(
-				pojo,
-				createModelObject(pojo.getUuid()));
-		// abort here if the result is null
-		if (result == null) {
-		    return null;
-		}
+		
+	    UUID resultId = null;
+	    TypeModel typeModel = createModelObject(pojo.getUuid());
+		
 		// 2. Get the transaction and merge (create or replace) the JPA model
 		// object.
 		EntityTransaction et = em.getTransaction();
 		try {
 			et.begin();
 			// special handling for geometry classes
-			if (modelClass.getSimpleName().equals("AttributeValueGeom") ||
-			        modelClass.getSimpleName().equals("AttributeValueGeomz")) {
-                Query geomQuery = createGeomQuery(pojo);
-                if (geomQuery != null) {
+			switch(modelClass.getSimpleName()) {
+			    case "AttributeValueGeom":
+			        // fall through
+			    case "AttributeValueGeomz":
+			        Query geomQuery = createGeomQuery(pojo);
+	                if (geomQuery != null) {
+	                    // execute the query
+	                    geomQuery.executeUpdate();
+	                }
+	                break;
+			    case "MetaData":
+			        Query metaQuery = createMetaDataQuery(pojo, typeModel);
                     // execute the query
-                    geomQuery.executeUpdate();
-                }
-			} else {
-			    em.merge(result.getModelObject());
+                    metaQuery.executeUpdate();
+                    resultId = pojo.getUuid();
+			        break;
+			    default:
+			        // Map the POJO object to a JPA model object
+			        MappingResult<TypeModel> result = mapToModel(
+			                pojo,
+			                typeModel);
+			        // abort here if the result is null
+			        if (result == null) {
+			            return null;
+			        }
+			        em.merge(result.getModelObject());
+			        resultId = result.getId();
 			}
 			et.commit();
-			return result.getId();
+			return resultId;
 		} catch(RuntimeException ex) {
 			if(et != null && et.isActive()) {
 				et.rollback();
@@ -330,6 +343,45 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 			throw ex;
 		} // end try catch
     }
+	
+	private Query createMetaDataQuery(TypePojo pojo, TypeModel typeModel) {
+	    Query metaDataQuery = null;
+	    
+	    if (typeModel == null) {
+	        // get the NamedNativeQuery
+	        String sqlString = em.createNamedQuery(
+	                modelClass.getSimpleName() + ".insert")
+	                .unwrap(JpaQuery.class).getDatabaseQuery()
+	                .getSQLString();
+	        System.out.println("sqlString = " + sqlString);
+	        // create native query
+	        metaDataQuery = em.createNativeQuery(sqlString);
+	        
+	        metaDataQuery.setParameter(1, pojo.getUuid());
+	        metaDataQuery.setParameter(2, ((MetaDataPojo) pojo).getTableName());
+	        metaDataQuery.setParameter(3, ((MetaDataPojo) pojo).getPkColumn());
+	        metaDataQuery.setParameter(4, ((MetaDataPojo) pojo).getData());
+	    }
+	    else {
+	        // get the NamedNativeQuery
+            String sqlString = em.createNamedQuery(
+                    modelClass.getSimpleName() + ".update")
+                    .unwrap(JpaQuery.class).getDatabaseQuery()
+                    .getSQLString();
+            System.out.println("sqlString = " + sqlString);
+            // create native query
+            metaDataQuery = em.createNativeQuery(sqlString);
+            
+            metaDataQuery.setParameter(1, ((MetaDataPojo) pojo).getTableName());
+            metaDataQuery.setParameter(2, ((MetaDataPojo) pojo).getPkColumn());
+            metaDataQuery.setParameter(3, ((MetaDataPojo) pojo).getData());
+            metaDataQuery.setParameter(4, ((MetaDataPojo) pojo).getUuid());
+	    }
+	    
+	    
+        
+	    return metaDataQuery;
+	}
 
 	/**
 	 * This special method will create a geometry query for creating or

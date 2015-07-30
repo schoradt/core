@@ -3,6 +3,9 @@ package de.btu.openinfra.backend.db.daos;
 import java.util.Locale;
 import java.util.UUID;
 
+import javax.json.Json;
+import javax.json.JsonObject;
+
 import de.btu.openinfra.backend.db.jpa.model.MetaData;
 import de.btu.openinfra.backend.db.pojos.MetaDataPojo;
 
@@ -54,8 +57,30 @@ public class MetaDataDao
     
     @Override
     public MappingResult<MetaData> mapToModel(MetaDataPojo pojo, MetaData md) {
-        // TODO Auto-generated method stub
-        return null;
+        // 1. If the POJO really exists than go further, otherwise return null.
+        if(pojo != null) {
+            md.setData(pojo.getData());
+            md.setPkColumn(pojo.getPkColumn());
+            md.setTableName(pojo.getTableName());
+            return new MappingResult<MetaData>(md.getId(), md);
+        } else {
+            return null;
+        } // end if else
+    }
+    
+    public MetaDataPojo newMetaData(Locale locale) {
+        // create the return pojo
+        MetaDataPojo pojo = new MetaDataPojo();
+        
+        // set an empty data
+        JsonObject jsonObject = Json.createObjectBuilder().build();
+        pojo.setData(jsonObject.toString());
+        // set an empty primary key column
+        pojo.setPkColumn("");
+        //set an empty table name
+        pojo.setTableName("");
+        
+        return pojo;
     }
 
 }

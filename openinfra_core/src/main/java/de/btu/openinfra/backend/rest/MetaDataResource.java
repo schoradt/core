@@ -4,11 +4,13 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import de.btu.openinfra.backend.db.daos.MetaDataDao;
 import de.btu.openinfra.backend.db.daos.OpenInfraOrderByEnum;
@@ -41,6 +43,30 @@ public class MetaDataResource {
 						orderBy,
                         offset,
                         size);
+    }
+    
+    @GET
+    @Path("/new")
+    public MetaDataPojo newValueList(
+            @QueryParam("language") String language,
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema) {
+        return new MetaDataDao(
+                        projectId,
+                        OpenInfraSchemas.valueOf(schema.toUpperCase()))
+                    .newMetaData(PtLocaleDao.forLanguageTag(language));
+    }
+    
+    @POST
+    public Response create(
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            MetaDataPojo pojo) {
+        UUID id = new MetaDataDao(
+                projectId,
+                OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
+                        pojo);
+        return OpenInfraResponseBuilder.postResponse(id);
     }
 
 	@GET
