@@ -3,6 +3,7 @@ package de.btu.openinfra.backend.rest;
 import java.util.List;
 import java.util.UUID;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -82,6 +83,20 @@ public class MetaDataResource {
                         projectId,
                         OpenInfraSchemas.valueOf(schema.toUpperCase())
                         ).createOrUpdate(pojo));
+    }
+    
+    @DELETE
+    @Path("{metadataId}")
+    public Response delete(
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            @PathParam("metadataId") UUID metadataId) {
+        return OpenInfraResponseBuilder.deleteResponse(
+                new MetaDataDao(
+                        projectId,
+                        OpenInfraSchemas.valueOf(schema.toUpperCase())).delete(
+                                metadataId),
+                metadataId);
     }
 
 	@GET
