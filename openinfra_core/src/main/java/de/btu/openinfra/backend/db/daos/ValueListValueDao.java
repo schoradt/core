@@ -73,12 +73,18 @@ public class ValueListValueDao
 
 	    // return null if the pojo is null
         if (pojo != null) {
-        	PtFreeTextDao ptfDao =
-        			new PtFreeTextDao(currentProjectId, schema);
+            PtFreeTextDao ptfDao =
+                    new PtFreeTextDao(currentProjectId, schema);
             // set the description (is optional)
             if (pojo.getDescriptions() != null) {
                 vlv.setPtFreeText1(
-                		ptfDao.getPtFreeTextModel(pojo.getDescriptions()));
+                        ptfDao.getPtFreeTextModel(pojo.getDescriptions()));
+            }
+
+            // in case the name is empty
+            if (pojo.getNames().getLocalizedStrings().get(0)
+                    .getCharacterString() == "") {
+                return null;
             }
 
             // set the name
