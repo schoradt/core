@@ -3,12 +3,16 @@ package de.btu.openinfra.backend.rest;
 import java.util.List;
 import java.util.UUID;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import de.btu.openinfra.backend.db.daos.AttributeTypeAssociationDao;
 import de.btu.openinfra.backend.db.daos.AttributeTypeDao;
@@ -178,4 +182,54 @@ public class AttributeTypeResource {
 						size);
 	}
 
+	@GET
+    @Path("/new")
+    public AttributeTypePojo newAttributeType(
+            @QueryParam("language") String language,
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema) {
+        return new AttributeTypeDao(
+                        projectId,
+                        OpenInfraSchemas.valueOf(schema.toUpperCase()))
+                    .newAttributeType(PtLocaleDao.forLanguageTag(language));
+    }
+
+    @POST
+    public Response create(
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            AttributeTypePojo pojo) {
+        UUID id = new AttributeTypeDao(
+                projectId,
+                OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
+                        pojo);
+        return OpenInfraResponseBuilder.postResponse(id);
+    }
+
+    @DELETE
+    @Path("{attributeTypeId}")
+    public Response delete(
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            @PathParam("attributeTypeId") UUID attributeTypeId) {
+        return OpenInfraResponseBuilder.deleteResponse(
+                new AttributeTypeDao(
+                        projectId,
+                        OpenInfraSchemas.valueOf(schema.toUpperCase())).delete(
+                                attributeTypeId),
+                        attributeTypeId);
+    }
+
+    @PUT
+    @Path("{attributeTypeId}")
+    public Response update(
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            @PathParam("attributeTypeId") UUID attributeTypeId,
+            AttributeTypePojo pojo) {
+        return OpenInfraResponseBuilder.postResponse(
+                new AttributeTypeDao(
+                        projectId,
+                        OpenInfraSchemas.PROJECTS).createOrUpdate(pojo));
+    }
 }

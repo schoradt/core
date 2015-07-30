@@ -111,6 +111,20 @@ public class AttributeValueGeomDao
 
 	    // return null if the pojo is null
         if (pojo != null) {
+
+            // in case the attribute type to attribute type group id, the
+            // topic instance id or the geometry is null
+            if (pojo.getAttributeTypeToAttributeTypeGroupId() == null ||
+                    pojo.getTopicInstanceId() == null ||
+                    pojo.getGeom() == null) {
+                return null;
+            }
+
+            // in case the geometry is an empty string
+            if (pojo.getGeom().equals("")) {
+                return null;
+            }
+
             // set the textual information
             avg.setGeom(pojo.getGeom());
 
