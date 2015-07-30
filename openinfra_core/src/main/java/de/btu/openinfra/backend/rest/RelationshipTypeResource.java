@@ -93,6 +93,19 @@ public class RelationshipTypeResource {
 						offset,
 						size);
 	}
+    
+    @GET
+    @Path("{relationshipTypeId}/topiccharacteristics/count")
+    public long getTopicCharacteristicsCount(
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            @PathParam("relationshipTypeId") UUID relationshipTypeId) {
+
+        return new TopicCharacteristicToRelationshipTypeDao(
+                projectId,
+                OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
+                        relationshipTypeId);
+    }
 
 	@GET
 	@Path("{relationshipTypeId}/topiccharacteristics/{topicCharacteristicId}")
