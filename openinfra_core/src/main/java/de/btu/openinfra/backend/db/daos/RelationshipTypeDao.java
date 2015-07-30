@@ -93,8 +93,8 @@ public class RelationshipTypeDao extends
 	}
 
     /**
-     * This method creates a RelationshipTypePojo shell that contains some
-     * informations about the name, the description and the locale.
+     * This method creates a RelationshipTypePojo shell that contains
+     * informations about relationshipType and description.
      *
      * @param locale the locale the informations should be saved at
      * @return       the RelationshipTypePojo
