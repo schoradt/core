@@ -72,28 +72,31 @@ public abstract class OpenInfraValueValueDao<
 			UUID valueId2,
 			int offset,
 			int size) {
-		// 1. Get the specific value objects from JPA layer
+	    // 1. Define a list which holds the POJO objects
+        List<TypePojo> pojos = new LinkedList<TypePojo>();
+		// 2. Get the specific value objects from JPA layer
 		TypeModelValue tmv = em.find(valueClass, valueId);
 		TypeModelValue2 tmv2 = em.find(valueClass2, valueId2);
-		// 2. Define a list which holds the POJO objects
-		List<TypePojo> pojos = new LinkedList<TypePojo>();
-		// 3. Construct the name of the named query
-		String namedQuery = modelClass.getSimpleName()
-				+ ".findBy"	+ valueClass.getSimpleName()
-				+ "And" + valueClass2.getSimpleName();
-		// 4. Retrieve the requested model objects from database
-		List<TypeModel> models = em.createNamedQuery(
-				namedQuery,
-				modelClass)
-				.setParameter("value", tmv)
-				.setParameter("value2", tmv2)
-				.setFirstResult(offset)
-				.setMaxResults(size)
-				.getResultList();
-		// 5. Map the JPA model objects to POJO objects
-		for(TypeModel modelItem : models) {
-			pojos.add(mapToPojo(locales, modelItem));
-		} // end for
+
+		if(tmv != null && tmv2 != null) {
+    		// 3. Construct the name of the named query
+    		String namedQuery = modelClass.getSimpleName()
+    				+ ".findBy"	+ valueClass.getSimpleName()
+    				+ "And" + valueClass2.getSimpleName();
+    		// 4. Retrieve the requested model objects from database
+    		List<TypeModel> models = em.createNamedQuery(
+    				namedQuery,
+    				modelClass)
+    				.setParameter("value", tmv)
+    				.setParameter("value2", tmv2)
+    				.setFirstResult(offset)
+    				.setMaxResults(size)
+    				.getResultList();
+    		// 5. Map the JPA model objects to POJO objects
+    		for(TypeModel modelItem : models) {
+    			pojos.add(mapToPojo(locales, modelItem));
+    		} // end for
+		}
 		return pojos;
 	}
 }

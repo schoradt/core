@@ -67,26 +67,29 @@ public abstract class OpenInfraValueDao<
 			UUID valueId,
 			int offset,
 			int size) {
-		// 1. Get the specific value object from JPA layer
+	    // 1. Define a list which holds the POJO objects
+        List<TypePojo> pojos = new LinkedList<TypePojo>();
+		// 2. Get the specific value object from JPA layer
 		TypeModelValue tmv = em.find(valueClass, valueId);
-		// 2. Define a list which holds the POJO objects
-		List<TypePojo> pojos = new LinkedList<TypePojo>();
-		// 3. Construct the name of the named query
-		String namedQuery = modelClass.getSimpleName()
-				+ ".findBy"
-				+ valueClass.getSimpleName();
-		// 4. Retrieve the requested model objects from database
-		List<TypeModel> models = em.createNamedQuery(
-				namedQuery,
-				modelClass)
-				.setParameter("value", tmv)
-				.setFirstResult(offset)
-				.setMaxResults(size)
-				.getResultList();
-		// 5. Map the JPA model objects to POJO objects
-		for(TypeModel modelItem : models) {
-			pojos.add(mapToPojo(locale, modelItem));
-		} // end for
+		if(tmv != null) {
+		    // 3. Construct the name of the named query
+	        String namedQuery = modelClass.getSimpleName()
+	                + ".findBy"
+	                + valueClass.getSimpleName();
+	        // 4. Retrieve the requested model objects from database
+	        List<TypeModel> models = em.createNamedQuery(
+	                namedQuery,
+	                modelClass)
+	                .setParameter("value", tmv)
+	                .setFirstResult(offset)
+	                .setMaxResults(size)
+	                .getResultList();
+	        // 5. Map the JPA model objects to POJO objects
+	        for(TypeModel modelItem : models) {
+	            pojos.add(mapToPojo(locale, modelItem));
+	        } // end for
+		}
+
 		return pojos;
 	}
 
@@ -115,12 +118,13 @@ public abstract class OpenInfraValueDao<
             OpenInfraOrderBy column,
             int offset,
             int size) {
-        // Get the specific value object from JPA layer
-        // TODO will be necessary for the not implemented else branch
-        //TypeModelValue tmv = em.find(valueClass, valueId);
-
         // Define a list which holds the POJO objects
         List<TypePojo> pojos = new LinkedList<TypePojo>();
+
+        // Get the specific value object from JPA layer
+        // TODO will be necessary for the not implemented else branch
+        // TODO Check: if tmv == null then return pojos
+        //TypeModelValue tmv = em.find(valueClass, valueId);
 
         // Define a model object that contains the query result
         List<TypeModel> models = null;
@@ -268,21 +272,24 @@ public abstract class OpenInfraValueDao<
 	 * This method returns the count of objects referring a specific object.
 	 *
 	 * @param valueId the specific object
-	 * @return        the count of objects
+	 * @return        the count of objects or -1 if the value id doesn't exists
 	 */
 	public Long getCount(UUID valueId) {
 		// 1. Get the specific value object from JPA layer
 		TypeModelValue tmv = em.find(valueClass, valueId);
-		// 2. Construct the name of the named query
-		String namedQuery = modelClass.getSimpleName()
-				+ ".countBy"
-				+ valueClass.getSimpleName();
-		return em.createNamedQuery(
-				namedQuery,
-				Long.class)
-				.setParameter("value", tmv)
-				.getSingleResult()
-				.longValue();
+		if(tmv != null) {
+		    // 2. Construct the name of the named query
+	        String namedQuery = modelClass.getSimpleName()
+	                + ".countBy"
+	                + valueClass.getSimpleName();
+	        return em.createNamedQuery(
+	                namedQuery,
+	                Long.class)
+	                .setParameter("value", tmv)
+	                .getSingleResult()
+	                .longValue();
+		}
+		return -1L;
 	}
 
 }

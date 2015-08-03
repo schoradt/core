@@ -19,10 +19,12 @@ import de.btu.openinfra.backend.db.pojos.CountryCodePojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
 @Path("/system/countrycodes")
-@Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY, 
-    MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY})
+@Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
+    + OpenInfraResponseBuilder.UTF8_CHARSET,
+    MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
+    + OpenInfraResponseBuilder.UTF8_CHARSET})
 public class CountryCodesResource {
-	
+
 	@GET
 	public List<CountryCodePojo> get(
 			@QueryParam("language") String language,
@@ -31,25 +33,34 @@ public class CountryCodesResource {
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new CountryCodeDao(
-					null, 
+					null,
 					OpenInfraSchemas.SYSTEM).read(
 							PtLocaleDao.forLanguageTag(language),
 							sortOrder,
 							orderBy,
-							offset, 
+							offset,
 							size);
 	}
-	
+
 	@GET
-	@Path("{countryCodeId}")	
+	@Path("{countryCodeId}")
 	public CountryCodePojo get(
 			@QueryParam("language") String language,
 			@PathParam("countryCodeId") UUID countryCodeId) {
 		return new CountryCodeDao(
-				null, 
+				null,
 				OpenInfraSchemas.SYSTEM).read(
 						PtLocaleDao.forLanguageTag(language),
 						countryCodeId);
 	}
+
+	@GET
+    @Path("count")
+    @Produces({MediaType.TEXT_PLAIN})
+    public long getCountryCodeCount() {
+        return new CountryCodeDao(
+                null,
+                OpenInfraSchemas.SYSTEM).getCount();
+    }
 
 }

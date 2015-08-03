@@ -31,8 +31,9 @@ import de.btu.openinfra.backend.db.pojos.ValueListValuePojo;
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
  */
-public class AttributeValueDao extends OpenInfraValueDao<AttributeValuePojo,
-	AttributeValue, TopicInstance> {
+public class AttributeValueDao extends
+    OpenInfraValueValueDao<AttributeValuePojo,
+	    AttributeValue, TopicInstance, AttributeType> {
 
 	/**
 	 * This variable defines the default geometry type. The default type is
@@ -41,15 +42,6 @@ public class AttributeValueDao extends OpenInfraValueDao<AttributeValuePojo,
 	// TODO: add a static parameter or make it dynamically
 	private AttributeValueGeomType defaultGeomType =
 			AttributeValueGeomType.TEXT;
-
-	/**
-	 * This variable defines the SQL string which is used to retrieve the
-	 * requested geometry type string from database.
-	 */
-	public static final String GEOM_CLAUSE =
-			"select %s "
-			+ "from attribute_value_geom%s "
-			+ "where id = cast(? as uuid)";
 
 	/**
 	 * This is the required constructor which calls the super constructor and in
@@ -63,7 +55,7 @@ public class AttributeValueDao extends OpenInfraValueDao<AttributeValuePojo,
 			UUID currentProjectId,
 			OpenInfraSchemas schema) {
 		super(currentProjectId, schema,
-				AttributeValue.class, TopicInstance.class);
+				AttributeValue.class, TopicInstance.class, AttributeType.class);
 	}
 
 	/**
@@ -80,7 +72,7 @@ public class AttributeValueDao extends OpenInfraValueDao<AttributeValuePojo,
 			OpenInfraSchemas schema,
 			AttributeValueGeomType geomType) {
 		super(currentProjectId, schema,
-				AttributeValue.class, TopicInstance.class);
+				AttributeValue.class, TopicInstance.class, AttributeType.class);
 		if(geomType != null) {
 			defaultGeomType = geomType;
 		} // end if

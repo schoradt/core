@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -14,7 +16,7 @@ import javax.persistence.Table;
 
 /**
  * The persistent class for the attribute_value_geomz database table.
- * 
+ *
  */
 @Entity
 @Table(name="attribute_value_geomz")
@@ -23,7 +25,24 @@ import javax.persistence.Table;
             query="SELECT a FROM AttributeValueGeomz a"),
     @NamedQuery(name="AttributeValueGeomz.findByTopicInstance",
             query="SELECT a "
-                    + "FROM AttributeValueGeomz a WHERE a.topicInstance = :value")})
+                    + "FROM AttributeValueGeomz a "
+                    + "WHERE a.topicInstance = :value")})
+@NamedNativeQueries({
+    @NamedNativeQuery(name="AttributeValueGeomz.select",
+            query="SELECT %s "
+                    + "FROM attribute_value_geomz "
+                    + "WHERE id = cast(? as uuid)"),
+    @NamedNativeQuery(name="AttributeValueGeomz.insert",
+            query="INSERT INTO attribute_value_geomz ("
+                    + "attribute_type_to_attribute_type_group_id, "
+                    + "topic_instance_id, geom) "
+                    + "VALUES (?, ?, %s(?))"),
+    @NamedNativeQuery(name="AttributeValueGeomz.update",
+            query="UPDATE TABLE attribute_value_geomz SET "
+                    + "attribute_type_to_attribute_type_group_id = ?, "
+                    + "topic_instance_id = ?, "
+                    + "geom = %s(?) WHERE id = ?")
+})
 
 public class AttributeValueGeomz implements Serializable, OpenInfraModelObject {
 	private static final long serialVersionUID = 1L;
@@ -46,7 +65,8 @@ public class AttributeValueGeomz implements Serializable, OpenInfraModelObject {
 	public AttributeValueGeomz() {
 	}
 
-	public UUID getId() {
+	@Override
+    public UUID getId() {
 		return this.id;
 	}
 

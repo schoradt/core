@@ -60,26 +60,6 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	protected OpenInfraSchemas schema;
 
 	/**
-     * This variable defines the SQL string which is used to insert a new
-     * geometry value into the database.
-     */
-    private static final String GEOM_INSERT_CLAUSE = ""
-            + "INSERT INTO attribute_value_geom%s ("
-            + "attribute_type_to_attribute_type_group_id, "
-            + "topic_instance_id, geom) "
-            + "VALUES (?, ?, %s(?))";
-
-    /**
-     * This variable defines the SQL string which is used to update an existing
-     * geometry value in the database.
-     */
-    private static final String GEOM_UPDATE_CLAUSE = ""
-            + "UPDATE TABLE attribute_value_geom%s SET "
-            + "attribute_type_to_attribute_type_group_id = ?, "
-            + "topic_instance_id = ?, "
-            + "geom = %s(?) WHERE id = ?";
-
-	/**
 	 * This method represents the super constructor in order to create an entity
 	 * manager for each data access object (DAO) in a sophisticated way. We
 	 * decided to use an application managed entity manager in order to have
@@ -180,8 +160,8 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 				url + currentSchema);
 		// 4. Create the final entity manager
 		em = Persistence.createEntityManagerFactory(
-				OpenInfraApplication.PERSISTENCE_CONTEXT,
-				properties).createEntityManager();
+		        OpenInfraApplication.PERSISTENCE_CONTEXT,
+		        properties).createEntityManager();
 	}
 
 	/**
@@ -331,10 +311,13 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 		try {
 			et.begin();
 			// special handling for geometry classes
-            Query geomQuery = createGeomQuery(pojo);
-            if (geomQuery != null) {
-                // execute the query
-                geomQuery.executeUpdate();
+			if (modelClass.getSimpleName().equals("AttributeValueGeom") ||
+			        modelClass.getSimpleName().equals("AttributeValueGeomz")) {
+                Query geomQuery = createGeomQuery(pojo);
+                if (geomQuery != null) {
+                    // execute the query
+                    geomQuery.executeUpdate();
+                }
 			} else {
 			    em.merge(result.getModelObject());
 			}
@@ -365,10 +348,14 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
         // create the special query for AttributeValueGeomz
         case "AttributeValueGeomz":
             if (pojo.getUuid() == null) {
+                // get the NamedNativeQuery
+                String sqlString = em.createNamedQuery(
+                        modelClass.getSimpleName() + ".insert")
+                        .unwrap(JpaQuery.class).getDatabaseQuery()
+                        .getSQLString();
                 // format the prepared INSERT statement
                 String queryString = String.format(
-                        GEOM_INSERT_CLAUSE,
-                        "z",
+                        sqlString,
                         // set the PostGIS function for the geomType
                         AttributeValueGeomWriteType.valueOf(
                                 ((AttributeValueGeomzPojo) pojo)
@@ -378,11 +365,15 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
             } else {
                 // TODO: JPA replaces the native query with its own query that
                 // leads to a type error: varchar / geometry
-                // format the prepared UPDATE statement
                 /*
+                // get the NamedNativeQuery
+                String sqlString = em.createNamedQuery(
+                        modelClass.getSimpleName() + ".insert")
+                        .unwrap(JpaQuery.class).getDatabaseQuery()
+                        .getSQLString();
+                // format the prepared UPDATE statement
                 String queryString = String.format(
-                        GEOM_UPDATE_CLAUSE,
-                        "z",
+                        sqlString,
                         // set the PostGIS function for the geomType
                         AttributeValueGeomWriteType.valueOf(
                                 ((AttributeValueGeomzPojo) pojo)
@@ -407,10 +398,14 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
             break;
         case "AttributeValueGeom":
             if (pojo.getUuid() == null) {
+             // get the NamedNativeQuery
+                String sqlString = em.createNamedQuery(
+                        modelClass.getSimpleName() + ".insert")
+                        .unwrap(JpaQuery.class).getDatabaseQuery()
+                        .getSQLString();
                 // format the prepared INSERT statement
                 String queryString = String.format(
-                        GEOM_INSERT_CLAUSE,
-                        "",
+                        sqlString,
                         // set the PostGIS function for the geomType
                         AttributeValueGeomWriteType.valueOf(
                                 ((AttributeValueGeomPojo) pojo)
@@ -421,10 +416,14 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
                 // TODO: JPA replaces the native query with its own query that
                 // leads to a type error: varchar / geometry
                 /*
+                // get the NamedNativeQuery
+                String sqlString = em.createNamedQuery(
+                        modelClass.getSimpleName() + ".insert")
+                        .unwrap(JpaQuery.class).getDatabaseQuery()
+                        .getSQLString();
                 // format the prepared UPDATE statement
                 String queryString = String.format(
-                        GEOM_UPDATE_CLAUSE,
-                        "",
+                        sqlString
                         // set the PostGIS function for the geomType
                         AttributeValueGeomWriteType.valueOf(
                                 ((AttributeValueGeomPojo) pojo)
@@ -448,7 +447,8 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
                     .getGeom());
             break;
         default:
-            // return null if the modelClass is no geometry
+            // return null if the modelClass is no geometry, this should never
+            // happen
             return null;
         }
         return geomQuery;
@@ -459,32 +459,21 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	 * class must implement its own read method. This should provide more type
 	 * safety.
 	 *
-     * Since the system schema doesn't provide the project_id column for topic
-     * characteristic objects it is necessary to handle this request separately.
-	 *
      * @param locale             A Java.util locale object.
 	 * @param id                 the UUID of the required model class
 	 * @return                   The requested POJO object if present otherwise
 	 *                           null.
 	 */
-	@SuppressWarnings("unchecked")
     public TypePojo read(Locale locale, UUID id) {
 		TypePojo pojo = null;
-		if(modelClass == TopicCharacteristic.class &&
-                schema == OpenInfraSchemas.SYSTEM) {
-		    pojo = mapToPojo(locale, (TypeModel)em.createNativeQuery(
-		            "select id, description, topic "
-                    + "from topic_characteristic where id = ?",
-                    TopicCharacteristic.class)
-                    .setParameter(1, id)
-                    .getSingleResult());
-		} else {
-	        try {
-	            pojo = mapToPojo(locale, em.find(modelClass, id));
-	        } catch(Exception ex) {
-	            ex.printStackTrace();
-	        } // end try catch
-		} // end if else
+		try {
+            TypeModel tm = em.find(modelClass, id);
+            if(tm != null) {
+                pojo = mapToPojo(locale, tm);
+            }
+		} catch(Exception ex) {
+            ex.printStackTrace();
+        } // end try catch
 		return pojo;
 	}
 

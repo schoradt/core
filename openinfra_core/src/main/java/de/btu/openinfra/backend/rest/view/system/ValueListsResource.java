@@ -21,7 +21,9 @@ import de.btu.openinfra.backend.db.pojos.ValueListPojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
 //@Path("/system/valuelists")
-@Produces(MediaType.TEXT_HTML + OpenInfraResponseBuilder.UTF8_CHARSET)
+@Produces(MediaType.TEXT_HTML +
+        OpenInfraResponseBuilder.UTF8_CHARSET +
+        OpenInfraResponseBuilder.HTML_PRIORITY)
 public class ValueListsResource {
 
 	@GET
@@ -36,7 +38,7 @@ public class ValueListsResource {
 				null,
 				OpenInfraSchemas.SYSTEM).read(
 						PtLocaleDao.forLanguageTag(language),
-						sortOrder, 
+						sortOrder,
 						orderBy,
 						offset,
 						size);

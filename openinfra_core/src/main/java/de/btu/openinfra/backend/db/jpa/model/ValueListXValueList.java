@@ -24,6 +24,9 @@ import javax.persistence.Table;
 	@NamedQuery(name="ValueListXValueList.findByValueList", 
 			query="SELECT v FROM ValueListXValueList v "
 					+ "WHERE v.valueList1Bean = :value "),
+	@NamedQuery(name="ValueListXValueList.countByValueList", 
+        query="SELECT count(v) FROM ValueListXValueList v "
+                + "WHERE v.valueList1Bean = :value "),
 	@NamedQuery(name="ValueListXValueList.findByValueListAndValueList", 
 		query="SELECT v FROM ValueListXValueList v "
 			+ "WHERE v.valueList1Bean = :value AND "

@@ -65,7 +65,7 @@ public class MetaDataManager {
 					OpenInfraPropertyValues.SEARCH_PATH);
 			emMeta = Persistence.createEntityManagerFactory(
 					OpenInfraApplication.PERSISTENCE_CONTEXT, 
-					properties).createEntityManager();			
+					properties).createEntityManager();
 		}
 		
 		return ProjectsDao.mapPojoStatically(

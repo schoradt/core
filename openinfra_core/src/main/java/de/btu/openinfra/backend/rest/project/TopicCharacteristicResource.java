@@ -24,8 +24,10 @@ import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
 @Path("/projects/{projectId}/topiccharacteristics/{topicCharacteristicId}"
         + "/topicinstances")
-@Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY,
-	MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY})
+@Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
+    + OpenInfraResponseBuilder.UTF8_CHARSET,
+    MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
+    + OpenInfraResponseBuilder.UTF8_CHARSET})
 public class TopicCharacteristicResource {
 
 	/**
@@ -36,7 +38,6 @@ public class TopicCharacteristicResource {
 	 *
 	 * @param language
 	 * @param projectId
-	 * @param schema
 	 * @param topicCharacteristicId
 	 * @param filter
 	 * @param sortOrder
@@ -50,7 +51,6 @@ public class TopicCharacteristicResource {
 	public List<TopicInstancePojo> getTopicInstances(
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
-			@PathParam("schema") String schema,
 			@PathParam("topicCharacteristicId") UUID topicCharacteristicId,
 			@QueryParam("filter") String filter,
 			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
@@ -90,11 +90,10 @@ public class TopicCharacteristicResource {
 	@Produces({MediaType.TEXT_PLAIN})
 	public long getTopicInstancesCount(
 			@PathParam("projectId") UUID projectId,
-			@PathParam("schema") String schema,
 			@PathParam("topicCharacteristicId") UUID topicCharacteristicId) {
 		return new TopicInstanceDao(
 				projectId,
-				OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
+				OpenInfraSchemas.PROJECTS).getCount(
 						topicCharacteristicId);
 	}
 
@@ -115,14 +114,13 @@ public class TopicCharacteristicResource {
     public List<TopicGeomzPojo> getTopicInstancesGeomz(
             @QueryParam("language") String language,
             @PathParam("projectId") UUID projectId,
-            @PathParam("schema") String schema,
             @PathParam("topicCharacteristicId") UUID topicCharacteristicId,
             @QueryParam("geomType") AttributeValueGeomType geomType,
             @QueryParam("offset") int offset,
             @QueryParam("size") int size) {
 	    return new TopicGeomzDao(
 	            projectId,
-	            OpenInfraSchemas.valueOf(schema.toUpperCase()),
+	            OpenInfraSchemas.PROJECTS,
 	            geomType).read(
 	                    PtLocaleDao.forLanguageTag(language),
 	                    topicCharacteristicId,
@@ -145,12 +143,11 @@ public class TopicCharacteristicResource {
     public long getTopicInstancesGeomzCount(
             @QueryParam("language") String language,
             @PathParam("projectId") UUID projectId,
-            @PathParam("schema") String schema,
             @PathParam("topicCharacteristicId") UUID topicCharacteristicId,
             @QueryParam("geomType") AttributeValueGeomType geomType) {
         return new TopicGeomzDao(
                 projectId,
-                OpenInfraSchemas.valueOf(schema.toUpperCase()),
+                OpenInfraSchemas.PROJECTS,
                 geomType).getCount(topicCharacteristicId);
     }
 }

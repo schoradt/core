@@ -24,7 +24,9 @@ import javax.persistence.Table;
 		query="SELECT c FROM CountryCode c"),
 	@NamedQuery(name="CountryCode.findByString",
 		query="SELECT c FROM CountryCode c "
-				+ "WHERE c.countryCode = :value")
+				+ "WHERE c.countryCode = :value"),
+	@NamedQuery(name="CountryCode.count",
+        query="SELECT COUNT(c) FROM CountryCode c ")
 })
 
 public class CountryCode implements Serializable, OpenInfraModelObject {
@@ -43,7 +45,8 @@ public class CountryCode implements Serializable, OpenInfraModelObject {
 	public CountryCode() {
 	}
 
-	public UUID getId() {
+	@Override
+    public UUID getId() {
 		return this.id;
 	}
 

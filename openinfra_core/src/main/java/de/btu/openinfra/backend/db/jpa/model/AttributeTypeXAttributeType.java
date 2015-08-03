@@ -25,6 +25,10 @@ import javax.persistence.Table;
 			query="SELECT a "
 					+ "FROM AttributeTypeXAttributeType a "
 					+ "WHERE a.attributeType1Bean = :value "),
+	@NamedQuery(name="AttributeTypeXAttributeType.countByAttributeType", 
+        query="SELECT count(a) "
+                + "FROM AttributeTypeXAttributeType a "
+                + "WHERE a.attributeType1Bean = :value "),
 	@NamedQuery(
 			name="AttributeTypeXAttributeType."
 					+ "findByAttributeTypeAndAttributeType", 

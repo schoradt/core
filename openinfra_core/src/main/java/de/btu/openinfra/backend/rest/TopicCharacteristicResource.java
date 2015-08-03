@@ -23,8 +23,10 @@ import de.btu.openinfra.backend.db.pojos.RelationshipTypeToTopicCharacteristicPo
 import de.btu.openinfra.backend.db.pojos.TopicCharacteristicPojo;
 
 @Path(OpenInfraResponseBuilder.REST_URI + "/topiccharacteristics")
-@Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY,
-	MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY})
+@Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
+    + OpenInfraResponseBuilder.UTF8_CHARSET,
+	MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
+	+ OpenInfraResponseBuilder.UTF8_CHARSET})
 public class TopicCharacteristicResource {
 
 	@GET
@@ -100,6 +102,19 @@ public class TopicCharacteristicResource {
 	}
 
 	@GET
+    @Path("{topicCharacteristicId}/attributetypegroups/count")
+    @Produces({MediaType.TEXT_PLAIN})
+    public long getAttributeTypeGroupCount(
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            @PathParam("topicCharacteristicId") UUID topicCharacteristicId) {
+        return new AttributeTypeGroupToTopicCharacteristicDao(
+                projectId,
+                OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
+                        topicCharacteristicId);
+    }
+
+	@GET
 	@Path("{topicCharacteristicId}/attributetypegroups/"
 			+ "{attributeTypeGroupId}")
 	public List<AttributeTypeGroupToTopicCharacteristicPojo> get(
@@ -164,7 +179,7 @@ public class TopicCharacteristicResource {
 	@GET
 	@Path("{topicCharacteristicId}/relationshiptypes/count")
 	@Produces({MediaType.TEXT_PLAIN})
-	public long getAttributeTypeGroupCount(
+	public long getRelationshipTypeCount(
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@PathParam("topicCharacteristicId") UUID topicCharacteristicId) {

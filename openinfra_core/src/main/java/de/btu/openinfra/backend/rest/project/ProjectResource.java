@@ -37,7 +37,8 @@ import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 @Path("/projects")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET,
-	MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY})
+	MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
+	+ OpenInfraResponseBuilder.UTF8_CHARSET})
 @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class ProjectResource {
 
@@ -122,6 +123,17 @@ public class ProjectResource {
 				OpenInfraSchemas.PROJECTS).getSubProjectsCount();
 	}
 
+	@GET
+	@Path("{projectId}/new")
+    public ProjectPojo newSubProject(
+            @QueryParam("language") String language,
+            @PathParam("projectId") UUID projectId) {
+        return new ProjectDao(
+                        projectId,
+                        OpenInfraSchemas.PROJECTS)
+                    .newSubProject(PtLocaleDao.forLanguageTag(language));
+    }
+
 	/**
 	 * This method creates a new project.
 	 *
@@ -137,9 +149,10 @@ public class ProjectResource {
 	 */
 	@POST
 	public Response createProject(ProjectPojo project) {
-		UUID id = new ProjectDao(
-				null,
-				OpenInfraSchemas.PROJECTS).createOrUpdate(project);
+	    // create the project
+		UUID id = ProjectDao.createProject(project);
+		// TODO add informations to the meta data schema, this is necessary for
+		//      every REST end point this project should use
 		return OpenInfraResponseBuilder.postResponse(id);
 	}
 
@@ -183,14 +196,20 @@ public class ProjectResource {
 	 */
 	@DELETE
 	@Path("{projectId}")
-	public Response deleteProject(@PathParam("projectId") UUID projectId) {
-		if(new ProjectDao(
-				projectId,
-				OpenInfraSchemas.PROJECTS).delete(projectId)) {
-			return Response.ok().entity("Entity deleted: " + projectId).build();
-		} else {
-			return Response.status(Response.Status.NOT_FOUND).build();
-		} // end if else
+	public Response deleteProject(
+	        @PathParam("projectId") UUID projectId) {
+	    // TODO this method will work correctly if the project creation works
+	    //      completely
+	    System.out.println("not implemented yet");
+	    return null;
+	    /*
+		return OpenInfraResponseBuilder.deleteResponse(
+                new ProjectDao(
+                        projectId,
+                        OpenInfraSchemas.PROJECTS)
+                    .deleteProject(),
+                projectId);
+                */
 	}
 
 	@GET

@@ -17,14 +17,16 @@ import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.PtLocalePojo;
 
 /**
- * This class represents the PtLocal resource of the REST API. 
- * 
+ * This class represents the PtLocal resource of the REST API.
+ *
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
  */
 @Path(OpenInfraResponseBuilder.REST_URI + "/ptlocales")
-@Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY, 
-	MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY})
+@Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
+    + OpenInfraResponseBuilder.UTF8_CHARSET,
+	MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
+	+ OpenInfraResponseBuilder.UTF8_CHARSET})
 public class PtLocaleResource {
 
 	@GET
@@ -34,18 +36,18 @@ public class PtLocaleResource {
 			@PathParam("schema") String schema,
 			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
 			@QueryParam("orderBy") OpenInfraOrderByEnum orderBy,
-			@QueryParam("offset") int offset, 
+			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new PtLocaleDao(
-				projectId, 
+				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language),
 						sortOrder,
 						orderBy,
-						offset, 
+						offset,
 						size);
 	}
-	
+
 	@GET
 	@Path("count")
 	@Produces({MediaType.TEXT_PLAIN})
@@ -53,7 +55,7 @@ public class PtLocaleResource {
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema) {
 		return new PtLocaleDao(
-				projectId, 
+				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount();
 	}
 
@@ -65,10 +67,10 @@ public class PtLocaleResource {
 			@PathParam("schema") String schema,
 			@PathParam("ptLocaleId") UUID ptLocaleId) {
 		return new PtLocaleDao(
-				projectId, 
+				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language),
 						ptLocaleId);
 	}
-	
+
 }
