@@ -68,23 +68,4 @@ public class MultiplicityDao extends
 			return null;
 		} // end if else
 	}
-
-	/**
-     * This method creates a MultiplicityPojo shell that contains informations
-     * about the min and max values.
-     *
-     * @return       the MultiplicityPojo
-     */
-    public MultiplicityPojo newMultiplicity() {
-        // create the return pojo
-        MultiplicityPojo pojo = new MultiplicityPojo();
-
-        // set the min value
-        pojo.setMin(0);
-
-        // set the max value
-        pojo.setMax(null);
-
-        return pojo;
-    }
 }

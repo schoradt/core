@@ -97,25 +97,4 @@ public class RelationshipTypeDao extends
             return null;
         }
 	}
-
-    /**
-     * This method creates a RelationshipTypePojo shell that contains
-     * informations about relationshipType and description.
-     *
-     * @param locale the locale the informations should be saved at
-     * @return       the RelationshipTypePojo
-     */
-    public RelationshipTypePojo newRelationshipType(Locale locale) {
-        // create the return pojo
-        RelationshipTypePojo pojo = new RelationshipTypePojo();
-
-        // add value list value for the relationship type
-        pojo.setRelationshipType(null);
-
-        // add value list value for the description
-        pojo.setDescription(null);
-
-        return pojo;
-    }
-
 }

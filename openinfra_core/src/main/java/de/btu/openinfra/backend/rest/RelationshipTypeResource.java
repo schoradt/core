@@ -93,7 +93,7 @@ public class RelationshipTypeResource {
 						offset,
 						size);
 	}
-    
+
     @GET
     @Path("{relationshipTypeId}/topiccharacteristics/count")
     public long getTopicCharacteristicsCount(
@@ -135,10 +135,7 @@ public class RelationshipTypeResource {
             @QueryParam("language") String language,
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema) {
-        return new RelationshipTypeDao(
-                        projectId,
-                        OpenInfraSchemas.valueOf(schema.toUpperCase()))
-                    .newRelationshipType(PtLocaleDao.forLanguageTag(language));
+        return new RelationshipTypePojo();
     }
 
 	@POST
