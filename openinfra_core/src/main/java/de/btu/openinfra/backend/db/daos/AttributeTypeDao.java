@@ -128,20 +128,10 @@ public class AttributeTypeDao
 	    // return null if the pojo is null
         if (pojo != null) {
 
-            // in case the name or the data type is null
-            if (pojo.getNames() == null || pojo.getDataType() == null) {
-                return null;
-            }
-
-            // in case the name value is empty
-            if (pojo.getNames().getLocalizedStrings().get(0)
-                    .getCharacterString().equals("")) {
-                return null;
-            }
-
             PtFreeTextDao ptfDao =
                     new PtFreeTextDao(currentProjectId, schema);
-            // set the description (is optional)
+
+            // set the description (optional)
             if (pojo.getDescriptions() != null) {
                 at.setPtFreeText1(
                         ptfDao.getPtFreeTextModel(pojo.getDescriptions()));
@@ -156,14 +146,24 @@ public class AttributeTypeDao
 
             // set the unit (optional)
             if (pojo.getUnit() != null) {
-                at.setValueListValue2(em.find(ValueListValue.class,
-                                              pojo.getUnit().getUuid()));
+                if (pojo.getUnit().getUuid() != null) {
+                    at.setValueListValue2(em.find(ValueListValue.class,
+                                                  pojo.getUnit().getUuid()));
+                } else {
+                    // reset the unit
+                    at.setValueListValue2(null);
+                }
             }
 
             // set the domain (optional)
             if (pojo.getDomain() != null) {
-                at.setValueList(em.find(ValueList.class,
-                                        pojo.getDomain().getUuid()));
+                if (pojo.getDomain().getUuid() != null) {
+                    at.setValueList(em.find(ValueList.class,
+                            pojo.getDomain().getUuid()));
+                } else {
+                    // reset the domain
+                    at.setValueList(null);
+                }
             }
 
             // return the model as mapping result

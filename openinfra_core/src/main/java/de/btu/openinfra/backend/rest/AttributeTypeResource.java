@@ -69,7 +69,7 @@ public class AttributeTypeResource {
 						offset,
 						size);
 	}
-	
+
 	@GET
     @Path("{attributeTypeId}/associations/count")
 	@Produces({MediaType.TEXT_PLAIN})
@@ -227,7 +227,7 @@ public class AttributeTypeResource {
             @PathParam("schema") String schema,
             @PathParam("attributeTypeId") UUID attributeTypeId,
             AttributeTypePojo pojo) {
-        return OpenInfraResponseBuilder.postResponse(
+        return OpenInfraResponseBuilder.putResponse(
                 new AttributeTypeDao(
                         projectId,
                         OpenInfraSchemas.PROJECTS).createOrUpdate(pojo));
