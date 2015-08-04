@@ -49,14 +49,13 @@ public class MetaDataResource {
     
     @GET
     @Path("/new")
-    public MetaDataPojo newValueList(
-            @QueryParam("language") String language,
+    public MetaDataPojo newMetaData(
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema) {
         return new MetaDataDao(
                         projectId,
                         OpenInfraSchemas.valueOf(schema.toUpperCase()))
-                    .newMetaData(PtLocaleDao.forLanguageTag(language));
+                    .newMetaData();
     }
     
     @POST
