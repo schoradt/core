@@ -3,9 +3,6 @@ package de.btu.openinfra.backend.db.daos;
 import java.util.Locale;
 import java.util.UUID;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-
 import de.btu.openinfra.backend.db.jpa.model.MetaData;
 import de.btu.openinfra.backend.db.pojos.MetaDataPojo;
 
@@ -68,19 +65,12 @@ public class MetaDataDao
         } // end if else
     }
     
-    public MetaDataPojo newMetaData(Locale locale) {
-        // create the return pojo
-        MetaDataPojo pojo = new MetaDataPojo();
-        
-        // set an empty data
-        JsonObject jsonObject = Json.createObjectBuilder().build();
-        pojo.setData(jsonObject.toString());
-        // set an empty primary key column
-        pojo.setPkColumn("");
-        //set an empty table name
-        pojo.setTableName("");
-        
-        return pojo;
+    /**
+     * Creates an empty MetaDataPojo.
+     * @return an empty MetaDataPojo
+     */
+    public MetaDataPojo newMetaData() {
+       return new MetaDataPojo();
     }
 
 }
