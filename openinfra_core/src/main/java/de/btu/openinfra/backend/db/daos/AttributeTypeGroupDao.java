@@ -7,6 +7,8 @@ import java.util.UUID;
 
 import de.btu.openinfra.backend.db.jpa.model.AttributeTypeGroup;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupPojo;
+import de.btu.openinfra.backend.db.pojos.LocalizedString;
+import de.btu.openinfra.backend.db.pojos.PtFreeTextPojo;
 
 /**
  * This class represents the AttributeTypeGroup and is used to access the
@@ -105,7 +107,27 @@ public class AttributeTypeGroupDao
         // return null if the pojo is null
         if (pojo != null) {
 
-            // TODO set the model values
+            PtFreeTextDao ptfDao =
+                    new PtFreeTextDao(currentProjectId, schema);
+
+            // set the description (optional)
+            if (pojo.getDescriptions() != null) {
+                atg.setPtFreeText1(
+                        ptfDao.getPtFreeTextModel(pojo.getDescriptions()));
+            }
+
+            // set the name
+            atg.setPtFreeText2(ptfDao.getPtFreeTextModel(pojo.getNames()));
+
+            // set the parent attribute type group id (optional)
+            if (pojo.getSubgroupOf() != null) {
+                atg.setAttributeTypeGroup(
+                        em.find(AttributeTypeGroup.class,
+                                pojo.getSubgroupOf()));
+            } else {
+                // reset the parent attribute type group id
+                atg.setAttributeTypeGroup(null);
+            }
 
             // return the model as mapping result
             return new MappingResult<AttributeTypeGroup>(atg.getId(), atg);
@@ -113,5 +135,38 @@ public class AttributeTypeGroupDao
             return null;
         }
 	}
+
+	/**
+     * This method creates a AttributeTypeGroupPojo shell that contains
+     * informations about the name, description and the parent group id.
+     *
+     * @param locale the locale the informations should be saved at
+     * @return       the AttributeTypePojo
+     */
+    public AttributeTypeGroupPojo newAttributeTypeGroup(Locale locale) {
+        // create the return pojo
+        AttributeTypeGroupPojo pojo = new AttributeTypeGroupPojo();
+
+        PtLocaleDao ptl = new PtLocaleDao(currentProjectId, schema);
+        List<LocalizedString> lcs = new LinkedList<LocalizedString>();
+        LocalizedString ls = new LocalizedString();
+
+        // set an empty character string
+        ls.setCharacterString("");
+
+        // set the locale of the character string
+        ls.setLocale(PtLocaleDao.mapToPojoStatically(
+                locale,
+                ptl.read(locale)));
+        lcs.add(ls);
+
+        // add the localized string for the name
+        pojo.setNames(new PtFreeTextPojo(lcs, null));
+
+        // add the localized string for the description
+        pojo.setDescriptions(new PtFreeTextPojo(lcs, null));
+
+        return pojo;
+    }
 
 }
