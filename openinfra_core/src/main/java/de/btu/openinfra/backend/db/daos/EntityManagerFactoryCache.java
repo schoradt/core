@@ -56,7 +56,7 @@ public class EntityManagerFactoryCache {
                     @Override
                     public EntityManagerFactory load(CacheTuple tuple)
                             throws PersistenceException {
-                        return createEntityManagerFactory(tuple);
+                        return createNewEntityManagerFactory(tuple);
                     }
                 });
         
@@ -217,7 +217,7 @@ public class EntityManagerFactoryCache {
      * a new entity manager factory
      * @return a new entity manager factory
      */
-    private static EntityManagerFactory createEntityManagerFactory(
+    private static EntityManagerFactory createNewEntityManagerFactory(
             final CacheTuple cacheTuple) {
         return Persistence.createEntityManagerFactory(
                 cacheTuple.getPersistenceUnitName(),
