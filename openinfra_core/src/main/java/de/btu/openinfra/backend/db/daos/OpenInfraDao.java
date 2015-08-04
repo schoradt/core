@@ -298,15 +298,14 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 			throws RuntimeException {
 		
 	    UUID resultId = null;
-	    TypeModel typeModel = createModelObject(pojo.getUuid());
-		
+	    
 		// 2. Get the transaction and merge (create or replace) the JPA model
 		// object.
 		EntityTransaction et = em.getTransaction();
 		try {
-			et.begin();
-			// special handling for geometry classes
+			et.begin();			
 			switch(modelClass.getSimpleName()) {
+			    // special handling for geometry classes
 			    case "AttributeValueGeom":
 			        // fall through
 			    case "AttributeValueGeomz":
@@ -317,20 +316,21 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	                }
 	                break;
 			    case "MetaData":
-			        Query metaQuery = createMetaDataQuery(pojo, typeModel);
+			        Query metaQuery = createMetaDataQuery(pojo);
                     // execute the query
                     metaQuery.executeUpdate();
                     resultId = pojo.getUuid();
 			        break;
 			    default:
+			        TypeModel typeModel = createModelObject(pojo.getUuid());
+			        // abort here if typeModel is null
+			        if(typeModel == null) {
+			            return null;
+			        }
 			        // Map the POJO object to a JPA model object
 			        MappingResult<TypeModel> result = mapToModel(
 			                pojo,
 			                typeModel);
-			        // abort here if the result is null
-			        if (result == null) {
-			            return null;
-			        }
 			        em.merge(result.getModelObject());
 			        resultId = result.getId();
 			}
@@ -344,8 +344,9 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 		} // end try catch
     }
 	
-	private Query createMetaDataQuery(TypePojo pojo, TypeModel typeModel) {
+	private Query createMetaDataQuery(TypePojo pojo) {
 	    Query metaDataQuery = null;
+	    TypeModel typeModel = createModelObject(pojo.getUuid());
 	    
 	    if (typeModel == null) {
 	        // get the NamedNativeQuery
