@@ -149,11 +149,11 @@ public class PtFreeTextDao	extends OpenInfraDao<PtFreeTextPojo, PtFreeText> {
 	 */
 	@Override
 	public MappingResult<PtFreeText> mapToModel(
-			PtFreeTextPojo pojo, 
+			PtFreeTextPojo pojo,
 			PtFreeText ptf) {
 
-        // return null if the pojo is null
-        if (pojo != null) {
+        // return null if the pojo or the model object is null
+        if (pojo != null && ptf != null) {
 
     		// 1. Define the List of LocalizedCharacterStrings and
     		//    a. take the existing list when the PtFreeText already has one
@@ -164,8 +164,8 @@ public class PtFreeTextDao	extends OpenInfraDao<PtFreeTextPojo, PtFreeText> {
     			lcsList = new LinkedList<LocalizedCharacterString>();
     		} // end if
 
-    		// 3. Now iterate through all LocalizedStrings and look if this 
-    		// locale already exists in the LocalizedCharacterStrings (from 
+    		// 3. Now iterate through all LocalizedStrings and look if this
+    		// locale already exists in the LocalizedCharacterStrings (from
     		// PtFreeText)
     		for(LocalizedString ls : pojo.getLocalizedStrings()) {
     			boolean exists = false;
@@ -174,7 +174,7 @@ public class PtFreeTextDao	extends OpenInfraDao<PtFreeTextPojo, PtFreeText> {
     			Iterator<LocalizedCharacterString> it = lcsList.iterator();
     			while(it.hasNext()) {
     				LocalizedCharacterString lcs = it.next();
-    				// If the locale exists replace the free text string in any 
+    				// If the locale exists replace the free text string in any
     				// case
     				if(ls.getLocale().getUuid().equals(lcs.getPtLocale()
     						.getId())) {
@@ -195,7 +195,7 @@ public class PtFreeTextDao	extends OpenInfraDao<PtFreeTextPojo, PtFreeText> {
     			// If the locale doesn't exists create a new
     			// LocalizedCharacterString
     			if(!exists && !"".equals(ls.getCharacterString())) {
-    				LocalizedCharacterString lcs = 
+    				LocalizedCharacterString lcs =
     						new LocalizedCharacterString();
     				lcs.setPtLocale(em.find(
     						PtLocale.class,
@@ -206,7 +206,7 @@ public class PtFreeTextDao	extends OpenInfraDao<PtFreeTextPojo, PtFreeText> {
     			} // end if
     		}
 
-    		// 4. Finally, add the changed List of LocalizedCharacterStrings to 
+    		// 4. Finally, add the changed List of LocalizedCharacterStrings to
     		//    the PtFreeTextObject
     		ptf.setLocalizedCharacterStrings(lcsList);
 
@@ -245,16 +245,16 @@ public class PtFreeTextDao	extends OpenInfraDao<PtFreeTextPojo, PtFreeText> {
         }
         return null;
     }
-	
+
 	public static PtFreeTextPojo mapToPojoStatically(
-			Locale locale, 
+			Locale locale,
 			PtFreeText ptf) {
 		UUID id = null;
 		if(ptf != null) {
 			id = ptf.getId();
 		} // end if
 		return new PtFreeTextPojo(
-				mapToLocalizedStringStatically(locale, ptf), 
+				mapToLocalizedStringStatically(locale, ptf),
 				id);
 	}
 }
