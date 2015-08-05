@@ -1,14 +1,25 @@
 package de.btu.openinfra.backend.db.pojos;
 
+import java.util.UUID;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class AttributeTypeAssociationPojo extends OpenInfraPojo {
 
-	private AttributeTypePojo associatedAttributeType;
+	private UUID associationAttributeTypeId;
+    private AttributeTypePojo associatedAttributeType;
 	private ValueListValuePojo relationship;
-	
-	public AttributeTypePojo getAssociatedAttributeType() {
+
+	public UUID getAssociationAttributeTypeId() {
+        return associationAttributeTypeId;
+    }
+
+    public void setAssociationAttributeTypeId(UUID associationAttributeTypeId) {
+        this.associationAttributeTypeId = associationAttributeTypeId;
+    }
+
+    public AttributeTypePojo getAssociatedAttributeType() {
 		return associatedAttributeType;
 	}
 
@@ -20,10 +31,10 @@ public class AttributeTypeAssociationPojo extends OpenInfraPojo {
 	public ValueListValuePojo getRelationship() {
 		return relationship;
 	}
-	
+
 	public void setRelationship(ValueListValuePojo relationship) {
 		this.relationship = relationship;
 	}
-	
-	
+
+
 }

@@ -50,16 +50,10 @@ public class CharacterCodeDao
 	public MappingResult<CharacterCode> mapToModel(
 			CharacterCodePojo pojo, CharacterCode cc) {
 
-        // return null if the pojo is null
-        if (pojo != null) {
+        // TODO set the model values
 
-            // TODO set the model values
-
-            // return the model as mapping result
-            return new MappingResult<CharacterCode>(cc.getId(), cc);
-        } else {
-            return null;
-        }
+        // return the model as mapping result
+        return new MappingResult<CharacterCode>(cc.getId(), cc);
 	}
 
 }

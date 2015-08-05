@@ -3,6 +3,7 @@ package de.btu.openinfra.backend.rest;
 import java.util.List;
 import java.util.UUID;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
@@ -25,6 +26,7 @@ import de.btu.openinfra.backend.db.pojos.ValueListValuePojo;
     + OpenInfraResponseBuilder.UTF8_CHARSET,
 	MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
 	+ OpenInfraResponseBuilder.UTF8_CHARSET})
+@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class ValueListValuesResource {
 
 	@GET
@@ -72,7 +74,7 @@ public class ValueListValuesResource {
 						offset,
 						size);
 	}
-	
+
 	@GET
     @Path("{valueListValueId}/associations/count")
 	@Produces({MediaType.TEXT_PLAIN})

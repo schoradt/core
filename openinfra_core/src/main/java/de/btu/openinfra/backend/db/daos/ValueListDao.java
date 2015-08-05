@@ -59,36 +59,30 @@ public class ValueListDao extends OpenInfraDao<ValueListPojo, ValueList> {
 			ValueListPojo pojo,
 			ValueList vl) {
 
-	    // return null if the pojo is null
-        if(pojo != null) {
-
-            // in case the name is empty
-            if (pojo.getNames() == null) {
-                return null;
-            }
-
-            // in case the name value is empty
-            if (pojo.getNames().getLocalizedStrings().get(0)
-                    .getCharacterString().equals("")) {
-                return null;
-            }
-
-        	PtFreeTextDao ptfDao =
-        			new PtFreeTextDao(currentProjectId, schema);
-            // set the description (is optional)
-            if (pojo.getDescriptions() != null) {
-                vl.setPtFreeText1(
-                		ptfDao.getPtFreeTextModel(pojo.getDescriptions()));
-            }
-
-            // set the name
-            vl.setPtFreeText2(ptfDao.getPtFreeTextModel(pojo.getNames()));
-
-            // return the model as mapping result
-            return new MappingResult<ValueList>(vl.getId(), vl);
-        } else {
+        // in case the name is empty
+        if (pojo.getNames() == null) {
             return null;
-        } // end if else
+        }
+
+        // in case the name value is empty
+        if (pojo.getNames().getLocalizedStrings().get(0)
+                .getCharacterString().equals("")) {
+            return null;
+        }
+
+    	PtFreeTextDao ptfDao =
+    			new PtFreeTextDao(currentProjectId, schema);
+        // set the description (is optional)
+        if (pojo.getDescriptions() != null) {
+            vl.setPtFreeText1(
+            		ptfDao.getPtFreeTextModel(pojo.getDescriptions()));
+        }
+
+        // set the name
+        vl.setPtFreeText2(ptfDao.getPtFreeTextModel(pojo.getNames()));
+
+        // return the model as mapping result
+        return new MappingResult<ValueList>(vl.getId(), vl);
 	}
 
 	/**

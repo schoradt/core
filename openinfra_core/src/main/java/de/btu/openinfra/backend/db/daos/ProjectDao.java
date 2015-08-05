@@ -153,12 +153,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 	    // return null if the pojo is null
 	    if (pojo != null) {
 
-	        // in case the name is null
-            if (pojo.getNames() == null) {
-                return null;
-            }
-
-            // in case the name value is empty
+            // avoid empty names
             if (pojo.getNames().getLocalizedStrings().get(0)
                     .getCharacterString().equals("")) {
                 return null;
@@ -178,7 +173,10 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
     		// set the sub project (optional)
     		if(pojo.getSubprojectOf() != null) {
     			p.setProject(em.find(Project.class, pojo.getSubprojectOf()));
-    		} // end if
+    		} else {
+    		    // reset the subProject id
+    		    p.setProject(null);
+    		}
 
     		return new MappingResult<Project>(p.getId(), p);
 	    } else {

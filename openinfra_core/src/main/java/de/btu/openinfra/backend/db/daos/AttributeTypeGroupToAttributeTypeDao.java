@@ -67,17 +67,11 @@ public class AttributeTypeGroupToAttributeTypeDao extends
 			AttributeTypeGroupToAttributeTypePojo pojo,
 			AttributeTypeToAttributeTypeGroup atg) {
 
-        // return null if the pojo is null
-        if (pojo != null) {
+	    // TODO set the model values
 
-            // TODO set the model values
-
-            // return the model as mapping result
-            return new MappingResult<AttributeTypeToAttributeTypeGroup>(
-                    atg.getId(), atg);
-        } else {
-            return null;
-        }
+        // return the model as mapping result
+        return new MappingResult<AttributeTypeToAttributeTypeGroup>(
+                atg.getId(), atg);
 	}
 
 }

@@ -63,11 +63,11 @@ public class AttributeTypeGroupToTopicCharacteristicDao extends
 		pojo.setMultiplicity(MultiplicityDao.mapToPojoStatically(
 				atg.getMultiplicityBean()));
 		pojo.setTopicCharacteristicId(atg.getTopicCharacteristic().getId());
-		
+
 		if(atg.getOrder() != null) {
 			pojo.setOrder(atg.getOrder());
 		}
-		
+
 		pojo.setUuid(atg.getId());
 		return pojo;
 	}
@@ -77,17 +77,11 @@ public class AttributeTypeGroupToTopicCharacteristicDao extends
 			AttributeTypeGroupToTopicCharacteristicPojo pojo,
 			AttributeTypeGroupToTopicCharacteristic atg) {
 
-        // return null if the pojo is null
-        if (pojo != null) {
+        // TODO set the model values
 
-            // TODO set the model values
-
-            // return the model as mapping result
-            return new MappingResult<AttributeTypeGroupToTopicCharacteristic>(
-                    atg.getId(), atg);
-        } else {
-            return null;
-        }
+        // return the model as mapping result
+        return new MappingResult<AttributeTypeGroupToTopicCharacteristic>(
+                atg.getId(), atg);
 	}
 
 }
