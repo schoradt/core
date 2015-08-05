@@ -205,16 +205,10 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
 			TopicInstancePojo pojo,
 			TopicInstance ti) {
 
-        // return null if the pojo is null
-        if (pojo != null) {
+        // TODO set the model values
 
-            // TODO set the model values
-
-            // return the model as mapping result
-            return new MappingResult<TopicInstance>(ti.getId(), ti);
-        } else {
-            return null;
-        }
+        // return the model as mapping result
+        return new MappingResult<TopicInstance>(ti.getId(), ti);
 	}
 
 }

@@ -16,11 +16,11 @@ import de.btu.openinfra.backend.db.pojos.TopicCharacteristicToRelationshipTypePo
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
  */
-public class TopicCharacteristicToRelationshipTypeDao 
+public class TopicCharacteristicToRelationshipTypeDao
 	extends OpenInfraValueValueDao<TopicCharacteristicToRelationshipTypePojo,
 	RelationshipTypeToTopicCharacteristic, RelationshipType,
 	TopicCharacteristic> {
-	
+
     /**
      * This is the required constructor which calls the super constructor and in
      * turn creates the corresponding entity manager.
@@ -36,7 +36,7 @@ public class TopicCharacteristicToRelationshipTypeDao
 				RelationshipTypeToTopicCharacteristic.class,
 				RelationshipType.class, TopicCharacteristic.class);
 	}
-	
+
 	@Override
 	public TopicCharacteristicToRelationshipTypePojo mapToPojo(
 			Locale locale,
@@ -49,24 +49,28 @@ public class TopicCharacteristicToRelationshipTypeDao
 
 	@Override
 	public MappingResult<RelationshipTypeToTopicCharacteristic> mapToModel(
-			TopicCharacteristicToRelationshipTypePojo pojoObject,
-			RelationshipTypeToTopicCharacteristic modelObject) {
-		// TODO Auto-generated method stub
-		return null;
+			TopicCharacteristicToRelationshipTypePojo pojo,
+			RelationshipTypeToTopicCharacteristic rtt) {
+
+        // TODO set the model values
+
+        // return the model as mapping result
+        return new MappingResult<RelationshipTypeToTopicCharacteristic>(
+                rtt.getId(), rtt);
 	}
-	
+
 	/**
      * This method implements the method mapToPojo in a static way.
-     * 
+     *
      * @param locale       the requested language as Java.util locale
      * @param association  the model object
      * @return             the POJO object when the model object is not null
      *                     else null
      */
-	
+
 	/**
 	 * This method implements the method mapToPojo in a static way.
-	 * 
+	 *
 	 * @param locale       the requested language as Java.util locale
 	 * @param association  the model object
 	 * @param md           the meta data model object
@@ -76,11 +80,11 @@ public class TopicCharacteristicToRelationshipTypeDao
 			Locale locale,
 			RelationshipTypeToTopicCharacteristic association,
 			MetaData md) {
-		
+
 		if(association != null) {
 			TopicCharacteristicToRelationshipTypePojo pojo =
 					new TopicCharacteristicToRelationshipTypePojo();
-			
+
 			pojo.setUuid(association.getId());
 			pojo.setRelationshipe(association.getRelationshipType().getId());
 			pojo.setMultiplicity(MultiplicityDao.mapToPojoStatically(
@@ -90,7 +94,7 @@ public class TopicCharacteristicToRelationshipTypeDao
 					locale,
 					association.getTopicCharacteristic(),
 					md));
-			
+
 			return pojo;
 		}
 		else {

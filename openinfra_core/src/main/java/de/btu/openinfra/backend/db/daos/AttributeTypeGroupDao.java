@@ -104,36 +104,30 @@ public class AttributeTypeGroupDao
 			AttributeTypeGroupPojo pojo,
 			AttributeTypeGroup atg) {
 
-        // return null if the pojo is null
-        if (pojo != null) {
+        PtFreeTextDao ptfDao =
+                new PtFreeTextDao(currentProjectId, schema);
 
-            PtFreeTextDao ptfDao =
-                    new PtFreeTextDao(currentProjectId, schema);
-
-            // set the description (optional)
-            if (pojo.getDescriptions() != null) {
-                atg.setPtFreeText1(
-                        ptfDao.getPtFreeTextModel(pojo.getDescriptions()));
-            }
-
-            // set the name
-            atg.setPtFreeText2(ptfDao.getPtFreeTextModel(pojo.getNames()));
-
-            // set the parent attribute type group id (optional)
-            if (pojo.getSubgroupOf() != null) {
-                atg.setAttributeTypeGroup(
-                        em.find(AttributeTypeGroup.class,
-                                pojo.getSubgroupOf()));
-            } else {
-                // reset the parent attribute type group id
-                atg.setAttributeTypeGroup(null);
-            }
-
-            // return the model as mapping result
-            return new MappingResult<AttributeTypeGroup>(atg.getId(), atg);
-        } else {
-            return null;
+        // set the description (optional)
+        if (pojo.getDescriptions() != null) {
+            atg.setPtFreeText1(
+                    ptfDao.getPtFreeTextModel(pojo.getDescriptions()));
         }
+
+        // set the name
+        atg.setPtFreeText2(ptfDao.getPtFreeTextModel(pojo.getNames()));
+
+        // set the parent attribute type group id (optional)
+        if (pojo.getSubgroupOf() != null) {
+            atg.setAttributeTypeGroup(
+                    em.find(AttributeTypeGroup.class,
+                            pojo.getSubgroupOf()));
+        } else {
+            // reset the parent attribute type group id
+            atg.setAttributeTypeGroup(null);
+        }
+
+        // return the model as mapping result
+        return new MappingResult<AttributeTypeGroup>(atg.getId(), atg);
 	}
 
 	/**

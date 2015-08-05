@@ -74,27 +74,21 @@ public class RelationshipTypeDao extends
 			RelationshipTypePojo pojo,
 			RelationshipType rt) {
 
-        // return null if the pojo is null
-        if (pojo != null) {
-
-            // in case the description or the relationship type is null
-            if (pojo.getDescription() == null ||
-                    pojo.getRelationshipType() == null) {
-                return null;
-            }
-
-            // set the description
-            rt.setValueListValue1(em.find(ValueListValue.class,
-                    pojo.getDescription().getUuid()));
-
-            // set the reference_to
-            rt.setValueListValue2(em.find(ValueListValue.class,
-                    pojo.getRelationshipType().getUuid()));
-
-            // return the model as mapping result
-            return new MappingResult<RelationshipType>(rt.getId(), rt);
-        } else {
+        // in case the description or the relationship type is null
+        if (pojo.getDescription() == null ||
+                pojo.getRelationshipType() == null) {
             return null;
         }
+
+        // set the description
+        rt.setValueListValue1(em.find(ValueListValue.class,
+                pojo.getDescription().getUuid()));
+
+        // set the reference_to
+        rt.setValueListValue2(em.find(ValueListValue.class,
+                pojo.getRelationshipType().getUuid()));
+
+        // return the model as mapping result
+        return new MappingResult<RelationshipType>(rt.getId(), rt);
 	}
 }

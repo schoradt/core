@@ -59,13 +59,14 @@ public class MultiplicityDao extends
 	public MappingResult<Multiplicity> mapToModel(
 			MultiplicityPojo pojo,
 			Multiplicity mp) {
-		// 1. If the POJO really exists than go further, otherwise return null.
-		if(pojo != null) {
-			mp.setMaxValue(pojo.getMax());
-			mp.setMinValue(pojo.getMin());
-			return new MappingResult<Multiplicity>(mp.getId(), mp);
-		} else {
-			return null;
-		} // end if else
+
+	    // set the max value
+		mp.setMaxValue(pojo.getMax());
+
+		// set the min value
+		mp.setMinValue(pojo.getMin());
+
+		// return the model as mapping result
+		return new MappingResult<Multiplicity>(mp.getId(), mp);
 	}
 }

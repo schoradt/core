@@ -106,16 +106,10 @@ public class PtLocaleDao extends OpenInfraDao<PtLocalePojo, PtLocale> {
 	@Override
 	public MappingResult<PtLocale> mapToModel(PtLocalePojo pojo, PtLocale ptl) {
 
-        // return null if the pojo is null
-        if (pojo != null) {
+        // TODO set the model values
 
-            // TODO set the model values
-
-            // return the model as mapping result
-            return new MappingResult<PtLocale>(ptl.getId(), ptl);
-        } else {
-            return null;
-        }
+        // return the model as mapping result
+        return new MappingResult<PtLocale>(ptl.getId(), ptl);
 	}
 
 	/**

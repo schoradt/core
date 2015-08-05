@@ -70,43 +70,33 @@ public class AttributeValueValueDao
 			AttributeValueValuePojo pojo,
 			AttributeValueValue avv) {
 
-	    // return null if the pojo is null
-	    if (pojo != null) {
-
-	        // in case the attribute type to attribute type group id, the
-	        // topic instance id or the value is null
-            if (pojo.getAttributeTypeToAttributeTypeGroupId() == null ||
-                    pojo.getValue() == null) {
-                return null;
-            }
-
-            // in case the value is an empty string
-            if (pojo.getValue().getLocalizedStrings().get(0)
-                    .getCharacterString().equals("")) {
-                return null;
-            }
-
-	        // set the textual information
-	        PtFreeTextDao fTD = new PtFreeTextDao(currentProjectId, schema);
-	        avv.setPtFreeText(
-	                fTD.mapToModel(
-	                        pojo.getValue(),
-	                        fTD.createModelObject(
-	                                pojo.getValue().getUuid())).getModelObject());
-
-	        // set the attribute type to attribute type group
-	        avv.setAttributeTypeToAttributeTypeGroup(em.find(
-                    AttributeTypeToAttributeTypeGroup.class,
-                    pojo.getAttributeTypeToAttributeTypeGroupId()));
-
-	        // set the topic instance
-	        avv.setTopicInstance(
-	                em.find(TopicInstance.class, pojo.getTopicInstanceId()));
-
-	        return new MappingResult<AttributeValueValue>(avv.getId(), avv);
-	    } else {
-	        return null;
+        // in case the attribute type to attribute type group id, the
+        // topic instance id or the value is null
+        if (pojo.getAttributeTypeToAttributeTypeGroupId() == null ||
+                pojo.getValue() == null) {
+            return null;
         }
+
+        // in case the value is an empty string
+        if (pojo.getValue().getLocalizedStrings().get(0)
+                .getCharacterString().equals("")) {
+            return null;
+        }
+
+        // set the textual information
+        PtFreeTextDao ptfDao = new PtFreeTextDao(currentProjectId, schema);
+        avv.setPtFreeText(ptfDao.getPtFreeTextModel(pojo.getValue()));
+
+        // set the attribute type to attribute type group
+        avv.setAttributeTypeToAttributeTypeGroup(em.find(
+                AttributeTypeToAttributeTypeGroup.class,
+                pojo.getAttributeTypeToAttributeTypeGroupId()));
+
+        // set the topic instance
+        avv.setTopicInstance(
+                em.find(TopicInstance.class, pojo.getTopicInstanceId()));
+
+        return new MappingResult<AttributeValueValue>(avv.getId(), avv);
 	}
 
 }

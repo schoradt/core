@@ -125,52 +125,46 @@ public class AttributeTypeDao
 			AttributeTypePojo pojo,
 			AttributeType at) {
 
-	    // return null if the pojo is null
-        if (pojo != null) {
+        PtFreeTextDao ptfDao =
+                new PtFreeTextDao(currentProjectId, schema);
 
-            PtFreeTextDao ptfDao =
-                    new PtFreeTextDao(currentProjectId, schema);
-
-            // set the description (optional)
-            if (pojo.getDescriptions() != null) {
-                at.setPtFreeText1(
-                        ptfDao.getPtFreeTextModel(pojo.getDescriptions()));
-            }
-
-            // set the name
-            at.setPtFreeText2(ptfDao.getPtFreeTextModel(pojo.getNames()));
-
-            // set the data type
-            at.setValueListValue1(em.find(ValueListValue.class,
-                    pojo.getDataType().getUuid()));
-
-            // set the unit (optional)
-            if (pojo.getUnit() != null) {
-                if (pojo.getUnit().getUuid() != null) {
-                    at.setValueListValue2(em.find(ValueListValue.class,
-                                                  pojo.getUnit().getUuid()));
-                } else {
-                    // reset the unit
-                    at.setValueListValue2(null);
-                }
-            }
-
-            // set the domain (optional)
-            if (pojo.getDomain() != null) {
-                if (pojo.getDomain().getUuid() != null) {
-                    at.setValueList(em.find(ValueList.class,
-                            pojo.getDomain().getUuid()));
-                } else {
-                    // reset the domain
-                    at.setValueList(null);
-                }
-            }
-
-            // return the model as mapping result
-            return new MappingResult<AttributeType>(at.getId(), at);
-        } else {
-            return null;
+        // set the description (optional)
+        if (pojo.getDescriptions() != null) {
+            at.setPtFreeText1(
+                    ptfDao.getPtFreeTextModel(pojo.getDescriptions()));
         }
+
+        // set the name
+        at.setPtFreeText2(ptfDao.getPtFreeTextModel(pojo.getNames()));
+
+        // set the data type
+        at.setValueListValue1(em.find(ValueListValue.class,
+                pojo.getDataType().getUuid()));
+
+        // set the unit (optional)
+        if (pojo.getUnit() != null) {
+            if (pojo.getUnit().getUuid() != null) {
+                at.setValueListValue2(em.find(ValueListValue.class,
+                                              pojo.getUnit().getUuid()));
+            } else {
+                // reset the unit
+                at.setValueListValue2(null);
+            }
+        }
+
+        // set the domain (optional)
+        if (pojo.getDomain() != null) {
+            if (pojo.getDomain().getUuid() != null) {
+                at.setValueList(em.find(ValueList.class,
+                        pojo.getDomain().getUuid()));
+            } else {
+                // reset the domain
+                at.setValueList(null);
+            }
+        }
+
+        // return the model as mapping result
+        return new MappingResult<AttributeType>(at.getId(), at);
 	}
 
 	/**
