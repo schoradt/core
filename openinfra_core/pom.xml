@@ -56,6 +56,13 @@
     </dependencyManagement>
 
     <dependencies>
+    	<!-- Guava is used to cache different object types. -->
+    	<dependency>
+    		<groupId>com.google.guava</groupId>
+    		<artifactId>guava</artifactId>
+    		<version>19.0-rc1</version>
+		</dependency>
+		
 	    <!-- EclipseLink is used as persistence API and for object relational 
 	         mapping.  -->
 		<dependency>
