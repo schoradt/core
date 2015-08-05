@@ -305,6 +305,10 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	    // 1. Map the POJO object to a JPA model object
 		MappingResult<TypeModel> result = mapToModel(pojo, model);
 
+		// abort here if the result is null
+		if (result == null) {
+		    return null;
+		}
 		// 2. Get the transaction and merge (create or replace) the JPA model
 		// object.
 		EntityTransaction et = em.getTransaction();
