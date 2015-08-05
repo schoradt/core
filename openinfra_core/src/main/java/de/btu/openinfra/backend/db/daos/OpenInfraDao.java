@@ -295,16 +295,16 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	 */
 	public UUID createOrUpdate(TypePojo pojo)
 			throws RuntimeException {
-	    // TODO handle the geometry cast here as special case
-	    // TODO maybe saving topics in system database must be handled as well
-		// 1. Map the POJO object to a JPA model object
-		MappingResult<TypeModel> result = mapToModel(
-				pojo,
-				createModelObject(pojo.getUuid()));
-		// abort here if the result is null
-		if (result == null) {
-		    return null;
-		}
+
+	    TypeModel model = createModelObject(pojo.getUuid());
+	    // abort if the pojo and the type model is null
+	    if (pojo == null || model == null) {
+	        return null;
+	    }
+
+	    // 1. Map the POJO object to a JPA model object
+		MappingResult<TypeModel> result = mapToModel(pojo, model);
+
 		// 2. Get the transaction and merge (create or replace) the JPA model
 		// object.
 		EntityTransaction et = em.getTransaction();
@@ -534,7 +534,8 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	 * creates a new object and generates a random UUID.
 	 *
 	 * @param id the UUID of the requested object or null
-	 * @return   a model object (new or old)
+	 * @return   a model object (new or old) or null if the pojo id doesn't
+	 *           exists
 	 */
 	protected TypeModel createModelObject(UUID id) {
 		TypeModel tm = null;
