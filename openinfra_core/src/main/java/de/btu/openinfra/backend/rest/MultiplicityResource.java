@@ -27,8 +27,10 @@ import de.btu.openinfra.backend.db.pojos.MultiplicityPojo;
  *
  */
 @Path(OpenInfraResponseBuilder.REST_URI + "/multiplicities")
-@Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY,
-	MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY})
+@Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
+    + OpenInfraResponseBuilder.UTF8_CHARSET,
+	MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
+	+ OpenInfraResponseBuilder.UTF8_CHARSET})
 @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class MultiplicityResource {
 
@@ -46,7 +48,7 @@ public class MultiplicityResource {
 						offset,
 						size);
 	}
-	
+
 	@GET
     @Path("count")
     @Produces({MediaType.TEXT_PLAIN})
@@ -71,6 +73,17 @@ public class MultiplicityResource {
 						PtLocaleDao.forLanguageTag(language),
 						multiplicityId);
 	}
+
+	@GET
+    @Path("/new")
+    public MultiplicityPojo newMultiplicity(
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema) {
+        return new MultiplicityDao(
+                        projectId,
+                        OpenInfraSchemas.valueOf(schema.toUpperCase()))
+                    .newMultiplicity();
+    }
 
 	@POST
 	public Response create(

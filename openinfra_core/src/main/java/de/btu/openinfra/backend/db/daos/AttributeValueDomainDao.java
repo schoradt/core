@@ -75,6 +75,15 @@ public class AttributeValueDomainDao extends
 	    // return null if the pojo is null
 
         if (pojo != null) {
+
+            // in case the attribute type to attribute type group id, the
+            // topic instance id or the domain is null
+            if (pojo.getAttributeTypeToAttributeTypeGroupId() == null ||
+                    pojo.getTopicInstanceId() == null ||
+                    pojo.getDomain() == null) {
+                return null;
+            }
+
             // set value list value
             avd.setValueListValue(em.find(ValueListValue.class,
                     pojo.getDomain().getUuid()));

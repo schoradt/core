@@ -25,13 +25,15 @@ import de.btu.openinfra.backend.db.pojos.TopicCharacteristicToAttributeTypeGroup
 
 /**
  * This class represents and implements the AttributeTypeGroupResource resource.
- * 
+ *
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
  */
 @Path(OpenInfraResponseBuilder.REST_URI + "/attributetypegroups")
-@Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY, 
-	MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY})
+@Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
+    + OpenInfraResponseBuilder.UTF8_CHARSET,
+	MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
+	+ OpenInfraResponseBuilder.UTF8_CHARSET})
 public class AttributeTypeGroupResource {
 
 	@GET
@@ -41,10 +43,10 @@ public class AttributeTypeGroupResource {
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema) {
 		return new AttributeTypeGroupDao(
-				projectId, 
+				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount();
 	}
-	
+
 	@GET
 	public List<AttributeTypeGroupPojo> get(
 			@QueryParam("language") String language,
@@ -52,7 +54,7 @@ public class AttributeTypeGroupResource {
 			@PathParam("schema") String schema,
 			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
 			@QueryParam("orderBy") OpenInfraOrderByEnum orderBy,
-			@QueryParam("offset") int offset, 
+			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new AttributeTypeGroupDao(
 				projectId,
@@ -60,10 +62,10 @@ public class AttributeTypeGroupResource {
 						PtLocaleDao.forLanguageTag(language),
 						sortOrder,
 						orderBy,
-						offset, 
+						offset,
 						size);
 	}
-	
+
 	@GET
 	@Path("{attributeTypeGroupId}")
 	public AttributeTypeGroupPojo get(
@@ -72,14 +74,14 @@ public class AttributeTypeGroupResource {
 			@PathParam("schema") String schema,
 			@PathParam("attributeTypeGroupId") UUID attributeTypeGroupId) {
 		return new AttributeTypeGroupDao(
-				projectId, 
+				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language),
 						attributeTypeGroupId);
 	}
-	
+
 	@GET
-	@Path("{attributeTypeGroupId}/attributetypes")	
+	@Path("{attributeTypeGroupId}/attributetypes")
 	public List<AttributeTypeToAttributeTypeGroupPojo> get(
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
@@ -87,17 +89,17 @@ public class AttributeTypeGroupResource {
 			@PathParam("attributeTypeGroupId") UUID attributeTypeGroupId,
 			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
 			@QueryParam("orderBy") OpenInfraOrderByEnum orderBy,
-			@QueryParam("offset") int offset, 
+			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new AttributeTypeToAttributeTypeGroupDao(
-				projectId, 
+				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language),
 						attributeTypeGroupId,
-						offset, 
+						offset,
 						size);
 	}
-	
+
 	@GET
 	@Path("{attributeTypeGroupId}/attributetypes/count")
 	@Produces({MediaType.TEXT_PLAIN})
@@ -106,23 +108,23 @@ public class AttributeTypeGroupResource {
 			@PathParam("schema") String schema,
 			@PathParam("attributeTypeGroupId") UUID attributeTypeGroupId) {
 		return new AttributeTypeDao(
-				projectId, 
+				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
 						attributeTypeGroupId);
 	}
-	
+
 	@GET
-	@Path("{attributeTypeGroupId}/attributetypes/{attributeTypeId}")	
+	@Path("{attributeTypeGroupId}/attributetypes/{attributeTypeId}")
 	public List<AttributeTypeToAttributeTypeGroupPojo> get(
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@PathParam("attributeTypeGroupId") UUID attributeTypeGroupId,
 			@PathParam("attributeTypeId") UUID attributeTypeId,
-			@QueryParam("offset") int offset, 
+			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new AttributeTypeToAttributeTypeGroupDao(
-				projectId, 
+				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language),
 						attributeTypeGroupId,
@@ -130,9 +132,9 @@ public class AttributeTypeGroupResource {
 						offset,
 						size);
 	}
-	
+
 	@GET
-	@Path("{attributeTypeGroupId}/topiccharacteristics")	
+	@Path("{attributeTypeGroupId}/topiccharacteristics")
 	public List<TopicCharacteristicToAttributeTypeGroupPojo>
 		getTopicCharacteristics(
 			@QueryParam("language") String language,
@@ -141,17 +143,17 @@ public class AttributeTypeGroupResource {
 			@PathParam("attributeTypeGroupId") UUID attributeTypeGroupId,
 			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
 			@QueryParam("orderBy") OpenInfraOrderBy orderBy,
-			@QueryParam("offset") int offset, 
+			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new TopicCharacteristicToAttributeTypeGroupDao(
-				projectId, 
+				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language),
 						attributeTypeGroupId,
-						offset, 
+						offset,
 						size);
 	}
-	
+
 	@GET
     @Path("{attributeTypeGroupId}/topiccharacteristics/count")
     @Produces({MediaType.TEXT_PLAIN})
@@ -164,20 +166,20 @@ public class AttributeTypeGroupResource {
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
                         attributeTypeGroupId);
     }
-	
+
 	@GET
-	@Path("{attributeTypeGroupId}/topiccharacteristics/{topicCharacteristicId}")	
-	public List<TopicCharacteristicToAttributeTypeGroupPojo> 
+	@Path("{attributeTypeGroupId}/topiccharacteristics/{topicCharacteristicId}")
+	public List<TopicCharacteristicToAttributeTypeGroupPojo>
 		getTopicCharacteristics(
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@PathParam("attributeTypeGroupId") UUID attributeTypeGroupId,
 			@PathParam("topicCharacteristicId") UUID topicCharacteristicId,
-			@QueryParam("offset") int offset, 
+			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new TopicCharacteristicToAttributeTypeGroupDao(
-				projectId, 
+				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language),
 						attributeTypeGroupId,
@@ -185,27 +187,27 @@ public class AttributeTypeGroupResource {
 						offset,
 						size);
 	}
-	
+
 	/**
-	 * This method represents a specific HTTP GET method and is used to retrieve 
+	 * This method represents a specific HTTP GET method and is used to retrieve
 	 * a list sub groups of an AttributeTypeGroup.
-	 * 
+	 *
 	 * @param projectId            the required project id
 	 * @param attributeTypeGroupId the id of the required AttributeTypeGroup
 	 * @return                     a list of AttributeTypeGroups (sub groups)
 	 */
 	@GET
-	@Path("{attributeTypeGroupId}/subgroups")	
+	@Path("{attributeTypeGroupId}/subgroups")
 	public List<AttributeTypeGroupPojo> getSubGroups(
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@PathParam("attributeTypeGroupId") UUID attributeTypeGroupId) {
 		return new AttributeTypeGroupDao(
-				projectId, 
+				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).readSubGroups(
 						PtLocaleDao.forLanguageTag(language),
-						attributeTypeGroupId);		
+						attributeTypeGroupId);
 	}
-	
+
 }

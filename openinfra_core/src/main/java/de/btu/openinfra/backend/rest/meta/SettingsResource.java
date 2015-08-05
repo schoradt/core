@@ -13,9 +13,13 @@ import javax.ws.rs.core.MediaType;
 import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.meta.SettingsDao;
 import de.btu.openinfra.backend.db.pojos.meta.SettingsPojo;
+import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
 @Path("/metadata/settings")
-@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+@Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
+    + OpenInfraResponseBuilder.UTF8_CHARSET,
+    MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
+    + OpenInfraResponseBuilder.UTF8_CHARSET})
 public class SettingsResource {
 
     @GET
@@ -32,10 +36,10 @@ public class SettingsResource {
             @PathParam("settingsId") UUID settingsId) {
         return new SettingsDao(
                 OpenInfraSchemas.META_DATA).read(
-                        null, 
-                        settingsId); 
+                        null,
+                        settingsId);
     }
-    
+
     @GET
 	@Path("count")
 	@Produces({MediaType.TEXT_PLAIN})

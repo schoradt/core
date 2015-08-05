@@ -5,6 +5,8 @@ import java.util.UUID;
 
 import javax.persistence.Query;
 
+import org.eclipse.persistence.jpa.JpaQuery;
+
 import de.btu.openinfra.backend.db.jpa.model.AttributeTypeToAttributeTypeGroup;
 import de.btu.openinfra.backend.db.jpa.model.AttributeValueGeom;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
@@ -71,11 +73,14 @@ public class AttributeValueGeomDao
 	public AttributeValueGeomPojo mapToPojo(
 			Locale locale,
 			AttributeValueGeom avg) {
+	    // get the NamedNativeQuery
+        String sqlString = em.createNamedQuery(
+                AttributeValueGeom.class.getSimpleName() + ".select")
+                .unwrap(JpaQuery.class).getDatabaseQuery().getSQLString();
 	    // format the SQL statement for retrieving geometry values
 		String queryString = String.format(
-				AttributeValueDao.GEOM_CLAUSE,
-				defaultGeomType.getPsqlFnSignature(),
-				"");
+		        sqlString,
+				defaultGeomType.getPsqlFnSignature());
 
         // add the id parameter to the query
         Query qGeom = em.createNativeQuery(queryString);
@@ -106,6 +111,20 @@ public class AttributeValueGeomDao
 
 	    // return null if the pojo is null
         if (pojo != null) {
+
+            // in case the attribute type to attribute type group id, the
+            // topic instance id or the geometry is null
+            if (pojo.getAttributeTypeToAttributeTypeGroupId() == null ||
+                    pojo.getTopicInstanceId() == null ||
+                    pojo.getGeom() == null) {
+                return null;
+            }
+
+            // in case the geometry is an empty string
+            if (pojo.getGeom().equals("")) {
+                return null;
+            }
+
             // set the textual information
             avg.setGeom(pojo.getGeom());
 
