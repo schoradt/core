@@ -1,5 +1,6 @@
 package de.btu.openinfra.backend.rest.view.project;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -11,6 +12,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.glassfish.jersey.server.mvc.Template;
 
 import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
@@ -40,14 +43,27 @@ public class ProjectResource {
 
 	@GET
 	@Template(name="/views/list/Projects.jsp")
-	public List<ProjectPojo> get(
+	public Response get(
 			@QueryParam("language") String language,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
-		return new ProjectDao(
-				null,
-				OpenInfraSchemas.META_DATA).getMainProjects(
-						PtLocaleDao.forLanguageTag(language));
+		Subject user = SecurityUtils.getSubject();
+		if(user.isPermitted("/projects:get")) {
+			List<ProjectPojo> list = new ProjectDao(
+					null,
+					OpenInfraSchemas.META_DATA).getMainProjects(
+							PtLocaleDao.forLanguageTag(language));
+			
+			Iterator<ProjectPojo> it = list.iterator();
+			while(it.hasNext()) {
+				if(!user.isPermitted("/projects/{id}:get:" + it.next().getUuid())) {
+					it.remove();
+				}
+			}
+			return Response.ok(list).build();			
+		} else {
+			return Response.status(403).build();
+		}
 	}
 
 	@GET
@@ -56,12 +72,16 @@ public class ProjectResource {
 	public Response getView(
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId) {
-		return OpenInfraResponseBuilder.getResponse(
-				new ProjectDao(
-						projectId,
-						OpenInfraSchemas.PROJECTS).read(
-								PtLocaleDao.forLanguageTag(language),
-								projectId));
+		if(SecurityUtils.getSubject().isPermitted("/projects/{id}:get:" + projectId)) {
+			return OpenInfraResponseBuilder.getResponse(
+					new ProjectDao(
+							projectId,
+							OpenInfraSchemas.PROJECTS).read(
+									PtLocaleDao.forLanguageTag(language),
+									projectId));			
+		} else {
+			return Response.status(403).build();
+		}
 	}
 
 	@GET
