@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import de.btu.openinfra.backend.db.jpa.model.RelationshipType;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
+import de.btu.openinfra.backend.db.jpa.model.ValueListValue;
 import de.btu.openinfra.backend.db.pojos.RelationshipTypePojo;
 
 /**
@@ -76,7 +77,19 @@ public class RelationshipTypeDao extends
         // return null if the pojo is null
         if (pojo != null) {
 
-            // TODO set the model values
+            // in case the description or the relationship type is null
+            if (pojo.getDescription() == null ||
+                    pojo.getRelationshipType() == null) {
+                return null;
+            }
+
+            // set the description
+            rt.setValueListValue1(em.find(ValueListValue.class,
+                    pojo.getDescription().getUuid()));
+
+            // set the reference_to
+            rt.setValueListValue2(em.find(ValueListValue.class,
+                    pojo.getRelationshipType().getUuid()));
 
             // return the model as mapping result
             return new MappingResult<RelationshipType>(rt.getId(), rt);
@@ -84,5 +97,25 @@ public class RelationshipTypeDao extends
             return null;
         }
 	}
+
+    /**
+     * This method creates a RelationshipTypePojo shell that contains
+     * informations about relationshipType and description.
+     *
+     * @param locale the locale the informations should be saved at
+     * @return       the RelationshipTypePojo
+     */
+    public RelationshipTypePojo newRelationshipType(Locale locale) {
+        // create the return pojo
+        RelationshipTypePojo pojo = new RelationshipTypePojo();
+
+        // add value list value for the relationship type
+        pojo.setRelationshipType(null);
+
+        // add value list value for the description
+        pojo.setDescription(null);
+
+        return pojo;
+    }
 
 }
