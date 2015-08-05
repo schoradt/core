@@ -37,12 +37,12 @@ public class EntityManagerFactoryCache {
      */
     private static int cacheSize = 100;
     
-    // TODO Proposal: Create two static variables for system and metadata
+    // TODO Proposal: Create two static variables for system and meta data
     // entity manager factory. Does not need a cache look up. Only a get
     // method is required.
     /**
      * The cache used for creating and caching entity manager factories
-     * (EntityManagerFactory).
+     * (EntityManagerFactory). The cache is thread-safe.
      */
     private static final LoadingCache<CacheTuple, EntityManagerFactory> cache;
     
@@ -51,6 +51,7 @@ public class EntityManagerFactoryCache {
      * factories.
      */
     static {
+        // Create initial cache
         cache = CacheBuilder.newBuilder().maximumSize(cacheSize).build(
                 new CacheLoader<CacheTuple, EntityManagerFactory>() {
                     @Override
@@ -108,20 +109,30 @@ public class EntityManagerFactoryCache {
     }
     
     /**
-     * Creates a new entity manager factory if it does not exists a
-     * entity manager factory in the cache with the given parameters.
-     * @param persistenceUnitName name of the persistence unit
-     * @param properties properties to use when creating the factory 
-     * @return entity manager factory
+     * Returns an entity factory manager for the given parameters.
+     * @param currentProjectId identifier of the current project
+     * @param schema this parameter defines the schema
+     * @return entity factory manager if an entry exists in the cache or it
+     * is possible to add an entry in the cache for the given parameters,
+     * otherwise null 
      */
-    public static synchronized EntityManagerFactory createEntityManagerFactory(
-            String persistenceUnitName, Map<String, String> properties) {
+    public static EntityManagerFactory getEntityManagerFactory(
+            UUID currentProjectId,
+            OpenInfraSchemas schema) {
+        // Create properties
+        Map<String, String> properties =
+                createProperties(currentProjectId, schema);
+        
         try {
-            return cache.get(new CacheTuple(persistenceUnitName, properties));
+            // return entity factory manager
+            return cache.get(new CacheTuple(
+                    OpenInfraApplication.PERSISTENCE_CONTEXT,
+                    properties));
         } catch (ExecutionException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        // return null
         return null;
     }
     
