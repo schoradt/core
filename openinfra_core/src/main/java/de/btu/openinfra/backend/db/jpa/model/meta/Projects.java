@@ -1,6 +1,7 @@
 package de.btu.openinfra.backend.db.jpa.model.meta;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -10,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
@@ -39,11 +41,10 @@ public class Projects implements Serializable, OpenInfraModelObject {
 	@ManyToOne
 	@JoinColumn(name="database_connection_id")
 	private DatabaseConnection databaseConnection;
-    
-	//bi-directional many-to-one association to Settings
-	@ManyToOne
-	@JoinColumn(name="settings")
-	private Settings setting;
+	
+	//bi-directional many-to-one association to Projects
+    @OneToMany(mappedBy="project")
+    private List<Settings> settings;
 
 	public Projects() {
 	}
@@ -74,12 +75,26 @@ public class Projects implements Serializable, OpenInfraModelObject {
 		this.databaseConnection = databaseConnection;
 	}
 
-	public Settings getSetting() {
-		return this.setting;
-	}
+    public List<Settings> getSettings() {
+        return settings;
+    }
 
-	public void setSetting(Settings setting) {
-		this.setting = setting;
-	}
+    public void setSettings(List<Settings> settings) {
+        this.settings = settings;
+    }
+    
+    public Settings addSetting(Settings setting) {
+        getSettings().add(setting);
+        setting.setProject(this);
+
+        return setting;
+    }
+
+    public Settings removeSetting(Settings setting) {
+        getSettings().remove(setting);
+        setting.setProject(null);
+
+        return setting;
+    }
 
 }

@@ -233,37 +233,43 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	public UUID createOrUpdate(TypePojo pojo)
 			throws RuntimeException {
 
-	    TypeModel model = createModelObject(pojo.getUuid());
-	    // abort if the pojo and the type model is null
-	    if (pojo == null || model == null) {
-	        return null;
-	    }
+	    UUID resultId = null;
 
-	    // 1. Map the POJO object to a JPA model object
-		MappingResult<TypeModel> result = mapToModel(pojo, model);
-
-		// abort here if the result is null
-		if (result == null) {
-		    return null;
-		}
 		// 2. Get the transaction and merge (create or replace) the JPA model
 		// object.
 		EntityTransaction et = em.getTransaction();
 		try {
-			et.begin();
-			// special handling for geometry classes
-			if (modelClass.getSimpleName().equals("AttributeValueGeom") ||
-			        modelClass.getSimpleName().equals("AttributeValueGeomz")) {
-                Query geomQuery = createGeomQuery(pojo);
-                if (geomQuery != null) {
-                    // execute the query
-                    geomQuery.executeUpdate();
-                }
-			} else {
-			    em.merge(result.getModelObject());
+			et.begin();			
+			switch(modelClass.getSimpleName()) {
+			    // special handling for geometry classes
+			    case "AttributeValueGeom":
+			        // fall through
+			    case "AttributeValueGeomz":
+			        Query geomQuery = createGeomQuery(pojo);
+	                if (geomQuery != null) {
+	                    // execute the query
+	                    geomQuery.executeUpdate();
+	                }
+	                break;
+			    default:
+			        TypeModel model = createModelObject(pojo.getUuid());
+			        // abort if the pojo and the type model is null
+			        if (pojo == null || model == null) {
+			            return null;
+			        }
+
+			        // 1. Map the POJO object to a JPA model object
+			        MappingResult<TypeModel> result = mapToModel(pojo, model);
+
+			        // abort here if the result is null
+			        if (result == null) {
+			            return null;
+			        }
+			        em.merge(result.getModelObject());
+			        resultId = result.getId();
 			}
 			et.commit();
-			return result.getId();
+			return resultId;
 		} catch(RuntimeException ex) {
 			if(et != null && et.isActive()) {
 				et.rollback();

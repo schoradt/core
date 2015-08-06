@@ -25,6 +25,8 @@ public class MetaData implements Serializable, OpenInfraModelObject {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+    private UUID id;
+	
 	@Column(name="object_id")
 	private UUID objectId;
 
@@ -49,12 +51,12 @@ public class MetaData implements Serializable, OpenInfraModelObject {
 
 	@Override
 	public void setId(UUID id) {
-		this.objectId = id;
+		this.id = id;
 	}
 
 	@Override
     public UUID getId() {
-	    return this.objectId;
+	    return this.id;
 	}
 
 	public String getData() {

@@ -51,9 +51,33 @@ public class LoggerDao
     }
     
     @Override
-    public MappingResult<Logger> mapToModel(LoggerPojo pojo, Logger log) {
-        // TODO Auto-generated method stub
-        return null;
+    public MappingResult<Logger> mapToModel(LoggerPojo pojo, Logger logger) {
+        if(pojo != null) {            
+            mapToModelStatically(pojo, logger);
+            return new MappingResult<Logger>(logger.getId(), logger);
+        }
+        else {
+            return null;
+        }
     }
 
+    /**
+     * This method implements the method mapToModel in a static way.
+     * @param pojo the POJO object
+     * @param logger the pre initialized model object
+     * @return return a corresponding JPA model object or null if the pojo
+     * object is null
+     */
+    public static Logger mapToModelStatically(LoggerPojo pojo, Logger logger) {
+        Logger resultLogger = null;
+        if(pojo != null) {
+            resultLogger = logger;
+            if(resultLogger == null) {
+                resultLogger = new Logger();
+                resultLogger.setId(pojo.getUuid());
+            }
+            resultLogger.setLogger(pojo.getLogger());
+        }
+        return resultLogger;
+    }
 }

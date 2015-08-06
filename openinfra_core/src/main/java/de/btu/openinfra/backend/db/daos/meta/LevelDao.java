@@ -52,8 +52,41 @@ public class LevelDao
     
     @Override
     public MappingResult<Level> mapToModel(LevelPojo pojo, Level lv) {
-        // TODO Auto-generated method stub
-        return null;
+        if(pojo != null) {            
+            mapToModelStatically(pojo, lv);
+            return new MappingResult<Level>(lv.getId(), lv);
+        }
+        else {
+            return null;
+        }
+    }
+    
+    /**
+     * This method implements the method mapToModel in a static way.
+     * @param pojo the POJO object
+     * @param lv the pre initialized
+     * @param usePojoId true if the pojo id is used as the model id, otherwise
+     * false
+     */
+    
+    /**
+     * This method implements the method mapToModel in a static way.
+     * @param pojo the POJO object
+     * @param level the pre initialized model object
+     * @return return a corresponding JPA model object or null if the pojo
+     * object is null
+     */
+    public static Level mapToModelStatically(LevelPojo pojo, Level level) {
+        Level resultLevel = null;
+        if(pojo != null) {
+            resultLevel = level;
+            if(resultLevel == null) {
+                resultLevel = new Level();
+                resultLevel.setId(pojo.getUuid());
+            }
+            resultLevel.setLevel(pojo.getLevel());
+        }
+        return resultLevel;
     }
 
 }
