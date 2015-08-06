@@ -39,47 +39,47 @@ public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
 				TopicInstanceXTopicInstance.class,
 				TopicInstance.class, TopicInstance.class);
 	}
-	
+
 	public List<TopicInstanceAssociationPojo> readParents(
 			Locale locale, UUID self) {
-		
-		TopicInstanceDao ti = 
+
+		TopicInstanceDao ti =
 				new TopicInstanceDao(currentProjectId, schema);
-		
-		List<TopicInstanceAssociationPojo> parents = 
+
+		List<TopicInstanceAssociationPojo> parents =
 				new LinkedList<TopicInstanceAssociationPojo>();
-		
+
 		TopicInstanceXTopicInstance parent = readParent(locale, self);
-				
+
 		while(true) {
 			if(parent != null) {
 				parents.add(
 						new TopicInstanceAssociationPojo(
 								ti.mapToPojo(
-										locale, 
+										locale,
 										parent.getTopicInstance1Bean()),
 								RelationshipTypeDao.mapToPojoStatically(
-										locale, 
-										parent.getRelationshipType())));			
+										locale,
+										parent.getRelationshipType())));
 				parent = readParent(
-						locale, 
+						locale,
 						parent.getTopicInstance1Bean().getId());
 			} else {
 				break;
 			} // end if else
 		} // end while
-		
+
 		Collections.reverse(parents);
 		return parents;
 	}
-	
+
 	private TopicInstanceXTopicInstance readParent(Locale locale, UUID self) {
-		List<TopicInstanceXTopicInstance> txt = 
+		List<TopicInstanceXTopicInstance> txt =
 				em.createNamedQuery(
-						"TopicInstanceXTopicInstance.findParent", 
+						"TopicInstanceXTopicInstance.findParent",
 						TopicInstanceXTopicInstance.class)
 						.setParameter(
-								"self", 
+								"self",
 								em.find(TopicInstance.class, self))
 						.getResultList();
 		if(txt != null && txt.size() > 0) {
@@ -88,7 +88,7 @@ public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
 			return null;
 		}
 	}
-	
+
 
 	@Override
 	public TopicInstanceAssociationPojo mapToPojo(
@@ -109,19 +109,13 @@ public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
 	@Override
 	public MappingResult<TopicInstanceXTopicInstance> mapToModel(
 			TopicInstanceAssociationPojo pojo,
-			TopicInstanceXTopicInstance tixti) {
+			TopicInstanceXTopicInstance txt) {
 
-        // return null if the pojo is null
-        if (pojo != null) {
+        // TODO set the model values
 
-            // TODO set the model values
-
-            // return the model as mapping result
-            return new MappingResult<TopicInstanceXTopicInstance>(
-                    tixti.getId(), tixti);
-        } else {
-            return null;
-        }
+        // return the model as mapping result
+        return new MappingResult<TopicInstanceXTopicInstance>(
+                txt.getId(), txt);
 	}
 
 }

@@ -3,6 +3,7 @@ package de.btu.openinfra.backend.rest;
 import java.util.List;
 import java.util.UUID;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -30,6 +31,7 @@ import de.btu.openinfra.backend.db.pojos.AttributeTypePojo;
     + OpenInfraResponseBuilder.UTF8_CHARSET,
 	MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
 	+ OpenInfraResponseBuilder.UTF8_CHARSET})
+@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class AttributeTypeResource {
 
 	@GET
@@ -69,7 +71,7 @@ public class AttributeTypeResource {
 						offset,
 						size);
 	}
-	
+
 	@GET
     @Path("{attributeTypeId}/associations/count")
 	@Produces({MediaType.TEXT_PLAIN})
@@ -227,9 +229,63 @@ public class AttributeTypeResource {
             @PathParam("schema") String schema,
             @PathParam("attributeTypeId") UUID attributeTypeId,
             AttributeTypePojo pojo) {
-        return OpenInfraResponseBuilder.postResponse(
+        return OpenInfraResponseBuilder.putResponse(
                 new AttributeTypeDao(
                         projectId,
                         OpenInfraSchemas.PROJECTS).createOrUpdate(pojo));
+    }
+
+    @GET
+    @Path("{attributeTypeId}/associations/new")
+    public AttributeTypeAssociationPojo newAttributeTypeAssociation(
+            @QueryParam("language") String language,
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            @PathParam("attributeTypeId") UUID attributeTypeId) {
+        return new AttributeTypeAssociationDao(
+                        projectId,
+                        OpenInfraSchemas.valueOf(schema.toUpperCase()))
+                    .newAttributeTypeAssociation(attributeTypeId);
+    }
+
+    @POST
+    @Path("{attributeTypeId}/associations")
+    public Response createAssociation(
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            AttributeTypeAssociationPojo pojo) {
+        UUID id = new AttributeTypeAssociationDao(
+                projectId,
+                OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
+                        pojo);
+        return OpenInfraResponseBuilder.postResponse(id);
+    }
+
+    @DELETE
+    @Path("{attributeTypeId}/associations/{associatedAttributeTypeId}")
+    public Response deleteAssociation(
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            @PathParam("associatedAttributeTypeId")
+                UUID associatedAttributeTypeId) {
+        return OpenInfraResponseBuilder.deleteResponse(
+                new AttributeTypeAssociationDao(
+                        projectId,
+                        OpenInfraSchemas.valueOf(schema.toUpperCase())).delete(
+                                associatedAttributeTypeId),
+                                associatedAttributeTypeId);
+    }
+
+    @PUT
+    @Path("{attributeTypeId}/associations/{associatedAttributeTypeId}")
+    public Response updateAssociation(
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            AttributeTypeAssociationPojo pojo) {
+        return OpenInfraResponseBuilder.putResponse(
+                new AttributeTypeAssociationDao(
+                        projectId,
+                        OpenInfraSchemas.valueOf(schema.toUpperCase()))
+                .createOrUpdate(pojo));
     }
 }

@@ -3,6 +3,7 @@ package de.btu.openinfra.backend.rest;
 import java.util.List;
 import java.util.UUID;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -28,6 +29,7 @@ import de.btu.openinfra.backend.db.pojos.TopicCharacteristicToRelationshipTypePo
     + OpenInfraResponseBuilder.UTF8_CHARSET,
     MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET})
+@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class RelationshipTypeResource {
 
     @GET
@@ -93,7 +95,7 @@ public class RelationshipTypeResource {
 						offset,
 						size);
 	}
-    
+
     @GET
     @Path("{relationshipTypeId}/topiccharacteristics/count")
     public long getTopicCharacteristicsCount(
@@ -135,10 +137,7 @@ public class RelationshipTypeResource {
             @QueryParam("language") String language,
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema) {
-        return new RelationshipTypeDao(
-                        projectId,
-                        OpenInfraSchemas.valueOf(schema.toUpperCase()))
-                    .newRelationshipType(PtLocaleDao.forLanguageTag(language));
+        return new RelationshipTypePojo();
     }
 
 	@POST

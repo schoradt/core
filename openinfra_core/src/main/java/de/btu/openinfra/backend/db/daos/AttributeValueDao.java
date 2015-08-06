@@ -22,7 +22,6 @@ import de.btu.openinfra.backend.db.pojos.AttributeValuePojo;
 import de.btu.openinfra.backend.db.pojos.AttributeValueValuePojo;
 import de.btu.openinfra.backend.db.pojos.LocalizedString;
 import de.btu.openinfra.backend.db.pojos.PtFreeTextPojo;
-import de.btu.openinfra.backend.db.pojos.ValueListValuePojo;
 
 /**
  * This class represents the AttributeValue and is used to access the underlying
@@ -305,10 +304,8 @@ public class AttributeValueDao extends
 	        AttributeValueDomainPojo avdP = new AttributeValueDomainPojo();
 	        // set the topic instance the value belongs to
             avdP.setTopicInstanceId(topicInstanceId);
-            // create the value list value object with an empty string
-            ValueListValuePojo vlv = new ValueListValuePojo();
-            vlv.setNames(new PtFreeTextPojo(lcs, null));
-            avdP.setDomain(vlv);
+            // add the domain
+            avdP.setDomain(null);
             // set the attribute type to attribute type group id
             avdP.setAttributeTypeToAttributeTypeGroupId(ataId);
 

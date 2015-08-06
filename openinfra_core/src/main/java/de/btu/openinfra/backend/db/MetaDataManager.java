@@ -1,15 +1,11 @@
 package de.btu.openinfra.backend.db;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Persistence;
 
-import de.btu.openinfra.backend.OpenInfraApplication;
-import de.btu.openinfra.backend.OpenInfraProperties;
-import de.btu.openinfra.backend.OpenInfraPropertyKeys;
+import de.btu.openinfra.backend.db.daos.EntityManagerFactoryCache;
+import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.meta.ProjectsDao;
 import de.btu.openinfra.backend.db.jpa.model.meta.Projects;
 import de.btu.openinfra.backend.db.pojos.meta.ProjectsPojo;
@@ -38,34 +34,9 @@ public class MetaDataManager {
 	 */
 	public static ProjectsPojo getProjects(UUID projectId) {	
 		if(emMeta == null) {
-			Map<String, String> properties = new HashMap<String, String>();
-			properties.put(
-					OpenInfraPropertyKeys.JDBC_DRIVER.toString(), 
-					OpenInfraPropertyValues.JDBC_DRIVER.toString());
-			properties.put(
-					OpenInfraPropertyKeys.USER.toString(), 
-					OpenInfraProperties.getProperty(
-							OpenInfraPropertyKeys.USER.toString()));
-			properties.put(
-					OpenInfraPropertyKeys.PASSWORD.toString(), 
-					OpenInfraProperties.getProperty(
-							OpenInfraPropertyKeys.PASSWORD.toString()));
-			String url = String.format(
-					OpenInfraPropertyValues.URL.toString(), 
-					OpenInfraProperties.getProperty(
-							OpenInfraPropertyKeys.SERVER.toString()), 
-					OpenInfraProperties.getProperty(
-							OpenInfraPropertyKeys.PORT.toString()), 
-					OpenInfraProperties.getProperty(
-							OpenInfraPropertyKeys.DB_NAME.toString()));
-			properties.put(
-					OpenInfraPropertyKeys.URL.toString(), 
-					url + "currentSchema=" + 
-					OpenInfraPropertyValues.META_DATA_SEARCH_PATH + "," + 
-					OpenInfraPropertyValues.SEARCH_PATH);
-			emMeta = Persistence.createEntityManagerFactory(
-					OpenInfraApplication.PERSISTENCE_CONTEXT, 
-					properties).createEntityManager();
+			emMeta = EntityManagerFactoryCache.getEntityManagerFactory(
+			        projectId,
+			        OpenInfraSchemas.META_DATA).createEntityManager();
 		}
 		
 		return ProjectsDao.mapPojoStatically(
