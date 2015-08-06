@@ -2,15 +2,15 @@ package de.btu.openinfra.backend.db.jpa.model.meta;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
@@ -42,10 +42,10 @@ public class Settings implements Serializable, OpenInfraModelObject {
 
 	@Column(name="updated_on")
 	private Date updatedOn;
-
-	//bi-directional many-to-one association to Projects
-	@OneToMany(mappedBy="setting")
-	private List<Projects> projects;
+	
+	@ManyToOne
+	@JoinColumn(name = "projects")
+	private Projects project;
 
 	public Settings() {
 	}
@@ -84,26 +84,12 @@ public class Settings implements Serializable, OpenInfraModelObject {
 		this.updatedOn = updatedOn;
 	}
 
-	public List<Projects> getProjects() {
-		return this.projects;
-	}
+	public Projects getProject() {
+        return project;
+    }
 
-	public void setProjects(List<Projects> projects) {
-		this.projects = projects;
-	}
-
-	public Projects addProject(Projects project) {
-		getProjects().add(project);
-		project.setSetting(this);
-
-		return project;
-	}
-
-	public Projects removeProject(Projects project) {
-		getProjects().remove(project);
-		project.setSetting(null);
-
-		return project;
-	}
+    public void setProject(Projects project) {
+        this.project = project;
+    }
 
 }

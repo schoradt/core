@@ -12,6 +12,7 @@ public class SettingsPojo extends OpenInfraPojo {
     private String key;
     private String value;
     private Date updatedOn;
+    private ProjectsPojo project;
     
     public String getKey() {
         return key;
@@ -35,6 +36,14 @@ public class SettingsPojo extends OpenInfraPojo {
     
     public void setUpdatedOn(Date updatedOn) {
         this.updatedOn = updatedOn;
+    }
+
+    public ProjectsPojo getProject() {
+        return project;
+    }
+
+    public void setProject(ProjectsPojo project) {
+        this.project = project;
     }
     
 }
