@@ -6,8 +6,6 @@ import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.NamedNativeQueries;
-import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -23,22 +21,12 @@ import javax.persistence.Table;
 	@NamedQuery(name="MetaData.findAll", query="SELECT m FROM MetaData m"),
 	@NamedQuery(name="MetaData.count", query="SELECT COUNT(m) FROM MetaData m")
 })
-
-@NamedNativeQueries({
-    @NamedNativeQuery(name="MetaData.insert",
-            query="INSERT INTO meta_Data "
-                    + "VALUES (?, ?, ?, CAST (to_json(?) AS jsonb) )"),
-    @NamedNativeQuery(name="MetaData.update",
-        query="UPDATE meta_Data "
-                + "SET table_Name = ?, "
-                + "pk_column = ?, "
-                + "data = CAST (to_json(?) AS jsonb) "
-                + "WHERE object_id = ?"),
-})
 public class MetaData implements Serializable, OpenInfraModelObject {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+    private UUID id;
+	
 	@Column(name="object_id")
 	private UUID objectId;
 
@@ -63,12 +51,12 @@ public class MetaData implements Serializable, OpenInfraModelObject {
 
 	@Override
 	public void setId(UUID id) {
-		this.objectId = id;
+		this.id = id;
 	}
 
 	@Override
     public UUID getId() {
-	    return this.objectId;
+	    return this.id;
 	}
 
 	public String getData() {

@@ -1,14 +1,25 @@
 package de.btu.openinfra.backend.db.pojos;
 
+import java.util.UUID;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class MetaDataPojo extends OpenInfraPojo {
     
+    private UUID objectId;
     private String tableName;
     private String pkColumn;
     private String data;
     
+    public UUID getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(UUID objectId) {
+        this.objectId = objectId;
+    }
+
     public String getTableName() {
         return tableName;
     }
