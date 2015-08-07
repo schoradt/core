@@ -1,5 +1,7 @@
 package de.btu.openinfra.backend.db.pojos;
 
+import java.util.UUID;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
@@ -10,8 +12,10 @@ public class TopicInstanceAssociationPojo extends OpenInfraPojo {
 	
 	public TopicInstanceAssociationPojo() {}
 	public TopicInstanceAssociationPojo(
+			UUID uuid,
 			TopicInstancePojo tip, 
 			RelationshipTypePojo rtp) {
+		setUuid(uuid);
 		associatedInstance = tip;
 		relationshipType = rtp;
 	}
