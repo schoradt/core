@@ -43,9 +43,6 @@ public class ProjectsDao
         if (p != null) {
             ProjectsPojo pojo = new ProjectsPojo();
             pojo.setUuid(p.getId());
-            pojo.setSettings(
-                    SettingsDao.mapPojoStatically(
-                            p.getSetting()));
             pojo.setDatabaseConnection(
                     DatabaseConnectionDao.mapPojoStatically(
                             p.getDatabaseConnection()));

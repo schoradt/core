@@ -65,16 +65,10 @@ public class CountryCodeDao
 			CountryCodePojo pojo,
 			CountryCode cc) {
 
-        // return null if the pojo is null
-        if (pojo != null) {
+        // TODO set the model values
 
-            // TODO set the model values
-
-            // return the model as mapping result
-            return new MappingResult<CountryCode>(cc.getId(), cc);
-        } else {
-            return null;
-        }
+        // return the model as mapping result
+        return new MappingResult<CountryCode>(cc.getId(), cc);
 	}
 
 }

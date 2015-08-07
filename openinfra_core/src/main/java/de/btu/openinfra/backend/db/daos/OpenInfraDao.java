@@ -1,31 +1,23 @@
 package de.btu.openinfra.backend.db.daos;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
 import javax.persistence.Query;
 
 import org.eclipse.persistence.jpa.JpaQuery;
 
-import de.btu.openinfra.backend.OpenInfraApplication;
 import de.btu.openinfra.backend.OpenInfraProperties;
-import de.btu.openinfra.backend.OpenInfraPropertyKeys;
-import de.btu.openinfra.backend.db.MetaDataManager;
-import de.btu.openinfra.backend.db.OpenInfraPropertyValues;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
 import de.btu.openinfra.backend.db.pojos.AttributeValueGeomPojo;
 import de.btu.openinfra.backend.db.pojos.AttributeValueGeomzPojo;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
-import de.btu.openinfra.backend.db.pojos.meta.ProjectsPojo;
 
 /**
  * This class is used to provide a sophisticated way to manage the JPA entity
@@ -103,65 +95,10 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 		this.schema = schema;
 		this.modelClass = modelClass;
 
-		// 2. Create properties map
-		Map<String, String> properties = new HashMap<String, String>();
-		properties.put(
-				OpenInfraPropertyKeys.JDBC_DRIVER.toString(),
-				OpenInfraPropertyValues.JDBC_DRIVER.toString());
-		// 3. Set default properties
-		String user = OpenInfraProperties.getProperty(
-				OpenInfraPropertyKeys.USER.toString());
-		String password = OpenInfraProperties.getProperty(
-				OpenInfraPropertyKeys.PASSWORD.toString());
-		String url = String.format(
-				OpenInfraPropertyValues.URL.toString(),
-				OpenInfraProperties.getProperty(
-						OpenInfraPropertyKeys.SERVER.toString()),
-				OpenInfraProperties.getProperty(
-						OpenInfraPropertyKeys.PORT.toString()),
-				OpenInfraProperties.getProperty(
-						OpenInfraPropertyKeys.DB_NAME.toString()));
-		// 3. Decide if the system or a project database schema is requested
-		String currentSchema = "currentSchema=";
-		switch (schema) {
-        case META_DATA:
-            currentSchema +=
-            	OpenInfraPropertyValues.META_DATA_SEARCH_PATH + "," +
-            	OpenInfraPropertyValues.SEARCH_PATH;
-            break;
-		case PROJECTS:
-			// Override default properties and set project and default search
-			// path
-			ProjectsPojo p = MetaDataManager.getProjects(currentProjectId);
-			user = p.getDatabaseConnection().getCredentials().getUsername();
-			password = p.getDatabaseConnection().getCredentials().getPassword();
-			url = String.format(
-					OpenInfraPropertyValues.URL.toString(),
-					p.getDatabaseConnection().getServer().getServer(),
-					p.getDatabaseConnection().getPort().getPort(),
-					p.getDatabaseConnection().getDatabase().getDatabase());
-			currentSchema +=
-					p.getDatabaseConnection().getSchema().getSchema() + "," +
-					OpenInfraPropertyValues.SEARCH_PATH;
-			break;
-		case SYSTEM:
-			// fall through
-		default:
-			// set default search path
-			currentSchema +=
-				OpenInfraPropertyValues.SYSTEM_SEARCH_PATH + "," +
-				OpenInfraPropertyValues.SEARCH_PATH;
-			break;
-		}
-		properties.put(OpenInfraPropertyKeys.USER.toString(), user);
-		properties.put(OpenInfraPropertyKeys.PASSWORD.toString(), password);
-		properties.put(
-				OpenInfraPropertyKeys.URL.toString(),
-				url + currentSchema);
-		// 4. Create the final entity manager
-		em = Persistence.createEntityManagerFactory(
-		        OpenInfraApplication.PERSISTENCE_CONTEXT,
-		        properties).createEntityManager();
+		// 2. Create the final entity manager
+		em = EntityManagerFactoryCache.getEntityManagerFactory(
+		        currentProjectId,
+		        schema).createEntityManager();
 	}
 
 	/**
@@ -295,34 +232,44 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	 */
 	public UUID createOrUpdate(TypePojo pojo)
 			throws RuntimeException {
-	    // TODO handle the geometry cast here as special case
-	    // TODO maybe saving topics in system database must be handled as well
-		// 1. Map the POJO object to a JPA model object
-		MappingResult<TypeModel> result = mapToModel(
-				pojo,
-				createModelObject(pojo.getUuid()));
-		// abort here if the result is null
-		if (result == null) {
-		    return null;
-		}
+
+	    UUID resultId = null;
+
 		// 2. Get the transaction and merge (create or replace) the JPA model
 		// object.
 		EntityTransaction et = em.getTransaction();
 		try {
-			et.begin();
-			// special handling for geometry classes
-			if (modelClass.getSimpleName().equals("AttributeValueGeom") ||
-			        modelClass.getSimpleName().equals("AttributeValueGeomz")) {
-                Query geomQuery = createGeomQuery(pojo);
-                if (geomQuery != null) {
-                    // execute the query
-                    geomQuery.executeUpdate();
-                }
-			} else {
-			    em.merge(result.getModelObject());
+			et.begin();			
+			switch(modelClass.getSimpleName()) {
+			    // special handling for geometry classes
+			    case "AttributeValueGeom":
+			        // fall through
+			    case "AttributeValueGeomz":
+			        Query geomQuery = createGeomQuery(pojo);
+	                if (geomQuery != null) {
+	                    // execute the query
+	                    geomQuery.executeUpdate();
+	                }
+	                break;
+			    default:
+			        TypeModel model = createModelObject(pojo.getUuid());
+			        // abort if the pojo and the type model is null
+			        if (pojo == null || model == null) {
+			            return null;
+			        }
+
+			        // 1. Map the POJO object to a JPA model object
+			        MappingResult<TypeModel> result = mapToModel(pojo, model);
+
+			        // abort here if the result is null
+			        if (result == null) {
+			            return null;
+			        }
+			        em.merge(result.getModelObject());
+			        resultId = result.getId();
 			}
 			et.commit();
-			return result.getId();
+			return resultId;
 		} catch(RuntimeException ex) {
 			if(et != null && et.isActive()) {
 				et.rollback();
@@ -534,7 +481,8 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	 * creates a new object and generates a random UUID.
 	 *
 	 * @param id the UUID of the requested object or null
-	 * @return   a model object (new or old)
+	 * @return   a model object (new or old) or null if the pojo id doesn't
+	 *           exists
 	 */
 	protected TypeModel createModelObject(UUID id) {
 		TypeModel tm = null;

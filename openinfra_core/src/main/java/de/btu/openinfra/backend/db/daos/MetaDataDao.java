@@ -42,7 +42,8 @@ public class MetaDataDao
     public static MetaDataPojo mapPojoStatically(MetaData md) {
         if(md != null) {
             MetaDataPojo pojo = new MetaDataPojo();
-            pojo.setUuid(md.getObjectId());
+            pojo.setUuid(md.getId());
+            pojo.setObjectId(md.getObjectId());
             pojo.setTableName(md.getTableName());
             pojo.setPkColumn(md.getPkColumn());
             pojo.setData(md.getData());
@@ -54,8 +55,24 @@ public class MetaDataDao
     
     @Override
     public MappingResult<MetaData> mapToModel(MetaDataPojo pojo, MetaData md) {
-        // TODO Auto-generated method stub
-        return null;
+        // 1. If the POJO really exists than go further, otherwise return null.
+        if(pojo != null) {
+            md.setObjectId(pojo.getObjectId());
+            md.setData(pojo.getData());
+            md.setPkColumn(pojo.getPkColumn());
+            md.setTableName(pojo.getTableName());
+            return new MappingResult<MetaData>(md.getId(), md);
+        } else {
+            return null;
+        } // end if else
+    }
+    
+    /**
+     * Creates an empty MetaDataPojo.
+     * @return an empty MetaDataPojo
+     */
+    public MetaDataPojo newMetaData() {
+       return new MetaDataPojo();
     }
 
 }

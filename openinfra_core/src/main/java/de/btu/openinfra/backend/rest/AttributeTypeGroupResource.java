@@ -3,12 +3,17 @@ package de.btu.openinfra.backend.rest;
 import java.util.List;
 import java.util.UUID;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import de.btu.openinfra.backend.db.daos.AttributeTypeDao;
 import de.btu.openinfra.backend.db.daos.AttributeTypeGroupDao;
@@ -34,6 +39,7 @@ import de.btu.openinfra.backend.db.pojos.TopicCharacteristicToAttributeTypeGroup
     + OpenInfraResponseBuilder.UTF8_CHARSET,
 	MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
 	+ OpenInfraResponseBuilder.UTF8_CHARSET})
+@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class AttributeTypeGroupResource {
 
 	@GET
@@ -210,4 +216,55 @@ public class AttributeTypeGroupResource {
 						attributeTypeGroupId);
 	}
 
+	@GET
+    @Path("/new")
+    public AttributeTypeGroupPojo newAttributeTypeGroup(
+            @QueryParam("language") String language,
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema) {
+        return new AttributeTypeGroupDao(
+                        projectId,
+                        OpenInfraSchemas.valueOf(schema.toUpperCase()))
+                    .newAttributeTypeGroup(
+                            PtLocaleDao.forLanguageTag(language));
+    }
+
+	@POST
+    public Response create(
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            AttributeTypeGroupPojo pojo) {
+        UUID id = new AttributeTypeGroupDao(
+                projectId,
+                OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
+                        pojo);
+        return OpenInfraResponseBuilder.postResponse(id);
+    }
+
+	@PUT
+	@Path("{attributeTypeGroupId}")
+	public Response update(
+	        @PathParam("projectId") UUID projectId,
+	        @PathParam("schema") String schema,
+	        @PathParam("attributeTypeGroupId") UUID attributeTypeGroupId,
+	        AttributeTypeGroupPojo pojo) {
+	    UUID id = new AttributeTypeGroupDao(
+	            projectId,
+	            OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
+                        pojo);
+	    return OpenInfraResponseBuilder.putResponse(id);
+	}
+
+	@DELETE
+	@Path("{attributeTypeGroupId}")
+	public Response delete(
+	        @PathParam("projectId") UUID projectId,
+	        @PathParam("schema") String schema,
+	        @PathParam("attributeTypeGroupId") UUID attributeTypeGroupId) {
+	    return OpenInfraResponseBuilder.deleteResponse(
+	            new AttributeTypeGroupDao(
+	                    projectId,
+	                    OpenInfraSchemas.valueOf(schema.toUpperCase()))
+	            .delete(attributeTypeGroupId), attributeTypeGroupId);
+	}
 }

@@ -42,11 +42,11 @@ public class TopicCharacteristicToAttributeTypeGroupDao extends
 	public TopicCharacteristicToAttributeTypeGroupPojo mapToPojo(
 			Locale locale,
 			AttributeTypeGroupToTopicCharacteristic modelObject) {
-		
+
 		if(modelObject != null) {
 			TopicCharacteristicToAttributeTypeGroupPojo pojo =
 					new TopicCharacteristicToAttributeTypeGroupPojo();
-			
+
 			pojo.setUuid(modelObject.getId());
 			pojo.setTopicCharacteristic(
 	                TopicCharacteristicDao.mapToPojoStatically(
@@ -60,11 +60,11 @@ public class TopicCharacteristicToAttributeTypeGroupDao extends
 				modelObject.getAttributeTypeGroup().getId());
 			pojo.setMultiplicity(MultiplicityDao.mapToPojoStatically(
 					modelObject.getMultiplicityBean()));
-			
+
 			if(modelObject.getOrder() != null) {
 				pojo.setOrder(modelObject.getOrder());
 			}
-			
+
 			return pojo;
 		}
 		else {
@@ -74,10 +74,14 @@ public class TopicCharacteristicToAttributeTypeGroupDao extends
 
 	@Override
 	public MappingResult<AttributeTypeGroupToTopicCharacteristic> mapToModel(
-			TopicCharacteristicToAttributeTypeGroupPojo pojoObject,
-			AttributeTypeGroupToTopicCharacteristic modelObject) {
-		// TODO Auto-generated method stub
-		return null;
+			TopicCharacteristicToAttributeTypeGroupPojo pojo,
+			AttributeTypeGroupToTopicCharacteristic att) {
+
+        // TODO set the model values
+
+        // return the model as mapping result
+        return new MappingResult<AttributeTypeGroupToTopicCharacteristic>(
+                att.getId(), att);
 	}
-	
+
 }

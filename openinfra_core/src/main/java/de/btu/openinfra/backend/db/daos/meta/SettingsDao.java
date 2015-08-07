@@ -46,6 +46,7 @@ public class SettingsDao
             pojo.setKey(s.getKey());
             pojo.setUpdatedOn(s.getUpdatedOn());
             pojo.setValue(s.getValue());
+            pojo.setProject(ProjectsDao.mapPojoStatically(s.getProject()));
             return pojo;
         } else {
             return null;

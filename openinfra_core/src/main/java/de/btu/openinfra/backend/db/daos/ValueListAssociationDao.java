@@ -14,7 +14,7 @@ import de.btu.openinfra.backend.db.pojos.ValueListAssociationPojo;
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
  */
-public class ValueListAssociationDao 
+public class ValueListAssociationDao
 	extends OpenInfraValueValueDao<ValueListAssociationPojo,
 	ValueListXValueList, ValueList, ValueList> {
 
@@ -42,15 +42,17 @@ public class ValueListAssociationDao
 
 	@Override
 	public MappingResult<ValueListXValueList> mapToModel(
-			ValueListAssociationPojo pojoObject,
-			ValueListXValueList modelObject) {
-		// TODO Auto-generated method stub
-		return null;
+			ValueListAssociationPojo pojo,
+			ValueListXValueList vlxvl) {
+        // TODO set the model values
+
+        // return the model as mapping result
+        return new MappingResult<ValueListXValueList>(vlxvl.getId(), vlxvl);
 	}
-	
+
 	/**
      * This method implements the method mapToPojo in a static way.
-     * 
+     *
      * @param locale       the requested language as Java.util locale
      * @param association  the model object
      * @return             the POJO object when the model object is not null
@@ -59,17 +61,17 @@ public class ValueListAssociationDao
 	public static ValueListAssociationPojo mapToPojoStatically(
 			Locale locale,
 			ValueListXValueList association) {
-		
+
 		if(association != null) {
 			ValueListAssociationPojo pojo =
 					new ValueListAssociationPojo();
-			
+
 			pojo.setUuid(association.getId());
 			pojo.setRelationship(ValueListValueDao.mapToPojoStatically(locale,
 					association.getValueListValue()));
 			pojo.setAssociatedValueList(ValueListDao.mapToPojoStatically(locale,
 					association.getValueList2Bean()));
-			
+
 			return pojo;
 		}
 		else {
