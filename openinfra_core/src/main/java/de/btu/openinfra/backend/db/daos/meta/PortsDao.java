@@ -52,8 +52,32 @@ public class PortsDao
 
     @Override
     public MappingResult<Ports> mapToModel(PortsPojo pojo, Ports ports) {
-        // TODO Auto-generated method stub
-        return null;
+        if(pojo != null) {            
+            mapToModelStatically(pojo, ports);
+            return new MappingResult<Ports>(ports.getId(), ports);
+        }
+        else {
+            return null;
+        }
     }
 
+    /**
+     * This method implements the method mapToModel in a static way.
+     * @param pojo the POJO object
+     * @param ports the pre initialized model object
+     * @return return a corresponding JPA model object or null if the pojo
+     * object is null
+     */
+    public static Ports mapToModelStatically(PortsPojo pojo, Ports ports) {
+        Ports resultPorts = null;
+        if(pojo != null) {
+            resultPorts = ports;
+            if(resultPorts == null) {
+                resultPorts = new Ports();
+                resultPorts.setId(pojo.getUuid());
+            }
+            resultPorts.setPort(pojo.getPort());
+        }
+        return resultPorts;
+    }
 }

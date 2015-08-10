@@ -55,9 +55,46 @@ public class ProjectsDao
 
     @Override
     public MappingResult<Projects> mapToModel(ProjectsPojo pojo, Projects ps) {
-        // TODO Auto-generated method stub
-        return null;
+        if(pojo != null) {            
+            mapToModelStatically(pojo, ps);
+            return new MappingResult<Projects>(ps.getId(), ps);
+        }
+        else {
+            return null;
+        }
+    }
+    
+    /**
+     * This method implements the method mapToModel in a static way.
+     * @param pojo the POJO object
+     * @param projects the pre initialized model object
+     * @return return a corresponding JPA model object or null if the pojo
+     * object is null
+     */
+    public static Projects mapToModelStatically(
+            ProjectsPojo pojo, Projects projects) {
+        Projects resultProjects = null;
+        if(pojo != null) {
+            resultProjects = projects;
+            if(resultProjects == null) {
+                resultProjects = new Projects();
+                resultProjects.setId(pojo.getUuid());
+            }
+            resultProjects.setIsSubproject(pojo.getIsSubproject());
+            resultProjects.setDatabaseConnection(
+                    DatabaseConnectionDao.mapToModelStatically(
+                            pojo.getDatabaseConnection(),
+                            null));
+        }
+        return resultProjects;
     }
 
+    /**
+     * Creates an empty ProjectsPojo.
+     * @return an empty ProjectsPojo
+     */
+    public ProjectsPojo newProjects() {
+       return new ProjectsPojo();
+    }
 
 }
