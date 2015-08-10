@@ -72,35 +72,29 @@ public class AttributeValueDomainDao extends
 	public MappingResult<AttributeValueDomain> mapToModel(
 			AttributeValueDomainPojo pojo,
 			AttributeValueDomain avd) {
-	    // return null if the pojo is null
 
-        if (pojo != null) {
-
-            // in case the attribute type to attribute type group id, the
-            // topic instance id or the domain is null
-            if (pojo.getAttributeTypeToAttributeTypeGroupId() == null ||
-                    pojo.getTopicInstanceId() == null ||
-                    pojo.getDomain() == null) {
-                return null;
-            }
-
-            // set value list value
-            avd.setValueListValue(em.find(ValueListValue.class,
-                    pojo.getDomain().getUuid()));
-
-            // set the attribute type to attribute type group
-            avd.setAttributeTypeToAttributeTypeGroup(em.find(
-                    AttributeTypeToAttributeTypeGroup.class,
-                    pojo.getAttributeTypeToAttributeTypeGroupId()));
-
-            // set the topic instance
-            avd.setTopicInstance(
-                    em.find(TopicInstance.class, pojo.getTopicInstanceId()));
-
-            return new MappingResult<AttributeValueDomain>(avd.getId(), avd);
-        } else {
+        // in case the attribute type to attribute type group id, the
+        // topic instance id or the domain is null
+        if (pojo.getAttributeTypeToAttributeTypeGroupId() == null ||
+                pojo.getTopicInstanceId() == null ||
+                pojo.getDomain() == null) {
             return null;
         }
+
+        // set value list value
+        avd.setValueListValue(em.find(ValueListValue.class,
+                pojo.getDomain().getUuid()));
+
+        // set the attribute type to attribute type group
+        avd.setAttributeTypeToAttributeTypeGroup(em.find(
+                AttributeTypeToAttributeTypeGroup.class,
+                pojo.getAttributeTypeToAttributeTypeGroupId()));
+
+        // set the topic instance
+        avd.setTopicInstance(
+                em.find(TopicInstance.class, pojo.getTopicInstanceId()));
+
+        return new MappingResult<AttributeValueDomain>(avd.getId(), avd);
 	}
 
 }

@@ -2,6 +2,8 @@ package de.btu.openinfra.backend.rest.project;
 
 import java.util.UUID;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -24,6 +26,7 @@ import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
     + OpenInfraResponseBuilder.UTF8_CHARSET,
     MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET})
+@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class AttributeValueResource {
 
 	@GET
@@ -61,7 +64,7 @@ public class AttributeValueResource {
 	}
 
 	@POST
-    public Response createAttributeValue(
+    public Response create(
             @PathParam("projectId") UUID projectId,
             AttributeValuePojo pojo) {
 	    UUID id = new AttributeValueDao(
@@ -69,4 +72,15 @@ public class AttributeValueResource {
                 OpenInfraSchemas.PROJECTS).distributeTypes(pojo, projectId);
         return OpenInfraResponseBuilder.postResponse(id);
     }
+
+	@DELETE
+	@Path("{attributeValueId}")
+	public Response delete(
+    	    @PathParam("projectId") UUID projectId,
+            @PathParam("attributeValueId") UUID attributeValueId) {
+	    return OpenInfraResponseBuilder.deleteResponse(
+	            new AttributeValueDao(projectId, OpenInfraSchemas.PROJECTS)
+	                .delete(attributeValueId),
+                attributeValueId);
+	}
 }

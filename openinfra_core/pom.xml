@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.btu.openinfra.core</groupId>
   <artifactId>openinfra_core</artifactId>
-  <version>1.1.4</version>
+  <version>1.1.5</version>
   <packaging>war</packaging>
   <name>openinfra_core</name>
   
@@ -56,6 +56,13 @@
     </dependencyManagement>
 
     <dependencies>
+    	<!-- Guava is used to cache different object types. -->
+    	<dependency>
+    		<groupId>com.google.guava</groupId>
+    		<artifactId>guava</artifactId>
+    		<version>19.0-rc1</version>
+		</dependency>
+		
 	    <!-- EclipseLink is used as persistence API and for object relational 
 	         mapping.  -->
 		<dependency>

@@ -132,16 +132,10 @@ public class TopicCharacteristicDao
 			TopicCharacteristicPojo pojo,
 			TopicCharacteristic tc) {
 
-        // return null if the pojo is null
-        if (pojo != null) {
+        // TODO set the model values
 
-            // TODO set the model values
-
-            // return the model as mapping result
-            return new MappingResult<TopicCharacteristic>(tc.getId(), tc);
-        } else {
-            return null;
-        }
+        // return the model as mapping result
+        return new MappingResult<TopicCharacteristic>(tc.getId(), tc);
 	}
 
 }

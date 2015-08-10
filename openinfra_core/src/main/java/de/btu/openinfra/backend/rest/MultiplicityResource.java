@@ -79,10 +79,7 @@ public class MultiplicityResource {
     public MultiplicityPojo newMultiplicity(
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema) {
-        return new MultiplicityDao(
-                        projectId,
-                        OpenInfraSchemas.valueOf(schema.toUpperCase()))
-                    .newMultiplicity();
+	    return new MultiplicityPojo();
     }
 
 	@POST

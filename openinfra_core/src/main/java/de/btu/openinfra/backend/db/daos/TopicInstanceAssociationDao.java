@@ -39,47 +39,84 @@ public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
 				TopicInstanceXTopicInstance.class,
 				TopicInstance.class, TopicInstance.class);
 	}
-	
+
+	/**
+	 * This method returns a list of parents relative to specified topic 
+	 * instance object.
+	 * 
+	 * @param locale the given locale
+	 * @param self   the specified topic instance object
+	 * @return       a list of parent topic instances
+	 */
 	public List<TopicInstanceAssociationPojo> readParents(
 			Locale locale, UUID self) {
-		
-		TopicInstanceDao ti = 
+
+		TopicInstanceDao ti =
 				new TopicInstanceDao(currentProjectId, schema);
-		
-		List<TopicInstanceAssociationPojo> parents = 
+
+		List<TopicInstanceAssociationPojo> parents =
 				new LinkedList<TopicInstanceAssociationPojo>();
-		
+
 		TopicInstanceXTopicInstance parent = readParent(locale, self);
-				
+
 		while(true) {
 			if(parent != null) {
 				parents.add(
 						new TopicInstanceAssociationPojo(
+								parent.getId(),
 								ti.mapToPojo(
-										locale, 
+										locale,
 										parent.getTopicInstance1Bean()),
 								RelationshipTypeDao.mapToPojoStatically(
-										locale, 
-										parent.getRelationshipType())));			
+										locale,
+										parent.getRelationshipType())));
 				parent = readParent(
-						locale, 
+						locale,
 						parent.getTopicInstance1Bean().getId());
 			} else {
 				break;
 			} // end if else
+			
+			// ++++++++++ Dirty hack!!! +++++++++
+			// TODO Obviously, there is a bug in the test data. Cycles can occur
+			// and a parent is a child of it's child. This must be discussed.
+			// Workaround: in order to provide the functionality, the loop will
+			// terminate in the third step.
+			
+			int count = 0;
+			if(parents.size() > 0) {
+				for(TopicInstanceAssociationPojo help : parents) {
+					for(TopicInstanceAssociationPojo p : parents) {
+						if(help.getUuid().equals(p.getUuid())) {
+							count++;
+						}
+					}
+					if(count > 3) {
+						break;
+					}
+				}
+			}
+			
+			if(count == 4) {
+				System.out.println("Big Problem in "
+						+ "TopicInstanceAssotionationDao --> readParents"
+						+ " This should be discussed and fixed!");
+				break;
+			}
+			
 		} // end while
-		
+
 		Collections.reverse(parents);
 		return parents;
 	}
-	
+
 	private TopicInstanceXTopicInstance readParent(Locale locale, UUID self) {
-		List<TopicInstanceXTopicInstance> txt = 
+		List<TopicInstanceXTopicInstance> txt =
 				em.createNamedQuery(
-						"TopicInstanceXTopicInstance.findParent", 
+						"TopicInstanceXTopicInstance.findParent",
 						TopicInstanceXTopicInstance.class)
 						.setParameter(
-								"self", 
+								"self",
 								em.find(TopicInstance.class, self))
 						.getResultList();
 		if(txt != null && txt.size() > 0) {
@@ -88,7 +125,7 @@ public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
 			return null;
 		}
 	}
-	
+
 
 	@Override
 	public TopicInstanceAssociationPojo mapToPojo(
@@ -109,19 +146,13 @@ public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
 	@Override
 	public MappingResult<TopicInstanceXTopicInstance> mapToModel(
 			TopicInstanceAssociationPojo pojo,
-			TopicInstanceXTopicInstance tixti) {
+			TopicInstanceXTopicInstance txt) {
 
-        // return null if the pojo is null
-        if (pojo != null) {
+        // TODO set the model values
 
-            // TODO set the model values
-
-            // return the model as mapping result
-            return new MappingResult<TopicInstanceXTopicInstance>(
-                    tixti.getId(), tixti);
-        } else {
-            return null;
-        }
+        // return the model as mapping result
+        return new MappingResult<TopicInstanceXTopicInstance>(
+                txt.getId(), txt);
 	}
 
 }

@@ -1,6 +1,7 @@
 package de.btu.openinfra.backend.db.daos.meta;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
@@ -44,7 +45,7 @@ public class LogDao
     public static LogPojo mapPojoStatically(Log l) {
         if(l != null) {
             LogPojo pojo = new LogPojo();
-            String format = "yyyy-MM-dd'T'H:m:sZ";
+            String format = "yyyy-MM-dd'T'HH:mm:ssZ";
             DateFormat df = new SimpleDateFormat(format);
             pojo.setUuid(l.getId());
             pojo.setUserId(l.getUserId());
@@ -61,7 +62,57 @@ public class LogDao
 
     @Override
     public MappingResult<Log> mapToModel(LogPojo pojo, Log log) {
-        // TODO Auto-generated method stub
-        return null;
+        if(pojo != null) {
+            mapToModelStatically(pojo, log); 
+            return new MappingResult<Log>(log.getId(), log);
+        }
+        else {
+            return null;
+        }
+    }
+    
+    /**
+     * This method implements the method mapToModel in a static way.
+     * @param pojo the POJO object
+     * @param log the pre initialized model object
+     * @return return a corresponding JPA model object or null if the pojo
+     * object is null
+     */
+    public Log mapToModelStatically(LogPojo pojo, Log log) {
+        Log resultLog = null;
+        if(pojo != null) {
+            resultLog = log;
+            if(resultLog == null) {
+                resultLog = new Log();
+                resultLog.setId(pojo.getUuid());
+            }
+            
+            try {
+                String format = "yyyy-MM-dd'T'HH:mm:ssX";
+                SimpleDateFormat df = new SimpleDateFormat(format);
+                resultLog.setCreatedOn(df.parse(pojo.getCreatedOn()));
+            } catch (ParseException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            resultLog.setMessage(pojo.getMessage());
+            resultLog.setUserId(pojo.getUserId());
+            resultLog.setUserName(pojo.getUserName());
+            resultLog.setLevelBean(LevelDao.mapToModelStatically(
+                    pojo.getLevel(),
+                    null));
+            resultLog.setLoggerBean(LoggerDao.mapToModelStatically(
+                    pojo.getLogger(),
+                    null));
+        }
+        return resultLog;
+    }
+    
+    /**
+     * Creates an empty LogPojo.
+     * @return an empty LogPojo
+     */
+    public LogPojo newLog() {
+        return new LogPojo();
     }
 }

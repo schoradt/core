@@ -42,15 +42,19 @@ public class ValueListValueAssociationDao
 
 	@Override
 	public MappingResult<ValueListValuesXValueListValue> mapToModel(
-			ValueListValueAssociationPojo pojoObject,
-			ValueListValuesXValueListValue modelObject) {
-		// TODO Auto-generated method stub
-		return null;
+			ValueListValueAssociationPojo pojo,
+			ValueListValuesXValueListValue vlvxvlv) {
+
+        // TODO set the model values
+
+        // return the model as mapping result
+        return new MappingResult<ValueListValuesXValueListValue>(
+                vlvxvlv.getId(), vlvxvlv);
 	}
-	
+
 	/**
      * This method implements the method mapToPojo in a static way.
-     * 
+     *
      * @param locale       the requested language as Java.util locale
      * @param association  the model object
      * @return             the POJO object when the model object is not null
@@ -59,18 +63,18 @@ public class ValueListValueAssociationDao
 	public static ValueListValueAssociationPojo mapToPojoStatically(
 			Locale locale,
 			ValueListValuesXValueListValue association) {
-		
+
 		if(association != null) {
 			ValueListValueAssociationPojo pojo =
 					new ValueListValueAssociationPojo();
-			
+
 			pojo.setUuid(association.getId());
 			pojo.setRelationship(ValueListValueDao.mapToPojoStatically(locale,
 					association.getValueListValue1()));
 			pojo.setAssociatedValueListValue(
 					ValueListValueDao.mapToPojoStatically(
 							locale, association.getValueListValue3()));
-			
+
 			return pojo;
 		}
 		else {

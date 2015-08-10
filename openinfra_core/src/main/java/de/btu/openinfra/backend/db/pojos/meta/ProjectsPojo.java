@@ -8,7 +8,6 @@ import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 public class ProjectsPojo extends OpenInfraPojo {
 
     private boolean isSubproject;
-    private SettingsPojo settings;
     private DatabaseConnectionPojo databaseConnection;
     
     public boolean getIsSubproject() {
@@ -17,14 +16,6 @@ public class ProjectsPojo extends OpenInfraPojo {
     
     public void setIsSubproject(boolean isSubproject) {
         this.isSubproject = isSubproject;
-    }
-    
-    public SettingsPojo getSettings() {
-        return settings;
-    }
-
-    public void setSettings(SettingsPojo settings) {
-        this.settings = settings;
     }
     
     public DatabaseConnectionPojo getDatabaseConnection() {
