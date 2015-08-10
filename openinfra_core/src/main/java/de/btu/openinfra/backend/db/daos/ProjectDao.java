@@ -72,7 +72,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 
 	@Override
 	public long getCount() {
-		return getMainProjects(null).size();
+		return readMainProjects(null).size();
 	}
 
 	/**
@@ -83,7 +83,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 	 * @param locale the required language
 	 * @return       a list of main projects
 	 */
-	public List<ProjectPojo> getMainProjects(Locale locale) {
+	public List<ProjectPojo> readMainProjects(Locale locale) {
 		// 1. We need to deliver each main Project from meta data database
 		List<ProjectsPojo> projects = new ProjectsDao(
 				OpenInfraSchemas.META_DATA).read(
@@ -117,7 +117,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 	 * @return the count of main projects
 	 */
 	public long getMainProjectsCount() {
-		return getMainProjects(null).size();
+		return readMainProjects(null).size();
 	}
 
 	@Override

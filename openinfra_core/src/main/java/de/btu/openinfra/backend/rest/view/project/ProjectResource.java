@@ -1,7 +1,5 @@
 package de.btu.openinfra.backend.rest.view.project;
 
-import java.util.Iterator;
-import java.util.List;
 import java.util.UUID;
 
 import javax.ws.rs.GET;
@@ -13,13 +11,12 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.glassfish.jersey.server.mvc.Template;
 
 import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.ProjectDao;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
-import de.btu.openinfra.backend.db.pojos.ProjectPojo;
+import de.btu.openinfra.backend.db.security.ProjectSecurity;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
 /**
@@ -47,23 +44,10 @@ public class ProjectResource {
 			@QueryParam("language") String language,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
-		Subject user = SecurityUtils.getSubject();
-		if(user.isPermitted("/projects:get")) {
-			List<ProjectPojo> list = new ProjectDao(
-					null,
-					OpenInfraSchemas.META_DATA).getMainProjects(
-							PtLocaleDao.forLanguageTag(language));
-			
-			Iterator<ProjectPojo> it = list.iterator();
-			while(it.hasNext()) {
-				if(!user.isPermitted("/projects/{id}:get:" + it.next().getUuid())) {
-					it.remove();
-				}
-			}
-			return Response.ok(list).build();			
-		} else {
-			return Response.status(403).build();
-		}
+		return Response.ok(new ProjectSecurity(
+				null, 
+				OpenInfraSchemas.PROJECTS).readMainProjects(
+						PtLocaleDao.forLanguageTag(language))).build();
 	}
 
 	@GET

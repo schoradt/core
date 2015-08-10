@@ -58,7 +58,7 @@ public class ProjectResource {
 			@QueryParam("size") int size) {
 		return new ProjectDao(
 				null,
-				OpenInfraSchemas.META_DATA).getMainProjects(
+				OpenInfraSchemas.META_DATA).readMainProjects(
 						PtLocaleDao.forLanguageTag(language));
 	}
 
