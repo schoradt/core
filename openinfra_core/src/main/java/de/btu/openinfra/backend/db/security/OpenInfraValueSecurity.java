@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
+import javax.ws.rs.WebApplicationException;
+
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
 import de.btu.openinfra.backend.db.daos.OpenInfraOrderBy;
 import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
@@ -33,7 +35,7 @@ public abstract class OpenInfraValueSecurity<
 			Locale locale,
 			UUID valueId,
 			int offset,
-			int size) {
+			int size) throws WebApplicationException {
 		return null;
 	}
 	
@@ -43,7 +45,7 @@ public abstract class OpenInfraValueSecurity<
             OpenInfraSortOrder order,
             OpenInfraOrderBy column,
             int offset,
-            int size) {
+            int size) throws WebApplicationException {
 		return null;
 	}
 	

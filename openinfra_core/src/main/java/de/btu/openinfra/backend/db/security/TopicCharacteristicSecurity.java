@@ -4,9 +4,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
-import org.apache.shiro.authz.UnauthenticatedException;
-import org.apache.shiro.authz.UnauthorizedException;
-
 import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.TopicCharacteristicDao;
 import de.btu.openinfra.backend.db.jpa.model.Project;
@@ -24,8 +21,7 @@ public class TopicCharacteristicSecurity extends
 				new TopicCharacteristicDao(currentProjectId, schema));
 	}
 	
-	public List<TopicCharacteristicPojo> read(Locale locale, String filter) 
-			throws UnauthorizedException, UnauthenticatedException{
+	public List<TopicCharacteristicPojo> read(Locale locale, String filter) {
 		checkPermission();
 		return ((TopicCharacteristicDao)dao).read(locale, filter);
 	}

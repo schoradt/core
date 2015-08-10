@@ -4,8 +4,6 @@ import java.util.UUID;
 
 import javax.ws.rs.core.Response;
 
-import org.apache.shiro.authz.UnauthorizedException;
-
 /**
  * This class is a helper class which is used to build responses in an uniform
  * way.
@@ -106,15 +104,11 @@ public class OpenInfraResponseBuilder {
 	 * @return a response containing the object otherwise an HTTP 404
 	 */
 	public static Response getResponse(Object result) {
-		try {
-			if(result != null) {
-				return Response.ok().entity(result).build();
-			} else {
-				return Response.status(Response.Status.NOT_FOUND).build();
-			} // end if else
-		} catch(UnauthorizedException ue) {
-			return Response.status(403).build();
-		}
+		if(result != null) {
+			return Response.ok().entity(result).build();
+		} else {
+			return Response.status(Response.Status.NOT_FOUND).build();
+		} // end if else
 	}
 
 }

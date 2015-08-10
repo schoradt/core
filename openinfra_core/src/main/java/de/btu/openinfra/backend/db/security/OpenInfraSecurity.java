@@ -4,9 +4,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.UnauthenticatedException;
-import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.subject.Subject;
 
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
@@ -49,7 +50,7 @@ public abstract class OpenInfraSecurity<
 	}
 	
 	public List<TypePojo> read(Locale locale, int offset, int size) 
-			throws UnauthorizedException, UnauthenticatedException {
+			throws WebApplicationException {
 		checkPermission();
 		return dao.read(locale, offset, size);
 	}
@@ -59,7 +60,7 @@ public abstract class OpenInfraSecurity<
     		OpenInfraSortOrder order,
     		OpenInfraOrderByEnum column,
     		int offset,
-    		int size) throws UnauthorizedException, UnauthenticatedException {
+    		int size) throws WebApplicationException {
 		checkPermission();
 		return dao.read(locale, order, column, offset, size);		
 	}
@@ -69,23 +70,31 @@ public abstract class OpenInfraSecurity<
 		return dao.read(locale, id);
 	}
 	
-	protected boolean checkPermission() throws 
-		UnauthorizedException, UnauthenticatedException {
+	protected boolean checkPermission() throws WebApplicationException {
 		
 		if(!user.isAuthenticated()) {
-			throw new UnauthenticatedException();
+			throw new WebApplicationException(Response.Status.UNAUTHORIZED);
 		}
 		
-		
-		
-		System.out.println(dao.getClass().getCanonicalName());
-		
-		if(currentProjectId != null && 
-			user.isPermitted("/projects/{id}:get:" + currentProjectId)) {
-			return true;
-		} else {
-			throw new UnauthorizedException();
+		switch (schema) {
+		case PROJECTS:
+			if(currentProjectId != null && user.isPermitted(
+					"/projects/{id}:get:" + currentProjectId)) {
+				return true;
+			}
+			break;
+
+		case META_DATA:
+			break;
+			
+		case SYSTEM:
+			if(user.isPermitted("/system:get")) {
+				return true;
+			}
+			break;
 		}
+		
+		throw new WebApplicationException(Response.Status.FORBIDDEN);
 		
 	}
 
