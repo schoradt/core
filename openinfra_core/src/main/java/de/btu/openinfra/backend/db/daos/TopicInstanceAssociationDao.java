@@ -40,6 +40,14 @@ public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
 				TopicInstance.class, TopicInstance.class);
 	}
 
+	/**
+	 * This method returns a list of parents relative to specified topic 
+	 * instance object.
+	 * 
+	 * @param locale the given locale
+	 * @param self   the specified topic instance object
+	 * @return       a list of parent topic instances
+	 */
 	public List<TopicInstanceAssociationPojo> readParents(
 			Locale locale, UUID self) {
 
@@ -55,6 +63,7 @@ public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
 			if(parent != null) {
 				parents.add(
 						new TopicInstanceAssociationPojo(
+								parent.getId(),
 								ti.mapToPojo(
 										locale,
 										parent.getTopicInstance1Bean()),
@@ -67,6 +76,34 @@ public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
 			} else {
 				break;
 			} // end if else
+			
+			// ++++++++++ Dirty hack!!! +++++++++
+			// TODO Obviously, there is a bug in the test data. Cycles can occur
+			// and a parent is a child of it's child. This must be discussed.
+			// Workaround: in order to provide the functionality, the loop will
+			// terminate in the third step.
+			
+			int count = 0;
+			if(parents.size() > 0) {
+				for(TopicInstanceAssociationPojo help : parents) {
+					for(TopicInstanceAssociationPojo p : parents) {
+						if(help.getUuid().equals(p.getUuid())) {
+							count++;
+						}
+					}
+					if(count > 3) {
+						break;
+					}
+				}
+			}
+			
+			if(count == 4) {
+				System.out.println("Big Problem in "
+						+ "TopicInstanceAssotionationDao --> readParents"
+						+ " This should be discussed and fixed!");
+				break;
+			}
+			
 		} // end while
 
 		Collections.reverse(parents);
