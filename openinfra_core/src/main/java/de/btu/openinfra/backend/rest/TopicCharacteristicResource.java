@@ -9,6 +9,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import de.btu.openinfra.backend.db.daos.AttributeTypeGroupToTopicCharacteristicDao;
 import de.btu.openinfra.backend.db.daos.OpenInfraOrderByEnum;
@@ -20,7 +21,7 @@ import de.btu.openinfra.backend.db.daos.RelationshipTypeToTopicCharacteristicDao
 import de.btu.openinfra.backend.db.daos.TopicCharacteristicDao;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupToTopicCharacteristicPojo;
 import de.btu.openinfra.backend.db.pojos.RelationshipTypeToTopicCharacteristicPojo;
-import de.btu.openinfra.backend.db.pojos.TopicCharacteristicPojo;
+import de.btu.openinfra.backend.db.security.TopicCharacteristicSecurity;
 
 @Path(OpenInfraResponseBuilder.REST_URI + "/topiccharacteristics")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
@@ -41,7 +42,7 @@ public class TopicCharacteristicResource {
 	}
 
 	@GET
-	public List<TopicCharacteristicPojo> get(
+	public Response getList(
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
@@ -51,35 +52,41 @@ public class TopicCharacteristicResource {
 			@PathParam("offset") int offset,
 			@PathParam("size") int size) {
 		if(filter != null && filter.length() > 0) {
-			return new TopicCharacteristicDao(
-					projectId,
-					OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-							PtLocaleDao.forLanguageTag(language),
-							filter);
+			return OpenInfraResponseBuilder.getResponse(
+					new TopicCharacteristicSecurity(
+							projectId, 
+							OpenInfraSchemas.valueOf(
+									schema.toUpperCase())).read(
+											PtLocaleDao.forLanguageTag(
+													language), filter));
 		} else {
-			return new TopicCharacteristicDao(
-					projectId,
-					OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-							PtLocaleDao.forLanguageTag(language),
-							sortOrder,
-							orderBy,
-							offset,
-							size);
+			return OpenInfraResponseBuilder.getResponse(
+					new TopicCharacteristicDao(
+							projectId,
+							OpenInfraSchemas.valueOf(
+									schema.toUpperCase())).read(
+											PtLocaleDao.forLanguageTag(
+													language),
+											sortOrder,
+											orderBy,
+											offset,
+											size));
 		} // end if else
 	}
 
 	@GET
 	@Path("{topicCharacteristicId}")
-	public TopicCharacteristicPojo get(
+	public Response getSingle(
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@PathParam("topicCharacteristicId") UUID topicCharacteristicId) {
-		return new TopicCharacteristicDao(
-				projectId,
-				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						PtLocaleDao.forLanguageTag(language),
-						topicCharacteristicId);
+		return OpenInfraResponseBuilder.getResponse(
+				new TopicCharacteristicSecurity(
+						projectId,
+						OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
+								PtLocaleDao.forLanguageTag(language),
+								topicCharacteristicId));
 	}
 
 	@GET

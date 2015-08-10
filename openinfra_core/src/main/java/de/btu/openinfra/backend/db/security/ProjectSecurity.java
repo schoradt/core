@@ -5,26 +5,24 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.UnauthorizedException;
-import org.apache.shiro.subject.Subject;
 
 import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.ProjectDao;
 import de.btu.openinfra.backend.db.jpa.model.Project;
 import de.btu.openinfra.backend.db.pojos.ProjectPojo;
 
-public class ProjectSecurity extends OpenInfraSecurity<ProjectPojo, Project> {
+public class ProjectSecurity extends 
+	OpenInfraSecurity<ProjectPojo, Project, ProjectDao> {
 
-	public ProjectSecurity(
-			UUID currentProjectId, 
-			OpenInfraSchemas schema) {
-		super(currentProjectId, schema, Project.class);
+	public ProjectSecurity(UUID currentProjectId, OpenInfraSchemas schema) {
+		super(currentProjectId, schema, new ProjectDao(
+				currentProjectId, 
+				schema));
 	}
-	
+
 	public List<ProjectPojo> readMainProjects(Locale locale) 
 			throws UnauthorizedException {
-		Subject user = SecurityUtils.getSubject();
 		if(user.isPermitted("/projects:get")) {
 			List<ProjectPojo> list = new ProjectDao(
 					null,

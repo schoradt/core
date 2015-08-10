@@ -10,13 +10,11 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.shiro.SecurityUtils;
 import org.glassfish.jersey.server.mvc.Template;
 
 import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.ProjectDao;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
-import de.btu.openinfra.backend.db.security.ProjectSecurity;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
 /**
@@ -44,10 +42,10 @@ public class ProjectResource {
 			@QueryParam("language") String language,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
-		return Response.ok(new ProjectSecurity(
-				null, 
-				OpenInfraSchemas.PROJECTS).readMainProjects(
-						PtLocaleDao.forLanguageTag(language))).build();
+		return new de.btu.openinfra.backend.rest.project.ProjectResource().get(
+				language, 
+				offset, 
+				size);
 	}
 
 	@GET
@@ -56,16 +54,9 @@ public class ProjectResource {
 	public Response getView(
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId) {
-		if(SecurityUtils.getSubject().isPermitted("/projects/{id}:get:" + projectId)) {
-			return OpenInfraResponseBuilder.getResponse(
-					new ProjectDao(
-							projectId,
-							OpenInfraSchemas.PROJECTS).read(
-									PtLocaleDao.forLanguageTag(language),
-									projectId));			
-		} else {
-			return Response.status(403).build();
-		}
+		return new de.btu.openinfra.backend.rest.project.ProjectResource().get(
+				language, 
+				projectId);
 	}
 
 	@GET

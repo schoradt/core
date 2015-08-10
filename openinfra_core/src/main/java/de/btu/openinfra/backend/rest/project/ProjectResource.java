@@ -19,6 +19,7 @@ import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.ProjectDao;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.ProjectPojo;
+import de.btu.openinfra.backend.db.security.ProjectSecurity;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
 /**
@@ -52,14 +53,15 @@ public class ProjectResource {
 	 *               and size)
 	 */
 	@GET
-	public List<ProjectPojo> get(
+	public Response get(
 			@QueryParam("language") String language,
 			@QueryParam("offset") int offset,
-			@QueryParam("size") int size) {
-		return new ProjectDao(
-				null,
-				OpenInfraSchemas.META_DATA).readMainProjects(
-						PtLocaleDao.forLanguageTag(language));
+			@QueryParam("size") int size) {		
+		return OpenInfraResponseBuilder.getResponse(
+				new ProjectSecurity(
+						null, 
+						OpenInfraSchemas.META_DATA).readMainProjects(
+								PtLocaleDao.forLanguageTag(language)));			
 	}
 
 	@GET
@@ -79,14 +81,15 @@ public class ProjectResource {
 	 */
 	@GET
 	@Path("{projectId}")
-	public ProjectPojo get(
+	public Response get(
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId) {
-		return new ProjectDao(
-				projectId,
-				OpenInfraSchemas.PROJECTS).read(
-						PtLocaleDao.forLanguageTag(language),
-						projectId);
+		return OpenInfraResponseBuilder.getResponse(
+				new ProjectDao(
+						projectId,
+						OpenInfraSchemas.PROJECTS).read(
+								PtLocaleDao.forLanguageTag(language),
+								projectId));
 	}
 
 	/**
