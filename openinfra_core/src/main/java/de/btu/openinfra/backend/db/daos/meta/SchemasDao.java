@@ -80,5 +80,21 @@ public class SchemasDao
         }
         return resultSchemas;
     }
+    
+    /**
+     * Creates an empty schemas pojo.
+     * @return an empty schemas pojo
+     */
+    public SchemasPojo newSchemas() {
+       return newPojoStatically();
+    }
+
+    /**
+     * This method implements the method newPorts in a static way.
+     * @return an empty schemas pojo
+     */
+    public static SchemasPojo newPojoStatically() {
+        return new SchemasPojo();
+    }
 
 }

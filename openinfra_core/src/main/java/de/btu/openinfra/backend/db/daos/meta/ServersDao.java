@@ -81,4 +81,19 @@ public class ServersDao
         return resultServers;
     }
 
+    /**
+     * Creates an empty servers pojo.
+     * @return an empty servers pojo
+     */
+    public ServersPojo newServers() {
+       return newPojoStatically();
+    }
+
+    /**
+     * This method implements the method newServers in a static way.
+     * @return an empty servers pojo
+     */
+    public static ServersPojo newPojoStatically() {
+        return new ServersPojo();
+    }
 }

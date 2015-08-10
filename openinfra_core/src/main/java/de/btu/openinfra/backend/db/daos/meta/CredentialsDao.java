@@ -86,5 +86,21 @@ public class CredentialsDao
         }
         return resultCredentials;
     }
+    
+    /**
+     * Creates an empty credentials pojo.
+     * @return an empty credentials pojo
+     */
+    public CredentialsPojo newCredentials() {
+       return newPojoStatically();
+    }
+
+    /**
+     * This method implements the method newCredentials in a static way.
+     * @return an empty credentials pojo
+     */
+    public static CredentialsPojo newPojoStatically() {
+        return new CredentialsPojo();
+    }
 
 }

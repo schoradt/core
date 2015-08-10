@@ -106,5 +106,35 @@ public class DatabaseConnectionDao
         }
         return resultDatabaseConnection;
     }
+    
+    /**
+     * Creates an empty database connection pojo.
+     * @return an empty database connection pojo
+     */
+    public DatabaseConnectionPojo newDatabaseConnection() {
+       return newPojoStatically();
+    }
+
+    /**
+     * This method implements the method newDatabaseConnection in a static way.
+     * @return an empty database connection pojo
+     */
+    public static DatabaseConnectionPojo newPojoStatically() {
+        DatabaseConnectionPojo newDatabaseConncetionPojo =
+                new DatabaseConnectionPojo();
+        
+        newDatabaseConncetionPojo.setCredentials(
+                CredentialsDao.newPojoStatically());
+        newDatabaseConncetionPojo.setDatabase(
+                DatabasesDao.newPojoStatically());
+        newDatabaseConncetionPojo.setPort(
+                PortsDao.newPojoStatically());
+        newDatabaseConncetionPojo.setSchema(
+                SchemasDao.newPojoStatically());
+        newDatabaseConncetionPojo.setServer(
+                ServersDao.newPojoStatically());
+        
+        return newDatabaseConncetionPojo;
+    }
 
 }

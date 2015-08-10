@@ -80,4 +80,20 @@ public class PortsDao
         }
         return resultPorts;
     }
+    
+    /**
+     * Creates an empty ports pojo.
+     * @return an empty ports pojo
+     */
+    public PortsPojo newPorts() {
+       return newPojoStatically();
+    }
+
+    /**
+     * This method implements the method newPorts in a static way.
+     * @return an empty ports pojo
+     */
+    public static PortsPojo newPojoStatically() {
+        return new PortsPojo();
+    }
 }

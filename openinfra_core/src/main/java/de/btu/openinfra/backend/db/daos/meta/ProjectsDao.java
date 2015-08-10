@@ -90,11 +90,21 @@ public class ProjectsDao
     }
 
     /**
-     * Creates an empty ProjectsPojo.
-     * @return an empty ProjectsPojo
+     * Creates an empty projects pojo.
+     * @return an empty projects pojo
      */
     public ProjectsPojo newProjects() {
-       return new ProjectsPojo();
+       return newPojoStatically();
     }
 
+    /**
+     * This method implements the method newProjects in a static way.
+     * @return an empty projects pojo
+     */
+    public static ProjectsPojo newPojoStatically() {
+        ProjectsPojo newProjectsPojo = new ProjectsPojo();
+        newProjectsPojo.setDatabaseConnection(
+                DatabaseConnectionDao.newPojoStatically());      
+        return newProjectsPojo;
+    }
 }

@@ -84,5 +84,21 @@ public class DatabasesDao
         }
         return resultDatabases;
     }
+    
+    /**
+     * Creates an empty databases pojo.
+     * @return an empty databases pojo
+     */
+    public DatabasesPojo newDatabases() {
+       return newPojoStatically();
+    }
+
+    /**
+     * This method implements the method newDatabases in a static way.
+     * @return an empty databases pojo
+     */
+    public static DatabasesPojo newPojoStatically() {
+        return new DatabasesPojo();
+    }
 
 }
