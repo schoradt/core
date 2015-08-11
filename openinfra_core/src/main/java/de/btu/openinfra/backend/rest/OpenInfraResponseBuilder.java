@@ -2,6 +2,7 @@ package de.btu.openinfra.backend.rest;
 
 import java.util.UUID;
 
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
 /**
@@ -107,8 +108,8 @@ public class OpenInfraResponseBuilder {
 		if(result != null) {
 			return Response.ok().entity(result).build();
 		} else {
-			return Response.status(Response.Status.NOT_FOUND).build();
-		} // end if else
+			throw new WebApplicationException(Response.Status.NOT_FOUND);
+		}
 	}
 
 }

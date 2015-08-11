@@ -4,9 +4,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
-import javax.ws.rs.WebApplicationException;
-
-import de.btu.openinfra.backend.db.daos.OpenInfraDao;
 import de.btu.openinfra.backend.db.daos.OpenInfraOrderBy;
 import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraSortOrder;
@@ -18,16 +15,13 @@ public abstract class OpenInfraValueSecurity<
 		TypePojo extends OpenInfraPojo,
 		TypeModel extends OpenInfraModelObject,
 		TypeModelValue,
-		TypeDao extends 
-			OpenInfraValueDao<TypePojo, TypeModel, TypeModelValue>> 
-		extends OpenInfraSecurity<TypePojo, TypeModel, 
-			OpenInfraDao<TypePojo,TypeModel>> {
-	
-	
+		TypeDao extends OpenInfraValueDao<TypePojo, TypeModel, TypeModelValue>> 
+		extends OpenInfraSecurity<TypePojo, TypeModel, TypeDao> {
+
 	protected OpenInfraValueSecurity(
 			UUID currentProjectId,
 			OpenInfraSchemas schema, 
-			OpenInfraDao<TypePojo, TypeModel> dao) {
+			Class<TypeDao> dao) {
 		super(currentProjectId, schema, dao);
 	}
 
@@ -35,7 +29,7 @@ public abstract class OpenInfraValueSecurity<
 			Locale locale,
 			UUID valueId,
 			int offset,
-			int size) throws WebApplicationException {
+			int size) {
 		return null;
 	}
 	
@@ -45,7 +39,7 @@ public abstract class OpenInfraValueSecurity<
             OpenInfraSortOrder order,
             OpenInfraOrderBy column,
             int offset,
-            int size) throws WebApplicationException {
+            int size) {
 		return null;
 	}
 	

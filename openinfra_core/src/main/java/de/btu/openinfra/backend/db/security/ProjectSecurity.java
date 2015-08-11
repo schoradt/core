@@ -15,10 +15,10 @@ import de.btu.openinfra.backend.db.pojos.ProjectPojo;
 public class ProjectSecurity extends 
 	OpenInfraSecurity<ProjectPojo, Project, ProjectDao> {
 
+	
+	
 	public ProjectSecurity(UUID currentProjectId, OpenInfraSchemas schema) {
-		super(currentProjectId, schema, new ProjectDao(
-				currentProjectId, 
-				schema));
+		super(currentProjectId, schema, ProjectDao.class);
 	}
 
 	public List<ProjectPojo> readMainProjects(Locale locale) 

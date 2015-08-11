@@ -27,7 +27,7 @@ public abstract class OpenInfraSecurity<
 	 */
 	protected UUID currentProjectId;
 	
-	protected OpenInfraDao<TypePojo, TypeModel> dao;
+	protected Class<TypeDao> dao;
 
 	/**
 	 * The currently used schema.
@@ -39,20 +39,25 @@ public abstract class OpenInfraSecurity<
 	 */
 	protected Subject user;
 	
-	public OpenInfraSecurity(
+	protected OpenInfraSecurity(
 			UUID currentProjectId,
 			OpenInfraSchemas schema,
-			OpenInfraDao<TypePojo, TypeModel> dao) {
+			Class<TypeDao> dao) {
 		this.currentProjectId = currentProjectId;
 		this.schema = schema;
 		this.dao = dao;
 		this.user = SecurityUtils.getSubject();
 	}
 	
-	public List<TypePojo> read(Locale locale, int offset, int size) 
-			throws WebApplicationException {
+	public List<TypePojo> read(Locale locale, int offset, int size) {
 		checkPermission();
-		return dao.read(locale, offset, size);
+		try {
+			return dao.newInstance().read(locale, offset, size);
+		} catch(Exception ex) {
+			throw new WebApplicationException(
+					ex.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
 	public List<TypePojo> read(
@@ -60,17 +65,29 @@ public abstract class OpenInfraSecurity<
     		OpenInfraSortOrder order,
     		OpenInfraOrderByEnum column,
     		int offset,
-    		int size) throws WebApplicationException {
+    		int size) {
 		checkPermission();
-		return dao.read(locale, order, column, offset, size);		
+		try {
+			return dao.newInstance().read(locale, order, column, offset, size);
+		} catch(Exception ex) {
+			throw new WebApplicationException(
+					ex.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		}		
 	}
 	
 	public TypePojo read(Locale locale, UUID id) {
 		checkPermission();
-		return dao.read(locale, id);
+		try {
+			return dao.newInstance().read(locale, id);
+		} catch(Exception ex) {
+			throw new WebApplicationException(
+					ex.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
-	protected boolean checkPermission() throws WebApplicationException {
+	protected void checkPermission() {
 		
 		if(!user.isAuthenticated()) {
 			throw new WebApplicationException(Response.Status.UNAUTHORIZED);
@@ -80,7 +97,7 @@ public abstract class OpenInfraSecurity<
 		case PROJECTS:
 			if(currentProjectId != null && user.isPermitted(
 					"/projects/{id}:get:" + currentProjectId)) {
-				return true;
+				return;
 			}
 			break;
 
@@ -88,8 +105,9 @@ public abstract class OpenInfraSecurity<
 			break;
 			
 		case SYSTEM:
+			System.out.println("test");
 			if(user.isPermitted("/system:get")) {
-				return true;
+				return;
 			}
 			break;
 		}

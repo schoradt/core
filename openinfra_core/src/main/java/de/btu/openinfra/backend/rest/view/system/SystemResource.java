@@ -24,7 +24,12 @@ public class SystemResource {
 	public Response getView(
 			@Context UriInfo uri,
 			@Context HttpHeaders headers) {
-		return Response.ok("system resource").build();
+		//if(SecurityUtils.getSubject().isPermitted("/system:get")) {
+			return Response.ok("system resource").build();
+//		} else {
+//			throw new WebApplicationException(Response.Status.FORBIDDEN);
+//		}
+		
 	}
 
 }
