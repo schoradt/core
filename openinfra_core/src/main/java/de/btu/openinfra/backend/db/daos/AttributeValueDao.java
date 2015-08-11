@@ -377,43 +377,71 @@ public class AttributeValueDao extends
 	    // to their respective createOrUpdate method
 	    switch (pojo.getAttributeValueType()) {
         case ATTRIBUTE_VALUE_DOMAIN:
-            id = new AttributeValueDomainDao(
-                    projectId,
-                    OpenInfraSchemas.PROJECTS).createOrUpdate(
-                            pojo.getAttributeValueDomain());
-            break;
-        case ATTRIBUTE_VALUE_GEOM:
-            // create or update is only available for GEOJSON
-            if (pojo.getAttributeValueGeom().getGeomType()
-                    .equals(AttributeValueGeomType.GEOJSON)) {
-                id = new AttributeValueGeomDao(
+            // check if the container id is equal to the value id
+            if (pojo.getUuid().equals(
+                    pojo.getAttributeValueDomain().getUuid())) {
+                id = new AttributeValueDomainDao(
                         projectId,
                         OpenInfraSchemas.PROJECTS).createOrUpdate(
-                                pojo.getAttributeValueGeom());
+                                pojo.getAttributeValueDomain());
             } else {
-                // return null if the geomType is unlike GeoJSON
+                // return null if the ids doesn't match
+                return null;
+            }
+            break;
+        case ATTRIBUTE_VALUE_GEOM:
+            // check if the container id is equal to the value id
+            if (pojo.getUuid().equals(
+                    pojo.getAttributeValueGeom().getUuid())) {
+                // create or update is only available for GEOJSON
+                if (pojo.getAttributeValueGeom().getGeomType()
+                        .equals(AttributeValueGeomType.GEOJSON)) {
+                    id = new AttributeValueGeomDao(
+                            projectId,
+                            OpenInfraSchemas.PROJECTS).createOrUpdate(
+                                    pojo.getAttributeValueGeom());
+                } else {
+                    // return null if the geomType is unlike GeoJSON
+                    return null;
+                }
+            } else {
+                // return null if the ids doesn't match
                 return null;
             }
             break;
         case ATTRIBUTE_VALUE_GEOMZ:
-            // create or update is only available for GEOJSON
-            if (pojo.getAttributeValueGeomz().getGeomType()
-                    .equals(AttributeValueGeomType.GEOJSON)) {
-                id = new AttributeValueGeomzDao(
-                        projectId,
-                        OpenInfraSchemas.PROJECTS).createOrUpdate(
-                                pojo.getAttributeValueGeomz());
+            // check if the container id is equal to the value id
+            if (pojo.getUuid().equals(
+                    pojo.getAttributeValueGeomz().getUuid())) {
+                // create or update is only available for GEOJSON
+                if (pojo.getAttributeValueGeomz().getGeomType()
+                        .equals(AttributeValueGeomType.GEOJSON)) {
+                    id = new AttributeValueGeomzDao(
+                            projectId,
+                            OpenInfraSchemas.PROJECTS).createOrUpdate(
+                                    pojo.getAttributeValueGeomz());
+                } else {
+                    // return null if the geomType is unlike GeoJSON
+                    return null;
+                }
             } else {
-                // return null if the geomType is unlike GeoJSON
+                // return null if the ids doesn't match
                 return null;
             }
             break;
         case ATTRIBUTE_VALUE_VALUE:
-             id = new AttributeValueValueDao(
-                    projectId,
-                    OpenInfraSchemas.PROJECTS).createOrUpdate(
-                            pojo.getAttributeValueValue());
-            break;
+            // check if the container id is equal to the value id
+            if (pojo.getUuid().equals(
+                    pojo.getAttributeValueValue().getUuid())) {
+                id = new AttributeValueValueDao(
+                        projectId,
+                        OpenInfraSchemas.PROJECTS).createOrUpdate(
+                                pojo.getAttributeValueValue());
+                break;
+            } else {
+                // return null if the ids doesn't match
+                return null;
+            }
         }
 
 	    return id;
