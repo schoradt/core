@@ -46,5 +46,6 @@
 		<class>de.btu.openinfra.backend.db.jpa.model.meta.Servers</class>
 		<class>de.btu.openinfra.backend.db.jpa.model.meta.Settings</class>
 		<class>de.btu.openinfra.backend.db.jpa.model.meta.Credentials</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.meta.SettingKeys</class>
 	</persistence-unit>
 </persistence>
