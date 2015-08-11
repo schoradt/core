@@ -6,6 +6,7 @@ import de.btu.openinfra.backend.db.daos.MappingResult;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
 import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.meta.Logger;
+import de.btu.openinfra.backend.db.pojos.meta.LevelPojo;
 import de.btu.openinfra.backend.db.pojos.meta.LoggerPojo;
 
 /**
@@ -79,5 +80,21 @@ public class LoggerDao
             resultLogger.setLogger(pojo.getLogger());
         }
         return resultLogger;
+    }
+    
+    /**
+     * Creates an empty logger pojo.
+     * @return an empty logger pojo
+     */
+    public LoggerPojo newLogger() {
+        return newPojoStatically();
+    }
+    
+    /**
+     * This method implements the method newLogger in a static way.
+     * @return an empty level pojo
+     */
+    public static LoggerPojo newPojoStatically() {
+        return new LoggerPojo();
     }
 }

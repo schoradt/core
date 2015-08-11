@@ -80,5 +80,21 @@ public class LevelDao
         }
         return resultLevel;
     }
+    
+    /**
+     * Creates an empty level pojo.
+     * @return an empty level pojo
+     */
+    public LevelPojo newLevel() {
+        return newPojoStatically();
+    }
+    
+    /**
+     * This method implements the method newLevel in a static way.
+     * @return an empty level pojo
+     */
+    public static LevelPojo newPojoStatically() {
+        return new LevelPojo();
+    }
 
 }
