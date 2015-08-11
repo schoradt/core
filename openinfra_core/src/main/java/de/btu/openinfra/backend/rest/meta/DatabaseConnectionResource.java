@@ -3,12 +3,16 @@ package de.btu.openinfra.backend.rest.meta;
 import java.util.List;
 import java.util.UUID;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.meta.DatabaseConnectionDao;
@@ -47,6 +51,42 @@ public class DatabaseConnectionResource {
 		return new DatabaseConnectionDao(
 				OpenInfraSchemas.META_DATA).getCount();
 	}
+    
+    @POST
+    public Response create(DatabaseConnectionPojo pojo) {
+        UUID id = new DatabaseConnectionDao(
+                OpenInfraSchemas.META_DATA).createOrUpdate(pojo);
+        return OpenInfraResponseBuilder.postResponse(id);
+    }
+    
+    @PUT
+    @Path("{databaseConnectionId}")
+    public Response update(
+            @PathParam("databaseConnectionId") UUID databaseConnectionId,
+            DatabaseConnectionPojo pojo) {
+        UUID id = new DatabaseConnectionDao(
+                OpenInfraSchemas.META_DATA).createOrUpdate(pojo);
+        return OpenInfraResponseBuilder.putResponse(id);
+    }
+    
+    @DELETE
+    @Path("{databaseConnectionId}")
+    public Response delete(
+            @PathParam("databaseConnectionId") UUID databaseConnectionId) {
+        boolean deleteResult =
+                new DatabaseConnectionDao(OpenInfraSchemas.META_DATA).delete(
+                        databaseConnectionId);
+        return OpenInfraResponseBuilder.deleteResponse(
+                deleteResult,
+                databaseConnectionId);
+    }
+    
+    @GET
+    @Path("/new")
+    public DatabaseConnectionPojo newDatabaseConncetion() {
+        return new DatabaseConnectionDao(
+                OpenInfraSchemas.META_DATA).newDatabaseConnection();
+    }
 
 }
 
