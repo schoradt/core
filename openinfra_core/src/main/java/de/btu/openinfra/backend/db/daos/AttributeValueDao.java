@@ -372,14 +372,27 @@ public class AttributeValueDao extends
 	public UUID distributeTypes(AttributeValuePojo pojo, UUID projectId) {
 
 	    UUID id = null;
+	    boolean checked = false;
 
 	    // depending on the AttributeValueType we must distribute the objects
 	    // to their respective createOrUpdate method
 	    switch (pojo.getAttributeValueType()) {
         case ATTRIBUTE_VALUE_DOMAIN:
             // check if the container id is equal to the value id
-            if (pojo.getUuid().equals(
-                    pojo.getAttributeValueDomain().getUuid())) {
+            try {
+                if (pojo.getUuid().equals(
+                        pojo.getAttributeValueDomain().getUuid())) {
+                    checked = true;
+                }
+            } catch (NullPointerException e) {
+                if (pojo.getUuid() == null &&
+                    pojo.getAttributeValueDomain().getUuid() == null) {
+                    checked = true;
+                }
+            }
+
+            // execute createOrUpdate if the preconditions match
+            if (checked) {
                 id = new AttributeValueDomainDao(
                         projectId,
                         OpenInfraSchemas.PROJECTS).createOrUpdate(
@@ -391,53 +404,78 @@ public class AttributeValueDao extends
             break;
         case ATTRIBUTE_VALUE_GEOM:
             // check if the container id is equal to the value id
-            if (pojo.getUuid().equals(
-                    pojo.getAttributeValueGeom().getUuid())) {
+            try {
+                if (pojo.getUuid().equals(
+                        pojo.getAttributeValueGeom().getUuid())) {
+                    checked = true;
+                }
                 // create or update is only available for GEOJSON
                 if (pojo.getAttributeValueGeom().getGeomType()
                         .equals(AttributeValueGeomType.GEOJSON)) {
-                    id = new AttributeValueGeomDao(
-                            projectId,
-                            OpenInfraSchemas.PROJECTS).createOrUpdate(
-                                    pojo.getAttributeValueGeom());
-                } else {
-                    // return null if the geomType is unlike GeoJSON
-                    return null;
+                    checked = true;
                 }
-            } else {
-                // return null if the ids doesn't match
-                return null;
+            } catch (NullPointerException e) {
+                if (pojo.getUuid() == null &&
+                    pojo.getAttributeValueGeom().getUuid() == null) {
+                    checked = true;
+                }
+            }
+
+            // execute createOrUpdate if the preconditions match
+            if (checked) {
+                id = new AttributeValueGeomDao(
+                        projectId,
+                        OpenInfraSchemas.PROJECTS).createOrUpdate(
+                                pojo.getAttributeValueGeom());
             }
             break;
         case ATTRIBUTE_VALUE_GEOMZ:
             // check if the container id is equal to the value id
-            if (pojo.getUuid().equals(
-                    pojo.getAttributeValueGeomz().getUuid())) {
+            try {
+                if (pojo.getUuid().equals(
+                        pojo.getAttributeValueGeomz().getUuid())) {
+                    checked = true;
+                }
                 // create or update is only available for GEOJSON
                 if (pojo.getAttributeValueGeomz().getGeomType()
                         .equals(AttributeValueGeomType.GEOJSON)) {
-                    id = new AttributeValueGeomzDao(
-                            projectId,
-                            OpenInfraSchemas.PROJECTS).createOrUpdate(
-                                    pojo.getAttributeValueGeomz());
-                } else {
-                    // return null if the geomType is unlike GeoJSON
-                    return null;
+                    checked = true;
                 }
-            } else {
-                // return null if the ids doesn't match
-                return null;
+            } catch (NullPointerException e) {
+                if (pojo.getUuid() == null &&
+                    pojo.getAttributeValueGeomz().getUuid() == null) {
+                    checked = true;
+                }
+            }
+
+            // execute createOrUpdate if the preconditions match
+            if (checked) {
+                id = new AttributeValueGeomzDao(
+                        projectId,
+                        OpenInfraSchemas.PROJECTS).createOrUpdate(
+                                pojo.getAttributeValueGeomz());
             }
             break;
         case ATTRIBUTE_VALUE_VALUE:
             // check if the container id is equal to the value id
-            if (pojo.getUuid().equals(
-                    pojo.getAttributeValueValue().getUuid())) {
+            try {
+                if (pojo.getUuid().equals(
+                        pojo.getAttributeValueValue().getUuid())) {
+                    checked = true;
+                }
+            } catch (NullPointerException e) {
+                if (pojo.getUuid() == null &&
+                    pojo.getAttributeValueValue().getUuid() == null) {
+                    checked = true;
+                }
+            }
+
+            // execute createOrUpdate if the preconditions match
+            if (checked) {
                 id = new AttributeValueValueDao(
                         projectId,
                         OpenInfraSchemas.PROJECTS).createOrUpdate(
                                 pojo.getAttributeValueValue());
-                break;
             } else {
                 // return null if the ids doesn't match
                 return null;
