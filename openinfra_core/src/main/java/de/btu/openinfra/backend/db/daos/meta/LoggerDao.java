@@ -6,7 +6,6 @@ import de.btu.openinfra.backend.db.daos.MappingResult;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
 import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.meta.Logger;
-import de.btu.openinfra.backend.db.pojos.meta.LevelPojo;
 import de.btu.openinfra.backend.db.pojos.meta.LoggerPojo;
 
 /**
