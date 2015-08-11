@@ -31,17 +31,7 @@ import javax.persistence.Table;
     @NamedNativeQuery(name="AttributeValueGeomz.select",
             query="SELECT %s "
                     + "FROM attribute_value_geomz "
-                    + "WHERE id = cast(? as uuid)"),
-    @NamedNativeQuery(name="AttributeValueGeomz.insert",
-            query="INSERT INTO attribute_value_geomz ("
-                    + "attribute_type_to_attribute_type_group_id, "
-                    + "topic_instance_id, geom) "
-                    + "VALUES (?, ?, %s(?))"),
-    @NamedNativeQuery(name="AttributeValueGeomz.update",
-            query="UPDATE TABLE attribute_value_geomz SET "
-                    + "attribute_type_to_attribute_type_group_id = ?, "
-                    + "topic_instance_id = ?, "
-                    + "geom = %s(?) WHERE id = ?")
+                    + "WHERE id = cast(? as uuid)")
 })
 
 public class AttributeValueGeomz implements Serializable, OpenInfraModelObject {
