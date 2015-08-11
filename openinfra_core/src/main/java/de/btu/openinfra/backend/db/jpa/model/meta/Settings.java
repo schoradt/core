@@ -26,7 +26,8 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
     @NamedQuery(name="Settings.findAll",
             query="SELECT s FROM Settings s"),
     @NamedQuery(name="Settings.findByKey",
-            query="SELECT s FROM Settings s WHERE s.key = :value"),
+            query="SELECT s FROM Settings s INNER JOIN s.settingKey sk WHERE "
+                    + " sk = :value"),
     @NamedQuery(name="Settings.count",
     	query="SELECT COUNT(s) FROM Settings s")
 })
@@ -38,13 +39,16 @@ public class Settings implements Serializable, OpenInfraModelObject {
 
 	private String value;
 
-	private String key;
+	//bi-directional many-to-one association to SettingKey
+    @ManyToOne
+    @JoinColumn(name="key")
+    private SettingKeys settingKey;
 
 	@Column(name="updated_on")
 	private Date updatedOn;
 	
 	@ManyToOne
-	@JoinColumn(name = "projects")
+	@JoinColumn(name = "project")
 	private Projects project;
 
 	public Settings() {
@@ -68,13 +72,13 @@ public class Settings implements Serializable, OpenInfraModelObject {
 		this.value = value;
 	}
 
-	public String getKey() {
-		return this.key;
-	}
+	public SettingKeys getSettingKey() {
+        return this.settingKey;
+    }
 
-	public void setKey(String key) {
-		this.key = key;
-	}
+    public void setSettingKey(SettingKeys settingKey) {
+        this.settingKey = settingKey;
+    }
 
 	public Date getUpdatedOn() {
 		return this.updatedOn;

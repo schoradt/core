@@ -80,4 +80,20 @@ public class LoggerDao
         }
         return resultLogger;
     }
+    
+    /**
+     * Creates an empty logger pojo.
+     * @return an empty logger pojo
+     */
+    public LoggerPojo newLogger() {
+        return newPojoStatically();
+    }
+    
+    /**
+     * This method implements the method newLogger in a static way.
+     * @return an empty level pojo
+     */
+    public static LoggerPojo newPojoStatically() {
+        return new LoggerPojo();
+    }
 }

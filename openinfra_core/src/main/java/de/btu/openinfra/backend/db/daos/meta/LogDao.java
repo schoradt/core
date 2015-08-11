@@ -109,10 +109,22 @@ public class LogDao
     }
     
     /**
-     * Creates an empty LogPojo.
-     * @return an empty LogPojo
+     * Creates an empty log pojo.
+     * @return an empty log pojo
      */
     public LogPojo newLog() {
-        return new LogPojo();
+        return newPojoStatically();
+    }
+    
+    /**
+     * This method implements the method newLog in a static way.
+     * @return an empty log pojo
+     */
+    public static LogPojo newPojoStatically() {
+        LogPojo newLogPojo = new LogPojo();
+        newLogPojo.setLevel(LevelDao.newPojoStatically());
+        newLogPojo.setLogger(LoggerDao.newPojoStatically());
+        
+        return newLogPojo;
     }
 }
