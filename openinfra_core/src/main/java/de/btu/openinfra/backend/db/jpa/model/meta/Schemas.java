@@ -25,6 +25,8 @@ public class Schemas implements Serializable, OpenInfraModelObject {
 
 	@Id
 	private UUID id;
+	
+	private Integer xmin;
 
 	private String schema;
 
@@ -35,6 +37,7 @@ public class Schemas implements Serializable, OpenInfraModelObject {
 	public Schemas() {
 	}
 
+	@Override
 	public UUID getId() {
 		return this.id;
 	}
@@ -72,6 +75,11 @@ public class Schemas implements Serializable, OpenInfraModelObject {
 		databaseConnection.setSchemaBean(null);
 
 		return databaseConnection;
+	}
+	
+	@Override
+	public Integer getXmin() {
+		return xmin;
 	}
 
 }

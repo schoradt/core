@@ -24,6 +24,8 @@ public class PtFreeText implements Serializable, OpenInfraModelObject {
 
 	@Id
 	private UUID id;
+	
+	private Integer xmin;
 
 	//bi-directional many-to-one association to AttributeType
 	@OneToMany(mappedBy="ptFreeText1")
@@ -80,6 +82,7 @@ public class PtFreeText implements Serializable, OpenInfraModelObject {
 	public PtFreeText() {
 	}
 
+	@Override
 	public UUID getId() {
 		return this.id;
 	}
@@ -373,6 +376,11 @@ public class PtFreeText implements Serializable, OpenInfraModelObject {
 		valueListValues2.setPtFreeText2(null);
 
 		return valueListValues2;
+	}
+	
+	@Override
+	public Integer getXmin() {
+		return xmin;
 	}
 
 }

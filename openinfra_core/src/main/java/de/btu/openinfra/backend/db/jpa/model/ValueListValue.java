@@ -38,6 +38,8 @@ public class ValueListValue implements Serializable, OpenInfraModelObject {
 
 	@Id
 	private UUID id;
+	
+	private Integer xmin;
 
 	private Boolean visibility;
 
@@ -107,6 +109,7 @@ public class ValueListValue implements Serializable, OpenInfraModelObject {
 	public ValueListValue() {
 	}
 
+	@Override
 	public UUID getId() {
 		return this.id;
 	}
@@ -410,6 +413,11 @@ public class ValueListValue implements Serializable, OpenInfraModelObject {
 		valueListXValueList.setValueListValue(null);
 
 		return valueListXValueList;
+	}
+	
+	@Override
+	public Integer getXmin() {
+		return xmin;
 	}
 
 }

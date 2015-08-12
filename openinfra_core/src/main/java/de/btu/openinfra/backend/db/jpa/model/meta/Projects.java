@@ -33,6 +33,8 @@ public class Projects implements Serializable, OpenInfraModelObject {
 
 	@Id
 	private UUID id;
+	
+	private Integer xmin;
 
 	@Column(name="is_subproject")
 	private Boolean isSubproject;
@@ -96,5 +98,10 @@ public class Projects implements Serializable, OpenInfraModelObject {
 
         return setting;
     }
+    
+	@Override
+	public Integer getXmin() {
+		return xmin;
+	}
 
 }

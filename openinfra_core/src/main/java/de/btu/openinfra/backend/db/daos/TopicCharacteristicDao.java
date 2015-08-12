@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.jpa.model.MetaData;
 import de.btu.openinfra.backend.db.jpa.model.Project;
 import de.btu.openinfra.backend.db.jpa.model.PtLocale;
@@ -123,6 +124,7 @@ public class TopicCharacteristicDao
 				locale,
 				tc.getPtFreeText()));
 		pojo.setUuid(tc.getId());
+		pojo.setTrid(tc.getXmin());
 
 		return pojo;
 	}

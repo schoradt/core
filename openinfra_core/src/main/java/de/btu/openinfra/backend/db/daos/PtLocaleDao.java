@@ -3,6 +3,7 @@ package de.btu.openinfra.backend.db.daos;
 import java.util.Locale;
 import java.util.UUID;
 
+import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.jpa.model.CountryCode;
 import de.btu.openinfra.backend.db.jpa.model.LanguageCode;
 import de.btu.openinfra.backend.db.jpa.model.PtLocale;
@@ -97,6 +98,7 @@ public class PtLocaleDao extends OpenInfraDao<PtLocalePojo, PtLocale> {
 						ptLocale.getCountryCode().getCountryCode());
 			}
 			ptLocalePojo.setUuid(ptLocale.getId());
+			ptLocalePojo.setTrid(ptLocale.getXmin());
 			return ptLocalePojo;
 		} else {
 			return null;

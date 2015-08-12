@@ -2,7 +2,7 @@ package de.btu.openinfra.backend.db.daos.meta;
 
 import java.util.Locale;
 
-import de.btu.openinfra.backend.db.daos.MappingResult;
+import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
 import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.meta.Settings;
@@ -43,6 +43,7 @@ public class SettingsDao
         if (s != null) {
             SettingsPojo pojo = new SettingsPojo();
             pojo.setUuid(s.getId());
+            pojo.setTrid(s.getXmin());
             pojo.setKey(s.getKey());
             pojo.setUpdatedOn(s.getUpdatedOn());
             pojo.setValue(s.getValue());

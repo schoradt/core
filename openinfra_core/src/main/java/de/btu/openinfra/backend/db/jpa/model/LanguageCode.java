@@ -33,6 +33,8 @@ public class LanguageCode implements Serializable, OpenInfraModelObject {
 
 	@Id
 	private UUID id;
+	
+	private Integer xmin;
 
 	@Column(name="language_code")
 	private String languageCode;
@@ -82,6 +84,11 @@ public class LanguageCode implements Serializable, OpenInfraModelObject {
 		ptLocale.setLanguageCode(null);
 
 		return ptLocale;
+	}
+	
+	@Override
+	public Integer getXmin() {
+		return xmin;
 	}
 
 }

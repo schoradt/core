@@ -3,6 +3,7 @@ package de.btu.openinfra.backend.db.daos;
 import java.util.Locale;
 import java.util.UUID;
 
+import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.jpa.model.AttributeType;
 import de.btu.openinfra.backend.db.jpa.model.AttributeTypeGroup;
 import de.btu.openinfra.backend.db.jpa.model.AttributeTypeToAttributeTypeGroup;
@@ -67,6 +68,7 @@ public class AttributeTypeToAttributeTypeGroupDao extends
 				atg.getMultiplicityBean()));
 		pojo.setOrder(atg.getOrder());
 		pojo.setUuid(atg.getId());
+		pojo.setTrid(atg.getXmin());
 		return pojo;
 	}
 

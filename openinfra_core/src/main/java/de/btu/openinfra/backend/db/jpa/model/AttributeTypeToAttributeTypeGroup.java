@@ -58,6 +58,8 @@ public class AttributeTypeToAttributeTypeGroup implements
 
 	@Id
 	private UUID id;
+	
+	private Integer xmin;
 
 	@Column(name="\"order\"")
 	private Integer order;
@@ -276,6 +278,11 @@ public class AttributeTypeToAttributeTypeGroup implements
 		attributeValueValue.setAttributeTypeToAttributeTypeGroup(null);
 
 		return attributeValueValue;
+	}
+	
+	@Override
+	public Integer getXmin() {
+		return xmin;
 	}
 
 }

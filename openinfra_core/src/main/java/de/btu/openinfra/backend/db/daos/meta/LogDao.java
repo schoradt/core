@@ -5,7 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-import de.btu.openinfra.backend.db.daos.MappingResult;
+import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
 import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.meta.Log;
@@ -48,6 +48,7 @@ public class LogDao
             String format = "yyyy-MM-dd'T'HH:mm:ssZ";
             DateFormat df = new SimpleDateFormat(format);
             pojo.setUuid(l.getId());
+            pojo.setTrid(l.getXmin());
             pojo.setUserId(l.getUserId());
             pojo.setUserName(l.getUserName());
             pojo.setCreatedOn(df.format(l.getCreatedOn()).toString()); 

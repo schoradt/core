@@ -2,6 +2,11 @@ package de.btu.openinfra.backend.helper;
 
 import java.util.UUID;
 
+import de.btu.openinfra.backend.db.daos.MultiplicityDao;
+import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.pojos.MultiplicityPojo;
+
+
 
 public class TestClass {
 	
@@ -31,7 +36,7 @@ public class TestClass {
 //						0,
 //						30);
 
-		System.out.println(UUID.fromString(null));
+//		System.out.println(UUID.fromString(null));
 		
 //		List<TopicCharacteristicPojo> list = new TopicCharacteristicDao(
 //		UUID.fromString("fd27a347-4e33-4ed7-aebc-eeff6dbf1054"), 
@@ -43,6 +48,14 @@ public class TestClass {
 //			System.out.println(tcp.getDescriptions().getLocalizedStrings().get(0).getCharacterString());
 //		}
 
+		
+		MultiplicityDao dao = new MultiplicityDao(UUID.fromString("fd27a347-4e33-4ed7-aebc-eeff6dbf1054"), OpenInfraSchemas.PROJECTS);
+		MultiplicityPojo m = dao.read(null, UUID.fromString("09d832bc-2ea8-4874-8f60-9f5878cb89e3"));
+		
+		m.setMax(new Integer(5));
+		System.out.println(m.getTrid());
+		
+		dao.createOrUpdate(m);
 		
 	}
 
