@@ -2,7 +2,7 @@ package de.btu.openinfra.backend.db.daos.meta;
 
 import java.util.Locale;
 
-import de.btu.openinfra.backend.db.daos.MappingResult;
+import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
 import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.meta.Credentials;
@@ -43,6 +43,7 @@ public class CredentialsDao
         if (c != null) {
             CredentialsPojo pojo = new CredentialsPojo();
             pojo.setUuid(c.getId());
+            pojo.setTrid(c.getXmin());
             pojo.setUsername(c.getUsername());
             pojo.setPassword(c.getPassword());
             return pojo;

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
+import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.jpa.model.ValueList;
 import de.btu.openinfra.backend.db.jpa.model.ValueListValue;
 import de.btu.openinfra.backend.db.pojos.LocalizedString;
@@ -51,6 +52,7 @@ public class ValueListValueDao
 		if(vlv != null) {
 			ValueListValuePojo vlvPojo = new ValueListValuePojo();
 			vlvPojo.setUuid(vlv.getId());
+			vlvPojo.setTrid(vlv.getXmin());
 			vlvPojo.setVisibility(vlv.getVisibility());
 			vlvPojo.setDescriptions(PtFreeTextDao.mapToPojoStatically(
 					locale,

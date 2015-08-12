@@ -12,6 +12,10 @@ import javax.persistence.Query;
 import org.eclipse.persistence.jpa.JpaQuery;
 
 import de.btu.openinfra.backend.OpenInfraProperties;
+import de.btu.openinfra.backend.db.EntityManagerFactoryCache;
+import de.btu.openinfra.backend.db.MappingResult;
+import de.btu.openinfra.backend.db.OpenInfraOrderByEnum;
+import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;

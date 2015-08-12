@@ -47,6 +47,8 @@ public class ValueList implements Serializable, OpenInfraModelObject {
 
 	@Id
 	private UUID id;
+	
+	private Integer xmin;
 
 	//bi-directional many-to-one association to AttributeType
 	@OneToMany(mappedBy="valueList")
@@ -189,6 +191,11 @@ public class ValueList implements Serializable, OpenInfraModelObject {
 		valueListXValueLists2.setValueList2Bean(null);
 
 		return valueListXValueLists2;
+	}
+	
+	@Override
+	public Integer getXmin() {
+		return xmin;
 	}
 
 }

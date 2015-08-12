@@ -25,6 +25,8 @@ public class Logger implements Serializable, OpenInfraModelObject {
 
 	@Id
 	private UUID id;
+	
+	private Integer xmin;
 
 	private String logger;
 
@@ -35,6 +37,7 @@ public class Logger implements Serializable, OpenInfraModelObject {
 	public Logger() {
 	}
 
+	@Override
 	public UUID getId() {
 		return this.id;
 	}
@@ -72,6 +75,11 @@ public class Logger implements Serializable, OpenInfraModelObject {
 		log.setLoggerBean(null);
 
 		return log;
+	}
+	
+	@Override
+	public Integer getXmin() {
+		return xmin;
 	}
 
 }

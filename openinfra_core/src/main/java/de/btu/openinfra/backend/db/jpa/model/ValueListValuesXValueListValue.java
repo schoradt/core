@@ -41,6 +41,8 @@ public class ValueListValuesXValueListValue implements Serializable,
 
 	@Id
 	private UUID id;
+	
+	private Integer xmin;
 
 	//bi-directional many-to-one association to ValueListValue
 	@ManyToOne
@@ -92,6 +94,11 @@ public class ValueListValuesXValueListValue implements Serializable,
 
 	public void setValueListValue3(ValueListValue valueListValue3) {
 		this.valueListValue3 = valueListValue3;
+	}
+	
+	@Override
+	public Integer getXmin() {
+		return xmin;
 	}
 
 }

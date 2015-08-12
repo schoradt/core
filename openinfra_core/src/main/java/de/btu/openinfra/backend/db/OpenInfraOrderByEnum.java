@@ -1,4 +1,4 @@
-package de.btu.openinfra.backend.db.daos;
+package de.btu.openinfra.backend.db;
 
 /**
  * This enumeration defines table columns which should be ordered. 

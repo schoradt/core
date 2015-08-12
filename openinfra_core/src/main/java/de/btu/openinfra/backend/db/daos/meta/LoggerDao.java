@@ -2,7 +2,7 @@ package de.btu.openinfra.backend.db.daos.meta;
 
 import java.util.Locale;
 
-import de.btu.openinfra.backend.db.daos.MappingResult;
+import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
 import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.meta.Logger;
@@ -43,6 +43,7 @@ public class LoggerDao
         if (l != null) {
             LoggerPojo pojo = new LoggerPojo();
             pojo.setUuid(l.getId());
+            pojo.setTrid(l.getXmin());
             pojo.setLogger(l.getLogger());
             return pojo;
         } else {

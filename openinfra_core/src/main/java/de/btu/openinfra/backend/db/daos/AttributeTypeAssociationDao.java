@@ -3,6 +3,7 @@ package de.btu.openinfra.backend.db.daos;
 import java.util.Locale;
 import java.util.UUID;
 
+import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.jpa.model.AttributeType;
 import de.btu.openinfra.backend.db.jpa.model.AttributeTypeXAttributeType;
 import de.btu.openinfra.backend.db.jpa.model.ValueListValue;
@@ -82,6 +83,7 @@ public class AttributeTypeAssociationDao
 
 			// set the id of the pojo
 			pojo.setUuid(atxat.getId());
+			pojo.setTrid(atxat.getXmin());
 
 			// set the relationship type object
 			pojo.setRelationship(ValueListValueDao.mapToPojoStatically(locale,

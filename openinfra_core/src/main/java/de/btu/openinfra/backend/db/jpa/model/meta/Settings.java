@@ -36,6 +36,8 @@ public class Settings implements Serializable, OpenInfraModelObject {
 
 	@Id
 	private UUID id;
+	
+	private Integer xmin;
 
 	private String value;
 
@@ -95,5 +97,10 @@ public class Settings implements Serializable, OpenInfraModelObject {
     public void setProject(Projects project) {
         this.project = project;
     }
+    
+	@Override
+	public Integer getXmin() {
+		return xmin;
+	}
 
 }

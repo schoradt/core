@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
+import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.jpa.model.ValueList;
 import de.btu.openinfra.backend.db.pojos.LocalizedString;
 import de.btu.openinfra.backend.db.pojos.PtFreeTextPojo;
@@ -48,6 +49,7 @@ public class ValueListDao extends OpenInfraDao<ValueListPojo, ValueList> {
 					locale,
 					vl.getPtFreeText1()));
 			vlPojo.setUuid(vl.getId());
+			vlPojo.setTrid(vl.getXmin());
 			return vlPojo;
 		} else {
 			return null;

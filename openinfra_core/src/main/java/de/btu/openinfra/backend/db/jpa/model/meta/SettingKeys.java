@@ -25,6 +25,8 @@ public class SettingKeys implements Serializable, OpenInfraModelObject {
 
 	@Id
 	private UUID id;
+	
+	private Integer xmin;
 
 	private String key;
 
@@ -35,10 +37,12 @@ public class SettingKeys implements Serializable, OpenInfraModelObject {
 	public SettingKeys() {
 	}
 
+	@Override
 	public UUID getId() {
 		return this.id;
 	}
 
+	@Override
 	public void setId(UUID id) {
 		this.id = id;
 	}
@@ -71,6 +75,11 @@ public class SettingKeys implements Serializable, OpenInfraModelObject {
 		settings.setSettingKey(null);
 
 		return settings;
+	}
+	
+	@Override
+	public Integer getXmin() {
+		return xmin;
 	}
 
 }

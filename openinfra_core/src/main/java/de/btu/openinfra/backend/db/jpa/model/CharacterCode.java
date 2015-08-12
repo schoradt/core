@@ -31,6 +31,8 @@ public class CharacterCode implements Serializable, OpenInfraModelObject {
 
 	@Id
 	private UUID id;
+	
+	private Integer xmin;
 
 	@Column(name="character_code")
 	private String characterCode;
@@ -80,6 +82,11 @@ public class CharacterCode implements Serializable, OpenInfraModelObject {
 		ptLocale.setCharacterCode(null);
 
 		return ptLocale;
+	}
+	
+	@Override
+	public Integer getXmin() {
+		return xmin;
 	}
 
 }

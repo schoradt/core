@@ -2,7 +2,7 @@ package de.btu.openinfra.backend.db.daos.meta;
 
 import java.util.Locale;
 
-import de.btu.openinfra.backend.db.daos.MappingResult;
+import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
 import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.meta.SettingKeys;
@@ -36,6 +36,7 @@ public class SettingKeysDao extends OpenInfraDao<SettingKeysPojo, SettingKeys> {
             SettingKeysPojo pojo = new SettingKeysPojo();
             pojo.setUuid(sk.getId());
             pojo.setKey(sk.getKey());
+            pojo.setTrid(sk.getXmin());
             return pojo;
         } else {
             return null;

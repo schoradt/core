@@ -1,4 +1,4 @@
-package de.btu.openinfra.backend.db.daos;
+package de.btu.openinfra.backend.db;
 
 /**
  * OpenInfraOrderBy is an enumeration of the possible sort orderings.

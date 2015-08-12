@@ -25,6 +25,8 @@ public class Level implements Serializable, OpenInfraModelObject {
 
 	@Id
 	private UUID id;
+	
+	private Integer xmin;
 
 	private String level;
 
@@ -35,6 +37,7 @@ public class Level implements Serializable, OpenInfraModelObject {
 	public Level() {
 	}
 
+	@Override
 	public UUID getId() {
 		return this.id;
 	}
@@ -72,6 +75,11 @@ public class Level implements Serializable, OpenInfraModelObject {
 		log.setLevelBean(null);
 
 		return log;
+	}
+	
+	@Override
+	public Integer getXmin() {
+		return xmin;
 	}
 
 }

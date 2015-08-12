@@ -2,7 +2,7 @@ package de.btu.openinfra.backend.db.daos.meta;
 
 import java.util.Locale;
 
-import de.btu.openinfra.backend.db.daos.MappingResult;
+import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
 import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.meta.DatabaseConnection;
@@ -45,6 +45,7 @@ public class DatabaseConnectionDao
         if (dc != null) {
             DatabaseConnectionPojo pojo = new DatabaseConnectionPojo();
             pojo.setUuid(dc.getId());
+            pojo.setTrid(dc.getXmin());
             pojo.setServer(ServersDao.mapPojoStatically(dc.getServerBean()));
             pojo.setPort(PortsDao.mapPojoStatically(dc.getPortBean()));
             pojo.setDatabase(DatabasesDao.mapPojoStatically(

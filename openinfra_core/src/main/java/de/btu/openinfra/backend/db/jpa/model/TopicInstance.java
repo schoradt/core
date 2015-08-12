@@ -114,6 +114,8 @@ public class TopicInstance implements Serializable, OpenInfraModelObject {
 
 	@Id
 	private UUID id;
+	
+	private Integer xmin;
 
 	//bi-directional many-to-one association to AttributeValue
 	@OneToMany(mappedBy="topicInstance")
@@ -321,6 +323,11 @@ public class TopicInstance implements Serializable, OpenInfraModelObject {
 		topicInstanceXTopicInstances2.setTopicInstance2Bean(null);
 
 		return topicInstanceXTopicInstances2;
+	}
+	
+	@Override
+	public Integer getXmin() {
+		return xmin;
 	}
 
 }
