@@ -9,16 +9,16 @@ import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 @XmlRootElement
 public class SettingsPojo extends OpenInfraPojo {
 
-    private String key;
+    private SettingKeysPojo key;
     private String value;
     private Date updatedOn;
     private ProjectsPojo project;
-    
-    public String getKey() {
+
+    public SettingKeysPojo getKey() {
         return key;
     }
 
-    public void setKey(String key) {
+    public void setKey(SettingKeysPojo key) {
         this.key = key;
     }
 

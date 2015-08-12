@@ -36,7 +36,7 @@ public class SettingsDao
     /**
      * This method implements the method mapToPojo in a static way.
      * 
-     * @param at     the model object
+     * @param s     the model object
      * @return       the POJO object when the model object is not null else null
      */
     public static SettingsPojo mapPojoStatically(Settings s) {
@@ -44,7 +44,7 @@ public class SettingsDao
             SettingsPojo pojo = new SettingsPojo();
             pojo.setUuid(s.getId());
             pojo.setTrid(s.getXmin());
-            pojo.setKey(s.getKey());
+            pojo.setKey(SettingKeysDao.mapPojoStatically(s.getSettingKey()));
             pojo.setUpdatedOn(s.getUpdatedOn());
             pojo.setValue(s.getValue());
             pojo.setProject(ProjectsDao.mapPojoStatically(s.getProject()));
@@ -56,8 +56,59 @@ public class SettingsDao
 
     @Override
     public MappingResult<Settings> mapToModel(SettingsPojo pojo, Settings s) {
-        // TODO Auto-generated method stub
-        return null;
+        if(pojo != null) {            
+            mapToModelStatically(pojo, s);
+            return new MappingResult<Settings>(s.getId(), s);
+        }
+        else {
+            return null;
+        }
+    }
+    
+    /**
+     * This method implements the method mapToModel in a static way.
+     * @param pojo the POJO object
+     * @param s the pre initialized model object
+     * @return return a corresponding JPA model object or null if the pojo
+     * object is null
+     */
+    public static Settings mapToModelStatically(
+            SettingsPojo pojo,
+            Settings s) {
+        Settings resultSettings = null;
+        if(pojo != null) {
+            resultSettings = s;
+            if(resultSettings == null) {
+                resultSettings = new Settings();
+                resultSettings.setId(pojo.getUuid());
+            }
+            resultSettings.setSettingKey(
+                    SettingKeysDao.mapToModelStatically(pojo.getKey(), null));
+            resultSettings.setValue(pojo.getValue());
+            resultSettings.setUpdatedOn(pojo.getUpdatedOn());
+            resultSettings.setProject(
+                    ProjectsDao.mapToModelStatically(pojo.getProject(), null));
+        }
+        return resultSettings;
+    }
+    
+    /**
+     * Creates an empty settings pojo.
+     * @return an empty settings pojo
+     */
+    public SettingsPojo newSettings() {
+       return newPojoStatically();
+    }
+
+    /**
+     * This method implements the method newSettings in a static way.
+     * @return an empty settings pojo
+     */
+    public static SettingsPojo newPojoStatically() {
+        SettingsPojo newSettingsPojo = new SettingsPojo();
+        newSettingsPojo.setProject(ProjectsDao.newPojoStatically());
+        newSettingsPojo.setKey(SettingKeysDao.newPojoStatically());
+        return newSettingsPojo;
     }
 
 }

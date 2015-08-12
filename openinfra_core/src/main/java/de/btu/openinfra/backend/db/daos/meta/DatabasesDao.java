@@ -55,8 +55,51 @@ public class DatabasesDao
     public MappingResult<Databases> mapToModel(
     		DatabasesPojo pojo, 
     		Databases dbs) {
-        // TODO Auto-generated method stub
-        return null;
+        if(pojo != null) {            
+            mapToModelStatically(pojo, dbs);
+            return new MappingResult<Databases>(dbs.getId(), dbs);
+        }
+        else {
+            return null;
+        }
+    }
+    
+    /**
+     * This method implements the method mapToModel in a static way.
+     * @param pojo the POJO object
+     * @param dbs the pre initialized model object
+     * @return return a corresponding JPA model object or null if the pojo
+     * object is null
+     */
+    public static Databases mapToModelStatically(
+            DatabasesPojo pojo, 
+            Databases dbs) {
+        Databases resultDatabases = null;
+        if(pojo != null) {
+            resultDatabases = dbs;
+            if(resultDatabases == null) {
+                resultDatabases = new Databases();
+                resultDatabases.setId(pojo.getUuid());
+            }
+            resultDatabases.setDatabase(pojo.getDatabase());
+        }
+        return resultDatabases;
+    }
+    
+    /**
+     * Creates an empty databases pojo.
+     * @return an empty databases pojo
+     */
+    public DatabasesPojo newDatabases() {
+       return newPojoStatically();
+    }
+
+    /**
+     * This method implements the method newDatabases in a static way.
+     * @return an empty databases pojo
+     */
+    public static DatabasesPojo newPojoStatically() {
+        return new DatabasesPojo();
     }
 
 }

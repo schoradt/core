@@ -53,8 +53,48 @@ public class ServersDao
 
     @Override
     public MappingResult<Servers> mapToModel(ServersPojo pojo, Servers s) {
-        // TODO Auto-generated method stub
-        return null;
+        if(pojo != null) {            
+            mapToModelStatically(pojo, s);
+            return new MappingResult<Servers>(s.getId(), s);
+        }
+        else {
+            return null;
+        }
+    }
+    
+    /**
+     * This method implements the method mapToModel in a static way.
+     * @param pojo the POJO object
+     * @param s the pre initialized model object
+     * @return return a corresponding JPA model object or null if the pojo
+     * object is null
+     */
+    public static Servers mapToModelStatically(ServersPojo pojo, Servers s) {
+        Servers resultServers = null;
+        if(pojo != null) {
+            resultServers = s;
+            if(resultServers == null) {
+                resultServers = new Servers();
+                resultServers.setId(pojo.getUuid());
+            }
+            resultServers.setServer(pojo.getServer());
+        }
+        return resultServers;
     }
 
+    /**
+     * Creates an empty servers pojo.
+     * @return an empty servers pojo
+     */
+    public ServersPojo newServers() {
+       return newPojoStatically();
+    }
+
+    /**
+     * This method implements the method newServers in a static way.
+     * @return an empty servers pojo
+     */
+    public static ServersPojo newPojoStatically() {
+        return new ServersPojo();
+    }
 }

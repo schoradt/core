@@ -52,12 +52,56 @@ public class CredentialsDao
         }
     }
 
- @Override
+    @Override
     public MappingResult<Credentials> mapToModel(
     		CredentialsPojo pojo, 
     		Credentials cd) {
-        // TODO Auto-generated method stub
-        return null;
+        if(pojo != null) {            
+            mapToModelStatically(pojo, cd);
+            return new MappingResult<Credentials>(cd.getId(), cd);
+        }
+        else {
+            return null;
+        }
+    }
+    
+    /**
+     * This method implements the method mapToModel in a static way.
+     * @param pojo the POJO object
+     * @param cd the pre initialized model object
+     * @return return a corresponding JPA model object or null if the pojo
+     * object is null
+     */
+    public static Credentials mapToModelStatically(
+            CredentialsPojo pojo,
+            Credentials cd) {
+        Credentials resultCredentials = null;
+        if(pojo != null) {
+            resultCredentials = cd;
+            if(resultCredentials == null) {
+                resultCredentials = new Credentials();
+                resultCredentials.setId(pojo.getUuid());
+            }
+            resultCredentials.setPassword(pojo.getPassword());
+            resultCredentials.setUsername(pojo.getUsername());
+        }
+        return resultCredentials;
+    }
+    
+    /**
+     * Creates an empty credentials pojo.
+     * @return an empty credentials pojo
+     */
+    public CredentialsPojo newCredentials() {
+       return newPojoStatically();
+    }
+
+    /**
+     * This method implements the method newCredentials in a static way.
+     * @return an empty credentials pojo
+     */
+    public static CredentialsPojo newPojoStatically() {
+        return new CredentialsPojo();
     }
 
 }

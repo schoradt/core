@@ -53,8 +53,49 @@ public class SchemasDao
 
     @Override
     public MappingResult<Schemas> mapToModel(SchemasPojo pojo, Schemas s) {
-        // TODO Auto-generated method stub
-        return null;
+        if(pojo != null) {            
+            mapToModelStatically(pojo, s);
+            return new MappingResult<Schemas>(s.getId(), s);
+        }
+        else {
+            return null;
+        }
+    }
+    
+    /**
+     * This method implements the method mapToModel in a static way.
+     * @param pojo the POJO object
+     * @param s the pre initialized model object
+     * @return return a corresponding JPA model object or null if the pojo
+     * object is null
+     */
+    public static Schemas mapToModelStatically(SchemasPojo pojo, Schemas s) {
+        Schemas resultSchemas = null;
+        if(pojo != null) {
+            resultSchemas = s;
+            if(resultSchemas == null) {
+                resultSchemas = new Schemas();
+                resultSchemas.setId(pojo.getUuid());
+            }
+            resultSchemas.setSchema(pojo.getSchema());
+        }
+        return resultSchemas;
+    }
+    
+    /**
+     * Creates an empty schemas pojo.
+     * @return an empty schemas pojo
+     */
+    public SchemasPojo newSchemas() {
+       return newPojoStatically();
+    }
+
+    /**
+     * This method implements the method newPorts in a static way.
+     * @return an empty schemas pojo
+     */
+    public static SchemasPojo newPojoStatically() {
+        return new SchemasPojo();
     }
 
 }

@@ -63,8 +63,79 @@ public class DatabaseConnectionDao
     public MappingResult<DatabaseConnection> mapToModel(
             DatabaseConnectionPojo pojo,
             DatabaseConnection dbc) {
-        // TODO Auto-generated method stub
-        return null;
+        if(pojo != null) {            
+            mapToModelStatically(pojo, dbc);
+            return new MappingResult<DatabaseConnection>(dbc.getId(), dbc);
+        }
+        else {
+            return null;
+        }
+    }
+    
+    /**
+     * This method implements the method mapToModel in a static way.
+     * @param pojo the POJO object
+     * @param dbc the pre initialized model object
+     * @return return a corresponding JPA model object or null if the pojo
+     * object is null
+     */
+    public static DatabaseConnection mapToModelStatically(
+            DatabaseConnectionPojo pojo,
+            DatabaseConnection dbc) {
+        DatabaseConnection resultDatabaseConnection = null;
+        if(pojo != null) {
+            resultDatabaseConnection = dbc;
+            if(resultDatabaseConnection == null) {
+                resultDatabaseConnection = new DatabaseConnection();
+                resultDatabaseConnection.setId(pojo.getUuid());
+            }
+            resultDatabaseConnection.setCredential(
+                    CredentialsDao.mapToModelStatically(
+                            pojo.getCredentials(),
+                            null));
+            resultDatabaseConnection.setDatabaseBean(
+                    DatabasesDao.mapToModelStatically(
+                            pojo.getDatabase(),
+                            null));
+            resultDatabaseConnection.setPortBean(
+                    PortsDao.mapToModelStatically(pojo.getPort(), null));
+            resultDatabaseConnection.setSchemaBean(
+                    SchemasDao.mapToModelStatically(pojo.getSchema(), null));
+            resultDatabaseConnection.setServerBean(
+                    ServersDao.mapToModelStatically(pojo.getServer(), null));
+            
+        }
+        return resultDatabaseConnection;
+    }
+    
+    /**
+     * Creates an empty database connection pojo.
+     * @return an empty database connection pojo
+     */
+    public DatabaseConnectionPojo newDatabaseConnection() {
+       return newPojoStatically();
+    }
+
+    /**
+     * This method implements the method newDatabaseConnection in a static way.
+     * @return an empty database connection pojo
+     */
+    public static DatabaseConnectionPojo newPojoStatically() {
+        DatabaseConnectionPojo newDatabaseConncetionPojo =
+                new DatabaseConnectionPojo();
+        
+        newDatabaseConncetionPojo.setCredentials(
+                CredentialsDao.newPojoStatically());
+        newDatabaseConncetionPojo.setDatabase(
+                DatabasesDao.newPojoStatically());
+        newDatabaseConncetionPojo.setPort(
+                PortsDao.newPojoStatically());
+        newDatabaseConncetionPojo.setSchema(
+                SchemasDao.newPojoStatically());
+        newDatabaseConncetionPojo.setServer(
+                ServersDao.newPojoStatically());
+        
+        return newDatabaseConncetionPojo;
     }
 
 }
