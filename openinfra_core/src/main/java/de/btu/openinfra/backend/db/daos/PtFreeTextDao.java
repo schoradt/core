@@ -65,7 +65,7 @@ public class PtFreeTextDao	extends OpenInfraDao<PtFreeTextPojo, PtFreeText> {
 
 		// 3. Finaly, create a new instance of TypeString and add the list
 		// of LocalizedStrings
-		return new PtFreeTextPojo(lsList, ptf.getId());
+		return new PtFreeTextPojo(lsList, ptf.getId(), ptf.getXmin());
 	}
 
 	/**
@@ -251,11 +251,14 @@ public class PtFreeTextDao	extends OpenInfraDao<PtFreeTextPojo, PtFreeText> {
 			Locale locale,
 			PtFreeText ptf) {
 		UUID id = null;
+		int trid = -1;
 		if(ptf != null) {
 			id = ptf.getId();
+			trid = ptf.getXmin();
 		} // end if
 		return new PtFreeTextPojo(
 				mapToLocalizedStringStatically(locale, ptf),
-				id);
+				id,
+				trid);
 	}
 }
