@@ -3,6 +3,7 @@ package de.btu.openinfra.backend.db.daos;
 import java.util.Locale;
 import java.util.UUID;
 
+import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.jpa.model.RelationshipType;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
 import de.btu.openinfra.backend.db.jpa.model.ValueListValue;
@@ -58,6 +59,7 @@ public class RelationshipTypeDao extends
 
 		RelationshipTypePojo pojo = new RelationshipTypePojo();
 		pojo.setUuid(rt.getId());
+		pojo.setTrid(rt.getXmin());
 		pojo.setRelationshipType(
 				ValueListValueDao.mapToPojoStatically(
 						locale,

@@ -48,6 +48,8 @@ public class RelationshipType implements Serializable, OpenInfraModelObject {
 
 	@Id
 	private UUID id;
+	
+	private Integer xmin;
 
 	//bi-directional many-to-one association to ValueListValue
 	@ManyToOne
@@ -70,6 +72,7 @@ public class RelationshipType implements Serializable, OpenInfraModelObject {
 	public RelationshipType() {
 	}
 
+	@Override
 	public UUID getId() {
 		return this.id;
 	}
@@ -137,6 +140,11 @@ public class RelationshipType implements Serializable, OpenInfraModelObject {
 		topicInstanceXTopicInstance.setRelationshipType(null);
 
 		return topicInstanceXTopicInstance;
+	}
+	
+	@Override
+	public Integer getXmin() {
+		return xmin;
 	}
 
 }

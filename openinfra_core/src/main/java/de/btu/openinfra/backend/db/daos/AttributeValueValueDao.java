@@ -3,6 +3,7 @@ package de.btu.openinfra.backend.db.daos;
 import java.util.Locale;
 import java.util.UUID;
 
+import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.jpa.model.AttributeTypeToAttributeTypeGroup;
 import de.btu.openinfra.backend.db.jpa.model.AttributeValueValue;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
@@ -61,6 +62,7 @@ public class AttributeValueValueDao
 		        avv.getAttributeTypeToAttributeTypeGroup().getId());
 		// set the id of the object
 		avvPojo.setUuid(avv.getId());
+		avvPojo.setTrid(avv.getXmin());
 
 		return avvPojo;
 	}

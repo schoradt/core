@@ -3,7 +3,7 @@
 	<persistence-unit name="openinfra_core">
 	
 		<!-- Register converter classes -->
-	    <class>de.btu.openinfra.backend.db.jpa.converter.PostgresUuidConverter</class>
+	    <class>de.btu.openinfra.backend.db.PostgresUuidConverter</class>
 	    
 	    <!-- Register entity classes --> 
 		<class>de.btu.openinfra.backend.db.jpa.model.AttributeType</class>
@@ -46,5 +46,6 @@
 		<class>de.btu.openinfra.backend.db.jpa.model.meta.Servers</class>
 		<class>de.btu.openinfra.backend.db.jpa.model.meta.Settings</class>
 		<class>de.btu.openinfra.backend.db.jpa.model.meta.Credentials</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.meta.SettingKeys</class>
 	</persistence-unit>
 </persistence>

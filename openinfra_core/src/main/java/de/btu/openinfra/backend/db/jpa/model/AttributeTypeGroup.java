@@ -32,6 +32,8 @@ public class AttributeTypeGroup implements Serializable, OpenInfraModelObject {
 
 	@Id
 	private UUID id;
+	
+	private Integer xmin;
 
 	//bi-directional many-to-one association to AttributeTypeGroup
 	@ManyToOne
@@ -63,6 +65,7 @@ public class AttributeTypeGroup implements Serializable, OpenInfraModelObject {
 	public AttributeTypeGroup() {
 	}
 
+	@Override
 	public UUID getId() {
 		return this.id;
 	}
@@ -160,6 +163,11 @@ public class AttributeTypeGroup implements Serializable, OpenInfraModelObject {
 		attributeTypeToAttributeTypeGroup.setAttributeTypeGroup(null);
 
 		return attributeTypeToAttributeTypeGroup;
+	}
+	
+	@Override
+	public Integer getXmin() {
+		return xmin;
 	}
 
 }

@@ -3,6 +3,7 @@ package de.btu.openinfra.backend.db.daos;
 import java.util.Locale;
 import java.util.UUID;
 
+import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.jpa.model.CountryCode;
 import de.btu.openinfra.backend.db.pojos.CountryCodePojo;
 
@@ -43,6 +44,7 @@ public class CountryCodeDao
 		CountryCodePojo pojo = new CountryCodePojo();
 		pojo.setCountryCode(cc.getCountryCode());
 		pojo.setUuid(cc.getId());
+		pojo.setTrid(cc.getXmin());
 		return pojo;
 	}
 

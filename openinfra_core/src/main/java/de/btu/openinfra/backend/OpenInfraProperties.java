@@ -3,7 +3,7 @@ package de.btu.openinfra.backend;
 import java.util.Locale;
 import java.util.Properties;
 
-import de.btu.openinfra.backend.db.daos.OpenInfraSortOrder;
+import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 
 /**

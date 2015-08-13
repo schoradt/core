@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
+import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.jpa.model.AttributeTypeGroup;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupPojo;
 import de.btu.openinfra.backend.db.pojos.LocalizedString;
@@ -92,6 +93,7 @@ public class AttributeTypeGroupDao
 					locale,
 					atg.getPtFreeText2()));
 			pojo.setUuid(atg.getId());
+			pojo.setTrid(atg.getXmin());
 
 			return pojo;
 		} else {

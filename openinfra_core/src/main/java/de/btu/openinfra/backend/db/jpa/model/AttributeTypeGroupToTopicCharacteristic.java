@@ -66,6 +66,8 @@ public class AttributeTypeGroupToTopicCharacteristic implements
 
 	@Id
 	private UUID id;
+	
+	private Integer xmin;
 
 	@Column(name="\"order\"")
 	private Integer order;
@@ -154,6 +156,11 @@ public class AttributeTypeGroupToTopicCharacteristic implements
 		attributeTypeToAttributeTypeGroup.setAttributeTypeGroupToTopicCharacteristic(null);
 
 		return attributeTypeToAttributeTypeGroup;
+	}
+	
+	@Override
+	public Integer getXmin() {
+		return xmin;
 	}
 
 }

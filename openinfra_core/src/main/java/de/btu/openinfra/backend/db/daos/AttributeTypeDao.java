@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
+import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.jpa.model.AttributeType;
 import de.btu.openinfra.backend.db.jpa.model.AttributeTypeGroup;
 import de.btu.openinfra.backend.db.jpa.model.PtLocale;
@@ -74,6 +75,7 @@ public class AttributeTypeDao
 					locale,
 					at.getPtFreeText2()));
 			pojo.setUuid(at.getId());
+			pojo.setTrid(at.getXmin());
 
 			// This part is used to specify the awaited attribute value type.
 			if(pojo.getDomain() != null) {

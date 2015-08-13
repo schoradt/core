@@ -48,6 +48,8 @@ public class TopicInstanceXTopicInstance implements
 
 	@Id
 	private UUID id;
+	
+	private Integer xmin;
 
 	//bi-directional many-to-one association to RelationshipType
 	@ManyToOne
@@ -99,6 +101,11 @@ public class TopicInstanceXTopicInstance implements
 
 	public void setTopicInstance2Bean(TopicInstance topicInstance2Bean) {
 		this.topicInstance2Bean = topicInstance2Bean;
+	}
+	
+	@Override
+	public Integer getXmin() {
+		return xmin;
 	}
 
 }

@@ -38,6 +38,8 @@ public class AttributeValue implements Serializable, OpenInfraModelObject {
 
 	@Id
 	private UUID id;
+	
+	private Integer xmin;
 
 	//bi-directional many-to-one association to AttributeTypeToAttributeTypeGroup
 	@ManyToOne
@@ -76,6 +78,11 @@ public class AttributeValue implements Serializable, OpenInfraModelObject {
 
 	public void setTopicInstance(TopicInstance topicInstance) {
 		this.topicInstance = topicInstance;
+	}
+	
+	@Override
+	public Integer getXmin() {
+		return xmin;
 	}
 
 }

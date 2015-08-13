@@ -12,7 +12,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.glassfish.jersey.server.mvc.Template;
 
-import de.btu.openinfra.backend.db.daos.OpenInfraSortOrder;
+import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.pojos.TopicInstancePojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 

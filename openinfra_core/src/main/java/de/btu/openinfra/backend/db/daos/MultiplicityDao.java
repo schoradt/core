@@ -3,6 +3,7 @@ package de.btu.openinfra.backend.db.daos;
 import java.util.Locale;
 import java.util.UUID;
 
+import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.jpa.model.Multiplicity;
 import de.btu.openinfra.backend.db.pojos.MultiplicityPojo;
 
@@ -49,6 +50,7 @@ public class MultiplicityDao extends
 			}
 			pojo.setMin(mp.getMinValue());
 			pojo.setUuid(mp.getId());
+			pojo.setTrid(mp.getXmin().intValue());
 			return pojo;
 		} else {
 			return null;

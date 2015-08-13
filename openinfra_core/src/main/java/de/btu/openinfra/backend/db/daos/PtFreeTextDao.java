@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
+import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.jpa.model.LocalizedCharacterString;
 import de.btu.openinfra.backend.db.jpa.model.PtFreeText;
 import de.btu.openinfra.backend.db.jpa.model.PtLocale;
@@ -64,7 +65,7 @@ public class PtFreeTextDao	extends OpenInfraDao<PtFreeTextPojo, PtFreeText> {
 
 		// 3. Finaly, create a new instance of TypeString and add the list
 		// of LocalizedStrings
-		return new PtFreeTextPojo(lsList, ptf.getId());
+		return new PtFreeTextPojo(lsList, ptf.getId(), ptf.getXmin());
 	}
 
 	/**
@@ -250,11 +251,14 @@ public class PtFreeTextDao	extends OpenInfraDao<PtFreeTextPojo, PtFreeText> {
 			Locale locale,
 			PtFreeText ptf) {
 		UUID id = null;
+		int trid = -1;
 		if(ptf != null) {
 			id = ptf.getId();
+			trid = ptf.getXmin();
 		} // end if
 		return new PtFreeTextPojo(
 				mapToLocalizedStringStatically(locale, ptf),
-				id);
+				id,
+				trid);
 	}
 }

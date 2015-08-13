@@ -56,6 +56,8 @@ public class RelationshipTypeToTopicCharacteristic implements Serializable,
 
 	@Id
 	private UUID id;
+	
+	private Integer xmin;
 
 	//bi-directional many-to-one association to Multiplicity
 	@ManyToOne
@@ -107,6 +109,11 @@ public class RelationshipTypeToTopicCharacteristic implements Serializable,
 
 	public void setTopicCharacteristic(TopicCharacteristic topicCharacteristic) {
 		this.topicCharacteristic = topicCharacteristic;
+	}
+	
+	@Override
+	public Integer getXmin() {
+		return xmin;
 	}
 
 }

@@ -3,12 +3,16 @@ package de.btu.openinfra.backend.rest.meta;
 import java.util.List;
 import java.util.UUID;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.meta.SettingsDao;
@@ -47,5 +51,40 @@ public class SettingsResource {
 		return new SettingsDao(
 				OpenInfraSchemas.META_DATA).getCount();
 	}
+    
+    @POST
+    public Response create(SettingsPojo pojo) {
+        UUID id = new SettingsDao(
+                OpenInfraSchemas.META_DATA).createOrUpdate(pojo);
+        return OpenInfraResponseBuilder.postResponse(id);
+    }
+    
+    @PUT
+    @Path("{settingsId}")
+    public Response update(
+            @PathParam("settingsId") UUID settingsId,
+            SettingsPojo pojo) {
+        UUID id = new SettingsDao(
+                OpenInfraSchemas.META_DATA).createOrUpdate(pojo);
+        return OpenInfraResponseBuilder.putResponse(id);
+    }
+    
+    @DELETE
+    @Path("{settingsId}")
+    public Response delete(
+            @PathParam("settingsId") UUID settingsId) {
+        boolean deleteResult =
+                new SettingsDao(OpenInfraSchemas.META_DATA).delete(
+                        settingsId);
+        return OpenInfraResponseBuilder.deleteResponse(
+                deleteResult,
+                settingsId);
+    }
+    
+    @GET
+    @Path("/new")
+    public SettingsPojo newSettings() {
+        return new SettingsDao(OpenInfraSchemas.META_DATA).newSettings();
+    }
 
 }

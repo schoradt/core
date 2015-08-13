@@ -24,6 +24,8 @@ public class Project implements Serializable, OpenInfraModelObject {
 
 	@Id
 	private UUID id;
+	
+	private Integer xmin;
 
 	//bi-directional many-to-one association to Project
 	@ManyToOne
@@ -51,6 +53,7 @@ public class Project implements Serializable, OpenInfraModelObject {
 	public Project() {
 	}
 
+	@Override
 	public UUID getId() {
 		return this.id;
 	}
@@ -126,6 +129,11 @@ public class Project implements Serializable, OpenInfraModelObject {
 		topicCharacteristic.setProject(null);
 
 		return topicCharacteristic;
+	}
+	
+	@Override
+	public Integer getXmin() {
+		return xmin;
 	}
 
 }

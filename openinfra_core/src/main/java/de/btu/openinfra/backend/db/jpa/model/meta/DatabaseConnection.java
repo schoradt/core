@@ -31,6 +31,8 @@ public class DatabaseConnection implements Serializable, OpenInfraModelObject {
 
 	@Id
 	private UUID id;
+	
+	private Integer xmin;
 
 	//bi-directional many-to-one association to Credentials
 	@ManyToOne
@@ -108,6 +110,11 @@ public class DatabaseConnection implements Serializable, OpenInfraModelObject {
 
 	public void setServerBean(Servers serverBean) {
 		this.serverBean = serverBean;
+	}
+	
+	@Override
+	public Integer getXmin() {
+		return xmin;
 	}
 
 }

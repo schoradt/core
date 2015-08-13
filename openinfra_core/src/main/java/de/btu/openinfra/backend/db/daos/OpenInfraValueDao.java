@@ -8,6 +8,8 @@ import java.util.UUID;
 import org.eclipse.persistence.jpa.JpaQuery;
 
 import de.btu.openinfra.backend.OpenInfraProperties;
+import de.btu.openinfra.backend.db.OpenInfraOrderBy;
+import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstance;

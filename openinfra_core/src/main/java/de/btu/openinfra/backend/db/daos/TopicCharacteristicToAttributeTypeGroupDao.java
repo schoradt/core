@@ -3,6 +3,7 @@ package de.btu.openinfra.backend.db.daos;
 import java.util.Locale;
 import java.util.UUID;
 
+import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.jpa.model.AttributeTypeGroup;
 import de.btu.openinfra.backend.db.jpa.model.AttributeTypeGroupToTopicCharacteristic;
 import de.btu.openinfra.backend.db.jpa.model.MetaData;
@@ -48,6 +49,7 @@ public class TopicCharacteristicToAttributeTypeGroupDao extends
 					new TopicCharacteristicToAttributeTypeGroupPojo();
 
 			pojo.setUuid(modelObject.getId());
+			pojo.setTrid(modelObject.getXmin());
 			pojo.setTopicCharacteristic(
 	                TopicCharacteristicDao.mapToPojoStatically(
 	                        locale,

@@ -14,6 +14,12 @@ public class PtFreeTextPojo extends OpenInfraPojo {
 		this.localizedStrings = ls;
 	}
 	
+	public PtFreeTextPojo(List<LocalizedString> ls, UUID id, int trid) {
+		this.setUuid(id);
+		this.setTrid(trid);
+		this.localizedStrings = ls;
+	}
+	
 	public List<LocalizedString> getLocalizedStrings() {
 		return localizedStrings;
 	}

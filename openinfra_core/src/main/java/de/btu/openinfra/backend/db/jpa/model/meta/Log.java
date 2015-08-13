@@ -33,6 +33,8 @@ public class Log implements Serializable, OpenInfraModelObject {
 
 	@Id
 	private UUID id;
+	
+	private Integer xmin;
 
 	@Column(name="created_on")
 	private Date createdOn;
@@ -114,6 +116,11 @@ public class Log implements Serializable, OpenInfraModelObject {
 
 	public void setLoggerBean(Logger loggerBean) {
 		this.loggerBean = loggerBean;
+	}
+	
+	@Override
+	public Integer getXmin() {
+		return xmin;
 	}
 
 }

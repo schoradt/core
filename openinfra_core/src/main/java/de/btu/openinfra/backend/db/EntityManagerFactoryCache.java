@@ -1,4 +1,4 @@
-package de.btu.openinfra.backend.db.daos;
+package de.btu.openinfra.backend.db;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,8 +17,8 @@ import com.google.common.cache.LoadingCache;
 import de.btu.openinfra.backend.OpenInfraApplication;
 import de.btu.openinfra.backend.OpenInfraProperties;
 import de.btu.openinfra.backend.OpenInfraPropertyKeys;
-import de.btu.openinfra.backend.db.MetaDataManager;
-import de.btu.openinfra.backend.db.OpenInfraPropertyValues;
+import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.daos.ProjectDao;
 import de.btu.openinfra.backend.db.pojos.ProjectPojo;
 import de.btu.openinfra.backend.db.pojos.meta.ProjectsPojo;
 

@@ -3,6 +3,7 @@ package de.btu.openinfra.backend.db.daos;
 import java.util.Locale;
 import java.util.UUID;
 
+import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.jpa.model.RelationshipType;
 import de.btu.openinfra.backend.db.jpa.model.RelationshipTypeToTopicCharacteristic;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
@@ -74,6 +75,7 @@ public class RelationshipTypeToTopicCharacteristicDao
 					new RelationshipTypeToTopicCharacteristicPojo();
 
 			pojo.setUuid(association.getId());
+			pojo.setTrid(association.getXmin());
 			pojo.setTopicCharacteristicId(
 				association.getTopicCharacteristic().getId());
 			pojo.setMultiplicity(MultiplicityDao.mapToPojoStatically(

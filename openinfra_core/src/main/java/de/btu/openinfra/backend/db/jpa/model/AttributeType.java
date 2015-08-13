@@ -62,6 +62,8 @@ public class AttributeType implements Serializable, OpenInfraModelObject {
 
 	@Id
 	private UUID id;
+	
+	private Integer xmin;
 
 	//bi-directional many-to-one association to PtFreeText
 	@ManyToOne
@@ -217,6 +219,11 @@ public class AttributeType implements Serializable, OpenInfraModelObject {
 		attributeTypeXAttributeTypes2.setAttributeType2Bean(null);
 
 		return attributeTypeXAttributeTypes2;
+	}
+	
+	@Override
+	public Integer getXmin() {
+		return xmin;
 	}
 
 }
