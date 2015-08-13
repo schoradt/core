@@ -1,9 +1,17 @@
 package de.btu.openinfra.backend.db.jpa.model.rbac;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+
+import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 
 
 /**
@@ -12,11 +20,13 @@ import java.util.List;
  */
 @Entity
 @NamedQuery(name="User.findAll", query="SELECT u FROM User u")
-public class User implements Serializable {
+public class User implements Serializable, OpenInfraModelObject {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	private String id;
+	private UUID id;
+	
+	private Integer xmin;
 
 	@Column(name="created_on")
 	private Timestamp createdOn;
@@ -54,11 +64,13 @@ public class User implements Serializable {
 	public User() {
 	}
 
-	public String getId() {
+	@Override
+	public UUID getId() {
 		return this.id;
 	}
 
-	public void setId(String id) {
+	@Override
+	public void setId(UUID id) {
 		this.id = id;
 	}
 
@@ -178,6 +190,11 @@ public class User implements Serializable {
 		userRole.setUserBean(null);
 
 		return userRole;
+	}
+	
+	@Override
+	public Integer getXmin() {
+		return xmin;
 	}
 
 }

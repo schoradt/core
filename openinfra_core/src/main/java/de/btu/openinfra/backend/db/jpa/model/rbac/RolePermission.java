@@ -1,7 +1,16 @@
 package de.btu.openinfra.backend.db.jpa.model.rbac;
 
 import java.io.Serializable;
-import javax.persistence.*;
+import java.util.UUID;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+
+import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 
 
 /**
@@ -11,11 +20,13 @@ import javax.persistence.*;
 @Entity
 @Table(name="role_permissions")
 @NamedQuery(name="RolePermission.findAll", query="SELECT r FROM RolePermission r")
-public class RolePermission implements Serializable {
+public class RolePermission implements Serializable, OpenInfraModelObject {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	private String id;
+	private UUID id;
+	
+	private Integer xmin;
 
 	//bi-directional many-to-one association to Permission
 	@ManyToOne
@@ -30,11 +41,13 @@ public class RolePermission implements Serializable {
 	public RolePermission() {
 	}
 
-	public String getId() {
+	@Override
+	public UUID getId() {
 		return this.id;
 	}
 
-	public void setId(String id) {
+	@Override
+	public void setId(UUID id) {
 		this.id = id;
 	}
 
@@ -52,6 +65,11 @@ public class RolePermission implements Serializable {
 
 	public void setRoleBean(Role roleBean) {
 		this.roleBean = roleBean;
+	}
+	
+	@Override
+	public Integer getXmin() {
+		return xmin;
 	}
 
 }

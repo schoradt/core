@@ -1,7 +1,16 @@
 package de.btu.openinfra.backend.db.jpa.model.rbac;
 
 import java.io.Serializable;
-import javax.persistence.*;
+import java.util.UUID;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+
+import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 
 
 /**
@@ -11,11 +20,13 @@ import javax.persistence.*;
 @Entity
 @Table(name="user_roles")
 @NamedQuery(name="UserRole.findAll", query="SELECT u FROM UserRole u")
-public class UserRole implements Serializable {
+public class UserRole implements Serializable, OpenInfraModelObject {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	private String id;
+	private UUID id;
+	
+	private Integer xmin;
 
 	//bi-directional many-to-one association to Role
 	@ManyToOne
@@ -30,11 +41,13 @@ public class UserRole implements Serializable {
 	public UserRole() {
 	}
 
-	public String getId() {
+	@Override
+	public UUID getId() {
 		return this.id;
 	}
 
-	public void setId(String id) {
+	@Override
+	public void setId(UUID id) {
 		this.id = id;
 	}
 
@@ -52,6 +65,11 @@ public class UserRole implements Serializable {
 
 	public void setUserBean(User userBean) {
 		this.userBean = userBean;
+	}
+	
+	@Override
+	public Integer getXmin() {
+		return xmin;
 	}
 
 }

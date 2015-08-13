@@ -1,7 +1,14 @@
 package de.btu.openinfra.backend.db.jpa.model.rbac;
 
 import java.io.Serializable;
-import javax.persistence.*;
+import java.util.UUID;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+
+import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 
 
 /**
@@ -11,22 +18,26 @@ import javax.persistence.*;
 @Entity
 @Table(name="password_blacklist")
 @NamedQuery(name="PasswordBlacklist.findAll", query="SELECT p FROM PasswordBlacklist p")
-public class PasswordBlacklist implements Serializable {
+public class PasswordBlacklist implements Serializable, OpenInfraModelObject {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	private String id;
+	private UUID id;
+	
+	private Integer xmin;
 
 	private String password;
 
 	public PasswordBlacklist() {
 	}
 
-	public String getId() {
+	@Override
+	public UUID getId() {
 		return this.id;
 	}
 
-	public void setId(String id) {
+	@Override
+	public void setId(UUID id) {
 		this.id = id;
 	}
 
@@ -36,6 +47,11 @@ public class PasswordBlacklist implements Serializable {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	@Override
+	public Integer getXmin() {
+		return xmin;
 	}
 
 }
