@@ -17,7 +17,6 @@ import com.google.common.cache.LoadingCache;
 import de.btu.openinfra.backend.OpenInfraApplication;
 import de.btu.openinfra.backend.OpenInfraProperties;
 import de.btu.openinfra.backend.OpenInfraPropertyKeys;
-import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.ProjectDao;
 import de.btu.openinfra.backend.db.pojos.ProjectPojo;
 import de.btu.openinfra.backend.db.pojos.meta.ProjectsPojo;

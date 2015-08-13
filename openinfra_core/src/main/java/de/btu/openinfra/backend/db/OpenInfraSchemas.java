@@ -20,6 +20,10 @@ public enum OpenInfraSchemas {
 	/**
 	 * This value refers to the meta data schema
 	 */
-	META_DATA
+	META_DATA,
+	/**
+	 * Schema for Role-based access control
+	 */
+	RBAC
 
 }

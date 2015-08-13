@@ -13,7 +13,7 @@ import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.server.mvc.Template;
 
-import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.ProjectDao;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.ProjectPojo;
