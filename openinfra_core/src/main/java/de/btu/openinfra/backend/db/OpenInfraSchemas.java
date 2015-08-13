@@ -1,4 +1,4 @@
-package de.btu.openinfra.backend.db.daos;
+package de.btu.openinfra.backend.db;
 
 /**
  * This enumeration entails the possible schemas and can be used to decide
