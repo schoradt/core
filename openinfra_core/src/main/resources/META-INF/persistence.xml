@@ -5,7 +5,8 @@
 		<!-- Register converter classes -->
 	    <class>de.btu.openinfra.backend.db.PostgresUuidConverter</class>
 	    
-	    <!-- Register entity classes --> 
+	    <!-- Register entity classes -->
+	    <!-- Project databases -->
 		<class>de.btu.openinfra.backend.db.jpa.model.AttributeType</class>
 		<class>de.btu.openinfra.backend.db.jpa.model.AttributeTypeGroup</class>
 		<class>de.btu.openinfra.backend.db.jpa.model.AttributeTypeGroupToTopicCharacteristic</class>
@@ -35,6 +36,8 @@
 		<class>de.btu.openinfra.backend.db.jpa.model.ValueListValue</class>
 		<class>de.btu.openinfra.backend.db.jpa.model.ValueListValuesXValueListValue</class>
 		<class>de.btu.openinfra.backend.db.jpa.model.ValueListXValueList</class>
+		
+		<!-- Metadata databases -->
 		<class>de.btu.openinfra.backend.db.jpa.model.meta.Credentials</class>
 		<class>de.btu.openinfra.backend.db.jpa.model.meta.DatabaseConnection</class>
 		<class>de.btu.openinfra.backend.db.jpa.model.meta.Databases</class>
@@ -47,5 +50,13 @@
 		<class>de.btu.openinfra.backend.db.jpa.model.meta.Servers</class>
 		<class>de.btu.openinfra.backend.db.jpa.model.meta.SettingKeys</class>
 		<class>de.btu.openinfra.backend.db.jpa.model.meta.Settings</class>
+		
+		<!-- Role-based access control (rbac) databases -->
+		<class>de.btu.openinfra.backend.db.jpa.model.rbac.PasswordBlacklist</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.rbac.Permission</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.rbac.Role</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.rbac.RolePermission</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.rbac.User</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.rbac.UserRole</class>
 	</persistence-unit>
 </persistence>
