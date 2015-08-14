@@ -19,7 +19,7 @@ import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.ProjectDao;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.ProjectPojo;
-import de.btu.openinfra.backend.db.rbac.ProjectSecurity;
+import de.btu.openinfra.backend.db.rbac.ProjectRbac;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
 /**
@@ -58,7 +58,7 @@ public class ProjectResource {
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {		
 		return OpenInfraResponseBuilder.getResponse(
-				new ProjectSecurity(
+				new ProjectRbac(
 						null, 
 						OpenInfraSchemas.META_DATA).readMainProjects(
 								PtLocaleDao.forLanguageTag(language)));			

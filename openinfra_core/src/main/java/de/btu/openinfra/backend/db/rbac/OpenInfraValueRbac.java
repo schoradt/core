@@ -11,14 +11,14 @@ import de.btu.openinfra.backend.db.daos.OpenInfraValueDao;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 
-public abstract class OpenInfraValueSecurity<
+public abstract class OpenInfraValueRbac<
 		TypePojo extends OpenInfraPojo,
 		TypeModel extends OpenInfraModelObject,
 		TypeModelValue,
 		TypeDao extends OpenInfraValueDao<TypePojo, TypeModel, TypeModelValue>> 
-		extends OpenInfraSecurity<TypePojo, TypeModel, TypeDao> {
+		extends OpenInfraRbac<TypePojo, TypeModel, TypeDao> {
 
-	protected OpenInfraValueSecurity(
+	protected OpenInfraValueRbac(
 			UUID currentProjectId,
 			OpenInfraSchemas schema, 
 			Class<TypeDao> dao) {

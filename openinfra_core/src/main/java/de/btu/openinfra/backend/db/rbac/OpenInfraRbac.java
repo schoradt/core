@@ -17,7 +17,7 @@ import de.btu.openinfra.backend.db.daos.OpenInfraDao;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 
-public abstract class OpenInfraSecurity<
+public abstract class OpenInfraRbac<
 	TypePojo extends OpenInfraPojo,
 	TypeModel extends OpenInfraModelObject,
 	TypeDao extends OpenInfraDao<TypePojo, TypeModel>> {
@@ -39,7 +39,7 @@ public abstract class OpenInfraSecurity<
 	 */
 	protected Subject user;
 	
-	protected OpenInfraSecurity(
+	protected OpenInfraRbac(
 			UUID currentProjectId,
 			OpenInfraSchemas schema,
 			Class<TypeDao> dao) {

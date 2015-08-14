@@ -12,12 +12,12 @@ import de.btu.openinfra.backend.db.daos.ProjectDao;
 import de.btu.openinfra.backend.db.jpa.model.Project;
 import de.btu.openinfra.backend.db.pojos.ProjectPojo;
 
-public class ProjectSecurity extends 
-	OpenInfraSecurity<ProjectPojo, Project, ProjectDao> {
+public class ProjectRbac extends 
+	OpenInfraRbac<ProjectPojo, Project, ProjectDao> {
 
 	
 	
-	public ProjectSecurity(UUID currentProjectId, OpenInfraSchemas schema) {
+	public ProjectRbac(UUID currentProjectId, OpenInfraSchemas schema) {
 		super(currentProjectId, schema, ProjectDao.class);
 	}
 

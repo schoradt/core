@@ -21,7 +21,7 @@ import de.btu.openinfra.backend.db.daos.TopicCharacteristicDao;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupToTopicCharacteristicPojo;
 import de.btu.openinfra.backend.db.pojos.RelationshipTypeToTopicCharacteristicPojo;
 import de.btu.openinfra.backend.db.pojos.TopicCharacteristicPojo;
-import de.btu.openinfra.backend.db.rbac.TopicCharacteristicSecurity;
+import de.btu.openinfra.backend.db.rbac.TopicCharacteristicRbac;
 
 @Path(OpenInfraResponseBuilder.REST_URI + "/topiccharacteristics")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
@@ -52,14 +52,14 @@ public class TopicCharacteristicResource {
 			@PathParam("offset") int offset,
 			@PathParam("size") int size) {
 		if(filter != null && filter.length() > 0) {
-			return new TopicCharacteristicSecurity(
+			return new TopicCharacteristicRbac(
 					projectId,
 					OpenInfraSchemas.valueOf(
 							schema.toUpperCase())).read(
 									PtLocaleDao.forLanguageTag(
 											language), filter);
 		} else {
-			return new TopicCharacteristicSecurity(
+			return new TopicCharacteristicRbac(
 					projectId,
 					OpenInfraSchemas.valueOf(
 							schema.toUpperCase())).read(
@@ -79,7 +79,7 @@ public class TopicCharacteristicResource {
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@PathParam("topicCharacteristicId") UUID topicCharacteristicId) {
-		return new TopicCharacteristicSecurity(
+		return new TopicCharacteristicRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language),
