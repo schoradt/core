@@ -1,4 +1,4 @@
-package de.btu.openinfra.backend.db.daos;
+package de.btu.openinfra.backend.db;
 
 /**
  * This enumeration entails the possible schemas and can be used to decide
@@ -20,6 +20,10 @@ public enum OpenInfraSchemas {
 	/**
 	 * This value refers to the meta data schema
 	 */
-	META_DATA
+	META_DATA,
+	/**
+	 * Schema for Role-based access control
+	 */
+	RBAC
 
 }

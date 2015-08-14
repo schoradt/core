@@ -10,7 +10,7 @@ public class AttributeTypeAssociationPojo extends OpenInfraPojo {
 	private UUID associationAttributeTypeId;
     private AttributeTypePojo associatedAttributeType;
 	private ValueListValuePojo relationship;
-
+	
 	public UUID getAssociationAttributeTypeId() {
         return associationAttributeTypeId;
     }

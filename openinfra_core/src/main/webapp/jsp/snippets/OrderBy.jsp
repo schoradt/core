@@ -7,7 +7,7 @@
 
 <%@page import="de.btu.openinfra.backend.db.daos.AttributeTypeDao"%>
 <%@page import="de.btu.openinfra.backend.db.daos.PtLocaleDao"%>
-<%@page import="de.btu.openinfra.backend.db.daos.OpenInfraSchemas"%>
+<%@page import="de.btu.openinfra.backend.db.OpenInfraSchemas"%>
 <%@page import="java.util.UUID"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>

@@ -8,6 +8,7 @@ import javax.persistence.Query;
 import org.eclipse.persistence.jpa.JpaQuery;
 
 import de.btu.openinfra.backend.db.MappingResult;
+import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.AttributeTypeToAttributeTypeGroup;
 import de.btu.openinfra.backend.db.jpa.model.AttributeValueGeom;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstance;

@@ -8,7 +8,7 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.common.SolrInputDocument;
 
-import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.TopicInstanceDao;
 import de.btu.openinfra.backend.db.jpa.model.AttributeValueValue;
 import de.btu.openinfra.backend.db.jpa.model.LocalizedCharacterString;

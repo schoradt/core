@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
+import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupToTopicCharacteristicPojo;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupToValues;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeToAttributeTypeGroupPojo;

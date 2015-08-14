@@ -14,7 +14,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.meta.LoggerDao;
 import de.btu.openinfra.backend.db.pojos.meta.LoggerPojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
