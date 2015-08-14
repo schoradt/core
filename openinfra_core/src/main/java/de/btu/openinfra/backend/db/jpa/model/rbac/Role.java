@@ -34,7 +34,7 @@ public class Role implements Serializable, OpenInfraModelObject {
 	@OneToMany(mappedBy="roleBean")
 	private List<RolePermission> rolePermissions;
 
-	//bi-directional many-to-one association to UserRole
+	//bi-directional many-to-one association to SubjectRole
 	@OneToMany(mappedBy="roleBean")
 	private List<SubjectRole> subjectRoles;
 
@@ -89,26 +89,26 @@ public class Role implements Serializable, OpenInfraModelObject {
 		return rolePermission;
 	}
 
-	public List<SubjectRole> getSubjectrRoles() {
+	public List<SubjectRole> getSubjectRoles() {
 		return this.subjectRoles;
 	}
 
-	public void setSubjectRoles(List<SubjectRole> userRoles) {
-		this.subjectRoles = userRoles;
+	public void setSubjectRoles(List<SubjectRole> subjectRoles) {
+		this.subjectRoles = subjectRoles;
 	}
 
-	public SubjectRole addUserRole(SubjectRole userRole) {
-		getSubjectrRoles().add(userRole);
-		userRole.setRoleBean(this);
+	public SubjectRole addSubjectRole(SubjectRole subjectRole) {
+		getSubjectRoles().add(subjectRole);
+		subjectRole.setRoleBean(this);
 
-		return userRole;
+		return subjectRole;
 	}
 
-	public SubjectRole removeUserRole(SubjectRole userRole) {
-		getSubjectrRoles().remove(userRole);
-		userRole.setRoleBean(null);
+	public SubjectRole removeSubjectRole(SubjectRole subjectRole) {
+		getSubjectRoles().remove(subjectRole);
+		subjectRole.setRoleBean(null);
 
-		return userRole;
+		return subjectRole;
 	}
 	
 	@Override

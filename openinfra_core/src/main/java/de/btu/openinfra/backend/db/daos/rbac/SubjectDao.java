@@ -42,12 +42,13 @@ public class SubjectDao extends OpenInfraDao<SubjectPojo, Subject> {
 		pojo.setUpdatedOn(modelObject.getUpdatedOn());
 		
 		List<RolePojo> roles = new LinkedList<RolePojo>();
-		SubjectRoleDao dao = new SubjectRoleDao();
-		for(SubjectRole ur : modelObject.getUserRoles()) {
-			roles.add(dao.mapToPojo(locale, ur).getRole());
+		RoleDao dao = new RoleDao();		
+		for(SubjectRole ur : modelObject.getSubjectRoles()) {
+			roles.add(dao.mapToPojo(locale, ur.getRoleBean()));
 		}
 		
 		pojo.setRoles(roles);
+		
 		return pojo;
 	}
 

@@ -14,12 +14,12 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 
 
 /**
- * The persistent class for the user_roles database table.
+ * The persistent class for the subject_roles database table.
  * 
  */
 @Entity
 @Table(name="subject_roles")
-@NamedQuery(name="SubjectRole.findAll", query="SELECT s FROM Subject s")
+@NamedQuery(name="SubjectRole.findAll", query="SELECT s FROM SubjectRole s")
 public class SubjectRole implements Serializable, OpenInfraModelObject {
 	private static final long serialVersionUID = 1L;
 
@@ -33,10 +33,10 @@ public class SubjectRole implements Serializable, OpenInfraModelObject {
 	@JoinColumn(name="role")
 	private Role roleBean;
 
-	//bi-directional many-to-one association to User
+	//bi-directional many-to-one association to Subject
 	@ManyToOne
-	@JoinColumn(name="user")
-	private Subject userBean;
+	@JoinColumn(name="subject")
+	private Subject subject;
 
 	public SubjectRole() {
 	}
@@ -59,12 +59,12 @@ public class SubjectRole implements Serializable, OpenInfraModelObject {
 		this.roleBean = roleBean;
 	}
 
-	public Subject getUserBean() {
-		return this.userBean;
+	public Subject getSubject() {
+		return this.subject;
 	}
 
-	public void setUserBean(Subject userBean) {
-		this.userBean = userBean;
+	public void setSubject(Subject subject) {
+		this.subject = subject;
 	}
 	
 	@Override

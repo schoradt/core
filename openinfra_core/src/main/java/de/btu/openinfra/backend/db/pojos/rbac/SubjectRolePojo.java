@@ -10,7 +10,7 @@ public class SubjectRolePojo extends OpenInfraPojo {
 
 	private RolePojo role;
 
-	private SubjectPojo user;
+	private SubjectPojo subject;
 	
 	public SubjectRolePojo() {}
 	
@@ -26,12 +26,12 @@ public class SubjectRolePojo extends OpenInfraPojo {
 		this.role = role;
 	}
 
-	public SubjectPojo getUser() {
-		return user;
+	public SubjectPojo getSubject() {
+		return subject;
 	}
 
-	public void setUser(SubjectPojo user) {
-		this.user = user;
+	public void setSubject(SubjectPojo subject) {
+		this.subject = subject;
 	}
 	
 	

@@ -15,7 +15,7 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 
 
 /**
- * The persistent class for the user database table.
+ * The persistent class for the subject database table.
  * 
  */
 @Entity
@@ -57,9 +57,9 @@ public class Subject implements Serializable, OpenInfraModelObject {
 	@Column(name="updated_on")
 	private Timestamp updatedOn;
 
-	//bi-directional many-to-one association to UserRole
-	@OneToMany(mappedBy="userBean")
-	private List<SubjectRole> userRoles;
+	//bi-directional many-to-one association to SubjectRole
+	@OneToMany(mappedBy="subject")
+	private List<SubjectRole> subjectRoles;
 
 	public Subject() {
 	}
@@ -170,26 +170,26 @@ public class Subject implements Serializable, OpenInfraModelObject {
 		this.updatedOn = updatedOn;
 	}
 
-	public List<SubjectRole> getUserRoles() {
-		return this.userRoles;
+	public List<SubjectRole> getSubjectRoles() {
+		return this.subjectRoles;
 	}
 
-	public void setUserRoles(List<SubjectRole> userRoles) {
-		this.userRoles = userRoles;
+	public void setSubjectRoles(List<SubjectRole> subjectRoles) {
+		this.subjectRoles = subjectRoles;
 	}
 
-	public SubjectRole addUserRole(SubjectRole userRole) {
-		getUserRoles().add(userRole);
-		userRole.setUserBean(this);
+	public SubjectRole addSubjectRole(SubjectRole subjectRole) {
+		getSubjectRoles().add(subjectRole);
+		subjectRole.setSubject(this);
 
-		return userRole;
+		return subjectRole;
 	}
 
-	public SubjectRole removeUserRole(SubjectRole userRole) {
-		getUserRoles().remove(userRole);
-		userRole.setUserBean(null);
+	public SubjectRole removeSubjectRole(SubjectRole subjectRole) {
+		getSubjectRoles().remove(subjectRole);
+		subjectRole.setSubject(null);
 
-		return userRole;
+		return subjectRole;
 	}
 	
 	@Override
