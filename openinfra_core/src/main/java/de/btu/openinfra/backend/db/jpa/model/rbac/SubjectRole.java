@@ -18,9 +18,9 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
  * 
  */
 @Entity
-@Table(name="user_roles")
-@NamedQuery(name="UserRole.findAll", query="SELECT u FROM UserRole u")
-public class UserRole implements Serializable, OpenInfraModelObject {
+@Table(name="subject_roles")
+@NamedQuery(name="SubjectRole.findAll", query="SELECT s FROM Subject s")
+public class SubjectRole implements Serializable, OpenInfraModelObject {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -36,9 +36,9 @@ public class UserRole implements Serializable, OpenInfraModelObject {
 	//bi-directional many-to-one association to User
 	@ManyToOne
 	@JoinColumn(name="user")
-	private User userBean;
+	private Subject userBean;
 
-	public UserRole() {
+	public SubjectRole() {
 	}
 
 	@Override
@@ -59,11 +59,11 @@ public class UserRole implements Serializable, OpenInfraModelObject {
 		this.roleBean = roleBean;
 	}
 
-	public User getUserBean() {
+	public Subject getUserBean() {
 		return this.userBean;
 	}
 
-	public void setUserBean(User userBean) {
+	public void setUserBean(Subject userBean) {
 		this.userBean = userBean;
 	}
 	

@@ -1,23 +1,42 @@
-package de.btu.openinfra.backend.db.pojos.rbac;
+package de.btu.openinfra.backend.db.jpa.model.rbac;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Locale;
+import java.util.UUID;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
-import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 
-@XmlRootElement
-public class UserPojo extends OpenInfraPojo {
 
+/**
+ * The persistent class for the user database table.
+ * 
+ */
+@Entity
+@NamedQuery(name="Subject.findAll", query="SELECT s FROM Subject s")
+public class Subject implements Serializable, OpenInfraModelObject {
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	private UUID id;
+	
+	private Integer xmin;
+
+	@Column(name="created_on")
 	private Timestamp createdOn;
 
-	private Locale defaultLanguage;
+	@Column(name="default_language")
+	private String defaultLanguage;
 
 	private String description;
 
+	@Column(name="last_login_on")
 	private Timestamp lastLoginOn;
 
 	private String login;
@@ -28,18 +47,31 @@ public class UserPojo extends OpenInfraPojo {
 
 	private String password;
 
+	@Column(name="password_created_on")
 	private Timestamp passwordCreatedOn;
+
+	private UUID salt;
 
 	private Integer status;
 
+	@Column(name="updated_on")
 	private Timestamp updatedOn;
-	
-	private List<RolePojo> roles;
-	
-	public UserPojo() {}
-	
-	public UserPojo(OpenInfraModelObject modelObject) {
-		super(modelObject);
+
+	//bi-directional many-to-one association to UserRole
+	@OneToMany(mappedBy="userBean")
+	private List<SubjectRole> userRoles;
+
+	public Subject() {
+	}
+
+	@Override
+	public UUID getId() {
+		return this.id;
+	}
+
+	@Override
+	public void setId(UUID id) {
+		this.id = id;
 	}
 
 	public Timestamp getCreatedOn() {
@@ -50,11 +82,11 @@ public class UserPojo extends OpenInfraPojo {
 		this.createdOn = createdOn;
 	}
 
-	public Locale getDefaultLanguage() {
+	public String getDefaultLanguage() {
 		return this.defaultLanguage;
 	}
 
-	public void setDefaultLanguage(Locale defaultLanguage) {
+	public void setDefaultLanguage(String defaultLanguage) {
 		this.defaultLanguage = defaultLanguage;
 	}
 
@@ -114,6 +146,14 @@ public class UserPojo extends OpenInfraPojo {
 		this.passwordCreatedOn = passwordCreatedOn;
 	}
 
+	public UUID getSalt() {
+		return this.salt;
+	}
+
+	public void setSalt(UUID salt) {
+		this.salt = salt;
+	}
+
 	public Integer getStatus() {
 		return this.status;
 	}
@@ -130,12 +170,31 @@ public class UserPojo extends OpenInfraPojo {
 		this.updatedOn = updatedOn;
 	}
 
-	public List<RolePojo> getRoles() {
-		return roles;
+	public List<SubjectRole> getUserRoles() {
+		return this.userRoles;
 	}
 
-	public void setRoles(List<RolePojo> roles) {
-		this.roles = roles;
+	public void setUserRoles(List<SubjectRole> userRoles) {
+		this.userRoles = userRoles;
+	}
+
+	public SubjectRole addUserRole(SubjectRole userRole) {
+		getUserRoles().add(userRole);
+		userRole.setUserBean(this);
+
+		return userRole;
+	}
+
+	public SubjectRole removeUserRole(SubjectRole userRole) {
+		getUserRoles().remove(userRole);
+		userRole.setUserBean(null);
+
+		return userRole;
+	}
+	
+	@Override
+	public Integer getXmin() {
+		return xmin;
 	}
 
 }

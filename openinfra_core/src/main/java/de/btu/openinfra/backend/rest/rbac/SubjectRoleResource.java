@@ -12,25 +12,24 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
-import de.btu.openinfra.backend.db.daos.rbac.UserDao;
-import de.btu.openinfra.backend.db.pojos.rbac.UserPojo;
+import de.btu.openinfra.backend.db.daos.rbac.SubjectRoleDao;
+import de.btu.openinfra.backend.db.pojos.rbac.SubjectRolePojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
-
-@Path("/rbac/users")
+@Path("/rbac/subjectroles")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET,
 	MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
 	+ OpenInfraResponseBuilder.UTF8_CHARSET})
 @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-public class UserResource {
-
+public class SubjectRoleResource {
+	
 	@GET
-	public List<UserPojo> get(
+	public List<SubjectRolePojo> get(
 			@QueryParam("language") String language,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
-		return new UserDao().read(
+		return new SubjectRoleDao().read(
 						PtLocaleDao.forLanguageTag(language),
 						offset,
 						size);
@@ -38,10 +37,10 @@ public class UserResource {
 	
 	@GET
 	@Path("{id}")
-	public UserPojo get(
+	public SubjectRolePojo get(
 			@QueryParam("language") String language,
 			@PathParam("id") UUID uuid) {
-		return new UserDao().read(
+		return new SubjectRoleDao().read(
 				PtLocaleDao.forLanguageTag(language),
 				uuid);
 	}

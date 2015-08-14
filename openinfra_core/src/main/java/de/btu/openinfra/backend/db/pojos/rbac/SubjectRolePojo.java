@@ -6,15 +6,15 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 
 @XmlRootElement
-public class UserRolePojo extends OpenInfraPojo {
+public class SubjectRolePojo extends OpenInfraPojo {
 
 	private RolePojo role;
 
-	private UserPojo user;
+	private SubjectPojo user;
 	
-	public UserRolePojo() {}
+	public SubjectRolePojo() {}
 	
-	public UserRolePojo(OpenInfraModelObject modelObject) {
+	public SubjectRolePojo(OpenInfraModelObject modelObject) {
 		super(modelObject);
 	}
 
@@ -26,11 +26,11 @@ public class UserRolePojo extends OpenInfraPojo {
 		this.role = role;
 	}
 
-	public UserPojo getUser() {
+	public SubjectPojo getUser() {
 		return user;
 	}
 
-	public void setUser(UserPojo user) {
+	public void setUser(SubjectPojo user) {
 		this.user = user;
 	}
 	

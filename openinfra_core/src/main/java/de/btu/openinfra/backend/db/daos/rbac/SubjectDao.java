@@ -8,10 +8,10 @@ import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
-import de.btu.openinfra.backend.db.jpa.model.rbac.User;
-import de.btu.openinfra.backend.db.jpa.model.rbac.UserRole;
+import de.btu.openinfra.backend.db.jpa.model.rbac.Subject;
+import de.btu.openinfra.backend.db.jpa.model.rbac.SubjectRole;
 import de.btu.openinfra.backend.db.pojos.rbac.RolePojo;
-import de.btu.openinfra.backend.db.pojos.rbac.UserPojo;
+import de.btu.openinfra.backend.db.pojos.rbac.SubjectPojo;
 
 /**
  * This is the DAO class for users. In this case the map to model method skips
@@ -20,15 +20,15 @@ import de.btu.openinfra.backend.db.pojos.rbac.UserPojo;
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
  */
-public class UserDao extends OpenInfraDao<UserPojo, User> {
+public class SubjectDao extends OpenInfraDao<SubjectPojo, Subject> {
 
-	public UserDao() {
-		super(null, OpenInfraSchemas.RBAC, User.class);
+	public SubjectDao() {
+		super(null, OpenInfraSchemas.RBAC, Subject.class);
 	}
 
 	@Override
-	public UserPojo mapToPojo(Locale locale, User modelObject) {
-		UserPojo pojo = new UserPojo(modelObject);
+	public SubjectPojo mapToPojo(Locale locale, Subject modelObject) {
+		SubjectPojo pojo = new SubjectPojo(modelObject);
 		pojo.setCreatedOn(modelObject.getCreatedOn());
 		pojo.setDefaultLanguage(PtLocaleDao.forLanguageTag(
 				modelObject.getDefaultLanguage()));
@@ -42,8 +42,8 @@ public class UserDao extends OpenInfraDao<UserPojo, User> {
 		pojo.setUpdatedOn(modelObject.getUpdatedOn());
 		
 		List<RolePojo> roles = new LinkedList<RolePojo>();
-		UserRoleDao dao = new UserRoleDao();
-		for(UserRole ur : modelObject.getUserRoles()) {
+		SubjectRoleDao dao = new SubjectRoleDao();
+		for(SubjectRole ur : modelObject.getUserRoles()) {
 			roles.add(dao.mapToPojo(locale, ur).getRole());
 		}
 		
@@ -52,7 +52,7 @@ public class UserDao extends OpenInfraDao<UserPojo, User> {
 	}
 
 	@Override
-	public MappingResult<User> mapToModel(UserPojo pojoObject, User modelObject) {
+	public MappingResult<Subject> mapToModel(SubjectPojo pojoObject, Subject modelObject) {
 		// TODO Auto-generated method stub
 		return null;
 	}

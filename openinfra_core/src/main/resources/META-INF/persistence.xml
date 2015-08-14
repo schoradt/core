@@ -56,7 +56,7 @@
 		<class>de.btu.openinfra.backend.db.jpa.model.rbac.Permission</class>
 		<class>de.btu.openinfra.backend.db.jpa.model.rbac.Role</class>
 		<class>de.btu.openinfra.backend.db.jpa.model.rbac.RolePermission</class>
-		<class>de.btu.openinfra.backend.db.jpa.model.rbac.User</class>
-		<class>de.btu.openinfra.backend.db.jpa.model.rbac.UserRole</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.rbac.Subject</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.rbac.SubjectRole</class>
 	</persistence-unit>
 </persistence>
