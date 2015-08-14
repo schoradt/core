@@ -10,7 +10,7 @@ import de.btu.openinfra.backend.db.pojos.rbac.PermissionPojo;
 
 public class PermissionDao extends OpenInfraDao<PermissionPojo, Permission> {
 
-	protected PermissionDao() {
+	public PermissionDao() {
 		super(null, OpenInfraSchemas.RBAC, Permission.class);
 	}
 

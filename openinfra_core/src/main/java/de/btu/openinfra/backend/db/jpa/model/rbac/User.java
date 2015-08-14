@@ -50,7 +50,7 @@ public class User implements Serializable, OpenInfraModelObject {
 	@Column(name="password_created_on")
 	private Timestamp passwordCreatedOn;
 
-	private Object salt;
+	private UUID salt;
 
 	private Integer status;
 
@@ -146,11 +146,11 @@ public class User implements Serializable, OpenInfraModelObject {
 		this.passwordCreatedOn = passwordCreatedOn;
 	}
 
-	public Object getSalt() {
+	public UUID getSalt() {
 		return this.salt;
 	}
 
-	public void setSalt(Object salt) {
+	public void setSalt(UUID salt) {
 		this.salt = salt;
 	}
 

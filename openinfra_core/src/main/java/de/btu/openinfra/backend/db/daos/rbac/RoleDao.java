@@ -10,7 +10,7 @@ import de.btu.openinfra.backend.db.pojos.rbac.RolePojo;
 
 public class RoleDao extends OpenInfraDao<RolePojo, Role> {
 
-	protected RoleDao() {
+	public RoleDao() {
 		super(null, OpenInfraSchemas.RBAC, Role.class);
 	}
 

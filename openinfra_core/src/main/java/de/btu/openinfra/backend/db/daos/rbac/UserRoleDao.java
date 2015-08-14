@@ -11,7 +11,7 @@ import de.btu.openinfra.backend.db.pojos.rbac.UserRolePojo;
 
 public class UserRoleDao extends OpenInfraDao<UserRolePojo, UserRole> {
 
-	protected UserRoleDao() {
+	public UserRoleDao() {
 		super(null, OpenInfraSchemas.RBAC, UserRole.class);
 	}
 

@@ -11,7 +11,7 @@ import de.btu.openinfra.backend.db.pojos.rbac.RolePermissionPojo;
 public class RolePermissionDao extends 
 	OpenInfraDao<RolePermissionPojo, RolePermission> {
 
-	protected RolePermissionDao() {
+	public RolePermissionDao() {
 		super(null, OpenInfraSchemas.RBAC, RolePermission.class);
 	}
 

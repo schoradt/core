@@ -22,7 +22,7 @@ import de.btu.openinfra.backend.db.pojos.rbac.UserPojo;
  */
 public class UserDao extends OpenInfraDao<UserPojo, User> {
 
-	protected UserDao() {
+	public UserDao() {
 		super(null, OpenInfraSchemas.RBAC, User.class);
 	}
 
