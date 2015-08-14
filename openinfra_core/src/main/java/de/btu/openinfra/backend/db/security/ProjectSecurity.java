@@ -7,7 +7,7 @@ import java.util.UUID;
 
 import org.apache.shiro.authz.UnauthorizedException;
 
-import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.ProjectDao;
 import de.btu.openinfra.backend.db.jpa.model.Project;
 import de.btu.openinfra.backend.db.pojos.ProjectPojo;

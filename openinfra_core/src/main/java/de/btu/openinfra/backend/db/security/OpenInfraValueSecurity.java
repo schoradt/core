@@ -5,8 +5,8 @@ import java.util.Locale;
 import java.util.UUID;
 
 import de.btu.openinfra.backend.db.OpenInfraOrderBy;
+import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.OpenInfraSortOrder;
-import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraValueDao;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;

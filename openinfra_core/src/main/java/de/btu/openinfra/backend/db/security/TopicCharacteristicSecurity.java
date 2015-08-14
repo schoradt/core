@@ -7,7 +7,7 @@ import java.util.UUID;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
-import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.TopicCharacteristicDao;
 import de.btu.openinfra.backend.db.jpa.model.Project;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;

@@ -11,9 +11,9 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 
 import de.btu.openinfra.backend.db.OpenInfraOrderByEnum;
+import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
-import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 
@@ -102,6 +102,9 @@ public abstract class OpenInfraSecurity<
 			break;
 
 		case META_DATA:
+			break;
+			
+		case RBAC:
 			break;
 			
 		case SYSTEM:
