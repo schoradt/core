@@ -21,7 +21,7 @@ import de.btu.openinfra.backend.db.daos.TopicCharacteristicDao;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupToTopicCharacteristicPojo;
 import de.btu.openinfra.backend.db.pojos.RelationshipTypeToTopicCharacteristicPojo;
 import de.btu.openinfra.backend.db.pojos.TopicCharacteristicPojo;
-import de.btu.openinfra.backend.db.security.TopicCharacteristicSecurity;
+import de.btu.openinfra.backend.db.rbac.TopicCharacteristicSecurity;
 
 @Path(OpenInfraResponseBuilder.REST_URI + "/topiccharacteristics")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY

@@ -1,4 +1,4 @@
-package de.btu.openinfra.backend.db.security;
+package de.btu.openinfra.backend.db.rbac;
 
 import java.util.List;
 import java.util.Locale;

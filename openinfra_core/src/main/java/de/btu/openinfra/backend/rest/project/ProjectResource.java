@@ -19,7 +19,7 @@ import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.ProjectDao;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.ProjectPojo;
-import de.btu.openinfra.backend.db.security.ProjectSecurity;
+import de.btu.openinfra.backend.db.rbac.ProjectSecurity;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
 /**
