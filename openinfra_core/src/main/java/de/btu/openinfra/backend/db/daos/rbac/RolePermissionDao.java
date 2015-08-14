@@ -1,26 +1,40 @@
 package de.btu.openinfra.backend.db.daos.rbac;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Locale;
 
-import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
+import de.btu.openinfra.backend.db.MappingResult;
+import de.btu.openinfra.backend.db.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.daos.OpenInfraDao;
+import de.btu.openinfra.backend.db.jpa.model.rbac.RolePermission;
+import de.btu.openinfra.backend.db.pojos.rbac.RolePermissionPojo;
 
-@XmlRootElement
-public class RolePermissionDao extends OpenInfraPojo {
+public class RolePermissionDao extends 
+	OpenInfraDao<RolePermissionPojo, RolePermission> {
 
-	private RoleDao role;
-	private PermissionDao permission;
-	
-	public RoleDao getRole() {
-		return role;
+	protected RolePermissionDao() {
+		super(null, OpenInfraSchemas.RBAC, RolePermission.class);
 	}
-	public void setRole(RoleDao role) {
-		this.role = role;
+
+	@Override
+	public RolePermissionPojo mapToPojo(
+			Locale locale,
+			RolePermission modelObject) {
+		RolePermissionPojo pojo = new RolePermissionPojo(modelObject);
+		pojo.setPermission(
+				new PermissionDao().mapToPojo(
+						locale, 
+						modelObject.getPermissionBean()));
+		pojo.setRole(new RoleDao().mapToPojo(
+				locale, 
+				modelObject.getRoleBean()));
+		return pojo;
 	}
-	public PermissionDao getPermission() {
-		return permission;
-	}
-	public void setPermission(PermissionDao permission) {
-		this.permission = permission;
+
+	@Override
+	public MappingResult<RolePermission> mapToModel(
+			RolePermissionPojo pojoObject, RolePermission modelObject) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

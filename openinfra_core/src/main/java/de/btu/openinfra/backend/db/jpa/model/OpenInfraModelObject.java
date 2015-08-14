@@ -13,8 +13,25 @@ import java.util.UUID;
  */
 public interface OpenInfraModelObject {
 
+	/**
+	 * This method represents the UUID of the current object.
+	 * @param id UUID of the current project
+	 */
 	public void setId(UUID id);
+	
+	/**
+	 * This method represents the UUID of the current object.
+	 * @return UUID of the current project
+	 */
 	public UUID getId();
+	
+	/**
+	 * The xmin value is part of a PostgreSQL system column and defines a
+	 * transaction id as integer. The integer value represents the last 
+	 * transaction id and might be used to detect database changes. 
+	 *  
+	 * @return transaction id as integer
+	 */
 	public Integer getXmin();
 
 }

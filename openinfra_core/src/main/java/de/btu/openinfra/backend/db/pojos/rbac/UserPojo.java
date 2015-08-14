@@ -1,10 +1,12 @@
 package de.btu.openinfra.backend.db.pojos.rbac;
 
 import java.sql.Timestamp;
-import java.util.UUID;
+import java.util.List;
+import java.util.Locale;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 
 @XmlRootElement
@@ -12,7 +14,7 @@ public class UserPojo extends OpenInfraPojo {
 
 	private Timestamp createdOn;
 
-	private String defaultLanguage;
+	private Locale defaultLanguage;
 
 	private String description;
 
@@ -28,11 +30,17 @@ public class UserPojo extends OpenInfraPojo {
 
 	private Timestamp passwordCreatedOn;
 
-	private UUID salt;
-
 	private Integer status;
 
 	private Timestamp updatedOn;
+	
+	private List<RolePojo> roles;
+	
+	public UserPojo() {}
+	
+	public UserPojo(OpenInfraModelObject modelObject) {
+		super(modelObject);
+	}
 
 	public Timestamp getCreatedOn() {
 		return this.createdOn;
@@ -42,11 +50,11 @@ public class UserPojo extends OpenInfraPojo {
 		this.createdOn = createdOn;
 	}
 
-	public String getDefaultLanguage() {
+	public Locale getDefaultLanguage() {
 		return this.defaultLanguage;
 	}
 
-	public void setDefaultLanguage(String defaultLanguage) {
+	public void setDefaultLanguage(Locale defaultLanguage) {
 		this.defaultLanguage = defaultLanguage;
 	}
 
@@ -106,14 +114,6 @@ public class UserPojo extends OpenInfraPojo {
 		this.passwordCreatedOn = passwordCreatedOn;
 	}
 
-	public UUID getSalt() {
-		return this.salt;
-	}
-
-	public void setSalt(UUID salt) {
-		this.salt = salt;
-	}
-
 	public Integer getStatus() {
 		return this.status;
 	}
@@ -128,6 +128,14 @@ public class UserPojo extends OpenInfraPojo {
 
 	public void setUpdatedOn(Timestamp updatedOn) {
 		this.updatedOn = updatedOn;
+	}
+
+	public List<RolePojo> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<RolePojo> roles) {
+		this.roles = roles;
 	}
 
 }

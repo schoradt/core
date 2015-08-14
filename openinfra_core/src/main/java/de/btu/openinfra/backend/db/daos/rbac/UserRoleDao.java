@@ -1,33 +1,36 @@
 package de.btu.openinfra.backend.db.daos.rbac;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Locale;
 
-import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
+import de.btu.openinfra.backend.db.MappingResult;
+import de.btu.openinfra.backend.db.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.daos.OpenInfraDao;
+import de.btu.openinfra.backend.db.jpa.model.rbac.UserRole;
+import de.btu.openinfra.backend.db.pojos.rbac.UserRolePojo;
 
-@XmlRootElement
-public class UserRoleDao extends OpenInfraPojo {
 
-	private RoleDao role;
+public class UserRoleDao extends OpenInfraDao<UserRolePojo, UserRole> {
 
-	private UserDao user;
-
-	public RoleDao getRole() {
-		return role;
+	protected UserRoleDao() {
+		super(null, OpenInfraSchemas.RBAC, UserRole.class);
 	}
 
-	public void setRole(RoleDao role) {
-		this.role = role;
+	@Override
+	public UserRolePojo mapToPojo(Locale locale, UserRole modelObject) {
+		UserRolePojo pojo = new UserRolePojo(modelObject);
+		pojo.setRole(
+				new RoleDao().mapToPojo(locale, modelObject.getRoleBean()));
+		pojo.setUser(
+				new UserDao().mapToPojo(locale, modelObject.getUserBean()));
+		return pojo;
 	}
 
-	public UserDao getUser() {
-		return user;
+	@Override
+	public MappingResult<UserRole> mapToModel(UserRolePojo pojoObject,
+			UserRole modelObject) {
+		// TODO Auto-generated method stub
+		return null;
 	}
-
-	public void setUser(UserDao user) {
-		this.user = user;
-	}
-	
-	
 
 
 }

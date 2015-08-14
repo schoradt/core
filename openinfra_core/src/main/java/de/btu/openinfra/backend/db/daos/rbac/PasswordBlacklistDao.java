@@ -21,10 +21,13 @@ public class PasswordBlacklistDao extends
 	}
 
 	@Override
-	public PasswordBlacklistPojo mapToPojo(Locale locale,
+	public PasswordBlacklistPojo mapToPojo(
+			Locale locale,
 			PasswordBlacklist modelObject) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		PasswordBlacklistPojo pojo = new PasswordBlacklistPojo(modelObject);
+		pojo.setPassword(modelObject.getPassword());
+		return pojo;
 	}
 
 	@Override

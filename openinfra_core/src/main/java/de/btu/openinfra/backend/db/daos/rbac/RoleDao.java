@@ -1,30 +1,32 @@
 package de.btu.openinfra.backend.db.daos.rbac;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Locale;
 
-import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
+import de.btu.openinfra.backend.db.MappingResult;
+import de.btu.openinfra.backend.db.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.daos.OpenInfraDao;
+import de.btu.openinfra.backend.db.jpa.model.rbac.Role;
+import de.btu.openinfra.backend.db.pojos.rbac.RolePojo;
 
-@XmlRootElement
-public class RoleDao extends OpenInfraPojo {
+public class RoleDao extends OpenInfraDao<RolePojo, Role> {
 
-	private String description;
-
-	private String name;
-
-	public String getDescription() {
-		return this.description;
+	protected RoleDao() {
+		super(null, OpenInfraSchemas.RBAC, Role.class);
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	@Override
+	public RolePojo mapToPojo(Locale locale, Role modelObject) {
+		RolePojo pojo = new RolePojo(modelObject);
+		pojo.setDescription(modelObject.getDescription());
+		pojo.setName(modelObject.getName());
+		return pojo;
 	}
 
-	public String getName() {
-		return this.name;
+	@Override
+	public MappingResult<Role> mapToModel(RolePojo pojoObject, Role modelObject) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
 
 }

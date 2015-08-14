@@ -1,30 +1,32 @@
 package de.btu.openinfra.backend.db.daos.rbac;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Locale;
 
-import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
+import de.btu.openinfra.backend.db.MappingResult;
+import de.btu.openinfra.backend.db.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.daos.OpenInfraDao;
+import de.btu.openinfra.backend.db.jpa.model.rbac.Permission;
+import de.btu.openinfra.backend.db.pojos.rbac.PermissionPojo;
 
-@XmlRootElement
-public class PermissionDao extends OpenInfraPojo {
+public class PermissionDao extends OpenInfraDao<PermissionPojo, Permission> {
 
-	private String description;
-
-	private String permission;
-
-	public String getDescription() {
-		return this.description;
+	protected PermissionDao() {
+		super(null, OpenInfraSchemas.RBAC, Permission.class);
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	@Override
+	public PermissionPojo mapToPojo(Locale locale, Permission modelObject) {
+		PermissionPojo pojo = new PermissionPojo(modelObject);
+		pojo.setDescription(modelObject.getDescription());
+		pojo.setPermission(modelObject.getPermission());
+		return pojo;
 	}
 
-	public String getPermission() {
-		return this.permission;
+	@Override
+	public MappingResult<Permission> mapToModel(PermissionPojo pojoObject,
+			Permission modelObject) {
+		// TODO Auto-generated method stub
+		return null;
 	}
-
-	public void setPermission(String permission) {
-		this.permission = permission;
-	}
-
+	
 }

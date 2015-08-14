@@ -1,133 +1,62 @@
 package de.btu.openinfra.backend.db.daos.rbac;
 
-import java.sql.Timestamp;
-import java.util.UUID;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import de.btu.openinfra.backend.db.MappingResult;
+import de.btu.openinfra.backend.db.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.daos.OpenInfraDao;
+import de.btu.openinfra.backend.db.daos.PtLocaleDao;
+import de.btu.openinfra.backend.db.jpa.model.rbac.User;
+import de.btu.openinfra.backend.db.jpa.model.rbac.UserRole;
+import de.btu.openinfra.backend.db.pojos.rbac.RolePojo;
+import de.btu.openinfra.backend.db.pojos.rbac.UserPojo;
 
-import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
+/**
+ * This is the DAO class for users. In this case the map to model method skips
+ * some values of the model class. This includes the salt string and the 
+ * password sting. These values should not be transferred to the client.
+ * @author <a href="http://www.b-tu.de">BTU</a> DBIS
+ *
+ */
+public class UserDao extends OpenInfraDao<UserPojo, User> {
 
-@XmlRootElement
-public class UserDao extends OpenInfraPojo {
-
-	private Timestamp createdOn;
-
-	private String defaultLanguage;
-
-	private String description;
-
-	private Timestamp lastLoginOn;
-
-	private String login;
-
-	private String mail;
-
-	private String name;
-
-	private String password;
-
-	private Timestamp passwordCreatedOn;
-
-	private UUID salt;
-
-	private Integer status;
-
-	private Timestamp updatedOn;
-
-	public Timestamp getCreatedOn() {
-		return this.createdOn;
+	protected UserDao() {
+		super(null, OpenInfraSchemas.RBAC, User.class);
 	}
 
-	public void setCreatedOn(Timestamp createdOn) {
-		this.createdOn = createdOn;
+	@Override
+	public UserPojo mapToPojo(Locale locale, User modelObject) {
+		UserPojo pojo = new UserPojo(modelObject);
+		pojo.setCreatedOn(modelObject.getCreatedOn());
+		pojo.setDefaultLanguage(PtLocaleDao.forLanguageTag(
+				modelObject.getDefaultLanguage()));
+		pojo.setDescription(modelObject.getDescription());
+		pojo.setLastLoginOn(modelObject.getLastLoginOn());
+		pojo.setLogin(modelObject.getLogin());
+		pojo.setMail(pojo.getMail());
+		pojo.setName(modelObject.getName());
+		pojo.setPasswordCreatedOn(modelObject.getPasswordCreatedOn());
+		pojo.setStatus(modelObject.getStatus());
+		pojo.setUpdatedOn(modelObject.getUpdatedOn());
+		
+		List<RolePojo> roles = new LinkedList<RolePojo>();
+		UserRoleDao dao = new UserRoleDao();
+		for(UserRole ur : modelObject.getUserRoles()) {
+			roles.add(dao.mapToPojo(locale, ur).getRole());
+		}
+		
+		pojo.setRoles(roles);
+		return pojo;
 	}
 
-	public String getDefaultLanguage() {
-		return this.defaultLanguage;
+	@Override
+	public MappingResult<User> mapToModel(UserPojo pojoObject, User modelObject) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	public void setDefaultLanguage(String defaultLanguage) {
-		this.defaultLanguage = defaultLanguage;
-	}
 
-	public String getDescription() {
-		return this.description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public Timestamp getLastLoginOn() {
-		return this.lastLoginOn;
-	}
-
-	public void setLastLoginOn(Timestamp lastLoginOn) {
-		this.lastLoginOn = lastLoginOn;
-	}
-
-	public String getLogin() {
-		return this.login;
-	}
-
-	public void setLogin(String login) {
-		this.login = login;
-	}
-
-	public String getMail() {
-		return this.mail;
-	}
-
-	public void setMail(String mail) {
-		this.mail = mail;
-	}
-
-	public String getName() {
-		return this.name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getPassword() {
-		return this.password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public Timestamp getPasswordCreatedOn() {
-		return this.passwordCreatedOn;
-	}
-
-	public void setPasswordCreatedOn(Timestamp passwordCreatedOn) {
-		this.passwordCreatedOn = passwordCreatedOn;
-	}
-
-	public UUID getSalt() {
-		return this.salt;
-	}
-
-	public void setSalt(UUID salt) {
-		this.salt = salt;
-	}
-
-	public Integer getStatus() {
-		return this.status;
-	}
-
-	public void setStatus(Integer status) {
-		this.status = status;
-	}
-
-	public Timestamp getUpdatedOn() {
-		return this.updatedOn;
-	}
-
-	public void setUpdatedOn(Timestamp updatedOn) {
-		this.updatedOn = updatedOn;
-	}
 
 }
