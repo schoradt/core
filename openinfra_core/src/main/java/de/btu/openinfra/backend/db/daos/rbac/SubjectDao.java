@@ -26,15 +26,21 @@ public class SubjectDao extends OpenInfraDao<SubjectPojo, Subject> {
 		super(null, OpenInfraSchemas.RBAC, Subject.class);
 	}
 	
-	public Subject read(String name) {
-		List<Subject> subjects = em.createNamedQuery(
-				"Subject.findByLogin",
-				Subject.class).setParameter(0, name).getResultList();
-		if(subjects.size() > 0) {
-			System.out.println("true ");
-			return subjects.get(0);
+	public Subject readModel(String login) {
+		try {
+			return em.createNamedQuery(
+					"Subject.findByLogin",
+					Subject.class).setParameter(
+							"login",
+							login).getSingleResult();			
+		} catch(Exception ex) {
+			ex.printStackTrace();
 		}
-		return null;
+		return null;		
+	}
+	
+	public SubjectPojo read(String login) {
+		return mapToPojo(null, readModel(login));
 	}
 
 	@Override

@@ -8,7 +8,7 @@ import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.NamedNativeQuery;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
@@ -20,11 +20,13 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
  * 
  */
 @Entity
-@NamedQuery(name="Subject.findAll", query="SELECT s FROM Subject s")
-@NamedNativeQuery(name="Subject.findByLogin",
-            query="SELECT * "
-                    + "FROM subject "
-                    + "WHERE login = ?")
+@NamedQueries({
+	@NamedQuery(name="Subject.findAll", query="SELECT s FROM Subject s"),
+	@NamedQuery(name="Subject.findByLogin", 
+		query="SELECT s "
+				+ "FROM Subject s "
+				+ "WHERE s.login = :login")
+})
 public class Subject implements Serializable, OpenInfraModelObject {
 	private static final long serialVersionUID = 1L;
 

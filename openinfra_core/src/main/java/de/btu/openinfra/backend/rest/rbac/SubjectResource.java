@@ -29,7 +29,8 @@ public class SubjectResource {
 	public List<SubjectPojo> get(
 			@QueryParam("language") String language,
 			@QueryParam("offset") int offset,
-			@QueryParam("size") int size) {
+			@QueryParam("size") int size,
+			@QueryParam("login") String login) {
 		return new SubjectDao().read(
 						PtLocaleDao.forLanguageTag(language),
 						offset,
@@ -45,5 +46,13 @@ public class SubjectResource {
 				PtLocaleDao.forLanguageTag(language),
 				uuid);
 	}
+	
+	@GET
+	@Path("name")
+	public SubjectPojo getLogin(
+			@QueryParam("login") String login) {
+		return new SubjectDao().read(login);
+	}
+
 
 }
