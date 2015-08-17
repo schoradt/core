@@ -122,7 +122,7 @@ public class ValueListValuesResource {
         UUID uuid = new ValueListValueDao(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
-                        valueListValue);
+                        valueListValue, valueListValueId);
         return OpenInfraResponseBuilder.postResponse(uuid);
     }
 
