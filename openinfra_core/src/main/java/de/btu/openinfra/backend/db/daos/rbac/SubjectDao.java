@@ -25,6 +25,17 @@ public class SubjectDao extends OpenInfraDao<SubjectPojo, Subject> {
 	public SubjectDao() {
 		super(null, OpenInfraSchemas.RBAC, Subject.class);
 	}
+	
+	public SubjectPojo read(String login) {
+		System.out.println("hier " + login);
+		return mapToPojo(
+				null, 
+				(Subject)em.createNativeQuery(
+						"select * from subject where login = ?", 
+						Subject.class).setParameter(
+								1, 
+								login).getSingleResult());
+	}
 
 	@Override
 	public SubjectPojo mapToPojo(Locale locale, Subject modelObject) {
