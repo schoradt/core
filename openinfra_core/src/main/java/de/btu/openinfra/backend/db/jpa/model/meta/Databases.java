@@ -25,6 +25,8 @@ public class Databases implements Serializable, OpenInfraModelObject {
 
 	@Id
 	private UUID id;
+	
+	private Integer xmin;
 
 	private String database;
 
@@ -35,6 +37,7 @@ public class Databases implements Serializable, OpenInfraModelObject {
 	public Databases() {
 	}
 
+	@Override
 	public UUID getId() {
 		return this.id;
 	}
@@ -72,6 +75,11 @@ public class Databases implements Serializable, OpenInfraModelObject {
 		databaseConnection.setDatabaseBean(null);
 
 		return databaseConnection;
+	}
+	
+	@Override
+	public Integer getXmin() {
+		return xmin;
 	}
 
 }

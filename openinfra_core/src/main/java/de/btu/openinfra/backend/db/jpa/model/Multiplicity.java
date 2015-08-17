@@ -25,11 +25,14 @@ import javax.persistence.OneToMany;
         query="SELECT m FROM Multiplicity m")
 })
 public class Multiplicity implements Serializable, OpenInfraModelObject {
+
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	private UUID id;
 
+	private Integer xmin;
+	
 	@Column(name="max_value")
 	private Integer maxValue;
 
@@ -141,6 +144,10 @@ public class Multiplicity implements Serializable, OpenInfraModelObject {
 		relationshipTypeToTopicCharacteristic.setMultiplicityBean(null);
 
 		return relationshipTypeToTopicCharacteristic;
+	}
+	
+	public Integer getXmin() {
+		return xmin;
 	}
 
 }

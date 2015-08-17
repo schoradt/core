@@ -25,6 +25,8 @@ public class Credentials implements Serializable, OpenInfraModelObject {
 
 	@Id
 	private UUID id;
+	
+	private Integer xmin;
 
 	private String password;
 
@@ -37,6 +39,7 @@ public class Credentials implements Serializable, OpenInfraModelObject {
 	public Credentials() {
 	}
 
+	@Override
 	public UUID getId() {
 		return this.id;
 	}
@@ -82,6 +85,11 @@ public class Credentials implements Serializable, OpenInfraModelObject {
 		databaseConnection.setCredential(null);
 
 		return databaseConnection;
+	}
+	
+	@Override
+	public Integer getXmin() {
+		return xmin;
 	}
 
 }

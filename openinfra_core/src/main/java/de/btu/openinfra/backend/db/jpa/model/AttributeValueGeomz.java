@@ -39,6 +39,8 @@ public class AttributeValueGeomz implements Serializable, OpenInfraModelObject {
 
 	@Id
 	private UUID id;
+	
+	private Integer xmin;
 
 	private String geom;
 
@@ -87,6 +89,11 @@ public class AttributeValueGeomz implements Serializable, OpenInfraModelObject {
 
 	public void setTopicInstance(TopicInstance topicInstance) {
 		this.topicInstance = topicInstance;
+	}
+	
+	@Override
+	public Integer getXmin() {
+		return xmin;
 	}
 
 }

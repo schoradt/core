@@ -5,7 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-import de.btu.openinfra.backend.db.daos.MappingResult;
+import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
 import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.meta.Log;
@@ -48,6 +48,7 @@ public class LogDao
             String format = "yyyy-MM-dd'T'HH:mm:ssZ";
             DateFormat df = new SimpleDateFormat(format);
             pojo.setUuid(l.getId());
+            pojo.setTrid(l.getXmin());
             pojo.setUserId(l.getUserId());
             pojo.setUserName(l.getUserName());
             pojo.setCreatedOn(df.format(l.getCreatedOn()).toString()); 
@@ -109,10 +110,22 @@ public class LogDao
     }
     
     /**
-     * Creates an empty LogPojo.
-     * @return an empty LogPojo
+     * Creates an empty log pojo.
+     * @return an empty log pojo
      */
     public LogPojo newLog() {
-        return new LogPojo();
+        return newPojoStatically();
+    }
+    
+    /**
+     * This method implements the method newLog in a static way.
+     * @return an empty log pojo
+     */
+    public static LogPojo newPojoStatically() {
+        LogPojo newLogPojo = new LogPojo();
+        newLogPojo.setLevel(LevelDao.newPojoStatically());
+        newLogPojo.setLogger(LoggerDao.newPojoStatically());
+        
+        return newLogPojo;
     }
 }

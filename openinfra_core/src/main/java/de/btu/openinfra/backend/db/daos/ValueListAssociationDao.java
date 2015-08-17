@@ -3,6 +3,7 @@ package de.btu.openinfra.backend.db.daos;
 import java.util.Locale;
 import java.util.UUID;
 
+import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.jpa.model.ValueList;
 import de.btu.openinfra.backend.db.jpa.model.ValueListXValueList;
 import de.btu.openinfra.backend.db.pojos.ValueListAssociationPojo;
@@ -67,6 +68,7 @@ public class ValueListAssociationDao
 					new ValueListAssociationPojo();
 
 			pojo.setUuid(association.getId());
+			pojo.setTrid(association.getXmin());
 			pojo.setRelationship(ValueListValueDao.mapToPojoStatically(locale,
 					association.getValueListValue()));
 			pojo.setAssociatedValueList(ValueListDao.mapToPojoStatically(locale,

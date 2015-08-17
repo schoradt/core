@@ -3,6 +3,7 @@
 import java.util.Locale;
 import java.util.UUID;
 
+import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.jpa.model.LanguageCode;
 import de.btu.openinfra.backend.db.pojos.LanguageCodePojo;
 
@@ -42,6 +43,7 @@ public class LanguageCodeDao
 	public static LanguageCodePojo mapToPojoStatically(LanguageCode lc) {
 		LanguageCodePojo pojo = new LanguageCodePojo();
 		pojo.setUuid(lc.getId());
+		pojo.setTrid(lc.getXmin());
 		pojo.setLanguageCode(lc.getLanguageCode());
 		return pojo;
 	}

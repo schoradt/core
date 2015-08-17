@@ -15,5 +15,6 @@ public interface OpenInfraModelObject {
 
 	public void setId(UUID id);
 	public UUID getId();
+	public Integer getXmin();
 
 }

@@ -43,6 +43,8 @@ public class PtLocale implements Serializable, OpenInfraModelObject {
 
 	@Id
 	private UUID id;
+	
+	private Integer xmin;
 
 	//bi-directional many-to-one association to LocalizedCharacterString
 	@OneToMany(mappedBy="ptLocale")
@@ -120,6 +122,11 @@ public class PtLocale implements Serializable, OpenInfraModelObject {
 
 	public void setLanguageCode(LanguageCode languageCode) {
 		this.languageCode = languageCode;
+	}
+	
+	@Override
+	public Integer getXmin() {
+		return xmin;
 	}
 
 }

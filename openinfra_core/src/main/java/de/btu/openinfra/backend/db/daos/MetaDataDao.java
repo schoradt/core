@@ -3,6 +3,7 @@ package de.btu.openinfra.backend.db.daos;
 import java.util.Locale;
 import java.util.UUID;
 
+import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.jpa.model.MetaData;
 import de.btu.openinfra.backend.db.pojos.MetaDataPojo;
 
@@ -43,6 +44,7 @@ public class MetaDataDao
         if(md != null) {
             MetaDataPojo pojo = new MetaDataPojo();
             pojo.setUuid(md.getId());
+            pojo.setTrid(md.getXmin());
             pojo.setObjectId(md.getObjectId());
             pojo.setTableName(md.getTableName());
             pojo.setPkColumn(md.getPkColumn());

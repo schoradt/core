@@ -3,12 +3,16 @@ package de.btu.openinfra.backend.rest.meta;
 import java.util.List;
 import java.util.UUID;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.meta.ProjectsDao;
@@ -20,7 +24,7 @@ import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
     + OpenInfraResponseBuilder.UTF8_CHARSET,
     MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET})
-public class ProjectsResources {
+public class ProjectsResource {
 
     @GET
     public List<ProjectsPojo> get(
@@ -48,4 +52,36 @@ public class ProjectsResources {
 				OpenInfraSchemas.META_DATA).getCount();
 	}
 
+    @POST
+    public Response create(ProjectsPojo pojo) {
+        UUID id = new ProjectsDao(OpenInfraSchemas.META_DATA).createOrUpdate(
+                        pojo);
+        return OpenInfraResponseBuilder.postResponse(id);
+    }
+    
+    @PUT
+    @Path("{projectsId}")
+    public Response update(
+            @PathParam("projectsId") UUID projectsId,
+            ProjectsPojo pojo) {
+        UUID id = new ProjectsDao(OpenInfraSchemas.META_DATA).createOrUpdate(
+                pojo);
+        return OpenInfraResponseBuilder.putResponse(id);
+    }
+    
+    @DELETE
+    @Path("{projectsId}")
+    public Response delete(@PathParam("projectsId") UUID projectsId) {
+        boolean deleteResult =
+                new ProjectsDao(OpenInfraSchemas.META_DATA).delete(projectsId);
+        return OpenInfraResponseBuilder.deleteResponse(
+                deleteResult,
+                projectsId);
+    }
+    
+    @GET
+    @Path("/new")
+    public ProjectsPojo newProjects() {
+        return new ProjectsDao(OpenInfraSchemas.META_DATA).newProjects();
+    }
 }

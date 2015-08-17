@@ -7,6 +7,7 @@ import javax.persistence.Query;
 
 import org.eclipse.persistence.jpa.JpaQuery;
 
+import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.jpa.model.AttributeTypeToAttributeTypeGroup;
 import de.btu.openinfra.backend.db.jpa.model.AttributeValueGeomz;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
@@ -103,6 +104,7 @@ public class AttributeValueGeomzDao
                 avgz.getAttributeTypeToAttributeTypeGroup().getId());
 		// set the id of the object
 		avgzPojo.setUuid(avgz.getId());
+		avgzPojo.setTrid(avgz.getXmin());
 
 		return avgzPojo;
 	}

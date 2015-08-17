@@ -66,6 +66,8 @@ public class TopicCharacteristic implements Serializable, OpenInfraModelObject {
 
 	@Id
 	private UUID id;
+	
+	private Integer xmin;
 
 	//bi-directional many-to-one association to AttributeTypeGroupToTopicCharacteristic
 	@OneToMany(mappedBy="topicCharacteristic")
@@ -194,6 +196,11 @@ public class TopicCharacteristic implements Serializable, OpenInfraModelObject {
 		topicInstance.setTopicCharacteristic(null);
 
 		return topicInstance;
+	}
+	
+	@Override
+	public Integer getXmin() {
+		return xmin;
 	}
 
 }

@@ -23,6 +23,8 @@ public class AttributeValueDomain implements Serializable, OpenInfraModelObject 
 
 	@Id
 	private UUID id;
+	
+	private Integer xmin;
 
 	//bi-directional many-to-one association to AttributeTypeToAttributeTypeGroup
 	@ManyToOne
@@ -42,6 +44,7 @@ public class AttributeValueDomain implements Serializable, OpenInfraModelObject 
 	public AttributeValueDomain() {
 	}
 
+	@Override
 	public UUID getId() {
 		return this.id;
 	}
@@ -73,6 +76,11 @@ public class AttributeValueDomain implements Serializable, OpenInfraModelObject 
 
 	public void setValueListValue(ValueListValue valueListValue) {
 		this.valueListValue = valueListValue;
+	}
+	
+	@Override
+	public Integer getXmin() {
+		return xmin;
 	}
 
 }

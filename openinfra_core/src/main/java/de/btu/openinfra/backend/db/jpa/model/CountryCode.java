@@ -34,6 +34,8 @@ public class CountryCode implements Serializable, OpenInfraModelObject {
 
 	@Id
 	private UUID id;
+	
+	private Integer xmin;
 
 	@Column(name="country_code")
 	private String countryCode;
@@ -83,6 +85,11 @@ public class CountryCode implements Serializable, OpenInfraModelObject {
 		ptLocale.setCountryCode(null);
 
 		return ptLocale;
+	}
+	
+	@Override
+	public Integer getXmin() {
+		return xmin;
 	}
 
 }

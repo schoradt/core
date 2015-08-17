@@ -25,6 +25,8 @@ public class Ports implements Serializable, OpenInfraModelObject {
 
 	@Id
 	private UUID id;
+	
+	private Integer xmin;
 
 	private Integer port;
 
@@ -35,6 +37,7 @@ public class Ports implements Serializable, OpenInfraModelObject {
 	public Ports() {
 	}
 
+	@Override
 	public UUID getId() {
 		return this.id;
 	}
@@ -72,6 +75,11 @@ public class Ports implements Serializable, OpenInfraModelObject {
 		databaseConnection.setPortBean(null);
 
 		return databaseConnection;
+	}
+	
+	@Override
+	public Integer getXmin() {
+		return xmin;
 	}
 
 }

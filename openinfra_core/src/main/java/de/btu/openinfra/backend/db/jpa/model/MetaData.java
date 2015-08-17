@@ -27,6 +27,8 @@ public class MetaData implements Serializable, OpenInfraModelObject {
 	@Id
     private UUID id;
 	
+	private Integer xmin;
+	
 	@Column(name="object_id")
 	private UUID objectId;
 
@@ -81,6 +83,11 @@ public class MetaData implements Serializable, OpenInfraModelObject {
 
 	public void setTableName(String tableName) {
 		this.tableName = tableName;
+	}
+	
+	@Override
+	public Integer getXmin() {
+		return xmin;
 	}
 
 }

@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import javax.persistence.Query;
 
+import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.jpa.model.AttributeType;
 import de.btu.openinfra.backend.db.jpa.model.AttributeValue;
 import de.btu.openinfra.backend.db.jpa.model.AttributeValueDomain;
@@ -176,6 +177,7 @@ public class AttributeValueDao extends
 					.getAttributeType()
 					.getId());
 			avPojo.setUuid(id);
+			avPojo.setTrid(av.getXmin());
 			avPojo.setAttributeValueType(type);
 			return avPojo;
 

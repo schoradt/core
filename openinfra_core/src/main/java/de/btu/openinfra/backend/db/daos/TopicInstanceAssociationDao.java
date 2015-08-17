@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
+import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstanceXTopicInstance;
 import de.btu.openinfra.backend.db.pojos.TopicInstanceAssociationPojo;
@@ -134,6 +135,7 @@ public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
 		TopicInstanceDao tiDao = new TopicInstanceDao(currentProjectId, schema);
 		TopicInstanceAssociationPojo pojo = new TopicInstanceAssociationPojo();
 		pojo.setUuid(txt.getId());
+		pojo.setTrid(txt.getXmin());
 		pojo.setRelationshipType(
 				RelationshipTypeDao.mapToPojoStatically(
 						locale,

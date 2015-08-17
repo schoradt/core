@@ -1,4 +1,4 @@
-package de.btu.openinfra.backend.db.jpa.converter;
+package de.btu.openinfra.backend.db;
 
 import java.util.UUID;
 

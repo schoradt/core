@@ -44,6 +44,8 @@ public class AttributeTypeXAttributeType implements Serializable,
 
 	@Id
 	private UUID id;
+	
+	private Integer xmin;
 
 	//bi-directional many-to-one association to AttributeType
 	@ManyToOne
@@ -95,6 +97,11 @@ public class AttributeTypeXAttributeType implements Serializable,
 
 	public void setValueListValue(ValueListValue valueListValue) {
 		this.valueListValue = valueListValue;
+	}
+	
+	@Override
+	public Integer getXmin() {
+		return xmin;
 	}
 
 }

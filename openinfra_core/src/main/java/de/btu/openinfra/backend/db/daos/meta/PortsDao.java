@@ -2,7 +2,7 @@ package de.btu.openinfra.backend.db.daos.meta;
 
 import java.util.Locale;
 
-import de.btu.openinfra.backend.db.daos.MappingResult;
+import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
 import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.meta.Ports;
@@ -43,6 +43,7 @@ public class PortsDao
         if (p != null) {
             PortsPojo pojo = new PortsPojo();
             pojo.setUuid(p.getId());
+            pojo.setTrid(p.getXmin());
             pojo.setPort(p.getPort());
             return pojo;
         } else {
@@ -52,8 +53,48 @@ public class PortsDao
 
     @Override
     public MappingResult<Ports> mapToModel(PortsPojo pojo, Ports ports) {
-        // TODO Auto-generated method stub
-        return null;
+        if(pojo != null) {            
+            mapToModelStatically(pojo, ports);
+            return new MappingResult<Ports>(ports.getId(), ports);
+        }
+        else {
+            return null;
+        }
     }
 
+    /**
+     * This method implements the method mapToModel in a static way.
+     * @param pojo the POJO object
+     * @param ports the pre initialized model object
+     * @return return a corresponding JPA model object or null if the pojo
+     * object is null
+     */
+    public static Ports mapToModelStatically(PortsPojo pojo, Ports ports) {
+        Ports resultPorts = null;
+        if(pojo != null) {
+            resultPorts = ports;
+            if(resultPorts == null) {
+                resultPorts = new Ports();
+                resultPorts.setId(pojo.getUuid());
+            }
+            resultPorts.setPort(pojo.getPort());
+        }
+        return resultPorts;
+    }
+    
+    /**
+     * Creates an empty ports pojo.
+     * @return an empty ports pojo
+     */
+    public PortsPojo newPorts() {
+       return newPojoStatically();
+    }
+
+    /**
+     * This method implements the method newPorts in a static way.
+     * @return an empty ports pojo
+     */
+    public static PortsPojo newPojoStatically() {
+        return new PortsPojo();
+    }
 }
