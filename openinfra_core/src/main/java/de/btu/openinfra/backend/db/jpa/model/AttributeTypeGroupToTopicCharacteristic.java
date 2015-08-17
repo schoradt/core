@@ -2,11 +2,9 @@ package de.btu.openinfra.backend.db.jpa.model;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -60,14 +58,9 @@ import javax.persistence.Table;
                     + "WHERE a.topicCharacteristic = :value")
 })
 
-public class AttributeTypeGroupToTopicCharacteristic implements 
-	Serializable, OpenInfraModelObject {
+public class AttributeTypeGroupToTopicCharacteristic
+    extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	@Id
-	private UUID id;
-	
-	private Integer xmin;
 
 	@Column(name="\"order\"")
 	private Integer order;
@@ -92,16 +85,6 @@ public class AttributeTypeGroupToTopicCharacteristic implements
 	private List<AttributeTypeToAttributeTypeGroup> attributeTypeToAttributeTypeGroups;
 
 	public AttributeTypeGroupToTopicCharacteristic() {
-	}
-
-	@Override
-	public UUID getId() {
-		return this.id;
-	}
-
-	@Override
-	public void setId(UUID id) {
-		this.id = id;
 	}
 
 	public Integer getOrder() {
@@ -156,11 +139,6 @@ public class AttributeTypeGroupToTopicCharacteristic implements
 		attributeTypeToAttributeTypeGroup.setAttributeTypeGroupToTopicCharacteristic(null);
 
 		return attributeTypeToAttributeTypeGroup;
-	}
-	
-	@Override
-	public Integer getXmin() {
-		return xmin;
 	}
 
 }

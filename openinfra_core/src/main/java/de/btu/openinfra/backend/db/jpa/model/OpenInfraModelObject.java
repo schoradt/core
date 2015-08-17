@@ -2,19 +2,39 @@ package de.btu.openinfra.backend.db.jpa.model;
 
 import java.util.UUID;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+
 /**
- * This interface is manually added to the set of automatically generated model
- * classes by JPA/EclipseLink. This interface intends to provide a simple
- * solution for providing setter methods for model classes without invoking side
- * effects to the generated classes.
- *
+ * This abstract class is manually added to the set of automatically generated
+ * model classes by JPA/EclipseLink. This class provides attributes and
+ * methods equal to all generated subclasses. The database tables of the
+ * generated subclasses must have the specified attributes (same name)
+ * as columns. 
+ * 
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
  */
-public interface OpenInfraModelObject {
+@MappedSuperclass
+public abstract class OpenInfraModelObject {
 
-	public void setId(UUID id);
-	public UUID getId();
-	public Integer getXmin();
+    @Id
+    private UUID id;
+
+    @Column(insertable = false)
+    private Integer xmin;
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public Integer getXmin() {
+        return xmin;
+    }
 
 }

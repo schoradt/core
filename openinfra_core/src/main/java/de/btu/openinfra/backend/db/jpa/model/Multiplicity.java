@@ -2,11 +2,9 @@ package de.btu.openinfra.backend.db.jpa.model;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -24,14 +22,9 @@ import javax.persistence.OneToMany;
     @NamedQuery(name="Multiplicity.findAll",
         query="SELECT m FROM Multiplicity m")
 })
-public class Multiplicity implements Serializable, OpenInfraModelObject {
+public class Multiplicity extends OpenInfraModelObject implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
-	@Id
-	private UUID id;
-
-	private Integer xmin;
 	
 	@Column(name="max_value")
 	private Integer maxValue;
@@ -52,16 +45,6 @@ public class Multiplicity implements Serializable, OpenInfraModelObject {
 	private List<RelationshipTypeToTopicCharacteristic> relationshipTypeToTopicCharacteristics;
 
 	public Multiplicity() {
-	}
-
-	@Override
-    public UUID getId() {
-		return this.id;
-	}
-
-	@Override
-	public void setId(UUID id) {
-		this.id = id;
 	}
 
 	public Integer getMaxValue() {
@@ -144,10 +127,6 @@ public class Multiplicity implements Serializable, OpenInfraModelObject {
 		relationshipTypeToTopicCharacteristic.setMultiplicityBean(null);
 
 		return relationshipTypeToTopicCharacteristic;
-	}
-	
-	public Integer getXmin() {
-		return xmin;
 	}
 
 }

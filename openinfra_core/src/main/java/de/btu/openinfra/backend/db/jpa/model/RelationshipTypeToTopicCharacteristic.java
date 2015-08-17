@@ -1,10 +1,8 @@
 package de.btu.openinfra.backend.db.jpa.model;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -50,14 +48,9 @@ import javax.persistence.Table;
 					+ "WHERE r.relationshipType = :value AND "
 					+ "r.topicCharacteristic = :value2"),
 })
-public class RelationshipTypeToTopicCharacteristic implements Serializable,
-	OpenInfraModelObject {
+public class RelationshipTypeToTopicCharacteristic extends OpenInfraModelObject
+    implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	@Id
-	private UUID id;
-	
-	private Integer xmin;
 
 	//bi-directional many-to-one association to Multiplicity
 	@ManyToOne
@@ -75,16 +68,6 @@ public class RelationshipTypeToTopicCharacteristic implements Serializable,
 	private TopicCharacteristic topicCharacteristic;
 
 	public RelationshipTypeToTopicCharacteristic() {
-	}
-
-	@Override
-	public UUID getId() {
-		return this.id;
-	}
-
-	@Override
-	public void setId(UUID id) {
-		this.id = id;
 	}
 
 	public Multiplicity getMultiplicityBean() {
@@ -109,11 +92,6 @@ public class RelationshipTypeToTopicCharacteristic implements Serializable,
 
 	public void setTopicCharacteristic(TopicCharacteristic topicCharacteristic) {
 		this.topicCharacteristic = topicCharacteristic;
-	}
-	
-	@Override
-	public Integer getXmin() {
-		return xmin;
 	}
 
 }

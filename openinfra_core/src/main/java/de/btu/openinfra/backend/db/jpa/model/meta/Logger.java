@@ -2,10 +2,8 @@ package de.btu.openinfra.backend.db.jpa.model.meta;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.UUID;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -20,13 +18,8 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 @Entity
 @Table(schema="meta_data")
 @NamedQuery(name="Logger.findAll", query="SELECT l FROM Logger l")
-public class Logger implements Serializable, OpenInfraModelObject {
+public class Logger extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	@Id
-	private UUID id;
-	
-	private Integer xmin;
 
 	private String logger;
 
@@ -35,16 +28,6 @@ public class Logger implements Serializable, OpenInfraModelObject {
 	private List<Log> logs;
 
 	public Logger() {
-	}
-
-	@Override
-	public UUID getId() {
-		return this.id;
-	}
-
-	@Override
-	public void setId(UUID id) {
-		this.id = id;
 	}
 
 	public String getLogger() {
@@ -75,11 +58,6 @@ public class Logger implements Serializable, OpenInfraModelObject {
 		log.setLoggerBean(null);
 
 		return log;
-	}
-	
-	@Override
-	public Integer getXmin() {
-		return xmin;
 	}
 
 }

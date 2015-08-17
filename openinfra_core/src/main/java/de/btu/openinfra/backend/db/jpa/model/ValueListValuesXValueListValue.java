@@ -1,10 +1,8 @@
 package de.btu.openinfra.backend.db.jpa.model;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -35,14 +33,9 @@ import javax.persistence.Table;
 			+ "WHERE v.valueListValue2 = :value AND "
 			+ "v.valueListValue3 = :value2"),
 })
-public class ValueListValuesXValueListValue implements Serializable,
-	OpenInfraModelObject {
+public class ValueListValuesXValueListValue extends OpenInfraModelObject
+    implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	@Id
-	private UUID id;
-	
-	private Integer xmin;
 
 	//bi-directional many-to-one association to ValueListValue
 	@ManyToOne
@@ -60,16 +53,6 @@ public class ValueListValuesXValueListValue implements Serializable,
 	private ValueListValue valueListValue3;
 
 	public ValueListValuesXValueListValue() {
-	}
-
-	@Override
-	public UUID getId() {
-		return this.id;
-	}
-
-	@Override
-	public void setId(UUID id) {
-		this.id = id;
 	}
 
 	public ValueListValue getValueListValue1() {
@@ -94,11 +77,6 @@ public class ValueListValuesXValueListValue implements Serializable,
 
 	public void setValueListValue3(ValueListValue valueListValue3) {
 		this.valueListValue3 = valueListValue3;
-	}
-	
-	@Override
-	public Integer getXmin() {
-		return xmin;
 	}
 
 }
