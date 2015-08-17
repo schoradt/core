@@ -25,8 +25,12 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 	@NamedQuery(name="Subject.findByLogin", 
 		query="SELECT s "
 				+ "FROM Subject s "
-				+ "WHERE s.login = :value")
+				+ "WHERE s.login = :login")
 })
+//@NamedNativeQueries({
+//	@NamedNativeQuery(name="Subject.findByLogin", 
+//			query="select *,xmin from subject where login = ?")
+//})
 public class Subject implements Serializable, OpenInfraModelObject {
 	private static final long serialVersionUID = 1L;
 

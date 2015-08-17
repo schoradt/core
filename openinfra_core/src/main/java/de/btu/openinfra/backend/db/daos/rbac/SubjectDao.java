@@ -27,13 +27,12 @@ public class SubjectDao extends OpenInfraDao<SubjectPojo, Subject> {
 	}
 	
 	public SubjectPojo read(String login) {
-		System.out.println("hier " + login);
 		return mapToPojo(
 				null, 
-				(Subject)em.createNativeQuery(
-						"select * from subject where login = ?", 
+				em.createNamedQuery(
+						"Subject.findByLogin", 
 						Subject.class).setParameter(
-								1, 
+								"login", 
 								login).getSingleResult());
 	}
 
