@@ -48,10 +48,9 @@ public class SubjectResource {
 	}
 	
 	@GET
-	@Path("test")
+	@Path("name")
 	public SubjectPojo getLogin(
 			@QueryParam("login") String login) {
-		System.out.println("da " + login);
 		return new SubjectDao().read(login);
 	}
 
