@@ -1,11 +1,9 @@
 package de.btu.openinfra.backend.db.jpa.model;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
@@ -19,13 +17,9 @@ import javax.persistence.Table;
 @Entity
 @Table(name="attribute_value_value")
 @NamedQuery(name="AttributeValueValue.findAll", query="SELECT a FROM AttributeValueValue a")
-public class AttributeValueValue implements Serializable, OpenInfraModelObject {
+public class AttributeValueValue extends OpenInfraModelObject
+    implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	@Id
-	private UUID id;
-	
-	private Integer xmin;
 
 	//bi-directional many-to-one association to AttributeTypeToAttributeTypeGroup
 	@ManyToOne
@@ -43,16 +37,6 @@ public class AttributeValueValue implements Serializable, OpenInfraModelObject {
 	private TopicInstance topicInstance;
 
 	public AttributeValueValue() {
-	}
-
-	@Override
-	public UUID getId() {
-		return this.id;
-	}
-
-	@Override
-	public void setId(UUID id) {
-		this.id = id;
 	}
 
 	public AttributeTypeToAttributeTypeGroup getAttributeTypeToAttributeTypeGroup() {
@@ -77,11 +61,6 @@ public class AttributeValueValue implements Serializable, OpenInfraModelObject {
 
 	public void setTopicInstance(TopicInstance topicInstance) {
 		this.topicInstance = topicInstance;
-	}
-	
-	@Override
-	public Integer getXmin() {
-		return xmin;
 	}
 
 }

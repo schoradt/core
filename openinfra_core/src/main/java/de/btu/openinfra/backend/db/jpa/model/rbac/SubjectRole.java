@@ -1,10 +1,8 @@
 package de.btu.openinfra.backend.db.jpa.model.rbac;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
@@ -20,13 +18,8 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 @Entity
 @Table(name="subject_roles")
 @NamedQuery(name="SubjectRole.findAll", query="SELECT s FROM SubjectRole s")
-public class SubjectRole implements Serializable, OpenInfraModelObject {
+public class SubjectRole extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	@Id
-	private UUID id;
-	
-	private Integer xmin;
 
 	//bi-directional many-to-one association to Role
 	@ManyToOne
@@ -39,16 +32,6 @@ public class SubjectRole implements Serializable, OpenInfraModelObject {
 	private Subject subject;
 
 	public SubjectRole() {
-	}
-
-	@Override
-	public UUID getId() {
-		return this.id;
-	}
-
-	@Override
-	public void setId(UUID id) {
-		this.id = id;
 	}
 
 	public Role getRoleBean() {
@@ -65,11 +48,6 @@ public class SubjectRole implements Serializable, OpenInfraModelObject {
 
 	public void setSubject(Subject subject) {
 		this.subject = subject;
-	}
-	
-	@Override
-	public Integer getXmin() {
-		return xmin;
 	}
 
 }

@@ -2,11 +2,9 @@ package de.btu.openinfra.backend.db.jpa.model;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -26,13 +24,9 @@ import javax.persistence.Table;
     @NamedQuery(name="CharacterCode.count",
             query="SELECT COUNT(c) FROM CharacterCode c ")
 })
-public class CharacterCode implements Serializable, OpenInfraModelObject {
+public class CharacterCode extends OpenInfraModelObject
+    implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	@Id
-	private UUID id;
-	
-	private Integer xmin;
 
 	@Column(name="character_code")
 	private String characterCode;
@@ -42,16 +36,6 @@ public class CharacterCode implements Serializable, OpenInfraModelObject {
 	private List<PtLocale> ptLocales;
 
 	public CharacterCode() {
-	}
-
-	@Override
-    public UUID getId() {
-		return this.id;
-	}
-
-	@Override
-	public void setId(UUID id) {
-		this.id = id;
 	}
 
 	public String getCharacterCode() {
@@ -82,11 +66,6 @@ public class CharacterCode implements Serializable, OpenInfraModelObject {
 		ptLocale.setCharacterCode(null);
 
 		return ptLocale;
-	}
-	
-	@Override
-	public Integer getXmin() {
-		return xmin;
 	}
 
 }

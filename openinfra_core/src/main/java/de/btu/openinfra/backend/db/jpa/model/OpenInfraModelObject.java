@@ -2,36 +2,39 @@ package de.btu.openinfra.backend.db.jpa.model;
 
 import java.util.UUID;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+
 /**
- * This interface is manually added to the set of automatically generated model
- * classes by JPA/EclipseLink. This interface intends to provide a simple
- * solution for providing setter methods for model classes without invoking side
- * effects to the generated classes.
- *
+ * This abstract class is manually added to the set of automatically generated
+ * model classes by JPA/EclipseLink. This class provides attributes and
+ * methods, which are equal for all generated subclasses. The database tables
+ * of the generated subclasses must have the specified attributes (same name)
+ * as columns.
+ * 
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
  */
-public interface OpenInfraModelObject {
+@MappedSuperclass
+public abstract class OpenInfraModelObject {
 
-	/**
-	 * This method represents the UUID of the current object.
-	 * @param id UUID of the current project
-	 */
-	public void setId(UUID id);
-	
-	/**
-	 * This method represents the UUID of the current object.
-	 * @return UUID of the current project
-	 */
-	public UUID getId();
-	
-	/**
-	 * The xmin value is part of a PostgreSQL system column and defines a
-	 * transaction id as integer. The integer value represents the last 
-	 * transaction id and might be used to detect database changes. 
-	 *  
-	 * @return transaction id as integer
-	 */
-	public Integer getXmin();
+    @Id
+    private UUID id;
+
+    @Column(insertable = false)
+    private Integer xmin;
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public Integer getXmin() {
+        return xmin;
+    }
 
 }

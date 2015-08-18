@@ -2,11 +2,9 @@ package de.btu.openinfra.backend.db.jpa.model.meta;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -31,13 +29,8 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
     @NamedQuery(name="Settings.count",
     	query="SELECT COUNT(s) FROM Settings s")
 })
-public class Settings implements Serializable, OpenInfraModelObject {
+public class Settings extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	@Id
-	private UUID id;
-	
-	private Integer xmin;
 
 	private String value;
 
@@ -54,16 +47,6 @@ public class Settings implements Serializable, OpenInfraModelObject {
 	private Projects project;
 
 	public Settings() {
-	}
-
-	@Override
-	public UUID getId() {
-		return this.id;
-	}
-
-	@Override
-	public void setId(UUID id) {
-		this.id = id;
 	}
 
 	public String getValue() {
@@ -97,10 +80,5 @@ public class Settings implements Serializable, OpenInfraModelObject {
     public void setProject(Projects project) {
         this.project = project;
     }
-    
-	@Override
-	public Integer getXmin() {
-		return xmin;
-	}
 
 }

@@ -1,10 +1,8 @@
 package de.btu.openinfra.backend.db.jpa.model;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
@@ -18,13 +16,9 @@ import javax.persistence.Table;
 @Entity
 @Table(name="attribute_value_domain")
 @NamedQuery(name="AttributeValueDomain.findAll", query="SELECT a FROM AttributeValueDomain a")
-public class AttributeValueDomain implements Serializable, OpenInfraModelObject {
+public class AttributeValueDomain extends OpenInfraModelObject
+    implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	@Id
-	private UUID id;
-	
-	private Integer xmin;
 
 	//bi-directional many-to-one association to AttributeTypeToAttributeTypeGroup
 	@ManyToOne
@@ -42,16 +36,6 @@ public class AttributeValueDomain implements Serializable, OpenInfraModelObject 
 	private ValueListValue valueListValue;
 
 	public AttributeValueDomain() {
-	}
-
-	@Override
-	public UUID getId() {
-		return this.id;
-	}
-
-	@Override
-	public void setId(UUID id) {
-		this.id = id;
 	}
 
 	public AttributeTypeToAttributeTypeGroup getAttributeTypeToAttributeTypeGroup() {
@@ -76,11 +60,6 @@ public class AttributeValueDomain implements Serializable, OpenInfraModelObject 
 
 	public void setValueListValue(ValueListValue valueListValue) {
 		this.valueListValue = valueListValue;
-	}
-	
-	@Override
-	public Integer getXmin() {
-		return xmin;
 	}
 
 }

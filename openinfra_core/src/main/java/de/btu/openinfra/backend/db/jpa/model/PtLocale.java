@@ -2,10 +2,8 @@ package de.btu.openinfra.backend.db.jpa.model;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.UUID;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -38,13 +36,8 @@ import javax.persistence.Table;
             + "FROM PtLocale p "
             + "WHERE p.countryCode IS NULL ")
 })
-public class PtLocale implements Serializable, OpenInfraModelObject {
+public class PtLocale extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	@Id
-	private UUID id;
-	
-	private Integer xmin;
 
 	//bi-directional many-to-one association to LocalizedCharacterString
 	@OneToMany(mappedBy="ptLocale")
@@ -66,16 +59,6 @@ public class PtLocale implements Serializable, OpenInfraModelObject {
 	private LanguageCode languageCode;
 
 	public PtLocale() {
-	}
-
-	@Override
-    public UUID getId() {
-		return this.id;
-	}
-
-	@Override
-	public void setId(UUID id) {
-		this.id = id;
 	}
 
 	public List<LocalizedCharacterString> getLocalizedCharacterStrings() {
@@ -124,9 +107,4 @@ public class PtLocale implements Serializable, OpenInfraModelObject {
 		this.languageCode = languageCode;
 	}
 	
-	@Override
-	public Integer getXmin() {
-		return xmin;
-	}
-
 }
