@@ -50,24 +50,24 @@ public class DatabasesResource {
     public long getCount() {
         return new DatabasesDao(OpenInfraSchemas.META_DATA).getCount();
     }
-    
+
     @POST
     public Response create(DatabasesPojo pojo) {
         UUID id = new DatabasesDao(
                 OpenInfraSchemas.META_DATA).createOrUpdate(pojo);
         return OpenInfraResponseBuilder.postResponse(id);
     }
-    
+
     @PUT
     @Path("{databasesId}")
     public Response update(
             @PathParam("databasesId") UUID databasesId,
             DatabasesPojo pojo) {
         UUID id = new DatabasesDao(
-                OpenInfraSchemas.META_DATA).createOrUpdate(pojo);
+                OpenInfraSchemas.META_DATA).createOrUpdate(pojo, databasesId);
         return OpenInfraResponseBuilder.putResponse(id);
     }
-    
+
     @DELETE
     @Path("{databasesId}")
     public Response delete(@PathParam("databasesId") UUID databasesId) {
@@ -78,11 +78,11 @@ public class DatabasesResource {
                 deleteResult,
                 databasesId);
     }
-    
+
     @GET
     @Path("/new")
     public DatabasesPojo newDatabases() {
         return new DatabasesDao(OpenInfraSchemas.META_DATA).newDatabases();
     }
-    
+
 }

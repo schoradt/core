@@ -50,24 +50,24 @@ public class ServersResource {
     public long getCount() {
         return new ServersDao(OpenInfraSchemas.META_DATA).getCount();
     }
-    
+
     @POST
     public Response create(ServersPojo pojo) {
         UUID id = new ServersDao(
                 OpenInfraSchemas.META_DATA).createOrUpdate(pojo);
         return OpenInfraResponseBuilder.postResponse(id);
     }
-    
+
     @PUT
     @Path("{serversId}")
     public Response update(
             @PathParam("serversId") UUID serversId,
             ServersPojo pojo) {
         UUID id = new ServersDao(
-                OpenInfraSchemas.META_DATA).createOrUpdate(pojo);
+                OpenInfraSchemas.META_DATA).createOrUpdate(pojo, serversId);
         return OpenInfraResponseBuilder.putResponse(id);
     }
-    
+
     @DELETE
     @Path("{serversId}")
     public Response delete(@PathParam("serversId") UUID serversId) {
@@ -78,11 +78,11 @@ public class ServersResource {
                 deleteResult,
                 serversId);
     }
-    
+
     @GET
     @Path("/new")
     public ServersPojo newServers() {
         return new ServersDao(OpenInfraSchemas.META_DATA).newServers();
     }
-    
+
 }
