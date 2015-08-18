@@ -48,24 +48,24 @@ public class LoggerResource {
     public long getCount() {
         return new LoggerDao(OpenInfraSchemas.META_DATA).getCount();
     }
-    
+
     @POST
     public Response create(LoggerPojo pojo) {
         UUID id = new LoggerDao(
                 OpenInfraSchemas.META_DATA).createOrUpdate(pojo);
         return OpenInfraResponseBuilder.postResponse(id);
     }
-    
+
     @PUT
     @Path("{loggerId}")
     public Response update(
             @PathParam("loggerId") UUID loggerId,
             LoggerPojo pojo) {
         UUID id = new LoggerDao(
-                OpenInfraSchemas.META_DATA).createOrUpdate(pojo);
+                OpenInfraSchemas.META_DATA).createOrUpdate(pojo, loggerId);
         return OpenInfraResponseBuilder.putResponse(id);
     }
-    
+
     @DELETE
     @Path("{loggerId}")
     public Response delete(@PathParam("loggerId") UUID loggerId) {
@@ -73,11 +73,11 @@ public class LoggerResource {
                 new LoggerDao(OpenInfraSchemas.META_DATA).delete(loggerId);
         return OpenInfraResponseBuilder.deleteResponse(deleteResult, loggerId);
     }
-    
+
     @GET
     @Path("/new")
     public LoggerPojo newLogger() {
         return new LoggerDao(OpenInfraSchemas.META_DATA).newLogger();
     }
-    
+
 }

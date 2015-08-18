@@ -23,17 +23,7 @@ import javax.persistence.Table;
     @NamedNativeQuery(name="AttributeValueGeom.select",
             query="SELECT %s "
                     + "FROM attribute_value_geom "
-                    + "WHERE id = cast(? as uuid)"),
-    @NamedNativeQuery(name="AttributeValueGeom.insert",
-            query="INSERT INTO attribute_value_geom ("
-                    + "attribute_type_to_attribute_type_group_id, "
-                    + "topic_instance_id, geom) "
-                    + "VALUES (?, ?, %s(?))"),
-    @NamedNativeQuery(name="AttributeValueGeom.update",
-            query="UPDATE TABLE attribute_value_geom SET "
-                    + "attribute_type_to_attribute_type_group_id = ?, "
-                    + "topic_instance_id = ?, "
-                    + "geom = %s(?) WHERE id = ?")
+                    + "WHERE id = cast(? as uuid)")
 })
 public class AttributeValueGeom extends OpenInfraModelObject
     implements Serializable {

@@ -48,22 +48,22 @@ public class LevelResource {
     public long getCount() {
         return new LevelDao(OpenInfraSchemas.META_DATA).getCount();
     }
-    
+
     @POST
     public Response create(LevelPojo pojo) {
         UUID id = new LevelDao(
                 OpenInfraSchemas.META_DATA).createOrUpdate(pojo);
         return OpenInfraResponseBuilder.postResponse(id);
     }
-    
+
     @PUT
     @Path("{levelId}")
     public Response update(@PathParam("levelId") UUID levelId, LevelPojo pojo) {
         UUID id = new LevelDao(
-                OpenInfraSchemas.META_DATA).createOrUpdate(pojo);
+                OpenInfraSchemas.META_DATA).createOrUpdate(pojo, levelId);
         return OpenInfraResponseBuilder.putResponse(id);
     }
-    
+
     @DELETE
     @Path("{levelId}")
     public Response delete(@PathParam("levelId") UUID levelId) {
@@ -71,11 +71,11 @@ public class LevelResource {
                 new LevelDao(OpenInfraSchemas.META_DATA).delete(levelId);
         return OpenInfraResponseBuilder.deleteResponse(deleteResult, levelId);
     }
-    
+
     @GET
     @Path("/new")
     public LevelPojo newLevel() {
         return new LevelDao(OpenInfraSchemas.META_DATA).newLevel();
     }
-    
+
 }

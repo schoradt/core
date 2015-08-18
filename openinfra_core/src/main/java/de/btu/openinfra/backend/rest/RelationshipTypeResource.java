@@ -164,7 +164,7 @@ public class RelationshipTypeResource {
 	    UUID uuid = new RelationshipTypeDao(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
-                        relationshipType);
+                        relationshipType, relationshipTypeId);
         return OpenInfraResponseBuilder.postResponse(uuid);
 	}
 

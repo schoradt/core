@@ -7,7 +7,6 @@ import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Query;
 
 import org.eclipse.persistence.jpa.JpaQuery;
 
@@ -20,8 +19,6 @@ import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
-import de.btu.openinfra.backend.db.pojos.AttributeValueGeomPojo;
-import de.btu.openinfra.backend.db.pojos.AttributeValueGeomzPojo;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 
 /**
@@ -231,50 +228,35 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	 * This function creates a new or updates an existing object in the
 	 * database. The update function depends on the specified language.
 	 *
-	 * @param pojo   the POJO object which should be stored in the database
-	 * @return       the UUID of the newly created or replaced object
+	 * @param pojo    the POJO object which should be stored in the database
+	 * @return        the UUID of the newly created or replaced object
 	 * @throws RuntimeException
 	 */
 	public UUID createOrUpdate(TypePojo pojo)
 			throws RuntimeException {
 
-	    UUID resultId = null;
+	    TypeModel model = createModelObject(pojo.getUuid());
+        // abort if the pojo and the type model is null
+        if (pojo == null || model == null) {
+            return null;
+        }
+
+        // 1. Map the POJO object to a JPA model object
+        MappingResult<TypeModel> result = mapToModel(pojo, model);
+
+        // abort here if the result is null
+        if (result == null) {
+            return null;
+        }
 
 		// 2. Get the transaction and merge (create or replace) the JPA model
 		// object.
 		EntityTransaction et = em.getTransaction();
 		try {
-			et.begin();			
-			switch(modelClass.getSimpleName()) {
-			    // special handling for geometry classes
-			    case "AttributeValueGeom":
-			        // fall through
-			    case "AttributeValueGeomz":
-			        Query geomQuery = createGeomQuery(pojo);
-	                if (geomQuery != null) {
-	                    // execute the query
-	                    geomQuery.executeUpdate();
-	                }
-	                break;
-			    default:
-			        TypeModel model = createModelObject(pojo.getUuid());
-			        // abort if the pojo and the type model is null
-			        if (pojo == null || model == null) {
-			            return null;
-			        }
-
-			        // 1. Map the POJO object to a JPA model object
-			        MappingResult<TypeModel> result = mapToModel(pojo, model);
-
-			        // abort here if the result is null
-			        if (result == null) {
-			            return null;
-			        }
-			        em.merge(result.getModelObject());
-			        resultId = result.getId();
-			}
+			et.begin();
+	        em.merge(result.getModelObject());
 			et.commit();
-			return resultId;
+			return result.getId();
 		} catch(RuntimeException ex) {
 			if(et != null && et.isActive()) {
 				et.rollback();
@@ -283,128 +265,95 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 		} // end try catch
     }
 
-	/**
-	 * This special method will create a geometry query for creating or
-	 * updating. Depending on the modelClass different queries will be
-	 * generated.
-	 *
-	 * @param pojo the POJO object which should be stored in the database
-	 * @return     the query or null if the modelClass is not
-	 *             AttributeValueGeom or AttributeValueGeomz
-	 */
-	private Query createGeomQuery(TypePojo pojo) {
-        Query geomQuery = null;
+    /**
+     * This function checks if the value that is part of the URI matches with
+     * the object id in the POJO. If it matches it will call the createOrUpdate
+     * method of the OpenInfraDao. Otherwise it will return null.
+     *
+     * @param pojo    the POJO object which should be stored in the database
+     * @param valueId the value id from the URI
+     * @return        the UUID of the newly created or replaced object or null
+     * @throws RuntimeException
+     */
+    public UUID createOrUpdate(TypePojo pojo, UUID valueId)
+            throws RuntimeException {
 
-        // handle special cases
-        switch (modelClass.getSimpleName()) {
-        // create the special query for AttributeValueGeomz
-        case "AttributeValueGeomz":
-            if (pojo.getUuid() == null) {
-                // get the NamedNativeQuery
-                String sqlString = em.createNamedQuery(
-                        modelClass.getSimpleName() + ".insert")
-                        .unwrap(JpaQuery.class).getDatabaseQuery()
-                        .getSQLString();
-                // format the prepared INSERT statement
-                String queryString = String.format(
-                        sqlString,
-                        // set the PostGIS function for the geomType
-                        AttributeValueGeomWriteType.valueOf(
-                                ((AttributeValueGeomzPojo) pojo)
-                                .getGeomType().toString())
-                                .getPsqlFnSignature());
-                geomQuery = em.createNativeQuery(queryString);
-            } else {
-                // TODO: JPA replaces the native query with its own query that
-                // leads to a type error: varchar / geometry
-                /*
-                // get the NamedNativeQuery
-                String sqlString = em.createNamedQuery(
-                        modelClass.getSimpleName() + ".insert")
-                        .unwrap(JpaQuery.class).getDatabaseQuery()
-                        .getSQLString();
-                // format the prepared UPDATE statement
-                String queryString = String.format(
-                        sqlString,
-                        // set the PostGIS function for the geomType
-                        AttributeValueGeomWriteType.valueOf(
-                                ((AttributeValueGeomzPojo) pojo)
-                                .getGeomType().toString())
-                                .getPsqlFnSignature());
-                geomQuery = em.createNativeQuery(queryString);
-                // set the id of the entry that should be updated
-                geomQuery.setParameter(4, pojo.getUuid());
-                */
-                System.out.println("currently not working");
+        // check if the value id of the URI map to the POJO uuid
+        try {
+            if (!pojo.getUuid().equals(valueId)) {
+                return null;
             }
+        } catch (NullPointerException e) { /* do nothing */ }
+        return createOrUpdate(pojo);
+    }
 
-            // set the attributeTypeToAttributeTypeGroup id
-            geomQuery.setParameter(1, ((AttributeValueGeomzPojo) pojo)
-                    .getAttributeTypeToAttributeTypeGroupId());
-            // set the topic instance id
-            geomQuery.setParameter(2, ((AttributeValueGeomzPojo) pojo)
-                    .getTopicInstanceId());
-            // set the geometry value
-            geomQuery.setParameter(3, ((AttributeValueGeomzPojo) pojo)
-                    .getGeom());
-            break;
-        case "AttributeValueGeom":
-            if (pojo.getUuid() == null) {
-             // get the NamedNativeQuery
-                String sqlString = em.createNamedQuery(
-                        modelClass.getSimpleName() + ".insert")
-                        .unwrap(JpaQuery.class).getDatabaseQuery()
-                        .getSQLString();
-                // format the prepared INSERT statement
-                String queryString = String.format(
-                        sqlString,
-                        // set the PostGIS function for the geomType
-                        AttributeValueGeomWriteType.valueOf(
-                                ((AttributeValueGeomPojo) pojo)
-                                .getGeomType().toString())
-                                .getPsqlFnSignature());
-                geomQuery = em.createNativeQuery(queryString);
-            } else {
-                // TODO: JPA replaces the native query with its own query that
-                // leads to a type error: varchar / geometry
-                /*
-                // get the NamedNativeQuery
-                String sqlString = em.createNamedQuery(
-                        modelClass.getSimpleName() + ".insert")
-                        .unwrap(JpaQuery.class).getDatabaseQuery()
-                        .getSQLString();
-                // format the prepared UPDATE statement
-                String queryString = String.format(
-                        sqlString
-                        // set the PostGIS function for the geomType
-                        AttributeValueGeomWriteType.valueOf(
-                                ((AttributeValueGeomPojo) pojo)
-                                .getGeomType().toString())
-                                .getPsqlFnSignature());
-                geomQuery = em.createNativeQuery(queryString);
-                // set the id of the entry that should be updated
-                geomQuery.setParameter(4, pojo.getUuid());
-                */
-                System.out.println("currently not working");
+    /**
+     * This function checks if the first associated id that is part of the URI
+     * matches with the association id in the POJO. If it matches it will call
+     * the createOrUpdate method of the OpenInfraDao. Otherwise it will return
+     * null.
+     *
+     * @param pojo                        the POJO object which should be stored
+     *                                    in the database
+     * @param firstAssociationId          the first association id from the URI
+     * @param firstAssociationIdFromPojo  the first association id from the POJO
+     * @return                            the UUID of the newly created or
+     *                                    replaced object or null
+     * @throws RuntimeException
+     */
+    public UUID createOrUpdate(TypePojo pojo, UUID firstAssociationId,
+            UUID firstAssociationIdFromPojo)
+            throws RuntimeException {
+
+        // check if the value id of the URI map to the pojo uuid
+        try {
+            if (!firstAssociationId.equals(firstAssociationIdFromPojo)) {
+                return null;
             }
+        } catch (NullPointerException e) { /* do nothing */ }
 
-            // set the attributeTypeToAttributeTypeGroup id
-            geomQuery.setParameter(1, ((AttributeValueGeomPojo) pojo)
-                    .getAttributeTypeToAttributeTypeGroupId());
-            // set the topic instance id
-            geomQuery.setParameter(2, ((AttributeValueGeomPojo) pojo)
-                    .getTopicInstanceId());
-            // set the geometry value
-            geomQuery.setParameter(3, ((AttributeValueGeomPojo) pojo)
-                    .getGeom());
-            break;
-        default:
-            // return null if the modelClass is no geometry, this should never
-            // happen
-            return null;
-        }
-        return geomQuery;
-	}
+        return createOrUpdate(pojo);
+    }
+
+    /**
+     * This function checks if the first associated id that is part of the URI
+     * matches with the association id in the POJO and the second associated id
+     * that is part of the URI matches with the id of the associated object in
+     * the POJO. If the matches are fulfilled the createOrUpdate method of the
+     * OpenInfraDao will be called. Otherwise it will return null.
+     *
+     * @param pojo                        the POJO object which should be stored
+     *                                    in the database
+     * @param firstAssociationId          the first association id from the URI
+     * @param firstAssociationIdFromPojo  the first association id from the POJO
+     * @param secondAssociationId         the second association id from the URI
+     * @param secondAssociationIdFromPojo the second association id from the
+     *                                    POJO
+     * @return                            the UUID of the newly created or
+     *                                    replaced object or null
+     * @throws RuntimeException
+     */
+    public UUID createOrUpdate(TypePojo pojo, UUID firstAssociationId,
+            UUID firstAssociationIdFromPojo, UUID secondAssociationId,
+            UUID secondAssociationIdFromPojo)
+            throws RuntimeException {
+
+        // check if the value id of the URI map to the pojo uuid
+        try {
+            if (!firstAssociationId.equals(firstAssociationIdFromPojo)) {
+                return null;
+            }
+        } catch (NullPointerException e) { /* do nothing */ }
+
+        try {
+            if (!secondAssociationId.equals(secondAssociationIdFromPojo)) {
+                return null;
+            }
+        } catch (NullPointerException e) { /* do nothing */ }
+
+        return createOrUpdate(pojo);
+    }
+
 	/**
 	 * This is a generic method which reads a specific pojo object. We decided
 	 * to hide this functionality behind a protected class so that each deriving

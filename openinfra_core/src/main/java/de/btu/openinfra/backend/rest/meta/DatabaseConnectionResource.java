@@ -51,24 +51,25 @@ public class DatabaseConnectionResource {
 		return new DatabaseConnectionDao(
 				OpenInfraSchemas.META_DATA).getCount();
 	}
-    
+
     @POST
     public Response create(DatabaseConnectionPojo pojo) {
         UUID id = new DatabaseConnectionDao(
                 OpenInfraSchemas.META_DATA).createOrUpdate(pojo);
         return OpenInfraResponseBuilder.postResponse(id);
     }
-    
+
     @PUT
     @Path("{databaseConnectionId}")
     public Response update(
             @PathParam("databaseConnectionId") UUID databaseConnectionId,
             DatabaseConnectionPojo pojo) {
         UUID id = new DatabaseConnectionDao(
-                OpenInfraSchemas.META_DATA).createOrUpdate(pojo);
+                OpenInfraSchemas.META_DATA).createOrUpdate(pojo,
+                        databaseConnectionId);
         return OpenInfraResponseBuilder.putResponse(id);
     }
-    
+
     @DELETE
     @Path("{databaseConnectionId}")
     public Response delete(
@@ -80,7 +81,7 @@ public class DatabaseConnectionResource {
                 deleteResult,
                 databaseConnectionId);
     }
-    
+
     @GET
     @Path("/new")
     public DatabaseConnectionPojo newDatabaseConncetion() {

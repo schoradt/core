@@ -118,7 +118,8 @@ public class MultiplicityResource {
 		return OpenInfraResponseBuilder.postResponse(
 				new MultiplicityDao(
 						projectId,
-						OpenInfraSchemas.PROJECTS).createOrUpdate(pojo));
+						OpenInfraSchemas.PROJECTS).createOrUpdate(pojo,
+						        multiplicityId));
 	}
 
 }
