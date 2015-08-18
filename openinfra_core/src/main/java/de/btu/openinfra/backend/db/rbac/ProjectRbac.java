@@ -16,7 +16,6 @@ public class ProjectRbac extends
 	OpenInfraRbac<ProjectPojo, Project, ProjectDao> {
 
 	
-	
 	public ProjectRbac(UUID currentProjectId, OpenInfraSchemas schema) {
 		super(currentProjectId, schema, ProjectDao.class);
 	}

@@ -24,15 +24,19 @@ public class TopicCharacteristicRbac extends
 	public TopicCharacteristicRbac(
 			UUID currentProjectId,
 			OpenInfraSchemas schema) {
-		super(currentProjectId, schema, TopicCharacteristicDao.class);
-		// TODO Auto-generated constructor stub
+		super(currentProjectId, 
+				schema, 
+				TopicCharacteristicDao.class);
 	}
 
 	public List<TopicCharacteristicPojo> read(Locale locale, String filter) {
 		checkPermission();
 		try {
-			return dao.newInstance().read(locale, filter);
+			return dao.getDeclaredConstructor(constructorTypes).newInstance(
+					currentProjectId, 
+					schema).read(locale, filter);
 		} catch(Exception ex) {
+			ex.printStackTrace();
 			throw new WebApplicationException(
 					ex.getMessage(),
 					Response.Status.INTERNAL_SERVER_ERROR);

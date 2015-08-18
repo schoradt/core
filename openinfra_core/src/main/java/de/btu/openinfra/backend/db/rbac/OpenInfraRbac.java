@@ -39,6 +39,9 @@ public abstract class OpenInfraRbac<
 	 */
 	protected Subject user;
 	
+	protected Class<?>[] constructorTypes =	
+			new Class[] {UUID.class, OpenInfraSchemas.class};
+	
 	protected OpenInfraRbac(
 			UUID currentProjectId,
 			OpenInfraSchemas schema,
@@ -52,8 +55,11 @@ public abstract class OpenInfraRbac<
 	public List<TypePojo> read(Locale locale, int offset, int size) {
 		checkPermission();
 		try {
-			return dao.newInstance().read(locale, offset, size);
+			return dao.getDeclaredConstructor(constructorTypes).newInstance(
+					currentProjectId, 
+					schema).read(locale, offset, size);
 		} catch(Exception ex) {
+			ex.printStackTrace();
 			throw new WebApplicationException(
 					ex.getMessage(),
 					Response.Status.INTERNAL_SERVER_ERROR);
@@ -68,8 +74,11 @@ public abstract class OpenInfraRbac<
     		int size) {
 		checkPermission();
 		try {
-			return dao.newInstance().read(locale, order, column, offset, size);
+			return dao.getDeclaredConstructor(constructorTypes).newInstance(
+					currentProjectId, 
+					schema).read(locale, order, column, offset, size);
 		} catch(Exception ex) {
+			ex.printStackTrace();
 			throw new WebApplicationException(
 					ex.getMessage(),
 					Response.Status.INTERNAL_SERVER_ERROR);
@@ -79,8 +88,11 @@ public abstract class OpenInfraRbac<
 	public TypePojo read(Locale locale, UUID id) {
 		checkPermission();
 		try {
-			return dao.newInstance().read(locale, id);
+			return dao.getDeclaredConstructor(constructorTypes).newInstance(
+					currentProjectId, 
+					schema).read(locale, id);
 		} catch(Exception ex) {
+			ex.printStackTrace();
 			throw new WebApplicationException(
 					ex.getMessage(),
 					Response.Status.INTERNAL_SERVER_ERROR);
