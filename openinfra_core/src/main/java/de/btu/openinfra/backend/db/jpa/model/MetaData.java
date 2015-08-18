@@ -5,7 +5,6 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -21,13 +20,8 @@ import javax.persistence.Table;
 	@NamedQuery(name="MetaData.findAll", query="SELECT m FROM MetaData m"),
 	@NamedQuery(name="MetaData.count", query="SELECT COUNT(m) FROM MetaData m")
 })
-public class MetaData implements Serializable, OpenInfraModelObject {
+public class MetaData extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	@Id
-    private UUID id;
-	
-	private Integer xmin;
 	
 	@Column(name="object_id")
 	private UUID objectId;
@@ -49,16 +43,6 @@ public class MetaData implements Serializable, OpenInfraModelObject {
 
 	public void setObjectId(UUID objectId) {
 		this.objectId = objectId;
-	}
-
-	@Override
-	public void setId(UUID id) {
-		this.id = id;
-	}
-
-	@Override
-    public UUID getId() {
-	    return this.id;
 	}
 
 	public String getData() {
@@ -83,11 +67,6 @@ public class MetaData implements Serializable, OpenInfraModelObject {
 
 	public void setTableName(String tableName) {
 		this.tableName = tableName;
-	}
-	
-	@Override
-	public Integer getXmin() {
-		return xmin;
 	}
 
 }

@@ -1,10 +1,8 @@
 package de.btu.openinfra.backend.db.jpa.model.meta;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -26,13 +24,9 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
     @NamedQuery(name="DatabaseConnection.count",
     	query="SELECT COUNT(d) FROM DatabaseConnection d")
 })
-public class DatabaseConnection implements Serializable, OpenInfraModelObject {
+public class DatabaseConnection extends OpenInfraModelObject
+    implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	@Id
-	private UUID id;
-	
-	private Integer xmin;
 
 	//bi-directional many-to-one association to Credentials
 	@ManyToOne
@@ -60,16 +54,6 @@ public class DatabaseConnection implements Serializable, OpenInfraModelObject {
 	private Servers serverBean;
 
 	public DatabaseConnection() {
-	}
-
-	@Override
-	public UUID getId() {
-		return this.id;
-	}
-
-	@Override
-	public void setId(UUID id) {
-		this.id = id;
 	}
 
 	public Credentials getCredential() {
@@ -110,11 +94,6 @@ public class DatabaseConnection implements Serializable, OpenInfraModelObject {
 
 	public void setServerBean(Servers serverBean) {
 		this.serverBean = serverBean;
-	}
-	
-	@Override
-	public Integer getXmin() {
-		return xmin;
 	}
 
 }

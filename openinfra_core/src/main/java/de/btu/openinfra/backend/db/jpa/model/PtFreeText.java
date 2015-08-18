@@ -2,11 +2,9 @@ package de.btu.openinfra.backend.db.jpa.model;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -19,13 +17,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name="pt_free_text")
 @NamedQuery(name="PtFreeText.findAll", query="SELECT p FROM PtFreeText p")
-public class PtFreeText implements Serializable, OpenInfraModelObject {
+public class PtFreeText extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	@Id
-	private UUID id;
-	
-	private Integer xmin;
 
 	//bi-directional many-to-one association to AttributeType
 	@OneToMany(mappedBy="ptFreeText1")
@@ -80,16 +73,6 @@ public class PtFreeText implements Serializable, OpenInfraModelObject {
 	private List<ValueListValue> valueListValues2;
 
 	public PtFreeText() {
-	}
-
-	@Override
-	public UUID getId() {
-		return this.id;
-	}
-
-	@Override
-	public void setId(UUID id) {
-		this.id = id;
 	}
 
 	public List<AttributeType> getAttributeTypes1() {
@@ -376,11 +359,6 @@ public class PtFreeText implements Serializable, OpenInfraModelObject {
 		valueListValues2.setPtFreeText2(null);
 
 		return valueListValues2;
-	}
-	
-	@Override
-	public Integer getXmin() {
-		return xmin;
 	}
 
 }
