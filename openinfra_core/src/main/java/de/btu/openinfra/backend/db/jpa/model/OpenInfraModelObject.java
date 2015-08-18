@@ -9,9 +9,9 @@ import javax.persistence.MappedSuperclass;
 /**
  * This abstract class is manually added to the set of automatically generated
  * model classes by JPA/EclipseLink. This class provides attributes and
- * methods equal to all generated subclasses. The database tables of the
- * generated subclasses must have the specified attributes (same name)
- * as columns. 
+ * methods, which are equal for all generated subclasses. The database tables
+ * of the generated subclasses must have the specified attributes (same name)
+ * as columns.
  * 
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
