@@ -179,6 +179,7 @@ public class ProjectResource {
     public Response updateProject(
     		@PathParam("projectId") UUID projectId,
     		ProjectPojo project) {
+        // TODO compare projectId in createOrUpdate method?
     	UUID uuid = new ProjectDao(
     			projectId,
     			OpenInfraSchemas.PROJECTS).createOrUpdate(project);

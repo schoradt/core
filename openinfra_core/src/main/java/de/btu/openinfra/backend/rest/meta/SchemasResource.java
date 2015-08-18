@@ -50,24 +50,24 @@ public class SchemasResource {
     public long getCount() {
         return new SchemasDao(OpenInfraSchemas.META_DATA).getCount();
     }
-    
+
     @POST
     public Response create(SchemasPojo pojo) {
         UUID id = new SchemasDao(
                 OpenInfraSchemas.META_DATA).createOrUpdate(pojo);
         return OpenInfraResponseBuilder.postResponse(id);
     }
-    
+
     @PUT
     @Path("{schemasId}")
     public Response update(
             @PathParam("schemasId") UUID schemasId,
             SchemasPojo pojo) {
         UUID id = new SchemasDao(
-                OpenInfraSchemas.META_DATA).createOrUpdate(pojo);
+                OpenInfraSchemas.META_DATA).createOrUpdate(pojo, schemasId);
         return OpenInfraResponseBuilder.putResponse(id);
     }
-    
+
     @DELETE
     @Path("{schemasId}")
     public Response delete(@PathParam("schemasId") UUID schemasId) {
@@ -78,11 +78,11 @@ public class SchemasResource {
                 deleteResult,
                 schemasId);
     }
-    
+
     @GET
     @Path("/new")
     public SchemasPojo newSchemas() {
         return new SchemasDao(OpenInfraSchemas.META_DATA).newSchemas();
     }
-    
+
 }

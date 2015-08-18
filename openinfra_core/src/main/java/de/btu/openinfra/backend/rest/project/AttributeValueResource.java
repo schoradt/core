@@ -53,7 +53,8 @@ public class AttributeValueResource {
 			AttributeValuePojo pojo) {
 	    UUID id = new AttributeValueDao(
                 projectId,
-                OpenInfraSchemas.PROJECTS).distributeTypes(pojo, projectId);
+                OpenInfraSchemas.PROJECTS).distributeTypes(pojo, projectId,
+                        attributeValueId);
         return OpenInfraResponseBuilder.putResponse(id);
 	}
 
@@ -69,7 +70,8 @@ public class AttributeValueResource {
             AttributeValuePojo pojo) {
 	    UUID id = new AttributeValueDao(
                 projectId,
-                OpenInfraSchemas.PROJECTS).distributeTypes(pojo, projectId);
+                OpenInfraSchemas.PROJECTS).distributeTypes(pojo, projectId,
+                        null);
         return OpenInfraResponseBuilder.postResponse(id);
     }
 

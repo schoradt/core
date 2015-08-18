@@ -372,51 +372,122 @@ public class AttributeValueDao extends
 	 * @return          the UUID of the created or updated object or null if an
 	 *                  error occurs or the geomType is unlike GeoJSON
 	 */
-	public UUID distributeTypes(AttributeValuePojo pojo, UUID projectId) {
+	public UUID distributeTypes(AttributeValuePojo pojo, UUID projectId,
+	        UUID attributeValueId) {
 
 	    UUID id = null;
+	    boolean checked = false;
 
 	    // depending on the AttributeValueType we must distribute the objects
 	    // to their respective createOrUpdate method
 	    switch (pojo.getAttributeValueType()) {
         case ATTRIBUTE_VALUE_DOMAIN:
-            id = new AttributeValueDomainDao(
-                    projectId,
-                    OpenInfraSchemas.PROJECTS).createOrUpdate(
-                            pojo.getAttributeValueDomain());
+            // check if the container id is equal to the value id
+            try {
+                if (pojo.getUuid().equals(
+                        pojo.getAttributeValueDomain().getUuid())) {
+                    checked = true;
+                }
+            } catch (NullPointerException e) {
+                if (pojo.getUuid() == null &&
+                    pojo.getAttributeValueDomain().getUuid() == null) {
+                    checked = true;
+                }
+            }
+
+            // execute createOrUpdate if the preconditions match
+            if (checked) {
+                id = new AttributeValueDomainDao(
+                        projectId,
+                        OpenInfraSchemas.PROJECTS).createOrUpdate(
+                                pojo.getAttributeValueDomain(),
+                                attributeValueId);
+            } else {
+                // return null if the ids doesn't match
+                return null;
+            }
             break;
         case ATTRIBUTE_VALUE_GEOM:
-            // create or update is only available for GEOJSON
-            if (pojo.getAttributeValueGeom().getGeomType()
-                    .equals(AttributeValueGeomType.GEOJSON)) {
+            // check if the container id is equal to the value id
+            try {
+                if (pojo.getUuid().equals(
+                        pojo.getAttributeValueGeom().getUuid())) {
+                    checked = true;
+                }
+                // create or update is only available for GEOJSON
+                if (pojo.getAttributeValueGeom().getGeomType()
+                        .equals(AttributeValueGeomType.GEOJSON)) {
+                    checked = true;
+                }
+            } catch (NullPointerException e) {
+                if (pojo.getUuid() == null &&
+                    pojo.getAttributeValueGeom().getUuid() == null) {
+                    checked = true;
+                }
+            }
+
+            // execute createOrUpdate if the preconditions match
+            if (checked) {
                 id = new AttributeValueGeomDao(
                         projectId,
                         OpenInfraSchemas.PROJECTS).createOrUpdate(
-                                pojo.getAttributeValueGeom());
-            } else {
-                // return null if the geomType is unlike GeoJSON
-                return null;
+                                pojo.getAttributeValueGeom(),
+                                attributeValueId);
             }
             break;
         case ATTRIBUTE_VALUE_GEOMZ:
-            // create or update is only available for GEOJSON
-            if (pojo.getAttributeValueGeomz().getGeomType()
-                    .equals(AttributeValueGeomType.GEOJSON)) {
+            // check if the container id is equal to the value id
+            try {
+                if (pojo.getUuid().equals(
+                        pojo.getAttributeValueGeomz().getUuid())) {
+                    checked = true;
+                }
+                // create or update is only available for GEOJSON
+                if (pojo.getAttributeValueGeomz().getGeomType()
+                        .equals(AttributeValueGeomType.GEOJSON)) {
+                    checked = true;
+                }
+            } catch (NullPointerException e) {
+                if (pojo.getUuid() == null &&
+                    pojo.getAttributeValueGeomz().getUuid() == null) {
+                    checked = true;
+                }
+            }
+
+            // execute createOrUpdate if the preconditions match
+            if (checked) {
                 id = new AttributeValueGeomzDao(
                         projectId,
                         OpenInfraSchemas.PROJECTS).createOrUpdate(
-                                pojo.getAttributeValueGeomz());
-            } else {
-                // return null if the geomType is unlike GeoJSON
-                return null;
+                                pojo.getAttributeValueGeomz(),
+                                attributeValueId);
             }
             break;
         case ATTRIBUTE_VALUE_VALUE:
-             id = new AttributeValueValueDao(
-                    projectId,
-                    OpenInfraSchemas.PROJECTS).createOrUpdate(
-                            pojo.getAttributeValueValue());
-            break;
+            // check if the container id is equal to the value id
+            try {
+                if (pojo.getUuid().equals(
+                        pojo.getAttributeValueValue().getUuid())) {
+                    checked = true;
+                }
+            } catch (NullPointerException e) {
+                if (pojo.getUuid() == null &&
+                    pojo.getAttributeValueValue().getUuid() == null) {
+                    checked = true;
+                }
+            }
+
+            // execute createOrUpdate if the preconditions match
+            if (checked) {
+                id = new AttributeValueValueDao(
+                        projectId,
+                        OpenInfraSchemas.PROJECTS).createOrUpdate(
+                                pojo.getAttributeValueValue(),
+                                attributeValueId);
+            } else {
+                // return null if the ids doesn't match
+                return null;
+            }
         }
 
 	    return id;

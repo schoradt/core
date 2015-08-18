@@ -48,22 +48,22 @@ public class PortsResource {
     public long getCount() {
         return new PortsDao(OpenInfraSchemas.META_DATA).getCount();
     }
-    
+
     @POST
     public Response create(PortsPojo pojo) {
         UUID id = new PortsDao(
                 OpenInfraSchemas.META_DATA).createOrUpdate(pojo);
         return OpenInfraResponseBuilder.postResponse(id);
     }
-    
+
     @PUT
     @Path("{portsId}")
     public Response update(@PathParam("portsId") UUID portsId, PortsPojo pojo) {
         UUID id = new PortsDao(
-                OpenInfraSchemas.META_DATA).createOrUpdate(pojo);
+                OpenInfraSchemas.META_DATA).createOrUpdate(pojo, portsId);
         return OpenInfraResponseBuilder.putResponse(id);
     }
-    
+
     @DELETE
     @Path("{portsId}")
     public Response delete(@PathParam("portsId") UUID portsId) {
@@ -71,11 +71,11 @@ public class PortsResource {
                 new PortsDao(OpenInfraSchemas.META_DATA).delete(portsId);
         return OpenInfraResponseBuilder.deleteResponse(deleteResult, portsId);
     }
-    
+
     @GET
     @Path("/new")
     public PortsPojo newPorts() {
         return new PortsDao(OpenInfraSchemas.META_DATA).newPorts();
     }
-    
+
 }

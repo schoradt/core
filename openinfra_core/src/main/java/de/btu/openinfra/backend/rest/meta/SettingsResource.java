@@ -51,24 +51,24 @@ public class SettingsResource {
 		return new SettingsDao(
 				OpenInfraSchemas.META_DATA).getCount();
 	}
-    
+
     @POST
     public Response create(SettingsPojo pojo) {
         UUID id = new SettingsDao(
                 OpenInfraSchemas.META_DATA).createOrUpdate(pojo);
         return OpenInfraResponseBuilder.postResponse(id);
     }
-    
+
     @PUT
     @Path("{settingsId}")
     public Response update(
             @PathParam("settingsId") UUID settingsId,
             SettingsPojo pojo) {
         UUID id = new SettingsDao(
-                OpenInfraSchemas.META_DATA).createOrUpdate(pojo);
+                OpenInfraSchemas.META_DATA).createOrUpdate(pojo, settingsId);
         return OpenInfraResponseBuilder.putResponse(id);
     }
-    
+
     @DELETE
     @Path("{settingsId}")
     public Response delete(
@@ -80,7 +80,7 @@ public class SettingsResource {
                 deleteResult,
                 settingsId);
     }
-    
+
     @GET
     @Path("/new")
     public SettingsPojo newSettings() {
