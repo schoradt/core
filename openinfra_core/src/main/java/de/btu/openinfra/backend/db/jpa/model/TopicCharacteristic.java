@@ -2,10 +2,8 @@ package de.btu.openinfra.backend.db.jpa.model;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.UUID;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedNativeQueries;
@@ -61,13 +59,9 @@ import javax.persistence.Table;
 						+ "order by free_text ",
 				resultClass=ValueList.class)
 })
-public class TopicCharacteristic implements Serializable, OpenInfraModelObject {
+public class TopicCharacteristic extends OpenInfraModelObject
+    implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	@Id
-	private UUID id;
-	
-	private Integer xmin;
 
 	//bi-directional many-to-one association to AttributeTypeGroupToTopicCharacteristic
 	@OneToMany(mappedBy="topicCharacteristic")
@@ -96,16 +90,6 @@ public class TopicCharacteristic implements Serializable, OpenInfraModelObject {
 	private List<TopicInstance> topicInstances;
 
 	public TopicCharacteristic() {
-	}
-
-	@Override
-	public UUID getId() {
-		return this.id;
-	}
-
-	@Override
-	public void setId(UUID id) {
-		this.id = id;
 	}
 
 	public List<AttributeTypeGroupToTopicCharacteristic> getAttributeTypeGroupToTopicCharacteristics() {
@@ -196,11 +180,6 @@ public class TopicCharacteristic implements Serializable, OpenInfraModelObject {
 		topicInstance.setTopicCharacteristic(null);
 
 		return topicInstance;
-	}
-	
-	@Override
-	public Integer getXmin() {
-		return xmin;
 	}
 
 }

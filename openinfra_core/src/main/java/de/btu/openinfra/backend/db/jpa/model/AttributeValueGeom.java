@@ -1,10 +1,8 @@
 package de.btu.openinfra.backend.db.jpa.model;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedNativeQueries;
@@ -27,13 +25,9 @@ import javax.persistence.Table;
                     + "FROM attribute_value_geom "
                     + "WHERE id = cast(? as uuid)")
 })
-public class AttributeValueGeom implements Serializable, OpenInfraModelObject {
+public class AttributeValueGeom extends OpenInfraModelObject
+    implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	@Id
-	private UUID id;
-	
-	private Integer xmin;
 
 	private String geom;
 
@@ -48,16 +42,6 @@ public class AttributeValueGeom implements Serializable, OpenInfraModelObject {
 	private TopicInstance topicInstance;
 
 	public AttributeValueGeom() {
-	}
-
-	@Override
-    public UUID getId() {
-		return this.id;
-	}
-
-	@Override
-	public void setId(UUID id) {
-		this.id = id;
 	}
 
 	public String getGeom() {
@@ -82,11 +66,6 @@ public class AttributeValueGeom implements Serializable, OpenInfraModelObject {
 
 	public void setTopicInstance(TopicInstance topicInstance) {
 		this.topicInstance = topicInstance;
-	}
-	
-	@Override
-	public Integer getXmin() {
-		return xmin;
 	}
 
 }

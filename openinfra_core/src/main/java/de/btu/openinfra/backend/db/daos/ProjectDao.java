@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import jersey.repackaged.com.google.common.collect.Lists;
 import de.btu.openinfra.backend.db.MappingResult;
+import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.meta.ProjectsDao;
 import de.btu.openinfra.backend.db.jpa.model.Project;
 import de.btu.openinfra.backend.db.pojos.LocalizedString;

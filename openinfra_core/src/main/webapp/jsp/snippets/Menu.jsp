@@ -3,7 +3,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@page import="de.btu.openinfra.backend.db.daos.AttributeValueGeomType"%>
-<%@page import="de.btu.openinfra.backend.db.daos.OpenInfraSchemas"%>
+<%@page import="de.btu.openinfra.backend.db.OpenInfraSchemas"%>
 <%@page import="de.btu.openinfra.backend.db.daos.PtLocaleDao"%>
 <%@page import="java.awt.event.ItemEvent"%>
 <%@page import="de.btu.openinfra.backend.db.pojos.LocalizedString"%>

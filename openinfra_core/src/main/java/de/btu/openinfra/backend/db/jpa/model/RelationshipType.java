@@ -2,10 +2,8 @@ package de.btu.openinfra.backend.db.jpa.model;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.UUID;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -43,13 +41,9 @@ import javax.persistence.Table;
 				+ "WHERE r.topicCharacteristic = :value)")
 })
 
-public class RelationshipType implements Serializable, OpenInfraModelObject {
+public class RelationshipType extends OpenInfraModelObject
+    implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	@Id
-	private UUID id;
-	
-	private Integer xmin;
 
 	//bi-directional many-to-one association to ValueListValue
 	@ManyToOne
@@ -70,16 +64,6 @@ public class RelationshipType implements Serializable, OpenInfraModelObject {
 	private List<TopicInstanceXTopicInstance> topicInstanceXTopicInstances;
 
 	public RelationshipType() {
-	}
-
-	@Override
-	public UUID getId() {
-		return this.id;
-	}
-
-	@Override
-	public void setId(UUID id) {
-		this.id = id;
 	}
 
 	public ValueListValue getValueListValue1() {
@@ -140,11 +124,6 @@ public class RelationshipType implements Serializable, OpenInfraModelObject {
 		topicInstanceXTopicInstance.setRelationshipType(null);
 
 		return topicInstanceXTopicInstance;
-	}
-	
-	@Override
-	public Integer getXmin() {
-		return xmin;
 	}
 
 }
