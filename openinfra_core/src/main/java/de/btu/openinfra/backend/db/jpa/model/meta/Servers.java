@@ -2,10 +2,8 @@ package de.btu.openinfra.backend.db.jpa.model.meta;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.UUID;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -20,13 +18,8 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 @Entity
 @Table(schema="meta_data")
 @NamedQuery(name="Servers.findAll", query="SELECT s FROM Servers s")
-public class Servers implements Serializable, OpenInfraModelObject {
+public class Servers extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	@Id
-	private UUID id;
-	
-	private Integer xmin;
 
 	private String server;
 
@@ -35,16 +28,6 @@ public class Servers implements Serializable, OpenInfraModelObject {
 	private List<DatabaseConnection> databaseConnections;
 
 	public Servers() {
-	}
-
-	@Override
-	public UUID getId() {
-		return this.id;
-	}
-
-	@Override
-	public void setId(UUID id) {
-		this.id = id;
 	}
 
 	public String getServer() {
@@ -75,11 +58,6 @@ public class Servers implements Serializable, OpenInfraModelObject {
 		databaseConnection.setServerBean(null);
 
 		return databaseConnection;
-	}
-	
-	@Override
-	public Integer getXmin() {
-		return xmin;
 	}
 
 }

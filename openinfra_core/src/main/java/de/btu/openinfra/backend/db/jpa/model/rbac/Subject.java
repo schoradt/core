@@ -7,7 +7,6 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -27,13 +26,13 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 				+ "FROM Subject s "
 				+ "WHERE s.login = :login")
 })
-public class Subject implements Serializable, OpenInfraModelObject {
-	private static final long serialVersionUID = 1L;
 
-	@Id
-	private UUID id;
-	
-	private Integer xmin;
+//@NamedNativeQueries({
+//	@NamedNativeQuery(name="Subject.findByLogin", 
+//			query="select *,xmin from subject where login = ?")
+//})
+public class Subject extends OpenInfraModelObject implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	@Column(name="created_on")
 	private Timestamp createdOn;
@@ -69,16 +68,6 @@ public class Subject implements Serializable, OpenInfraModelObject {
 	private List<SubjectRole> subjectRoles;
 
 	public Subject() {
-	}
-
-	@Override
-	public UUID getId() {
-		return this.id;
-	}
-
-	@Override
-	public void setId(UUID id) {
-		this.id = id;
 	}
 
 	public Timestamp getCreatedOn() {
@@ -197,11 +186,6 @@ public class Subject implements Serializable, OpenInfraModelObject {
 		subjectRole.setSubject(null);
 
 		return subjectRole;
-	}
-	
-	@Override
-	public Integer getXmin() {
-		return xmin;
 	}
 
 }

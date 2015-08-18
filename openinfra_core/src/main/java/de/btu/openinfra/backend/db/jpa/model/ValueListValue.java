@@ -2,11 +2,9 @@ package de.btu.openinfra.backend.db.jpa.model;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -33,13 +31,9 @@ import javax.persistence.Table;
 			+ "FROM ValueListValue v "
 			+ "WHERE v.valueList = :value")
 })
-public class ValueListValue implements Serializable, OpenInfraModelObject {
+public class ValueListValue extends OpenInfraModelObject
+    implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	@Id
-	private UUID id;
-	
-	private Integer xmin;
 
 	private Boolean visibility;
 
@@ -107,16 +101,6 @@ public class ValueListValue implements Serializable, OpenInfraModelObject {
 	private List<ValueListXValueList> valueListXValueLists;
 
 	public ValueListValue() {
-	}
-
-	@Override
-	public UUID getId() {
-		return this.id;
-	}
-
-	@Override
-	public void setId(UUID id) {
-		this.id = id;
 	}
 
 	public Boolean getVisibility() {
@@ -413,11 +397,6 @@ public class ValueListValue implements Serializable, OpenInfraModelObject {
 		valueListXValueList.setValueListValue(null);
 
 		return valueListXValueList;
-	}
-	
-	@Override
-	public Integer getXmin() {
-		return xmin;
 	}
 
 }

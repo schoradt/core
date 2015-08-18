@@ -2,11 +2,9 @@ package de.btu.openinfra.backend.db.jpa.model;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedNativeQueries;
@@ -109,13 +107,9 @@ import javax.persistence.Table;
                 + "ORDER BY b.free_text ",
             resultClass=ValueList.class),
 })
-public class TopicInstance implements Serializable, OpenInfraModelObject {
+public class TopicInstance extends OpenInfraModelObject
+    implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	@Id
-	private UUID id;
-	
-	private Integer xmin;
 
 	//bi-directional many-to-one association to AttributeValue
 	@OneToMany(mappedBy="topicInstance")
@@ -151,16 +145,6 @@ public class TopicInstance implements Serializable, OpenInfraModelObject {
 	private List<TopicInstanceXTopicInstance> topicInstanceXTopicInstances2;
 
 	public TopicInstance() {
-	}
-
-	@Override
-    public UUID getId() {
-		return this.id;
-	}
-
-	@Override
-	public void setId(UUID id) {
-		this.id = id;
 	}
 
 	public List<AttributeValue> getAttributeValues() {
@@ -323,11 +307,6 @@ public class TopicInstance implements Serializable, OpenInfraModelObject {
 		topicInstanceXTopicInstances2.setTopicInstance2Bean(null);
 
 		return topicInstanceXTopicInstances2;
-	}
-	
-	@Override
-	public Integer getXmin() {
-		return xmin;
 	}
 
 }

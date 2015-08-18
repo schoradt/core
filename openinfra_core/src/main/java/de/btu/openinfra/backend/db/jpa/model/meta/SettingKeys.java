@@ -2,10 +2,8 @@ package de.btu.openinfra.backend.db.jpa.model.meta;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.UUID;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -20,13 +18,8 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 @Entity
 @Table(schema="meta_data", name="setting_keys")
 @NamedQuery(name="SettingKey.findAll", query="SELECT s FROM SettingKeys s")
-public class SettingKeys implements Serializable, OpenInfraModelObject {
+public class SettingKeys extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	@Id
-	private UUID id;
-	
-	private Integer xmin;
 
 	private String key;
 
@@ -35,16 +28,6 @@ public class SettingKeys implements Serializable, OpenInfraModelObject {
 	private List<Settings> settings;
 
 	public SettingKeys() {
-	}
-
-	@Override
-	public UUID getId() {
-		return this.id;
-	}
-
-	@Override
-	public void setId(UUID id) {
-		this.id = id;
 	}
 
 	public String getKey() {
@@ -75,11 +58,6 @@ public class SettingKeys implements Serializable, OpenInfraModelObject {
 		settings.setSettingKey(null);
 
 		return settings;
-	}
-	
-	@Override
-	public Integer getXmin() {
-		return xmin;
 	}
 
 }

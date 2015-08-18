@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -28,13 +27,8 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
     	query="SELECT COUNT(l) FROM Log l")
 })
 
-public class Log implements Serializable, OpenInfraModelObject {
+public class Log extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	@Id
-	private UUID id;
-	
-	private Integer xmin;
 
 	@Column(name="created_on")
 	private Date createdOn;
@@ -58,16 +52,6 @@ public class Log implements Serializable, OpenInfraModelObject {
 	private Logger loggerBean;
 
 	public Log() {
-	}
-
-	@Override
-	public UUID getId() {
-		return this.id;
-	}
-
-	@Override
-	public void setId(UUID id) {
-		this.id = id;
 	}
 
 	public Date getCreatedOn() {
@@ -116,11 +100,6 @@ public class Log implements Serializable, OpenInfraModelObject {
 
 	public void setLoggerBean(Logger loggerBean) {
 		this.loggerBean = loggerBean;
-	}
-	
-	@Override
-	public Integer getXmin() {
-		return xmin;
 	}
 
 }

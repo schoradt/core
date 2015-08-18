@@ -2,10 +2,8 @@ package de.btu.openinfra.backend.db.jpa.model.rbac;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.UUID;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
@@ -18,13 +16,8 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
  */
 @Entity
 @NamedQuery(name="Permission.findAll", query="SELECT p FROM Permission p")
-public class Permission implements Serializable, OpenInfraModelObject {
+public class Permission extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	@Id
-	private UUID id;
-	
-	private Integer xmin;
 
 	private String description;
 
@@ -35,16 +28,6 @@ public class Permission implements Serializable, OpenInfraModelObject {
 	private List<RolePermission> rolePermissions;
 
 	public Permission() {
-	}
-
-	@Override
-	public UUID getId() {
-		return this.id;
-	}
-
-	@Override
-	public void setId(UUID id) {
-		this.id = id;
 	}
 
 	public String getDescription() {
@@ -85,9 +68,4 @@ public class Permission implements Serializable, OpenInfraModelObject {
 		return rolePermission;
 	}
 	
-	@Override
-	public Integer getXmin() {
-		return xmin;
-	}
-
 }
