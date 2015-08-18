@@ -3,8 +3,8 @@ package de.btu.openinfra.backend.db.daos.meta;
 import java.util.Locale;
 
 import de.btu.openinfra.backend.db.MappingResult;
+import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
-import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.meta.Level;
 import de.btu.openinfra.backend.db.pojos.meta.LevelPojo;
 

@@ -17,7 +17,6 @@ import com.google.common.cache.LoadingCache;
 import de.btu.openinfra.backend.OpenInfraApplication;
 import de.btu.openinfra.backend.OpenInfraProperties;
 import de.btu.openinfra.backend.OpenInfraPropertyKeys;
-import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.ProjectDao;
 import de.btu.openinfra.backend.db.pojos.ProjectPojo;
 import de.btu.openinfra.backend.db.pojos.meta.ProjectsPojo;
@@ -69,7 +68,6 @@ public class EntityManagerFactoryCache {
                         OpenInfraApplication.PERSISTENCE_CONTEXT,
                         createProperties(null, OpenInfraSchemas.SYSTEM)));
             } catch (ExecutionException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
@@ -80,9 +78,18 @@ public class EntityManagerFactoryCache {
                         OpenInfraApplication.PERSISTENCE_CONTEXT,
                         createProperties(null, OpenInfraSchemas.META_DATA)));
             } catch (ExecutionException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
+        }
+        // Add RBAC entity manager factory
+        if(cacheSize - cache.size() > 0) {
+        	try {
+        		cache.get(new CacheTuple(
+        				OpenInfraApplication.PERSISTENCE_CONTEXT, 
+        				createProperties(null, OpenInfraSchemas.RBAC)));
+        	} catch(ExecutionException ee) {
+        		ee.printStackTrace();
+        	}
         }
         // Add project entity manager factories
         if(cacheSize - cache.size() > 0) {
@@ -98,7 +105,6 @@ public class EntityManagerFactoryCache {
                                     projectPojo.getUuid(),
                                     OpenInfraSchemas.PROJECTS)));
                 } catch (ExecutionException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
                 if(cacheSize - cache.size() == 0) {
@@ -129,7 +135,6 @@ public class EntityManagerFactoryCache {
                     OpenInfraApplication.PERSISTENCE_CONTEXT,
                     properties));
         } catch (ExecutionException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         // return null
@@ -186,6 +191,10 @@ public class EntityManagerFactoryCache {
                     p.getDatabaseConnection().getSchema().getSchema() + "," +
                     OpenInfraPropertyValues.SEARCH_PATH;
             break;
+        case RBAC:
+        	currentSchema += OpenInfraPropertyValues.RBAC_SEARCH_PATH + "," +
+        			OpenInfraPropertyValues.SEARCH_PATH;
+        	break;
         case SYSTEM:
             // fall through
         default:
