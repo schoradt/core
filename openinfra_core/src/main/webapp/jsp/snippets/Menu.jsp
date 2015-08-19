@@ -149,6 +149,11 @@
 				<fmt:message key="3dwebgis.label"/>
 			</a>
         </li>
+        <li>
+        	<a style="color:red;" href="${contextPath}/logout">
+        		<fmt:message key="logout.label"></fmt:message>
+        	</a>
+        </li>
       </ul>
       <!-- http://stackoverflow.com/questions/4276061/how-to-internationalize-a-java-web-application -->
 		<form class="navbar-form navbar-right">
