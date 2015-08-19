@@ -1,5 +1,6 @@
 package de.btu.openinfra.backend.rest.rbac;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
@@ -11,9 +12,13 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
+
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.daos.rbac.SubjectDao;
 import de.btu.openinfra.backend.db.pojos.rbac.SubjectPojo;
+import de.btu.openinfra.backend.db.rbac.OpenInfraRealmNames;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
 
@@ -29,8 +34,7 @@ public class SubjectResource {
 	public List<SubjectPojo> get(
 			@QueryParam("language") String language,
 			@QueryParam("offset") int offset,
-			@QueryParam("size") int size,
-			@QueryParam("login") String login) {
+			@QueryParam("size") int size) {
 		return new SubjectDao().read(
 						PtLocaleDao.forLanguageTag(language),
 						offset,
@@ -48,11 +52,23 @@ public class SubjectResource {
 	}
 	
 	@GET
-	@Path("name")
-	public SubjectPojo getLogin(
+	@Path("bylogin")
+	public SubjectPojo getSubjectByLogin(
 			@QueryParam("login") String login) {
 		return new SubjectDao().read(login);
 	}
 
+	@GET
+	@Path("self")
+	public SubjectPojo self() {
+		// Retrieve the login from principals (there might be multiple)
+		Subject s = SecurityUtils.getSubject();
+		List<String> login = new LinkedList<String>();
+		for(Object o : s.getPrincipals().fromRealm(
+				OpenInfraRealmNames.LOGIN.name())) {
+			login.add(o.toString());
+		}
+		return new SubjectDao().read(login.get(0));
+	}
 
 }

@@ -1,6 +1,8 @@
 package de.btu.openinfra.backend.db.rbac;
 
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.shiro.authc.AuthenticationException;
@@ -30,16 +32,22 @@ public class OpenInfraRealm extends AuthorizingRealm {
 		return new SimpleAuthenticationInfo(
 				new SimplePrincipalCollection(
 						s.getLogin(), 
-						"login"), s.getPassword());
+						OpenInfraRealmNames.LOGIN.name()), 
+						s.getPassword());
 	}
 	
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(
 			PrincipalCollection principals) {
-        Subject s = new SubjectDao().readModel(
-        		(String) getAvailablePrincipal(principals));
-        
 		
+		// Retrieve the login from principals (there might be multiple)
+		List<String> login = new LinkedList<String>();
+		for(Object o : principals.fromRealm(OpenInfraRealmNames.LOGIN.name())) {
+			login.add(o.toString());
+		}
+		
+        Subject s = new SubjectDao().readModel(login.get(0));
+        
         Set<String> roleNames = new HashSet<String>();
         Set<String> permissions = new HashSet<String>();
         
