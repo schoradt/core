@@ -4,6 +4,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
@@ -34,9 +37,8 @@ public class SubjectDao extends OpenInfraDao<SubjectPojo, Subject> {
 							"login",
 							login).getSingleResult();			
 		} catch(Exception ex) {
-			ex.printStackTrace();
+			throw new WebApplicationException(Response.Status.UNAUTHORIZED);
 		}
-		return null;		
 	}
 	
 	public SubjectPojo read(String login) {
