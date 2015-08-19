@@ -8,7 +8,9 @@
 </head>
 <body>
 
-
+<table>
+<tr>
+<td>
 <form name="loginform" action="" method="post">
     <table align="left" border="0" cellspacing="0" cellpadding="3">
         <tr>
@@ -27,6 +29,21 @@
         </tr>
     </table>
 </form>
+</td>
+</tr>
+<tr>
+<td>
+<table>
+<tr><th>Nutzername</th><th>Passwort</th><th>Beschreibung</th></tr>
+<tr><td>root</td><td>root</td><td>Vollzugriff (ändern + lesen)</td></tr>
+<tr><td>max</td><td>max</td><td>Vollzugriff (nur lesen)</td></tr>
+<tr><td>lieschen</td><td>lieschen</td><td>nur Zugriff auf das Baalbek-Projekt (ändern + lesen)</td></tr>
+<tr><td>anonymous</td><td>anonymous</td><td>nur Zugriff auf das Testproject (nur lesen)</td></tr>
+</table>
+<td>
+</tr>
+</table>
+
 
 </body>
 </html>
