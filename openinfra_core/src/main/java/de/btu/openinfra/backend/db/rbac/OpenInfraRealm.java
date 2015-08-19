@@ -75,15 +75,11 @@ public class OpenInfraRealm extends AuthorizingRealm {
 	 * @return the encrypted password
 	 */
 	public static String encrypt(String plainTextPassword, UUID salt) {
-		//We'll use a Random Number Generator to generate salts. This
-		//is much more secure than using a username as a salt or not
-		//having a salt at all.  Shiro makes this easy.
-		
-		//Now hash the plain-text password with the salt and multiple
+		//Hash the plain-text password with the salt and multiple
 		//iterations and then Base64-encode the value (requires less 
 		//space than Hex):
 		// TODO: the value 1024 is defined in the shiro.ini and should match
-		// the same value 'credentialsMatcher.hashIterations'
+		// the same value 'credentialsMatcher.hashIterations = 1024'
 		return new Sha256Hash(
 				plainTextPassword, 
 				salt.toString(), 
