@@ -1,12 +1,10 @@
 package de.btu.openinfra.backend.db.daos;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
-import jersey.repackaged.com.google.common.collect.Lists;
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.daos.meta.ProjectsDao;
 import de.btu.openinfra.backend.db.jpa.model.Project;
@@ -14,6 +12,7 @@ import de.btu.openinfra.backend.db.pojos.LocalizedString;
 import de.btu.openinfra.backend.db.pojos.ProjectPojo;
 import de.btu.openinfra.backend.db.pojos.PtFreeTextPojo;
 import de.btu.openinfra.backend.db.pojos.meta.ProjectsPojo;
+import jersey.repackaged.com.google.common.collect.Lists;
 
 /**
  * This class represents the Project and is used to access the underlying layer
@@ -91,23 +90,20 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 						locale,
 						0,
 						Integer.MAX_VALUE);
-		Iterator<ProjectsPojo> it = projects.iterator();
-		// 2. Only keep main projects in the list
-		while (it.hasNext()) {
-			if(it.next().getIsSubproject()) {
-				it.remove();
-			} // end if
-		} // end while
-		// 3. Create a list of main projects and add a corresponding main
+		// 2. Create a list of main projects and add a corresponding main
 		//    project to the list found in the metadata database
 		List<ProjectPojo> mainProjects = new LinkedList<ProjectPojo>();
 		for(ProjectsPojo item : projects) {
-			ProjectPojo pp = new ProjectDao(
-					 item.getUuid(),
-					 OpenInfraSchemas.PROJECTS).read(locale, item.getUuid());
-			if(pp != null) {
-				mainProjects.add(pp);
-			}
+		    if(item.getIsSubproject() == false) {
+    			ProjectPojo pp = new ProjectDao(
+    					 item.getUuid(),
+    					 OpenInfraSchemas.PROJECTS).read(
+    					         locale,
+    					         item.getUuid());
+    			if(pp != null) {
+    				mainProjects.add(pp);
+    			}
+		    }
 		} // end for
 		return mainProjects;
 	}
