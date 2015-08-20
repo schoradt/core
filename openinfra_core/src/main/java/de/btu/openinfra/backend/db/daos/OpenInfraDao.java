@@ -7,8 +7,10 @@ import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Table;
 
 import org.eclipse.persistence.jpa.JpaQuery;
+import org.json.simple.JSONObject;
 
 import de.btu.openinfra.backend.OpenInfraProperties;
 import de.btu.openinfra.backend.db.EntityManagerFactoryCache;
@@ -19,6 +21,7 @@ import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
+import de.btu.openinfra.backend.db.pojos.MetaDataPojo;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 
 /**
@@ -265,8 +268,52 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 		} // end try catch
     }
 
+	/**
+	 * This method will first execute a createOrUpdate for the TypePojo and
+	 * second execute a createOrUpdate for the meta data. This is necessary for
+	 * project and system databases where tables can store meta data inside the
+	 * table meta_data.
+	 *
+	 * @param pojo     the POJO object which should be stored in the database
+	 * @param metaData the JSON data that should be stored in the meta data
+	 *                 associated to the POJO
+	 * @return
+	 */
+	public UUID createOrUpdate(TypePojo pojo, JSONObject metaData) {
+
+	    UUID retId = null;
+
+	    if (pojo != null && metaData != null) {
+	        // first createOrUpdate the TypePojo
+	        retId = createOrUpdate(pojo);
+
+	        // if the TypePojo was created successfully
+	        if (retId != null) {
+    	        // create a raw POJO for meta data
+    	        MetaDataPojo mdPojo = new MetaDataPojo();
+
+                // set the object id from the previously created TypePojo
+                mdPojo.setObjectId(retId);
+                // TODO find a way to avoid hard coded id
+                // define the primary key column
+                mdPojo.setPkColumn("id");
+                // define the table name for the object
+                mdPojo.setTableName(modelClass.getAnnotation(Table.class).name());
+                // set the settings
+                mdPojo.setData(metaData);
+                // write the meta data
+                UUID metaId = new MetaDataDao(currentProjectId, schema)
+                                    .createOrUpdate(mdPojo);
+                if (metaId == null) {
+                    // TODO give feedback about setting creation?
+                }
+	        }
+	    }
+	    return retId;
+	}
+
     /**
-     * This function checks if the value that is part of the URI matches with
+     * This method checks if the value that is part of the URI matches with
      * the object id in the POJO. If it matches it will call the createOrUpdate
      * method of the OpenInfraDao. Otherwise it will return null.
      *
@@ -288,7 +335,7 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
     }
 
     /**
-     * This function checks if the first associated id that is part of the URI
+     * This method checks if the first associated id that is part of the URI
      * matches with the association id in the POJO. If it matches it will call
      * the createOrUpdate method of the OpenInfraDao. Otherwise it will return
      * null.
@@ -316,7 +363,7 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
     }
 
     /**
-     * This function checks if the first associated id that is part of the URI
+     * This method checks if the first associated id that is part of the URI
      * matches with the association id in the POJO and the second associated id
      * that is part of the URI matches with the id of the associated object in
      * the POJO. If the matches are fulfilled the createOrUpdate method of the

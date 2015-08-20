@@ -7,14 +7,13 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.MetaData;
 import de.btu.openinfra.backend.db.jpa.model.Project;
 import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
+import de.btu.openinfra.backend.db.jpa.model.ValueListValue;
 import de.btu.openinfra.backend.db.pojos.TopicCharacteristicPojo;
 
 /**
@@ -92,7 +91,11 @@ public class TopicCharacteristicDao
 		return mapToPojoStatically(
 				locale,
 				tc,
-				em.find(MetaData.class, tc.getId()));
+				em.createNamedQuery(
+				        "MetaData.findByObjectId", MetaData.class)
+				        .setParameter("oId", tc.getId())
+				        .getSingleResult()
+				);
 	}
 
 	/**
@@ -102,20 +105,15 @@ public class TopicCharacteristicDao
 	 * @param tc    the model object
 	 * @return       the POJO object when the model object is not null else null
 	 */
-	@SuppressWarnings("unchecked")
 	public static TopicCharacteristicPojo mapToPojoStatically(
 			Locale locale,
 			TopicCharacteristic tc,
 			MetaData md) {
 		TopicCharacteristicPojo pojo = new TopicCharacteristicPojo();
 
+		// if meta data exists
 		if(md != null) {
-			ObjectMapper om = new ObjectMapper();
-			try {
-				pojo.setSettings(om.readValue(md.getData(), List.class));
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			} // end try catch
+		    pojo.setMetaData(md.getData());
 		} // end if
 
 		pojo.setTopic(ValueListValueDao.mapToPojoStatically(
@@ -134,8 +132,29 @@ public class TopicCharacteristicDao
 	public MappingResult<TopicCharacteristic> mapToModel(
 			TopicCharacteristicPojo pojo,
 			TopicCharacteristic tc) {
+	    // avoid empty names
+        if (pojo.getDescriptions().getLocalizedStrings().get(0)
+                .getCharacterString().equals("")) {
+            return null;
+        }
 
-        // TODO set the model values
+        PtFreeTextDao ptfDao =
+                new PtFreeTextDao(currentProjectId, schema);
+
+        // set the description
+        tc.setPtFreeText(ptfDao.getPtFreeTextModel(pojo.getDescriptions()));
+
+        // set the topic
+        tc.setValueListValue(em.find(
+                ValueListValue.class, pojo.getTopic().getUuid()));
+
+        // set the project (can be null for system database)
+        if (pojo.getProjectId() != null) {
+            tc.setProject(em.find(Project.class, pojo.getProjectId()));
+        } else {
+            // reset the project
+            tc.setProject(null);
+        }
 
         // return the model as mapping result
         return new MappingResult<TopicCharacteristic>(tc.getId(), tc);

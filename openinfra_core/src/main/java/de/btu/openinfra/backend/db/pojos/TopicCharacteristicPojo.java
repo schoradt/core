@@ -1,23 +1,25 @@
 package de.btu.openinfra.backend.db.pojos;
 
-import java.util.List;
+import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.json.simple.JSONObject;
+
 @XmlRootElement
 public class TopicCharacteristicPojo extends OpenInfraPojo {
-	
+
 	private PtFreeTextPojo descriptions;
 	private ValueListValuePojo topic;
-	private String projectId;
-	private List<String> settings;
+	private UUID projectId;
+	private JSONObject metaData;
 
-	public List<String> getSettings() {
-		return settings;
+	public JSONObject getMetaData() {
+		return metaData;
 	}
 
-	public void setSettings(List<String> settings) {
-		this.settings = settings;
+	public void setMetaData(JSONObject metaData) {
+		this.metaData = metaData;
 	}
 
 	public PtFreeTextPojo getDescriptions() {
@@ -36,11 +38,11 @@ public class TopicCharacteristicPojo extends OpenInfraPojo {
 		this.topic = topic;
 	}
 
-	public String getProjectId() {
+	public UUID getProjectId() {
 		return projectId;
 	}
 
-	public void setProjectId(String projectId) {
+	public void setProjectId(UUID projectId) {
 		this.projectId = projectId;
 	}
 
