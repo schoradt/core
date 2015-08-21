@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.NoResultException;
 import javax.persistence.Table;
 
 import org.eclipse.persistence.jpa.JpaQuery;
@@ -18,6 +19,7 @@ import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraOrderByEnum;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.OpenInfraSortOrder;
+import de.btu.openinfra.backend.db.jpa.model.MetaData;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
@@ -287,26 +289,34 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	        // first createOrUpdate the TypePojo
 	        retId = createOrUpdate(pojo);
 
-	        // if the TypePojo was created successfully
-	        if (retId != null) {
-    	        // create a raw POJO for meta data
-    	        MetaDataPojo mdPojo = new MetaDataPojo();
+	        // only check for meta data in project and system schema
+	        switch (schema) {
+	            case PROJECTS:
+	            case SYSTEM:
+	                // if the TypePojo was created successfully
+	                if (retId != null) {
+	                    // create a raw POJO for meta data
+	                    MetaDataPojo mdPojo = new MetaDataPojo();
 
-                // set the object id from the previously created TypePojo
-                mdPojo.setObjectId(retId);
-                // TODO find a way to avoid hard coded id
-                // define the primary key column
-                mdPojo.setPkColumn("id");
-                // define the table name for the object
-                mdPojo.setTableName(modelClass.getAnnotation(Table.class).name());
-                // set the meta data
-                mdPojo.setData(metaData);
-                // write the meta data
-                UUID metaId = new MetaDataDao(currentProjectId, schema)
-                                    .createOrUpdate(mdPojo);
-                if (metaId == null) {
-                    // TODO give feedback about meta data creation?
-                }
+	                    // set the object id from the previously created TypePojo
+	                    mdPojo.setObjectId(retId);
+	                    // TODO find a way to avoid hard coded id
+	                    // define the primary key column
+	                    mdPojo.setPkColumn("id");
+	                    // define the table name for the object
+	                    mdPojo.setTableName(modelClass.getAnnotation(Table.class).name());
+	                    // set the meta data
+	                    mdPojo.setData(metaData);
+	                    // write the meta data
+	                    UUID metaId = new MetaDataDao(currentProjectId, schema)
+	                                        .createOrUpdate(mdPojo);
+	                    if (metaId == null) {
+	                        // TODO give feedback about meta data creation?
+	                    }
+	                }
+	                break;
+	            default:
+	                break;
 	        }
 	    }
 	    return retId;
@@ -450,13 +460,35 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 			TypePojo pojoObject, TypeModel modelObject);
 
 	/**
-	 * This method deletes an entity from the database.
+	 * This method deletes an entity from the database. Previously it checks if
+	 * meta data exists for this entity and delete it as well.
 	 *
 	 * @param uuid the uuid which specifies the entity
 	 * @return     true when the entity was deleted false when the uuid doesn't
 	 *             exists
 	 */
 	public boolean delete(UUID uuid) {
+	    // only check for meta data in project and system schema
+	    switch (schema) {
+            case PROJECTS:
+            case SYSTEM:
+        	    try {
+        	        // retrieve meta data for the entity if exists
+                    MetaData md = em.createNamedQuery(
+                            "MetaData.findByObjectId", MetaData.class)
+                            .setParameter("oId", uuid).getSingleResult();
+                    // delete the meta data
+                    if (new MetaDataDao(currentProjectId, schema).delete(
+                            md.getId())) {
+                        // TODO give feedback about meta data deletion?
+                    }
+                } catch (NoResultException nre) { /* do nothing */ }
+        	    break;
+            default:
+                break;
+        }
+
+	    // delete the common entity
 		TypeModel o = em.find(modelClass, uuid);
 		EntityTransaction et = em.getTransaction();
 		if(o != null) {
