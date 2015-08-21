@@ -7,6 +7,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.persistence.NoResultException;
+
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.MetaData;
@@ -88,21 +90,22 @@ public class TopicCharacteristicDao
 	public TopicCharacteristicPojo mapToPojo(
 			Locale locale,
 			TopicCharacteristic tc) {
-		return mapToPojoStatically(
-				locale,
-				tc,
-				em.createNamedQuery(
-				        "MetaData.findByObjectId", MetaData.class)
-				        .setParameter("oId", tc.getId())
-				        .getSingleResult()
-				);
+	    MetaData md = null;
+	    try {
+	        md = em.createNamedQuery(
+	                "MetaData.findByObjectId", MetaData.class)
+	                .setParameter("oId", tc.getId())
+	                .getSingleResult();
+        } catch (NoResultException nre) { /* do nothing */ }
+		return mapToPojoStatically(locale, tc, md);
 	}
 
 	/**
 	 * This method implements the method mapToPojo in a static way.
 	 *
 	 * @param locale the requested language as Java.util locale
-	 * @param tc    the model object
+	 * @param tc     the model object
+	 * @param md     the meta data as model object
 	 * @return       the POJO object when the model object is not null else null
 	 */
 	public static TopicCharacteristicPojo mapToPojoStatically(
@@ -116,6 +119,7 @@ public class TopicCharacteristicDao
 		    pojo.setMetaData(md.getData());
 		} // end if
 
+		pojo.setProjectId(tc.getProject().getId());
 		pojo.setTopic(ValueListValueDao.mapToPojoStatically(
 				locale,
 				tc.getValueListValue()));
