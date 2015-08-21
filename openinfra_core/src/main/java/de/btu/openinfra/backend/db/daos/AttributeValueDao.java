@@ -139,6 +139,7 @@ public class AttributeValueDao extends
 			    // object in order to provide the required geom object.
 				AttributeValueGeom avg = new AttributeValueGeom();
 				avg.setId(id);
+				avg.setXmin(av.getXmin());
 				avg.setTopicInstance(av.getTopicInstance());
                 avg.setAttributeTypeToAttributeTypeGroup(
                         av.getAttributeTypeToAttributeTypeGroup());
@@ -156,6 +157,7 @@ public class AttributeValueDao extends
                 // object in order to provide the required geom object.
 				AttributeValueGeomz avgz = new AttributeValueGeomz();
 				avgz.setId(id);
+				avgz.setXmin(av.getXmin());
 				avgz.setTopicInstance(av.getTopicInstance());
 				avgz.setAttributeTypeToAttributeTypeGroup(
 				        av.getAttributeTypeToAttributeTypeGroup());
