@@ -4,9 +4,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
-
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.AttributeTypeGroupDao;
 import de.btu.openinfra.backend.db.jpa.model.AttributeTypeGroup;
@@ -25,16 +22,9 @@ public class AttributeTypeGroupRbac extends OpenInfraRbac<
 			Locale locale,
 			UUID attributeTypeGroupId) {
 		checkPermission();
-		try {
-			return dao.getDeclaredConstructor(constructorTypes).newInstance(
-					currentProjectId, 
-					schema).readSubGroups(locale, attributeTypeGroupId);
-		} catch(Exception ex) {
-			ex.printStackTrace();
-			throw new WebApplicationException(
-					ex.getMessage(),
-					Response.Status.INTERNAL_SERVER_ERROR);
-		}
+		return new AttributeTypeGroupDao(
+				currentProjectId,
+				schema).readSubGroups(locale, attributeTypeGroupId);
 	}
 
 }

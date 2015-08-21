@@ -30,9 +30,8 @@ public class TopicRbac {
 			AttributeValueGeomType geomType) {
 		// Since this Class is not a rbac class, we use a closely related class 
 		// to check the permission.
-		// TODO this should be TopicInstance
-			new TopicCharacteristicRbac(
-					currentProjectId, schema).checkPermission();
+		new TopicInstanceRbac(
+				currentProjectId, schema).checkPermission();
 		return new TopicDao(currentProjectId, schema).read(
 				locale, topicInstanceId, geomType);
 	}

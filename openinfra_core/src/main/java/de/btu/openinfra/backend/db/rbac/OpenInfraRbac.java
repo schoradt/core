@@ -52,6 +52,9 @@ import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
  * Each {id} refers to an additional : like so
  * /projects/{id}/topiccharacteristics/{id}/topicinstances:get:{id 1}:{id 2}
  * 
+ * Permission to read information from system schema:
+ * /system:get
+ * 
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
  * @param <TypePojo>
@@ -91,6 +94,15 @@ public abstract class OpenInfraRbac<
 	protected Class<?>[] constructorTypes =	
 			new Class[] {UUID.class, OpenInfraSchemas.class};
 	
+	/**
+	 * This is the default constructor method which is used to identify the
+	 * current subject and to manage the information required to create the
+	 * underlying DAO objects.
+	 * 
+	 * @param currentProjectId the project which is currently accessed
+	 * @param schema           the schema which is currently accessed
+	 * @param dao              the related DAO class
+	 */
 	protected OpenInfraRbac(
 			UUID currentProjectId,
 			OpenInfraSchemas schema,
@@ -101,6 +113,14 @@ public abstract class OpenInfraRbac<
 		this.user = SecurityUtils.getSubject();
 	}
 	
+	/**
+	 * This is a generic method which is provided by all RBAC classes.
+	 * 
+	 * @param locale
+	 * @param offset
+	 * @param size
+	 * @return
+	 */
 	public List<TypePojo> read(Locale locale, int offset, int size) {
 		checkPermission();
 		try {
@@ -115,6 +135,16 @@ public abstract class OpenInfraRbac<
 		}
 	}
 	
+	/**
+	 * This is a generic method which is provided by all RBAC classes.
+	 * 
+	 * @param locale
+	 * @param order
+	 * @param column
+	 * @param offset
+	 * @param size
+	 * @return
+	 */
 	public List<TypePojo> read(
     		Locale locale,
     		OpenInfraSortOrder order,
@@ -134,6 +164,13 @@ public abstract class OpenInfraRbac<
 		}		
 	}
 	
+	/**
+	 * This is a generic method which is provided by all RBAC classes.
+	 * 
+	 * @param locale
+	 * @param id
+	 * @return
+	 */
 	public TypePojo read(Locale locale, UUID id) {
 		checkPermission();
 		try {
@@ -148,7 +185,15 @@ public abstract class OpenInfraRbac<
 		}
 	}
 	
-	protected void checkPermission() {
+	/**
+	 * This method is used to check the permissions of the current subject. This
+	 * class throws a WebApplicationException when the current user is either 
+	 * not authenticated or unauthorized to access the requested resource. This
+	 * WebApplicationException is automatically handled by the embedding web 
+	 * container (it might be Apache Tomcat).
+	 * 
+	 */
+	protected void checkPermission() throws WebApplicationException {
 		
 		if(!user.isAuthenticated()) {
 			throw new WebApplicationException(Response.Status.UNAUTHORIZED);
@@ -169,7 +214,6 @@ public abstract class OpenInfraRbac<
 			break;
 			
 		case SYSTEM:
-			System.out.println("test");
 			if(user.isPermitted("/system:get")) {
 				return;
 			}

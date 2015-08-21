@@ -31,6 +31,14 @@ public abstract class OpenInfraValueRbac<
 			new Class[] {UUID.class, OpenInfraSchemas.class, 
 				OpenInfraModelObject.class, OpenInfraValueDao.class};
 	
+	/**
+	 * Refers to the OpenInfraValueDao
+	 * 
+	 * @param currentProjectId
+	 * @param schema
+	 * @param valueClass
+	 * @param dao
+	 */
 	protected OpenInfraValueRbac(
 			UUID currentProjectId,
 			OpenInfraSchemas schema, 

@@ -24,6 +24,15 @@ import de.btu.openinfra.backend.db.jpa.model.rbac.RolePermission;
 import de.btu.openinfra.backend.db.jpa.model.rbac.Subject;
 import de.btu.openinfra.backend.db.jpa.model.rbac.SubjectRole;
 
+/**
+ * This is the OpenInfraRealm which is used to retrieve user-specific 
+ * information from database. The idea behind this implementation was: 
+ * 'keep it stupid and simple' and is closely related to the implementation
+ * of the origin jdbcReal.
+ * 
+ * @author <a href="http://www.b-tu.de">BTU</a> DBIS
+ *
+ */
 public class OpenInfraRealm extends AuthorizingRealm {
 	
 	@Override

@@ -23,6 +23,15 @@ public class OpenInfraValueValueRbac<
 	
 	protected Class<TypeModelValue2> valueClass2;
 	
+	/**
+	 * Refers to the OpenInfraValueValueDao
+	 * 
+	 * @param currentProjectId
+	 * @param schema
+	 * @param valueClass
+	 * @param valueClass2
+	 * @param dao
+	 */
 	protected OpenInfraValueValueRbac(
 			UUID currentProjectId,
 			OpenInfraSchemas schema, 

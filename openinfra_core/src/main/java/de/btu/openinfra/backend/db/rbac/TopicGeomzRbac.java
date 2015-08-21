@@ -41,13 +41,12 @@ public class TopicGeomzRbac {
             int size) {
 		// Since this Class is not a rbac class, we use a closely related class 
 		// to check the permission.
-		// TODO this should be TopicInstance
-			new TopicCharacteristicRbac(
-					currentProjectId, schema).checkPermission();
-			return new TopicGeomzDao(
-					topicCharacteristicId, 
-					schema, 
-					geomType).read(locale, topicCharacteristicId, offset, size);
+		new TopicInstanceRbac(
+				currentProjectId, schema).checkPermission();
+		return new TopicGeomzDao(
+				topicCharacteristicId, 
+				schema, 
+				geomType).read(locale, topicCharacteristicId, offset, size);
     }
 
 }

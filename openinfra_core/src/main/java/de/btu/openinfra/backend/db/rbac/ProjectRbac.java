@@ -18,6 +18,12 @@ public class ProjectRbac extends
 		super(currentProjectId, schema, ProjectDao.class);
 	}
 
+	/**
+	 * This is a special method which implements its own permission check.
+	 * 
+	 * @param locale
+	 * @return
+	 */
 	public List<ProjectPojo> readMainProjects(Locale locale) {
 		List<ProjectPojo> list = new ProjectDao(
 				null,
