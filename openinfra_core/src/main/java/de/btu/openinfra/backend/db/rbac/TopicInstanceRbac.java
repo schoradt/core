@@ -42,5 +42,12 @@ public class TopicInstanceRbac extends OpenInfraValueRbac<TopicInstancePojo,
 				schema).readWithGeomz(locale, 
 						topicCharacteristicId, offset, size);
 	}
+	
+	public long getCountWithGeomz(UUID topicCharacteristicId) {
+		checkPermission();
+		return new TopicInstanceDao(
+				topicCharacteristicId, 
+				schema).getCountWithGeomz(topicCharacteristicId);
+		}
 
 }

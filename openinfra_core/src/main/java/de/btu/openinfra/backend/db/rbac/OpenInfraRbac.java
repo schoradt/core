@@ -186,6 +186,25 @@ public abstract class OpenInfraRbac<
 	}
 	
 	/**
+	 * This is a generic method which is provided by all RBAC classes.
+	 * 
+	 * @return
+	 */
+	public long getCount() {
+		checkPermission();
+		try {
+			return dao.getDeclaredConstructor(constructorTypes).newInstance(
+					currentProjectId, 
+					schema).getCount();
+		} catch(Exception ex) {
+			ex.printStackTrace();
+			throw new WebApplicationException(
+					ex.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	/**
 	 * This method is used to check the permissions of the current subject. This
 	 * class throws a WebApplicationException when the current user is either 
 	 * not authenticated or unauthorized to access the requested resource. This

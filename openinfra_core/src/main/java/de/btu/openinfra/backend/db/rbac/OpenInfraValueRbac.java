@@ -58,9 +58,7 @@ public abstract class OpenInfraValueRbac<
 			return dao.getDeclaredConstructor(
 					constructorTypesValue).newInstance(
 							currentProjectId, 
-							schema, 
-							valueClass, 
-							dao).read(locale, valueId, offset, size);
+							schema).read(locale, valueId, offset, size);
 		} catch(Exception ex) {
 			ex.printStackTrace();
 			throw new WebApplicationException(
@@ -81,15 +79,28 @@ public abstract class OpenInfraValueRbac<
 			return dao.getDeclaredConstructor(
 					constructorTypesValue).newInstance(
 							currentProjectId, 
-							schema, 
-							valueClass, 
-							dao).read(
+							schema).read(
 									locale, 
 									valueId, 
 									order, 
 									column, 
 									offset, 
 									size);
+		} catch(Exception ex) {
+			ex.printStackTrace();
+			throw new WebApplicationException(
+					ex.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	public Long getCount(UUID valueId) {
+		checkPermission();
+		try {
+			return dao.getDeclaredConstructor(
+					constructorTypesValue).newInstance(
+							currentProjectId, 
+							schema).getCount(valueId);
 		} catch(Exception ex) {
 			ex.printStackTrace();
 			throw new WebApplicationException(

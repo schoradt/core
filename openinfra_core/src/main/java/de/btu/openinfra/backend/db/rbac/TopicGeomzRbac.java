@@ -48,5 +48,16 @@ public class TopicGeomzRbac {
 				schema, 
 				geomType).read(locale, topicCharacteristicId, offset, size);
     }
+    
+    public Long getCount(UUID topicCharacteristicId) {
+		// Since this Class is not a rbac class, we use a closely related class 
+		// to check the permission.
+		new TopicInstanceRbac(
+				currentProjectId, schema).checkPermission();    	
+		return new TopicGeomzDao(
+				topicCharacteristicId, 
+				schema, 
+				geomType).getCount(topicCharacteristicId);
+    }
 
 }
