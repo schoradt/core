@@ -298,13 +298,15 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	                    // create a raw POJO for meta data
 	                    MetaDataPojo mdPojo = new MetaDataPojo();
 
-	                    // set the object id from the previously created TypePojo
+	                    // set the object id from the previously created
+	                    // TypePojo
 	                    mdPojo.setObjectId(retId);
 	                    // TODO find a way to avoid hard coded id
 	                    // define the primary key column
 	                    mdPojo.setPkColumn("id");
 	                    // define the table name for the object
-	                    mdPojo.setTableName(modelClass.getAnnotation(Table.class).name());
+	                    mdPojo.setTableName(modelClass
+	                            .getAnnotation(Table.class).name());
 	                    // set the meta data
 	                    mdPojo.setData(metaData);
 	                    // write the meta data

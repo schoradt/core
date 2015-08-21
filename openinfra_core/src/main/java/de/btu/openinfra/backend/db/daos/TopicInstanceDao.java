@@ -8,6 +8,7 @@ import java.util.UUID;
 import javax.persistence.NoResultException;
 
 import de.btu.openinfra.backend.db.MappingResult;
+import de.btu.openinfra.backend.db.OpenInfraMetaDataEnum;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.AttributeValueDomain;
 import de.btu.openinfra.backend.db.jpa.model.AttributeValueValue;
@@ -56,10 +57,13 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
 		        .read(locale, ti.getTopicCharacteristic().getId()));
 
 		String metaData = null;
+		// check if meta data exists for this topic instance
 		if (pojo.getTopicCharacteristic().getMetaData() != null) {
-    		if (pojo.getTopicCharacteristic().getMetaData().containsKey("list_view_columns")) {
+    		if (pojo.getTopicCharacteristic().getMetaData()
+    		        .containsKey(OpenInfraMetaDataEnum.LIST_VIEW_COLUMNS)) {
     		    metaData = pojo.getTopicCharacteristic().getMetaData()
-    		                   .get("list_view_columns").toString();
+    		                   .get(OpenInfraMetaDataEnum.LIST_VIEW_COLUMNS)
+    		                   .toString();
     		}
 		}
 
