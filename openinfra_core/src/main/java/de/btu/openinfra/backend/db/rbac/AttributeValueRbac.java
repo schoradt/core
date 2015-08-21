@@ -32,4 +32,23 @@ public class AttributeValueRbac extends
 					schema).read(locale, attributeValueId, geomType);
 
 	}
+	
+	public UUID distributeTypes(AttributeValuePojo pojo, UUID projectId,
+	        UUID attributeValueId) {
+		checkPermission();
+		return new AttributeValueDao(
+				currentProjectId, 
+				schema).distributeTypes(pojo, projectId, attributeValueId);
+	}
+	
+	public AttributeValuePojo newAttributeValue(
+	        UUID topicInstanceId,
+	        UUID attributeTypeId,
+	        Locale locale) {
+		checkPermission();
+		return new AttributeValueDao(
+				attributeTypeId, 
+				schema).newAttributeValue(
+						topicInstanceId, attributeTypeId, locale);
+	}
 }

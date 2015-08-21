@@ -13,9 +13,9 @@ import javax.ws.rs.core.MediaType;
 import de.btu.openinfra.backend.db.OpenInfraOrderByEnum;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.OpenInfraSortOrder;
-import de.btu.openinfra.backend.db.daos.CharacterCodeDao;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.CharacterCodePojo;
+import de.btu.openinfra.backend.db.rbac.CharacterCodeRbac;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
 /**
@@ -38,7 +38,7 @@ public class CharacterCodesResource {
 			@QueryParam("orderBy") OpenInfraOrderByEnum orderBy,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
-		return new CharacterCodeDao(
+		return new CharacterCodeRbac(
 				null,
 				OpenInfraSchemas.SYSTEM).read(
 						PtLocaleDao.forLanguageTag(language),
@@ -53,7 +53,7 @@ public class CharacterCodesResource {
 	public CharacterCodePojo get(
 			@QueryParam("language") String language,
 			@PathParam("characterCodeId") UUID characterCodeId) {
-		return new CharacterCodeDao(
+		return new CharacterCodeRbac(
 				null,
 				OpenInfraSchemas.SYSTEM).read(
 						PtLocaleDao.forLanguageTag(language),
@@ -64,7 +64,7 @@ public class CharacterCodesResource {
     @Path("count")
     @Produces({MediaType.TEXT_PLAIN})
     public long getCharacterCodeCount() {
-        return new CharacterCodeDao(
+        return new CharacterCodeRbac(
                 null,
                 OpenInfraSchemas.SYSTEM).getCount();
 	}

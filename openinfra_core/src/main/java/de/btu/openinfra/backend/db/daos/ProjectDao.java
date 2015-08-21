@@ -247,12 +247,17 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 	 * necessary to create a new database schema and write some data into the
 	 * meta data schema.
 	 *
+	 * TODO check permission for this method!
+	 *
 	 * @param project the project pojo
 	 * @return        the UUID of the new created project or NULL if something
 	 *                went wrong
 	 */
 	public static UUID createProject(ProjectPojo project) {
-
+		
+		System.out.println("This method (ProjectDao - createProject) is "
+				+ "currently not secured!!!!!!!!!");
+		
 	    UUID id = null;
 
 	    // determine if we want to create a sub or a main project

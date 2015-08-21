@@ -13,9 +13,9 @@ import javax.ws.rs.core.MediaType;
 import de.btu.openinfra.backend.db.OpenInfraOrderByEnum;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.OpenInfraSortOrder;
-import de.btu.openinfra.backend.db.daos.CountryCodeDao;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.CountryCodePojo;
+import de.btu.openinfra.backend.db.rbac.CountryCodeRbac;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
 @Path("/system/countrycodes")
@@ -32,7 +32,7 @@ public class CountryCodesResource {
 			@QueryParam("orderBy") OpenInfraOrderByEnum orderBy,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
-		return new CountryCodeDao(
+		return new CountryCodeRbac(
 					null,
 					OpenInfraSchemas.SYSTEM).read(
 							PtLocaleDao.forLanguageTag(language),
@@ -47,7 +47,7 @@ public class CountryCodesResource {
 	public CountryCodePojo get(
 			@QueryParam("language") String language,
 			@PathParam("countryCodeId") UUID countryCodeId) {
-		return new CountryCodeDao(
+		return new CountryCodeRbac(
 				null,
 				OpenInfraSchemas.SYSTEM).read(
 						PtLocaleDao.forLanguageTag(language),
@@ -58,7 +58,7 @@ public class CountryCodesResource {
     @Path("count")
     @Produces({MediaType.TEXT_PLAIN})
     public long getCountryCodeCount() {
-        return new CountryCodeDao(
+        return new CountryCodeRbac(
                 null,
                 OpenInfraSchemas.SYSTEM).getCount();
     }

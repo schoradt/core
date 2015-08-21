@@ -39,5 +39,31 @@ public class ProjectRbac extends
 		return list;		
 	}
 	
-
+	public long getMainProjectsCount() {
+		return readMainProjects(null).size();
+	}
+	
+	public List<ProjectPojo> readSubProjects(
+			Locale locale,
+			int offset,
+			int size) {
+		checkPermission();
+		return new ProjectDao(
+				currentProjectId, schema).readSubProjects(locale, offset, size);
+	}
+	
+	public long getSubProjectsCount() {
+		return readSubProjects(null, 0, Integer.MAX_VALUE).size();
+	}
+	
+	public ProjectPojo newSubProject(Locale locale) {
+		checkPermission();
+		return new ProjectDao(currentProjectId, schema).newSubProject(locale);
+	}
+	
+	public List<ProjectPojo> readParents(Locale locale) {
+		checkPermission();
+		return new ProjectDao(currentProjectId, schema).readParents(locale);
+	}
+	
 }

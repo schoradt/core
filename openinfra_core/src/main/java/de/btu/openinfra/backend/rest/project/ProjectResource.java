@@ -68,7 +68,7 @@ public class ProjectResource {
 	@Path("count")
 	@Produces({MediaType.TEXT_PLAIN})
 	public long getMainProjectsCount() {
-		return new ProjectDao(
+		return new ProjectRbac(
 				null,
 				OpenInfraSchemas.META_DATA).getMainProjectsCount();
 	}
@@ -85,7 +85,7 @@ public class ProjectResource {
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId) {
 		return OpenInfraResponseBuilder.getResponse(
-				new ProjectDao(
+				new ProjectRbac(
 						projectId,
 						OpenInfraSchemas.PROJECTS).read(
 								PtLocaleDao.forLanguageTag(language),
@@ -108,7 +108,7 @@ public class ProjectResource {
 			@PathParam("projectId") UUID projectId,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
-		return new ProjectDao(
+		return new ProjectRbac(
 				projectId,
 				OpenInfraSchemas.PROJECTS).readSubProjects(
 						PtLocaleDao.forLanguageTag(language),
@@ -121,7 +121,7 @@ public class ProjectResource {
 	@Produces({MediaType.TEXT_PLAIN})
 	public long getSubProjectsCount(
 			@PathParam("projectId") UUID projectId) {
-		return new ProjectDao(
+		return new ProjectRbac(
 				projectId,
 				OpenInfraSchemas.PROJECTS).getSubProjectsCount();
 	}
@@ -131,7 +131,7 @@ public class ProjectResource {
     public ProjectPojo newSubProject(
             @QueryParam("language") String language,
             @PathParam("projectId") UUID projectId) {
-        return new ProjectDao(
+        return new ProjectRbac(
                         projectId,
                         OpenInfraSchemas.PROJECTS)
                     .newSubProject(PtLocaleDao.forLanguageTag(language));
@@ -180,7 +180,7 @@ public class ProjectResource {
     		@PathParam("projectId") UUID projectId,
     		ProjectPojo project) {
         // TODO compare projectId in createOrUpdate method?
-    	UUID uuid = new ProjectDao(
+    	UUID uuid = new ProjectRbac(
     			projectId,
     			OpenInfraSchemas.PROJECTS).createOrUpdate(project);
     	return OpenInfraResponseBuilder.putResponse(uuid);
@@ -221,7 +221,7 @@ public class ProjectResource {
 	public List<ProjectPojo> readParents(
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId) {
-		return new ProjectDao(
+		return new ProjectRbac(
 				projectId,
 				OpenInfraSchemas.PROJECTS).readParents(
 						PtLocaleDao.forLanguageTag(language));
