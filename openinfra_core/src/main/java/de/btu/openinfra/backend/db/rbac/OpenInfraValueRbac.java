@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+
 import de.btu.openinfra.backend.db.OpenInfraOrderBy;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.OpenInfraSortOrder;
@@ -16,13 +19,25 @@ public abstract class OpenInfraValueRbac<
 		TypeModel extends OpenInfraModelObject,
 		TypeModelValue,
 		TypeDao extends OpenInfraValueDao<TypePojo, TypeModel, TypeModelValue>> 
-		extends OpenInfraRbac<TypePojo, TypeModel, TypeDao> {
-
+			extends OpenInfraRbac<TypePojo, TypeModel, TypeDao> {
+	
+	protected Class<TypeModelValue> valueClass;
+	
+	/**
+	 * This defines the constructor types in order to call the constructor in a 
+	 * generic way via: 
+	 */
+	protected Class<?>[] constructorTypesValue =	
+			new Class[] {UUID.class, OpenInfraSchemas.class, 
+				OpenInfraModelObject.class, OpenInfraValueDao.class};
+	
 	protected OpenInfraValueRbac(
 			UUID currentProjectId,
 			OpenInfraSchemas schema, 
+			Class<TypeModelValue> valueClass,
 			Class<TypeDao> dao) {
 		super(currentProjectId, schema, dao);
+		this.valueClass = valueClass; 
 	}
 
 	public List<TypePojo> read(
@@ -30,7 +45,20 @@ public abstract class OpenInfraValueRbac<
 			UUID valueId,
 			int offset,
 			int size) {
-		return null;
+		checkPermission();
+		try {
+			return dao.getDeclaredConstructor(
+					constructorTypesValue).newInstance(
+							currentProjectId, 
+							schema, 
+							valueClass, 
+							dao).read(locale, valueId, offset, size);
+		} catch(Exception ex) {
+			ex.printStackTrace();
+			throw new WebApplicationException(
+					ex.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
 	public List<TypePojo> read(
@@ -40,9 +68,25 @@ public abstract class OpenInfraValueRbac<
             OpenInfraOrderBy column,
             int offset,
             int size) {
-		return null;
+		checkPermission();
+		try {
+			return dao.getDeclaredConstructor(
+					constructorTypesValue).newInstance(
+							currentProjectId, 
+							schema, 
+							valueClass, 
+							dao).read(
+									locale, 
+									valueId, 
+									order, 
+									column, 
+									offset, 
+									size);
+		} catch(Exception ex) {
+			ex.printStackTrace();
+			throw new WebApplicationException(
+					ex.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		}
 	}
-	
-	
-
 }

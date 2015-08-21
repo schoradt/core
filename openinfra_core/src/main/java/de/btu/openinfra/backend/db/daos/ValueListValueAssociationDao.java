@@ -18,7 +18,7 @@ import de.btu.openinfra.backend.db.pojos.ValueListValueAssociationPojo;
  */
 public class ValueListValueAssociationDao
 	extends OpenInfraValueValueDao<ValueListValueAssociationPojo,
-	ValueListValuesXValueListValue, ValueListValue, ValueListValue>{
+	ValueListValuesXValueListValue, ValueListValue, ValueListValue> {
 
     /**
      * This is the required constructor which calls the super constructor and in

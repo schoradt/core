@@ -13,19 +13,16 @@ import de.btu.openinfra.backend.db.jpa.model.Project;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
 import de.btu.openinfra.backend.db.pojos.TopicCharacteristicPojo;
 
-public class TopicCharacteristicRbac extends 
-	OpenInfraValueRbac<
-	TopicCharacteristicPojo,
-	TopicCharacteristic,
-	Project,
+public class TopicCharacteristicRbac extends OpenInfraValueRbac<
+	TopicCharacteristicPojo, TopicCharacteristic, Project, 
 	TopicCharacteristicDao> {
-
 
 	public TopicCharacteristicRbac(
 			UUID currentProjectId,
 			OpenInfraSchemas schema) {
 		super(currentProjectId, 
-				schema, 
+				schema,
+				Project.class,
 				TopicCharacteristicDao.class);
 	}
 

@@ -193,7 +193,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 	 * @param locale the required locale
 	 * @return       a list of parents in reverse order
 	 */
-	public List<ProjectPojo> getParents(Locale locale) {
+	public List<ProjectPojo> readParents(Locale locale) {
 		Project self = em.find(Project.class, currentProjectId);
 		List<ProjectPojo> parents = new LinkedList<ProjectPojo>();
 		parents.add(mapToPojoStatically(locale, self));
@@ -218,7 +218,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 		if(currentProject != null) {
 			return new ProjectDao(
 					UUID.fromString(currentProject),
-					OpenInfraSchemas.PROJECTS).getParents(locale);
+					OpenInfraSchemas.PROJECTS).readParents(locale);
 		} else {
 			return new LinkedList<ProjectPojo>();
 		} // end if else

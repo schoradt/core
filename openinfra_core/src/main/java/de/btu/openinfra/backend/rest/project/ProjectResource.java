@@ -223,7 +223,7 @@ public class ProjectResource {
 			@PathParam("projectId") UUID projectId) {
 		return new ProjectDao(
 				projectId,
-				OpenInfraSchemas.PROJECTS).getParents(
+				OpenInfraSchemas.PROJECTS).readParents(
 						PtLocaleDao.forLanguageTag(language));
 	}
 
