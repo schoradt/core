@@ -3,6 +3,7 @@ package de.btu.openinfra.backend.rest;
 import java.util.List;
 import java.util.UUID;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -201,6 +202,20 @@ public class TopicCharacteristicResource {
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
                         pojo, pojo.getMetaData());
         return OpenInfraResponseBuilder.postResponse(id);
+    }
+
+    @DELETE
+    @Path("{topicCharacteristicId}")
+    public Response delete(
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            @PathParam("topicCharacteristicId") UUID topicCharacteristicId) {
+        return OpenInfraResponseBuilder.deleteResponse(
+                new TopicCharacteristicDao(
+                        projectId,
+                        OpenInfraSchemas.valueOf(schema.toUpperCase())).delete(
+                                topicCharacteristicId),
+                                topicCharacteristicId);
     }
 
 }
