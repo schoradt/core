@@ -15,8 +15,7 @@ import de.btu.openinfra.backend.db.pojos.MetaDataPojo;
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
  */
-public class MetaDataDao 
-    extends OpenInfraDao<MetaDataPojo, MetaData> {
+public class MetaDataDao extends OpenInfraDao<MetaDataPojo, MetaData> {
 
     /**
      * This is the required constructor which calls the super constructor and in 

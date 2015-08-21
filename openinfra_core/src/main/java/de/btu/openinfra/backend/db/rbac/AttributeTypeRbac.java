@@ -25,5 +25,12 @@ public class AttributeTypeRbac extends OpenInfraValueRbac<AttributeTypePojo,
 				currentProjectId, 
 				schema).read(locale, dataType);
 	}
+	
+	public AttributeTypePojo newAttributeType(Locale locale) {
+		checkPermission();
+		return new AttributeTypeDao(
+				currentProjectId, 
+				schema).newAttributeType(locale);
+	}
 
 }

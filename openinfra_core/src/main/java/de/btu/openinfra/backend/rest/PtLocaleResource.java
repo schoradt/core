@@ -15,6 +15,7 @@ import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.PtLocalePojo;
+import de.btu.openinfra.backend.db.rbac.PtLocaleRbac;
 
 /**
  * This class represents the PtLocal resource of the REST API.
@@ -38,7 +39,7 @@ public class PtLocaleResource {
 			@QueryParam("orderBy") OpenInfraOrderByEnum orderBy,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
-		return new PtLocaleDao(
+		return new PtLocaleRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language),
@@ -54,7 +55,7 @@ public class PtLocaleResource {
 	public long getCount(
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema) {
-		return new PtLocaleDao(
+		return new PtLocaleRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount();
 	}
@@ -66,7 +67,7 @@ public class PtLocaleResource {
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@PathParam("ptLocaleId") UUID ptLocaleId) {
-		return new PtLocaleDao(
+		return new PtLocaleRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language),

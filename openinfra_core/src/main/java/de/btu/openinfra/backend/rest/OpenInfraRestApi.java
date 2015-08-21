@@ -16,6 +16,13 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+/**
+ * This class is used to generate a HTML view out of the XML-based rest API
+ * documentation.
+ * 
+ * @author <a href="http://www.b-tu.de">BTU</a> DBIS
+ *
+ */
 @Path("/application.html")
 @Singleton
 @Produces({MediaType.TEXT_HTML})

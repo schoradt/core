@@ -18,13 +18,13 @@ import javax.ws.rs.core.Response;
 import de.btu.openinfra.backend.db.OpenInfraOrderByEnum;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.OpenInfraSortOrder;
-import de.btu.openinfra.backend.db.daos.AttributeTypeAssociationDao;
-import de.btu.openinfra.backend.db.daos.AttributeTypeDao;
-import de.btu.openinfra.backend.db.daos.AttributeTypeGroupToAttributeTypeDao;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeAssociationPojo;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupToAttributeTypePojo;
 import de.btu.openinfra.backend.db.pojos.AttributeTypePojo;
+import de.btu.openinfra.backend.db.rbac.AttributeTypeAssociationRbac;
+import de.btu.openinfra.backend.db.rbac.AttributeTypeGroupToAttributeTypeRbac;
+import de.btu.openinfra.backend.db.rbac.AttributeTypeRbac;
 
 @Path(OpenInfraResponseBuilder.REST_URI + "/attributetypes")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
@@ -43,7 +43,7 @@ public class AttributeTypeResource {
 			@QueryParam("orderBy") OpenInfraOrderByEnum orderBy,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
-		return new AttributeTypeDao(
+		return new AttributeTypeRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language),
@@ -63,7 +63,7 @@ public class AttributeTypeResource {
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 
-		return new AttributeTypeAssociationDao(
+		return new AttributeTypeAssociationRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language),
@@ -80,7 +80,7 @@ public class AttributeTypeResource {
             @PathParam("schema") String schema,
             @PathParam("attributeTypeId") UUID attributeTypeId) {
 
-        return new AttributeTypeAssociationDao(
+        return new AttributeTypeAssociationRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
                         attributeTypeId);
@@ -98,7 +98,7 @@ public class AttributeTypeResource {
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 
-		return new AttributeTypeAssociationDao(
+		return new AttributeTypeAssociationRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language),
@@ -114,7 +114,7 @@ public class AttributeTypeResource {
 	public long getCount(
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema) {
-		return new AttributeTypeDao(
+		return new AttributeTypeRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount();
 	}
@@ -126,7 +126,7 @@ public class AttributeTypeResource {
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@PathParam("attributeTypeId") UUID attributeTypeId) {
-		return new AttributeTypeDao(
+		return new AttributeTypeRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language),
@@ -142,7 +142,7 @@ public class AttributeTypeResource {
 			@PathParam("attributeTypeId") UUID attributeTypeId,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
-		return new AttributeTypeGroupToAttributeTypeDao(
+		return new AttributeTypeGroupToAttributeTypeRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language),
@@ -158,7 +158,7 @@ public class AttributeTypeResource {
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@PathParam("attributeTypeId") UUID attributeTypeId) {
-		return new AttributeTypeGroupToAttributeTypeDao(
+		return new AttributeTypeGroupToAttributeTypeRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
 						attributeTypeId);
@@ -174,7 +174,7 @@ public class AttributeTypeResource {
 			@PathParam("attributeTypeGroupId") UUID attributeTypeGroupId,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
-		return new AttributeTypeGroupToAttributeTypeDao(
+		return new AttributeTypeGroupToAttributeTypeRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language),
@@ -190,7 +190,7 @@ public class AttributeTypeResource {
             @QueryParam("language") String language,
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema) {
-        return new AttributeTypeDao(
+        return new AttributeTypeRbac(
                         projectId,
                         OpenInfraSchemas.valueOf(schema.toUpperCase()))
                     .newAttributeType(PtLocaleDao.forLanguageTag(language));
@@ -201,7 +201,7 @@ public class AttributeTypeResource {
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema,
             AttributeTypePojo pojo) {
-        UUID id = new AttributeTypeDao(
+        UUID id = new AttributeTypeRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
                         pojo);
@@ -215,7 +215,7 @@ public class AttributeTypeResource {
             @PathParam("schema") String schema,
             @PathParam("attributeTypeId") UUID attributeTypeId) {
         return OpenInfraResponseBuilder.deleteResponse(
-                new AttributeTypeDao(
+                new AttributeTypeRbac(
                         projectId,
                         OpenInfraSchemas.valueOf(schema.toUpperCase())).delete(
                                 attributeTypeId),
@@ -230,7 +230,7 @@ public class AttributeTypeResource {
             @PathParam("attributeTypeId") UUID attributeTypeId,
             AttributeTypePojo pojo) {
         return OpenInfraResponseBuilder.putResponse(
-                new AttributeTypeDao(
+                new AttributeTypeRbac(
                         projectId,
                         OpenInfraSchemas.PROJECTS).createOrUpdate(pojo,
                                 attributeTypeId));
@@ -243,7 +243,7 @@ public class AttributeTypeResource {
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema,
             @PathParam("attributeTypeId") UUID attributeTypeId) {
-        return new AttributeTypeAssociationDao(
+        return new AttributeTypeAssociationRbac(
                         projectId,
                         OpenInfraSchemas.valueOf(schema.toUpperCase()))
                     .newAttributeTypeAssociation(attributeTypeId);
@@ -256,7 +256,7 @@ public class AttributeTypeResource {
             @PathParam("schema") String schema,
             @PathParam("attributeTypeId") UUID attributeTypeId,
             AttributeTypeAssociationPojo pojo) {
-        UUID id = new AttributeTypeAssociationDao(
+        UUID id = new AttributeTypeAssociationRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
                         pojo, attributeTypeId,
@@ -272,7 +272,7 @@ public class AttributeTypeResource {
             @PathParam("associatedAttributeTypeId")
                 UUID associatedAttributeTypeId) {
         return OpenInfraResponseBuilder.deleteResponse(
-                new AttributeTypeAssociationDao(
+                new AttributeTypeAssociationRbac(
                         projectId,
                         OpenInfraSchemas.valueOf(schema.toUpperCase())).delete(
                                 associatedAttributeTypeId),
@@ -289,7 +289,7 @@ public class AttributeTypeResource {
             @PathParam("schema") String schema,
             AttributeTypeAssociationPojo pojo) {
         return OpenInfraResponseBuilder.putResponse(
-                new AttributeTypeAssociationDao(
+                new AttributeTypeAssociationRbac(
                         projectId,
                         OpenInfraSchemas.valueOf(schema.toUpperCase()))
                             .createOrUpdate(

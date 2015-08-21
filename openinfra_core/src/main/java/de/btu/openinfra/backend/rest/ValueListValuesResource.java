@@ -20,6 +20,7 @@ import de.btu.openinfra.backend.db.daos.ValueListValueAssociationDao;
 import de.btu.openinfra.backend.db.daos.ValueListValueDao;
 import de.btu.openinfra.backend.db.pojos.ValueListValueAssociationPojo;
 import de.btu.openinfra.backend.db.pojos.ValueListValuePojo;
+import de.btu.openinfra.backend.db.rbac.ValueListValueRbac;
 
 @Path(OpenInfraResponseBuilder.REST_URI + "/valuelistvalues")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
@@ -36,7 +37,7 @@ public class ValueListValuesResource {
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@PathParam("valueListValueId") UUID valueListValueId) {
-		return new ValueListValueDao(
+		return new ValueListValueRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language),
@@ -49,7 +50,7 @@ public class ValueListValuesResource {
             @QueryParam("language") String language,
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema) {
-        return new ValueListValueDao(
+        return new ValueListValueRbac(
                         projectId,
                         OpenInfraSchemas.valueOf(schema.toUpperCase()))
                     .newAttributeValueValues(

@@ -14,7 +14,7 @@ public class TopicInstanceAssociationRbac extends OpenInfraValueValueRbac<
 	TopicInstanceAssociationPojo, TopicInstanceXTopicInstance, 
 	TopicInstance, TopicInstance, TopicInstanceAssociationDao> {
 
-	protected TopicInstanceAssociationRbac(
+	public TopicInstanceAssociationRbac(
 			UUID currentProjectId,
 			OpenInfraSchemas schema) {
 		super(currentProjectId, schema, TopicInstance.class, 

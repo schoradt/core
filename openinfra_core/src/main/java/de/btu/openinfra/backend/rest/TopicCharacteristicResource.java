@@ -13,14 +13,13 @@ import javax.ws.rs.core.MediaType;
 import de.btu.openinfra.backend.db.OpenInfraOrderByEnum;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.OpenInfraSortOrder;
-import de.btu.openinfra.backend.db.daos.AttributeTypeGroupToTopicCharacteristicDao;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
-import de.btu.openinfra.backend.db.daos.RelationshipTypeDao;
-import de.btu.openinfra.backend.db.daos.RelationshipTypeToTopicCharacteristicDao;
-import de.btu.openinfra.backend.db.daos.TopicCharacteristicDao;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupToTopicCharacteristicPojo;
 import de.btu.openinfra.backend.db.pojos.RelationshipTypeToTopicCharacteristicPojo;
 import de.btu.openinfra.backend.db.pojos.TopicCharacteristicPojo;
+import de.btu.openinfra.backend.db.rbac.AttributeTypeGroupToTopicCharacteristicRbac;
+import de.btu.openinfra.backend.db.rbac.RelationshipTypeRbac;
+import de.btu.openinfra.backend.db.rbac.RelationshipTypeToTopicCharacteristicRbac;
 import de.btu.openinfra.backend.db.rbac.TopicCharacteristicRbac;
 
 @Path(OpenInfraResponseBuilder.REST_URI + "/topiccharacteristics")
@@ -36,7 +35,7 @@ public class TopicCharacteristicResource {
 	public long getTopicCharacteristicsCount(
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema) {
-		return new TopicCharacteristicDao(
+		return new TopicCharacteristicRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount();
 	}
@@ -96,7 +95,7 @@ public class TopicCharacteristicResource {
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 
-		return new AttributeTypeGroupToTopicCharacteristicDao(
+		return new AttributeTypeGroupToTopicCharacteristicRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language),
@@ -112,7 +111,7 @@ public class TopicCharacteristicResource {
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema,
             @PathParam("topicCharacteristicId") UUID topicCharacteristicId) {
-        return new AttributeTypeGroupToTopicCharacteristicDao(
+        return new AttributeTypeGroupToTopicCharacteristicRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
                         topicCharacteristicId);
@@ -129,7 +128,7 @@ public class TopicCharacteristicResource {
 			@PathParam("attributeTypeGroupId") UUID attributeTypeGroupId,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
-		return new AttributeTypeGroupToTopicCharacteristicDao(
+		return new AttributeTypeGroupToTopicCharacteristicRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language),
@@ -150,7 +149,7 @@ public class TopicCharacteristicResource {
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 
-		return new RelationshipTypeToTopicCharacteristicDao(
+		return new RelationshipTypeToTopicCharacteristicRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language),
@@ -170,7 +169,7 @@ public class TopicCharacteristicResource {
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 
-		return new RelationshipTypeToTopicCharacteristicDao(
+		return new RelationshipTypeToTopicCharacteristicRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language),
@@ -187,7 +186,7 @@ public class TopicCharacteristicResource {
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@PathParam("topicCharacteristicId") UUID topicCharacteristicId) {
-		return new RelationshipTypeDao(
+		return new RelationshipTypeRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
 						topicCharacteristicId);

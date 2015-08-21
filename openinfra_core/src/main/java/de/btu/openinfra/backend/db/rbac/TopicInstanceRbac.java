@@ -13,7 +13,7 @@ import de.btu.openinfra.backend.db.pojos.TopicInstancePojo;
 public class TopicInstanceRbac extends OpenInfraValueRbac<TopicInstancePojo,
 	TopicInstance, TopicCharacteristic, TopicInstanceDao> {
 
-	protected TopicInstanceRbac(
+	public TopicInstanceRbac(
 			UUID currentProjectId, 
 			OpenInfraSchemas schema) {
 		super(currentProjectId, schema, 

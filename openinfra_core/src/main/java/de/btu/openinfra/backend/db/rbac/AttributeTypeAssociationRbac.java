@@ -18,5 +18,13 @@ public class AttributeTypeAssociationRbac extends OpenInfraValueValueRbac<
 		super(currentProjectId,	schema, AttributeType.class, 
 				AttributeType.class, AttributeTypeAssociationDao.class);
 	}
+	
+	public AttributeTypeAssociationPojo newAttributeTypeAssociation(
+            UUID attributeTypeId) {
+		checkPermission();
+		return new AttributeTypeAssociationDao(
+				attributeTypeId, 
+				schema).newAttributeTypeAssociation(attributeTypeId);
+	}
 
 }

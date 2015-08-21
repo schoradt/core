@@ -205,6 +205,126 @@ public abstract class OpenInfraRbac<
 	}
 	
 	/**
+	 * This is a generic method which is provided by all RBAC classes.
+	 * 
+	 * @param pojo
+	 * @return
+	 * @throws RuntimeException
+	 */
+	public UUID createOrUpdate(TypePojo pojo)
+			throws RuntimeException {
+		checkPermission();
+		try {
+			return dao.getDeclaredConstructor(constructorTypes).newInstance(
+					currentProjectId, 
+					schema).createOrUpdate(pojo);
+		} catch(Exception ex) {
+			ex.printStackTrace();
+			throw new WebApplicationException(
+					ex.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	/**
+	 * This is a generic method which is provided by all RBAC classes.
+	 * 
+	 * @param pojo
+	 * @param valueId
+	 * @return
+	 * @throws RuntimeException
+	 */
+    public UUID createOrUpdate(TypePojo pojo, UUID valueId)
+            throws RuntimeException {
+		checkPermission();
+		try {
+			return dao.getDeclaredConstructor(constructorTypes).newInstance(
+					currentProjectId, 
+					schema).createOrUpdate(pojo, valueId);
+		} catch(Exception ex) {
+			ex.printStackTrace();
+			throw new WebApplicationException(
+					ex.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		}
+    }
+    
+    /**
+     * This is a generic method which is provided by all RBAC classes.
+     * 
+     * @param pojo
+     * @param firstAssociationId
+     * @param firstAssociationIdFromPojo
+     * @return
+     * @throws RuntimeException
+     */
+    public UUID createOrUpdate(TypePojo pojo, UUID firstAssociationId,
+            UUID firstAssociationIdFromPojo) throws RuntimeException {
+		checkPermission();
+		try {
+			return dao.getDeclaredConstructor(constructorTypes).newInstance(
+					currentProjectId, 
+					schema).createOrUpdate(pojo, 
+							firstAssociationId, firstAssociationIdFromPojo);
+		} catch(Exception ex) {
+			ex.printStackTrace();
+			throw new WebApplicationException(
+					ex.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		}
+    }
+    
+    /**
+     * This is a generic method which is provided by all RBAC classes.
+     * 
+     * @param pojo
+     * @param firstAssociationId
+     * @param firstAssociationIdFromPojo
+     * @param secondAssociationId
+     * @param secondAssociationIdFromPojo
+     * @return
+     * @throws RuntimeException
+     */
+    public UUID createOrUpdate(TypePojo pojo, UUID firstAssociationId,
+            UUID firstAssociationIdFromPojo, UUID secondAssociationId,
+            UUID secondAssociationIdFromPojo)
+            throws RuntimeException {
+		checkPermission();
+		try {
+			return dao.getDeclaredConstructor(constructorTypes).newInstance(
+					currentProjectId, 
+					schema).createOrUpdate(pojo, firstAssociationId, 
+							firstAssociationIdFromPojo, secondAssociationId, 
+							secondAssociationIdFromPojo);
+		} catch(Exception ex) {
+			ex.printStackTrace();
+			throw new WebApplicationException(
+					ex.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		}
+    }
+    
+    /**
+     * This is a generic method which is provided by all RBAC classes.
+     * 
+     * @param uuid
+     * @return
+     */
+    public boolean delete(UUID uuid) {
+		checkPermission();
+		try {
+			return dao.getDeclaredConstructor(constructorTypes).newInstance(
+					currentProjectId, 
+					schema).delete(uuid);
+		} catch(Exception ex) {
+			ex.printStackTrace();
+			throw new WebApplicationException(
+					ex.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		}
+    }
+	
+	/**
 	 * This method is used to check the permissions of the current subject. This
 	 * class throws a WebApplicationException when the current user is either 
 	 * not authenticated or unauthorized to access the requested resource. This

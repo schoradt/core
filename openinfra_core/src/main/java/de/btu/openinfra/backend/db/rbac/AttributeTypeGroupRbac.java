@@ -26,5 +26,11 @@ public class AttributeTypeGroupRbac extends OpenInfraRbac<
 				currentProjectId,
 				schema).readSubGroups(locale, attributeTypeGroupId);
 	}
+	
+	public AttributeTypeGroupPojo newAttributeTypeGroup(Locale locale) {
+		checkPermission();
+		return new AttributeTypeGroupDao(
+				currentProjectId, schema).newAttributeTypeGroup(locale);
+	}
 
 }

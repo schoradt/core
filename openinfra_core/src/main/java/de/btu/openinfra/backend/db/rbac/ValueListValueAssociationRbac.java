@@ -12,7 +12,7 @@ public class ValueListValueAssociationRbac extends OpenInfraValueValueRbac<
 	ValueListValueAssociationPojo, ValueListValuesXValueListValue, 
 	ValueListValue, ValueListValue, ValueListValueAssociationDao> {
 
-	protected ValueListValueAssociationRbac(
+	public ValueListValueAssociationRbac(
 			UUID currentProjectId,
 			OpenInfraSchemas schema) {
 		super(currentProjectId, schema, ValueListValue.class, 
