@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
+import javax.persistence.NoResultException;
+
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.AttributeValueDomain;
@@ -48,14 +50,18 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
 	public TopicInstancePojo mapToPojo(Locale locale, TopicInstance ti) {
 		// 1. Create new POJO object and set necessary stuff
 		TopicInstancePojo pojo = new TopicInstancePojo();
+		// set the topic characteristic POJO
 		pojo.setTopicCharacteristic(
-				TopicCharacteristicDao.mapToPojoStatically(
-						locale,
-						ti.getTopicCharacteristic(),
-						em.find(
-								MetaData.class,
-								ti.getTopicCharacteristic().getId())));
-		List<String> settings = pojo.getTopicCharacteristic().getSettings();
+		        new TopicCharacteristicDao(currentProjectId, schema)
+		        .read(locale, ti.getTopicCharacteristic().getId()));
+
+		String metaData = null;
+		if (pojo.getTopicCharacteristic().getMetaData() != null) {
+    		if (pojo.getTopicCharacteristic().getMetaData().containsKey("list_view_columns")) {
+    		    metaData = pojo.getTopicCharacteristic().getMetaData()
+    		                   .get("list_view_columns").toString();
+    		}
+		}
 
 		// 2. Associate only attribute values to the topic instance which are
 		//    mentioned in the meta data.
@@ -63,11 +69,11 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
 
 		// 3. This is for all attribute value domains
 		for(AttributeValueDomain avd : ti.getAttributeValueDomains()) {
-			// 3.a Check if the current id is mentioned in the settings
-			if( settings != null && settings.contains(
+			// 3.a Check if the current id is mentioned in the meta data
+			if( metaData != null && metaData.contains(
 					avd.getAttributeTypeToAttributeTypeGroup()
 						.getAttributeType().getId().toString()) ||
-					settings == null ) {
+					metaData == null ) {
 				AttributeValuePojo avPojo = new AttributeValuePojo();
 				avPojo.setUuid(avd.getId());
 				avPojo.setAttributeTypeId(
@@ -86,10 +92,10 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
 		// 4. This is for all attribute value values
 		for(AttributeValueValue avv : ti.getAttributeValueValues()) {
 			// 4.a Check if the current id is mentioned in the settings
-			if( settings != null && settings.contains(
+			if( metaData != null && metaData.contains(
 					avv.getAttributeTypeToAttributeTypeGroup()
 						.getAttributeType().getId().toString()) ||
-					settings == null ) {
+					metaData == null ) {
 				AttributeValuePojo avPojo = new AttributeValuePojo();
 				avPojo.setUuid(avv.getId());
 				avPojo.setAttributeTypeId(
@@ -104,6 +110,14 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
 				values.add(avPojo);
 			} // end if
 		} // end for
+
+		// set the meta data
+        try {
+            MetaData md = em.createNamedQuery(
+                    "MetaData.findByObjectId", MetaData.class)
+                    .setParameter("oId", ti.getId()).getSingleResult();
+            pojo.setMetaData(md.getData());
+        } catch (NoResultException nre) { /* do nothing */ }
 
 		pojo.setValues(values);
 		pojo.setUuid(ti.getId());
