@@ -7,8 +7,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.persistence.NoResultException;
-
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.MetaData;
@@ -90,13 +88,8 @@ public class TopicCharacteristicDao
 	public TopicCharacteristicPojo mapToPojo(
 			Locale locale,
 			TopicCharacteristic tc) {
-	    MetaData md = null;
-	    try {
-	        md = em.createNamedQuery(
-	                "MetaData.findByObjectId", MetaData.class)
-	                .setParameter("oId", tc.getId())
-	                .getSingleResult();
-        } catch (NoResultException nre) { /* do nothing */ }
+	    MetaData md =
+	            new MetaDataDao(currentProjectId, schema).read(tc.getId());
 		return mapToPojoStatically(locale, tc, md);
 	}
 
