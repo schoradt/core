@@ -28,8 +28,7 @@ public abstract class OpenInfraValueRbac<
 	 * generic way via: 
 	 */
 	protected Class<?>[] constructorTypesValue =	
-			new Class[] {UUID.class, OpenInfraSchemas.class, 
-				OpenInfraModelObject.class, OpenInfraValueDao.class};
+			new Class[] {UUID.class, OpenInfraSchemas.class};
 	
 	/**
 	 * Refers to the OpenInfraValueDao
