@@ -3,6 +3,8 @@ package de.btu.openinfra.backend.db.daos;
 import java.util.Locale;
 import java.util.UUID;
 
+import javax.persistence.NoResultException;
+
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.MetaData;
@@ -28,6 +30,24 @@ public class MetaDataDao
      */
     public MetaDataDao(UUID currentProjectId, OpenInfraSchemas schema) {
         super(currentProjectId, schema, MetaData.class);
+    }
+
+    /**
+     * This is a special read method for extracting a meta data model from the
+     * database to a corresponding object id.
+     *
+     * @param objectId the object id
+     * @return         the meta data model for the object id
+     */
+    public MetaData read(UUID objectId) {
+        MetaData md = null;
+        try {
+            md = em.createNamedQuery(
+                    "MetaData.findByObjectId", MetaData.class)
+                    .setParameter("oId", objectId)
+                    .getSingleResult();
+        } catch (NoResultException nre) { /* do nothing */ }
+        return md;
     }
 
     @Override
