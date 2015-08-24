@@ -14,7 +14,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.meta.SettingKeysDao;
 import de.btu.openinfra.backend.db.pojos.meta.SettingKeysPojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
@@ -50,24 +50,24 @@ public class SettingKeysResource {
     public long getCount() {
         return new SettingKeysDao(OpenInfraSchemas.META_DATA).getCount();
     }
-    
+
     @POST
     public Response create(SettingKeysPojo pojo) {
         UUID id = new SettingKeysDao(
                 OpenInfraSchemas.META_DATA).createOrUpdate(pojo);
         return OpenInfraResponseBuilder.postResponse(id);
     }
-    
+
     @PUT
     @Path("{settingKeysId}")
     public Response update(
             @PathParam("settingKeysId") UUID settingKeysId,
             SettingKeysPojo pojo) {
         UUID id = new SettingKeysDao(
-                OpenInfraSchemas.META_DATA).createOrUpdate(pojo);
+                OpenInfraSchemas.META_DATA).createOrUpdate(pojo, settingKeysId);
         return OpenInfraResponseBuilder.putResponse(id);
     }
-    
+
     @DELETE
     @Path("{settingKeysId}")
     public Response delete(@PathParam("settingKeysId") UUID settingKeysId) {
@@ -78,11 +78,11 @@ public class SettingKeysResource {
                 deleteResult,
                 settingKeysId);
     }
-    
+
     @GET
     @Path("/new")
     public SettingKeysPojo newSettingKeys() {
         return new SettingKeysDao(OpenInfraSchemas.META_DATA).newSettingKeys();
     }
-    
+
 }

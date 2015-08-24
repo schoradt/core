@@ -14,7 +14,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.meta.ProjectsDao;
 import de.btu.openinfra.backend.db.pojos.meta.ProjectsPojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
@@ -58,17 +58,17 @@ public class ProjectsResource {
                         pojo);
         return OpenInfraResponseBuilder.postResponse(id);
     }
-    
+
     @PUT
     @Path("{projectsId}")
     public Response update(
             @PathParam("projectsId") UUID projectsId,
             ProjectsPojo pojo) {
         UUID id = new ProjectsDao(OpenInfraSchemas.META_DATA).createOrUpdate(
-                pojo);
+                pojo, projectsId);
         return OpenInfraResponseBuilder.putResponse(id);
     }
-    
+
     @DELETE
     @Path("{projectsId}")
     public Response delete(@PathParam("projectsId") UUID projectsId) {
@@ -78,7 +78,7 @@ public class ProjectsResource {
                 deleteResult,
                 projectsId);
     }
-    
+
     @GET
     @Path("/new")
     public ProjectsPojo newProjects() {

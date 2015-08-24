@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import javax.persistence.EntityManager;
 
-import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.meta.ProjectsDao;
 import de.btu.openinfra.backend.db.jpa.model.meta.Projects;
 import de.btu.openinfra.backend.db.pojos.meta.ProjectsPojo;

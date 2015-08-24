@@ -6,6 +6,7 @@ import java.util.Locale;
 import java.util.UUID;
 
 import de.btu.openinfra.backend.db.MappingResult;
+import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.AttributeValueDomain;
 import de.btu.openinfra.backend.db.jpa.model.AttributeValueValue;
 import de.btu.openinfra.backend.db.jpa.model.MetaData;

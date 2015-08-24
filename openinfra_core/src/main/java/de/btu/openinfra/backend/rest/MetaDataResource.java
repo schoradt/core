@@ -16,9 +16,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import de.btu.openinfra.backend.db.OpenInfraOrderByEnum;
+import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.MetaDataDao;
-import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.MetaDataPojo;
 
@@ -48,7 +48,7 @@ public class MetaDataResource {
                         offset,
                         size);
     }
-    
+
     @GET
     @Path("/new")
     public MetaDataPojo newMetaData(
@@ -59,7 +59,7 @@ public class MetaDataResource {
                         OpenInfraSchemas.valueOf(schema.toUpperCase()))
                     .newMetaData();
     }
-    
+
     @POST
     public Response create(
             @PathParam("projectId") UUID projectId,
@@ -71,7 +71,7 @@ public class MetaDataResource {
                         pojo);
         return OpenInfraResponseBuilder.postResponse(id);
     }
-    
+
     @PUT
     @Path("{metadataId}")
     public Response update(
@@ -83,9 +83,9 @@ public class MetaDataResource {
                 new MetaDataDao(
                         projectId,
                         OpenInfraSchemas.valueOf(schema.toUpperCase())
-                        ).createOrUpdate(pojo));
+                        ).createOrUpdate(pojo, metadataId));
     }
-    
+
     @DELETE
     @Path("{metadataId}")
     public Response delete(

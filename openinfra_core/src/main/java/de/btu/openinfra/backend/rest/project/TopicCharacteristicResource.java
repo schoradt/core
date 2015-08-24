@@ -12,9 +12,9 @@ import javax.ws.rs.core.MediaType;
 
 import de.btu.openinfra.backend.OpenInfraProperties;
 import de.btu.openinfra.backend.db.OpenInfraOrderBy;
+import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.AttributeValueGeomType;
-import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.daos.TopicGeomzDao;
 import de.btu.openinfra.backend.db.daos.TopicInstanceDao;

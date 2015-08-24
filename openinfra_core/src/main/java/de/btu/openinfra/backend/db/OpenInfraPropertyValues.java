@@ -58,6 +58,16 @@ public enum OpenInfraPropertyValues {
 		public String toString() {
 			return "meta_data";
 		}
+	},
+	
+	/**
+	 * The static search path for the role-based access control
+	 */
+	RBAC_SEARCH_PATH {
+		@Override
+		public String toString() {
+			return "rbac";
+		}
 	}
 
 }

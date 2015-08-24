@@ -14,7 +14,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.meta.CredentialsDao;
 import de.btu.openinfra.backend.db.pojos.meta.CredentialsPojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
@@ -50,24 +50,24 @@ public class CredentialsResource {
     public long getCount() {
         return new CredentialsDao(OpenInfraSchemas.META_DATA).getCount();
     }
-    
+
     @POST
     public Response create(CredentialsPojo pojo) {
         UUID id = new CredentialsDao(
                 OpenInfraSchemas.META_DATA).createOrUpdate(pojo);
         return OpenInfraResponseBuilder.postResponse(id);
     }
-    
+
     @PUT
     @Path("{credentialsId}")
     public Response update(
             @PathParam("credentialsId") UUID credentialsId,
             CredentialsPojo pojo) {
         UUID id = new CredentialsDao(
-                OpenInfraSchemas.META_DATA).createOrUpdate(pojo);
+                OpenInfraSchemas.META_DATA).createOrUpdate(pojo, credentialsId);
         return OpenInfraResponseBuilder.putResponse(id);
     }
-    
+
     @DELETE
     @Path("{credentialsId}")
     public Response delete(@PathParam("credentialsId") UUID credentialsId) {
@@ -78,11 +78,11 @@ public class CredentialsResource {
                 deleteResult,
                 credentialsId);
     }
-    
+
     @GET
     @Path("/new")
     public CredentialsPojo newCredentials() {
         return new CredentialsDao(OpenInfraSchemas.META_DATA).newCredentials();
     }
-    
+
 }

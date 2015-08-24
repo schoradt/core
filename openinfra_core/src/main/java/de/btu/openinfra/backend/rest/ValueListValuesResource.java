@@ -14,7 +14,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.daos.ValueListValueAssociationDao;
 import de.btu.openinfra.backend.db.daos.ValueListValueDao;
@@ -122,7 +122,7 @@ public class ValueListValuesResource {
         UUID uuid = new ValueListValueDao(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
-                        valueListValue);
+                        valueListValue, valueListValueId);
         return OpenInfraResponseBuilder.postResponse(uuid);
     }
 

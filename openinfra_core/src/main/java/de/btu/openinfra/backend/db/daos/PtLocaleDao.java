@@ -4,6 +4,7 @@ import java.util.Locale;
 import java.util.UUID;
 
 import de.btu.openinfra.backend.db.MappingResult;
+import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.CountryCode;
 import de.btu.openinfra.backend.db.jpa.model.LanguageCode;
 import de.btu.openinfra.backend.db.jpa.model.PtLocale;

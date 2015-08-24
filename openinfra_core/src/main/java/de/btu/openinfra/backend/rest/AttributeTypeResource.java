@@ -16,11 +16,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import de.btu.openinfra.backend.db.OpenInfraOrderByEnum;
+import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.AttributeTypeAssociationDao;
 import de.btu.openinfra.backend.db.daos.AttributeTypeDao;
 import de.btu.openinfra.backend.db.daos.AttributeTypeGroupToAttributeTypeDao;
-import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeAssociationPojo;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupToAttributeTypePojo;
@@ -232,7 +232,8 @@ public class AttributeTypeResource {
         return OpenInfraResponseBuilder.putResponse(
                 new AttributeTypeDao(
                         projectId,
-                        OpenInfraSchemas.PROJECTS).createOrUpdate(pojo));
+                        OpenInfraSchemas.PROJECTS).createOrUpdate(pojo,
+                                attributeTypeId));
     }
 
     @GET
@@ -253,11 +254,13 @@ public class AttributeTypeResource {
     public Response createAssociation(
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema,
+            @PathParam("attributeTypeId") UUID attributeTypeId,
             AttributeTypeAssociationPojo pojo) {
         UUID id = new AttributeTypeAssociationDao(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
-                        pojo);
+                        pojo, attributeTypeId,
+                        pojo.getAssociationAttributeTypeId());
         return OpenInfraResponseBuilder.postResponse(id);
     }
 
@@ -280,12 +283,19 @@ public class AttributeTypeResource {
     @Path("{attributeTypeId}/associations/{associatedAttributeTypeId}")
     public Response updateAssociation(
             @PathParam("projectId") UUID projectId,
+            @PathParam("attributeTypeId") UUID attributeTypeId,
+            @PathParam("associatedAttributeTypeId")
+                UUID associatedAttributeTypeId,
             @PathParam("schema") String schema,
             AttributeTypeAssociationPojo pojo) {
         return OpenInfraResponseBuilder.putResponse(
                 new AttributeTypeAssociationDao(
                         projectId,
                         OpenInfraSchemas.valueOf(schema.toUpperCase()))
-                .createOrUpdate(pojo));
+                            .createOrUpdate(
+                                pojo, attributeTypeId,
+                                pojo.getAssociationAttributeTypeId(),
+                                associatedAttributeTypeId,
+                                pojo.getAssociatedAttributeType().getUuid()));
     }
 }

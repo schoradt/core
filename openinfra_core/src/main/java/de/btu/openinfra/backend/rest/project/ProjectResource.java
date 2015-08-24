@@ -15,7 +15,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import de.btu.openinfra.backend.db.daos.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.ProjectDao;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.ProjectPojo;
@@ -176,6 +176,7 @@ public class ProjectResource {
     public Response updateProject(
     		@PathParam("projectId") UUID projectId,
     		ProjectPojo project) {
+        // TODO compare projectId in createOrUpdate method?
     	UUID uuid = new ProjectDao(
     			projectId,
     			OpenInfraSchemas.PROJECTS).createOrUpdate(project);
