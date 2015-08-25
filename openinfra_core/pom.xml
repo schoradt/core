@@ -109,6 +109,8 @@
 		</dependency>
 		
 		<!-- simple json string to object converter -->
+		<!-- TODO test if it is really necessary to use this lib instead of 
+			 jackson ObjectMapper -->
 		<dependency>
 		    <groupId>com.googlecode.json-simple</groupId>
     		<artifactId>json-simple</artifactId>
