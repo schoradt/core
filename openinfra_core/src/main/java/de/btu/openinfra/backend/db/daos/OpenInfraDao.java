@@ -327,14 +327,17 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
     /**
      * This method checks if the value that is part of the URI matches with
      * the object id in the POJO. If it matches it will call the createOrUpdate
-     * method of the OpenInfraDao. Otherwise it will return null.
+     * method of the OpenInfraDao. Otherwise it will return null. If meta data
+     * is passed it will be created or updated as well.
      *
-     * @param pojo    the POJO object which should be stored in the database
-     * @param valueId the value id from the URI
-     * @return        the UUID of the newly created or replaced object or null
+     * @param pojo     the POJO object which should be stored in the database
+     * @param valueId  the value id from the URI
+     * @param metaData the JSON data that should be stored in the meta data
+     *                 associated to the POJO
+     * @return         the UUID of the newly created or replaced object or null
      * @throws RuntimeException
      */
-    public UUID createOrUpdate(TypePojo pojo, UUID valueId)
+    public UUID createOrUpdate(TypePojo pojo, UUID valueId, JSONObject metaData)
             throws RuntimeException {
 
         // check if the value id of the URI map to the POJO uuid
@@ -343,7 +346,12 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
                 return null;
             }
         } catch (NullPointerException e) { /* do nothing */ }
-        return createOrUpdate(pojo);
+        if (metaData != null) {
+            // update the meta data as well if it exists
+            return createOrUpdate(pojo, metaData);
+        } else {
+            return createOrUpdate(pojo);
+        }
     }
 
     /**
@@ -356,12 +364,14 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
      *                                    in the database
      * @param firstAssociationId          the first association id from the URI
      * @param firstAssociationIdFromPojo  the first association id from the POJO
+     * @param metaData                    the JSON data that should be stored in
+     *                                    the meta data associated to the POJO
      * @return                            the UUID of the newly created or
      *                                    replaced object or null
      * @throws RuntimeException
      */
     public UUID createOrUpdate(TypePojo pojo, UUID firstAssociationId,
-            UUID firstAssociationIdFromPojo)
+            UUID firstAssociationIdFromPojo, JSONObject metaData)
             throws RuntimeException {
 
         // check if the value id of the URI map to the pojo uuid
@@ -371,7 +381,12 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
             }
         } catch (NullPointerException e) { /* do nothing */ }
 
-        return createOrUpdate(pojo);
+        if (metaData != null) {
+            // update the meta data as well if it exists
+            return createOrUpdate(pojo, metaData);
+        } else {
+            return createOrUpdate(pojo);
+        }
     }
 
     /**
@@ -388,13 +403,15 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
      * @param secondAssociationId         the second association id from the URI
      * @param secondAssociationIdFromPojo the second association id from the
      *                                    POJO
+     * @param metaData                    the JSON data that should be stored in
+     *                                    the meta data associated to the POJO
      * @return                            the UUID of the newly created or
      *                                    replaced object or null
      * @throws RuntimeException
      */
     public UUID createOrUpdate(TypePojo pojo, UUID firstAssociationId,
             UUID firstAssociationIdFromPojo, UUID secondAssociationId,
-            UUID secondAssociationIdFromPojo)
+            UUID secondAssociationIdFromPojo, JSONObject metaData)
             throws RuntimeException {
 
         // check if the value id of the URI map to the pojo uuid
@@ -410,7 +427,12 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
             }
         } catch (NullPointerException e) { /* do nothing */ }
 
-        return createOrUpdate(pojo);
+        if (metaData != null) {
+            // update the meta data as well if it exists
+            return createOrUpdate(pojo, metaData);
+        } else {
+            return createOrUpdate(pojo);
+        }
     }
 
 	/**

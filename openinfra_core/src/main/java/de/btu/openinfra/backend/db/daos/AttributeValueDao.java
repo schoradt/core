@@ -104,7 +104,7 @@ public class AttributeValueDao extends
 		if(av != null) {
 			// 1. Define the Attribute value POJO that will be returned at
 			// the end
-			AttributeValuePojo avPojo = new AttributeValuePojo();
+			AttributeValuePojo pojo = new AttributeValuePojo();
 			// 2. Define the id which is used heavily throughout this method
 			UUID id = av.getId();
 			// 3. Retrieve the specific type of this attribute value
@@ -112,24 +112,29 @@ public class AttributeValueDao extends
 			AttributeValueTypes type =
 					AttributeValueTypes.valueOf(
 							getAttributeValueTypeAsString(id));
+
+			MetaDataDao mdDao = new MetaDataDao(currentProjectId, schema);
+
 			// 4. Define the attribute by the retrieved attribute value type
 			switch (type) {
 			// 4.a This is a standard query which can be implemented in a static
 			//     way.
 			case ATTRIBUTE_VALUE_VALUE:
-				avPojo.setAttributeValueValue(
+				pojo.setAttributeValueValue(
 						AttributeValueValueDao.mapToPojoStatically(
 								locale,
-								em.find(AttributeValueValue.class, id)));
+								em.find(AttributeValueValue.class, id),
+								mdDao));
 				break;
 
 			// 4.b This is a standard query which can be implemented in a static
 			//     way.
 			case ATTRIBUTE_VALUE_DOMAIN:
-				avPojo.setAttributeValueDomain(
+				pojo.setAttributeValueDomain(
 						AttributeValueDomainDao.mapToPojoStatically(
 								locale,
-								em.find(AttributeValueDomain.class, id)));
+								em.find(AttributeValueDomain.class, id),
+								mdDao));
 				break;
 
 			// 4.c This is a specific query which must be implemented
@@ -143,7 +148,7 @@ public class AttributeValueDao extends
 				avg.setTopicInstance(av.getTopicInstance());
                 avg.setAttributeTypeToAttributeTypeGroup(
                         av.getAttributeTypeToAttributeTypeGroup());
-				avPojo.setAttributeValueGeom(
+				pojo.setAttributeValueGeom(
 						new AttributeValueGeomDao(
 								currentProjectId,
 								schema,
@@ -161,7 +166,7 @@ public class AttributeValueDao extends
 				avgz.setTopicInstance(av.getTopicInstance());
 				avgz.setAttributeTypeToAttributeTypeGroup(
 				        av.getAttributeTypeToAttributeTypeGroup());
-				avPojo.setAttributeValueGeomz(
+				pojo.setAttributeValueGeomz(
 						new AttributeValueGeomzDao(
 								currentProjectId,
 								schema,
@@ -175,14 +180,14 @@ public class AttributeValueDao extends
 
 			} // end switch
 
-			avPojo.setAttributeTypeId(
+			pojo.setAttributeTypeId(
 					av.getAttributeTypeToAttributeTypeGroup()
 					.getAttributeType()
 					.getId());
-			avPojo.setUuid(id);
-			avPojo.setTrid(av.getXmin());
-			avPojo.setAttributeValueType(type);
-			return avPojo;
+			pojo.setUuid(id);
+			pojo.setTrid(av.getXmin());
+			pojo.setAttributeValueType(type);
+			return pojo;
 
 		} else {
 			return null;
@@ -244,7 +249,8 @@ public class AttributeValueDao extends
 	    // get the attribute type pojo from the passed attribute type id
 	    AttributeTypePojo atP = AttributeTypeDao.mapToPojoStatically(
 	            locale,
-	            em.find(AttributeType.class, attributeTypeId));
+	            em.find(AttributeType.class, attributeTypeId),
+	            null);
 
 	    // get the actual data type
 	    String dataType = atP.getDataType().getNames()
@@ -403,7 +409,8 @@ public class AttributeValueDao extends
                         projectId,
                         OpenInfraSchemas.PROJECTS).createOrUpdate(
                                 pojo.getAttributeValueDomain(),
-                                attributeValueId);
+                                attributeValueId,
+                                pojo.getAttributeValueDomain().getMetaData());
             } else {
                 // return null if the ids doesn't match
                 return null;
@@ -434,7 +441,8 @@ public class AttributeValueDao extends
                         projectId,
                         OpenInfraSchemas.PROJECTS).createOrUpdate(
                                 pojo.getAttributeValueGeom(),
-                                attributeValueId);
+                                attributeValueId,
+                                pojo.getAttributeValueGeom().getMetaData());
             }
             break;
         case ATTRIBUTE_VALUE_GEOMZ:
@@ -462,7 +470,8 @@ public class AttributeValueDao extends
                         projectId,
                         OpenInfraSchemas.PROJECTS).createOrUpdate(
                                 pojo.getAttributeValueGeomz(),
-                                attributeValueId);
+                                attributeValueId,
+                                pojo.getAttributeValueGeomz().getMetaData());
             }
             break;
         case ATTRIBUTE_VALUE_VALUE:
@@ -485,7 +494,8 @@ public class AttributeValueDao extends
                         projectId,
                         OpenInfraSchemas.PROJECTS).createOrUpdate(
                                 pojo.getAttributeValueValue(),
-                                attributeValueId);
+                                attributeValueId,
+                                pojo.getAttributeValueValue().getMetaData());
             } else {
                 // return null if the ids doesn't match
                 return null;

@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.json.simple.JSONObject;
 
 @XmlRootElement
-public class TopicInstancePojo extends OpenInfraPojo {
+public class TopicInstancePojo extends OpenInfraMetaDataPojo {
 
 	/**
 	 * This variable defines the corresponding topic characteristic this topic
@@ -21,10 +21,12 @@ public class TopicInstancePojo extends OpenInfraPojo {
 	private List<AttributeValuePojo> values;
 	private JSONObject metaData;
 
+    @Override
     public JSONObject getMetaData() {
         return metaData;
     }
 
+    @Override
     public void setMetaData(JSONObject metaData) {
         this.metaData = metaData;
     }

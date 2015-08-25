@@ -4,23 +4,12 @@ import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.json.simple.JSONObject;
-
 @XmlRootElement
-public class TopicCharacteristicPojo extends OpenInfraPojo {
+public class TopicCharacteristicPojo extends OpenInfraMetaDataPojo {
 
 	private PtFreeTextPojo descriptions;
 	private ValueListValuePojo topic;
 	private UUID projectId;
-	private JSONObject metaData;
-
-	public JSONObject getMetaData() {
-		return metaData;
-	}
-
-	public void setMetaData(JSONObject metaData) {
-		this.metaData = metaData;
-	}
 
 	public PtFreeTextPojo getDescriptions() {
 		return descriptions;

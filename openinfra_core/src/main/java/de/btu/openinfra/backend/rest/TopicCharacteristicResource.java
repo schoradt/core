@@ -6,6 +6,7 @@ import java.util.UUID;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -202,6 +203,20 @@ public class TopicCharacteristicResource {
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
                         pojo, pojo.getMetaData());
         return OpenInfraResponseBuilder.postResponse(id);
+    }
+
+    @PUT
+    @Path("{topicCharacteristicId}")
+    public Response update(
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            @PathParam("topicCharacteristicId") UUID topicCharacteristicId,
+            TopicCharacteristicPojo pojo) {
+        return OpenInfraResponseBuilder.postResponse(
+                new TopicCharacteristicDao(
+                        projectId,
+                        OpenInfraSchemas.PROJECTS).createOrUpdate(pojo,
+                                topicCharacteristicId, pojo.getMetaData()));
     }
 
     @DELETE

@@ -9,7 +9,6 @@ import java.util.UUID;
 
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
-import de.btu.openinfra.backend.db.jpa.model.MetaData;
 import de.btu.openinfra.backend.db.jpa.model.Project;
 import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
@@ -71,13 +70,14 @@ public class TopicCharacteristicDao
 		// 3. Map the model objects to POJOs
 		Map<UUID, TopicCharacteristicPojo> tcp =
 				new HashMap<UUID, TopicCharacteristicPojo>();
+		MetaDataDao mdDao = new MetaDataDao(currentProjectId, schema);
 		for(TopicCharacteristic tc : tcs) {
 		    UUID id = tc.getId();
 		    if (!tcp.containsKey(id)) {
 		        tcp.put(id, TopicCharacteristicDao.mapToPojoStatically(
 	                    locale,
 	                    tc,
-	                    em.find(MetaData.class, id)));
+	                    mdDao));
 		    }
 
 		} // end for
@@ -88,9 +88,8 @@ public class TopicCharacteristicDao
 	public TopicCharacteristicPojo mapToPojo(
 			Locale locale,
 			TopicCharacteristic tc) {
-	    MetaData md =
-	            new MetaDataDao(currentProjectId, schema).read(tc.getId());
-		return mapToPojoStatically(locale, tc, md);
+		return mapToPojoStatically(locale, tc,
+		        new MetaDataDao(currentProjectId, schema));
 	}
 
 	/**
@@ -98,31 +97,39 @@ public class TopicCharacteristicDao
 	 *
 	 * @param locale the requested language as Java.util locale
 	 * @param tc     the model object
-	 * @param md     the meta data as model object
+	 * @param mdDao  the meta data DAO
 	 * @return       the POJO object when the model object is not null else null
 	 */
 	public static TopicCharacteristicPojo mapToPojoStatically(
 			Locale locale,
 			TopicCharacteristic tc,
-			MetaData md) {
-		TopicCharacteristicPojo pojo = new TopicCharacteristicPojo();
+			MetaDataDao mdDao) {
+		if (tc != null) {
+		    TopicCharacteristicPojo pojo = new TopicCharacteristicPojo();
 
-		// if meta data exists
-		if(md != null) {
-		    pojo.setMetaData(md.getData());
-		} // end if
+		    // set meta data if exists
+            try {
+                pojo.setMetaData(mdDao.read(tc.getId()).getData());
+            } catch (NullPointerException npe) { /* do nothing */ }
 
-		pojo.setProjectId(tc.getProject().getId());
-		pojo.setTopic(ValueListValueDao.mapToPojoStatically(
-				locale,
-				tc.getValueListValue()));
-		pojo.setDescriptions(PtFreeTextDao.mapToPojoStatically(
-				locale,
-				tc.getPtFreeText()));
-		pojo.setUuid(tc.getId());
-		pojo.setTrid(tc.getXmin());
+            // set the project if exists
+            try {
+                pojo.setProjectId(tc.getProject().getId());
+            } catch (NullPointerException npe) { /* do nothing */ }
+    		pojo.setTopic(ValueListValueDao.mapToPojoStatically(
+    				locale,
+    				tc.getValueListValue(),
+    				null));
+    		pojo.setDescriptions(PtFreeTextDao.mapToPojoStatically(
+    				locale,
+    				tc.getPtFreeText()));
+    		pojo.setUuid(tc.getId());
+    		pojo.setTrid(tc.getXmin());
+    		return pojo;
+		} else {
+		    return null;
+		}
 
-		return pojo;
 	}
 
 	@Override
