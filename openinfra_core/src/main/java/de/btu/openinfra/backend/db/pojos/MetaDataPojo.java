@@ -6,6 +6,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.json.simple.JSONObject;
 
+import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
+
 @XmlRootElement
 public class MetaDataPojo extends OpenInfraPojo {
 
@@ -13,6 +15,14 @@ public class MetaDataPojo extends OpenInfraPojo {
     private String tableName;
     private String pkColumn;
     private JSONObject data;
+
+    /* Default constructor */
+    public MetaDataPojo() {}
+
+    /* Constructor that will set the id, trid and meta data automatically */
+    public MetaDataPojo(OpenInfraModelObject modelObject) {
+        super(modelObject);
+    }
 
     public UUID getObjectId() {
         return objectId;

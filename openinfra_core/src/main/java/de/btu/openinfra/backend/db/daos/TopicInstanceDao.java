@@ -94,8 +94,7 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
                         avd.getAttributeTypeToAttributeTypeGroup()
                             .getAttributeType().getId().toString()) ||
                         metaData == null ) {
-                    AttributeValuePojo avPojo = new AttributeValuePojo();
-                    avPojo.setUuid(avd.getId());
+                    AttributeValuePojo avPojo = new AttributeValuePojo(avd);
                     avPojo.setAttributeTypeId(
                             avd.getAttributeTypeToAttributeTypeGroup()
                             .getAttributeType().getId());
@@ -117,8 +116,7 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
                         avv.getAttributeTypeToAttributeTypeGroup()
                             .getAttributeType().getId().toString()) ||
                         metaData == null ) {
-                    AttributeValuePojo avPojo = new AttributeValuePojo();
-                    avPojo.setUuid(avv.getId());
+                    AttributeValuePojo avPojo = new AttributeValuePojo(avv);
                     avPojo.setAttributeTypeId(
                             avv.getAttributeTypeToAttributeTypeGroup()
                             .getAttributeType().getId());

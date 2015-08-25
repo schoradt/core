@@ -108,11 +108,6 @@ public class TopicCharacteristicDao
 		    TopicCharacteristicPojo pojo =
 		            new TopicCharacteristicPojo(tc, mdDao);
 
-		    // set meta data if exists
-//            try {
-//                pojo.setMetaData(mdDao.read(tc.getId()).getData());
-//            } catch (NullPointerException npe) { /* do nothing */ }
-
             // set the project if exists
             try {
                 pojo.setProjectId(tc.getProject().getId());
@@ -124,8 +119,7 @@ public class TopicCharacteristicDao
     		pojo.setDescriptions(PtFreeTextDao.mapToPojoStatically(
     				locale,
     				tc.getPtFreeText()));
-    		pojo.setUuid(tc.getId());
-    		pojo.setTrid(tc.getXmin());
+
     		return pojo;
 		} else {
 		    return null;

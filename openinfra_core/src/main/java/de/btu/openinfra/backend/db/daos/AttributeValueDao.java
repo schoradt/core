@@ -184,8 +184,6 @@ public class AttributeValueDao extends
 					av.getAttributeTypeToAttributeTypeGroup()
 					.getAttributeType()
 					.getId());
-			pojo.setUuid(id);
-			pojo.setTrid(av.getXmin());
 			pojo.setAttributeValueType(type);
 			return pojo;
 

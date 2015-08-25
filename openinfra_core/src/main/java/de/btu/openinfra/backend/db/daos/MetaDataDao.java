@@ -63,9 +63,7 @@ public class MetaDataDao
      */
     public static MetaDataPojo mapPojoStatically(MetaData md) {
         if(md != null) {
-            MetaDataPojo pojo = new MetaDataPojo();
-            pojo.setUuid(md.getId());
-            pojo.setTrid(md.getXmin());
+            MetaDataPojo pojo = new MetaDataPojo(md);
             pojo.setObjectId(md.getObjectId());
             pojo.setTableName(md.getTableName());
             pojo.setPkColumn(md.getPkColumn());

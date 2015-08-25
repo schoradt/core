@@ -88,7 +88,7 @@ public class PtLocaleDao extends OpenInfraDao<PtLocalePojo, PtLocale> {
 			Locale locale,
 			PtLocale ptLocale) {
 		if(ptLocale != null) {
-			PtLocalePojo ptLocalePojo = new PtLocalePojo();
+			PtLocalePojo ptLocalePojo = new PtLocalePojo(ptLocale);
 			ptLocalePojo.setCharacterCode(
 					ptLocale.getCharacterCode().getCharacterCode());
 			ptLocalePojo.setLanguageCode(
@@ -98,8 +98,6 @@ public class PtLocaleDao extends OpenInfraDao<PtLocalePojo, PtLocale> {
 				ptLocalePojo.setCountryCode(
 						ptLocale.getCountryCode().getCountryCode());
 			}
-			ptLocalePojo.setUuid(ptLocale.getId());
-			ptLocalePojo.setTrid(ptLocale.getXmin());
 			return ptLocalePojo;
 		} else {
 			return null;
