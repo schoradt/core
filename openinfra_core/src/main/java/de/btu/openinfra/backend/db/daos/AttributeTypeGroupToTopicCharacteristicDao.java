@@ -62,12 +62,8 @@ public class AttributeTypeGroupToTopicCharacteristicDao extends
 				MetaDataDao mdDao) {
 	    if (atgttc != null) {
     		AttributeTypeGroupToTopicCharacteristicPojo pojo =
-    				new AttributeTypeGroupToTopicCharacteristicPojo();
-
-    		// set meta data if exists
-            try {
-                pojo.setMetaData(mdDao.read(atgttc.getId()).getData());
-            } catch (NullPointerException npe) { /* do nothing */ }
+    				new AttributeTypeGroupToTopicCharacteristicPojo(
+    				        atgttc, mdDao);
 
     		pojo.setAttributeTypeGroup(
     		        AttributeTypeGroupDao.mapToPojoStatically(
@@ -83,8 +79,6 @@ public class AttributeTypeGroupToTopicCharacteristicDao extends
     			pojo.setOrder(atgttc.getOrder());
     		}
 
-    		pojo.setUuid(atgttc.getId());
-    		pojo.setTrid(atgttc.getXmin());
     		return pojo;
 	    } else {
 	        return null;

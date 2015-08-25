@@ -73,15 +73,8 @@ public class TopicCharacteristicToRelationshipTypeDao
 
 		if(rtttc != null) {
 			TopicCharacteristicToRelationshipTypePojo pojo =
-					new TopicCharacteristicToRelationshipTypePojo();
+					new TopicCharacteristicToRelationshipTypePojo(rtttc, mdDao);
 
-			// set meta data if exists
-            try {
-                pojo.setMetaData(mdDao.read(rtttc.getId()).getData());
-            } catch (NullPointerException npe) { /* do nothing */ }
-
-			pojo.setUuid(rtttc.getId());
-			pojo.setTrid(rtttc.getXmin());
 			pojo.setRelationshipe(rtttc.getRelationshipType().getId());
 			pojo.setMultiplicity(MultiplicityDao.mapToPojoStatically(
 					rtttc.getMultiplicityBean(), mdDao));

@@ -52,12 +52,7 @@ public class ValueListDao extends OpenInfraDao<ValueListPojo, ValueList> {
 			ValueList vl,
 			MetaDataDao mdDao) {
 		if(vl != null) {
-		    ValueListPojo pojo = new ValueListPojo();
-
-		 // set meta data if exists
-            try {
-                pojo.setMetaData(mdDao.read(vl.getId()).getData());
-            } catch (NullPointerException npe) { /* do nothing */ }
+		    ValueListPojo pojo = new ValueListPojo(vl, mdDao);
 
 			pojo.setNames(PtFreeTextDao.mapToPojoStatically(
 					locale,
@@ -65,8 +60,6 @@ public class ValueListDao extends OpenInfraDao<ValueListPojo, ValueList> {
 			pojo.setDescriptions(PtFreeTextDao.mapToPojoStatically(
 					locale,
 					vl.getPtFreeText1()));
-			pojo.setUuid(vl.getId());
-			pojo.setTrid(vl.getXmin());
 			return pojo;
 		} else {
 			return null;

@@ -105,12 +105,13 @@ public class TopicCharacteristicDao
 			TopicCharacteristic tc,
 			MetaDataDao mdDao) {
 		if (tc != null) {
-		    TopicCharacteristicPojo pojo = new TopicCharacteristicPojo();
+		    TopicCharacteristicPojo pojo =
+		            new TopicCharacteristicPojo(tc, mdDao);
 
 		    // set meta data if exists
-            try {
-                pojo.setMetaData(mdDao.read(tc.getId()).getData());
-            } catch (NullPointerException npe) { /* do nothing */ }
+//            try {
+//                pojo.setMetaData(mdDao.read(tc.getId()).getData());
+//            } catch (NullPointerException npe) { /* do nothing */ }
 
             // set the project if exists
             try {

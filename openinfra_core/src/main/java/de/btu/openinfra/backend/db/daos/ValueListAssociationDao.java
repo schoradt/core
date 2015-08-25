@@ -68,15 +68,8 @@ public class ValueListAssociationDao
 
 		if(vlxvl != null) {
 			ValueListAssociationPojo pojo =
-					new ValueListAssociationPojo();
+					new ValueListAssociationPojo(vlxvl, mdDao);
 
-			// set meta data if exists
-            try {
-                pojo.setMetaData(mdDao.read(vlxvl.getId()).getData());
-            } catch (NullPointerException npe) { /* do nothing */ }
-
-			pojo.setUuid(vlxvl.getId());
-			pojo.setTrid(vlxvl.getXmin());
 			pojo.setRelationship(ValueListValueDao.mapToPojoStatically(locale,
 					vlxvl.getValueListValue(), null));
 			pojo.setAssociatedValueList(ValueListDao.mapToPojoStatically(locale,

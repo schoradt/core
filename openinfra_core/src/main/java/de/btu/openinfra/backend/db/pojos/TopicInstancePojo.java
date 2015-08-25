@@ -4,7 +4,8 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.json.simple.JSONObject;
+import de.btu.openinfra.backend.db.daos.MetaDataDao;
+import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 
 @XmlRootElement
 public class TopicInstancePojo extends OpenInfraMetaDataPojo {
@@ -19,16 +20,14 @@ public class TopicInstancePojo extends OpenInfraMetaDataPojo {
 	 * corresponding topic characteristic.
 	 */
 	private List<AttributeValuePojo> values;
-	private JSONObject metaData;
 
-    @Override
-    public JSONObject getMetaData() {
-        return metaData;
-    }
+	/* Default constructor */
+    public TopicInstancePojo() {}
 
-    @Override
-    public void setMetaData(JSONObject metaData) {
-        this.metaData = metaData;
+    /* Constructor that will set the id, trid and meta data automatically */
+    public TopicInstancePojo(
+            OpenInfraModelObject modelObject, MetaDataDao mdDao) {
+        super(modelObject, mdDao);
     }
 
 	public TopicCharacteristicPojo getTopicCharacteristic() {

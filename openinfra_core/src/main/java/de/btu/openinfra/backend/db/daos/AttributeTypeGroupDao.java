@@ -85,12 +85,8 @@ public class AttributeTypeGroupDao
 			AttributeTypeGroup atg,
 			MetaDataDao mdDao) {
 		if(atg != null) {
-		    AttributeTypeGroupPojo pojo = new AttributeTypeGroupPojo();
-
-		    // set meta data if exists
-            try {
-                pojo.setMetaData(mdDao.read(atg.getId()).getData());
-            } catch (NullPointerException npe) { /* do nothing */ }
+		    AttributeTypeGroupPojo pojo =
+		            new AttributeTypeGroupPojo(atg, mdDao);
 
 			AttributeTypeGroup subgroupOf = atg.getAttributeTypeGroup();
 			if(subgroupOf != null) {
@@ -103,8 +99,6 @@ public class AttributeTypeGroupDao
 			pojo.setNames(PtFreeTextDao.mapToPojoStatically(
 					locale,
 					atg.getPtFreeText2()));
-			pojo.setUuid(atg.getId());
-			pojo.setTrid(atg.getXmin());
 
 			return pojo;
 		} else {

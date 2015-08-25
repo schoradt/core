@@ -62,15 +62,9 @@ public class TopicCharacteristicToAttributeTypeGroupDao extends
                 MetaDataDao mdDao) {
         if (atgttc != null) {
             TopicCharacteristicToAttributeTypeGroupPojo pojo =
-                    new TopicCharacteristicToAttributeTypeGroupPojo();
+                    new TopicCharacteristicToAttributeTypeGroupPojo(
+                            atgttc, mdDao);
 
-            // set meta data if exists
-            try {
-                pojo.setMetaData(mdDao.read(atgttc.getId()).getData());
-            } catch (NullPointerException npe) { /* do nothing */ }
-
-            pojo.setUuid(atgttc.getId());
-            pojo.setTrid(atgttc.getXmin());
             pojo.setTopicCharacteristic(
                     TopicCharacteristicDao.mapToPojoStatically(
                             locale,

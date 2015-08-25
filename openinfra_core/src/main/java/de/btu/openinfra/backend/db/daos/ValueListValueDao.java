@@ -55,15 +55,8 @@ public class ValueListValueDao
 			ValueListValue vlv,
 			MetaDataDao mdDao) {
 		if(vlv != null) {
-		    ValueListValuePojo pojo = new ValueListValuePojo();
+		    ValueListValuePojo pojo = new ValueListValuePojo(vlv, mdDao);
 
-		 // set meta data if exists
-            try {
-                pojo.setMetaData(mdDao.read(vlv.getId()).getData());
-            } catch (NullPointerException npe) { /* do nothing */ }
-
-			pojo.setUuid(vlv.getId());
-			pojo.setTrid(vlv.getXmin());
 			pojo.setVisibility(vlv.getVisibility());
 			pojo.setDescriptions(PtFreeTextDao.mapToPojoStatically(
 					locale,

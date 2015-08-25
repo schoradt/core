@@ -61,12 +61,7 @@ public class AttributeTypeGroupToAttributeTypeDao extends
             MetaDataDao mdDao) {
         if(atgtat != null) {
             AttributeTypeGroupToAttributeTypePojo pojo =
-                    new AttributeTypeGroupToAttributeTypePojo();
-
-            // set meta data if exists
-            try {
-                pojo.setMetaData(mdDao.read(atgtat.getId()).getData());
-            } catch (NullPointerException npe) { /* do nothing */ }
+                    new AttributeTypeGroupToAttributeTypePojo(atgtat, mdDao);
 
             pojo.setAttributeTypeId(atgtat.getAttributeType().getId());
             pojo.setAttributeTypeGroup(
@@ -82,8 +77,6 @@ public class AttributeTypeGroupToAttributeTypeDao extends
                     atgtat.getMultiplicityBean(),
                     null));
             pojo.setOrder(atgtat.getOrder());
-            pojo.setUuid(atgtat.getId());
-            pojo.setTrid(atgtat.getXmin());
             return pojo;
         } else {
             return null;

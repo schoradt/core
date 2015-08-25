@@ -139,12 +139,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 	public static ProjectPojo mapToPojoStatically(Locale locale, Project p,
 	        MetaDataDao mdDao) {
 		if(p != null) {
-			ProjectPojo pojo = new ProjectPojo();
-
-			// set meta data if exists
-            try {
-                pojo.setMetaData(mdDao.read(p.getId()).getData());
-            } catch (NullPointerException npe) { /* do nothing */ }
+			ProjectPojo pojo = new ProjectPojo(p, mdDao);
 
 			Project parent = p.getProject();
 
@@ -157,8 +152,6 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 			if(parent != null) {
 				pojo.setSubprojectOf(parent.getId());
 			} // end if
-			pojo.setUuid(p.getId());
-			pojo.setTrid(p.getXmin());
 
 			return pojo;
 		} else {

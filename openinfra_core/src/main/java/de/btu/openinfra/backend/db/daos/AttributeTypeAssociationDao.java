@@ -82,16 +82,7 @@ public class AttributeTypeAssociationDao
 
 		if(atxat != null) {
 			AttributeTypeAssociationPojo pojo =
-					new AttributeTypeAssociationPojo();
-
-			// set meta data if exists
-            try {
-                pojo.setMetaData(mdDao.read(atxat.getId()).getData());
-            } catch (NullPointerException npe) { /* do nothing */ }
-
-			// set the id of the pojo
-			pojo.setUuid(atxat.getId());
-			pojo.setTrid(atxat.getXmin());
+					new AttributeTypeAssociationPojo(atxat, mdDao);
 
 			// set the relationship type object
 			pojo.setRelationship(ValueListValueDao.mapToPojoStatically(locale,
@@ -102,7 +93,6 @@ public class AttributeTypeAssociationDao
 			        .getId());
 
 			// set the associated attribute type object
-			// TODO test what happens when we pass null for meta data
 			pojo.setAssociatedAttributeType(
 				AttributeTypeDao.mapToPojoStatically(locale,
 				        atxat.getAttributeType2Bean(), mdDao));

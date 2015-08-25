@@ -57,12 +57,7 @@ public class AttributeValueDomainDao extends
 			MetaDataDao mdDao) {
 	    if (avd != null) {
     		AttributeValueDomainPojo pojo =
-    				new AttributeValueDomainPojo();
-
-    		// set meta data if exists
-            try {
-                pojo.setMetaData(mdDao.read(avd.getId()).getData());
-            } catch (NullPointerException npe) { /* do nothing */ }
+    				new AttributeValueDomainPojo(avd, mdDao);
 
     		// set the topic instance id
             pojo.setTopicInstanceId(avd.getTopicInstance().getId());
@@ -74,9 +69,7 @@ public class AttributeValueDomainDao extends
     		// set the attribute type to attribute type id group of the value
             pojo.setAttributeTypeToAttributeTypeGroupId(
                     avd.getAttributeTypeToAttributeTypeGroup().getId());
-    		// set the id of the object
-    		pojo.setUuid(avd.getId());
-    		pojo.setTrid(avd.getXmin());
+
     		return pojo;
         } else {
             return null;

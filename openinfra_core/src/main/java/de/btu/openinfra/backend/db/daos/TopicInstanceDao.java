@@ -64,12 +64,7 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
             MetaDataDao mdDao) {
         if (ti != null) {
             // 1. Create new POJO object and set necessary stuff
-            TopicInstancePojo pojo = new TopicInstancePojo();
-
-            // set meta data if exists
-            try {
-                pojo.setMetaData(mdDao.read(ti.getId()).getData());
-            } catch (NullPointerException npe) { /* do nothing */ }
+            TopicInstancePojo pojo = new TopicInstancePojo(ti, mdDao);
 
             // set the topic characteristic POJO
             pojo.setTopicCharacteristic(TopicCharacteristicDao
@@ -139,8 +134,6 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
             } // end for
 
             pojo.setValues(values);
-            pojo.setUuid(ti.getId());
-            pojo.setTrid(ti.getXmin());
             return pojo;
         } else {
             return null;

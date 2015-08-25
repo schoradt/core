@@ -152,15 +152,9 @@ public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
             TopicInstanceXTopicInstance txt,
             MetaDataDao mdDao) {
         if (txt != null) {
-            TopicInstanceAssociationPojo pojo = new TopicInstanceAssociationPojo();
+            TopicInstanceAssociationPojo pojo =
+                    new TopicInstanceAssociationPojo(txt, mdDao);
 
-            // set meta data if exists
-            try {
-                pojo.setMetaData(mdDao.read(txt.getId()).getData());
-            } catch (NullPointerException npe) { /* do nothing */ }
-
-            pojo.setUuid(txt.getId());
-            pojo.setTrid(txt.getXmin());
             pojo.setRelationshipType(
                     RelationshipTypeDao.mapToPojoStatically(
                             locale,

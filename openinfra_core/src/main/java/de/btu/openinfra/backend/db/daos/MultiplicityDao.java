@@ -47,20 +47,13 @@ public class MultiplicityDao extends
 	public static MultiplicityPojo mapToPojoStatically(Multiplicity mp,
 	        MetaDataDao mdDao) {
 		if(mp != null) {
-			MultiplicityPojo pojo = new MultiplicityPojo();
-
-			// set meta data if exists
-            try {
-                pojo.setMetaData(mdDao.read(mp.getId()).getData());
-            } catch (NullPointerException npe) { /* do nothing */ }
+			MultiplicityPojo pojo = new MultiplicityPojo(mp, mdDao);
 
 			// Obviously, the maximum value can be null
 			if(mp.getMaxValue() != null) {
 				pojo.setMax(mp.getMaxValue());
 			}
 			pojo.setMin(mp.getMinValue());
-			pojo.setUuid(mp.getId());
-			pojo.setTrid(mp.getXmin().intValue());
 			return pojo;
 		} else {
 			return null;

@@ -4,6 +4,9 @@ import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import de.btu.openinfra.backend.db.daos.MetaDataDao;
+import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
+
 @XmlRootElement
 public class AttributeTypeGroupToAttributeTypePojo
                 extends OpenInfraMetaDataPojo {
@@ -13,6 +16,15 @@ public class AttributeTypeGroupToAttributeTypePojo
 	private MultiplicityPojo multiplicity;
 	private ValueListValuePojo defaultValue;
 	private Integer order;
+
+	/* Default constructor */
+	public AttributeTypeGroupToAttributeTypePojo() {}
+
+	/* Constructor that will set the id, trid and meta data automatically */
+	public AttributeTypeGroupToAttributeTypePojo(
+	        OpenInfraModelObject modelObject, MetaDataDao mdDao) {
+	    super(modelObject, mdDao);
+	}
 
 	public AttributeTypeGroupPojo getAttributeTypeGroup() {
 		return attributeTypeGroup;

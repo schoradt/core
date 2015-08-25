@@ -61,15 +61,8 @@ public class RelationshipTypeDao extends
 			RelationshipType rt,
 			MetaDataDao mdDao) {
 	    if (rt != null) {
-    		RelationshipTypePojo pojo = new RelationshipTypePojo();
+    		RelationshipTypePojo pojo = new RelationshipTypePojo(rt, mdDao);
 
-    		// set meta data if exists
-            try {
-                pojo.setMetaData(mdDao.read(rt.getId()).getData());
-            } catch (NullPointerException npe) { /* do nothing */ }
-
-    		pojo.setUuid(rt.getId());
-    		pojo.setTrid(rt.getXmin());
     		pojo.setRelationshipType(
     				ValueListValueDao.mapToPojoStatically(
     						locale,

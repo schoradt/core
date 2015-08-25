@@ -4,12 +4,24 @@ import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import de.btu.openinfra.backend.db.daos.MetaDataDao;
+import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
+
 @XmlRootElement
 public class TopicCharacteristicPojo extends OpenInfraMetaDataPojo {
 
 	private PtFreeTextPojo descriptions;
 	private ValueListValuePojo topic;
 	private UUID projectId;
+
+	/* Default constructor */
+	public TopicCharacteristicPojo() {}
+
+	/* Constructor that will set the id, trid and meta data automatically */
+	public TopicCharacteristicPojo(
+	        OpenInfraModelObject modelObject, MetaDataDao mdDao) {
+	    super(modelObject, mdDao);
+	}
 
 	public PtFreeTextPojo getDescriptions() {
 		return descriptions;

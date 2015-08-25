@@ -62,12 +62,7 @@ public class AttributeTypeDao
 			AttributeType at,
 			MetaDataDao mdDao) {
 		if(at != null) {
-		    AttributeTypePojo pojo = new AttributeTypePojo();
-
-		 // set meta data if exists
-            try {
-                pojo.setMetaData(mdDao.read(at.getId()).getData());
-            } catch (NullPointerException npe) { /* do nothing */ }
+		    AttributeTypePojo pojo = new AttributeTypePojo(at, mdDao);
 
 			pojo.setDomain(ValueListDao.mapToPojoStatically(
 					locale,
@@ -87,8 +82,6 @@ public class AttributeTypeDao
 			pojo.setNames(PtFreeTextDao.mapToPojoStatically(
 					locale,
 					at.getPtFreeText2()));
-			pojo.setUuid(at.getId());
-			pojo.setTrid(at.getXmin());
 
 			// This part is used to specify the awaited attribute value type.
 			if(pojo.getDomain() != null) {

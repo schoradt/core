@@ -54,12 +54,8 @@ public class AttributeValueValueDao
 			AttributeValueValue avv,
 			MetaDataDao mdDao) {
 	    if (avv != null) {
-    		AttributeValueValuePojo pojo = new AttributeValueValuePojo();
-
-    		// set meta data if exists
-            try {
-                pojo.setMetaData(mdDao.read(avv.getId()).getData());
-            } catch (NullPointerException npe) { /* do nothing */ }
+    		AttributeValueValuePojo pojo =
+    		        new AttributeValueValuePojo(avv, mdDao);
 
     		// set the topic instance id
     		pojo.setTopicInstanceId(avv.getTopicInstance().getId());
@@ -70,9 +66,6 @@ public class AttributeValueValueDao
     		// set the attribute type to attribute type group id of the value
     		pojo.setAttributeTypeToAttributeTypeGroupId(
     		        avv.getAttributeTypeToAttributeTypeGroup().getId());
-    		// set the id of the object
-    		pojo.setUuid(avv.getId());
-    		pojo.setTrid(avv.getXmin());
 
     		return pojo;
 	    } else {

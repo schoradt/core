@@ -73,15 +73,8 @@ public class RelationshipTypeToTopicCharacteristicDao
 
 		if(rtt != null) {
 			RelationshipTypeToTopicCharacteristicPojo pojo =
-					new RelationshipTypeToTopicCharacteristicPojo();
+					new RelationshipTypeToTopicCharacteristicPojo(rtt, mdDao);
 
-			// set meta data if exists
-            try {
-                pojo.setMetaData(mdDao.read(rtt.getId()).getData());
-            } catch (NullPointerException npe) { /* do nothing */ }
-
-			pojo.setUuid(rtt.getId());
-			pojo.setTrid(rtt.getXmin());
 			pojo.setTopicCharacteristicId(
 			        rtt.getTopicCharacteristic().getId());
 			pojo.setMultiplicity(MultiplicityDao.mapToPojoStatically(

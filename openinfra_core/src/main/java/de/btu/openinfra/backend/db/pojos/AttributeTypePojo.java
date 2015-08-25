@@ -3,6 +3,8 @@ package de.btu.openinfra.backend.db.pojos;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import de.btu.openinfra.backend.db.daos.AttributeValueTypes;
+import de.btu.openinfra.backend.db.daos.MetaDataDao;
+import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 
 @XmlRootElement
 public class AttributeTypePojo extends OpenInfraMetaDataPojo {
@@ -13,6 +15,15 @@ public class AttributeTypePojo extends OpenInfraMetaDataPojo {
 	private ValueListValuePojo unit;
 	private ValueListPojo domain;
 	private AttributeValueTypes type;
+
+	/* Default constructor */
+	public AttributeTypePojo() {}
+
+	/* Constructor that will set the id, trid and meta data automatically */
+	public AttributeTypePojo(
+	        OpenInfraModelObject modelObject, MetaDataDao mdDao) {
+	    super(modelObject, mdDao);
+	}
 
 	public AttributeValueTypes getType() {
 		return type;
