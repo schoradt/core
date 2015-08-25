@@ -22,7 +22,6 @@ import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.jpa.model.MetaData;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 import de.btu.openinfra.backend.db.jpa.model.PtLocale;
-import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
 import de.btu.openinfra.backend.db.pojos.MetaDataPojo;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 
@@ -179,19 +178,11 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 		}
 		// 4. Read the required ptlocale object
 		PtLocale ptl = new PtLocaleDao(currentProjectId, schema).read(locale);
-		// 5. Handle topic characteristic objects which belong to the system
-		//    schema separately.
-		// TODO use the language here as well!
-		if(modelClass == TopicCharacteristic.class &&
-		        schema == OpenInfraSchemas.SYSTEM) {
-		    models = em.createNativeQuery(
-		            "select id, description, topic "
-                    + "from topic_characteristic",
-                    TopicCharacteristic.class).getResultList();
-		} else if(column == null) {
-			// 5.a When the column is null redirect to another method
-			return read(locale, offset, size);
-		} else {
+		// 5. Handle requests that contains an order by column
+        if(column == null) {
+            // 5.a When the column is null redirect to another method
+            return read(locale, offset, size);
+        } else {
 	        // 5.a Construct the origin SQL-based named query and replace the
 			//     the placeholder by the required column and sort order.
 	        String sqlString = em.createNamedQuery(
