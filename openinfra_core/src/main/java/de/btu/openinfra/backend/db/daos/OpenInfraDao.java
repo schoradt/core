@@ -276,40 +276,43 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 
 	    UUID retId = null;
 
-	    if (pojo != null && metaData != null) {
+	    if (pojo != null) {
 	        // first createOrUpdate the TypePojo
 	        retId = createOrUpdate(pojo);
 
-	        // only check for meta data in project and system schema
-	        switch (schema) {
-	            case PROJECTS:
-	            case SYSTEM:
-	                // if the TypePojo was created successfully
-	                if (retId != null) {
-	                    // create a raw POJO for meta data
-	                    MetaDataPojo mdPojo = new MetaDataPojo();
+	        if (metaData != null) {
+    	        // only check for meta data in project and system schema
+    	        switch (schema) {
+    	            case PROJECTS:
+    	            case SYSTEM:
+    	                // if the TypePojo was created successfully
+    	                if (retId != null) {
+    	                    // create a raw POJO for meta data
+    	                    MetaDataPojo mdPojo = new MetaDataPojo();
 
-	                    // set the object id from the previously created
-	                    // TypePojo
-	                    mdPojo.setObjectId(retId);
-	                    // TODO find a way to avoid hard coded id
-	                    // define the primary key column
-	                    mdPojo.setPkColumn("id");
-	                    // define the table name for the object
-	                    mdPojo.setTableName(modelClass
-	                            .getAnnotation(Table.class).name());
-	                    // set the meta data
-	                    mdPojo.setData(metaData);
-	                    // write the meta data
-	                    UUID metaId = new MetaDataDao(currentProjectId, schema)
-	                                        .createOrUpdate(mdPojo);
-	                    if (metaId == null) {
-	                        // TODO give feedback about meta data creation?
-	                    }
-	                }
-	                break;
-	            default:
-	                break;
+    	                    // set the object id from the previously created
+    	                    // TypePojo
+    	                    mdPojo.setObjectId(retId);
+    	                    // TODO find a way to avoid hard coded id
+    	                    // define the primary key column
+    	                    mdPojo.setPkColumn("id");
+    	                    // define the table name for the object
+    	                    mdPojo.setTableName(modelClass
+    	                            .getAnnotation(Table.class).name());
+    	                    // set the meta data
+    	                    mdPojo.setData(metaData);
+    	                    // write the meta data
+    	                    UUID metaId = new MetaDataDao(
+    	                            currentProjectId, schema)
+    	                        .createOrUpdate(mdPojo);
+    	                    if (metaId == null) {
+    	                        // TODO give feedback about meta data creation?
+    	                    }
+    	                }
+    	                break;
+    	            default:
+    	                break;
+    	        }
 	        }
 	    }
 	    return retId;
