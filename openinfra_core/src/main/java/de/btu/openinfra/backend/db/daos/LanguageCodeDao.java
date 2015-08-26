@@ -42,9 +42,7 @@ public class LanguageCodeDao
 	 * @return       the POJO object when the model object is not null else null
 	 */
 	public static LanguageCodePojo mapToPojoStatically(LanguageCode lc) {
-		LanguageCodePojo pojo = new LanguageCodePojo();
-		pojo.setUuid(lc.getId());
-		pojo.setTrid(lc.getXmin());
+		LanguageCodePojo pojo = new LanguageCodePojo(lc);
 		pojo.setLanguageCode(lc.getLanguageCode());
 		return pojo;
 	}

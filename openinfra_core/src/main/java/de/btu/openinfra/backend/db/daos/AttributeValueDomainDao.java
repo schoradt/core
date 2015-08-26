@@ -38,8 +38,9 @@ public class AttributeValueDomainDao extends
 	@Override
 	public AttributeValueDomainPojo mapToPojo(
 			Locale locale,
-			AttributeValueDomain modelObject) {
-		return mapToPojoStatically(locale, modelObject);
+			AttributeValueDomain avd) {
+		return mapToPojoStatically(locale, avd,
+		        new MetaDataDao(currentProjectId, schema));
 	}
 
 	/**
@@ -47,28 +48,32 @@ public class AttributeValueDomainDao extends
 	 *
 	 * @param locale the requested language as Java.util locale
 	 * @param avd    the model object
+	 * @param mdDao  the meta data DAO
 	 * @return       the POJO object when the model object is not null else null
 	 */
 	public static AttributeValueDomainPojo mapToPojoStatically(
 			Locale locale,
-			AttributeValueDomain avd) {
-		AttributeValueDomainPojo avdPojo =
-				new AttributeValueDomainPojo();
+			AttributeValueDomain avd,
+			MetaDataDao mdDao) {
+	    if (avd != null) {
+    		AttributeValueDomainPojo pojo =
+    				new AttributeValueDomainPojo(avd, mdDao);
 
-		// set the topic instance id
-        avdPojo.setTopicInstanceId(avd.getTopicInstance().getId());
-        // set the value list value of the object
-		avdPojo.setDomain(ValueListValueDao.mapToPojoStatically(
-				locale,
-				avd.getValueListValue()));
-		// set the attribute type to attribute type id group of the value
-        avdPojo.setAttributeTypeToAttributeTypeGroupId(
-                avd.getAttributeTypeToAttributeTypeGroup().getId());
-		// set the id of the object
-		avdPojo.setUuid(avd.getId());
-		avdPojo.setTrid(avd.getXmin());
+    		// set the topic instance id
+            pojo.setTopicInstanceId(avd.getTopicInstance().getId());
+            // set the value list value of the object
+    		pojo.setDomain(ValueListValueDao.mapToPojoStatically(
+    				locale,
+    				avd.getValueListValue(),
+    				mdDao));
+    		// set the attribute type to attribute type id group of the value
+            pojo.setAttributeTypeToAttributeTypeGroupId(
+                    avd.getAttributeTypeToAttributeTypeGroup().getId());
 
-		return avdPojo;
+    		return pojo;
+        } else {
+            return null;
+        }
 	}
 
 	@Override

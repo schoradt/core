@@ -5,6 +5,7 @@ import java.util.UUID;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import de.btu.openinfra.backend.db.daos.AttributeValueTypes;
+import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 
 @XmlRootElement
 public class AttributeValuePojo extends OpenInfraPojo {
@@ -15,7 +16,15 @@ public class AttributeValuePojo extends OpenInfraPojo {
 	private AttributeValueGeomPojo attributeValueGeom;
 	private AttributeValueGeomzPojo attributeValueGeomz;
 	private AttributeValueValuePojo attributeValueValue;
-	
+
+	/* Default constructor */
+    public AttributeValuePojo() {}
+
+    /* Constructor that will set the id, trid and meta data automatically */
+    public AttributeValuePojo(OpenInfraModelObject modelObject) {
+        super(modelObject);
+    }
+
 	public AttributeValueDomainPojo getAttributeValueDomain() {
 		return attributeValueDomain;
 	}
