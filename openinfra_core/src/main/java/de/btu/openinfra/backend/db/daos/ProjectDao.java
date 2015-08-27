@@ -1,13 +1,20 @@
 package de.btu.openinfra.backend.db.daos;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.UUID;
 
+import javax.persistence.Persistence;
+
 import jersey.repackaged.com.google.common.collect.Lists;
+import de.btu.openinfra.backend.OpenInfraProperties;
+import de.btu.openinfra.backend.OpenInfraPropertyKeys;
 import de.btu.openinfra.backend.db.MappingResult;
+import de.btu.openinfra.backend.db.OpenInfraPropertyValues;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.meta.ProjectsDao;
 import de.btu.openinfra.backend.db.jpa.model.Project;
@@ -270,7 +277,39 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 	        id = new ProjectDao(project.getSubprojectOf(),
 	                OpenInfraSchemas.PROJECTS).createOrUpdate(project);
 	    } else {
-	        // TODO implement the creation of a new project database schema
+	        // TODO: the private method createProperties in
+	        //       EntitiyManagerFactoryCache.java does the same. Combine it!
+	        Map<String, String> properties = new HashMap<String, String>();
+	        properties.put(
+	                OpenInfraPropertyKeys.JDBC_DRIVER.toString(),
+	                OpenInfraPropertyValues.JDBC_DRIVER.toString());
+	        properties.put(
+	                OpenInfraPropertyKeys.USER.toString(),
+	                OpenInfraProperties.getProperty(
+	                        OpenInfraPropertyKeys.USER.toString()));
+	        properties.put(
+                    OpenInfraPropertyKeys.PASSWORD.toString(),
+                    OpenInfraProperties.getProperty(
+                            OpenInfraPropertyKeys.PASSWORD.toString()));
+	        properties.put(
+	                OpenInfraPropertyKeys.URL.toString(),
+	                String.format(
+                        OpenInfraPropertyValues.URL.toString(),
+                        OpenInfraProperties.getProperty(
+                                OpenInfraPropertyKeys.SERVER.toString()),
+                        OpenInfraProperties.getProperty(
+                                OpenInfraPropertyKeys.PORT.toString()),
+                        OpenInfraProperties.getProperty(
+                                OpenInfraPropertyKeys.DB_NAME.toString())));
+
+	        // create the new project schema
+            Persistence.generateSchema("openinfra_schema_creation", properties);
+
+            // generate a UUID for the new project
+            // insert the project into the new schema in project table
+            // execute SELECT public.rename_project_schema('Name des Projektes');
+            // add the informations into the meta_data schema
+
 	    }
 	    return id;
 	}
