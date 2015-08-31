@@ -11,7 +11,7 @@
 <!-- ######## Define used variables here. This is a central point! ######## -->
 <c:set var="requestUrl" value="${requestScope['javax.servlet.forward.request_uri']}"/>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
-<c:set var="homePage" value="${contextPath}/rest/projects" />
+<c:set var="homePage" value="${contextPath}/rest/v1/projects" />
 
 <!-- Set the OpenInfRA version for the current session and make sure that 
 	 it is set only once -->
@@ -30,7 +30,7 @@
 
 <!-- a global variable that defines if we are in a project or in the system database -->
 <c:choose>
-	<c:when test="${fn:contains(requestUrl, 'rest/system')}">
+	<c:when test="${fn:contains(requestUrl, '/rest/v1/projects')}">
 		<c:set var="schema" value="system" />
 		<!-- override the project id -->
 		<c:set var="currentProject" value="" />

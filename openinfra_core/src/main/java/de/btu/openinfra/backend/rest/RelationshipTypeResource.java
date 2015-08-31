@@ -24,7 +24,7 @@ import de.btu.openinfra.backend.db.daos.TopicCharacteristicToRelationshipTypeDao
 import de.btu.openinfra.backend.db.pojos.RelationshipTypePojo;
 import de.btu.openinfra.backend.db.pojos.TopicCharacteristicToRelationshipTypePojo;
 
-@Path(OpenInfraResponseBuilder.REST_URI + "/relationshiptypes")
+@Path(OpenInfraResponseBuilder.REST_URI_DEFAULT + "/relationshiptypes")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET,
     MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY

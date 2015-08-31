@@ -16,7 +16,7 @@ import de.btu.openinfra.backend.db.daos.rbac.PermissionDao;
 import de.btu.openinfra.backend.db.pojos.rbac.PermissionPojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
-@Path("/rbac/permissions")
+@Path(OpenInfraResponseBuilder.REST_URI_RBAC + "/permissions")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET,
 	MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY

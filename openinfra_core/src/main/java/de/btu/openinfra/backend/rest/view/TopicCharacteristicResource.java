@@ -18,7 +18,7 @@ import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupToTopicCharacteristic
 import de.btu.openinfra.backend.db.pojos.TopicCharacteristicPojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
-@Path(OpenInfraResponseBuilder.REST_URI + "/topiccharacteristics")
+@Path(OpenInfraResponseBuilder.REST_URI_DEFAULT + "/topiccharacteristics")
 @Produces(MediaType.TEXT_HTML +
 		OpenInfraResponseBuilder.UTF8_CHARSET +
 		OpenInfraResponseBuilder.HTML_PRIORITY)

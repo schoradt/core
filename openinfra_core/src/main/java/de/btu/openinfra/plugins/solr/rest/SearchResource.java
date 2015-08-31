@@ -8,6 +8,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 import de.btu.openinfra.plugins.solr.Indexer;
 import de.btu.openinfra.plugins.solr.Result;
 import de.btu.openinfra.plugins.solr.Searcher;
@@ -18,7 +19,7 @@ import de.btu.openinfra.plugins.solr.Searcher;
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
  */
-@Path("/search")
+@Path(OpenInfraResponseBuilder.REST_URI_SEARCH)
 @Produces({MediaType.APPLICATION_JSON})
 public class SearchResource {
 

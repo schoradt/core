@@ -28,6 +28,7 @@ import org.apache.fop.apps.MimeConstants;
 
 import de.btu.openinfra.backend.db.daos.AttributeValueGeomType;
 import de.btu.openinfra.backend.db.pojos.TopicPojo;
+import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 import de.btu.openinfra.backend.rest.project.TopicInstanceResource;
 
 /**
@@ -36,7 +37,7 @@ import de.btu.openinfra.backend.rest.project.TopicInstanceResource;
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
  */
-@Path("/projects/{projectId}/topicinstances")
+@Path(OpenInfraResponseBuilder.REST_URI_PROJECTS + "/topicinstances")
 public class TopicPdfResource {
 	
 	/**

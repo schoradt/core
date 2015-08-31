@@ -22,7 +22,7 @@ import de.btu.openinfra.backend.db.daos.MetaDataDao;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.MetaDataPojo;
 
-@Path(OpenInfraResponseBuilder.REST_URI + "/metadata")
+@Path(OpenInfraResponseBuilder.REST_URI_DEFAULT + "/metadata")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET,
 	MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY

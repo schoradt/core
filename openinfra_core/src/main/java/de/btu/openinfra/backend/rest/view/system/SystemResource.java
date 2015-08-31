@@ -13,7 +13,7 @@ import org.glassfish.jersey.server.mvc.Template;
 
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
-@Path("/system")
+@Path(OpenInfraResponseBuilder.REST_URI_SYSTEM)
 @Produces(MediaType.TEXT_HTML +
         OpenInfraResponseBuilder.UTF8_CHARSET +
         OpenInfraResponseBuilder.HTML_PRIORITY)

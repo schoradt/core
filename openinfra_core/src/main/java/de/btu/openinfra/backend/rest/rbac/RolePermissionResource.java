@@ -17,7 +17,7 @@ import de.btu.openinfra.backend.db.pojos.rbac.RolePermissionPojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
 
-@Path("/rbac/rolepermissions")
+@Path(OpenInfraResponseBuilder.REST_URI_RBAC +  "/rolepermissions")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET,
 	MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY

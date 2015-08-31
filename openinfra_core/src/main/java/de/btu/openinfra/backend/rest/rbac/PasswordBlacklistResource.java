@@ -16,7 +16,7 @@ import de.btu.openinfra.backend.db.daos.rbac.PasswordBlacklistDao;
 import de.btu.openinfra.backend.db.pojos.rbac.PasswordBlacklistPojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
-@Path("/rbac/passwordblacklist")
+@Path(OpenInfraResponseBuilder.REST_URI_RBAC + "/passwordblacklist")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET,
 	MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY

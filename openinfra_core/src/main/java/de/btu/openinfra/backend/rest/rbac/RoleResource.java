@@ -16,7 +16,7 @@ import de.btu.openinfra.backend.db.daos.rbac.RoleDao;
 import de.btu.openinfra.backend.db.pojos.rbac.RolePojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
-@Path("/rbac/roles")
+@Path(OpenInfraResponseBuilder.REST_URI_RBAC + "/roles")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET,
 	MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
