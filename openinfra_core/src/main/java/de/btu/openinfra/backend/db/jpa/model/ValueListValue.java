@@ -70,12 +70,12 @@ public class ValueListValue extends OpenInfraModelObject
 	private List<TopicCharacteristic> topicCharacteristics;
 
 	//bi-directional many-to-one association to PtFreeText
-	@ManyToOne(cascade=CascadeType.MERGE)
+	@ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH})
 	@JoinColumn(name="description")
 	private PtFreeText ptFreeText1;
 
 	//bi-directional many-to-one association to PtFreeText
-	@ManyToOne(cascade=CascadeType.MERGE)
+	@ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH})
 	@JoinColumn(name="name")
 	private PtFreeText ptFreeText2;
 

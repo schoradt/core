@@ -13,12 +13,12 @@ import javax.persistence.Table;
 
 /**
  * The persistent class for the attribute_value database table.
- * 
+ *
  */
 @Entity
 @Table(name="attribute_value")
 @NamedQueries({
-	@NamedQuery(name="AttributeValue.findAll", 
+	@NamedQuery(name="AttributeValue.findAll",
 			query="SELECT a FROM AttributeValue a"),
 	@NamedQuery(name="AttributeValue.findByTopicInstance",
 			query="SELECT a "
@@ -41,7 +41,7 @@ public class AttributeValue extends OpenInfraModelObject
 	private AttributeTypeToAttributeTypeGroup attributeTypeToAttributeTypeGroup;
 
 	//bi-directional many-to-one association to TopicInstance
-	@ManyToOne(cascade=CascadeType.MERGE)
+	@ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH})
 	@JoinColumn(name="topic_instance_id")
 	private TopicInstance topicInstance;
 
