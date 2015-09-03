@@ -68,7 +68,9 @@
 			<property name="javax.persistence.schema-generation.database.action" value="create" />
 			<property name="javax.persistence.schema-generation.create-source" value="script" />
 			<property name="javax.persistence.schema-generation.create-script-source" 
-			          value="de/btu/openinfra/backend/sql/project_schema.sql" /> 
+			          value="de/btu/openinfra/backend/sql/project_schema.sql" />
+			<property name="javax.persistence.sql-load-script-source" 
+					  value="de/btu/openinfra/backend/sql/project_static_valuelist.sql"/>
 		</properties>
 	
 	</persistence-unit>

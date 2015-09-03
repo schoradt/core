@@ -152,8 +152,6 @@ public class ProjectResource {
 	    // create the project
 		UUID id = new ProjectDao(
 		        null, OpenInfraSchemas.SYSTEM).createProject(project);
-		// TODO add informations to the meta data schema, this is necessary for
-		//      every REST end point this project should use
 		return OpenInfraResponseBuilder.postResponse(id);
 	}
 
