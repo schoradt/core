@@ -151,8 +151,8 @@ public class EntityManagerFactoryCache {
             UUID currentProjectId,
             OpenInfraSchemas schema) {
         // set the default database connection properties
-          Map<String, String> properties =
-                  OpenInfraProperties.getConnectionProperties();
+        Map<String, String> properties =
+                OpenInfraProperties.getConnectionProperties();
         // 3. Decide if the system or a project database schema is requested
         String currentSchema = "currentSchema=";
         switch (schema) {
