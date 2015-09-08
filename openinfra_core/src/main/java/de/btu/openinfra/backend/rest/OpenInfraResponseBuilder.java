@@ -25,7 +25,7 @@ public class OpenInfraResponseBuilder {
 			+ "{projectId:([0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12})?}";
 	
 	public static final String REST_URI_METADATA = "/v1/metadata";
-	public static final String REST_URI_PROJECTS = "/v1/{schema:(projects)}"
+	public static final String REST_URI_PROJECTS = "/v1/{schema:(projects)}/"
 			+ "{projectId:([0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12})}";
 	public static final String REST_URI_RBAC = "/v1/rbac";
 	public static final String REST_URI_SYSTEM = "/v1/system";

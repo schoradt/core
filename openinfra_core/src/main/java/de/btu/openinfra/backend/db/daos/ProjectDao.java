@@ -244,8 +244,8 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 	 */
 	public static String getCurrentProject(String url) {
 		String[] split = url.split("/");
-		if(split.length >= 5 && split[4] != null) {
-			return split[4];
+		if(split.length >= 6 && split[5] != null) {
+			return split[5];
 		} else {
 			return "";
 		} // end if else

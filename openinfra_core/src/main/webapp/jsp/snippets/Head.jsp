@@ -23,7 +23,7 @@
 					PageContext.SESSION_SCOPE);
 } %>
 <!-- Set the current project -->
-<c:set var="currentProject">
+<c:set var="currentProject" scope="page">
 <%= ProjectDao.getCurrentProject(
 		request.getAttribute("javax.servlet.forward.request_uri").toString()) %>
 </c:set>
