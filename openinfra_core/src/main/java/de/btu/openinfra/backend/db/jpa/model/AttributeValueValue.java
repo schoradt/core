@@ -12,7 +12,7 @@ import javax.persistence.Table;
 
 /**
  * The persistent class for the attribute_value_value database table.
- * 
+ *
  */
 @Entity
 @Table(name="attribute_value_value")
@@ -27,7 +27,7 @@ public class AttributeValueValue extends OpenInfraModelObject
 	private AttributeTypeToAttributeTypeGroup attributeTypeToAttributeTypeGroup;
 
 	//bi-directional many-to-one association to PtFreeText
-	@ManyToOne(cascade=CascadeType.MERGE)
+	@ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH})
 	@JoinColumn(name="value")
 	private PtFreeText ptFreeText;
 

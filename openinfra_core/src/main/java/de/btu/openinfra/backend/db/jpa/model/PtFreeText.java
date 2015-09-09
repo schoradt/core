@@ -12,7 +12,7 @@ import javax.persistence.Table;
 
 /**
  * The persistent class for the pt_free_text database table.
- * 
+ *
  */
 @Entity
 @Table(name="pt_free_text")
@@ -41,7 +41,8 @@ public class PtFreeText extends OpenInfraModelObject implements Serializable {
 	private List<AttributeValueValue> attributeValueValues;
 
 	//bi-directional many-to-one association to LocalizedCharacterString
-	@OneToMany(mappedBy="ptFreeText", cascade=CascadeType.MERGE)
+	@OneToMany(mappedBy="ptFreeText",
+	           cascade={CascadeType.MERGE,CascadeType.REFRESH})
 	private List<LocalizedCharacterString> localizedCharacterStrings;
 
 	//bi-directional many-to-one association to Project
