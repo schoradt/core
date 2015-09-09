@@ -26,7 +26,7 @@ import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
  */
-@Path(OpenInfraResponseBuilder.REST_URI + "/attributetypegroups")
+@Path(OpenInfraResponseBuilder.REST_URI_DEFAULT + "/attributetypegroups")
 @Produces(MediaType.TEXT_HTML +
 		OpenInfraResponseBuilder.UTF8_CHARSET +
 		OpenInfraResponseBuilder.HTML_PRIORITY)

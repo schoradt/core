@@ -17,7 +17,7 @@ import de.btu.openinfra.backend.db.pojos.rbac.SubjectPojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
 
-@Path("/rbac/subjects")
+@Path(OpenInfraResponseBuilder.REST_URI_RBAC + "/subjects")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET,
 	MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY

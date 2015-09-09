@@ -19,7 +19,7 @@ import de.btu.openinfra.backend.db.daos.meta.SettingsDao;
 import de.btu.openinfra.backend.db.pojos.meta.SettingsPojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
-@Path("/metadata/settings")
+@Path(OpenInfraResponseBuilder.REST_URI_METADATA + "/settings")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET,
     MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY

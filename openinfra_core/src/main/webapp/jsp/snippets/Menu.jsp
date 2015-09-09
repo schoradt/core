@@ -41,26 +41,26 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <c:choose>
-        	<c:when test="${fn:contains(requestUrl, '/rest/search')}">
+        	<c:when test="${fn:contains(requestUrl, '/rest/v1/search')}">
 		        <li>
-		        	<a href="${contextPath}/rest/system">
+		        	<a href="${contextPath}/rest/v1/system">
 		        		<fmt:message key="system.label"></fmt:message>
 		        	</a>
 		        </li>
 		        <li>
-		        	<a href="${contextPath}/rest/projects">
+		        	<a href="${contextPath}/rest/v1/projects">
 		        		<fmt:message key="projects.label"></fmt:message>
 		        	</a>
 		        </li>
         	</c:when>
-        	<c:when test="${fn:contains(requestUrl, '/rest/system')}">
+        	<c:when test="${fn:contains(requestUrl, '/rest/v1/system')}">
 		        <li class="active">
-		        	<a href="${contextPath}/rest/system">
+		        	<a href="${contextPath}/rest/v1/system">
 		        		<fmt:message key="system.label"></fmt:message>
 		        	</a>
 		        </li>
 		        <li>
-		        	<a href="${contextPath}/rest/projects">
+		        	<a href="${contextPath}/rest/v1/projects">
 		        		<fmt:message key="projects.label"></fmt:message>
 		        	</a>
 		        </li>
@@ -80,14 +80,14 @@
 		          </ul>
 		        </li>
         	</c:when>
-        	<c:when test="${fn:contains(requestUrl, '/rest/projects/')}">
+        	<c:when test="${fn:contains(requestUrl, '/rest/v1/projects/')}">
 		        <li>
-		        	<a href="${contextPath}/rest/system">
+		        	<a href="${contextPath}/rest/v1/system">
 		        		<fmt:message key="system.label"/>
 		        	</a>
 		        </li>
 		        <li class="active">
-		        	<a href="${contextPath}/rest/projects">
+		        	<a href="${contextPath}/rest/v1/projects">
 		        		<fmt:message key="projects.label"/>
 		        	</a>
 		        </li>
@@ -95,7 +95,7 @@
 		          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 		          	<fmt:message key="menu.label"/><span class="caret"></span>
 		          </a>
-		          <c:set var="link" value="${req.scheme}://${req.serverName}:${req.serverPort}${contextPath}/rest/projects/${currentProject}"/>
+		          <c:set var="link" value="${req.scheme}://${req.serverName}:${req.serverPort}${contextPath}/rest/v1/projects/${currentProject}"/>
 		          <ul class="dropdown-menu" role="menu">
         			<c:if test="${fn:contains(requestUrl, '/topicinstances/')}">
         				<li><a style="cursor: pointer;"><fmt:message key="new.topicinstance.label"/></a></li>
@@ -118,14 +118,14 @@
 		          </ul>
 		        </li>
         	</c:when>
-        	<c:when test="${fn:contains(requestUrl, '/rest/projects')}">
+        	<c:when test="${fn:contains(requestUrl, '/rest/v1/projects')}">
 		        <li>
-		        	<a href="${contextPath}/rest/system">
+		        	<a href="${contextPath}/rest/v1/system">
 		        		<fmt:message key="system.label"/>
 		        	</a>
 		        </li>
 		        <li class="active">
-		        	<a href="${contextPath}/rest/projects">
+		        	<a href="${contextPath}/rest/v1/projects">
 		        		<fmt:message key="projects.label"/>
 		        	</a>
 		        </li>
@@ -140,7 +140,7 @@
         	</c:when>
         </c:choose>
         <li>
-			<a href="${pageContext.request.contextPath}/rest/projects/maps">
+			<a href="${pageContext.request.contextPath}/rest/v1/projects/maps">
 				<fmt:message key="map.label"/>
 			</a>
         </li>
@@ -186,7 +186,7 @@
 		    	</c:if>
       		</c:forEach>
 		</form>
-      <form class="navbar-form navbar-right" method="get" action="/openinfra_backend/rest/search" role="search">
+      <form class="navbar-form navbar-right" method="get" action="/openinfra_backend/rest/v1/search" role="search">
         <div class="form-group">
         <!-- Check the query parameter and create an input field with the query
         	 as value or an input field a placeholder -->
@@ -206,12 +206,12 @@
   </div><!-- /.container-fluid -->  
 <ol class="breadcrumb">
 	<c:choose>
-		<c:when test="${fn:contains(requestUrl, '/rest/projects/')}">
+		<c:when test="${fn:contains(requestUrl, '/rest/v1/projects/')}">
 			<!-- Iterate over all bread crumbs --> 
 			<c:forEach items="${breadCrumbs}" var="crumb">
 				<li>
 					<!-- define the URL -->
-					<a href="${contextPath}/rest/${crumb.value}">
+					<a href="${contextPath}/rest/v1/${crumb.value}">
 					<!-- either print the label that can be translated via
 						 locale files or a already translated dynamic string
 						 from the database -->
@@ -229,14 +229,14 @@
 				</li>
 			</c:forEach>
 		</c:when>
-		<c:when test="${fn:contains(requestUrl, '/rest/system')}">
+		<c:when test="${fn:contains(requestUrl, '/rest/v1/system')}">
 			<li class="active">
 				<a href="system">
 					<fmt:message key="system.label"/>
 				</a>
 			</li>
 		</c:when>
-		<c:when test="${fn:contains(requestUrl, '/rest/projects')}">
+		<c:when test="${fn:contains(requestUrl, '/rest/v1/projects')}">
 			<li class="active">
 				<a href="projects">
 					<fmt:message key="projects.label"/>

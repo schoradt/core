@@ -50,7 +50,7 @@
 							</a>
 	
 					  		<div class="media-body">
-					  			<a href="<%= request.getContextPath() %>/rest/projects/${pojo.uuid}/topiccharacteristics">
+					  			<a href="<%= request.getContextPath() %>/rest/v1/projects/${pojo.uuid}/topiccharacteristics">
 					    			<h4 class="media-heading">
 					    				${name}
 					    				<span class="small">(${pojo.uuid})</span>
@@ -64,7 +64,7 @@
 					    		<br/>
 					    		<div class="media-body">
 									<div style="padding-bottom: 3px;">
-						    			<a href="<%= request.getContextPath() %>/rest/projects/${pojo.uuid}/topiccharacteristics">
+						    			<a href="<%= request.getContextPath() %>/rest/v1/projects/${pojo.uuid}/topiccharacteristics">
 						    				<fmt:message key="topiccharacteristics.label"/>
 						    			</a>
 						    			<span class="badge">
@@ -76,7 +76,7 @@
 						    		</div>
 						    		
 						    		<div style="padding-bottom: 3px;">
-						    			<a href="<%= request.getContextPath() %>/rest/projects/${pojo.uuid}/valuelists">
+						    			<a href="<%= request.getContextPath() %>/rest/v1/projects/${pojo.uuid}/valuelists">
 						    				<fmt:message key="valuelists.label"/>
 							    			<span class="badge">
 												<%=new ValueListDao(
@@ -86,7 +86,7 @@
 						    			</a>					    		
 						    		</div>
 						    		
-					    			<a href="<%= request.getContextPath() %>/rest/projects/${pojo.uuid}/subprojects">
+					    			<a href="<%= request.getContextPath() %>/rest/v1/projects/${pojo.uuid}/subprojects">
 					    				<fmt:message key="subprojects.label"/>:
 						    			<span class="badge">
 											<%=new ProjectDao(
@@ -107,7 +107,7 @@
 										%>
 								   		<c:forEach var="subProject" items="${subProjects}">
 									   		<li>
-									   			<a href="<%= request.getContextPath() %>/rest/projects/${subProject.uuid}/topiccharacteristics">
+									   			<a href="<%= request.getContextPath() %>/rest/v1/projects/${subProject.uuid}/topiccharacteristics">
 									   				${subProject.names.localizedStrings[0].characterString}
 									   			</a>
 									   		</li>

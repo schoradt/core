@@ -21,7 +21,7 @@ import de.btu.openinfra.backend.db.daos.ValueListValueDao;
 import de.btu.openinfra.backend.db.pojos.ValueListValueAssociationPojo;
 import de.btu.openinfra.backend.db.pojos.ValueListValuePojo;
 
-@Path(OpenInfraResponseBuilder.REST_URI + "/valuelistvalues")
+@Path(OpenInfraResponseBuilder.REST_URI_DEFAULT + "/valuelistvalues")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET,
 	MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY

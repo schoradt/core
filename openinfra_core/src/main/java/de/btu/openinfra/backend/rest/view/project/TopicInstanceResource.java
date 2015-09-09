@@ -17,7 +17,7 @@ import de.btu.openinfra.backend.db.pojos.TopicInstanceAssociationPojo;
 import de.btu.openinfra.backend.db.pojos.TopicPojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
-@Path("/projects/{projectId}/topicinstances")
+@Path(OpenInfraResponseBuilder.REST_URI_PROJECTS + "/topicinstances")
 @Produces(MediaType.TEXT_HTML +
 		OpenInfraResponseBuilder.UTF8_CHARSET +
 		OpenInfraResponseBuilder.HTML_PRIORITY)
