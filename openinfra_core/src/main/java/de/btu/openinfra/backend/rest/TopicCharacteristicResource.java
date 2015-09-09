@@ -3,12 +3,16 @@ package de.btu.openinfra.backend.rest;
 import java.util.List;
 import java.util.UUID;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import de.btu.openinfra.backend.db.OpenInfraOrderByEnum;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
@@ -22,7 +26,7 @@ import de.btu.openinfra.backend.db.rbac.RelationshipTypeRbac;
 import de.btu.openinfra.backend.db.rbac.RelationshipTypeToTopicCharacteristicRbac;
 import de.btu.openinfra.backend.db.rbac.TopicCharacteristicRbac;
 
-@Path(OpenInfraResponseBuilder.REST_URI + "/topiccharacteristics")
+@Path(OpenInfraResponseBuilder.REST_URI_DEFAULT + "/topiccharacteristics")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET,
 	MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
@@ -191,5 +195,45 @@ public class TopicCharacteristicResource {
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
 						topicCharacteristicId);
 	}
+
+	@POST
+    public Response create(
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            TopicCharacteristicPojo pojo) {
+        UUID id = new TopicCharacteristicRbac(
+                projectId,
+                OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
+                        pojo, pojo.getMetaData());
+        return OpenInfraResponseBuilder.postResponse(id);
+    }
+
+    @PUT
+    @Path("{topicCharacteristicId}")
+    public Response update(
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            @PathParam("topicCharacteristicId") UUID topicCharacteristicId,
+            TopicCharacteristicPojo pojo) {
+        return OpenInfraResponseBuilder.postResponse(
+                new TopicCharacteristicRbac(
+                        projectId,
+                        OpenInfraSchemas.PROJECTS).createOrUpdate(pojo,
+                                topicCharacteristicId, pojo.getMetaData()));
+    }
+
+    @DELETE
+    @Path("{topicCharacteristicId}")
+    public Response delete(
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            @PathParam("topicCharacteristicId") UUID topicCharacteristicId) {
+        return OpenInfraResponseBuilder.deleteResponse(
+                new TopicCharacteristicRbac(
+                        projectId,
+                        OpenInfraSchemas.valueOf(schema.toUpperCase())).delete(
+                                topicCharacteristicId),
+                                topicCharacteristicId);
+    }
 
 }

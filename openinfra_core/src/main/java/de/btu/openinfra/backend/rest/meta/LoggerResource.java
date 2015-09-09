@@ -19,7 +19,7 @@ import de.btu.openinfra.backend.db.daos.meta.LoggerDao;
 import de.btu.openinfra.backend.db.pojos.meta.LoggerPojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
-@Path("/metadata/logger")
+@Path(OpenInfraResponseBuilder.REST_URI_METADATA + "/logger")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET,
     MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
@@ -62,7 +62,8 @@ public class LoggerResource {
             @PathParam("loggerId") UUID loggerId,
             LoggerPojo pojo) {
         UUID id = new LoggerDao(
-                OpenInfraSchemas.META_DATA).createOrUpdate(pojo, loggerId);
+                OpenInfraSchemas.META_DATA).createOrUpdate(pojo, loggerId,
+                        null);
         return OpenInfraResponseBuilder.putResponse(id);
     }
 

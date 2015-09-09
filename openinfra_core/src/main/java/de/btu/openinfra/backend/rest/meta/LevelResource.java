@@ -19,7 +19,7 @@ import de.btu.openinfra.backend.db.daos.meta.LevelDao;
 import de.btu.openinfra.backend.db.pojos.meta.LevelPojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
-@Path("/metadata/level")
+@Path(OpenInfraResponseBuilder.REST_URI_METADATA + "/level")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET,
     MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
@@ -60,7 +60,7 @@ public class LevelResource {
     @Path("{levelId}")
     public Response update(@PathParam("levelId") UUID levelId, LevelPojo pojo) {
         UUID id = new LevelDao(
-                OpenInfraSchemas.META_DATA).createOrUpdate(pojo, levelId);
+                OpenInfraSchemas.META_DATA).createOrUpdate(pojo, levelId, null);
         return OpenInfraResponseBuilder.putResponse(id);
     }
 

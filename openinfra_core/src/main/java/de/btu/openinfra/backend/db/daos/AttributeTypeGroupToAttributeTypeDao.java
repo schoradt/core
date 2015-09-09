@@ -42,29 +42,46 @@ public class AttributeTypeGroupToAttributeTypeDao extends
 	@Override
 	public AttributeTypeGroupToAttributeTypePojo mapToPojo(
 			Locale locale,
-			AttributeTypeToAttributeTypeGroup at) {
-		AttributeTypeGroupToAttributeTypePojo pojo =
-				new AttributeTypeGroupToAttributeTypePojo();
-		if(at != null) {
-			pojo.setAttributeTypeId(at.getAttributeType().getId());
-			pojo.setAttributeTypeGroup(
-					AttributeTypeGroupDao.mapToPojoStatically(
-							locale,
-							at.getAttributeTypeGroup()));
-			pojo.setDefaultValue(ValueListValueDao.mapToPojoStatically(
-					locale,
-					at.getValueListValue()));
-			pojo.setMultiplicity(MultiplicityDao.mapToPojoStatically(
-					at.getMultiplicityBean()));
-			pojo.setOrder(at.getOrder());
-			pojo.setUuid(at.getId());
-			pojo.setTrid(at.getXmin());
-			return pojo;
-		} else {
-			return null;
-		} // end if else
+			AttributeTypeToAttributeTypeGroup atgtat) {
+        return mapToPojoStatically(locale, atgtat,
+                new MetaDataDao(currentProjectId, schema));
 	}
 
+	/**
+     * This method implements the method mapToPojo in a static way.
+     *
+     * @param locale the requested language as Java.util locale
+     * @param atgtat the model object
+     * @param mdDao  the meta data DAO
+     * @return       the POJO object when the model object is not null else null
+     */
+    public static AttributeTypeGroupToAttributeTypePojo mapToPojoStatically(
+            Locale locale,
+            AttributeTypeToAttributeTypeGroup atgtat,
+            MetaDataDao mdDao) {
+        if(atgtat != null) {
+            AttributeTypeGroupToAttributeTypePojo pojo =
+                    new AttributeTypeGroupToAttributeTypePojo(atgtat, mdDao);
+
+            pojo.setAttributeTypeId(atgtat.getAttributeType().getId());
+            pojo.setAttributeTypeGroup(
+                    AttributeTypeGroupDao.mapToPojoStatically(
+                            locale,
+                            atgtat.getAttributeTypeGroup(),
+                            null));
+            pojo.setDefaultValue(ValueListValueDao.mapToPojoStatically(
+                    locale,
+                    atgtat.getValueListValue(),
+                    null));
+            pojo.setMultiplicity(MultiplicityDao.mapToPojoStatically(
+                    atgtat.getMultiplicityBean(),
+                    null));
+            pojo.setOrder(atgtat.getOrder());
+            return pojo;
+        } else {
+            return null;
+        } // end if else
+    }
 	@Override
 	public MappingResult<AttributeTypeToAttributeTypeGroup> mapToModel(
 			AttributeTypeGroupToAttributeTypePojo pojo,

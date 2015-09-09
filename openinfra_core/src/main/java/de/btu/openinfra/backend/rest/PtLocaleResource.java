@@ -23,7 +23,7 @@ import de.btu.openinfra.backend.db.rbac.PtLocaleRbac;
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
  */
-@Path(OpenInfraResponseBuilder.REST_URI + "/ptlocales")
+@Path(OpenInfraResponseBuilder.REST_URI_DEFAULT + "/ptlocales")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET,
 	MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY

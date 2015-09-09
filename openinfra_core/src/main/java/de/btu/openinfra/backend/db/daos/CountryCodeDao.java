@@ -42,10 +42,8 @@ public class CountryCodeDao
 	 * @return       the POJO object when the model object is not null else null
 	 */
 	public static CountryCodePojo mapToPojoStatically(CountryCode cc) {
-		CountryCodePojo pojo = new CountryCodePojo();
+		CountryCodePojo pojo = new CountryCodePojo(cc);
 		pojo.setCountryCode(cc.getCountryCode());
-		pojo.setUuid(cc.getId());
-		pojo.setTrid(cc.getXmin());
 		return pojo;
 	}
 

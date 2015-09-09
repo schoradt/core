@@ -24,7 +24,7 @@ import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
  */
-@Path("/system/charactercodes")
+@Path(OpenInfraResponseBuilder.REST_URI_SYSTEM + "/charactercodes")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET,
     MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY

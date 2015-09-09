@@ -5,7 +5,6 @@ import java.util.UUID;
 
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
-import de.btu.openinfra.backend.db.jpa.model.MetaData;
 import de.btu.openinfra.backend.db.jpa.model.RelationshipType;
 import de.btu.openinfra.backend.db.jpa.model.RelationshipTypeToTopicCharacteristic;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
@@ -42,11 +41,9 @@ public class TopicCharacteristicToRelationshipTypeDao
 	@Override
 	public TopicCharacteristicToRelationshipTypePojo mapToPojo(
 			Locale locale,
-			RelationshipTypeToTopicCharacteristic association) {
-		return mapToPojoStatically(
-			locale,
-			association,
-			em.find(MetaData.class, association.getId()));
+			RelationshipTypeToTopicCharacteristic rtttc) {
+		return mapToPojoStatically(locale, rtttc,
+		        new MetaDataDao(currentProjectId, schema));
 	}
 
 	@Override
@@ -62,41 +59,30 @@ public class TopicCharacteristicToRelationshipTypeDao
 	}
 
 	/**
-     * This method implements the method mapToPojo in a static way.
-     *
-     * @param locale       the requested language as Java.util locale
-     * @param association  the model object
-     * @return             the POJO object when the model object is not null
-     *                     else null
-     */
-
-	/**
 	 * This method implements the method mapToPojo in a static way.
 	 *
-	 * @param locale       the requested language as Java.util locale
-	 * @param association  the model object
-	 * @param md           the meta data model object
-	 * @return
+	 * @param locale the requested language as Java.util locale
+	 * @param rtttc  the model object
+	 * @param mdDao  the meta data DAO
+	 * @return       the POJO object when the model object is not null else null
 	 */
 	public static TopicCharacteristicToRelationshipTypePojo mapToPojoStatically(
 			Locale locale,
-			RelationshipTypeToTopicCharacteristic association,
-			MetaData md) {
+			RelationshipTypeToTopicCharacteristic rtttc,
+			MetaDataDao mdDao) {
 
-		if(association != null) {
+		if(rtttc != null) {
 			TopicCharacteristicToRelationshipTypePojo pojo =
-					new TopicCharacteristicToRelationshipTypePojo();
+					new TopicCharacteristicToRelationshipTypePojo(rtttc, mdDao);
 
-			pojo.setUuid(association.getId());
-			pojo.setTrid(association.getXmin());
-			pojo.setRelationshipe(association.getRelationshipType().getId());
+			pojo.setRelationshipe(rtttc.getRelationshipType().getId());
 			pojo.setMultiplicity(MultiplicityDao.mapToPojoStatically(
-					association.getMultiplicityBean()));
+					rtttc.getMultiplicityBean(), mdDao));
 			pojo.setTopicCharacteristic(
 				TopicCharacteristicDao.mapToPojoStatically(
 					locale,
-					association.getTopicCharacteristic(),
-					md));
+					rtttc.getTopicCharacteristic(),
+					mdDao));
 
 			return pojo;
 		}

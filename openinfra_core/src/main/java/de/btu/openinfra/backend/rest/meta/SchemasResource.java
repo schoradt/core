@@ -19,7 +19,7 @@ import de.btu.openinfra.backend.db.daos.meta.SchemasDao;
 import de.btu.openinfra.backend.db.pojos.meta.SchemasPojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
-@Path("/metadata/schemas")
+@Path(OpenInfraResponseBuilder.REST_URI_METADATA + "/schemas")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET,
     MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
@@ -64,7 +64,8 @@ public class SchemasResource {
             @PathParam("schemasId") UUID schemasId,
             SchemasPojo pojo) {
         UUID id = new SchemasDao(
-                OpenInfraSchemas.META_DATA).createOrUpdate(pojo, schemasId);
+                OpenInfraSchemas.META_DATA).createOrUpdate(pojo, schemasId,
+                        null);
         return OpenInfraResponseBuilder.putResponse(id);
     }
 

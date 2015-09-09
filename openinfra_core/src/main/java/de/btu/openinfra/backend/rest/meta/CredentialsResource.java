@@ -19,7 +19,7 @@ import de.btu.openinfra.backend.db.daos.meta.CredentialsDao;
 import de.btu.openinfra.backend.db.pojos.meta.CredentialsPojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
-@Path("/metadata/credentials")
+@Path(OpenInfraResponseBuilder.REST_URI_METADATA + "/credentials")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET,
     MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
@@ -64,7 +64,8 @@ public class CredentialsResource {
             @PathParam("credentialsId") UUID credentialsId,
             CredentialsPojo pojo) {
         UUID id = new CredentialsDao(
-                OpenInfraSchemas.META_DATA).createOrUpdate(pojo, credentialsId);
+                OpenInfraSchemas.META_DATA).createOrUpdate(pojo, credentialsId,
+                        null);
         return OpenInfraResponseBuilder.putResponse(id);
     }
 

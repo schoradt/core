@@ -18,7 +18,7 @@ import de.btu.openinfra.backend.db.pojos.ValueListPojo;
 import de.btu.openinfra.backend.db.pojos.ValueListValuePojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
-@Path(OpenInfraResponseBuilder.REST_URI + "/valuelists")
+@Path(OpenInfraResponseBuilder.REST_URI_DEFAULT + "/valuelists")
 @Produces(MediaType.TEXT_HTML +
 		OpenInfraResponseBuilder.UTF8_CHARSET +
 		OpenInfraResponseBuilder.HTML_PRIORITY)

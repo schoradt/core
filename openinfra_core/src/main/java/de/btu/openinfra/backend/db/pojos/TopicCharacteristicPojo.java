@@ -1,23 +1,26 @@
 package de.btu.openinfra.backend.db.pojos;
 
-import java.util.List;
+import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import de.btu.openinfra.backend.db.daos.MetaDataDao;
+import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
+
 @XmlRootElement
-public class TopicCharacteristicPojo extends OpenInfraPojo {
-	
+public class TopicCharacteristicPojo extends OpenInfraMetaDataPojo {
+
 	private PtFreeTextPojo descriptions;
 	private ValueListValuePojo topic;
-	private String projectId;
-	private List<String> settings;
+	private UUID projectId;
 
-	public List<String> getSettings() {
-		return settings;
-	}
+	/* Default constructor */
+	public TopicCharacteristicPojo() {}
 
-	public void setSettings(List<String> settings) {
-		this.settings = settings;
+	/* Constructor that will set the id, trid and meta data automatically */
+	public TopicCharacteristicPojo(
+	        OpenInfraModelObject modelObject, MetaDataDao mdDao) {
+	    super(modelObject, mdDao);
 	}
 
 	public PtFreeTextPojo getDescriptions() {
@@ -36,11 +39,11 @@ public class TopicCharacteristicPojo extends OpenInfraPojo {
 		this.topic = topic;
 	}
 
-	public String getProjectId() {
+	public UUID getProjectId() {
 		return projectId;
 	}
 
-	public void setProjectId(String projectId) {
+	public void setProjectId(UUID projectId) {
 		this.projectId = projectId;
 	}
 

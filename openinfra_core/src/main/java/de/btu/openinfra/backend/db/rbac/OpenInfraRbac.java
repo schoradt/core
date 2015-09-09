@@ -9,6 +9,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+import org.json.simple.JSONObject;
 
 import de.btu.openinfra.backend.db.OpenInfraOrderByEnum;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
@@ -225,7 +226,7 @@ public abstract class OpenInfraRbac<
 					Response.Status.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	/**
 	 * This is a generic method which is provided by all RBAC classes.
 	 * 
@@ -234,13 +235,36 @@ public abstract class OpenInfraRbac<
 	 * @return
 	 * @throws RuntimeException
 	 */
-    public UUID createOrUpdate(TypePojo pojo, UUID valueId)
+    public UUID createOrUpdate(TypePojo pojo, JSONObject json)
+            throws RuntimeException {
+    	checkPermission();
+		try {
+			return dao.getDeclaredConstructor(constructorTypes).newInstance(
+					currentProjectId, 
+					schema).createOrUpdate(pojo, json);
+		} catch(Exception ex) {
+			ex.printStackTrace();
+			throw new WebApplicationException(
+					ex.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		}
+    }
+    
+	/**
+	 * This is a generic method which is provided by all RBAC classes.
+	 * 
+	 * @param pojo
+	 * @param valueId
+	 * @return
+	 * @throws RuntimeException
+	 */
+    public UUID createOrUpdate(TypePojo pojo, UUID valueId, JSONObject json)
             throws RuntimeException {
 		checkPermission();
 		try {
 			return dao.getDeclaredConstructor(constructorTypes).newInstance(
 					currentProjectId, 
-					schema).createOrUpdate(pojo, valueId);
+					schema).createOrUpdate(pojo, valueId, json);
 		} catch(Exception ex) {
 			ex.printStackTrace();
 			throw new WebApplicationException(
@@ -259,13 +283,15 @@ public abstract class OpenInfraRbac<
      * @throws RuntimeException
      */
     public UUID createOrUpdate(TypePojo pojo, UUID firstAssociationId,
-            UUID firstAssociationIdFromPojo) throws RuntimeException {
+            UUID firstAssociationIdFromPojo, JSONObject json) 
+            		throws RuntimeException {
 		checkPermission();
 		try {
 			return dao.getDeclaredConstructor(constructorTypes).newInstance(
 					currentProjectId, 
 					schema).createOrUpdate(pojo, 
-							firstAssociationId, firstAssociationIdFromPojo);
+							firstAssociationId, firstAssociationIdFromPojo, 
+							json);
 		} catch(Exception ex) {
 			ex.printStackTrace();
 			throw new WebApplicationException(
@@ -287,7 +313,7 @@ public abstract class OpenInfraRbac<
      */
     public UUID createOrUpdate(TypePojo pojo, UUID firstAssociationId,
             UUID firstAssociationIdFromPojo, UUID secondAssociationId,
-            UUID secondAssociationIdFromPojo)
+            UUID secondAssociationIdFromPojo, JSONObject json)
             throws RuntimeException {
 		checkPermission();
 		try {
@@ -295,7 +321,7 @@ public abstract class OpenInfraRbac<
 					currentProjectId, 
 					schema).createOrUpdate(pojo, firstAssociationId, 
 							firstAssociationIdFromPojo, secondAssociationId, 
-							secondAssociationIdFromPojo);
+							secondAssociationIdFromPojo, json);
 		} catch(Exception ex) {
 			ex.printStackTrace();
 			throw new WebApplicationException(

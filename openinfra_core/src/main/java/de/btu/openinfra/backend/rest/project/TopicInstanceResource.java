@@ -23,7 +23,7 @@ import de.btu.openinfra.backend.db.rbac.TopicInstanceRbac;
 import de.btu.openinfra.backend.db.rbac.TopicRbac;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
-@Path("/projects/{projectId}/topicinstances")
+@Path(OpenInfraResponseBuilder.REST_URI_PROJECTS + "/topicinstances")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET,
     MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY

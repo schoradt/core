@@ -58,7 +58,7 @@ import javax.persistence.Table;
 @NamedNativeQueries({
     @NamedNativeQuery(name="TopicInstance.findAllByLocaleAndOrderForValues",
         query="SELECT "
-                + "ti1.*, b.free_text "
+                + "ti1.*, b.free_text, ti1.xmin "
                 + "FROM topic_instance ti1 LEFT JOIN ("
                     + "SELECT "
                         + "ti2.id, at.name, lcs.free_text "
@@ -82,7 +82,7 @@ import javax.persistence.Table;
             resultClass=ValueList.class),
     @NamedNativeQuery(name="TopicInstance.findAllByLocaleAndOrderForDomains",
         query="SELECT "
-                + "ti1.* "
+                + "ti1.*, ti1.xmin "
                 + "FROM topic_instance ti1 LEFT JOIN ("
                     + "SELECT "
                         + "ti2.id, at.name, lcs.free_text "
@@ -128,7 +128,8 @@ public class TopicInstance extends OpenInfraModelObject
 	private List<AttributeValueGeomz> attributeValueGeomzs;
 
 	//bi-directional many-to-one association to AttributeValueValue
-	@OneToMany(mappedBy="topicInstance", cascade=CascadeType.MERGE)
+	@OneToMany(mappedBy="topicInstance",
+	           cascade={CascadeType.MERGE,CascadeType.REFRESH})
 	private List<AttributeValueValue> attributeValueValues;
 
 	//bi-directional many-to-one association to TopicCharacteristic

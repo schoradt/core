@@ -30,7 +30,7 @@ import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
  */
-@Path("/projects")
+@Path("/v1/projects")
 @Produces(MediaType.TEXT_HTML +
 		OpenInfraResponseBuilder.UTF8_CHARSET +
 		OpenInfraResponseBuilder.HTML_PRIORITY)

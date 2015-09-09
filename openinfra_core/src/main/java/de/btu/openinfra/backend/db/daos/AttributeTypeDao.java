@@ -45,7 +45,8 @@ public class AttributeTypeDao
 
 	@Override
 	public AttributeTypePojo mapToPojo(Locale locale, AttributeType at) {
-		return mapToPojoStatically(locale, at);
+		return mapToPojoStatically(locale, at,
+		        new MetaDataDao(currentProjectId, schema));
 	}
 
 	/**
@@ -53,30 +54,34 @@ public class AttributeTypeDao
 	 *
 	 * @param locale the requested language as Java.util locale
 	 * @param at     the model object
+	 * @param mdDao  the meta data DAO
 	 * @return       the POJO object when the model object is not null else null
 	 */
 	public static AttributeTypePojo mapToPojoStatically(
 			Locale locale,
-			AttributeType at) {
+			AttributeType at,
+			MetaDataDao mdDao) {
 		if(at != null) {
-			AttributeTypePojo pojo = new AttributeTypePojo();
+		    AttributeTypePojo pojo = new AttributeTypePojo(at, mdDao);
+
 			pojo.setDomain(ValueListDao.mapToPojoStatically(
 					locale,
-					at.getValueList()));
+					at.getValueList(),
+					mdDao));
 			pojo.setUnit(ValueListValueDao.mapToPojoStatically(
 					locale,
-					at.getValueListValue2()));
+					at.getValueListValue2(),
+					mdDao));
 			pojo.setDataType(ValueListValueDao.mapToPojoStatically(
 					locale,
-					at.getValueListValue1()));
+					at.getValueListValue1(),
+					mdDao));
 			pojo.setDescriptions(PtFreeTextDao.mapToPojoStatically(
 					locale,
 					at.getPtFreeText1()));
 			pojo.setNames(PtFreeTextDao.mapToPojoStatically(
 					locale,
 					at.getPtFreeText2()));
-			pojo.setUuid(at.getId());
-			pojo.setTrid(at.getXmin());
 
 			// This part is used to specify the awaited attribute value type.
 			if(pojo.getDomain() != null) {
@@ -113,14 +118,16 @@ public class AttributeTypeDao
 	public AttributeTypePojo read(Locale locale, String dataType) {
 
 	    PtLocale pl = new PtLocaleDao(currentProjectId, schema).read(locale);
+	    AttributeType at = em.createNamedQuery(
+                "AttributeType.findByDataType",
+                AttributeType.class)
+                .setParameter("ptl", pl)
+                .setParameter("dataType", dataType)
+                .getSingleResult();
 	    return AttributeTypeDao.mapToPojoStatically(
 	            locale,
-	            em.createNamedQuery(
-	                    "AttributeType.findByDataType",
-	                    AttributeType.class)
-	                    .setParameter("ptl", pl)
-	                    .setParameter("dataType", dataType)
-	                    .getSingleResult());
+	            at,
+	            new MetaDataDao(currentProjectId, schema));
 	}
 
 	@Override

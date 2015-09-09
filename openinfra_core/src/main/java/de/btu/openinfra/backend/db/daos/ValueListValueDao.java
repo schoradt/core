@@ -37,33 +37,36 @@ public class ValueListValueDao
 
 	@Override
 	public ValueListValuePojo mapToPojo(Locale locale, ValueListValue vlv) {
-		return mapToPojoStatically(locale, vlv);
+		return mapToPojoStatically(locale, vlv,
+		        new MetaDataDao(currentProjectId, schema));
 	}
 
 	/**
 	 * This is a static representation of the mapToPojo method and maps a JPA
 	 * model object into the referring POJO object.
 	 *
-	 * @param vlv the JPA model object
-	 * @return    the referring PJO object
+	 * @param locale the requested language as Java.util locale
+     * @param vlv    the model object
+     * @param mdDao  the meta data DAO
+	 * @return       the referring POJO object
 	 */
 	public static ValueListValuePojo mapToPojoStatically(
 			Locale locale,
-			ValueListValue vlv) {
+			ValueListValue vlv,
+			MetaDataDao mdDao) {
 		if(vlv != null) {
-			ValueListValuePojo vlvPojo = new ValueListValuePojo();
-			vlvPojo.setUuid(vlv.getId());
-			vlvPojo.setTrid(vlv.getXmin());
-			vlvPojo.setVisibility(vlv.getVisibility());
-			vlvPojo.setDescriptions(PtFreeTextDao.mapToPojoStatically(
+		    ValueListValuePojo pojo = new ValueListValuePojo(vlv, mdDao);
+
+			pojo.setVisibility(vlv.getVisibility());
+			pojo.setDescriptions(PtFreeTextDao.mapToPojoStatically(
 					locale,
 					vlv.getPtFreeText1()));
-			vlvPojo.setNames(PtFreeTextDao.mapToPojoStatically(
+			pojo.setNames(PtFreeTextDao.mapToPojoStatically(
 					locale,
 					vlv.getPtFreeText2()));
-			vlvPojo.setBelongsToValueList(
+			pojo.setBelongsToValueList(
 					vlv.getValueList().getId());
-			return vlvPojo;
+			return pojo;
 		} else {
 			return null;
 		} // end if else

@@ -124,12 +124,23 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 
 	@Override
 	public ProjectPojo mapToPojo(Locale locale, Project p) {
-		return mapToPojoStatically(locale, p);
+		return mapToPojoStatically(locale, p,
+		        new MetaDataDao(currentProjectId, schema));
 	}
 
-	public static ProjectPojo mapToPojoStatically(Locale locale, Project p) {
+	/**
+     * This method implements the method mapToPojo in a static way.
+     *
+     * @param locale the requested language as Java.util locale
+     * @param p      the model object
+     * @param mdDao  the meta data DAO
+     * @return       the POJO object when the model object is not null else null
+     */
+	public static ProjectPojo mapToPojoStatically(Locale locale, Project p,
+	        MetaDataDao mdDao) {
 		if(p != null) {
-			ProjectPojo pojo = new ProjectPojo();
+			ProjectPojo pojo = new ProjectPojo(p, mdDao);
+
 			Project parent = p.getProject();
 
 			pojo.setNames(PtFreeTextDao.mapToPojoStatically(
@@ -141,8 +152,6 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 			if(parent != null) {
 				pojo.setSubprojectOf(parent.getId());
 			} // end if
-			pojo.setUuid(p.getId());
-			pojo.setTrid(p.getXmin());
 
 			return pojo;
 		} else {
@@ -196,11 +205,12 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 	public List<ProjectPojo> readParents(Locale locale) {
 		Project self = em.find(Project.class, currentProjectId);
 		List<ProjectPojo> parents = new LinkedList<ProjectPojo>();
-		parents.add(mapToPojoStatically(locale, self));
+		MetaDataDao mdDao = new MetaDataDao(currentProjectId, schema);
+		parents.add(mapToPojoStatically(locale, self, mdDao));
 
 		while(self.getProject() != null) {
 			self = self.getProject();
-			parents.add(mapToPojoStatically(locale, self));
+			parents.add(mapToPojoStatically(locale, self, mdDao));
 		} // end while
 		return Lists.reverse(parents);
 	}
@@ -234,8 +244,8 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 	 */
 	public static String getCurrentProject(String url) {
 		String[] split = url.split("/");
-		if(split.length >= 5 && split[4] != null) {
-			return split[4];
+		if(split.length >= 6 && split[5] != null) {
+			return split[5];
 		} else {
 			return "";
 		} // end if else

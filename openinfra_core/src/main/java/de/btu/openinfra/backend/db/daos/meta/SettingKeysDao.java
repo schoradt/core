@@ -11,9 +11,9 @@ import de.btu.openinfra.backend.db.pojos.meta.SettingKeysPojo;
 public class SettingKeysDao extends OpenInfraDao<SettingKeysPojo, SettingKeys> {
 
     /**
-     * This is the required constructor which calls the super constructor and in 
+     * This is the required constructor which calls the super constructor and in
      * turn creates the corresponding entity manager.
-     * 
+     *
      * @param schema           the required schema
      */
     public SettingKeysDao(OpenInfraSchemas schema) {
@@ -24,19 +24,17 @@ public class SettingKeysDao extends OpenInfraDao<SettingKeysPojo, SettingKeys> {
     public SettingKeysPojo mapToPojo(Locale locale, SettingKeys sk) {
         return mapPojoStatically(sk);
     }
-    
+
     /**
      * This method implements the method mapToPojo in a static way.
-     * 
+     *
      * @param sk     the model object
      * @return       the POJO object when the model object is not null else null
      */
     public static SettingKeysPojo mapPojoStatically(SettingKeys sk) {
         if (sk != null) {
-            SettingKeysPojo pojo = new SettingKeysPojo();
-            pojo.setUuid(sk.getId());
+            SettingKeysPojo pojo = new SettingKeysPojo(sk);
             pojo.setKey(sk.getKey());
-            pojo.setTrid(sk.getXmin());
             return pojo;
         } else {
             return null;
@@ -47,7 +45,7 @@ public class SettingKeysDao extends OpenInfraDao<SettingKeysPojo, SettingKeys> {
     public MappingResult<SettingKeys> mapToModel(
             SettingKeysPojo pojo,
             SettingKeys sk) {
-        if(pojo != null) {            
+        if(pojo != null) {
             mapToModelStatically(pojo, sk);
             return new MappingResult<SettingKeys>(sk.getId(), sk);
         }
@@ -55,7 +53,7 @@ public class SettingKeysDao extends OpenInfraDao<SettingKeysPojo, SettingKeys> {
             return null;
         }
     }
-    
+
     /**
      * This method implements the method mapToModel in a static way.
      * @param pojo the POJO object
@@ -77,7 +75,7 @@ public class SettingKeysDao extends OpenInfraDao<SettingKeysPojo, SettingKeys> {
         }
         return resultSettingKeys;
     }
-    
+
     /**
      * Creates an empty setting keys pojo.
      * @return an empty setting keys pojo

@@ -2,6 +2,7 @@ package de.btu.openinfra.backend.rest.pdf;
 
 import java.io.ByteArrayOutputStream;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
@@ -10,13 +11,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
 import javax.xml.transform.Result;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -28,8 +27,17 @@ import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
 
 import de.btu.openinfra.backend.db.daos.AttributeValueGeomType;
+import de.btu.openinfra.backend.db.pojos.TopicPojo;
+import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
+import de.btu.openinfra.backend.rest.project.TopicInstanceResource;
 
-@Path("/projects/{projectId}/topicinstances")
+/**
+ * This class transforms XML files into PDF files.
+ * 
+ * @author <a href="http://www.b-tu.de">BTU</a> DBIS
+ *
+ */
+@Path(OpenInfraResponseBuilder.REST_URI_PROJECTS + "/topicinstances")
 public class TopicPdfResource {
 	
 	/**
@@ -39,6 +47,7 @@ public class TopicPdfResource {
 			"de/btu/openinfra/backend/xsl/TopicPdf.xsl"; 
 	
 	/**
+	 * This method executes the transformation. 
 	 * http://www.e-zest.net/blog/integrating-apache-fop-with-java-project-to-generate-pdf-files/
 	 * 
 	 * @param language
@@ -59,15 +68,28 @@ public class TopicPdfResource {
 			@Context UriInfo uriInfo,
 			@Context HttpServletResponse servletResponse) {
 		
-		// Remove the PDF extension of the URL and add query parameters
-		String path = uriInfo.getAbsolutePath().toString();
-		Client client = ClientBuilder.newClient();
-		WebTarget target = client.target(
-				path.substring(0, path.lastIndexOf(".pdf")) + 
-				"?language=" + language);
-		String xml = target.request(
-				MediaType.APPLICATION_XML).get(String.class);
+		// Don't care about accessing the RBAC system classes. Just use the 
+		// resource class to retrieve the requested object. 
+		TopicPojo pojo = new TopicInstanceResource().get(
+				language, 
+				projectId, 
+				topicInstanceId, 
+				geomType);
 		
+		// Use JAXB to retrieve XML output.
+		String xml = "";
+		StringWriter sw = new StringWriter();
+		try {
+			JAXBContext jaxb = JAXBContext.newInstance(TopicPojo.class);
+			Marshaller m = jaxb.createMarshaller();
+			m.marshal(pojo , sw);
+			xml = sw.toString();			
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		
+		// Use formatted objects (FOP) and a specific XSL file in order to 
+		// generate PDF output.
 		Fop fop;
 		FopFactory fopf = FopFactory.newInstance();
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
