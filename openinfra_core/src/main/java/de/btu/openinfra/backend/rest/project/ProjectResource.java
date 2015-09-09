@@ -53,15 +53,14 @@ public class ProjectResource {
 	 *               and size)
 	 */
 	@GET
-	public Response get(
+	public List<ProjectPojo> get(
 			@QueryParam("language") String language,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {		
-		return OpenInfraResponseBuilder.getResponse(
-				new ProjectRbac(
+				return new ProjectRbac(
 						null, 
 						OpenInfraSchemas.META_DATA).readMainProjects(
-								PtLocaleDao.forLanguageTag(language)));			
+								PtLocaleDao.forLanguageTag(language));			
 	}
 
 	@GET

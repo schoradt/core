@@ -1,5 +1,6 @@
 package de.btu.openinfra.backend.rest.view.project;
 
+import java.util.List;
 import java.util.UUID;
 
 import javax.ws.rs.GET;
@@ -15,6 +16,7 @@ import org.glassfish.jersey.server.mvc.Template;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.ProjectDao;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
+import de.btu.openinfra.backend.db.pojos.ProjectPojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
 /**
@@ -38,7 +40,7 @@ public class ProjectResource {
 
 	@GET
 	@Template(name="/views/list/Projects.jsp")
-	public Response get(
+	public List<ProjectPojo> get(
 			@QueryParam("language") String language,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
