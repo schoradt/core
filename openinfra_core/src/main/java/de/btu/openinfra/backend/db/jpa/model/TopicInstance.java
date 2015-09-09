@@ -128,7 +128,8 @@ public class TopicInstance extends OpenInfraModelObject
 	private List<AttributeValueGeomz> attributeValueGeomzs;
 
 	//bi-directional many-to-one association to AttributeValueValue
-	@OneToMany(mappedBy="topicInstance", cascade=CascadeType.MERGE)
+	@OneToMany(mappedBy="topicInstance",
+	           cascade={CascadeType.MERGE,CascadeType.REFRESH})
 	private List<AttributeValueValue> attributeValueValues;
 
 	//bi-directional many-to-one association to TopicCharacteristic

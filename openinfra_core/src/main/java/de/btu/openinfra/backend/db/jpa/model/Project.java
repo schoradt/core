@@ -13,7 +13,7 @@ import javax.persistence.OneToMany;
 
 /**
  * The persistent class for the project database table.
- * 
+ *
  */
 @Entity
 @NamedQuery(name="Project.findAll", query="SELECT p FROM Project p")
@@ -30,12 +30,12 @@ public class Project extends OpenInfraModelObject implements Serializable {
 	private List<Project> projects;
 
 	//bi-directional many-to-one association to PtFreeText
-	@ManyToOne(cascade=CascadeType.MERGE)
+	@ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH})
 	@JoinColumn(name="description")
 	private PtFreeText ptFreeText1;
 
 	//bi-directional many-to-one association to PtFreeText
-	@ManyToOne(cascade=CascadeType.MERGE)
+	@ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH})
 	@JoinColumn(name="name")
 	private PtFreeText ptFreeText2;
 
