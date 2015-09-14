@@ -23,7 +23,7 @@ import de.btu.openinfra.plugins.solr.Result;
  *
  */
 
-@Path("/search")
+@Path(OpenInfraResponseBuilder.REST_URI_SEARCH)
 @Produces(MediaType.TEXT_HTML +
         OpenInfraResponseBuilder.UTF8_CHARSET +
         OpenInfraResponseBuilder.HTML_PRIORITY)

@@ -41,10 +41,9 @@ public class RelationshipTypeToTopicCharacteristicDao
 	@Override
 	public RelationshipTypeToTopicCharacteristicPojo mapToPojo(
 			Locale locale,
-			RelationshipTypeToTopicCharacteristic association) {
-		return mapToPojoStatically(
-			locale,
-			association);
+			RelationshipTypeToTopicCharacteristic rtt) {
+		return mapToPojoStatically(locale, rtt,
+		        new MetaDataDao(currentProjectId, schema));
 	}
 
 	@Override
@@ -62,29 +61,29 @@ public class RelationshipTypeToTopicCharacteristicDao
 	/**
      * This method implements the method mapToPojo in a static way.
      *
-     * @param locale       the requested language as Java.util locale
-     * @param association  the model object
-     * @return             the POJO object when the model object is not null
-     *                     else null
+     * @param locale the requested language as Java.util locale
+     * @param rtt    the model object
+     * @param mdDao  the meta data DAO
+     * @return       the POJO object when the model object is not null else null
      */
 	public static RelationshipTypeToTopicCharacteristicPojo mapToPojoStatically(
 			Locale locale,
-			RelationshipTypeToTopicCharacteristic association) {
+			RelationshipTypeToTopicCharacteristic rtt,
+			MetaDataDao mdDao) {
 
-		if(association != null) {
+		if(rtt != null) {
 			RelationshipTypeToTopicCharacteristicPojo pojo =
-					new RelationshipTypeToTopicCharacteristicPojo();
+					new RelationshipTypeToTopicCharacteristicPojo(rtt, mdDao);
 
-			pojo.setUuid(association.getId());
-			pojo.setTrid(association.getXmin());
 			pojo.setTopicCharacteristicId(
-				association.getTopicCharacteristic().getId());
+			        rtt.getTopicCharacteristic().getId());
 			pojo.setMultiplicity(MultiplicityDao.mapToPojoStatically(
-					association.getMultiplicityBean()));
+			        rtt.getMultiplicityBean(), null));
 			pojo.setRelationshipType(
 				RelationshipTypeDao.mapToPojoStatically(
 					locale,
-					association.getRelationshipType()));
+					rtt.getRelationshipType(),
+					null));
 
 			return pojo;
 		}

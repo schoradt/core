@@ -19,7 +19,7 @@ import de.btu.openinfra.backend.db.daos.meta.DatabaseConnectionDao;
 import de.btu.openinfra.backend.db.pojos.meta.DatabaseConnectionPojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
-@Path("/metadata/dbconnections")
+@Path(OpenInfraResponseBuilder.REST_URI_METADATA + "/dbconnections")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET,
     MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
@@ -66,7 +66,7 @@ public class DatabaseConnectionResource {
             DatabaseConnectionPojo pojo) {
         UUID id = new DatabaseConnectionDao(
                 OpenInfraSchemas.META_DATA).createOrUpdate(pojo,
-                        databaseConnectionId);
+                        databaseConnectionId, null);
         return OpenInfraResponseBuilder.putResponse(id);
     }
 

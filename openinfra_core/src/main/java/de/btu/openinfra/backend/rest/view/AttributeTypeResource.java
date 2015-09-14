@@ -18,7 +18,7 @@ import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupToAttributeTypePojo;
 import de.btu.openinfra.backend.db.pojos.AttributeTypePojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
-@Path(OpenInfraResponseBuilder.REST_URI + "/attributetypes")
+@Path(OpenInfraResponseBuilder.REST_URI_DEFAULT + "/attributetypes")
 @Produces(MediaType.TEXT_HTML +
 		OpenInfraResponseBuilder.UTF8_CHARSET +
 		OpenInfraResponseBuilder.HTML_PRIORITY)

@@ -43,36 +43,46 @@ public class AttributeTypeGroupToTopicCharacteristicDao extends
 	public AttributeTypeGroupToTopicCharacteristicPojo mapToPojo(
 			Locale locale,
 			AttributeTypeGroupToTopicCharacteristic atg) {
-		return mapToPojoStatically(locale, atg);
+		return mapToPojoStatically(locale, atg,
+		        new MetaDataDao(currentProjectId, schema));
 	}
 
 	/**
 	 * This method implements the method mapToPojo in a static way.
 	 *
 	 * @param locale the requested language as Java.util locale
-	 * @param atg    the model object
+	 * @param atgttc    the model object
+	 * @param mdDao  the meta data DAO
 	 * @return       the POJO object when the model object is not null else null
 	 */
 	public static AttributeTypeGroupToTopicCharacteristicPojo
 		mapToPojoStatically(
 				Locale locale,
-				AttributeTypeGroupToTopicCharacteristic atg) {
-		AttributeTypeGroupToTopicCharacteristicPojo pojo =
-				new AttributeTypeGroupToTopicCharacteristicPojo();
-		pojo.setAttributeTypeGroup(AttributeTypeGroupDao.mapToPojoStatically(
-				locale,
-				atg.getAttributeTypeGroup()));
-		pojo.setMultiplicity(MultiplicityDao.mapToPojoStatically(
-				atg.getMultiplicityBean()));
-		pojo.setTopicCharacteristicId(atg.getTopicCharacteristic().getId());
+				AttributeTypeGroupToTopicCharacteristic atgttc,
+				MetaDataDao mdDao) {
+	    if (atgttc != null) {
+    		AttributeTypeGroupToTopicCharacteristicPojo pojo =
+    				new AttributeTypeGroupToTopicCharacteristicPojo(
+    				        atgttc, mdDao);
 
-		if(atg.getOrder() != null) {
-			pojo.setOrder(atg.getOrder());
-		}
+    		pojo.setAttributeTypeGroup(
+    		        AttributeTypeGroupDao.mapToPojoStatically(
+    		                locale,
+    		                atgttc.getAttributeTypeGroup(),
+    		                null));
+    		pojo.setMultiplicity(MultiplicityDao.mapToPojoStatically(
+    				atgttc.getMultiplicityBean(),
+    				null));
+    		pojo.setTopicCharacteristicId(atgttc.getTopicCharacteristic().getId());
 
-		pojo.setUuid(atg.getId());
-		pojo.setTrid(atg.getXmin());
-		return pojo;
+    		if(atgttc.getOrder() != null) {
+    			pojo.setOrder(atgttc.getOrder());
+    		}
+
+    		return pojo;
+	    } else {
+	        return null;
+	    }
 	}
 
 	@Override

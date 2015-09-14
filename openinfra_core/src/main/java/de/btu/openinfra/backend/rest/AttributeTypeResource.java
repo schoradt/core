@@ -26,7 +26,7 @@ import de.btu.openinfra.backend.db.pojos.AttributeTypeAssociationPojo;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupToAttributeTypePojo;
 import de.btu.openinfra.backend.db.pojos.AttributeTypePojo;
 
-@Path(OpenInfraResponseBuilder.REST_URI + "/attributetypes")
+@Path(OpenInfraResponseBuilder.REST_URI_DEFAULT + "/attributetypes")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET,
 	MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
@@ -204,7 +204,7 @@ public class AttributeTypeResource {
         UUID id = new AttributeTypeDao(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
-                        pojo);
+                        pojo, pojo.getMetaData());
         return OpenInfraResponseBuilder.postResponse(id);
     }
 
@@ -233,7 +233,7 @@ public class AttributeTypeResource {
                 new AttributeTypeDao(
                         projectId,
                         OpenInfraSchemas.PROJECTS).createOrUpdate(pojo,
-                                attributeTypeId));
+                                attributeTypeId, pojo.getMetaData()));
     }
 
     @GET
@@ -260,7 +260,8 @@ public class AttributeTypeResource {
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
                         pojo, attributeTypeId,
-                        pojo.getAssociationAttributeTypeId());
+                        pojo.getAssociationAttributeTypeId(),
+                        pojo.getMetaData());
         return OpenInfraResponseBuilder.postResponse(id);
     }
 
@@ -296,6 +297,7 @@ public class AttributeTypeResource {
                                 pojo, attributeTypeId,
                                 pojo.getAssociationAttributeTypeId(),
                                 associatedAttributeTypeId,
-                                pojo.getAssociatedAttributeType().getUuid()));
+                                pojo.getAssociatedAttributeType().getUuid(),
+                                pojo.getMetaData()));
     }
 }

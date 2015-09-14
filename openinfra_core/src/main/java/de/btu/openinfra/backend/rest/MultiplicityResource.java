@@ -26,7 +26,7 @@ import de.btu.openinfra.backend.db.pojos.MultiplicityPojo;
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
  */
-@Path(OpenInfraResponseBuilder.REST_URI + "/multiplicities")
+@Path(OpenInfraResponseBuilder.REST_URI_DEFAULT + "/multiplicities")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET,
 	MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
@@ -90,7 +90,7 @@ public class MultiplicityResource {
 		UUID id = new MultiplicityDao(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
-						pojo);
+						pojo, pojo.getMetaData());
 		return OpenInfraResponseBuilder.postResponse(id);
 	}
 
@@ -119,7 +119,7 @@ public class MultiplicityResource {
 				new MultiplicityDao(
 						projectId,
 						OpenInfraSchemas.PROJECTS).createOrUpdate(pojo,
-						        multiplicityId));
+						        multiplicityId, pojo.getMetaData()));
 	}
 
 }

@@ -19,7 +19,7 @@ import de.btu.openinfra.backend.db.daos.meta.SettingKeysDao;
 import de.btu.openinfra.backend.db.pojos.meta.SettingKeysPojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
-@Path("/metadata/settingkeys")
+@Path(OpenInfraResponseBuilder.REST_URI_METADATA + "/settingkeys")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET,
     MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
@@ -64,7 +64,8 @@ public class SettingKeysResource {
             @PathParam("settingKeysId") UUID settingKeysId,
             SettingKeysPojo pojo) {
         UUID id = new SettingKeysDao(
-                OpenInfraSchemas.META_DATA).createOrUpdate(pojo, settingKeysId);
+                OpenInfraSchemas.META_DATA).createOrUpdate(pojo, settingKeysId,
+                        null);
         return OpenInfraResponseBuilder.putResponse(id);
     }
 

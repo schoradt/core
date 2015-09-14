@@ -41,7 +41,7 @@ public class BreadCrumbNavigation {
 
     // will determine the position when the URL parts get relevant
     // TODO not very dynamically!
-    private final static int uselessCrumbsUntil = 3;
+    private final static int uselessCrumbsUntil = 4;
 
 
     /**
@@ -93,10 +93,10 @@ public class BreadCrumbNavigation {
         // only create bread crumbs if the URL has a specific length
         // TODO not very dynamic
         // TODO ignoring system is just a workaround
-        if(split.length >= 5 && !split[3].equals("system")) {
+        if(split.length >= 5 && !split[4].equals("system")) {
             // set the project id, that will always appear at position four
         	try {
-        		projectId = UUID.fromString(split[4]);
+        		projectId = UUID.fromString(split[5]);
         	} catch(Exception ex) {
         		//TODO handle this
         	}
@@ -132,7 +132,8 @@ public class BreadCrumbNavigation {
                                 value = "projects/" + projects.get(x).getUuid()
                                         + "/subprojects";
 
-                                // put the label and the URL into the bread crumbs
+                                // put the label and the URL into the bread 
+                                // crumbs
                                 breadCrumbs.put(key, value);
                                 key = "";
                             }
@@ -255,7 +256,7 @@ public class BreadCrumbNavigation {
 
                         // create the URL with the project string, UUID and the
                         // specific additions
-                        value = split[3] + "/" + projectId + urlAddon + param;
+                        value = split[4] + "/" + projectId + urlAddon + param;
 
                         // put the label and the URL into the bread crumbs
                         if (!key.equals("")) {
@@ -324,7 +325,8 @@ public class BreadCrumbNavigation {
 
                             // add the string "projects" and the project id from
                             // the URL as part of the new URL
-                            value = split[3] + "/" + projectId + urlAddon + param;
+                            value = split[4] + "/" + projectId + urlAddon + 
+                            		param;
 
                             // clear the URL addition for the next run
                             urlAddon = "";

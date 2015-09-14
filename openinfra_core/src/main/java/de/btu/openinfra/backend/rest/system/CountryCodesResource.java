@@ -18,7 +18,7 @@ import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.CountryCodePojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
-@Path("/system/countrycodes")
+@Path(OpenInfraResponseBuilder.REST_URI_SYSTEM + "/countrycodes")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET,
     MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY

@@ -42,9 +42,7 @@ public class CharacterCodeDao
 	 * @return       the POJO object when the model object is not null else null
 	 */
 	public CharacterCodePojo mapToPojoStatically(CharacterCode cc) {
-		CharacterCodePojo pojo = new CharacterCodePojo();
-		pojo.setUuid(cc.getId());
-		pojo.setTrid(cc.getXmin());
+		CharacterCodePojo pojo = new CharacterCodePojo(cc);
 		pojo.setCharacterCode(cc.getCharacterCode());
 		return pojo;
 	}

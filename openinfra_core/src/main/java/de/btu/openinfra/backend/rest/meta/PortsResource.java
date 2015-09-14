@@ -19,7 +19,7 @@ import de.btu.openinfra.backend.db.daos.meta.PortsDao;
 import de.btu.openinfra.backend.db.pojos.meta.PortsPojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
-@Path("/metadata/ports")
+@Path(OpenInfraResponseBuilder.REST_URI_METADATA + "/ports")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET,
     MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
@@ -60,7 +60,7 @@ public class PortsResource {
     @Path("{portsId}")
     public Response update(@PathParam("portsId") UUID portsId, PortsPojo pojo) {
         UUID id = new PortsDao(
-                OpenInfraSchemas.META_DATA).createOrUpdate(pojo, portsId);
+                OpenInfraSchemas.META_DATA).createOrUpdate(pojo, portsId, null);
         return OpenInfraResponseBuilder.putResponse(id);
     }
 

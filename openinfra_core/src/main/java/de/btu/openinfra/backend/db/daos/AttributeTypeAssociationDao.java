@@ -39,8 +39,9 @@ public class AttributeTypeAssociationDao
 	@Override
 	public AttributeTypeAssociationPojo mapToPojo(
 			Locale locale,
-			AttributeTypeXAttributeType association) {
-		return mapToPojoStatically(locale, association);
+			AttributeTypeXAttributeType atxat) {
+		return mapToPojoStatically(locale, atxat,
+		        new MetaDataDao(currentProjectId, schema));
 	}
 
 	@Override
@@ -69,26 +70,23 @@ public class AttributeTypeAssociationDao
 	/**
 	 * This method implements the method mapToPojo in a static way.
 	 *
-	 * @param locale       the requested language as Java.util locale
-	 * @param association  the model object
-	 * @return             the POJO object when the model object is not null
-	 *                     else null
+	 * @param locale the requested language as Java.util locale
+	 * @param atxat  the model object
+	 * @param mdDao  the meta data DAO
+	 * @return       the POJO object when the model object is not null else null
 	 */
 	public static AttributeTypeAssociationPojo mapToPojoStatically(
 			Locale locale,
-			AttributeTypeXAttributeType atxat) {
+			AttributeTypeXAttributeType atxat,
+			MetaDataDao mdDao) {
 
 		if(atxat != null) {
 			AttributeTypeAssociationPojo pojo =
-					new AttributeTypeAssociationPojo();
-
-			// set the id of the pojo
-			pojo.setUuid(atxat.getId());
-			pojo.setTrid(atxat.getXmin());
+					new AttributeTypeAssociationPojo(atxat, mdDao);
 
 			// set the relationship type object
 			pojo.setRelationship(ValueListValueDao.mapToPojoStatically(locale,
-			        atxat.getValueListValue()));
+			        atxat.getValueListValue(), mdDao));
 
 			// set the association attribute type id
 			pojo.setAssociationAttributeTypeId(atxat.getAttributeType1Bean()
@@ -97,11 +95,10 @@ public class AttributeTypeAssociationDao
 			// set the associated attribute type object
 			pojo.setAssociatedAttributeType(
 				AttributeTypeDao.mapToPojoStatically(locale,
-				        atxat.getAttributeType2Bean()));
+				        atxat.getAttributeType2Bean(), mdDao));
 
 			return pojo;
-		}
-		else {
+		} else {
 			return null;
 		}
 	}

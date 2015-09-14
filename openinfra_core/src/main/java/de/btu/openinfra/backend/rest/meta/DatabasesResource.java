@@ -19,7 +19,7 @@ import de.btu.openinfra.backend.db.daos.meta.DatabasesDao;
 import de.btu.openinfra.backend.db.pojos.meta.DatabasesPojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
-@Path("/metadata/databases")
+@Path(OpenInfraResponseBuilder.REST_URI_METADATA + "/databases")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET,
     MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
@@ -64,7 +64,8 @@ public class DatabasesResource {
             @PathParam("databasesId") UUID databasesId,
             DatabasesPojo pojo) {
         UUID id = new DatabasesDao(
-                OpenInfraSchemas.META_DATA).createOrUpdate(pojo, databasesId);
+                OpenInfraSchemas.META_DATA).createOrUpdate(pojo, databasesId,
+                        null);
         return OpenInfraResponseBuilder.putResponse(id);
     }
 

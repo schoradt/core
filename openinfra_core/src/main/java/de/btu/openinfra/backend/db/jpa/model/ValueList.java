@@ -30,7 +30,7 @@ import javax.persistence.Table;
 @NamedNativeQueries({
 	@NamedNativeQuery(name="ValueList.findAllByLocaleAndOrder",
 			query="select * "
-				  + "from value_list as vl " 
+				  + "from value_list as vl "
 			      + "LEFT OUTER JOIN ( "
 			      	+ "select * "
 			      	+ "from value_list as a, localized_character_string as b "
@@ -48,12 +48,12 @@ public class ValueList extends OpenInfraModelObject implements Serializable {
 	private List<AttributeType> attributeTypes;
 
 	//bi-directional many-to-one association to PtFreeText
-	@ManyToOne(cascade=CascadeType.MERGE)
+	@ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH})
 	@JoinColumn(name="description")
 	private PtFreeText ptFreeText1;
 
 	//bi-directional many-to-one association to PtFreeText
-	@ManyToOne(cascade=CascadeType.MERGE)
+	@ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH})
 	@JoinColumn(name="name")
 	private PtFreeText ptFreeText2;
 

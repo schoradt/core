@@ -15,7 +15,7 @@ import org.glassfish.jersey.server.mvc.Template;
 import de.btu.openinfra.backend.db.pojos.ValueListValuePojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
-@Path(OpenInfraResponseBuilder.REST_URI + "/valuelistvalues")
+@Path(OpenInfraResponseBuilder.REST_URI_DEFAULT + "/valuelistvalues")
 @Produces(MediaType.TEXT_HTML +
 		OpenInfraResponseBuilder.UTF8_CHARSET +
 		OpenInfraResponseBuilder.HTML_PRIORITY)

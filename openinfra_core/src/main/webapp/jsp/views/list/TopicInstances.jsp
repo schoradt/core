@@ -20,7 +20,9 @@
 <body>
 	<%@ include file="../../snippets/Menu.jsp" %>
 	
-	<c:set var="columns" value="${it[0].topicCharacteristic.settings}"/>
+	<c:set var="metaData" value="${it[0].topicCharacteristic.metaData}"/>
+	<c:set var="columns" value="${metaData.list_view_columns}"/>
+	
 	<div id="orderAndFilterRow" class="row">
 		<%@ include file="../../snippets/Filter.jsp" %>
 		<%@ include file="../../snippets/OrderBy.jsp" %>
@@ -35,7 +37,8 @@
 			<span class="badge">
 				<c:set var="currentCharacteristic" value="${it[0].topicCharacteristic.uuid}"/>
 				<%=new TopicInstanceDao(
-						UUID.fromString(pageContext.getAttribute("currentProject").toString()),
+						UUID.fromString(ProjectDao.getCurrentProject(
+								request.getAttribute("javax.servlet.forward.request_uri").toString())),
 						OpenInfraSchemas.PROJECTS).getCount(
 								UUID.fromString(pageContext.getAttribute("currentCharacteristic").toString()))%>
 			</span>
@@ -62,7 +65,8 @@
 							pageContext.setAttribute(
 																"columnName",
 																new AttributeTypeDao(
-																UUID.fromString(pageContext.getAttribute("currentProject").toString()),
+																UUID.fromString(ProjectDao.getCurrentProject(
+																		request.getAttribute("javax.servlet.forward.request_uri").toString())),
 																OpenInfraSchemas.PROJECTS).read(
 																		PtLocaleDao.forLanguageTag(session.getAttribute("language").toString()), 
 																		UUID.fromString(pageContext.getAttribute("column").toString())),
@@ -156,7 +160,7 @@
 					</c:if>
 				</tr>
 			</c:forEach>
-		</table>  
+		</table>
 	</div>
 	
 	<nav>

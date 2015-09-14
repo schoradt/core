@@ -34,7 +34,7 @@ import de.btu.openinfra.backend.db.pojos.TopicCharacteristicToAttributeTypeGroup
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
  */
-@Path(OpenInfraResponseBuilder.REST_URI + "/attributetypegroups")
+@Path(OpenInfraResponseBuilder.REST_URI_DEFAULT + "/attributetypegroups")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET,
 	MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
@@ -237,7 +237,7 @@ public class AttributeTypeGroupResource {
         UUID id = new AttributeTypeGroupDao(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
-                        pojo);
+                        pojo, pojo.getMetaData());
         return OpenInfraResponseBuilder.postResponse(id);
     }
 
@@ -251,7 +251,7 @@ public class AttributeTypeGroupResource {
 	    UUID id = new AttributeTypeGroupDao(
 	            projectId,
 	            OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
-                        pojo, attributeTypeGroupId);
+                        pojo, attributeTypeGroupId, pojo.getMetaData());
 	    return OpenInfraResponseBuilder.putResponse(id);
 	}
 
