@@ -16,10 +16,9 @@ import javax.ws.rs.core.Response;
 
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
-import de.btu.openinfra.backend.db.daos.ValueListValueAssociationDao;
-import de.btu.openinfra.backend.db.daos.ValueListValueDao;
 import de.btu.openinfra.backend.db.pojos.ValueListValueAssociationPojo;
 import de.btu.openinfra.backend.db.pojos.ValueListValuePojo;
+import de.btu.openinfra.backend.db.rbac.ValueListValueAssociationRbac;
 import de.btu.openinfra.backend.db.rbac.ValueListValueRbac;
 
 @Path(OpenInfraResponseBuilder.REST_URI_DEFAULT + "/valuelistvalues")
@@ -67,7 +66,7 @@ public class ValueListValuesResource {
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 
-		return new ValueListValueAssociationDao(
+		return new ValueListValueAssociationRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language),
@@ -84,7 +83,7 @@ public class ValueListValuesResource {
             @PathParam("schema") String schema,
             @PathParam("valueListValueId") UUID valueListValueId) {
 
-        return new ValueListValueAssociationDao(
+        return new ValueListValueAssociationRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
                         valueListValueId);
@@ -102,7 +101,7 @@ public class ValueListValuesResource {
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 
-		return new ValueListValueAssociationDao(
+		return new ValueListValueAssociationRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language),
@@ -120,7 +119,7 @@ public class ValueListValuesResource {
             @PathParam("schema") String schema,
             @PathParam("valueListValueId") UUID valueListValueId,
             ValueListValuePojo pojo) {
-        UUID uuid = new ValueListValueDao(
+        UUID uuid = new ValueListValueRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
                         pojo, valueListValueId, pojo.getMetaData());
@@ -134,7 +133,7 @@ public class ValueListValuesResource {
             @PathParam("valueListValueId") UUID valueListValueId,
             @PathParam("schema") String schema) {
         return OpenInfraResponseBuilder.deleteResponse(
-                new ValueListValueDao(
+                new ValueListValueRbac(
                         projectId,
                         OpenInfraSchemas.valueOf(schema.toUpperCase()))
                     .delete(valueListValueId),
