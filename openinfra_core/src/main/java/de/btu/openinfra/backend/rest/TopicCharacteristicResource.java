@@ -215,7 +215,8 @@ public class TopicCharacteristicResource {
         return OpenInfraResponseBuilder.postResponse(
                 new TopicCharacteristicDao(
                         projectId,
-                        OpenInfraSchemas.PROJECTS).createOrUpdate(pojo,
+                        OpenInfraSchemas.valueOf(schema.toUpperCase())
+                        ).createOrUpdate(pojo,
                                 topicCharacteristicId, pojo.getMetaData()));
     }
 
