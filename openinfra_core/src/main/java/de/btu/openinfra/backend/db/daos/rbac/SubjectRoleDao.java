@@ -21,7 +21,8 @@ public class SubjectRoleDao extends OpenInfraDao<SubjectRolePojo, SubjectRole> {
 		pojo.setRole(
 				new RoleDao().mapToPojo(locale, modelObject.getRoleBean()));
 		pojo.setSubject(
-				new SubjectDao().mapToPojo(locale, modelObject.getSubject()));
+				new SubjectDao().mapToPojo(
+						locale, modelObject.getSubjectBean()));
 		return pojo;
 	}
 

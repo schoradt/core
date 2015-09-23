@@ -33,6 +33,7 @@ public class OpenInfraRequestFilter implements ContainerRequestFilter {
 
 	@Override
 	public void filter(ContainerRequestContext crc) throws IOException {
+		System.out.println("Hier -->");
 		String url = crc.getUriInfo().getAbsolutePath().toString();
 		try {
 			if(url.endsWith(".json")) {
