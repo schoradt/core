@@ -10,6 +10,7 @@ import java.util.UUID;
 import javax.persistence.ParameterMode;
 import javax.persistence.Persistence;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 
 import jersey.repackaged.com.google.common.collect.Lists;
 import de.btu.openinfra.backend.OpenInfraProperties;
@@ -317,7 +318,8 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
                     .setParameter("uuid", newProjectId)
                     .execute()) {
                 throw new WebApplicationException(
-                        "Failed to rename project schema.");
+                        "Failed to rename project schema.",
+                        Response.Status.INTERNAL_SERVER_ERROR);
             }
 
             // create a POJO for the schema in the meta data schema
@@ -326,6 +328,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
             metaSchemasPojo.setSchema("project_" + newProjectId);
             // create the DAO for the schema
             SchemasDao schemaDao = new SchemasDao(OpenInfraSchemas.META_DATA);
+            // insert the data
             UUID schemaId = schemaDao.createOrUpdate(metaSchemasPojo);
             if (schemaId == null) {
                 throw new WebApplicationException(
@@ -345,8 +348,8 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
             ServersDao serverDao = new ServersDao(OpenInfraSchemas.META_DATA);
 
             // TODO Only the default values from the properties file will be
-            //      used for the new connection. Find a better way!
-            // retrieve the default port
+            //      used for the new connection. Find a better way?
+            // retrieve the default credentials
             dbCPojo.setCredentials(
                     credentialsDao.mapToPojo(
                             null,
@@ -407,22 +410,24 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
             // create the DAO for the database connection
             DatabaseConnectionDao dbCDao =
                     new DatabaseConnectionDao(OpenInfraSchemas.META_DATA);
-            // write the database connection information to the database
+            // insert the database connection information
             UUID dbCId = dbCDao.createOrUpdate(dbCPojo);
             if (dbCId == null) {
                 throw new WebApplicationException(
                         "Failed to create an entry in the table "
-                        + "database_connection.");
+                        + "database_connection.",
+                        Response.Status.INTERNAL_SERVER_ERROR);
             }
 
 
             // create a POJO for the project in the meta data schema
             ProjectsPojo metaProjectsPojo = new ProjectsPojo();
+            metaProjectsPojo.setUuid(newProjectId);
             // set the subproject flag to false
             metaProjectsPojo.setIsSubproject(false);
             // set the database connection information
             metaProjectsPojo.setDatabaseConnection(dbCDao.read(null, dbCId));
-            // write the informations into the meta_data schema
+            // insert the informations into the meta_data schema
             new ProjectsDao(OpenInfraSchemas.META_DATA)
                 .createOrUpdate(metaProjectsPojo);
 
@@ -438,9 +443,6 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
             // set the sub project to null because it is a main project
             newProjectPojo.setSubprojectOf(null);
 
-            // TODO how ever this doesn't work because the meta data entity
-            //      manager has no knowledge about the new created project in
-            //      the table projects!
             // write the data of the project
             new ProjectDao(newProjectId, OpenInfraSchemas.PROJECTS)
                     .createOrUpdate(newProjectPojo);
@@ -448,7 +450,8 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
             if (id == null) {
                 throw new WebApplicationException(
                         "Failed to write the project data into the new created "
-                        + "project schema.");
+                        + "project schema.",
+                        Response.Status.INTERNAL_SERVER_ERROR);
             }
 
 	    }
