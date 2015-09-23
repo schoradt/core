@@ -37,7 +37,7 @@ public class SubjectDao extends OpenInfraDao<SubjectPojo, Subject> {
 							"login",
 							login).getSingleResult();			
 		} catch(Exception ex) {
-			throw new WebApplicationException(Response.Status.UNAUTHORIZED);
+			throw new WebApplicationException(Response.Status.NOT_FOUND);
 		}
 	}
 	
