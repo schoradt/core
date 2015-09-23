@@ -30,7 +30,7 @@ public class SubjectObject extends OpenInfraModelObject
 	//bi-directional many-to-one association to Object
 	@ManyToOne
 	@JoinColumn(name="object")
-	private Object objectBean;
+	private OpenInfraObject objectBean;
 
 	//bi-directional many-to-one association to Subject
 	@ManyToOne
@@ -48,11 +48,11 @@ public class SubjectObject extends OpenInfraModelObject
 		this.projectId = projectId;
 	}
 
-	public Object getObjectBean() {
+	public OpenInfraObject getObjectBean() {
 		return this.objectBean;
 	}
 
-	public void setObjectBean(Object objectBean) {
+	public void setObjectBean(OpenInfraObject objectBean) {
 		this.objectBean = objectBean;
 	}
 

@@ -5,31 +5,33 @@ import java.util.Locale;
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
-import de.btu.openinfra.backend.db.jpa.model.rbac.Object;
-import de.btu.openinfra.backend.db.pojos.rbac.ObjectPojo;
+import de.btu.openinfra.backend.db.jpa.model.rbac.OpenInfraObject;
+import de.btu.openinfra.backend.db.pojos.rbac.OpenInfraObjectPojo;
 
-public class ObjectDao extends OpenInfraDao<ObjectPojo, Object> {
+public class ObjectDao 
+	extends OpenInfraDao<OpenInfraObjectPojo, OpenInfraObject> {
 
 	protected ObjectDao() {
-		super(null, OpenInfraSchemas.RBAC, Object.class);
+		super(null, OpenInfraSchemas.RBAC, OpenInfraObject.class);
 	}
 
 	@Override
-	public ObjectPojo mapToPojo(Locale locale, Object modelObject) {
+	public OpenInfraObjectPojo mapToPojo(
+			Locale locale, OpenInfraObject modelObject) {
 		return mapToPojoStatically(locale, modelObject);
 	}
 	
-	public static ObjectPojo mapToPojoStatically(
-			Locale locale, Object modelObject) {
-		ObjectPojo pojo = new ObjectPojo(modelObject);
+	public static OpenInfraObjectPojo mapToPojoStatically(
+			Locale locale, OpenInfraObject modelObject) {
+		OpenInfraObjectPojo pojo = new OpenInfraObjectPojo(modelObject);
 		pojo.setDescription(modelObject.getDescription());
 		pojo.setName(modelObject.getName());
 		return pojo;
 	}
 
 	@Override
-	public MappingResult<Object> mapToModel(ObjectPojo pojoObject,
-			Object modelObject) {
+	public MappingResult<OpenInfraObject> mapToModel(
+			OpenInfraObjectPojo pojoObject, OpenInfraObject modelObject) {
 		// TODO Auto-generated method stub
 		return null;
 	}

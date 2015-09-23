@@ -3,9 +3,11 @@ package de.btu.openinfra.backend.db.jpa.model.rbac;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
@@ -17,7 +19,13 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
  * 
  */
 @Entity
-@NamedQuery(name="Subject.findAll", query="SELECT s FROM Subject s")
+@NamedQueries({
+	@NamedQuery(name="Subject.findAll", query="SELECT s FROM Subject s"),
+	@NamedQuery(name="Subject.findByLogin", 
+		query="SELECT s "
+				+ "FROM Subject s "
+				+ "WHERE s.login = :login")
+})
 public class Subject extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -43,7 +51,7 @@ public class Subject extends OpenInfraModelObject implements Serializable {
 	@Column(name="password_created_on")
 	private Timestamp passwordCreatedOn;
 
-	private Object salt;
+	private UUID salt;
 
 	private Integer status;
 
@@ -137,11 +145,11 @@ public class Subject extends OpenInfraModelObject implements Serializable {
 		this.passwordCreatedOn = passwordCreatedOn;
 	}
 
-	public Object getSalt() {
+	public UUID getSalt() {
 		return this.salt;
 	}
 
-	public void setSalt(Object salt) {
+	public void setSalt(UUID salt) {
 		this.salt = salt;
 	}
 

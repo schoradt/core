@@ -53,7 +53,7 @@
 		<class>de.btu.openinfra.backend.db.jpa.model.meta.Settings</class>
 		
 		<!-- Role-based access control (rbac) databases -->
-		<class>de.btu.openinfra.backend.db.jpa.model.rbac.Object</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.rbac.OpenInfraObject</class>
 		<class>de.btu.openinfra.backend.db.jpa.model.rbac.PasswordBlacklist</class>
 		<class>de.btu.openinfra.backend.db.jpa.model.rbac.Permission</class>
 		<class>de.btu.openinfra.backend.db.jpa.model.rbac.ProjectRelatedRole</class>

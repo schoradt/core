@@ -2,18 +2,18 @@ package de.btu.openinfra.backend.db.pojos.rbac;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import de.btu.openinfra.backend.db.jpa.model.rbac.Object;
+import de.btu.openinfra.backend.db.jpa.model.rbac.OpenInfraObject;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 
 @XmlRootElement
-public class ObjectPojo extends OpenInfraPojo {
+public class OpenInfraObjectPojo extends OpenInfraPojo {
 
 	private String description;
 	private String name;
 	
-	public ObjectPojo() {}
+	public OpenInfraObjectPojo() {}
 	
-	public ObjectPojo(Object model) {
+	public OpenInfraObjectPojo(OpenInfraObject model) {
 		super(model);
 	}
 	

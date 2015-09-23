@@ -11,7 +11,7 @@ import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 public class SubjectObjectPojo extends OpenInfraPojo {
 	
 	private UUID projectId;
-	private ObjectPojo object;
+	private OpenInfraObjectPojo object;
 	private SubjectPojo subject;
 	
 	public SubjectObjectPojo() {}
@@ -28,11 +28,11 @@ public class SubjectObjectPojo extends OpenInfraPojo {
 		this.projectId = projectId;
 	}
 	
-	public ObjectPojo getObject() {
+	public OpenInfraObjectPojo getObject() {
 		return object;
 	}
 	
-	public void setObject(ObjectPojo object) {
+	public void setObject(OpenInfraObjectPojo object) {
 		this.object = object;
 	}
 	

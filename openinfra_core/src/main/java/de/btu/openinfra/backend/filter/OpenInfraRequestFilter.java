@@ -33,7 +33,6 @@ public class OpenInfraRequestFilter implements ContainerRequestFilter {
 
 	@Override
 	public void filter(ContainerRequestContext crc) throws IOException {
-		System.out.println("Hier -->");
 		String url = crc.getUriInfo().getAbsolutePath().toString();
 		try {
 			if(url.endsWith(".json")) {
@@ -41,13 +40,15 @@ public class OpenInfraRequestFilter implements ContainerRequestFilter {
 				crc.getHeaders().add(
 						HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON);
 				crc.setRequestUri(
-						new URI(url.substring(0, url.lastIndexOf(".json"))));
+						new URI(crc.getUriInfo().getRequestUri().toString()
+								.replace(".json", "")));
 			} else if(url.endsWith(".xml")) {
 				crc.getHeaders().remove(HttpHeaders.ACCEPT);
 				crc.getHeaders().add(
 						HttpHeaders.ACCEPT, MediaType.APPLICATION_XML);
 				crc.setRequestUri(
-						new URI(url.substring(0, url.lastIndexOf(".xml"))));
+						new URI(crc.getUriInfo().getRequestUri().toString()
+								.replace(".xml", "")));
 			}			
 		} catch(Exception ex) {
 			ex.printStackTrace();
