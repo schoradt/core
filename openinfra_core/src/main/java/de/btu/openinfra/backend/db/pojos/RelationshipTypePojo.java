@@ -8,32 +8,40 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 @XmlRootElement
 public class RelationshipTypePojo extends OpenInfraMetaDataPojo {
 
-	private ValueListValuePojo description;
-	private ValueListValuePojo RelationshipType;
+    private ValueListValuePojo description;
+    private ValueListValuePojo RelationshipType;
 
-	/* Default constructor */
-    public RelationshipTypePojo() {}
+    /* Default constructor */
+    public RelationshipTypePojo() {
+    }
 
     /* Constructor that will set the id, trid and meta data automatically */
-    public RelationshipTypePojo(
-            OpenInfraModelObject modelObject, MetaDataDao mdDao) {
+    public RelationshipTypePojo(OpenInfraModelObject modelObject, MetaDataDao mdDao) {
         super(modelObject, mdDao);
     }
 
-	public ValueListValuePojo getDescription() {
-		return description;
-	}
+    public ValueListValuePojo getDescription() {
+        return description;
+    }
 
-	public void setDescription(ValueListValuePojo description) {
-		this.description = description;
-	}
+    public void setDescription(ValueListValuePojo description) {
+        this.description = description;
+    }
 
-	public ValueListValuePojo getRelationshipType() {
-		return RelationshipType;
-	}
+    public ValueListValuePojo getRelationshipType() {
+        return RelationshipType;
+    }
 
-	public void setRelationshipType(ValueListValuePojo relationshipType) {
-		RelationshipType = relationshipType;
-	}
+    public void setRelationshipType(ValueListValuePojo relationshipType) {
+        RelationshipType = relationshipType;
+    }
+
+    @Override
+    public void makePrimer() {
+        description = new ValueListValuePojo();
+        description.makePrimer();
+        RelationshipType = new ValueListValuePojo();
+        RelationshipType.makePrimer();
+    }
 
 }

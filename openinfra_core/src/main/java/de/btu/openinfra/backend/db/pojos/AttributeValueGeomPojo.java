@@ -11,52 +11,58 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 @XmlRootElement
 public class AttributeValueGeomPojo extends OpenInfraMetaDataPojo {
 
-	private UUID topicInstanceId;
-	private String geom;
-	private AttributeValueGeomType geomType;
+    private UUID topicInstanceId;
+    private String geom;
+    private AttributeValueGeomType geomType;
     private UUID attributeTypeToAttributeTypeGroupId;
 
     /* Default constructor */
-    public AttributeValueGeomPojo() {}
+    public AttributeValueGeomPojo() {
+    }
 
     /* Constructor that will set the id, trid and meta data automatically */
-    public AttributeValueGeomPojo(
-            OpenInfraModelObject modelObject, MetaDataDao mdDao) {
+    public AttributeValueGeomPojo(OpenInfraModelObject modelObject, MetaDataDao mdDao) {
         super(modelObject, mdDao);
     }
 
-	public UUID getTopicInstanceId() {
-		return topicInstanceId;
-	}
+    public UUID getTopicInstanceId() {
+        return topicInstanceId;
+    }
 
-	public void setTopicInstanceId(UUID topicInstanceId) {
-		this.topicInstanceId = topicInstanceId;
-	}
+    public void setTopicInstanceId(UUID topicInstanceId) {
+        this.topicInstanceId = topicInstanceId;
+    }
 
-	public String getGeom() {
-		return geom;
-	}
+    public String getGeom() {
+        return geom;
+    }
 
-	public void setGeom(String geom) {
-		this.geom = geom;
-	}
+    public void setGeom(String geom) {
+        this.geom = geom;
+    }
 
-	public AttributeValueGeomType getGeomType() {
-		return geomType;
-	}
+    public AttributeValueGeomType getGeomType() {
+        return geomType;
+    }
 
-	public void setGeomType(AttributeValueGeomType geomType) {
-		this.geomType = geomType;
-	}
+    public void setGeomType(AttributeValueGeomType geomType) {
+        this.geomType = geomType;
+    }
 
-	public UUID getAttributeTypeToAttributeTypeGroupId() {
+    public UUID getAttributeTypeToAttributeTypeGroupId() {
         return attributeTypeToAttributeTypeGroupId;
     }
 
-    public void setAttributeTypeToAttributeTypeGroupId(
-            UUID attributeTypeToAttributeTypeGroupId) {
-        this.attributeTypeToAttributeTypeGroupId =
-                attributeTypeToAttributeTypeGroupId;
+    public void setAttributeTypeToAttributeTypeGroupId(UUID attributeTypeToAttributeTypeGroupId) {
+        this.attributeTypeToAttributeTypeGroupId = attributeTypeToAttributeTypeGroupId;
+    }
+
+    @Override
+    public void makePrimer() {
+        topicInstanceId = null;
+        geom = "";
+        geomType = AttributeValueGeomType.GEOJSON;
+        attributeTypeToAttributeTypeGroupId = null;
     }
 
 }

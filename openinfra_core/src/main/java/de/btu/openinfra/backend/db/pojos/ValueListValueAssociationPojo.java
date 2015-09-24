@@ -8,33 +8,40 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 @XmlRootElement
 public class ValueListValueAssociationPojo extends OpenInfraMetaDataPojo {
 
-	private ValueListValuePojo associatedValueListValue;
-	private ValueListValuePojo relationship;
+    private ValueListValuePojo associatedValueListValue;
+    private ValueListValuePojo relationship;
 
-	/* Default constructor */
-    public ValueListValueAssociationPojo() {}
+    /* Default constructor */
+    public ValueListValueAssociationPojo() {
+    }
 
     /* Constructor that will set the id, trid and meta data automatically */
-    public ValueListValueAssociationPojo(
-            OpenInfraModelObject modelObject, MetaDataDao mdDao) {
+    public ValueListValueAssociationPojo(OpenInfraModelObject modelObject, MetaDataDao mdDao) {
         super(modelObject, mdDao);
     }
 
-	public ValueListValuePojo getAssociatedValueListValue() {
-		return associatedValueListValue;
-	}
+    public ValueListValuePojo getAssociatedValueListValue() {
+        return associatedValueListValue;
+    }
 
-	public void setAssociatedValueListValue(
-		ValueListValuePojo associatedValueListValue) {
-		this.associatedValueListValue = associatedValueListValue;
-	}
+    public void setAssociatedValueListValue(ValueListValuePojo associatedValueListValue) {
+        this.associatedValueListValue = associatedValueListValue;
+    }
 
-	public ValueListValuePojo getRelationship() {
-		return relationship;
-	}
+    public ValueListValuePojo getRelationship() {
+        return relationship;
+    }
 
-	public void setRelationship(ValueListValuePojo relationship) {
-		this.relationship = relationship;
-	}
+    public void setRelationship(ValueListValuePojo relationship) {
+        this.relationship = relationship;
+    }
+
+    @Override
+    public void makePrimer() {
+        associatedValueListValue = new ValueListValuePojo();
+        associatedValueListValue.makePrimer();
+        relationship = new ValueListValuePojo();
+        relationship.makePrimer();
+    }
 
 }

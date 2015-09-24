@@ -17,7 +17,8 @@ public class MetaDataPojo extends OpenInfraPojo {
     private JSONObject data;
 
     /* Default constructor */
-    public MetaDataPojo() {}
+    public MetaDataPojo() {
+    }
 
     /* Constructor that will set the id and trid data automatically */
     public MetaDataPojo(OpenInfraModelObject modelObject) {
@@ -54,6 +55,14 @@ public class MetaDataPojo extends OpenInfraPojo {
 
     public void setData(JSONObject data) {
         this.data = data;
+    }
+
+    @Override
+    public void makePrimer() {
+        objectId = null;
+        tableName = "";
+        pkColumn = "";
+        data = new JSONObject();
     }
 
 }

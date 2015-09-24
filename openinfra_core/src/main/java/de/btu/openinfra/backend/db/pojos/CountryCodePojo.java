@@ -7,22 +7,28 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 @XmlRootElement
 public class CountryCodePojo extends OpenInfraPojo {
 
-	private String CountryCode;
+    private String CountryCode;
 
-	/* Default constructor */
-    public CountryCodePojo() {}
+    /* Default constructor */
+    public CountryCodePojo() {
+    }
 
     /* Constructor that will set the id, trid and meta data automatically */
     public CountryCodePojo(OpenInfraModelObject modelObject) {
         super(modelObject);
     }
 
-	public String getCountryCode() {
-		return CountryCode;
-	}
+    public String getCountryCode() {
+        return CountryCode;
+    }
 
-	public void setCountryCode(String countryCode) {
-		CountryCode = countryCode;
-	}
+    public void setCountryCode(String countryCode) {
+        CountryCode = countryCode;
+    }
+
+    @Override
+    public void makePrimer() {
+        CountryCode = "";
+    }
 
 }
