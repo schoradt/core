@@ -67,5 +67,5 @@ public class Permission extends OpenInfraModelObject implements Serializable {
 
 		return rolePermission;
 	}
-	
+
 }

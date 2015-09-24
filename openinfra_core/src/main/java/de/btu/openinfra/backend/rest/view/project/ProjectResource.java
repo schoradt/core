@@ -44,10 +44,10 @@ public class ProjectResource {
 			@QueryParam("language") String language,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
-		return new ProjectDao(
-				null,
-				OpenInfraSchemas.META_DATA).getMainProjects(
-						PtLocaleDao.forLanguageTag(language));
+		return new de.btu.openinfra.backend.rest.project.ProjectResource().get(
+				language, 
+				offset, 
+				size);
 	}
 
 	@GET
@@ -56,12 +56,9 @@ public class ProjectResource {
 	public Response getView(
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId) {
-		return OpenInfraResponseBuilder.getResponse(
-				new ProjectDao(
-						projectId,
-						OpenInfraSchemas.PROJECTS).read(
-								PtLocaleDao.forLanguageTag(language),
-								projectId));
+		return new de.btu.openinfra.backend.rest.project.ProjectResource().get(
+				language, 
+				projectId);
 	}
 
 	@GET

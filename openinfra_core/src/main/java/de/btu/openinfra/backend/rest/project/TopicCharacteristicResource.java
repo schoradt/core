@@ -16,10 +16,10 @@ import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.AttributeValueGeomType;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
-import de.btu.openinfra.backend.db.daos.TopicGeomzDao;
-import de.btu.openinfra.backend.db.daos.TopicInstanceDao;
 import de.btu.openinfra.backend.db.pojos.TopicGeomzPojo;
 import de.btu.openinfra.backend.db.pojos.TopicInstancePojo;
+import de.btu.openinfra.backend.db.rbac.TopicGeomzRbac;
+import de.btu.openinfra.backend.db.rbac.TopicInstanceRbac;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
 @Path(OpenInfraResponseBuilder.REST_URI_PROJECTS + "/topiccharacteristics/"
@@ -64,7 +64,7 @@ public class TopicCharacteristicResource {
 		} // end if
 
 		if(filter != null && filter.length() > 0) {
-			return new TopicInstanceDao(
+			return new TopicInstanceRbac(
 					projectId,
 					OpenInfraSchemas.PROJECTS).read(
 							PtLocaleDao.forLanguageTag(language),
@@ -73,7 +73,7 @@ public class TopicCharacteristicResource {
 							offset,
 							size);
 		} else {
-			return new TopicInstanceDao(
+			return new TopicInstanceRbac(
 					projectId,
 					OpenInfraSchemas.PROJECTS).read(
 					PtLocaleDao.forLanguageTag(language),
@@ -91,7 +91,7 @@ public class TopicCharacteristicResource {
 	public long getTopicInstancesCount(
 			@PathParam("projectId") UUID projectId,
 			@PathParam("topicCharacteristicId") UUID topicCharacteristicId) {
-		return new TopicInstanceDao(
+		return new TopicInstanceRbac(
 				projectId,
 				OpenInfraSchemas.PROJECTS).getCount(
 						topicCharacteristicId);
@@ -118,7 +118,7 @@ public class TopicCharacteristicResource {
             @QueryParam("geomType") AttributeValueGeomType geomType,
             @QueryParam("offset") int offset,
             @QueryParam("size") int size) {
-	    return new TopicGeomzDao(
+	    return new TopicGeomzRbac(
 	            projectId,
 	            OpenInfraSchemas.PROJECTS,
 	            geomType).read(
@@ -145,7 +145,7 @@ public class TopicCharacteristicResource {
             @PathParam("projectId") UUID projectId,
             @PathParam("topicCharacteristicId") UUID topicCharacteristicId,
             @QueryParam("geomType") AttributeValueGeomType geomType) {
-        return new TopicGeomzDao(
+        return new TopicGeomzRbac(
                 projectId,
                 OpenInfraSchemas.PROJECTS,
                 geomType).getCount(topicCharacteristicId);

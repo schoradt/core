@@ -3,12 +3,14 @@ package de.btu.openinfra.backend.rest.view.system;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import org.apache.shiro.SecurityUtils;
 import org.glassfish.jersey.server.mvc.Template;
 
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
@@ -24,7 +26,12 @@ public class SystemResource {
 	public Response getView(
 			@Context UriInfo uri,
 			@Context HttpHeaders headers) {
-		return Response.ok("system resource").build();
+		if(SecurityUtils.getSubject().isPermitted("/system:get")) {
+			return Response.ok("system resource").build();
+		} else {
+			throw new WebApplicationException(Response.Status.FORBIDDEN);
+		}
+		
 	}
 
 }

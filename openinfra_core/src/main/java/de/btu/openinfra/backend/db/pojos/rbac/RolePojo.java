@@ -1,5 +1,7 @@
 package de.btu.openinfra.backend.db.pojos.rbac;
 
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
@@ -12,10 +14,20 @@ public class RolePojo extends OpenInfraPojo {
 
 	private String name;
 	
+	private List<PermissionPojo> permissions;
+	
 	public RolePojo() {}
 	
 	public RolePojo(OpenInfraModelObject modelObject) {
 		super(modelObject);
+	}
+
+	public List<PermissionPojo> getPermissions() {
+		return permissions;
+	}
+
+	public void setPermissions(List<PermissionPojo> permissions) {
+		this.permissions = permissions;
 	}
 
 	public String getDescription() {

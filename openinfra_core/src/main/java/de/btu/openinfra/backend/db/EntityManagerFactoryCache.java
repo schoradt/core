@@ -95,7 +95,7 @@ public class EntityManagerFactoryCache {
         if(cacheSize - cache.size() > 0) {
             ProjectDao projectDao = new ProjectDao(null,
                     OpenInfraSchemas.META_DATA);
-            List<ProjectPojo> projects = projectDao.getMainProjects(null);
+            List<ProjectPojo> projects = projectDao.readMainProjects(null);
           
             for(ProjectPojo projectPojo : projects) {
                 try {

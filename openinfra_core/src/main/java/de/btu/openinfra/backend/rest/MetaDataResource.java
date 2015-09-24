@@ -18,9 +18,9 @@ import javax.ws.rs.core.Response;
 import de.btu.openinfra.backend.db.OpenInfraOrderByEnum;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.OpenInfraSortOrder;
-import de.btu.openinfra.backend.db.daos.MetaDataDao;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.MetaDataPojo;
+import de.btu.openinfra.backend.db.rbac.MetaDataRbac;
 
 @Path(OpenInfraResponseBuilder.REST_URI_DEFAULT + "/metadata")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
@@ -39,7 +39,7 @@ public class MetaDataResource {
 			@QueryParam("orderBy") OpenInfraOrderByEnum orderBy,
             @QueryParam("offset") int offset,
             @QueryParam("size") int size) {
-        return new MetaDataDao(
+        return new MetaDataRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
                         PtLocaleDao.forLanguageTag(language),
@@ -54,7 +54,7 @@ public class MetaDataResource {
     public MetaDataPojo newMetaData(
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema) {
-        return new MetaDataDao(
+        return new MetaDataRbac(
                         projectId,
                         OpenInfraSchemas.valueOf(schema.toUpperCase()))
                     .newMetaData();
@@ -65,7 +65,7 @@ public class MetaDataResource {
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema,
             MetaDataPojo pojo) {
-        UUID id = new MetaDataDao(
+        UUID id = new MetaDataRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
                         pojo);
@@ -80,7 +80,7 @@ public class MetaDataResource {
             @PathParam("metadataId") UUID metadataId,
             MetaDataPojo pojo) {
         return OpenInfraResponseBuilder.putResponse(
-                new MetaDataDao(
+                new MetaDataRbac(
                         projectId,
                         OpenInfraSchemas.valueOf(schema.toUpperCase())
                         ).createOrUpdate(pojo, metadataId, null));
@@ -93,7 +93,7 @@ public class MetaDataResource {
             @PathParam("schema") String schema,
             @PathParam("metadataId") UUID metadataId) {
         return OpenInfraResponseBuilder.deleteResponse(
-                new MetaDataDao(
+                new MetaDataRbac(
                         projectId,
                         OpenInfraSchemas.valueOf(schema.toUpperCase())).delete(
                                 metadataId),
@@ -106,7 +106,7 @@ public class MetaDataResource {
 	public long getCount(
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema) {
-		return new MetaDataDao(
+		return new MetaDataRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount();
 	}
@@ -118,7 +118,7 @@ public class MetaDataResource {
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema,
             @PathParam("metaDataId") UUID metaDataId) {
-        return new MetaDataDao(
+        return new MetaDataRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
                         PtLocaleDao.forLanguageTag(language),
