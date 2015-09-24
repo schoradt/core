@@ -16,7 +16,8 @@ public class SettingsPojo extends OpenInfraPojo {
     private ProjectsPojo project;
 
     /* Default constructor */
-    public SettingsPojo() {}
+    public SettingsPojo() {
+    }
 
     /* Constructor that will set the id, trid and meta data automatically */
     public SettingsPojo(OpenInfraModelObject modelObject) {
@@ -53,6 +54,16 @@ public class SettingsPojo extends OpenInfraPojo {
 
     public void setProject(ProjectsPojo project) {
         this.project = project;
+    }
+
+    @Override
+    public void makePrimer() {
+        key = new SettingKeysPojo();
+        key.makePrimer();
+        value = "";
+        updatedOn = new Date();
+        project = new ProjectsPojo();
+        project.makePrimer();
     }
 
 }

@@ -15,7 +15,8 @@ public class DatabaseConnectionPojo extends OpenInfraPojo {
     private CredentialsPojo credentials;
 
     /* Default constructor */
-    public DatabaseConnectionPojo() {}
+    public DatabaseConnectionPojo() {
+    }
 
     /* Constructor that will set the id, trid and meta data automatically */
     public DatabaseConnectionPojo(OpenInfraModelObject modelObject) {
@@ -60,6 +61,20 @@ public class DatabaseConnectionPojo extends OpenInfraPojo {
 
     public void setCredentials(CredentialsPojo credentials) {
         this.credentials = credentials;
+    }
+
+    @Override
+    public void makePrimer() {
+        server = new ServersPojo();
+        server.makePrimer();
+        port = new PortsPojo();
+        port.makePrimer();
+        database = new DatabasesPojo();
+        database.makePrimer();
+        schema = new SchemasPojo();
+        schema.makePrimer();
+        credentials = new CredentialsPojo();
+        credentials.makePrimer();
     }
 
 }

@@ -18,7 +18,8 @@ public class LogPojo extends OpenInfraPojo {
     private String message;
 
     /* Default constructor */
-    public LogPojo() {}
+    public LogPojo() {
+    }
 
     /* Constructor that will set the id, trid and meta data automatically */
     public LogPojo(OpenInfraModelObject modelObject) {
@@ -71,6 +72,18 @@ public class LogPojo extends OpenInfraPojo {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    @Override
+    public void makePrimer() {
+        userId = null;
+        userName = "";
+        createdOn = "";
+        logger = new LoggerPojo();
+        logger.makePrimer();
+        level = new LevelPojo();
+        level.makePrimer();
+        message = "";
     }
 
 }

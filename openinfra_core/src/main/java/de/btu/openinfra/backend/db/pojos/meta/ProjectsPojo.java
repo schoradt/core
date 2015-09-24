@@ -12,7 +12,8 @@ public class ProjectsPojo extends OpenInfraPojo {
     private DatabaseConnectionPojo databaseConnection;
 
     /* Default constructor */
-    public ProjectsPojo() {}
+    public ProjectsPojo() {
+    }
 
     /* Constructor that will set the id, trid and meta data automatically */
     public ProjectsPojo(OpenInfraModelObject modelObject) {
@@ -33,6 +34,13 @@ public class ProjectsPojo extends OpenInfraPojo {
 
     public void setDatabaseConnection(DatabaseConnectionPojo databaseConnection) {
         this.databaseConnection = databaseConnection;
+    }
+
+    @Override
+    public void makePrimer() {
+        isSubproject = false;
+        databaseConnection = new DatabaseConnectionPojo();
+        databaseConnection.makePrimer();
     }
 
 }

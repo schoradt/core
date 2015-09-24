@@ -11,7 +11,8 @@ public class LoggerPojo extends OpenInfraPojo {
     private String logger;
 
     /* Default constructor */
-    public LoggerPojo() {}
+    public LoggerPojo() {
+    }
 
     /* Constructor that will set the id, trid and meta data automatically */
     public LoggerPojo(OpenInfraModelObject modelObject) {
@@ -24,6 +25,11 @@ public class LoggerPojo extends OpenInfraPojo {
 
     public void setLogger(String logger) {
         this.logger = logger;
+    }
+
+    @Override
+    public void makePrimer() {
+        logger = "";
     }
 
 }

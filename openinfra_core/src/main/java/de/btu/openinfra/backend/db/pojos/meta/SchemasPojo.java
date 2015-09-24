@@ -11,7 +11,8 @@ public class SchemasPojo extends OpenInfraPojo {
     private String schema;
 
     /* Default constructor */
-    public SchemasPojo() {}
+    public SchemasPojo() {
+    }
 
     /* Constructor that will set the id, trid and meta data automatically */
     public SchemasPojo(OpenInfraModelObject modelObject) {
@@ -26,5 +27,9 @@ public class SchemasPojo extends OpenInfraPojo {
         this.schema = schema;
     }
 
+    @Override
+    public void makePrimer() {
+        schema = "";
+    }
 
 }

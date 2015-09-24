@@ -11,7 +11,8 @@ public class DatabasesPojo extends OpenInfraPojo {
     private String database;
 
     /* Default constructor */
-    public DatabasesPojo() {}
+    public DatabasesPojo() {
+    }
 
     /* Constructor that will set the id, trid and meta data automatically */
     public DatabasesPojo(OpenInfraModelObject modelObject) {
@@ -24,6 +25,11 @@ public class DatabasesPojo extends OpenInfraPojo {
 
     public void setDatabase(String database) {
         this.database = database;
+    }
+
+    @Override
+    public void makePrimer() {
+        database = "";
     }
 
 }

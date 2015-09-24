@@ -11,7 +11,8 @@ public class LevelPojo extends OpenInfraPojo {
     private String level;
 
     /* Default constructor */
-    public LevelPojo() {}
+    public LevelPojo() {
+    }
 
     /* Constructor that will set the id, trid and meta data automatically */
     public LevelPojo(OpenInfraModelObject modelObject) {
@@ -24,6 +25,11 @@ public class LevelPojo extends OpenInfraPojo {
 
     public void setLevel(String level) {
         this.level = level;
+    }
+
+    @Override
+    public void makePrimer() {
+        level = "";
     }
 
 }
