@@ -37,11 +37,11 @@ public class ValueListValueAssociationPojo extends OpenInfraMetaDataPojo {
     }
 
     @Override
-    public void makePrimer() {
+    protected void makePrimerHelper() {
         associatedValueListValue = new ValueListValuePojo();
-        associatedValueListValue.makePrimer();
+        associatedValueListValue.makePrimerHelper();
         relationship = new ValueListValuePojo();
-        relationship.makePrimer();
+        relationship.makePrimerHelper();
     }
 
 }

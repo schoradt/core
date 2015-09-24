@@ -36,11 +36,11 @@ public class SubjectRolePojo extends OpenInfraPojo {
     }
 
     @Override
-    public void makePrimer() {
+    protected void makePrimerHelper() {
         role = new RolePojo();
-        role.makePrimer();
+        role.makePrimerHelper();
         subject = new SubjectPojo();
-        subject.makePrimer();
+        subject.makePrimerHelper();
     }
 
 }

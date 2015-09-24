@@ -28,7 +28,7 @@ public class DatabasesPojo extends OpenInfraPojo {
     }
 
     @Override
-    public void makePrimer() {
+    protected void makePrimerHelper() {
         database = "";
     }
 

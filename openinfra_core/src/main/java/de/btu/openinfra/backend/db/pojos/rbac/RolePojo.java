@@ -36,7 +36,7 @@ public class RolePojo extends OpenInfraPojo {
     }
 
     @Override
-    public void makePrimer() {
+    protected void makePrimerHelper() {
         description = "";
         name = "";
     }

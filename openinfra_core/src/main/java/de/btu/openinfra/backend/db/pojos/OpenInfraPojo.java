@@ -22,7 +22,7 @@ public abstract class OpenInfraPojo {
     /**
      * This constructor is used to set the id and the trid of the POJO object
      * automatically.
-     * 
+     *
      * @param modelObject
      *            the current model object
      */
@@ -47,5 +47,11 @@ public abstract class OpenInfraPojo {
         this.trid = trid;
     }
 
-    public abstract void makePrimer();
+    public void makePrimer() {
+        uuid = null;
+        trid = -1;
+        makePrimerHelper();
+    }
+
+    protected abstract void makePrimerHelper();
 }

@@ -37,11 +37,11 @@ public class RelationshipTypePojo extends OpenInfraMetaDataPojo {
     }
 
     @Override
-    public void makePrimer() {
+    protected void makePrimerHelper() {
         description = new ValueListValuePojo();
-        description.makePrimer();
+        description.makePrimerHelper();
         RelationshipType = new ValueListValuePojo();
-        RelationshipType.makePrimer();
+        RelationshipType.makePrimerHelper();
     }
 
 }

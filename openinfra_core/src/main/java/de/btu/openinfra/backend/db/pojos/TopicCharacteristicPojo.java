@@ -48,11 +48,11 @@ public class TopicCharacteristicPojo extends OpenInfraMetaDataPojo {
     }
 
     @Override
-    public void makePrimer() {
+    protected void makePrimerHelper() {
         descriptions = new PtFreeTextPojo();
-        descriptions.makePrimer();
+        descriptions.makePrimerHelper();
         topic = new ValueListValuePojo();
-        topic.makePrimer();
+        topic.makePrimerHelper();
         projectId = null;
     }
 

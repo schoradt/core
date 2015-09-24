@@ -27,7 +27,7 @@ public class CountryCodePojo extends OpenInfraPojo {
     }
 
     @Override
-    public void makePrimer() {
+    protected void makePrimerHelper() {
         CountryCode = "";
     }
 

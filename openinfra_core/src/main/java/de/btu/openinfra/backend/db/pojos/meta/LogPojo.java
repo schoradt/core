@@ -75,14 +75,14 @@ public class LogPojo extends OpenInfraPojo {
     }
 
     @Override
-    public void makePrimer() {
+    protected void makePrimerHelper() {
         userId = null;
         userName = "";
         createdOn = "";
         logger = new LoggerPojo();
-        logger.makePrimer();
+        logger.makePrimerHelper();
         level = new LevelPojo();
-        level.makePrimer();
+        level.makePrimerHelper();
         message = "";
     }
 

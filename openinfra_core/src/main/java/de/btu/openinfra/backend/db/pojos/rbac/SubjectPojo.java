@@ -141,7 +141,7 @@ public class SubjectPojo extends OpenInfraPojo {
     }
 
     @Override
-    public void makePrimer() {
+    protected void makePrimerHelper() {
         createdOn = null;
         defaultLanguage = Locale.ENGLISH;
         description = "";
@@ -155,7 +155,7 @@ public class SubjectPojo extends OpenInfraPojo {
         updatedOn = null;
         roles = new ArrayList<RolePojo>();
         roles.add(new RolePojo());
-        roles.get(0).makePrimer();
+        roles.get(0).makePrimerHelper();
     }
 
 }

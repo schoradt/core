@@ -48,12 +48,12 @@ public class AttributeTypeAssociationPojo extends OpenInfraMetaDataPojo {
     }
 
     @Override
-    public void makePrimer() {
+    protected void makePrimerHelper() {
         associationAttributeTypeId = null;
         associatedAttributeType = new AttributeTypePojo();
-        associatedAttributeType.makePrimer();
+        associatedAttributeType.makePrimerHelper();
         relationship = new ValueListValuePojo();
-        relationship.makePrimer();
+        relationship.makePrimerHelper();
     }
 
 }

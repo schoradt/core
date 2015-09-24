@@ -37,7 +37,7 @@ public class CredentialsPojo extends OpenInfraPojo {
     }
 
     @Override
-    public void makePrimer() {
+    protected void makePrimerHelper() {
         username = "";
         password = "";
     }

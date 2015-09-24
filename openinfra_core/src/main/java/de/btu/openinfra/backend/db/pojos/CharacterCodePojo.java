@@ -27,7 +27,7 @@ public class CharacterCodePojo extends OpenInfraPojo {
     }
 
     @Override
-    public void makePrimer() {
+    protected void makePrimerHelper() {
         characterCode = "";
     }
 

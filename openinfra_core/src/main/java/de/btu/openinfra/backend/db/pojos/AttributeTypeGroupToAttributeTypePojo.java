@@ -66,14 +66,14 @@ public class AttributeTypeGroupToAttributeTypePojo extends OpenInfraMetaDataPojo
     }
 
     @Override
-    public void makePrimer() {
+    protected void makePrimerHelper() {
         attributeTypeGroup = new AttributeTypeGroupPojo();
-        attributeTypeGroup.makePrimer();
+        attributeTypeGroup.makePrimerHelper();
         attributeTypeId = null;
         multiplicity = new MultiplicityPojo();
-        multiplicity.makePrimer();
+        multiplicity.makePrimerHelper();
         defaultValue = new ValueListValuePojo();
-        defaultValue.makePrimer();
+        defaultValue.makePrimerHelper();
         order = Integer.valueOf(-1);
     }
 

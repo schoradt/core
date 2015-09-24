@@ -28,7 +28,7 @@ public class SchemasPojo extends OpenInfraPojo {
     }
 
     @Override
-    public void makePrimer() {
+    protected void makePrimerHelper() {
         schema = "";
     }
 

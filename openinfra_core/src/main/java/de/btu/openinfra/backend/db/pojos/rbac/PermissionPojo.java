@@ -36,7 +36,7 @@ public class PermissionPojo extends OpenInfraPojo {
     }
 
     @Override
-    public void makePrimer() {
+    protected void makePrimerHelper() {
         description = "";
         permission = "";
     }

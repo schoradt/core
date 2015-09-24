@@ -25,7 +25,7 @@ public class SettingKeysPojo extends OpenInfraPojo {
     }
 
     @Override
-    public void makePrimer() {
+    protected void makePrimerHelper() {
         key = "";
     }
 

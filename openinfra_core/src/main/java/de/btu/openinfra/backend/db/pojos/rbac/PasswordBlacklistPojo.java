@@ -26,7 +26,7 @@ public class PasswordBlacklistPojo extends OpenInfraPojo {
     }
 
     @Override
-    public void makePrimer() {
+    protected void makePrimerHelper() {
         password = "";
     }
 

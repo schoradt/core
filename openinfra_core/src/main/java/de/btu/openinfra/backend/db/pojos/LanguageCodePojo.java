@@ -27,7 +27,7 @@ public class LanguageCodePojo extends OpenInfraPojo {
     }
 
     @Override
-    public void makePrimer() {
+    protected void makePrimerHelper() {
         languageCode = "";
     }
 

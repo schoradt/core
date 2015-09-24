@@ -28,7 +28,7 @@ public class LevelPojo extends OpenInfraPojo {
     }
 
     @Override
-    public void makePrimer() {
+    protected void makePrimerHelper() {
         level = "";
     }
 

@@ -28,7 +28,7 @@ public class PortsPojo extends OpenInfraPojo {
     }
 
     @Override
-    public void makePrimer() {
+    protected void makePrimerHelper() {
         port = Integer.valueOf(-1);
     }
 

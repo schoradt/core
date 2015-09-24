@@ -58,7 +58,7 @@ public class MetaDataPojo extends OpenInfraPojo {
     }
 
     @Override
-    public void makePrimer() {
+    protected void makePrimerHelper() {
         objectId = null;
         tableName = "";
         pkColumn = "";

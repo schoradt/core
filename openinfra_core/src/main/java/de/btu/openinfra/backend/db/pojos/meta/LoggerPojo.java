@@ -28,7 +28,7 @@ public class LoggerPojo extends OpenInfraPojo {
     }
 
     @Override
-    public void makePrimer() {
+    protected void makePrimerHelper() {
         logger = "";
     }
 

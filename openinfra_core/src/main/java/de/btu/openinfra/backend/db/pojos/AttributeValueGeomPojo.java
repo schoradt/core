@@ -58,7 +58,7 @@ public class AttributeValueGeomPojo extends OpenInfraMetaDataPojo {
     }
 
     @Override
-    public void makePrimer() {
+    protected void makePrimerHelper() {
         topicInstanceId = null;
         geom = "";
         geomType = AttributeValueGeomType.GEOJSON;

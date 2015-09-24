@@ -28,7 +28,7 @@ public class ServersPojo extends OpenInfraPojo {
     }
 
     @Override
-    public void makePrimer() {
+    protected void makePrimerHelper() {
         server = "";
     }
 

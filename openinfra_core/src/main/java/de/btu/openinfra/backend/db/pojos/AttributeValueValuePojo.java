@@ -45,10 +45,10 @@ public class AttributeValueValuePojo extends OpenInfraMetaDataPojo {
     }
 
     @Override
-    public void makePrimer() {
+    protected void makePrimerHelper() {
         topicInstanceId = null;
         value = new PtFreeTextPojo();
-        value.makePrimer();
+        value.makePrimerHelper();
         attributeTypeToAttributeTypeGroupId = null;
     }
 

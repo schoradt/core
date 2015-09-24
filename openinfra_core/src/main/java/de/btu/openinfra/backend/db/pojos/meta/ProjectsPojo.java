@@ -37,10 +37,10 @@ public class ProjectsPojo extends OpenInfraPojo {
     }
 
     @Override
-    public void makePrimer() {
+    protected void makePrimerHelper() {
         isSubproject = false;
         databaseConnection = new DatabaseConnectionPojo();
-        databaseConnection.makePrimer();
+        databaseConnection.makePrimerHelper();
     }
 
 }

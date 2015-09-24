@@ -48,12 +48,12 @@ public class ProjectPojo extends OpenInfraMetaDataPojo {
     }
 
     @Override
-    public void makePrimer() {
+    protected void makePrimerHelper() {
         subprojectOf = null;
         names = new PtFreeTextPojo();
-        names.makePrimer();
+        names.makePrimerHelper();
         descriptions = new PtFreeTextPojo();
-        descriptions.makePrimer();
+        descriptions.makePrimerHelper();
     }
 
 }

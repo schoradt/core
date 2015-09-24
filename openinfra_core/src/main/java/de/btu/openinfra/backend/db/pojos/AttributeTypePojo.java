@@ -74,17 +74,17 @@ public class AttributeTypePojo extends OpenInfraMetaDataPojo {
     }
 
     @Override
-    public void makePrimer() {
+    protected void makePrimerHelper() {
         names = new PtFreeTextPojo();
-        names.makePrimer();
+        names.makePrimerHelper();
         descriptions = new PtFreeTextPojo();
-        descriptions.makePrimer();
+        descriptions.makePrimerHelper();
         dataType = new ValueListValuePojo();
-        dataType.makePrimer();
+        dataType.makePrimerHelper();
         unit = new ValueListValuePojo();
-        unit.makePrimer();
+        unit.makePrimerHelper();
         domain = new ValueListPojo();
-        domain.makePrimer();
+        domain.makePrimerHelper();
         type = AttributeValueTypes.ATTRIBUTE_VALUE_VALUE;
     }
 

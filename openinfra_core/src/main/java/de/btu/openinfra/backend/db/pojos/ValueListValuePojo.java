@@ -57,13 +57,13 @@ public class ValueListValuePojo extends OpenInfraMetaDataPojo {
     }
 
     @Override
-    public void makePrimer() {
+    protected void makePrimerHelper() {
         visibility = false;
         belongsToValueList = null;
         names = new PtFreeTextPojo();
-        names.makePrimer();
+        names.makePrimerHelper();
         descriptions = new PtFreeTextPojo();
-        descriptions.makePrimer();
+        descriptions.makePrimerHelper();
     }
 
 }

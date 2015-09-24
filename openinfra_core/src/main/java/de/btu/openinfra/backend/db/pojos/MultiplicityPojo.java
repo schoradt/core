@@ -37,7 +37,7 @@ public class MultiplicityPojo extends OpenInfraMetaDataPojo {
     }
 
     @Override
-    public void makePrimer() {
+    protected void makePrimerHelper() {
         min = Integer.valueOf(-1);
         max = Integer.valueOf(-1);
     }

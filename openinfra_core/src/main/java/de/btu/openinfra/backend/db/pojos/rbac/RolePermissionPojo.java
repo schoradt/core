@@ -35,11 +35,11 @@ public class RolePermissionPojo extends OpenInfraPojo {
     }
 
     @Override
-    public void makePrimer() {
+    protected void makePrimerHelper() {
         role = new RolePojo();
-        role.makePrimer();
+        role.makePrimerHelper();
         permission = new PermissionPojo();
-        permission.makePrimer();
+        permission.makePrimerHelper();
     }
 
 }

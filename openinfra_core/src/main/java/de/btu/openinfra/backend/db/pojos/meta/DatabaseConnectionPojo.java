@@ -64,17 +64,17 @@ public class DatabaseConnectionPojo extends OpenInfraPojo {
     }
 
     @Override
-    public void makePrimer() {
+    protected void makePrimerHelper() {
         server = new ServersPojo();
-        server.makePrimer();
+        server.makePrimerHelper();
         port = new PortsPojo();
-        port.makePrimer();
+        port.makePrimerHelper();
         database = new DatabasesPojo();
-        database.makePrimer();
+        database.makePrimerHelper();
         schema = new SchemasPojo();
-        schema.makePrimer();
+        schema.makePrimerHelper();
         credentials = new CredentialsPojo();
-        credentials.makePrimer();
+        credentials.makePrimerHelper();
     }
 
 }

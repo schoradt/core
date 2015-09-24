@@ -31,12 +31,12 @@ public class PtFreeTextPojo extends OpenInfraPojo {
     }
 
     @Override
-    public void makePrimer() {
+    protected void makePrimerHelper() {
         localizedStrings = new ArrayList<LocalizedString>();
         localizedStrings.add(new LocalizedString());
         localizedStrings.get(0).setCharacterString("");
         localizedStrings.get(0).setLocale(new PtLocalePojo());
-        localizedStrings.get(0).getLocale().makePrimer();
+        localizedStrings.get(0).getLocale().makePrimerHelper();
     }
 
 }
