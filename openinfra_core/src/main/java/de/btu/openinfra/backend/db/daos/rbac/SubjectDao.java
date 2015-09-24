@@ -29,6 +29,12 @@ public class SubjectDao extends OpenInfraDao<SubjectPojo, Subject> {
 		super(null, OpenInfraSchemas.RBAC, Subject.class);
 	}
 	
+	/**
+	 * This method reads a RBAC model object by login from database. This is
+	 * required for Apache Shiro login. 
+	 * @param login the login name
+	 * @return the subject (user) as model object
+	 */
 	public Subject readModel(String login) {
 		try {
 			return em.createNamedQuery(

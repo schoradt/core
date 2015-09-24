@@ -9,6 +9,13 @@ import javax.ws.rs.core.HttpHeaders;
 
 import org.apache.shiro.SecurityUtils;
 
+/**
+ * This class represents a response filter and is used to add the session
+ * time out for every subject (user) to a specific header field.
+ * 
+ * @author <a href="http://www.b-tu.de">BTU</a> DBIS
+ *
+ */
 public class OpenInfraResponseFilter implements ContainerResponseFilter {
 
 	@Override

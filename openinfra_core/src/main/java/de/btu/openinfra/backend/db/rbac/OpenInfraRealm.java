@@ -27,8 +27,8 @@ import de.btu.openinfra.backend.db.jpa.model.rbac.SubjectRole;
 /**
  * This is the OpenInfraRealm which is used to retrieve user-specific 
  * information from database. The idea behind this implementation was: 
- * 'keep it stupid and simple' and is closely related to the implementation
- * of the origin jdbcReal.
+ * 'keep it stupid and simple' and it's closely related to the implementation
+ * of the origin jdbcRealm.
  * 
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
@@ -60,6 +60,11 @@ public class OpenInfraRealm extends AuthorizingRealm {
 			login.add(o.toString());
 		}
 		
+		// Currently, we assume that there is only one entry in the principal 
+		// collection with the name: 'OpenInfraRealmNames.LOGIN.name()'. This
+		// login name is defined in the 'doGetAuthenticationInfo' method above.
+		// Thus, we use always the very first entry. However, this might change
+		// in the future and should be changed.
         Subject s = new SubjectDao().readModel(login.get(0));
         
         Set<String> roleNames = new HashSet<String>();
