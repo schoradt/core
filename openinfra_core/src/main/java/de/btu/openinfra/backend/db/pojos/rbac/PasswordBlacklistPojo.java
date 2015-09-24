@@ -8,20 +8,26 @@ import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 @XmlRootElement
 public class PasswordBlacklistPojo extends OpenInfraPojo {
 
-	private String password;
-	
-	public PasswordBlacklistPojo() {}
-	
-	public PasswordBlacklistPojo(OpenInfraModelObject modelObject) {
-		super(modelObject);
-	}
+    private String password;
 
-	public String getPassword() {
-		return password;
-	}
+    public PasswordBlacklistPojo() {
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public PasswordBlacklistPojo(OpenInfraModelObject modelObject) {
+        super(modelObject);
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    @Override
+    public void makePrimer() {
+        password = "";
+    }
 
 }

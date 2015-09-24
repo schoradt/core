@@ -8,33 +8,39 @@ import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 @XmlRootElement
 public class SubjectRolePojo extends OpenInfraPojo {
 
-	private RolePojo role;
+    private RolePojo role;
 
-	private SubjectPojo subject;
-	
-	public SubjectRolePojo() {}
-	
-	public SubjectRolePojo(OpenInfraModelObject modelObject) {
-		super(modelObject);
-	}
+    private SubjectPojo subject;
 
-	public RolePojo getRole() {
-		return role;
-	}
+    public SubjectRolePojo() {
+    }
 
-	public void setRole(RolePojo role) {
-		this.role = role;
-	}
+    public SubjectRolePojo(OpenInfraModelObject modelObject) {
+        super(modelObject);
+    }
 
-	public SubjectPojo getSubject() {
-		return subject;
-	}
+    public RolePojo getRole() {
+        return role;
+    }
 
-	public void setSubject(SubjectPojo subject) {
-		this.subject = subject;
-	}
-	
-	
+    public void setRole(RolePojo role) {
+        this.role = role;
+    }
 
+    public SubjectPojo getSubject() {
+        return subject;
+    }
+
+    public void setSubject(SubjectPojo subject) {
+        this.subject = subject;
+    }
+
+    @Override
+    public void makePrimer() {
+        role = new RolePojo();
+        role.makePrimer();
+        subject = new SubjectPojo();
+        subject.makePrimer();
+    }
 
 }

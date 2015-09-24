@@ -8,26 +8,38 @@ import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 @XmlRootElement
 public class RolePermissionPojo extends OpenInfraPojo {
 
-	private RolePojo role;
-	private PermissionPojo permission;
-	
-	public RolePermissionPojo() {}
-	
-	public RolePermissionPojo(OpenInfraModelObject modelObject) {
-		super(modelObject);
-	}
-	
-	public RolePojo getRole() {
-		return role;
-	}
-	public void setRole(RolePojo role) {
-		this.role = role;
-	}
-	public PermissionPojo getPermission() {
-		return permission;
-	}
-	public void setPermission(PermissionPojo permission) {
-		this.permission = permission;
-	}
+    private RolePojo role;
+    private PermissionPojo permission;
+
+    public RolePermissionPojo() {
+    }
+
+    public RolePermissionPojo(OpenInfraModelObject modelObject) {
+        super(modelObject);
+    }
+
+    public RolePojo getRole() {
+        return role;
+    }
+
+    public void setRole(RolePojo role) {
+        this.role = role;
+    }
+
+    public PermissionPojo getPermission() {
+        return permission;
+    }
+
+    public void setPermission(PermissionPojo permission) {
+        this.permission = permission;
+    }
+
+    @Override
+    public void makePrimer() {
+        role = new RolePojo();
+        role.makePrimer();
+        permission = new PermissionPojo();
+        permission.makePrimer();
+    }
 
 }

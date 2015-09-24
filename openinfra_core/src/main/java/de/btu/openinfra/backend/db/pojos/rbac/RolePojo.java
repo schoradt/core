@@ -8,30 +8,37 @@ import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 @XmlRootElement
 public class RolePojo extends OpenInfraPojo {
 
-	private String description;
+    private String description;
 
-	private String name;
-	
-	public RolePojo() {}
-	
-	public RolePojo(OpenInfraModelObject modelObject) {
-		super(modelObject);
-	}
+    private String name;
 
-	public String getDescription() {
-		return this.description;
-	}
+    public RolePojo() {
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public RolePojo(OpenInfraModelObject modelObject) {
+        super(modelObject);
+    }
 
-	public String getName() {
-		return this.name;
-	}
+    public String getDescription() {
+        return this.description;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public void makePrimer() {
+        description = "";
+        name = "";
+    }
 
 }
