@@ -97,6 +97,7 @@ public class PojoPrimer {
         OpenInfraPojo pojo = null;
         try {
             pojo = pojoClasses.get(pojoName).newInstance();
+            pojo.makePrimer();
         } catch (InstantiationException | IllegalAccessException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
