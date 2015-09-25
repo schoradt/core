@@ -27,8 +27,8 @@ public abstract class OpenInfraModelObject {
     private UUID id;
 
     @ReturnInsert(returnOnly=true)
-    // TODO updates the xmin of the model object after an update operation of
-    // the model object (remove if it is not necessary)
+    // TODO updates the attribute 'xmin' of the model object after an update
+    // operation of the model object (remove if it is not necessary)
     @ReturnUpdate
     @Convert(converter = de.btu.openinfra.backend.db.PostgresIntegerConverter.class)
     @Column(insertable = false)
