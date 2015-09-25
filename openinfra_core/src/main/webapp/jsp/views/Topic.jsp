@@ -430,7 +430,7 @@ $(document).ready(function() {
         // bind click handler to redirect to map
         $('#map').click(function() {
         	var qParams = "?tc=" + instance.topicCharacteristic.uuid + "&ti=" + instance.uuid
-        	window.open("${contextPath}/rest/projects/maps" + qParams, "_blank");
+        	window.open("${contextPath}/rest/v1/projects/maps" + qParams, "_blank");
         });
 	};
 	

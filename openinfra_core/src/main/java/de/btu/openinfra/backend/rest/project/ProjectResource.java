@@ -19,6 +19,7 @@ import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.ProjectDao;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.ProjectPojo;
+import de.btu.openinfra.backend.db.rbac.ProjectRbac;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
 /**
@@ -55,18 +56,18 @@ public class ProjectResource {
 	public List<ProjectPojo> get(
 			@QueryParam("language") String language,
 			@QueryParam("offset") int offset,
-			@QueryParam("size") int size) {
-		return new ProjectDao(
-				null,
-				OpenInfraSchemas.META_DATA).getMainProjects(
-						PtLocaleDao.forLanguageTag(language));
+			@QueryParam("size") int size) {		
+				return new ProjectRbac(
+						null, 
+						OpenInfraSchemas.META_DATA).readMainProjects(
+								PtLocaleDao.forLanguageTag(language));			
 	}
 
 	@GET
 	@Path("count")
 	@Produces({MediaType.TEXT_PLAIN})
 	public long getMainProjectsCount() {
-		return new ProjectDao(
+		return new ProjectRbac(
 				null,
 				OpenInfraSchemas.META_DATA).getMainProjectsCount();
 	}
@@ -79,14 +80,15 @@ public class ProjectResource {
 	 */
 	@GET
 	@Path("{projectId}")
-	public ProjectPojo get(
+	public Response get(
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId) {
-		return new ProjectDao(
-				projectId,
-				OpenInfraSchemas.PROJECTS).read(
-						PtLocaleDao.forLanguageTag(language),
-						projectId);
+		return OpenInfraResponseBuilder.getResponse(
+				new ProjectRbac(
+						projectId,
+						OpenInfraSchemas.PROJECTS).read(
+								PtLocaleDao.forLanguageTag(language),
+								projectId));
 	}
 
 	/**
@@ -105,7 +107,7 @@ public class ProjectResource {
 			@PathParam("projectId") UUID projectId,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
-		return new ProjectDao(
+		return new ProjectRbac(
 				projectId,
 				OpenInfraSchemas.PROJECTS).readSubProjects(
 						PtLocaleDao.forLanguageTag(language),
@@ -118,7 +120,7 @@ public class ProjectResource {
 	@Produces({MediaType.TEXT_PLAIN})
 	public long getSubProjectsCount(
 			@PathParam("projectId") UUID projectId) {
-		return new ProjectDao(
+		return new ProjectRbac(
 				projectId,
 				OpenInfraSchemas.PROJECTS).getSubProjectsCount();
 	}
@@ -128,7 +130,7 @@ public class ProjectResource {
     public ProjectPojo newSubProject(
             @QueryParam("language") String language,
             @PathParam("projectId") UUID projectId) {
-        return new ProjectDao(
+        return new ProjectRbac(
                         projectId,
                         OpenInfraSchemas.PROJECTS)
                     .newSubProject(PtLocaleDao.forLanguageTag(language));
@@ -177,7 +179,7 @@ public class ProjectResource {
     		@PathParam("projectId") UUID projectId,
     		ProjectPojo project) {
         // TODO compare projectId in createOrUpdate method?
-    	UUID uuid = new ProjectDao(
+    	UUID uuid = new ProjectRbac(
     			projectId,
     			OpenInfraSchemas.PROJECTS).createOrUpdate(project);
     	return OpenInfraResponseBuilder.putResponse(uuid);
@@ -218,9 +220,9 @@ public class ProjectResource {
 	public List<ProjectPojo> readParents(
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId) {
-		return new ProjectDao(
+		return new ProjectRbac(
 				projectId,
-				OpenInfraSchemas.PROJECTS).getParents(
+				OpenInfraSchemas.PROJECTS).readParents(
 						PtLocaleDao.forLanguageTag(language));
 	}
 

@@ -20,7 +20,8 @@ import javax.xml.transform.stream.StreamSource;
 import org.glassfish.jersey.server.wadl.WadlApplicationContext;
 
 /**
- * This class is used to transform the original WADL into a HTML representation.
+ * This class is used to generate a HTML view out of the XML-based rest API
+ * documentation.
  * 
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *

@@ -117,6 +117,9 @@ public class ValueListValueDao
      * informations about the name, the description and the locale, the
      * visibility and the value list the value belongs to.
      *
+     * TODO this method is identically implemented in other dao classes
+     * and should be moved abstractly to the OpenInfraDao class
+     *
      * @param locale the locale the informations should be saved at
      * @return       the ValueListValuePojo
      */

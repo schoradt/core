@@ -29,7 +29,7 @@ public class SubjectRole extends OpenInfraModelObject implements Serializable {
 	//bi-directional many-to-one association to Subject
 	@ManyToOne
 	@JoinColumn(name="subject")
-	private Subject subject;
+	private Subject subjectBean;
 
 	public SubjectRole() {
 	}
@@ -42,12 +42,12 @@ public class SubjectRole extends OpenInfraModelObject implements Serializable {
 		this.roleBean = roleBean;
 	}
 
-	public Subject getSubject() {
-		return this.subject;
+	public Subject getSubjectBean() {
+		return this.subjectBean;
 	}
 
-	public void setSubject(Subject subject) {
-		this.subject = subject;
+	public void setSubjectBean(Subject subjectBean) {
+		this.subjectBean = subjectBean;
 	}
 
 }

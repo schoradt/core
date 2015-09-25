@@ -19,14 +19,14 @@ import de.btu.openinfra.backend.db.OpenInfraOrderBy;
 import de.btu.openinfra.backend.db.OpenInfraOrderByEnum;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.OpenInfraSortOrder;
-import de.btu.openinfra.backend.db.daos.AttributeTypeDao;
-import de.btu.openinfra.backend.db.daos.AttributeTypeGroupDao;
-import de.btu.openinfra.backend.db.daos.AttributeTypeToAttributeTypeGroupDao;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
-import de.btu.openinfra.backend.db.daos.TopicCharacteristicToAttributeTypeGroupDao;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupPojo;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeToAttributeTypeGroupPojo;
 import de.btu.openinfra.backend.db.pojos.TopicCharacteristicToAttributeTypeGroupPojo;
+import de.btu.openinfra.backend.db.rbac.AttributeTypeGroupRbac;
+import de.btu.openinfra.backend.db.rbac.AttributeTypeRbac;
+import de.btu.openinfra.backend.db.rbac.AttributeTypeToAttributeTypeGroupRbac;
+import de.btu.openinfra.backend.db.rbac.TopicCharacteristicToAttributeTypeGroupRbac;
 
 /**
  * This class represents and implements the AttributeTypeGroupResource resource.
@@ -48,7 +48,7 @@ public class AttributeTypeGroupResource {
 	public long getAttributeTypeGroupCount(
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema) {
-		return new AttributeTypeGroupDao(
+		return new AttributeTypeGroupRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount();
 	}
@@ -62,7 +62,7 @@ public class AttributeTypeGroupResource {
 			@QueryParam("orderBy") OpenInfraOrderByEnum orderBy,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
-		return new AttributeTypeGroupDao(
+		return new AttributeTypeGroupRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language),
@@ -79,7 +79,7 @@ public class AttributeTypeGroupResource {
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@PathParam("attributeTypeGroupId") UUID attributeTypeGroupId) {
-		return new AttributeTypeGroupDao(
+		return new AttributeTypeGroupRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language),
@@ -97,7 +97,7 @@ public class AttributeTypeGroupResource {
 			@QueryParam("orderBy") OpenInfraOrderByEnum orderBy,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
-		return new AttributeTypeToAttributeTypeGroupDao(
+		return new AttributeTypeToAttributeTypeGroupRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language),
@@ -113,7 +113,7 @@ public class AttributeTypeGroupResource {
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@PathParam("attributeTypeGroupId") UUID attributeTypeGroupId) {
-		return new AttributeTypeDao(
+		return new AttributeTypeRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
 						attributeTypeGroupId);
@@ -129,7 +129,7 @@ public class AttributeTypeGroupResource {
 			@PathParam("attributeTypeId") UUID attributeTypeId,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
-		return new AttributeTypeToAttributeTypeGroupDao(
+		return new AttributeTypeToAttributeTypeGroupRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language),
@@ -151,7 +151,7 @@ public class AttributeTypeGroupResource {
 			@QueryParam("orderBy") OpenInfraOrderBy orderBy,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
-		return new TopicCharacteristicToAttributeTypeGroupDao(
+		return new TopicCharacteristicToAttributeTypeGroupRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language),
@@ -167,7 +167,7 @@ public class AttributeTypeGroupResource {
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema,
             @PathParam("attributeTypeGroupId") UUID attributeTypeGroupId) {
-	    return new TopicCharacteristicToAttributeTypeGroupDao(
+	    return new TopicCharacteristicToAttributeTypeGroupRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
                         attributeTypeGroupId);
@@ -184,7 +184,7 @@ public class AttributeTypeGroupResource {
 			@PathParam("topicCharacteristicId") UUID topicCharacteristicId,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
-		return new TopicCharacteristicToAttributeTypeGroupDao(
+		return new TopicCharacteristicToAttributeTypeGroupRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language),
@@ -209,7 +209,7 @@ public class AttributeTypeGroupResource {
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@PathParam("attributeTypeGroupId") UUID attributeTypeGroupId) {
-		return new AttributeTypeGroupDao(
+		return new AttributeTypeGroupRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).readSubGroups(
 						PtLocaleDao.forLanguageTag(language),
@@ -222,7 +222,7 @@ public class AttributeTypeGroupResource {
             @QueryParam("language") String language,
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema) {
-        return new AttributeTypeGroupDao(
+        return new AttributeTypeGroupRbac(
                         projectId,
                         OpenInfraSchemas.valueOf(schema.toUpperCase()))
                     .newAttributeTypeGroup(
@@ -234,7 +234,7 @@ public class AttributeTypeGroupResource {
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema,
             AttributeTypeGroupPojo pojo) {
-        UUID id = new AttributeTypeGroupDao(
+        UUID id = new AttributeTypeGroupRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
                         pojo, pojo.getMetaData());
@@ -248,7 +248,7 @@ public class AttributeTypeGroupResource {
 	        @PathParam("schema") String schema,
 	        @PathParam("attributeTypeGroupId") UUID attributeTypeGroupId,
 	        AttributeTypeGroupPojo pojo) {
-	    UUID id = new AttributeTypeGroupDao(
+	    UUID id = new AttributeTypeGroupRbac(
 	            projectId,
 	            OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
                         pojo, attributeTypeGroupId, pojo.getMetaData());
@@ -262,7 +262,7 @@ public class AttributeTypeGroupResource {
 	        @PathParam("schema") String schema,
 	        @PathParam("attributeTypeGroupId") UUID attributeTypeGroupId) {
 	    return OpenInfraResponseBuilder.deleteResponse(
-	            new AttributeTypeGroupDao(
+	            new AttributeTypeGroupRbac(
 	                    projectId,
 	                    OpenInfraSchemas.valueOf(schema.toUpperCase()))
 	            .delete(attributeTypeGroupId), attributeTypeGroupId);
