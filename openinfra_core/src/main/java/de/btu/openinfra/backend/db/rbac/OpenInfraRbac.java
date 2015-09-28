@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -122,8 +123,10 @@ public abstract class OpenInfraRbac<
 	 * @param size
 	 * @return
 	 */
-	public List<TypePojo> read(Locale locale, int offset, int size) {
-		checkPermission();
+	public List<TypePojo> read(
+			OpenInfraHttpMethod httpMethod, 
+			UriInfo uriInfo, Locale locale, int offset, int size) {
+		checkPermission(httpMethod, uriInfo);
 		try {
 			return dao.getDeclaredConstructor(constructorTypes).newInstance(
 					currentProjectId, 
@@ -147,12 +150,14 @@ public abstract class OpenInfraRbac<
 	 * @return
 	 */
 	public List<TypePojo> read(
+			OpenInfraHttpMethod httpMethod, 
+			UriInfo uriInfo,
     		Locale locale,
     		OpenInfraSortOrder order,
     		OpenInfraOrderByEnum column,
     		int offset,
     		int size) {
-		checkPermission();
+		checkPermission(httpMethod, uriInfo);
 		try {
 			return dao.getDeclaredConstructor(constructorTypes).newInstance(
 					currentProjectId, 
@@ -172,8 +177,12 @@ public abstract class OpenInfraRbac<
 	 * @param id
 	 * @return
 	 */
-	public TypePojo read(Locale locale, UUID id) {
-		checkPermission();
+	public TypePojo read(
+			OpenInfraHttpMethod httpMethod, 
+			UriInfo uriInfo,
+			Locale locale, 
+			UUID id) {
+		checkPermission(httpMethod, uriInfo);
 		try {
 			return dao.getDeclaredConstructor(constructorTypes).newInstance(
 					currentProjectId, 
@@ -191,8 +200,8 @@ public abstract class OpenInfraRbac<
 	 * 
 	 * @return
 	 */
-	public long getCount() {
-		checkPermission();
+	public long getCount(OpenInfraHttpMethod httpMethod, UriInfo uriInfo) {
+		checkPermission(httpMethod, uriInfo);
 		try {
 			return dao.getDeclaredConstructor(constructorTypes).newInstance(
 					currentProjectId, 
@@ -212,9 +221,12 @@ public abstract class OpenInfraRbac<
 	 * @return
 	 * @throws RuntimeException
 	 */
-	public UUID createOrUpdate(TypePojo pojo)
+	public UUID createOrUpdate(
+			OpenInfraHttpMethod httpMethod, 
+			UriInfo uriInfo,
+			TypePojo pojo)
 			throws RuntimeException {
-		checkPermission();
+		checkPermission(httpMethod, uriInfo);
 		try {
 			return dao.getDeclaredConstructor(constructorTypes).newInstance(
 					currentProjectId, 
@@ -235,9 +247,13 @@ public abstract class OpenInfraRbac<
 	 * @return
 	 * @throws RuntimeException
 	 */
-    public UUID createOrUpdate(TypePojo pojo, JSONObject json)
+    public UUID createOrUpdate(
+    		OpenInfraHttpMethod httpMethod, 
+			UriInfo uriInfo, 
+			TypePojo pojo, 
+			JSONObject json)
             throws RuntimeException {
-    	checkPermission();
+    	checkPermission(httpMethod, uriInfo);
 		try {
 			return dao.getDeclaredConstructor(constructorTypes).newInstance(
 					currentProjectId, 
@@ -258,9 +274,14 @@ public abstract class OpenInfraRbac<
 	 * @return
 	 * @throws RuntimeException
 	 */
-    public UUID createOrUpdate(TypePojo pojo, UUID valueId, JSONObject json)
+    public UUID createOrUpdate(
+    		OpenInfraHttpMethod httpMethod, 
+			UriInfo uriInfo, 
+			TypePojo pojo, 
+			UUID valueId, 
+			JSONObject json)
             throws RuntimeException {
-		checkPermission();
+		checkPermission(httpMethod, uriInfo);
 		try {
 			return dao.getDeclaredConstructor(constructorTypes).newInstance(
 					currentProjectId, 
@@ -282,10 +303,14 @@ public abstract class OpenInfraRbac<
      * @return
      * @throws RuntimeException
      */
-    public UUID createOrUpdate(TypePojo pojo, UUID firstAssociationId,
+    public UUID createOrUpdate(
+    		OpenInfraHttpMethod httpMethod, 
+			UriInfo uriInfo, 
+			TypePojo pojo, 
+			UUID firstAssociationId,
             UUID firstAssociationIdFromPojo, JSONObject json) 
             		throws RuntimeException {
-		checkPermission();
+		checkPermission(httpMethod, uriInfo);
 		try {
 			return dao.getDeclaredConstructor(constructorTypes).newInstance(
 					currentProjectId, 
@@ -311,11 +336,13 @@ public abstract class OpenInfraRbac<
      * @return
      * @throws RuntimeException
      */
-    public UUID createOrUpdate(TypePojo pojo, UUID firstAssociationId,
+    public UUID createOrUpdate(
+    		OpenInfraHttpMethod httpMethod, 
+			UriInfo uriInfo, TypePojo pojo, UUID firstAssociationId,
             UUID firstAssociationIdFromPojo, UUID secondAssociationId,
             UUID secondAssociationIdFromPojo, JSONObject json)
             throws RuntimeException {
-		checkPermission();
+		checkPermission(httpMethod, uriInfo);
 		try {
 			return dao.getDeclaredConstructor(constructorTypes).newInstance(
 					currentProjectId, 
@@ -336,8 +363,11 @@ public abstract class OpenInfraRbac<
      * @param uuid
      * @return
      */
-    public boolean delete(UUID uuid) {
-		checkPermission();
+    public boolean delete(
+    		OpenInfraHttpMethod httpMethod, 
+			UriInfo uriInfo, 
+			UUID uuid) {
+		checkPermission(httpMethod, uriInfo);
 		try {
 			return dao.getDeclaredConstructor(constructorTypes).newInstance(
 					currentProjectId, 
@@ -350,15 +380,22 @@ public abstract class OpenInfraRbac<
 		}
     }
 	
-	/**
-	 * This method is used to check the permissions of the current subject. This
+    /**
+     * This method is used to check the permissions of the current subject. This
 	 * class throws a WebApplicationException when the current user is either 
 	 * not authenticated or unauthorized to access the requested resource. This
 	 * WebApplicationException is automatically handled by the embedding web 
 	 * container (it might be Apache Tomcat).
-	 * 
-	 */
-	protected void checkPermission() throws WebApplicationException {
+     * 
+     * @param httpMethod               the method which has been used to access
+     *                                 the current resource
+     * @param uriInfo                  the URI information
+     * @throws WebApplicationException when the subject (user) is not allowed to
+     *                                 access the requested resource
+     */
+	protected void checkPermission(
+			OpenInfraHttpMethod httpMethod, 
+			UriInfo uriInfo) throws WebApplicationException {
 		
 		if(!user.isAuthenticated()) {
 			throw new WebApplicationException(Response.Status.UNAUTHORIZED);

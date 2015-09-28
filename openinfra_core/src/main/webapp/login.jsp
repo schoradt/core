@@ -42,6 +42,15 @@ response.setStatus(401);
 <tr><td>max</td><td>max</td><td>Vollzugriff (nur lesen)</td></tr>
 <tr><td>lieschen</td><td>lieschen</td><td>nur Zugriff auf das Baalbek-Projekt (ändern + lesen)</td></tr>
 <tr><td>anonymous</td><td>anonymous</td><td>nur Zugriff auf das Testproject (nur lesen)</td></tr>
+<tr><td> </td><td> </td><td> </td></tr>
+<tr><td>sysadmin</td><td>sysadmin</td><td>Systemadministrator (Nutzerverwaltung)</td></tr>
+<tr><td>syseditor</td><td>syseditor</td><td>Systembearbeiter (Ändern von Inhalten im Systembereich)</td></tr>
+<tr><td>sysguest</td><td>sysguest</td><td>Systemgast (Lesenden Zugriff auf Inhalte im Systembereich)</td></tr>
+<tr><td> </td><td> </td><td> </td></tr>
+<tr><td>projectadmin_baal</td><td>projectadmin_baal</td><td>Projektadministrator Baalbek (Nutzerverwaltung + Projektname-/beschreibung)</td></tr>
+<tr><td>projectguest_baal</td><td>projectguest_baal</td><td>Projektgast Baalbek (Lesender Zugriff auf Inhalte im Projekt Baalbek)</td></tr>
+<tr><td>projecteditor_baal</td><td>projecteditor_baal</td><td>Projektarbeiter Baalbek (Ändern von Inhalten im Projekt Baalbek)</td></tr>
+
 </table>
 <td>
 </tr>

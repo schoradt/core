@@ -7,8 +7,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import org.glassfish.jersey.server.mvc.Template;
 
@@ -25,12 +27,13 @@ public class ValueListValueResource {
 	@Path("{valueListValueId}")
 	@Template(name="/views/detail/ValueListValues.jsp")
 	public ValueListValuePojo getView(
+			@Context UriInfo uriInfo,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@PathParam("valueListValueId") UUID valueListValueId) {
 		return new de.btu.openinfra.backend.rest.ValueListValuesResource()
-			.get(language, projectId, schema, valueListValueId);
+			.get(uriInfo, language, projectId, schema, valueListValueId);
 	}
 
     @GET

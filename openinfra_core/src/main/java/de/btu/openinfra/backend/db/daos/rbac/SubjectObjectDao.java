@@ -11,7 +11,7 @@ import de.btu.openinfra.backend.db.pojos.rbac.SubjectObjectPojo;
 public class SubjectObjectDao extends 
 	OpenInfraDao<SubjectObjectPojo, SubjectObject> {
 
-	protected SubjectObjectDao() {
+	public SubjectObjectDao() {
 		super(null, OpenInfraSchemas.RBAC, SubjectObject.class);
 	}
 
@@ -19,7 +19,7 @@ public class SubjectObjectDao extends
 	public SubjectObjectPojo mapToPojo(
 			Locale locale, SubjectObject modelObject) {
 		SubjectObjectPojo pojo = new SubjectObjectPojo(modelObject);
-		pojo.setObject(ObjectDao.mapToPojoStatically(
+		pojo.setObject(OpenInfraObjectDao.mapToPojoStatically(
 				locale, modelObject.getObjectBean()));
 		pojo.setProjectId(modelObject.getProjectId());
 		pojo.setSubject(SubjectDao.mapToPojoStatically(

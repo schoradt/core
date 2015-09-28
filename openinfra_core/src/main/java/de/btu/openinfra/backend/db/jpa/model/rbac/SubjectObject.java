@@ -29,7 +29,7 @@ public class SubjectObject extends OpenInfraModelObject
 
 	//bi-directional many-to-one association to Object
 	@ManyToOne
-	@JoinColumn(name="object")
+	@JoinColumn(name="openinfra_objects")
 	private OpenInfraObject objectBean;
 
 	//bi-directional many-to-one association to Subject

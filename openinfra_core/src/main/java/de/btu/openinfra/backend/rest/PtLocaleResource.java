@@ -8,13 +8,16 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriInfo;
 
 import de.btu.openinfra.backend.db.OpenInfraOrderByEnum;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.PtLocalePojo;
+import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
 import de.btu.openinfra.backend.db.rbac.PtLocaleRbac;
 
 /**
@@ -32,6 +35,7 @@ public class PtLocaleResource {
 
 	@GET
 	public List<PtLocalePojo> get(
+			@Context UriInfo uriInfo,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
@@ -42,6 +46,8 @@ public class PtLocaleResource {
 		return new PtLocaleRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
+						OpenInfraHttpMethod.GET, 
+						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						sortOrder,
 						orderBy,
@@ -53,16 +59,20 @@ public class PtLocaleResource {
 	@Path("count")
 	@Produces({MediaType.TEXT_PLAIN})
 	public long getCount(
+			@Context UriInfo uriInfo,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema) {
 		return new PtLocaleRbac(
 				projectId,
-				OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount();
+				OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
+						OpenInfraHttpMethod.GET, 
+						uriInfo);
 	}
 
 	@GET
 	@Path("{ptLocaleId}")
 	public PtLocalePojo get(
+			@Context UriInfo uriInfo,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
@@ -70,6 +80,8 @@ public class PtLocaleResource {
 		return new PtLocaleRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
+						OpenInfraHttpMethod.GET, 
+						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						ptLocaleId);
 	}

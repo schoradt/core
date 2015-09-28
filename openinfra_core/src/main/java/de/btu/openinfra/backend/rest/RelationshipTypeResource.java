@@ -12,8 +12,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import de.btu.openinfra.backend.db.OpenInfraOrderByEnum;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
@@ -21,6 +23,7 @@ import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.RelationshipTypePojo;
 import de.btu.openinfra.backend.db.pojos.TopicCharacteristicToRelationshipTypePojo;
+import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
 import de.btu.openinfra.backend.db.rbac.RelationshipTypeRbac;
 import de.btu.openinfra.backend.db.rbac.TopicCharacteristicToRelationshipTypeRbac;
 
@@ -34,6 +37,7 @@ public class RelationshipTypeResource {
 
     @GET
     public List <RelationshipTypePojo> get(
+    		@Context UriInfo uriInfo,
             @QueryParam("language") String language,
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema,
@@ -44,6 +48,8 @@ public class RelationshipTypeResource {
         return new RelationshipTypeRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
+                		OpenInfraHttpMethod.GET, 
+						uriInfo,
                         PtLocaleDao.forLanguageTag(language),
 						sortOrder,
 						orderBy,
@@ -55,16 +61,20 @@ public class RelationshipTypeResource {
 	@Path("count")
 	@Produces({MediaType.TEXT_PLAIN})
 	public long getAttributeTypeGroupCount(
+			@Context UriInfo uriInfo,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema) {
 		return new RelationshipTypeRbac(
 				projectId,
-				OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount();
+				OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
+						OpenInfraHttpMethod.GET, 
+						uriInfo);
 	}
 
     @GET
     @Path("{relationshipTypeId}")
     public RelationshipTypePojo get(
+    		@Context UriInfo uriInfo,
             @QueryParam("language") String language,
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema,
@@ -72,6 +82,8 @@ public class RelationshipTypeResource {
         return new RelationshipTypeRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
+                		OpenInfraHttpMethod.GET, 
+						uriInfo,
                         PtLocaleDao.forLanguageTag(language),
                         relationshipTypeId);
     }
@@ -80,6 +92,7 @@ public class RelationshipTypeResource {
 	@Path("{relationshipTypeId}/topiccharacteristics")
 	public List<TopicCharacteristicToRelationshipTypePojo>
     	getTopicCharacteristics(
+    			@Context UriInfo uriInfo,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
@@ -90,6 +103,8 @@ public class RelationshipTypeResource {
 		return new TopicCharacteristicToRelationshipTypeRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
+						OpenInfraHttpMethod.GET, 
+						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						relationshipTypeId,
 						offset,
@@ -99,13 +114,15 @@ public class RelationshipTypeResource {
     @GET
     @Path("{relationshipTypeId}/topiccharacteristics/count")
     public long getTopicCharacteristicsCount(
+    		@Context UriInfo uriInfo,
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema,
             @PathParam("relationshipTypeId") UUID relationshipTypeId) {
-
         return new TopicCharacteristicToRelationshipTypeRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
+                		OpenInfraHttpMethod.GET, 
+						uriInfo,
                         relationshipTypeId);
     }
 
@@ -113,6 +130,7 @@ public class RelationshipTypeResource {
 	@Path("{relationshipTypeId}/topiccharacteristics/{topicCharacteristicId}")
 	public List<TopicCharacteristicToRelationshipTypePojo>
 		getTopicCharacteristics(
+				@Context UriInfo uriInfo,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
@@ -120,10 +138,11 @@ public class RelationshipTypeResource {
 			@PathParam("topicCharacteristicId") UUID topicCharacteristicId,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
-
 		return new TopicCharacteristicToRelationshipTypeRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
+						OpenInfraHttpMethod.GET, 
+						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						relationshipTypeId,
 						topicCharacteristicId,
@@ -134,6 +153,7 @@ public class RelationshipTypeResource {
 	@GET
     @Path("/new")
     public RelationshipTypePojo newRelationshipType(
+    		@Context UriInfo uriInfo,
             @QueryParam("language") String language,
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema) {
@@ -142,6 +162,7 @@ public class RelationshipTypeResource {
 
 	@POST
     public Response createRelationshipType(
+    		@Context UriInfo uriInfo,
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema,
             RelationshipTypePojo pojo) {
@@ -150,12 +171,16 @@ public class RelationshipTypeResource {
                     new RelationshipTypeRbac(
                             projectId,
                             OpenInfraSchemas.valueOf(schema.toUpperCase()))
-                            .createOrUpdate(pojo, pojo.getMetaData()));
+                            .createOrUpdate(
+                            		OpenInfraHttpMethod.GET, 
+            						uriInfo,
+            						pojo, pojo.getMetaData()));
     }
 
 	@PUT
 	@Path("{relationshipTypeId}")
 	public Response update(
+			@Context UriInfo uriInfo,
 	        @QueryParam("language") String language,
 	        @PathParam("projectId") UUID projectId,
 	        @PathParam("schema") String schema,
@@ -164,6 +189,8 @@ public class RelationshipTypeResource {
 	    UUID uuid = new RelationshipTypeRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
+                		OpenInfraHttpMethod.GET, 
+						uriInfo,
                         pojo, relationshipTypeId, pojo.getMetaData());
         return OpenInfraResponseBuilder.postResponse(uuid);
 	}
@@ -171,6 +198,7 @@ public class RelationshipTypeResource {
 	@DELETE
     @Path("{relationshipTypeId}")
     public Response delete(
+    		@Context UriInfo uriInfo,
             @PathParam("projectId") UUID projectId,
             @PathParam("relationshipTypeId") UUID relationshipTypeId,
             @PathParam("schema") String schema) {
@@ -178,7 +206,9 @@ public class RelationshipTypeResource {
                 new RelationshipTypeRbac(
                         projectId,
                         OpenInfraSchemas.valueOf(schema.toUpperCase()))
-                    .delete(relationshipTypeId),
+                    .delete(OpenInfraHttpMethod.GET, 
+    						uriInfo,
+    						relationshipTypeId),
                     relationshipTypeId);
     }
 }

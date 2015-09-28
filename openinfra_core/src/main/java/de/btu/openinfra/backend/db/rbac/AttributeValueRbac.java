@@ -3,6 +3,8 @@ package de.btu.openinfra.backend.db.rbac;
 import java.util.Locale;
 import java.util.UUID;
 
+import javax.ws.rs.core.UriInfo;
+
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.AttributeValueDao;
 import de.btu.openinfra.backend.db.daos.AttributeValueGeomType;
@@ -23,29 +25,37 @@ public class AttributeValueRbac extends
 	}
 	
 	public AttributeValuePojo read(
+			OpenInfraHttpMethod httpMethod, 
+			UriInfo uriInfo,
 			Locale locale,
 			UUID attributeValueId,
 			AttributeValueGeomType geomType) {
-		checkPermission();
+		checkPermission(httpMethod, uriInfo);
 		return new AttributeValueDao(
 					currentProjectId, 
 					schema).read(locale, attributeValueId, geomType);
 
 	}
 	
-	public UUID distributeTypes(AttributeValuePojo pojo, UUID projectId,
+	public UUID distributeTypes(
+			OpenInfraHttpMethod httpMethod, 
+			UriInfo uriInfo,
+			AttributeValuePojo pojo, 
+			UUID projectId,
 	        UUID attributeValueId) {
-		checkPermission();
+		checkPermission(httpMethod, uriInfo);
 		return new AttributeValueDao(
 				currentProjectId, 
 				schema).distributeTypes(pojo, projectId, attributeValueId);
 	}
 	
 	public AttributeValuePojo newAttributeValue(
+			OpenInfraHttpMethod httpMethod, 
+			UriInfo uriInfo,
 	        UUID topicInstanceId,
 	        UUID attributeTypeId,
 	        Locale locale) {
-		checkPermission();
+		checkPermission(httpMethod, uriInfo);
 		return new AttributeValueDao(
 				attributeTypeId, 
 				schema).newAttributeValue(

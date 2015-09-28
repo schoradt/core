@@ -2,6 +2,8 @@ package de.btu.openinfra.backend.db.rbac;
 
 import java.util.UUID;
 
+import javax.ws.rs.core.UriInfo;
+
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.MetaDataDao;
 import de.btu.openinfra.backend.db.jpa.model.MetaData;
@@ -14,8 +16,10 @@ public class MetaDataRbac extends OpenInfraRbac<MetaDataPojo, MetaData,
 		super(currentProjectId, schema, MetaDataDao.class);
 	}
 	
-    public MetaDataPojo newMetaData() {
-        checkPermission();
+    public MetaDataPojo newMetaData(
+    		OpenInfraHttpMethod httpMethod, 
+    		UriInfo uriInfo) {
+        checkPermission(httpMethod, uriInfo);
         return new MetaDataDao(currentProjectId, schema).newMetaData();
      }
 

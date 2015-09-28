@@ -8,7 +8,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriInfo;
 
 import org.glassfish.jersey.server.mvc.Template;
 
@@ -27,6 +29,7 @@ public class AttributeTypeResource {
 	@GET
 	@Template(name="/views/list/AttributeTypes.jsp")
 	public List<AttributeTypePojo> get(
+			@Context UriInfo uriInfo,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
@@ -35,25 +38,28 @@ public class AttributeTypeResource {
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new de.btu.openinfra.backend.rest.AttributeTypeResource()
-			.get(language, projectId, schema, sortOrder, orderBy, offset, size);
+			.get(uriInfo, language, projectId, 
+					schema, sortOrder, orderBy, offset, size);
 	}
 
 	@GET
 	@Path("{attributeTypeId}")
 	@Template(name="/views/detail/AttributeTypes.jsp")
 	public AttributeTypePojo getView(
+			@Context UriInfo uriInfo,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@PathParam("attributeTypeId") UUID attributeTypeId) {
 		return new de.btu.openinfra.backend.rest.AttributeTypeResource()
-			.get(language, projectId, schema, attributeTypeId);
+			.get(uriInfo, language, projectId, schema, attributeTypeId);
 	}
 
 	@GET
 	@Template(name="/views/list/AttributeTypeGroupToAttributeType.jsp")
 	@Path("{attributeTypeId}/attributetypegroups")
 	public List<AttributeTypeGroupToAttributeTypePojo> getView(
+			@Context UriInfo uriInfo,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
@@ -61,7 +67,8 @@ public class AttributeTypeResource {
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new de.btu.openinfra.backend.rest.AttributeTypeResource()
-			.get(language, projectId, schema, attributeTypeId, offset, size);
+			.get(uriInfo, language, projectId, schema, 
+					attributeTypeId, offset, size);
 	}
 
 }

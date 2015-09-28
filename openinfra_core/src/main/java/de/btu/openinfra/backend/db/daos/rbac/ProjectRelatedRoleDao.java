@@ -11,12 +11,17 @@ import de.btu.openinfra.backend.db.pojos.rbac.ProjectRelatedRolePojo;
 public class ProjectRelatedRoleDao extends
 	OpenInfraDao<ProjectRelatedRolePojo, ProjectRelatedRole> {
 
-	protected ProjectRelatedRoleDao() {
+	public ProjectRelatedRoleDao() {
 		super(null, OpenInfraSchemas.RBAC, ProjectRelatedRole.class);
 	}
 
 	@Override
 	public ProjectRelatedRolePojo mapToPojo(Locale locale,
+			ProjectRelatedRole modelObject) {
+		return mapToPojoStatically(locale, modelObject);
+	}
+	
+	public static ProjectRelatedRolePojo mapToPojoStatically(Locale locale,
 			ProjectRelatedRole modelObject) {
 		ProjectRelatedRolePojo pojo = new ProjectRelatedRolePojo(modelObject);
 		pojo.setDescription(modelObject.getDescription());

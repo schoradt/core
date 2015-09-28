@@ -3,6 +3,8 @@ package de.btu.openinfra.backend.db.rbac;
 import java.util.Locale;
 import java.util.UUID;
 
+import javax.ws.rs.core.UriInfo;
+
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.AttributeValueGeomType;
 import de.btu.openinfra.backend.db.daos.TopicDao;
@@ -25,13 +27,17 @@ public class TopicRbac {
 	}
 	
 	public TopicPojo read(
+			OpenInfraHttpMethod httpMethod, 
+			UriInfo uriInfo,
 			Locale locale, 
 			UUID topicInstanceId, 
 			AttributeValueGeomType geomType) {
 		// Since this Class is not a rbac class, we use a closely related class 
 		// to check the permission.
 		new TopicInstanceRbac(
-				currentProjectId, schema).checkPermission();
+				currentProjectId, schema).checkPermission(
+						httpMethod, 
+						uriInfo);
 		return new TopicDao(currentProjectId, schema).read(
 				locale, topicInstanceId, geomType);
 	}

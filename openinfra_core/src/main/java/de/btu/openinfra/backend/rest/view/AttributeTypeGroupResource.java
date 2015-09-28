@@ -35,7 +35,7 @@ public class AttributeTypeGroupResource {
 	@GET
 	@Template(name="/views/list/AttributeTypeGroups.jsp")
 	public List<AttributeTypeGroupPojo> getView(
-			@Context UriInfo uri,
+			@Context UriInfo uriInfo,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
@@ -44,25 +44,28 @@ public class AttributeTypeGroupResource {
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new de.btu.openinfra.backend.rest.AttributeTypeGroupResource()
-			.get(language, projectId, schema, sortOrder, orderBy, offset, size);
+			.get(uriInfo, language, projectId, 
+					schema, sortOrder, orderBy, offset, size);
 	}
 
 	@GET
 	@Path("{attributeTypeGroupId}")
 	@Template(name="/views/detail/AttributeTypeGroups.jsp")
 	public AttributeTypeGroupPojo getView(
+			@Context UriInfo uriInfo,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@PathParam("attributeTypeGroupId") UUID attributeTypeGroupId) {
 		return new de.btu.openinfra.backend.rest.AttributeTypeGroupResource()
-			.get(language, projectId, schema, attributeTypeGroupId);
+			.get(uriInfo, language, projectId, schema, attributeTypeGroupId);
 	}
 
 	@GET
 	@Path("{attributeTypeGroupId}/attributetypes")
 	@Template(name="/views/list/AttributeTypeToAttributeTypeGroups.jsp")
 	public List<AttributeTypeToAttributeTypeGroupPojo> getView(
+			@Context UriInfo uriInfo,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
@@ -72,7 +75,7 @@ public class AttributeTypeGroupResource {
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new de.btu.openinfra.backend.rest.AttributeTypeGroupResource()
-			.get(language, projectId, schema,
+			.get(uriInfo, language, projectId, schema,
 					attributeTypeGroupId, sortOrder, orderBy, offset, size);
 	}
 

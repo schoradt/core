@@ -8,7 +8,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriInfo;
 
 import org.glassfish.jersey.server.mvc.Template;
 
@@ -27,6 +29,7 @@ public class TopicCharacteristicResource {
 	@GET
 	@Template(name="/views/list/TopicCharacteristics.jsp")
 	public List<TopicCharacteristicPojo> getView(
+			@Context UriInfo uriInfo,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
@@ -36,26 +39,28 @@ public class TopicCharacteristicResource {
 			@PathParam("offset") int offset,
 			@PathParam("size") int size) {
 		return new de.btu.openinfra.backend.rest.TopicCharacteristicResource()
-			.get(language, projectId, schema, filter, sortOrder, orderBy,
-					offset, size);
+			.get(uriInfo, language, projectId, schema, 
+					filter, sortOrder, orderBy, offset, size);
 	}
 
 	@GET
 	@Path("{topicCharacteristicId}")
 	@Template(name="/views/detail/TopicCharacteristics.jsp")
 	public TopicCharacteristicPojo getView(
+			@Context UriInfo uriInfo,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@PathParam("topicCharacteristicId") UUID topicCharacteristicId) {
 		return new de.btu.openinfra.backend.rest.TopicCharacteristicResource()
-			.get(language, projectId, schema, topicCharacteristicId);
+			.get(uriInfo, language, projectId, schema, topicCharacteristicId);
 	}
 
 	@GET
 	@Path("{topicCharacteristicId}/attributetypegroups")
 	@Template(name="/views/list/AttributeTypeGroupsToTopicCharactristics.jsp")
 	public List<AttributeTypeGroupToTopicCharacteristicPojo> getView(
+			@Context UriInfo uriInfo,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
@@ -63,7 +68,7 @@ public class TopicCharacteristicResource {
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new de.btu.openinfra.backend.rest.TopicCharacteristicResource()
-			.get(language, projectId, schema,
+			.get(uriInfo, language, projectId, schema,
 					topicCharacteristicId, offset, size);
 	}
 

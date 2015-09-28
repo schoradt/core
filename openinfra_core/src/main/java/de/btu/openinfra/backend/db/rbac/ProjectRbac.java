@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
+import javax.ws.rs.core.UriInfo;
+
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.ProjectDao;
 import de.btu.openinfra.backend.db.jpa.model.Project;
@@ -44,25 +46,34 @@ public class ProjectRbac extends
 	}
 	
 	public List<ProjectPojo> readSubProjects(
+			OpenInfraHttpMethod httpMethod, 
+			UriInfo uriInfo,
 			Locale locale,
 			int offset,
 			int size) {
-		checkPermission();
+		checkPermission(httpMethod, uriInfo);
 		return new ProjectDao(
 				currentProjectId, schema).readSubProjects(locale, offset, size);
 	}
 	
-	public long getSubProjectsCount() {
-		return readSubProjects(null, 0, Integer.MAX_VALUE).size();
+	public long getSubProjectsCount(
+			OpenInfraHttpMethod httpMethod, UriInfo uriInfo) {
+		return readSubProjects(
+				httpMethod, 
+				uriInfo, null, 0, Integer.MAX_VALUE).size();
 	}
 	
-	public ProjectPojo newSubProject(Locale locale) {
-		checkPermission();
+	public ProjectPojo newSubProject(
+			OpenInfraHttpMethod httpMethod, 
+			UriInfo uriInfo, Locale locale) {
+		checkPermission(httpMethod, uriInfo);
 		return new ProjectDao(currentProjectId, schema).newSubProject(locale);
 	}
 	
-	public List<ProjectPojo> readParents(Locale locale) {
-		checkPermission();
+	public List<ProjectPojo> readParents(
+			OpenInfraHttpMethod httpMethod, 
+			UriInfo uriInfo, Locale locale) {
+		checkPermission(httpMethod, uriInfo);
 		return new ProjectDao(currentProjectId, schema).readParents(locale);
 	}
 	

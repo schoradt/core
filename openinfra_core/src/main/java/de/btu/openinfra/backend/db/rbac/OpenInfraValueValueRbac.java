@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraValueValueDao;
@@ -43,12 +44,14 @@ public class OpenInfraValueValueRbac<
 	}	
 
 	public List<TypePojo> read(
+			OpenInfraHttpMethod httpMethod, 
+			UriInfo uriInfo,
 			Locale locales,
 			UUID valueId,
 			UUID valueId2,
 			int offset,
 			int size) {
-		checkPermission();
+		checkPermission(httpMethod, uriInfo);
 		try {
 			return dao.getDeclaredConstructor(
 					constructorTypes).newInstance(

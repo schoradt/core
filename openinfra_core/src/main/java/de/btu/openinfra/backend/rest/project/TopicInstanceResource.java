@@ -8,7 +8,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriInfo;
 
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.AttributeValueGeomType;
@@ -18,6 +20,7 @@ import de.btu.openinfra.backend.db.pojos.TopicInstanceAssociationPojo;
 import de.btu.openinfra.backend.db.pojos.TopicInstancePojo;
 import de.btu.openinfra.backend.db.pojos.TopicPojo;
 import de.btu.openinfra.backend.db.rbac.AttributeValueRbac;
+import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
 import de.btu.openinfra.backend.db.rbac.TopicInstanceAssociationRbac;
 import de.btu.openinfra.backend.db.rbac.TopicInstanceRbac;
 import de.btu.openinfra.backend.db.rbac.TopicRbac;
@@ -33,21 +36,28 @@ public class TopicInstanceResource {
 	@GET
 	@Path("count")
 	@Produces({MediaType.TEXT_PLAIN})
-	public long getTopicInstanceCount(@PathParam("projectId") UUID projectId) {
+	public long getTopicInstanceCount(
+			@Context UriInfo uriInfo,
+			@PathParam("projectId") UUID projectId) {
 		return new TopicInstanceRbac(
 				projectId,
-				OpenInfraSchemas.PROJECTS).getCount();
+				OpenInfraSchemas.PROJECTS).getCount(
+						OpenInfraHttpMethod.GET, 
+						uriInfo);
 	}
 
 	@GET
 	@Path("{topicInstanceId}")
 	public TopicInstancePojo get(
+			@Context UriInfo uriInfo,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("topicInstanceId") UUID topicInstanceId) {
 		return new TopicInstanceRbac(
 				projectId,
 				OpenInfraSchemas.PROJECTS).read(
+						OpenInfraHttpMethod.GET, 
+						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						topicInstanceId);
 	}
@@ -55,6 +65,7 @@ public class TopicInstanceResource {
 	@GET
 	@Path("{topicInstanceId}/associations")
 	public List<TopicInstanceAssociationPojo> getAssociations(
+			@Context UriInfo uriInfo,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("topicInstanceId") UUID topicInstanceId,
@@ -63,6 +74,8 @@ public class TopicInstanceResource {
 		return new TopicInstanceAssociationRbac(
 				projectId,
 				OpenInfraSchemas.PROJECTS).read(
+						OpenInfraHttpMethod.GET, 
+						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						topicInstanceId,
 						offset,
@@ -72,12 +85,15 @@ public class TopicInstanceResource {
 	@GET
 	@Path("{topicInstanceId}/parents")
 	public List<TopicInstanceAssociationPojo> getParents(
+			@Context UriInfo uriInfo,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("topicInstanceId") UUID topicInstanceId) {
 		return new TopicInstanceAssociationRbac(
 				projectId,
 				OpenInfraSchemas.PROJECTS).readParents(
+						OpenInfraHttpMethod.GET, 
+						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						topicInstanceId);
 	}
@@ -86,17 +102,22 @@ public class TopicInstanceResource {
 	@Path("{topicInstanceId}/associations/count")
 	@Produces({MediaType.TEXT_PLAIN})
 	public long getTopicInstanceAssociationCount(
+			@Context UriInfo uriInfo,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("topicInstanceId")
 				UUID topicInstanceId) {
 		return new TopicInstanceAssociationRbac(
 				projectId,
-				OpenInfraSchemas.PROJECTS).getCount(topicInstanceId);
+				OpenInfraSchemas.PROJECTS).getCount(
+						OpenInfraHttpMethod.GET, 
+						uriInfo,
+						topicInstanceId);
 	}
 
 	@GET
 	@Path("{topicInstanceId}/associations/{associatedTopicInstanceId}")
 	public List<TopicInstanceAssociationPojo> getAssociations(
+			@Context UriInfo uriInfo,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("topicInstanceId") UUID topicInstanceId,
@@ -107,6 +128,8 @@ public class TopicInstanceResource {
 		return new TopicInstanceAssociationRbac(
 				projectId,
 				OpenInfraSchemas.PROJECTS).read(
+						OpenInfraHttpMethod.GET, 
+						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						topicInstanceId,
 						associatedTopicInstanceId, offset, size);
@@ -116,6 +139,7 @@ public class TopicInstanceResource {
     @Path("/{topicInstanceId}/attributetypes/{attributeTypeId}/attributevalues"
             + "/new")
     public AttributeValuePojo newAttributeValue(
+    		@Context UriInfo uriInfo,
             @QueryParam("language") String language,
             @PathParam("projectId") UUID projectId,
             @PathParam("topicInstanceId") UUID topicInstanceId,
@@ -124,6 +148,8 @@ public class TopicInstanceResource {
         return new AttributeValueRbac(
                 projectId,
                 OpenInfraSchemas.PROJECTS).newAttributeValue(
+						OpenInfraHttpMethod.GET, 
+						uriInfo,
                         topicInstanceId,
                         attributeTypeId,
                         PtLocaleDao.forLanguageTag(language));
@@ -132,6 +158,7 @@ public class TopicInstanceResource {
 	@GET
     @Path("/{topicInstanceId}/attributetypes/{attributeTypeId}/attributevalues")
     public List<AttributeValuePojo> getAttributeValues(
+    		@Context UriInfo uriInfo,
             @QueryParam("language") String language,
             @PathParam("projectId") UUID projectId,
             @PathParam("topicInstanceId") UUID topicInstanceId,
@@ -141,6 +168,8 @@ public class TopicInstanceResource {
         return new AttributeValueRbac(
                 projectId,
                 OpenInfraSchemas.PROJECTS).read(
+						OpenInfraHttpMethod.GET, 
+						uriInfo,
                         PtLocaleDao.forLanguageTag(language),
                         topicInstanceId,
                         attributeTypeId,
@@ -151,6 +180,7 @@ public class TopicInstanceResource {
 	@GET
     @Path("{topicInstanceId}/topic")
     public TopicPojo get(
+    		@Context UriInfo uriInfo,
             @QueryParam("language") String language,
             @PathParam("projectId") UUID projectId,
             @PathParam("topicInstanceId") UUID topicInstanceId,
@@ -158,6 +188,8 @@ public class TopicInstanceResource {
         return new TopicRbac(
                 projectId,
                 OpenInfraSchemas.PROJECTS).read(
+						OpenInfraHttpMethod.GET, 
+						uriInfo,
                         PtLocaleDao.forLanguageTag(language),
                         topicInstanceId,
                         geomType);
