@@ -3,6 +3,7 @@ package de.btu.openinfra.backend.rest.project;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -58,6 +59,7 @@ public class ProjectResource {
 	@GET
 	public List<ProjectPojo> get(
 			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
@@ -70,7 +72,9 @@ public class ProjectResource {
 	@GET
 	@Path("count")
 	@Produces({MediaType.TEXT_PLAIN})
-	public long getMainProjectsCount(@Context UriInfo uriInfo) {
+	public long getMainProjectsCount(
+			@Context UriInfo uriInfo, 
+			@Context HttpServletRequest request) {
 		return new ProjectRbac(
 				null,
 				OpenInfraSchemas.META_DATA).getMainProjectsCount();
@@ -86,13 +90,15 @@ public class ProjectResource {
 	@Path("{projectId}")
 	public Response get(
 			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId) {
 		return OpenInfraResponseBuilder.getResponse(
 				new ProjectRbac(
 						projectId,
 						OpenInfraSchemas.PROJECTS).read(
-								OpenInfraHttpMethod.GET, 
+								OpenInfraHttpMethod.valueOf(
+										request.getMethod()), 
 								uriInfo,
 								PtLocaleDao.forLanguageTag(language),
 								projectId));
@@ -111,6 +117,7 @@ public class ProjectResource {
 	@Path("{projectId}/subprojects")
 	public List<ProjectPojo> getSubProjects(
 			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@QueryParam("offset") int offset,
@@ -118,7 +125,7 @@ public class ProjectResource {
 		return new ProjectRbac(
 				projectId,
 				OpenInfraSchemas.PROJECTS).readSubProjects(
-						OpenInfraHttpMethod.GET, 
+						OpenInfraHttpMethod.valueOf(request.getMethod()), 
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						offset,
@@ -130,11 +137,12 @@ public class ProjectResource {
 	@Produces({MediaType.TEXT_PLAIN})
 	public long getSubProjectsCount(
 			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			@PathParam("projectId") UUID projectId) {
 		return new ProjectRbac(
 				projectId,
 				OpenInfraSchemas.PROJECTS).getSubProjectsCount(
-						OpenInfraHttpMethod.GET, 
+						OpenInfraHttpMethod.valueOf(request.getMethod()), 
 						uriInfo);
 	}
 
@@ -142,13 +150,14 @@ public class ProjectResource {
 	@Path("{projectId}/new")
     public ProjectPojo newSubProject(
     		@Context UriInfo uriInfo,
+    		@Context HttpServletRequest request,
             @QueryParam("language") String language,
             @PathParam("projectId") UUID projectId) {
         return new ProjectRbac(
                         projectId,
                         OpenInfraSchemas.PROJECTS)
                     .newSubProject(
-                    		OpenInfraHttpMethod.GET, 
+                    		OpenInfraHttpMethod.valueOf(request.getMethod()), 
     						uriInfo,
     						PtLocaleDao.forLanguageTag(language));
     }
@@ -168,7 +177,8 @@ public class ProjectResource {
 	 */
 	@POST
 	public Response createProject(
-			@Context UriInfo uriInfo, 
+			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			ProjectPojo project) {
 	    // create the project
 		UUID id = ProjectDao.createProject(project);
@@ -196,13 +206,14 @@ public class ProjectResource {
     @Path("{projectId}")
     public Response updateProject(
     		@Context UriInfo uriInfo,
+    		@Context HttpServletRequest request,
     		@PathParam("projectId") UUID projectId,
     		ProjectPojo project) {
         // TODO compare projectId in createOrUpdate method?
     	UUID uuid = new ProjectRbac(
     			projectId,
     			OpenInfraSchemas.PROJECTS).createOrUpdate(
-    					OpenInfraHttpMethod.GET, 
+    					OpenInfraHttpMethod.valueOf(request.getMethod()), 
 						uriInfo,
 						project);
     	return OpenInfraResponseBuilder.putResponse(uuid);
@@ -224,6 +235,7 @@ public class ProjectResource {
 	@Path("{projectId}")
 	public Response deleteProject(
 			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 	        @PathParam("projectId") UUID projectId) {
 	    // TODO this method will work correctly if the project creation works
 	    //      completely
@@ -243,12 +255,13 @@ public class ProjectResource {
 	@Path("{projectId}/parents")
 	public List<ProjectPojo> readParents(
 			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId) {
 		return new ProjectRbac(
 				projectId,
 				OpenInfraSchemas.PROJECTS).readParents(
-						OpenInfraHttpMethod.GET, 
+						OpenInfraHttpMethod.valueOf(request.getMethod()), 
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language));
 	}

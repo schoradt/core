@@ -3,6 +3,7 @@ package de.btu.openinfra.backend.rest.view;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -36,6 +37,7 @@ public class AttributeTypeGroupResource {
 	@Template(name="/views/list/AttributeTypeGroups.jsp")
 	public List<AttributeTypeGroupPojo> getView(
 			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
@@ -44,7 +46,7 @@ public class AttributeTypeGroupResource {
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new de.btu.openinfra.backend.rest.AttributeTypeGroupResource()
-			.get(uriInfo, language, projectId, 
+			.get(uriInfo, request, language, projectId, 
 					schema, sortOrder, orderBy, offset, size);
 	}
 
@@ -53,12 +55,14 @@ public class AttributeTypeGroupResource {
 	@Template(name="/views/detail/AttributeTypeGroups.jsp")
 	public AttributeTypeGroupPojo getView(
 			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@PathParam("attributeTypeGroupId") UUID attributeTypeGroupId) {
 		return new de.btu.openinfra.backend.rest.AttributeTypeGroupResource()
-			.get(uriInfo, language, projectId, schema, attributeTypeGroupId);
+			.get(uriInfo, request, language, 
+					projectId, schema, attributeTypeGroupId);
 	}
 
 	@GET
@@ -66,6 +70,7 @@ public class AttributeTypeGroupResource {
 	@Template(name="/views/list/AttributeTypeToAttributeTypeGroups.jsp")
 	public List<AttributeTypeToAttributeTypeGroupPojo> getView(
 			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
@@ -75,7 +80,7 @@ public class AttributeTypeGroupResource {
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new de.btu.openinfra.backend.rest.AttributeTypeGroupResource()
-			.get(uriInfo, language, projectId, schema,
+			.get(uriInfo, request, language, projectId, schema,
 					attributeTypeGroupId, sortOrder, orderBy, offset, size);
 	}
 

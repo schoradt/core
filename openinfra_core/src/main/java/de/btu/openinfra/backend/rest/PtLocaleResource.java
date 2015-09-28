@@ -3,6 +3,7 @@ package de.btu.openinfra.backend.rest;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -36,6 +37,7 @@ public class PtLocaleResource {
 	@GET
 	public List<PtLocalePojo> get(
 			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
@@ -46,7 +48,7 @@ public class PtLocaleResource {
 		return new PtLocaleRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						OpenInfraHttpMethod.GET, 
+						OpenInfraHttpMethod.valueOf(request.getMethod()), 
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						sortOrder,
@@ -60,12 +62,13 @@ public class PtLocaleResource {
 	@Produces({MediaType.TEXT_PLAIN})
 	public long getCount(
 			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema) {
 		return new PtLocaleRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
-						OpenInfraHttpMethod.GET, 
+						OpenInfraHttpMethod.valueOf(request.getMethod()), 
 						uriInfo);
 	}
 
@@ -73,6 +76,7 @@ public class PtLocaleResource {
 	@Path("{ptLocaleId}")
 	public PtLocalePojo get(
 			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
@@ -80,7 +84,7 @@ public class PtLocaleResource {
 		return new PtLocaleRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						OpenInfraHttpMethod.GET, 
+						OpenInfraHttpMethod.valueOf(request.getMethod()), 
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						ptLocaleId);

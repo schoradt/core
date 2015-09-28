@@ -5,6 +5,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -61,6 +62,7 @@ public class TopicPdfResource {
 	@Path("{topicInstanceId}/topic.pdf")
 	public Response getTopicAsPdf(
 			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("topicInstanceId") UUID topicInstanceId,
@@ -70,6 +72,7 @@ public class TopicPdfResource {
 		// resource class to retrieve the requested object. 
 		TopicPojo pojo = new TopicInstanceResource().get(
 				uriInfo,
+				request,
 				language, 
 				projectId, 
 				topicInstanceId, 

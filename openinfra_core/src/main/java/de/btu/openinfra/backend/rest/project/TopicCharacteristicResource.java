@@ -3,6 +3,7 @@ package de.btu.openinfra.backend.rest.project;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -53,6 +54,7 @@ public class TopicCharacteristicResource {
 	@GET
 	public List<TopicInstancePojo> getTopicInstances(
 			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("topicCharacteristicId") UUID topicCharacteristicId,
@@ -71,7 +73,7 @@ public class TopicCharacteristicResource {
 			return new TopicInstanceRbac(
 					projectId,
 					OpenInfraSchemas.PROJECTS).read(
-							OpenInfraHttpMethod.GET, 
+							OpenInfraHttpMethod.valueOf(request.getMethod()), 
 							uriInfo,
 							PtLocaleDao.forLanguageTag(language),
 							topicCharacteristicId,
@@ -82,7 +84,7 @@ public class TopicCharacteristicResource {
 			return new TopicInstanceRbac(
 					projectId,
 					OpenInfraSchemas.PROJECTS).read(
-							OpenInfraHttpMethod.GET, 
+							OpenInfraHttpMethod.valueOf(request.getMethod()), 
 							uriInfo,
 					PtLocaleDao.forLanguageTag(language),
 					topicCharacteristicId,
@@ -98,12 +100,13 @@ public class TopicCharacteristicResource {
 	@Produces({MediaType.TEXT_PLAIN})
 	public long getTopicInstancesCount(
 			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("topicCharacteristicId") UUID topicCharacteristicId) {
 		return new TopicInstanceRbac(
 				projectId,
 				OpenInfraSchemas.PROJECTS).getCount(
-						OpenInfraHttpMethod.GET, 
+						OpenInfraHttpMethod.valueOf(request.getMethod()), 
 						uriInfo,
 						topicCharacteristicId);
 	}
@@ -124,6 +127,7 @@ public class TopicCharacteristicResource {
     @Path("geomz")
     public List<TopicGeomzPojo> getTopicInstancesGeomz(
     		@Context UriInfo uriInfo,
+    		@Context HttpServletRequest request,
             @QueryParam("language") String language,
             @PathParam("projectId") UUID projectId,
             @PathParam("topicCharacteristicId") UUID topicCharacteristicId,
@@ -134,7 +138,7 @@ public class TopicCharacteristicResource {
 	            projectId,
 	            OpenInfraSchemas.PROJECTS,
 	            geomType).read(
-	            		OpenInfraHttpMethod.GET, 
+	            		OpenInfraHttpMethod.valueOf(request.getMethod()), 
 						uriInfo,
 	                    PtLocaleDao.forLanguageTag(language),
 	                    topicCharacteristicId,
@@ -156,6 +160,7 @@ public class TopicCharacteristicResource {
     @Path("geomz/count")
     public long getTopicInstancesGeomzCount(
     		@Context UriInfo uriInfo,
+    		@Context HttpServletRequest request,
             @QueryParam("language") String language,
             @PathParam("projectId") UUID projectId,
             @PathParam("topicCharacteristicId") UUID topicCharacteristicId,
@@ -164,7 +169,7 @@ public class TopicCharacteristicResource {
                 projectId,
                 OpenInfraSchemas.PROJECTS,
                 geomType).getCount(
-                		OpenInfraHttpMethod.GET, 
+                		OpenInfraHttpMethod.valueOf(request.getMethod()), 
 						uriInfo,
 						topicCharacteristicId);
     }

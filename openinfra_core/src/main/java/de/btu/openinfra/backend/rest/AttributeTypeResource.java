@@ -3,6 +3,7 @@ package de.btu.openinfra.backend.rest;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -39,7 +40,8 @@ public class AttributeTypeResource {
 
 	@GET
 	public List<AttributeTypePojo> get(
-			@Context UriInfo uriInfo, 
+			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
@@ -50,7 +52,7 @@ public class AttributeTypeResource {
 		return new AttributeTypeRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						OpenInfraHttpMethod.GET, 
+						OpenInfraHttpMethod.valueOf(request.getMethod()), 
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						sortOrder,
@@ -62,18 +64,18 @@ public class AttributeTypeResource {
 	@GET
 	@Path("{attributeTypeId}/associations")
 	public List<AttributeTypeAssociationPojo> getAssociations(
-			@Context UriInfo uriInfo, 
+			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@PathParam("attributeTypeId") UUID attributeTypeId,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
-
 		return new AttributeTypeAssociationRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						OpenInfraHttpMethod.GET, 
+						OpenInfraHttpMethod.valueOf(request.getMethod()), 
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						attributeTypeId,
@@ -85,14 +87,15 @@ public class AttributeTypeResource {
     @Path("{attributeTypeId}/associations/count")
 	@Produces({MediaType.TEXT_PLAIN})
     public long getAssociationsCount(
-    		@Context UriInfo uriInfo, 
+    		@Context UriInfo uriInfo,
+    		@Context HttpServletRequest request,
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema,
             @PathParam("attributeTypeId") UUID attributeTypeId) {
         return new AttributeTypeAssociationRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
-						OpenInfraHttpMethod.GET, 
+						OpenInfraHttpMethod.valueOf(request.getMethod()), 
 						uriInfo,
                         attributeTypeId);
     }
@@ -100,7 +103,8 @@ public class AttributeTypeResource {
 	@GET
 	@Path("{attributeTypeId}/associations/{associatedAttributeTypeId}")
 	public List<AttributeTypeAssociationPojo> getAssociations(
-			@Context UriInfo uriInfo, 
+			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
@@ -109,11 +113,10 @@ public class AttributeTypeResource {
 				UUID associatedAttributeTypeId,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
-
 		return new AttributeTypeAssociationRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						OpenInfraHttpMethod.GET, 
+						OpenInfraHttpMethod.valueOf(request.getMethod()), 
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						attributeTypeId,
@@ -126,20 +129,22 @@ public class AttributeTypeResource {
 	@Path("count")
 	@Produces({MediaType.TEXT_PLAIN})
 	public long getCount(
-			@Context UriInfo uriInfo, 
+			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema) {
 		return new AttributeTypeRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
-						OpenInfraHttpMethod.GET, 
+						OpenInfraHttpMethod.valueOf(request.getMethod()), 
 						uriInfo);
 	}
 
 	@GET
 	@Path("{attributeTypeId}")
 	public AttributeTypePojo get(
-			@Context UriInfo uriInfo, 
+			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
@@ -147,7 +152,7 @@ public class AttributeTypeResource {
 		return new AttributeTypeRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						OpenInfraHttpMethod.GET, 
+						OpenInfraHttpMethod.valueOf(request.getMethod()), 
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						attributeTypeId);
@@ -156,7 +161,8 @@ public class AttributeTypeResource {
 	@GET
 	@Path("{attributeTypeId}/attributetypegroups")
 	public List<AttributeTypeGroupToAttributeTypePojo> get(
-			@Context UriInfo uriInfo, 
+			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
@@ -166,7 +172,7 @@ public class AttributeTypeResource {
 		return new AttributeTypeGroupToAttributeTypeRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						OpenInfraHttpMethod.GET, 
+						OpenInfraHttpMethod.valueOf(request.getMethod()), 
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						attributeTypeId,
@@ -178,14 +184,15 @@ public class AttributeTypeResource {
 	@Path("{attributeTypeId}/attributetypegroups/count")
 	@Produces({MediaType.TEXT_PLAIN})
 	public long getAttributeTypeGroupsCount(
-			@Context UriInfo uriInfo, 
+			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@PathParam("attributeTypeId") UUID attributeTypeId) {
 		return new AttributeTypeGroupToAttributeTypeRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
-						OpenInfraHttpMethod.GET, 
+						OpenInfraHttpMethod.valueOf(request.getMethod()), 
 						uriInfo,
 						attributeTypeId);
 	}
@@ -193,7 +200,8 @@ public class AttributeTypeResource {
 	@GET
 	@Path("{attributeTypeId}/attributetypegroups/{attributeTypeGroupId}")
 	public List<AttributeTypeGroupToAttributeTypePojo> get(
-			@Context UriInfo uriInfo, 
+			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
@@ -204,7 +212,7 @@ public class AttributeTypeResource {
 		return new AttributeTypeGroupToAttributeTypeRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						OpenInfraHttpMethod.GET, 
+						OpenInfraHttpMethod.valueOf(request.getMethod()), 
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						attributeTypeId,
@@ -216,7 +224,8 @@ public class AttributeTypeResource {
 	@GET
     @Path("/new")
     public AttributeTypePojo newAttributeType(
-    		@Context UriInfo uriInfo, 
+    		@Context UriInfo uriInfo,
+    		@Context HttpServletRequest request,
             @QueryParam("language") String language,
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema) {
@@ -224,21 +233,22 @@ public class AttributeTypeResource {
                         projectId,
                         OpenInfraSchemas.valueOf(schema.toUpperCase()))
                     .newAttributeType(
-    						OpenInfraHttpMethod.GET, 
+    						OpenInfraHttpMethod.valueOf(request.getMethod()), 
     						uriInfo,
     						PtLocaleDao.forLanguageTag(language));
     }
 
     @POST
     public Response create(
-    		@Context UriInfo uriInfo, 
+    		@Context UriInfo uriInfo,
+    		@Context HttpServletRequest request,
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema,
             AttributeTypePojo pojo) {
         UUID id = new AttributeTypeRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
-						OpenInfraHttpMethod.GET, 
+						OpenInfraHttpMethod.valueOf(request.getMethod()), 
 						uriInfo,
                         pojo, 
                         pojo.getMetaData());
@@ -249,6 +259,7 @@ public class AttributeTypeResource {
     @Path("{attributeTypeId}")
     public Response delete(
     		@Context UriInfo uriInfo,
+    		@Context HttpServletRequest request,
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema,
             @PathParam("attributeTypeId") UUID attributeTypeId) {
@@ -256,7 +267,8 @@ public class AttributeTypeResource {
                 new AttributeTypeRbac(
                         projectId,
                         OpenInfraSchemas.valueOf(schema.toUpperCase())).delete(
-        						OpenInfraHttpMethod.GET, 
+        						OpenInfraHttpMethod.valueOf(
+        								request.getMethod()), 
         						uriInfo,
                                 attributeTypeId),
                         attributeTypeId);
@@ -266,6 +278,7 @@ public class AttributeTypeResource {
     @Path("{attributeTypeId}")
     public Response update(
     		@Context UriInfo uriInfo,
+    		@Context HttpServletRequest request,
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema,
             @PathParam("attributeTypeId") UUID attributeTypeId,
@@ -274,7 +287,8 @@ public class AttributeTypeResource {
                 new AttributeTypeRbac(
                         projectId,
                         OpenInfraSchemas.PROJECTS).createOrUpdate(
-        						OpenInfraHttpMethod.GET, 
+        						OpenInfraHttpMethod.valueOf(
+        								request.getMethod()), 
         						uriInfo,
         						pojo,
                                 attributeTypeId, 
@@ -285,6 +299,7 @@ public class AttributeTypeResource {
     @Path("{attributeTypeId}/associations/new")
     public AttributeTypeAssociationPojo newAttributeTypeAssociation(
     		@Context UriInfo uriInfo,
+    		@Context HttpServletRequest request,
             @QueryParam("language") String language,
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema,
@@ -293,7 +308,7 @@ public class AttributeTypeResource {
                         projectId,
                         OpenInfraSchemas.valueOf(schema.toUpperCase()))
                     .newAttributeTypeAssociation(
-    						OpenInfraHttpMethod.GET, 
+    						OpenInfraHttpMethod.valueOf(request.getMethod()), 
     						uriInfo,
     						attributeTypeId);
     }
@@ -302,6 +317,7 @@ public class AttributeTypeResource {
     @Path("{attributeTypeId}/associations")
     public Response createAssociation(
     		@Context UriInfo uriInfo,
+    		@Context HttpServletRequest request,
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema,
             @PathParam("attributeTypeId") UUID attributeTypeId,
@@ -309,7 +325,7 @@ public class AttributeTypeResource {
         UUID id = new AttributeTypeAssociationRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
-						OpenInfraHttpMethod.GET, 
+						OpenInfraHttpMethod.valueOf(request.getMethod()), 
 						uriInfo,
                         pojo, attributeTypeId,
                         pojo.getAssociationAttributeTypeId(),
@@ -321,6 +337,7 @@ public class AttributeTypeResource {
     @Path("{attributeTypeId}/associations/{associatedAttributeTypeId}")
     public Response deleteAssociation(
     		@Context UriInfo uriInfo,
+    		@Context HttpServletRequest request,
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema,
             @PathParam("associatedAttributeTypeId")
@@ -329,7 +346,8 @@ public class AttributeTypeResource {
                 new AttributeTypeAssociationRbac(
                         projectId,
                         OpenInfraSchemas.valueOf(schema.toUpperCase())).delete(
-        						OpenInfraHttpMethod.GET, 
+        						OpenInfraHttpMethod.valueOf(
+        								request.getMethod()), 
         						uriInfo,
                                 associatedAttributeTypeId),
                                 associatedAttributeTypeId);
@@ -339,6 +357,7 @@ public class AttributeTypeResource {
     @Path("{attributeTypeId}/associations/{associatedAttributeTypeId}")
     public Response updateAssociation(
     		@Context UriInfo uriInfo,
+    		@Context HttpServletRequest request,
             @PathParam("projectId") UUID projectId,
             @PathParam("attributeTypeId") UUID attributeTypeId,
             @PathParam("associatedAttributeTypeId")
@@ -350,7 +369,8 @@ public class AttributeTypeResource {
                         projectId,
                         OpenInfraSchemas.valueOf(schema.toUpperCase()))
                             .createOrUpdate(
-                            		OpenInfraHttpMethod.GET, 
+                            		OpenInfraHttpMethod.valueOf(
+                            				request.getMethod()), 
             						uriInfo,
                                     pojo, attributeTypeId,
                                     pojo.getAssociationAttributeTypeId(),

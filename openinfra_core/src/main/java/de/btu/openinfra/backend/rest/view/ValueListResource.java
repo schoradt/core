@@ -3,6 +3,7 @@ package de.btu.openinfra.backend.rest.view;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -30,6 +31,7 @@ public class ValueListResource {
 	@Template(name="/views/list/ValueLists.jsp")
 	public List<ValueListPojo> getView(
 			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
@@ -38,8 +40,8 @@ public class ValueListResource {
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new de.btu.openinfra.backend.rest.ValueListResource()
-				.get(uriInfo, language, projectId, schema, sortOrder, orderBy, 
-						offset, size);
+				.get(uriInfo, request, language, projectId, schema,
+						sortOrder, orderBy,	offset, size);
 	}
 
 	@GET
@@ -47,12 +49,13 @@ public class ValueListResource {
 	@Template(name="/views/detail/ValueLists.jsp")
 	public ValueListPojo getView(
 			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@PathParam("valueListId") UUID valueListId) {
 		return new de.btu.openinfra.backend.rest.ValueListResource()
-			.get(uriInfo, language, projectId, schema, valueListId);
+			.get(uriInfo, request, language, projectId, schema, valueListId);
 	}
 
 	@GET
@@ -60,6 +63,7 @@ public class ValueListResource {
 	@Template(name="/views/list/ValueListValues.jsp")
 	public List<ValueListValuePojo> getValueListValues(
 			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
@@ -67,7 +71,7 @@ public class ValueListResource {
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new de.btu.openinfra.backend.rest.ValueListResource()
-			.getValueListValues(uriInfo, language, projectId, schema,
+			.getValueListValues(uriInfo, request, language, projectId, schema,
 					valueListId, offset, size);
 	}
 
@@ -76,10 +80,11 @@ public class ValueListResource {
     @Template(name="/views/detail/ValueLists.jsp")
     public ValueListPojo newValueList(
     		@Context UriInfo uriInfo,
+    		@Context HttpServletRequest request,
             @QueryParam("language") String language,
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema) {
         return new de.btu.openinfra.backend.rest.ValueListResource()
-            .newValueList(uriInfo, language, projectId, schema);
+            .newValueList(uriInfo, request, language, projectId, schema);
     }
 }

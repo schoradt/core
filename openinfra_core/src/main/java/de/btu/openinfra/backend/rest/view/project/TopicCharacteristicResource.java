@@ -3,6 +3,7 @@ package de.btu.openinfra.backend.rest.view.project;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -29,6 +30,7 @@ public class TopicCharacteristicResource {
 	@Template(name="/views/list/TopicInstances.jsp")
 	public List<TopicInstancePojo> getTopicInstancesView(
 			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("topicCharacteristicId") UUID topicCharacteristicId,
@@ -39,7 +41,7 @@ public class TopicCharacteristicResource {
 			@QueryParam("size") int size) {
 		return new de.btu.openinfra.backend.rest.project.
 		        TopicCharacteristicResource().getTopicInstances(
-		        		uriInfo,
+		        		uriInfo, request,
 		                language, projectId, topicCharacteristicId,
 		                filter, sortOrder, orderBy, offset, size);
 	}

@@ -3,6 +3,7 @@ package de.btu.openinfra.backend.rest.view;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -30,6 +31,7 @@ public class AttributeTypeResource {
 	@Template(name="/views/list/AttributeTypes.jsp")
 	public List<AttributeTypePojo> get(
 			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
@@ -38,7 +40,7 @@ public class AttributeTypeResource {
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new de.btu.openinfra.backend.rest.AttributeTypeResource()
-			.get(uriInfo, language, projectId, 
+			.get(uriInfo, request, language, projectId, 
 					schema, sortOrder, orderBy, offset, size);
 	}
 
@@ -47,12 +49,14 @@ public class AttributeTypeResource {
 	@Template(name="/views/detail/AttributeTypes.jsp")
 	public AttributeTypePojo getView(
 			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@PathParam("attributeTypeId") UUID attributeTypeId) {
 		return new de.btu.openinfra.backend.rest.AttributeTypeResource()
-			.get(uriInfo, language, projectId, schema, attributeTypeId);
+			.get(uriInfo, request, language, 
+					projectId, schema, attributeTypeId);
 	}
 
 	@GET
@@ -60,6 +64,7 @@ public class AttributeTypeResource {
 	@Path("{attributeTypeId}/attributetypegroups")
 	public List<AttributeTypeGroupToAttributeTypePojo> getView(
 			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
@@ -67,7 +72,7 @@ public class AttributeTypeResource {
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new de.btu.openinfra.backend.rest.AttributeTypeResource()
-			.get(uriInfo, language, projectId, schema, 
+			.get(uriInfo, request, language, projectId, schema, 
 					attributeTypeId, offset, size);
 	}
 

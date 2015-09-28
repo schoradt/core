@@ -3,6 +3,7 @@ package de.btu.openinfra.backend.rest.view.project;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -45,11 +46,13 @@ public class ProjectResource {
 	@Template(name="/views/list/Projects.jsp")
 	public List<ProjectPojo> get(
 			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new de.btu.openinfra.backend.rest.project.ProjectResource().get(
 				uriInfo,
+				request,
 				language, 
 				offset, 
 				size);
@@ -60,10 +63,12 @@ public class ProjectResource {
 	@Template(name="/views/detail/Projects.jsp")
 	public Response getView(
 			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId) {
 		return new de.btu.openinfra.backend.rest.project.ProjectResource().get(
 				uriInfo,
+				request,
 				language, 
 				projectId);
 	}
@@ -73,6 +78,7 @@ public class ProjectResource {
 	@Template(name="/views/list/Projects.jsp")
 	public Response getSubProjectsView(
 			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@QueryParam("offset") int offset,
@@ -81,7 +87,8 @@ public class ProjectResource {
 					new ProjectRbac(
 							projectId,
 							OpenInfraSchemas.PROJECTS).readSubProjects(
-									OpenInfraHttpMethod.GET,
+									OpenInfraHttpMethod.valueOf(
+											request.getMethod()),
 									uriInfo,
 									PtLocaleDao.forLanguageTag(language),
 									offset,

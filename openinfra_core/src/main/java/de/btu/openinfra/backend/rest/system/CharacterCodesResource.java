@@ -3,6 +3,7 @@ package de.btu.openinfra.backend.rest.system;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -37,6 +38,7 @@ public class CharacterCodesResource {
 	@GET
 	public List<CharacterCodePojo> get(
 			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
 			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
 			@QueryParam("orderBy") OpenInfraOrderByEnum orderBy,
@@ -45,7 +47,7 @@ public class CharacterCodesResource {
 		return new CharacterCodeRbac(
 				null,
 				OpenInfraSchemas.SYSTEM).read(
-						OpenInfraHttpMethod.GET, 
+						OpenInfraHttpMethod.valueOf(request.getMethod()), 
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						sortOrder,
@@ -58,12 +60,13 @@ public class CharacterCodesResource {
 	@Path("{characterCodeId}")
 	public CharacterCodePojo get(
 			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
 			@PathParam("characterCodeId") UUID characterCodeId) {
 		return new CharacterCodeRbac(
 				null,
 				OpenInfraSchemas.SYSTEM).read(
-						OpenInfraHttpMethod.GET, 
+						OpenInfraHttpMethod.valueOf(request.getMethod()), 
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						characterCodeId);
@@ -72,11 +75,13 @@ public class CharacterCodesResource {
 	@GET
     @Path("count")
     @Produces({MediaType.TEXT_PLAIN})
-    public long getCharacterCodeCount(@Context UriInfo uriInfo) {
+    public long getCharacterCodeCount(
+    		@Context UriInfo uriInfo, 
+    		@Context HttpServletRequest request) {
         return new CharacterCodeRbac(
                 null,
                 OpenInfraSchemas.SYSTEM).getCount(
-                		OpenInfraHttpMethod.GET, 
+                		OpenInfraHttpMethod.valueOf(request.getMethod()), 
 						uriInfo);
 	}
 }

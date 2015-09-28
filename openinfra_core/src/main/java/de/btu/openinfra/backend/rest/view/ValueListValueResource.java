@@ -2,6 +2,7 @@ package de.btu.openinfra.backend.rest.view;
 
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -28,12 +29,14 @@ public class ValueListValueResource {
 	@Template(name="/views/detail/ValueListValues.jsp")
 	public ValueListValuePojo getView(
 			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@PathParam("valueListValueId") UUID valueListValueId) {
 		return new de.btu.openinfra.backend.rest.ValueListValuesResource()
-			.get(uriInfo, language, projectId, schema, valueListValueId);
+			.get(uriInfo, request, language, projectId, 
+					schema, valueListValueId);
 	}
 
     @GET
