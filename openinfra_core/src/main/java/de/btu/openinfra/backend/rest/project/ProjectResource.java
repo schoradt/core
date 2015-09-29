@@ -19,7 +19,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
-import de.btu.openinfra.backend.db.daos.ProjectDao;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.ProjectPojo;
 import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
@@ -181,7 +180,9 @@ public class ProjectResource {
 			@Context HttpServletRequest request,
 			ProjectPojo project) {
 	    // create the project
-		UUID id = ProjectDao.createProject(project);
+		UUID id = ProjectRbac.createProject(
+				project, 
+				OpenInfraHttpMethod.valueOf(request.getMethod()), uriInfo);
 		// TODO add informations to the meta data schema, this is necessary for
 		//      every REST end point this project should use
 		return OpenInfraResponseBuilder.postResponse(id);
@@ -239,9 +240,11 @@ public class ProjectResource {
 	        @PathParam("projectId") UUID projectId) {
 	    // TODO this method will work correctly if the project creation works
 	    //      completely
+		// TODO Use RBAC-Class here!
 	    System.out.println("not implemented yet");
 	    return null;
 	    /*
+	     * Use RBAC-Class here!
 		return OpenInfraResponseBuilder.deleteResponse(
                 new ProjectDao(
                         projectId,

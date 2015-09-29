@@ -77,4 +77,19 @@ public class ProjectRbac extends
 		return new ProjectDao(currentProjectId, schema).readParents(locale);
 	}
 	
+	public static UUID createProject(
+			ProjectPojo project,
+			OpenInfraHttpMethod httpMethod, 
+			UriInfo uriInfo) {
+		new ProjectRbac(null, OpenInfraSchemas.PROJECTS).checkPermission(
+				httpMethod, uriInfo);
+		return ProjectDao.createProject(project);
+	}
+	
+	public boolean deleteProject(
+			OpenInfraHttpMethod httpMethod, UriInfo uriInfo) {
+		checkPermission(httpMethod, uriInfo);
+		return new ProjectDao(currentProjectId, schema).deleteProject();
+	}
+	
 }
