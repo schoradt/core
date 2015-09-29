@@ -1,6 +1,8 @@
 package de.btu.openinfra.backend.db.pojos;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import de.btu.openinfra.backend.db.pojos.meta.CredentialsPojo;
@@ -34,6 +36,10 @@ public class PojoPrimer {
 
     public static OpenInfraPojo primePojoStatically(String pojoName) {
         return pojoPrimer.primePojo(pojoName);
+    }
+    
+    public static List<String> getPrimerNamesStatically() {
+        return pojoPrimer.getPrimerNames();
     }
 
     private void initiatePojoClasses() {
@@ -103,5 +109,9 @@ public class PojoPrimer {
             e.printStackTrace();
         }
         return pojo;
+    }
+    
+    private List<String> getPrimerNames() {
+        return new ArrayList<String>(pojoClasses.keySet());
     }
 }
