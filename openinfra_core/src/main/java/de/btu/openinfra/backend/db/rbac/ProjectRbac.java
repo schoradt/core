@@ -83,7 +83,7 @@ public class ProjectRbac extends
 			UriInfo uriInfo) {
 		checkPermission(httpMethod, uriInfo);
 		return new ProjectDao(
-		        null, OpenInfraSchemas.PROJECTS).createProject(project);
+		        null, OpenInfraSchemas.SYSTEM).createProject(project);
 	}
 
 	public boolean deleteProject(
