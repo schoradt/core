@@ -20,11 +20,13 @@ import javax.persistence.Converter;
 @Converter(autoApply = true)
 public class PostgresUuidConverter implements AttributeConverter<UUID, UUID> {
 	
-	public UUID convertToDatabaseColumn(UUID uuid) {
+    @Override
+    public UUID convertToDatabaseColumn(UUID uuid) {
 		return uuid;
 	}
 
-	public UUID convertToEntityAttribute(UUID uuid) {
+    @Override
+    public UUID convertToEntityAttribute(UUID uuid) {
 		return uuid;
 	}
 	

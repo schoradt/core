@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.btu.openinfra.core</groupId>
   <artifactId>openinfra_core</artifactId>
-  <version>1.1.5</version>
+  <version>1.2.0</version>
   <packaging>war</packaging>
   <name>openinfra_core</name>
   
@@ -202,11 +202,24 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>3.4</version>
 		</dependency>
+		
+		<!-- Security context -->
+		<dependency>
+		    <groupId>org.apache.shiro</groupId>
+		    <artifactId>shiro-core</artifactId>
+		    <version>${shiro.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.shiro</groupId>
+		    <artifactId>shiro-web</artifactId>
+		    <version>${shiro.version}</version>
+		</dependency>
     </dependencies>
     <properties>
         <jersey.version>2.18</jersey.version>
         <slf4j.version>1.7.12</slf4j.version>
         <solr.version>4.10.4</solr.version>
+        <shiro.version>1.2.4</shiro.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
   

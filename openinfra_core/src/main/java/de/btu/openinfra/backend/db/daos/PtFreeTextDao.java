@@ -23,7 +23,7 @@ import de.btu.openinfra.backend.db.pojos.PtFreeTextPojo;
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
  */
-public class PtFreeTextDao	extends OpenInfraDao<PtFreeTextPojo, PtFreeText> {
+public class PtFreeTextDao extends OpenInfraDao<PtFreeTextPojo, PtFreeText> {
 
 	/**
 	 * Represents a value which cannot be assigned to any language.

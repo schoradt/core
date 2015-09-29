@@ -18,7 +18,7 @@ import de.btu.openinfra.backend.db.daos.meta.LogDao;
 import de.btu.openinfra.backend.db.pojos.meta.LogPojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
-@Path("/metadata/logs")
+@Path(OpenInfraResponseBuilder.REST_URI_METADATA + "/logs")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET,
     MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY

@@ -18,8 +18,8 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 @Entity
 @Table(name="role_permissions")
 @NamedQuery(name="RolePermission.findAll", query="SELECT r FROM RolePermission r")
-public class RolePermission 
-	extends OpenInfraModelObject implements Serializable {
+public class RolePermission extends OpenInfraModelObject
+	implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	//bi-directional many-to-one association to Permission
@@ -50,5 +50,5 @@ public class RolePermission
 	public void setRoleBean(Role roleBean) {
 		this.roleBean = roleBean;
 	}
-	
+
 }

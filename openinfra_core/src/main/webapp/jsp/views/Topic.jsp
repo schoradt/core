@@ -149,7 +149,8 @@
 										<c:set var="currentDomain" value="${atv.attributeType.domain.uuid}"/>
 										<%
 											pageContext.setAttribute("values", new ValueListValueDao(
-																				UUID.fromString(pageContext.getAttribute("currentProject").toString()),
+																				UUID.fromString(ProjectDao.getCurrentProject(
+																						request.getAttribute("javax.servlet.forward.request_uri").toString())),
 																				OpenInfraSchemas.PROJECTS).read(
 																						PtLocaleDao.forLanguageTag(session.getAttribute("language").toString()), 
 																						UUID.fromString(pageContext.getAttribute("currentDomain").toString()), 
@@ -274,7 +275,8 @@
 			<c:set var="currentInstance" value="${it.topicInstance.uuid}"/>
 			<fmt:message key="please.wait.label"/>:
 			<%=new TopicInstanceAssociationDao(
-					UUID.fromString(pageContext.getAttribute("currentProject").toString()),
+					UUID.fromString(ProjectDao.getCurrentProject(
+							request.getAttribute("javax.servlet.forward.request_uri").toString())),
 					OpenInfraSchemas.PROJECTS).getCount(
 							UUID.fromString(pageContext.getAttribute("currentInstance").toString()))%>
 		</p>
@@ -428,7 +430,7 @@ $(document).ready(function() {
         // bind click handler to redirect to map
         $('#map').click(function() {
         	var qParams = "?tc=" + instance.topicCharacteristic.uuid + "&ti=" + instance.uuid
-        	window.open("${contextPath}/rest/projects/maps" + qParams, "_blank");
+        	window.open("${contextPath}/rest/v1/projects/maps" + qParams, "_blank");
         });
 	};
 	

@@ -19,7 +19,7 @@ import de.btu.openinfra.backend.db.daos.meta.DatabasesDao;
 import de.btu.openinfra.backend.db.pojos.meta.DatabasesPojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
-@Path("/metadata/databases")
+@Path(OpenInfraResponseBuilder.REST_URI_METADATA + "/databases")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET,
     MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY

@@ -4,6 +4,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
@@ -26,18 +29,35 @@ public class SubjectDao extends OpenInfraDao<SubjectPojo, Subject> {
 		super(null, OpenInfraSchemas.RBAC, Subject.class);
 	}
 	
+	/**
+	 * This method reads a RBAC model object by login from database. This is
+	 * required for Apache Shiro login. 
+	 * @param login the login name
+	 * @return the subject (user) as model object
+	 */
+	public Subject readModel(String login) {
+		try {
+			return em.createNamedQuery(
+					"Subject.findByLogin",
+					Subject.class).setParameter(
+							"login",
+							login).getSingleResult();			
+		} catch(Exception ex) {
+			throw new WebApplicationException(Response.Status.NOT_FOUND);
+		}
+	}
+	
 	public SubjectPojo read(String login) {
-		return mapToPojo(
-				null, 
-				em.createNamedQuery(
-						"Subject.findByLogin", 
-						Subject.class).setParameter(
-								"login", 
-								login).getSingleResult());
+		return mapToPojo(null, readModel(login));
 	}
 
 	@Override
 	public SubjectPojo mapToPojo(Locale locale, Subject modelObject) {
+		return mapToPojoStatically(locale, modelObject);
+	}
+	
+	public static SubjectPojo mapToPojoStatically(
+			Locale locale, Subject modelObject) {
 		SubjectPojo pojo = new SubjectPojo(modelObject);
 		pojo.setCreatedOn(modelObject.getCreatedOn());
 		pojo.setDefaultLanguage(PtLocaleDao.forLanguageTag(
@@ -59,7 +79,7 @@ public class SubjectDao extends OpenInfraDao<SubjectPojo, Subject> {
 		
 		pojo.setRoles(roles);
 		
-		return pojo;
+		return pojo;		
 	}
 
 	@Override

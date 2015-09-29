@@ -250,15 +250,8 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 		EntityTransaction et = em.getTransaction();
 		try {
 			et.begin();
-	        em.merge(result.getModelObject());
+			em.merge(result.getModelObject());
 			et.commit();
-
-			// This will force a synchronization of the current created entity.
-			// Necessary for retrieving the xmin value for newly created
-			// entities.
-			// TODO avoid refresh for updated objects
-            em.refresh(em.find(modelClass, result.getId()));
-
 			return result.getId();
 		} catch(RuntimeException ex) {
 			if(et != null && et.isActive()) {

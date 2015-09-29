@@ -79,7 +79,8 @@
 															pageContext.setAttribute(
 																												"columnName",
 																												new AttributeTypeDao(
-																												UUID.fromString(pageContext.getAttribute("currentProject").toString()),
+																												UUID.fromString(ProjectDao.getCurrentProject(
+																														request.getAttribute("javax.servlet.forward.request_uri").toString())),
 																												OpenInfraSchemas.PROJECTS).read(
 																														PtLocaleDao.forLanguageTag(session.getAttribute("language").toString()), 
 																														UUID.fromString(pageContext.getAttribute("setting").toString())),
