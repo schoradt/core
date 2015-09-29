@@ -1,6 +1,7 @@
 package de.btu.openinfra.backend.db.daos.rbac;
 
 import java.util.Locale;
+import java.util.UUID;
 
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
@@ -13,6 +14,10 @@ public class OpenInfraObjectDao
 
 	public OpenInfraObjectDao() {
 		super(null, OpenInfraSchemas.RBAC, OpenInfraObject.class);
+	}
+	
+	public OpenInfraObjectDao(UUID currentProjectId, OpenInfraSchemas schema) {
+		super(currentProjectId, schema, OpenInfraObject.class);
 	}
 
 	@Override

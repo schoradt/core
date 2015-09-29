@@ -1,6 +1,7 @@
 package de.btu.openinfra.backend.db.daos.rbac;
 
 import java.util.Locale;
+import java.util.UUID;
 
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
@@ -13,6 +14,10 @@ public class SubjectProjectDao
 
 	public SubjectProjectDao() {
 		super(null, OpenInfraSchemas.RBAC, SubjectProject.class);
+	}
+	
+	public SubjectProjectDao(UUID currentProjectId, OpenInfraSchemas schema) {
+		super(currentProjectId, schema, SubjectProject.class);
 	}
 
 	@Override
@@ -27,9 +32,7 @@ public class SubjectProjectDao
 			SubjectProject modelObject) {
 		SubjectProjectPojo pojo = new SubjectProjectPojo(modelObject);
 		pojo.setProjectId(modelObject.getProjectId());
-		pojo.setSubject(
-				SubjectDao.mapToPojoStatically(
-						locale, modelObject.getSubjectBean()));
+		pojo.setSubject(modelObject.getSubjectBean().getId());
 		pojo.setProjectRelatedRole(
 				ProjectRelatedRoleDao.mapToPojoStatically(
 						locale, 

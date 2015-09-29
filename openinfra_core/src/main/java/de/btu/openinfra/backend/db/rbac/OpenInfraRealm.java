@@ -22,6 +22,7 @@ import org.apache.shiro.util.SimpleByteSource;
 import de.btu.openinfra.backend.db.daos.rbac.SubjectDao;
 import de.btu.openinfra.backend.db.jpa.model.rbac.RolePermission;
 import de.btu.openinfra.backend.db.jpa.model.rbac.Subject;
+import de.btu.openinfra.backend.db.jpa.model.rbac.SubjectProject;
 import de.btu.openinfra.backend.db.jpa.model.rbac.SubjectRole;
 
 /**
@@ -67,6 +68,7 @@ public class OpenInfraRealm extends AuthorizingRealm {
 		// in the future and should be changed.
         Subject s = new SubjectDao().readModel(login.get(0));
         
+        // 1. Get all default/ordinary roles and permissions
         Set<String> roleNames = new HashSet<String>();
         Set<String> permissions = new HashSet<String>();
         
@@ -74,6 +76,24 @@ public class OpenInfraRealm extends AuthorizingRealm {
         	roleNames.add(sr.getRoleBean().getName());
         	for(RolePermission rp : sr.getRoleBean().getRolePermissions()) {
         		permissions.add(rp.getPermissionBean().getPermission());
+        	}
+        }
+        
+        // 2. Generate project related permissions based on project related
+        // roles.
+        for(SubjectProject sp : s.getSubjectProjects()) {
+        	if(sp.getProjectRelatedRoleBean().getName()
+        			.equalsIgnoreCase("projectguest")) {
+        		permissions.add("/projects/{id}:r:" + sp.getProjectId());
+        	}
+        	if(sp.getProjectRelatedRoleBean().getName()
+        			.equalsIgnoreCase("projecteditor")) {
+        		permissions.add("/projects/{id}:r,w:" + sp.getProjectId());
+        	}
+        	if(sp.getProjectRelatedRoleBean().getName()
+        			.equalsIgnoreCase("projectadmin")) {
+        		permissions.add("/projects/" + sp.getProjectId() + ":r");
+        		//TODO implement this
         	}
         }
         		

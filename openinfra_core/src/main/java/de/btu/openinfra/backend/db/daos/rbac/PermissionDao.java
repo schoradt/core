@@ -1,6 +1,7 @@
 package de.btu.openinfra.backend.db.daos.rbac;
 
 import java.util.Locale;
+import java.util.UUID;
 
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
@@ -12,6 +13,10 @@ public class PermissionDao extends OpenInfraDao<PermissionPojo, Permission> {
 
 	public PermissionDao() {
 		super(null, OpenInfraSchemas.RBAC, Permission.class);
+	}
+	
+	public PermissionDao(UUID currentProjectId, OpenInfraSchemas schema) {
+		super(currentProjectId, schema, Permission.class);
 	}
 
 	@Override

@@ -403,15 +403,26 @@ public abstract class OpenInfraRbac<
 		
 		switch (schema) {
 		case PROJECTS:
+			if(currentProjectId != null && user.isPermitted(
+					"/projects/{id}:" + httpMethod.getAccess() + ":" +
+							currentProjectId)) {
+				return;
+			}
 			break;
 
 		case META_DATA:
 			break;
 			
 		case RBAC:
+			if(user.isPermitted("/rbac:" + httpMethod.getAccess())) {
+				return;
+			}
 			break;
 			
 		case SYSTEM:
+			if(user.isPermitted("/system:" + httpMethod.getAccess())) {
+				return;
+			}
 			break;
 		}
 		
