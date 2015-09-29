@@ -15,10 +15,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
-import de.btu.openinfra.backend.db.daos.AttributeValueDao;
 import de.btu.openinfra.backend.db.daos.AttributeValueGeomType;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.AttributeValuePojo;
+import de.btu.openinfra.backend.db.rbac.AttributeValueRbac;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
 @Path("/projects/{projectId}/attributevalues")
@@ -36,7 +36,7 @@ public class AttributeValueResource {
 			@PathParam("projectId") UUID projectId,
 			@PathParam("attributeValueId") UUID attributeValueId,
 			@QueryParam("geomType") AttributeValueGeomType geomType) {
-		return new AttributeValueDao(
+		return new AttributeValueRbac(
 				projectId,
 				OpenInfraSchemas.PROJECTS).read(
 						PtLocaleDao.forLanguageTag(language),
@@ -51,7 +51,7 @@ public class AttributeValueResource {
 			@PathParam("projectId") UUID projectId,
 			@PathParam("attributeValueId") UUID attributeValueId,
 			AttributeValuePojo pojo) {
-	    UUID id = new AttributeValueDao(
+	    UUID id = new AttributeValueRbac(
                 projectId,
                 OpenInfraSchemas.PROJECTS).distributeTypes(pojo, projectId,
                         attributeValueId);
@@ -68,7 +68,7 @@ public class AttributeValueResource {
     public Response create(
             @PathParam("projectId") UUID projectId,
             AttributeValuePojo pojo) {
-	    UUID id = new AttributeValueDao(
+	    UUID id = new AttributeValueRbac(
                 projectId,
                 OpenInfraSchemas.PROJECTS).distributeTypes(pojo, projectId,
                         null);
@@ -81,7 +81,7 @@ public class AttributeValueResource {
     	    @PathParam("projectId") UUID projectId,
             @PathParam("attributeValueId") UUID attributeValueId) {
 	    return OpenInfraResponseBuilder.deleteResponse(
-	            new AttributeValueDao(projectId, OpenInfraSchemas.PROJECTS)
+	            new AttributeValueRbac(projectId, OpenInfraSchemas.PROJECTS)
 	                .delete(attributeValueId),
                 attributeValueId);
 	}

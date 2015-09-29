@@ -74,7 +74,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 
 	@Override
 	public long getCount() {
-		return getMainProjects(null).size();
+		return readMainProjects(null).size();
 	}
 
 	/**
@@ -85,7 +85,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 	 * @param locale the required language
 	 * @return       a list of main projects
 	 */
-	public List<ProjectPojo> getMainProjects(Locale locale) {
+	public List<ProjectPojo> readMainProjects(Locale locale) {
 		// 1. We need to deliver each main Project from meta data database
 		List<ProjectsPojo> projects = new ProjectsDao(
 				OpenInfraSchemas.META_DATA).read(
@@ -119,7 +119,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 	 * @return the count of main projects
 	 */
 	public long getMainProjectsCount() {
-		return getMainProjects(null).size();
+		return readMainProjects(null).size();
 	}
 
 	@Override
@@ -202,7 +202,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 	 * @param locale the required locale
 	 * @return       a list of parents in reverse order
 	 */
-	public List<ProjectPojo> getParents(Locale locale) {
+	public List<ProjectPojo> readParents(Locale locale) {
 		Project self = em.find(Project.class, currentProjectId);
 		List<ProjectPojo> parents = new LinkedList<ProjectPojo>();
 		MetaDataDao mdDao = new MetaDataDao(currentProjectId, schema);
@@ -228,7 +228,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 		if(currentProject != null) {
 			return new ProjectDao(
 					UUID.fromString(currentProject),
-					OpenInfraSchemas.PROJECTS).getParents(locale);
+					OpenInfraSchemas.PROJECTS).readParents(locale);
 		} else {
 			return new LinkedList<ProjectPojo>();
 		} // end if else
@@ -257,12 +257,17 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 	 * necessary to create a new database schema and write some data into the
 	 * meta data schema.
 	 *
+	 * TODO check permission for this method!
+	 *
 	 * @param project the project pojo
 	 * @return        the UUID of the new created project or NULL if something
 	 *                went wrong
 	 */
 	public static UUID createProject(ProjectPojo project) {
-
+		
+		System.out.println("This method (ProjectDao - createProject) is "
+				+ "currently not secured!!!!!!!!!");
+		
 	    UUID id = null;
 
 	    // determine if we want to create a sub or a main project

@@ -1,0 +1,32 @@
+# http://shiro.apache.org/realm.html
+
+[main]
+shiro.loginUrl = /login.jsp
+logout.redirectUrl = /login.jsp
+authc.successUrl = /rest/v1/projects
+
+# Hashing and salting
+credentialsMatcher = org.apache.shiro.authc.credential.Sha256CredentialsMatcher
+# base64 encoding, not hex in this example:
+credentialsMatcher.storedCredentialsHexEncoded = false
+credentialsMatcher.hashIterations = 1024
+
+# Hashing and salting
+credentialsMatcher = org.apache.shiro.authc.credential.Sha256CredentialsMatcher
+# base64 encoding, not hex in this example:
+credentialsMatcher.storedCredentialsHexEncoded = false
+credentialsMatcher.hashIterations = 1024
+
+# custom Realm
+customRealm = de.btu.openinfra.backend.db.rbac.OpenInfraRealm
+customRealm.credentialsMatcher = $credentialsMatcher
+securityManager.realms = $customRealm
+
+# cache management
+builtInCacheManager = org.apache.shiro.cache.MemoryConstrainedCacheManager
+securityManager.cacheManager = $builtInCacheManager
+
+[urls]
+/login.jsp = authc
+/logout = logout
+/** = authc, authcBasic

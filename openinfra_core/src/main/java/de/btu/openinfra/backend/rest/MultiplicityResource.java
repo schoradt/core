@@ -16,9 +16,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
-import de.btu.openinfra.backend.db.daos.MultiplicityDao;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.MultiplicityPojo;
+import de.btu.openinfra.backend.db.rbac.MultiplicityRbac;
 
 /**
  * This class represents and implements the Multiplicity resource.
@@ -41,7 +41,7 @@ public class MultiplicityResource {
 			@PathParam("schema") String schema,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
-		return new MultiplicityDao(
+		return new MultiplicityRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language),
@@ -55,7 +55,7 @@ public class MultiplicityResource {
     public long getMultiplicityCount(
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema) {
-        return new MultiplicityDao(
+        return new MultiplicityRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount();
     }
@@ -67,7 +67,7 @@ public class MultiplicityResource {
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@PathParam("multiplicityId") UUID multiplicityId) {
-		return new MultiplicityDao(
+		return new MultiplicityRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						PtLocaleDao.forLanguageTag(language),
@@ -87,7 +87,7 @@ public class MultiplicityResource {
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			MultiplicityPojo pojo) {
-		UUID id = new MultiplicityDao(
+		UUID id = new MultiplicityRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
 						pojo, pojo.getMetaData());
@@ -101,7 +101,7 @@ public class MultiplicityResource {
 			@PathParam("schema") String schema,
 			@PathParam("multiplicityId") UUID multiplicityId) {
 		return OpenInfraResponseBuilder.deleteResponse(
-				new MultiplicityDao(
+				new MultiplicityRbac(
 						projectId,
 						OpenInfraSchemas.valueOf(schema.toUpperCase())).delete(
 								multiplicityId),
@@ -116,7 +116,7 @@ public class MultiplicityResource {
 			@PathParam("multiplicityId") UUID multiplicityId,
 			MultiplicityPojo pojo) {
 		return OpenInfraResponseBuilder.postResponse(
-				new MultiplicityDao(
+				new MultiplicityRbac(
 						projectId,
 						OpenInfraSchemas.PROJECTS).createOrUpdate(pojo,
 						        multiplicityId, pojo.getMetaData()));
