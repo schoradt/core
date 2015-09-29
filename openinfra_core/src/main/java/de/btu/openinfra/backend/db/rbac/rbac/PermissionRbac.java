@@ -9,7 +9,7 @@ import de.btu.openinfra.backend.db.rbac.OpenInfraRbac;
 public class PermissionRbac extends 
 	OpenInfraRbac<PermissionPojo, Permission, PermissionDao> {
 
-	protected PermissionRbac() {
+	public PermissionRbac() {
 		super(null, OpenInfraSchemas.RBAC, PermissionDao.class);
 	}
 

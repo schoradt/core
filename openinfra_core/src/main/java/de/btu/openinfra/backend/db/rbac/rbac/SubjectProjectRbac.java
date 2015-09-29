@@ -9,7 +9,7 @@ import de.btu.openinfra.backend.db.rbac.OpenInfraRbac;
 public class SubjectProjectRbac extends OpenInfraRbac<
 	SubjectProjectPojo, SubjectProject, SubjectProjectDao>{
 
-	protected SubjectProjectRbac() {
+	public SubjectProjectRbac() {
 		super(null, OpenInfraSchemas.RBAC, SubjectProjectDao.class);
 	}
 

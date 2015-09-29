@@ -9,7 +9,7 @@ import de.btu.openinfra.backend.db.rbac.OpenInfraRbac;
 public class SubjectRoleRbac extends 
 	OpenInfraRbac<SubjectRolePojo, SubjectRole, SubjectRoleDao> {
 
-	protected SubjectRoleRbac() {
+	public SubjectRoleRbac() {
 		super(null, OpenInfraSchemas.RBAC, SubjectRoleDao.class);
 	}
 

@@ -10,7 +10,7 @@ public class ProjectRelatedRoleRbac extends
 	OpenInfraRbac<ProjectRelatedRolePojo, ProjectRelatedRole, 
 	ProjectRelatedRoleDao> {
 
-	protected ProjectRelatedRoleRbac() {
+	public ProjectRelatedRoleRbac() {
 		super(null, OpenInfraSchemas.RBAC, ProjectRelatedRoleDao.class);
 	}
 

@@ -9,7 +9,7 @@ import de.btu.openinfra.backend.db.rbac.OpenInfraRbac;
 public class OpenInfraObjectRbac extends OpenInfraRbac<
 	OpenInfraObjectPojo, OpenInfraObject, OpenInfraObjectDao>{
 
-	protected OpenInfraObjectRbac() {
+	public OpenInfraObjectRbac() {
 		super(null, OpenInfraSchemas.RBAC, OpenInfraObjectDao.class);
 	}
 

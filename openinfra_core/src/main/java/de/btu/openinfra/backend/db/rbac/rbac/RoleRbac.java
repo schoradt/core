@@ -8,7 +8,7 @@ import de.btu.openinfra.backend.db.rbac.OpenInfraRbac;
 
 public class RoleRbac extends OpenInfraRbac<RolePojo, Role, RoleDao> {
 
-	protected RoleRbac() {
+	public RoleRbac() {
 		super(null, OpenInfraSchemas.RBAC, RoleDao.class);
 	}
 

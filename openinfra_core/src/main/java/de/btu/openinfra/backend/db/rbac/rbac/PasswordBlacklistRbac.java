@@ -9,7 +9,7 @@ import de.btu.openinfra.backend.db.rbac.OpenInfraRbac;
 public class PasswordBlacklistRbac extends OpenInfraRbac<
 	PasswordBlacklistPojo, PasswordBlacklist, PasswordBlacklistDao> {
 
-	protected PasswordBlacklistRbac() {
+	public PasswordBlacklistRbac() {
 		super(null, OpenInfraSchemas.RBAC, PasswordBlacklistDao.class);
 	}
 
