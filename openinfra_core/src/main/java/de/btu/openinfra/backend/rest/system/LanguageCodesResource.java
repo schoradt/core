@@ -3,12 +3,15 @@ package de.btu.openinfra.backend.rest.system;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriInfo;
 
 import de.btu.openinfra.backend.db.OpenInfraOrderByEnum;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
@@ -16,6 +19,7 @@ import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.LanguageCodePojo;
 import de.btu.openinfra.backend.db.rbac.LanguageCodeRbac;
+import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
 /**
@@ -33,6 +37,8 @@ public class LanguageCodesResource {
 
 	@GET
 	public List<LanguageCodePojo> get(
+			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
 			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
 			@QueryParam("orderBy") OpenInfraOrderByEnum orderBy,
@@ -41,6 +47,8 @@ public class LanguageCodesResource {
 		return new LanguageCodeRbac(
 				null,
 				OpenInfraSchemas.SYSTEM ).read(
+						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						sortOrder,
 						orderBy,
@@ -51,11 +59,15 @@ public class LanguageCodesResource {
 	@GET
 	@Path("{languageCodeId}")
 	public LanguageCodePojo get(
+			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
 			@PathParam("languageCodeId") UUID languageCodeId) {
 		return new LanguageCodeRbac(
 				null,
 				OpenInfraSchemas.SYSTEM ).read(
+						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						languageCodeId);
 	}
@@ -63,10 +75,14 @@ public class LanguageCodesResource {
 	@GET
     @Path("count")
     @Produces({MediaType.TEXT_PLAIN})
-    public long getLanguageCodeCount() {
+    public long getLanguageCodeCount(
+    		@Context UriInfo uriInfo, 
+    		@Context HttpServletRequest request) {
         return new LanguageCodeRbac(
                 null,
-                OpenInfraSchemas.SYSTEM).getCount();
+                OpenInfraSchemas.SYSTEM).getCount(
+                		OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						uriInfo);
     }
 
 }

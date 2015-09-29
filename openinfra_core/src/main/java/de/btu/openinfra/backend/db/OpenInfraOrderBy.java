@@ -31,7 +31,8 @@ public class OpenInfraOrderBy {
 
         if (!isUuid) {
             try {
-                this.column = OpenInfraOrderByEnum.valueOf(column.toUpperCase());
+                this.column = OpenInfraOrderByEnum.valueOf(
+                		column.toUpperCase());
                 isUuid = false;
             } catch (Exception e) {
                 // do nothing

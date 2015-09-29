@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
+import javax.ws.rs.core.UriInfo;
+
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.AttributeValueGeomType;
 import de.btu.openinfra.backend.db.daos.TopicGeomzDao;
@@ -35,6 +37,8 @@ public class TopicGeomzRbac {
     }
 	
     public List<TopicGeomzPojo> read(
+    		OpenInfraHttpMethod httpMethod, 
+			UriInfo uriInfo,
             Locale locale,
             UUID topicCharacteristicId,
             int offset,
@@ -42,18 +46,25 @@ public class TopicGeomzRbac {
 		// Since this Class is not a rbac class, we use a closely related class 
 		// to check the permission.
 		new TopicInstanceRbac(
-				currentProjectId, schema).checkPermission();
+				currentProjectId, schema).checkPermission(
+						httpMethod, 
+						uriInfo);
 		return new TopicGeomzDao(
 				topicCharacteristicId, 
 				schema, 
 				geomType).read(locale, topicCharacteristicId, offset, size);
     }
     
-    public Long getCount(UUID topicCharacteristicId) {
+    public Long getCount(
+    		OpenInfraHttpMethod httpMethod, 
+			UriInfo uriInfo, 
+			UUID topicCharacteristicId) {
 		// Since this Class is not a rbac class, we use a closely related class 
 		// to check the permission.
 		new TopicInstanceRbac(
-				currentProjectId, schema).checkPermission();    	
+				currentProjectId, schema).checkPermission(
+						httpMethod, 
+						uriInfo);    	
 		return new TopicGeomzDao(
 				topicCharacteristicId, 
 				schema, 

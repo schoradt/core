@@ -17,7 +17,8 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
  */
 @Entity
 @Table(name="openinfra_objects")
-@NamedQuery(name="Object.findAll", query="SELECT o FROM OpenInfraObject o")
+@NamedQuery(name="OpenInfraObject.findAll", 
+	query="SELECT o FROM OpenInfraObject o")
 public class OpenInfraObject extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 

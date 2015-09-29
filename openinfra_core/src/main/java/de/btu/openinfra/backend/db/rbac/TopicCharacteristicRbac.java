@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
+import javax.ws.rs.core.UriInfo;
+
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.TopicCharacteristicDao;
 import de.btu.openinfra.backend.db.jpa.model.Project;
@@ -23,8 +25,10 @@ public class TopicCharacteristicRbac extends OpenInfraValueRbac<
 				TopicCharacteristicDao.class);
 	}
 
-	public List<TopicCharacteristicPojo> read(Locale locale, String filter) {
-		checkPermission();
+	public List<TopicCharacteristicPojo> read(
+			OpenInfraHttpMethod httpMethod, 
+			UriInfo uriInfo, Locale locale, String filter) {
+		checkPermission(httpMethod, uriInfo);
 		return new TopicCharacteristicDao(
 				currentProjectId, 
 				schema).read(locale, filter);

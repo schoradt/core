@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import de.btu.openinfra.backend.db.OpenInfraOrderBy;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
@@ -48,11 +49,13 @@ public abstract class OpenInfraValueRbac<
 	}
 
 	public List<TypePojo> read(
+			OpenInfraHttpMethod httpMethod, 
+			UriInfo uriInfo,
 			Locale locale,
 			UUID valueId,
 			int offset,
 			int size) {
-		checkPermission();
+		checkPermission(httpMethod, uriInfo);
 		try {
 			return dao.getDeclaredConstructor(
 					constructorTypesValue).newInstance(
@@ -67,13 +70,15 @@ public abstract class OpenInfraValueRbac<
 	}
 	
 	public List<TypePojo> read(
+			OpenInfraHttpMethod httpMethod, 
+			UriInfo uriInfo,
             Locale locale,
             UUID valueId,
             OpenInfraSortOrder order,
             OpenInfraOrderBy column,
             int offset,
             int size) {
-		checkPermission();
+		checkPermission(httpMethod, uriInfo);
 		try {
 			return dao.getDeclaredConstructor(
 					constructorTypesValue).newInstance(
@@ -93,8 +98,10 @@ public abstract class OpenInfraValueRbac<
 		}
 	}
 	
-	public Long getCount(UUID valueId) {
-		checkPermission();
+	public Long getCount(
+			OpenInfraHttpMethod httpMethod, 
+			UriInfo uriInfo, UUID valueId) {
+		checkPermission(httpMethod, uriInfo);
 		try {
 			return dao.getDeclaredConstructor(
 					constructorTypesValue).newInstance(

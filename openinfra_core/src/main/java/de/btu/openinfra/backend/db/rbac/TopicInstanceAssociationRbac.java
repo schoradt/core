@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
+import javax.ws.rs.core.UriInfo;
+
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.TopicInstanceAssociationDao;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
@@ -22,8 +24,10 @@ public class TopicInstanceAssociationRbac extends OpenInfraValueValueRbac<
 	}
 	
 	public List<TopicInstanceAssociationPojo> readParents(
+			OpenInfraHttpMethod httpMethod, 
+			UriInfo uriInfo, 
 			Locale locale, UUID self) {
-		checkPermission();
+		checkPermission(httpMethod, uriInfo);
 		return new TopicInstanceAssociationDao(
 				currentProjectId,
 				schema).readParents(locale, self);
