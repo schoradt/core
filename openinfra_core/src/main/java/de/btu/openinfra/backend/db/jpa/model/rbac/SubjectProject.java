@@ -3,6 +3,7 @@ package de.btu.openinfra.backend.db.jpa.model.rbac;
 import java.io.Serializable;
 import java.util.UUID;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -23,7 +24,7 @@ public class SubjectProject extends OpenInfraModelObject
 	implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@JoinColumn(name="project_id")
+	@Column(name="project_id")
 	private UUID projectId;
 
 	//bi-directional many-to-one association to ProjectRelatedRole
