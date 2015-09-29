@@ -403,10 +403,6 @@ public abstract class OpenInfraRbac<
 		
 		switch (schema) {
 		case PROJECTS:
-			if(currentProjectId != null && user.isPermitted(
-					"/projects/{id}:get:" + currentProjectId)) {
-				return;
-			}
 			break;
 
 		case META_DATA:
@@ -416,9 +412,6 @@ public abstract class OpenInfraRbac<
 			break;
 			
 		case SYSTEM:
-			if(user.isPermitted("/system:get")) {
-				return;
-			}
 			break;
 		}
 		
