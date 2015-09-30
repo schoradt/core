@@ -23,8 +23,8 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 	@NamedQuery(name="Subject.findAll", query="SELECT s FROM Subject s"),
 	@NamedQuery(name="Subject.findByLogin", 
 		query="SELECT s "
-				+ "FROM Subject s "
-				+ "WHERE s.login = :login")
+			+ "FROM Subject s "
+			+ "WHERE s.login = :login")
 })
 public class Subject extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -57,6 +57,8 @@ public class Subject extends OpenInfraModelObject implements Serializable {
 
 	@Column(name="updated_on")
 	private Timestamp updatedOn;
+	
+	private String webapp;
 
 	//bi-directional many-to-one association to SubjectRole
 	@OneToMany(mappedBy="subjectBean")
@@ -233,6 +235,14 @@ public class Subject extends OpenInfraModelObject implements Serializable {
 		subjectProject.setSubjectBean(null);
 
 		return subjectProject;
+	}
+	
+	public String getWebapp() {
+		return this.webapp;
+	}
+
+	public void setWebapp(String webapp) {
+		this.webapp = webapp;
 	}
 
 }

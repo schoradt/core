@@ -16,6 +16,7 @@ import de.btu.openinfra.backend.db.OpenInfraOrderByEnum;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
+import de.btu.openinfra.backend.db.daos.TopicInstanceDao;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 
@@ -33,29 +34,27 @@ import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
  * delete):
  * *:*:*
  *  
- * Permission to access all projects with read, write, update and delete:
- * /projects/{id}:*:* or /projects/{id}:get,post,put,delete:* 
+ * Permission to access all projects with read and write (update and delete)
+ * permission:
+ * /projects/{id}:*:* or /projects/{id}:r,w:* 
  *  
  * Permission to read all available projects:
- * /projects/{id}:get:*
- *  
- * Permission to read and write available projects (delete isn't allowed):
- * /projects/{id}:get,post,put:*
+ * /projects/{id}:r:*
  *  
  * Permission to read only one project:
- * /projects/{id}:get:e7d42bff-4e40-4f43-9d1b-1dc5a190cd75
+ * /projects/{id}:r:e7d42bff-4e40-4f43-9d1b-1dc5a190cd75
  *  
  * Permission to read two projects:
- * /projects/{id}:get:e7d42bff-4e40-4f43-9d1b-1dc5a190cd75,fd27a347-4e33-4ed7-aebc-eeff6dbf1054
+ * /projects/{id}:r:e7d42bff-4e40-4f43-9d1b-1dc5a190cd75,fd27a347-4e33-4ed7-aebc-eeff6dbf1054
  * 
  * These permissions can be extended to secure each resource in detail. For 
  * example you want to secure the following url:
  * /projects/{id}/topiccharacteristics/{id}/topicinstances
- * Each {id} refers to an additional : like so
- * /projects/{id}/topiccharacteristics/{id}/topicinstances:get:{id 1}:{id 2}
+ * Insert the currentProjectId like so
+ * /projects/e7d42bff-4e40-4f43-9d1b-1dc5a190cd75/topiccharacteristics/{id}/topicinstances:r:{id}
  * 
  * Permission to read information from system schema:
- * /system:get
+ * /system:r
  * 
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
@@ -87,6 +86,21 @@ public abstract class OpenInfraRbac<
 	 * The current user.
 	 */
 	protected Subject user;
+	
+	private String v = "v\\d(\\d)?";
+	private String p = "/projects/";
+	private String tc = "topiccharacteristics/";
+	private String ti = "topicinstances/";
+	private String regex_project = v + p +
+			"[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}.{1,}";
+	private String regex_project_admin = v + p +
+			"[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}";
+	private String regex_project_topic_characteristic = v + p
+					+ "[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}/" + tc
+					+ "[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}.{0,}";
+	private String regex_project_topic_instance = v + p
+			+ "[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}/" + ti
+			+ "[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}.{0,}";
 	
 	/**
 	 * This defines the constructor types in order to call the constructor in a 
@@ -403,10 +417,58 @@ public abstract class OpenInfraRbac<
 		
 		switch (schema) {
 		case PROJECTS:
-			if(currentProjectId != null && user.isPermitted(
-					"/projects/{id}:" + httpMethod.getAccess() + ":" +
-							currentProjectId)) {
-				return;
+			// Is the current URI path really a project path?
+			if(uriInfo.getPath().matches(regex_project)) {
+				// Is the subject (user) permitted to read or write the project?
+				if(currentProjectId != null && user.isPermitted(
+						"/projects/{id}:" + httpMethod.getAccess() + ":" +
+								currentProjectId)) {
+					// Is the current URI path a topic characteristic or a
+					// topic instance? If not, the subject (user) is permitted
+					// in any case since it has access to the project.
+					if(uriInfo.getPath().matches(
+							regex_project_topic_characteristic)) {
+						// Get the topic characteristic UUID from path 
+						String tcId = uriInfo.getPath().substring(
+								uriInfo.getPath().lastIndexOf(tc) + 
+								tc.length());
+						tcId = tcId.substring(0, tcId.indexOf("/"));
+						// Generate the required access string
+						String req_access = "/projects/" + currentProjectId +
+								"/topiccharacteristics/{id}:" +
+								httpMethod.getAccess() + ":" + tcId;
+						if(user.isPermitted(req_access)) {
+							return;
+						}
+					} else if(uriInfo.getPath().matches(
+							regex_project_topic_instance)) {
+						// Get the topic instance UUID from path 
+						String tiId = uriInfo.getPath().substring(
+								uriInfo.getPath().lastIndexOf(ti) + 
+								ti.length());
+						tiId = tiId.substring(0, tiId.indexOf("/"));
+						// Get the responding topic characteristic UUID from DB
+						UUID tcId = new TopicInstanceDao(
+								currentProjectId, schema).read(
+										null, UUID.fromString(tiId)).getUuid();
+						// Generate the required access string
+						String req_access = "/projects/" + currentProjectId +
+								"/topiccharacteristics/{id}:" +
+								httpMethod.getAccess() + ":" + tcId;
+						if(user.isPermitted(req_access)) {
+							return;
+						}						
+					} else {
+						return;
+					} // end else if
+				}		
+			} // end if regex_project
+			if(uriInfo.getPath().matches(regex_project_admin)) {
+				if(currentProjectId != null && user.isPermitted(
+						"/projects/" + currentProjectId + ":" + 
+								httpMethod.getAccess())) {
+					return;
+				}
 			}
 			break;
 

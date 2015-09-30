@@ -38,9 +38,9 @@ response.setStatus(401);
 <td>
 <table>
 <tr><th>Nutzername</th><th>Passwort</th><th>Beschreibung</th></tr>
-<tr><td>root</td><td>root</td><td>Vollzugriff (ändern + lesen)</td></tr>
-<tr><td>max</td><td>max</td><td>Vollzugriff (nur lesen)</td></tr>
-<tr><td>lieschen</td><td>lieschen</td><td>nur Zugriff auf das Baalbek-Projekt (ändern + lesen)</td></tr>
+<tr><td>root</td><td>root</td><td>Vollzugriff Projektdaten + Systemdaten (ändern + lesen)</td></tr>
+<tr><td>max</td><td>max</td><td>Projektgast (lesender Zugriff) für das Projekt Palatin und das Testprojekt</td></tr>
+<tr><td>lieschen</td><td>lieschen</td><td>Projektbearbeiter (lesen + schreiben) auf das Baalbek-Projekt</td></tr>
 <tr><td>anonymous</td><td>anonymous</td><td>nur Zugriff auf das Testproject (nur lesen)</td></tr>
 <tr><td> </td><td> </td><td> </td></tr>
 <tr><td>sysadmin</td><td>sysadmin</td><td>Systemadministrator (Nutzerverwaltung)</td></tr>
