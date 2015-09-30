@@ -450,7 +450,8 @@ public abstract class OpenInfraRbac<
 						// Get the responding topic characteristic UUID from DB
 						UUID tcId = new TopicInstanceDao(
 								currentProjectId, schema).read(
-										null, UUID.fromString(tiId)).getUuid();
+										null, UUID.fromString(tiId))
+										.getTopicCharacteristic().getUuid();
 						// Generate the required access string
 						String req_access = "/projects/" + currentProjectId +
 								"/topiccharacteristics/{id}:" +
