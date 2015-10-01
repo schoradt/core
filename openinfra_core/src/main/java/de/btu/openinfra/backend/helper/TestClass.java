@@ -68,6 +68,7 @@ public class TestClass {
 			System.out.println(OpenInfraRealm.encrypt("projectadmin_baal", UUID.fromString("ca0202b3-3675-46d2-8e59-4d4bd666489a")));
 			System.out.println(OpenInfraRealm.encrypt("projectguest_baal", UUID.fromString("2d38ac64-1242-490b-8569-18477bf18a9c")));
 			System.out.println(OpenInfraRealm.encrypt("projecteditor_baal", UUID.fromString("64573585-8546-429c-98dc-e1b379744d42")));
+			System.out.println(OpenInfraRealm.encrypt("siehstnix", UUID.fromString("db848094-0ead-4214-a850-d3c8cb23971c")));
 		}
 		
 	}

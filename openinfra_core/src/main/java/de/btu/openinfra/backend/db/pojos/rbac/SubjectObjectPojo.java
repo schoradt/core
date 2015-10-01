@@ -13,6 +13,8 @@ public class SubjectObjectPojo extends OpenInfraPojo {
 	private UUID projectId;
 	private OpenInfraObjectPojo object;
 	private SubjectPojo subject;
+	private boolean writeObject;
+	private UUID objectId;
 	
 	public SubjectObjectPojo() {}
 	
@@ -42,6 +44,22 @@ public class SubjectObjectPojo extends OpenInfraPojo {
 	
 	public void setSubject(SubjectPojo subject) {
 		this.subject = subject;
+	}
+
+	public boolean getWriteObject() {
+		return writeObject;
+	}
+
+	public void setWriteObject(boolean writeObject) {
+		this.writeObject = writeObject;
+	}
+
+	public UUID getObjectId() {
+		return objectId;
+	}
+
+	public void setObjectId(UUID objectId) {
+		this.objectId = objectId;
 	}
 
 }

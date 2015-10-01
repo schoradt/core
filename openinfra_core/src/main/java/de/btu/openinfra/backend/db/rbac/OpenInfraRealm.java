@@ -20,9 +20,12 @@ import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.util.SimpleByteSource;
 
 import de.btu.openinfra.backend.db.daos.rbac.SubjectDao;
+import de.btu.openinfra.backend.db.daos.rbac.SubjectObjectDao;
 import de.btu.openinfra.backend.db.jpa.model.rbac.RolePermission;
 import de.btu.openinfra.backend.db.jpa.model.rbac.Subject;
+import de.btu.openinfra.backend.db.jpa.model.rbac.SubjectProject;
 import de.btu.openinfra.backend.db.jpa.model.rbac.SubjectRole;
+import de.btu.openinfra.backend.db.pojos.rbac.SubjectObjectPojo;
 
 /**
  * This is the OpenInfraRealm which is used to retrieve user-specific 
@@ -67,6 +70,7 @@ public class OpenInfraRealm extends AuthorizingRealm {
 		// in the future and should be changed.
         Subject s = new SubjectDao().readModel(login.get(0));
         
+        // 1. Get all default/ordinary roles and permissions
         Set<String> roleNames = new HashSet<String>();
         Set<String> permissions = new HashSet<String>();
         
@@ -74,6 +78,52 @@ public class OpenInfraRealm extends AuthorizingRealm {
         	roleNames.add(sr.getRoleBean().getName());
         	for(RolePermission rp : sr.getRoleBean().getRolePermissions()) {
         		permissions.add(rp.getPermissionBean().getPermission());
+        	}
+        }
+        
+        // 2. Generate project related permissions based on project related
+        // roles.
+        for(SubjectProject sp : s.getSubjectProjects()) {
+        	if(sp.getProjectRelatedRoleBean().getName()
+        			.equalsIgnoreCase("projectguest")) {
+        		permissions.add("/projects/{id}:r:" + sp.getProjectId());
+        		// get information about the object access
+        		List<SubjectObjectPojo> soList = new SubjectObjectDao().read(
+        				sp.getSubjectBean().getId(), sp.getProjectId());
+        		if(soList.size() == 0) {
+        			permissions.add("/projects/" + sp.getProjectId() + 
+        					"/topiccharacteristics/{id}:r:*");
+        		} else {
+            		for(SubjectObjectPojo so : soList) {
+            			permissions.add("/projects/" + sp.getProjectId() + 
+            					"/topiccharacteristics/{id}:r:" + 
+            					so.getObjectId());            			
+            		} // end for
+        		} // end if else
+        	}
+        	if(sp.getProjectRelatedRoleBean().getName()
+        			.equalsIgnoreCase("projecteditor")) {
+        		permissions.add("/projects/{id}:r,w:" + sp.getProjectId());
+        		// get information about the object access
+        		List<SubjectObjectPojo> soList = new SubjectObjectDao().read(
+        				sp.getSubjectBean().getId(), sp.getProjectId());
+        		if(soList.size() == 0) {
+        			permissions.add("/projects/" + sp.getProjectId() + 
+        					"/topiccharacteristics/{id}:r,w:*");
+        		} else {
+            		for(SubjectObjectPojo so : soList) {
+            			String write = (so.getWriteObject()) ? "" : ",r";
+            			permissions.add("/projects/" + sp.getProjectId() + 
+            					"/topiccharacteristics/{id}:r" + write + ":" + 
+            					so.getObjectId());            			
+            		} // end for
+        		} // end if else        		
+        	}
+        	if(sp.getProjectRelatedRoleBean().getName()
+        			.equalsIgnoreCase("projectadmin")) {
+        		permissions.add("/projects/" + sp.getProjectId() + ":r");
+        		//TODO implement this - change of subjects (users) related
+        		// to the project
         	}
         }
         		

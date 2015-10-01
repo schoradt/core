@@ -36,6 +36,8 @@ public class SubjectPojo extends OpenInfraPojo {
 	
 	private List<RolePojo> roles;
 	
+	private List<SubjectProjectPojo> projects;
+	
 	public SubjectPojo() {}
 	
 	public SubjectPojo(OpenInfraModelObject modelObject) {
@@ -136,6 +138,14 @@ public class SubjectPojo extends OpenInfraPojo {
 
 	public void setRoles(List<RolePojo> roles) {
 		this.roles = roles;
+	}
+
+	public List<SubjectProjectPojo> getProjects() {
+		return projects;
+	}
+
+	public void setProjects(List<SubjectProjectPojo> projects) {
+		this.projects = projects;
 	}
 
 }
