@@ -33,8 +33,10 @@ public class ProjectRbac extends
 
 		Iterator<ProjectPojo> it = list.iterator();
 		while(it.hasNext()) {
+			UUID uuid = it.next().getUuid();
 			if(!user.isPermitted(
-					"/projects/{id}:get:" + it.next().getUuid())) {
+					"/projects/{id}:r:" + uuid) &&
+					!user.isPermitted("/projects/" + uuid + ":r")) {
 				it.remove();
 			}
 		}

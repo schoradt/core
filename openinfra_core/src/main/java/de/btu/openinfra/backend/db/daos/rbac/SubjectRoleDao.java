@@ -1,6 +1,7 @@
 package de.btu.openinfra.backend.db.daos.rbac;
 
 import java.util.Locale;
+import java.util.UUID;
 
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
@@ -13,6 +14,10 @@ public class SubjectRoleDao extends OpenInfraDao<SubjectRolePojo, SubjectRole> {
 
 	public SubjectRoleDao() {
 		super(null, OpenInfraSchemas.RBAC, SubjectRole.class);
+	}
+	
+	public SubjectRoleDao(UUID currentProjectId, OpenInfraSchemas schema) {
+		super(currentProjectId, schema, SubjectRole.class);
 	}
 
 	@Override

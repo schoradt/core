@@ -9,7 +9,7 @@ public class SubjectProjectPojo extends OpenInfraPojo {
 	
 	private UUID projectId;
 	private ProjectRelatedRolePojo projectRelatedRole;
-	private SubjectPojo subject;
+	private UUID subject;
 	
 	public SubjectProjectPojo() {}
 	
@@ -34,11 +34,11 @@ public class SubjectProjectPojo extends OpenInfraPojo {
 		this.projectRelatedRole = projectRelatedRole;
 	}
 	
-	public SubjectPojo getSubject() {
+	public UUID getSubject() {
 		return subject;
 	}
 	
-	public void setSubject(SubjectPojo subject) {
+	public void setSubject(UUID subject) {
 		this.subject = subject;
 	}
 
