@@ -458,6 +458,26 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
                         Response.Status.INTERNAL_SERVER_ERROR);
             }
 
+            // merge the content of the system schema into the new project
+            // schema
+            boolean result = false;
+            try {
+                result = em.createStoredProcedureQuery(
+                        "merge_system_schema", Boolean.class)
+                        .registerStoredProcedureParameter(
+                                "project_id",
+                                UUID.class,
+                                ParameterMode.IN)
+                        .setParameter("project_id", id)
+                        .execute();
+            } catch (Exception e) { /* do nothing */ }
+            if (!result) {
+                throw new WebApplicationException(
+                        "The new project database was created successfully with"
+                        + " the id '"+ id +"'. But merging the content of the "
+                        + "system database failed.",
+                        Response.Status.INTERNAL_SERVER_ERROR);
+            }
 	    }
 	    return id;
 	}
