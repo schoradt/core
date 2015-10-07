@@ -13,10 +13,6 @@
 	<div id="header">
 		<!--<h1>3D-WebGIS-Client</h1>-->
 		<div id="ls">
-			<button type="button" onclick="history.back()">Zurück zu OpenInfRA</button><br>
-		</div>
-		
-		<div id="ls">
 			<div id="kopf">3D-WebGIS-Client</div>
 		</div>		
 		<div id="navbartop">

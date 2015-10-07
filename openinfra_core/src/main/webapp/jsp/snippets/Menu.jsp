@@ -145,7 +145,7 @@
 			</a>
         </li>
         <li>
-			<a href="${pageContext.request.contextPath}/3d/index.jsp">
+			<a href="${pageContext.request.contextPath}/3d/index.jsp" target="_blank">
 				<fmt:message key="3dwebgis.label"/>
 			</a>
         </li>
