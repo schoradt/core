@@ -199,10 +199,13 @@
 		    	</c:if>
       		</c:forEach>
 		</form>
+		<!--
       <form class="navbar-form navbar-right" method="get" action="/openinfra_backend/rest/v1/search" role="search">
         <div class="form-group">
+        -->
         <!-- Check the query parameter and create an input field with the query
         	 as value or an input field a placeholder -->
+        	 <!--
 		  <c:choose>
             <c:when test="${fn:length(param.query) > 0}">
               <input type="text" class="form-control" name="query" value="${param.query}">
@@ -215,6 +218,7 @@
 
         <button type="submit" class="btn btn-default"><fmt:message key="searchbutton.label"/></button>
       </form>
+      -->
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->  
 <ol class="breadcrumb">
