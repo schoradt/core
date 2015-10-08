@@ -42,13 +42,16 @@
 						OpenInfraSchemas.PROJECTS).getCount(
 								UUID.fromString(pageContext.getAttribute("currentCharacteristic").toString()))%>
 			</span>
-			<span class="badge">
+			<!--
+			<span class="badge">-->
 				<!-- link topic charateristic to map -->
 				<!-- TODO: test if tc supports geometry attribute and is mapped to geoserver layer -->
+				<!--
 		    	<a href="${contextPath}/rest/projects/maps?tc[0]=${currentCharacteristic}">
 		    		<fmt:message key="maps.label"></fmt:message>
 		        </a>
 		    </span>
+		    -->
 		</div>
 		<c:set var="columnCount" value="${fn:length(columns)}"/>
 		<c:if test="${columnCount == 0}">
