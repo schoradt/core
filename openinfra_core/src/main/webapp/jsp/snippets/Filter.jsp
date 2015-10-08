@@ -14,8 +14,8 @@
 	<div class="col-lg-2">
 		<div class="input-group">
 			<form>
-				<input type="text" name="filter" value="<c:out value="${param.filter}"/>" class="form-control" placeholder="Name filtern (%und%)">
 				<span class="input-group-btn">
+					<input type="text" name="filter" value="<c:out value="${param.filter}"/>" class="form-control" placeholder="Name filtern (%und%)">
 					<button class="btn btn-default" type="submit">
 						<fmt:message key="searchbutton.label"/>
 					</button>
