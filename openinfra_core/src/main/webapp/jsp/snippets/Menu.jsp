@@ -42,11 +42,13 @@
       <ul class="nav navbar-nav">
         <c:choose>
         	<c:when test="${fn:contains(requestUrl, '/rest/v1/search')}">
+        		<!--
 		        <li>
 		        	<a href="${contextPath}/rest/v1/system">
 		        		<fmt:message key="system.label"></fmt:message>
 		        	</a>
 		        </li>
+		        -->
 		        <li>
 		        	<a href="${contextPath}/rest/v1/projects">
 		        		<fmt:message key="projects.label"></fmt:message>
@@ -54,11 +56,13 @@
 		        </li>
         	</c:when>
         	<c:when test="${fn:contains(requestUrl, '/rest/v1/system')}">
+        		<!--
 		        <li class="active">
 		        	<a href="${contextPath}/rest/v1/system">
 		        		<fmt:message key="system.label"></fmt:message>
 		        	</a>
 		        </li>
+		        -->
 		        <li>
 		        	<a href="${contextPath}/rest/v1/projects">
 		        		<fmt:message key="projects.label"></fmt:message>
@@ -81,11 +85,13 @@
 		        </li>
         	</c:when>
         	<c:when test="${fn:contains(requestUrl, '/rest/v1/projects/')}">
+        		<!--
 		        <li>
 		        	<a href="${contextPath}/rest/v1/system">
 		        		<fmt:message key="system.label"/>
 		        	</a>
 		        </li>
+		        -->
 		        <li class="active">
 		        	<a href="${contextPath}/rest/v1/projects">
 		        		<fmt:message key="projects.label"/>
@@ -119,11 +125,13 @@
 		        </li>
         	</c:when>
         	<c:when test="${fn:contains(requestUrl, '/rest/v1/projects')}">
+        		<!--
 		        <li>
 		        	<a href="${contextPath}/rest/v1/system">
 		        		<fmt:message key="system.label"/>
 		        	</a>
 		        </li>
+		        -->
 		        <li class="active">
 		        	<a href="${contextPath}/rest/v1/projects">
 		        		<fmt:message key="projects.label"/>
@@ -235,11 +243,13 @@
 			</c:forEach>
 		</c:when>
 		<c:when test="${fn:contains(requestUrl, '/rest/v1/system')}">
+			<!--
 			<li class="active">
 				<a href="system">
 					<fmt:message key="system.label"/>
 				</a>
 			</li>
+			-->
 		</c:when>
 		<c:when test="${fn:contains(requestUrl, '/rest/v1/projects')}">
 			<li class="active">
