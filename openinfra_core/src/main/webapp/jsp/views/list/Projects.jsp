@@ -53,7 +53,7 @@
 					  			<a href="<%= request.getContextPath() %>/rest/v1/projects/${pojo.uuid}/topiccharacteristics">
 					    			<h4 class="media-heading">
 					    				${name}
-					    				<span class="small">(${pojo.uuid})</span>
+					    				<!--<span class="small">(${pojo.uuid})</span>-->
 					    			</h4>
 					    		</a>
 					 		   <div class="media">

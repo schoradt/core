@@ -17,7 +17,7 @@ Warning: The jstl variables will be removed after the button is printed.
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
-<c:if test="${edit != null}">
+<c:if test="${edit != null && false}">
 	<div id="controlButtons">
 		<!-- Define the safe mode. Initial it will always be create. -->
 		<c:set var="saveMode" value="create" />

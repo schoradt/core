@@ -17,10 +17,10 @@
 		<ul>
 			<c:forEach items="${it}" var="pojo">    		
 	    		<li>
-	    			<a href="multiplicities/${pojo.uuid}">
+	    			<!--<a href="multiplicities/${pojo.uuid}">-->
 		    			max: ${pojo.max}; min: ${pojo.min}
-		    			<span class="uuid">(${pojo.uuid})</span>
-	    			</a>
+		    			<!--<span class="uuid">(${pojo.uuid})</span>-->
+	    			<!--</a>-->
 	    		</li>
 			</c:forEach>
 		</ul>

@@ -39,9 +39,11 @@
 					<th>
 						<fmt:message key="count.label"/>
 					</th>
+					<!--
 					<th>
 						UUID
 					</th>
+					-->
 				</tr>
 			</thead>
 			<c:forEach items="${it}" var="pojo">
@@ -60,11 +62,13 @@
 								OpenInfraSchemas.PROJECTS).getCount(
 										UUID.fromString(pageContext.getAttribute("currentCharacteristic").toString()))%>
 					</td>
+					<!--
 					<td>
 			    		<a href="topiccharacteristics/${pojo.uuid}">
 			    			${pojo.uuid}
 		    			</a>
 					</td>
+					-->
 	    		</tr>
 			</c:forEach>
 		</table>

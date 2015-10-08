@@ -20,8 +20,8 @@
 								UUID.fromString(pageContext.getAttribute("currentProject").toString()),
 								OpenInfraSchemas.PROJECTS).getCount()%>
 			</span>
-			<c:set var="createButton" value="valuelists/new" />
-			<%@ include file="../../snippets/ButtonBar.jsp" %>
+			<c:set var="createButton" value="attributetype/new" />
+			<%--<%@ include file="../../snippets/ButtonBar.jsp" %>--%>
 		</div>
 		<table class="table table-hover">
 			<thead>
@@ -41,9 +41,11 @@
 					<th>
 						<fmt:message key="domain.label"/>
 					</th>
+					<!--
 					<th>
 						UUID
 					</th>
+					-->
 				</tr>
 			</thead>
 			<c:forEach items="${it}" var="pojo">
@@ -71,9 +73,11 @@
 						<c:set var="localizedStrings" value="${pojo.domain.names.localizedStrings}"/>
 						<%@ include file="../../snippets/LocalizedStrings.jsp" %>
 					</td>
+					<!--
 					<td>
 		    			${pojo.uuid}
 					</td>
+					-->
 	    		</tr>
 			</c:forEach>
 		</table>

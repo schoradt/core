@@ -24,7 +24,7 @@ Warning: The jstl variables will be removed after the button is printed.
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-
+<!--
 	<div id="singleButtonBar">
 		<c:if test="${deleteButton != null}">
 			<a id="deleteButtonLink" href="#" onclick="deleteItem('${deleteButton}')">
@@ -52,7 +52,7 @@ Warning: The jstl variables will be removed after the button is printed.
 			<c:remove var="createButton"/>
 		</c:if>
 	</div>
-	
+-->
 	<div id="singleButtonBar">
 		<c:if test="${detailButton != null}">
 			<a id="detailButtonLink" href="${detailButton}">

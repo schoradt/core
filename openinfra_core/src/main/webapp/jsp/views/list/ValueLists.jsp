@@ -47,9 +47,11 @@
 					<th>
 						<fmt:message key="count.label"/>
 					</th>
+					<!--
 					<th>
 						UUID
 					</th>
+					-->
 					<th></th>
 				</tr>
 			</thead>
@@ -74,12 +76,14 @@
 										OpenInfraSchemas.valueOf(pageContext.getAttribute("schema").toString().toUpperCase())).getCount(
 												UUID.fromString(pageContext.getAttribute("currentValueList").toString()))%>
 					</td>
+					<!--
 					<td>
 			    		${pojo.uuid}
 					</td>
+					-->
 					<td>
 						<c:set var="detailButton" value="valuelists/${pojo.uuid}" />
-						<c:set var="deleteButton" value="${pojo.uuid}" />
+						<!--<c:set var="deleteButton" value="${pojo.uuid}" />-->
 						<%@ include file="../../snippets/ButtonBar.jsp" %>
 					</td>
 	    		</tr>

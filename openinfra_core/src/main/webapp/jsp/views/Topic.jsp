@@ -28,7 +28,7 @@
 			<i style="cursor: pointer;" class="fa fa-file-text-o fa-lg" title="CSV"></i>
 		</a>
 	</div>
-	<div><h2><fmt:message key="topic.label"/> ${instanceDesc} <span class="small">(${it.topicInstance.uuid})</span>:</h2></div>
+	<div><h2><fmt:message key="topic.label"/> ${instanceDesc} <!--<span class="small">(${it.topicInstance.uuid})</span>-->:</h2></div>
 	
 	
 	<div class="row">

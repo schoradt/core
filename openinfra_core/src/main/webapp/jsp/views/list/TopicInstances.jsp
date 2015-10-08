@@ -90,9 +90,11 @@
 						<th>
 							Name
 						</th>
+						<!--
 						<th>
 							UUID
 						</th>
+						-->
 					</c:if>
 				</tr>
 			</thead>
@@ -152,11 +154,13 @@
 								<%@ include file="../../snippets/LocalizedStrings.jsp" %>
 							</a>
 						</td>
+						<!--
 						<td>
 							<a href="../../topicinstances/${pojo.uuid}/topic?language=${language}">
 								${pojo.uuid}
 							</a>
 						</td>
+						-->
 					</c:if>
 				</tr>
 			</c:forEach>

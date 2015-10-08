@@ -53,9 +53,11 @@
 					<th>
 						<fmt:message key="visibility.label"/>
 					</th>
+					<!--
 					<th>
 						UUID
 					</th>
+					-->
 				</tr>
 			</thead>
 			<c:forEach items="${it}" var="pojo">
@@ -71,9 +73,11 @@
 					<td>
 						${pojo.visibility}
 					</td>
+					<!--
 					<td>
 			    		${pojo.uuid}
 					</td>
+					-->
 					<td>
 						<c:set var="detailButton" value="../../valuelistvalues/${pojo.uuid}" />
 						<c:set var="deleteButton" value="${pojo.uuid}" />

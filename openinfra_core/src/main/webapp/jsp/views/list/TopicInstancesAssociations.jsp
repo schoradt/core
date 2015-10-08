@@ -101,9 +101,11 @@
 														<th>
 															Name
 														</th>
+														<!--
 														<th>
 															UUID
 														</th>
+														-->
 													</c:if>
 												</tr>
 											</thead>
@@ -167,11 +169,13 @@
 															</a>
 														</c:forEach>
 													</td>
+													<!--
 													<td>
 														<a href="../../topicinstances/${pojo.associatedInstance.uuid}/topic?language=${language}">
 															${pojo.associatedInstance.uuid}
 														</a>
 													</td>
+													-->
 												</c:if>
 											</tr>
 										</c:if>

@@ -21,7 +21,7 @@
 								OpenInfraSchemas.PROJECTS).getCount()%>
 			</span>
 		</div>
-		<table class="table">
+		<table class="table table-hover">
 			<thead>
 				<tr>
 					<th>
@@ -33,18 +33,20 @@
 					<th>
 						<fmt:message key="count.label"/>
 					</th>
+					<!--
 					<th>
 						UUID
 					</th>
+					-->
 				</tr>
 			</thead>
 			<c:forEach items="${it}" var="pojo">
 				<tr> 
 					<td>
-		    			<a href="attributetypegroups/${pojo.uuid}/attributetypes">
+		    			<!--<a href="attributetypegroups/${pojo.uuid}/attributetypes">-->
 							<c:set var="localizedStrings" value="${pojo.names.localizedStrings}"/>
 							<%@ include file="../../snippets/LocalizedStrings.jsp" %>
-		    			</a>
+		    			<!--</a>-->
 					</td>
 					<td>
 						<c:set var="localizedStrings" value="${pojo.descriptions.localizedStrings}"/>
@@ -57,11 +59,13 @@
 								OpenInfraSchemas.PROJECTS).getCount(
 										UUID.fromString(pageContext.getAttribute("currentAttributeType").toString()))%>
 					</td>
+					<!--
 					<td>
 			    		<a href="attributetypegroups/${pojo.uuid}/attributetype">
 			    			${pojo.uuid}
 		    			</a>
 					</td>
+					-->
 	    		</tr>
 			</c:forEach>
 		</table>
