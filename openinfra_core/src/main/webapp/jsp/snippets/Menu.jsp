@@ -229,18 +229,20 @@
       -->
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->  
+<!--
 <ol class="breadcrumb">
 	<c:choose>
-		<c:when test="${fn:contains(requestUrl, '/rest/v1/projects/')}">
+		<c:when test="${fn:contains(requestUrl, '/rest/v1/projects/')}">-->
 			<!-- Iterate over all bread crumbs --> 
+			<!--
 			<c:forEach items="${breadCrumbs}" var="crumb">
-				<li>
+				<li>-->
 					<!-- define the URL -->
-					<a href="${contextPath}/rest/v1/${crumb.value}">
+					<!--<a href="${contextPath}/rest/v1/${crumb.value}">-->
 					<!-- either print the label that can be translated via
 						 locale files or a already translated dynamic string
 						 from the database -->
-					<c:choose>
+					<!--<c:choose>
 						<c:when test="${fn:contains(crumb.key, breadCrumbLabelMarker)}">
 							<c:set var="label" value="${fn:substringAfter(crumb.key, '.#label#.')}"></c:set>
 							<fmt:message key="${label}.label"/>
@@ -254,7 +256,7 @@
 				</li>
 			</c:forEach>
 		</c:when>
-		<c:when test="${fn:contains(requestUrl, '/rest/v1/system')}">
+		<c:when test="${fn:contains(requestUrl, '/rest/v1/system')}">-->
 			<!--
 			<li class="active">
 				<a href="system">
@@ -262,7 +264,7 @@
 				</a>
 			</li>
 			-->
-		</c:when>
+		<!--</c:when>
 		<c:when test="${fn:contains(requestUrl, '/rest/v1/projects')}">
 			<li class="active">
 				<a href="projects">
@@ -275,6 +277,7 @@
 		</c:otherwise>
 	</c:choose>
 </ol>
+-->
 </header>
 
 <%@ include file="ConfirmDialog.jsp" %>
