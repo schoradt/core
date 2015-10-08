@@ -39,13 +39,13 @@
 	<div class="well">
 		<div class="media">
 	  		<div class="media-body">
-	  			<a href="../../attributetypegroups/${atg.attributeTypeGroup.uuid}">
+	  			<!--<a href="../../attributetypegroups/${atg.attributeTypeGroup.uuid}">-->
 	    			<h3 class="media-heading">
 	    				<c:forEach items="${atg.attributeTypeGroup.names.localizedStrings}" var="item">
 	    					${item.characterString}
 	    				</c:forEach>
 	    			</h3>
-	    		</a>
+	    		<!--</a>-->
 	 		   <div class="media">
 			   		<c:forEach items="${atg.attributeTypeGroup.descriptions.localizedStrings}" var="item">
 	 					<c:out value="${item.characterString}"/>
@@ -68,11 +68,11 @@
 						
 		    			<tr>
 		    				<td style="width: 20%;">
-					  			<a href="../../attributetypes/${atv.attributeType.uuid}">
+					  			<!--<a href="../../attributetypes/${atv.attributeType.uuid}">-->
 				    				<c:forEach items="${atv.attributeType.names.localizedStrings}" var="item">
 				    					${item.characterString}
 				    				</c:forEach>:
-					    		</a>
+					    		<!--</a>-->
 							</td>
 							
 							<!-- Create the fields twice: view fields and input fields -->
@@ -109,7 +109,7 @@
 										   		<c:forEach items="${atv.attributeValue.attributeValueDomain.domain.descriptions.localizedStrings}" var="item">
 								 					<c:set var="domDesc" value="${domDesc} ${item.characterString}"/>
 												</c:forEach>			   									
-									  			<a title="${domDesc}" href="../../attributevalues/${atv.attributeValue.uuid}">
+									  			<!--<a title="${domDesc}" href="../../attributevalues/${atv.attributeValue.uuid}">-->
 								    				<c:forEach items="${atv.attributeValue.attributeValueDomain.domain.names.localizedStrings}" var="item" varStatus="loop">
 														<c:set var="currentValue" value="${item.characterString}"/>
 													 	<c:if test="${!loop.last}">
@@ -117,7 +117,7 @@
 													 	</c:if>
 													</c:forEach>
 													<span id="span_${typeId}_${valueId}_${atv_loop.index}_${it.topicInstance.uuid}">${currentValue}</span>
-									    		</a>
+									    		<!--</a>-->
 			   								</c:when>
 			   								
 			   								<c:when test="${atv.attributeValue.attributeValueValue != null}">
