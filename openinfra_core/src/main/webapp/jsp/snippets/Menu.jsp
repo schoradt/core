@@ -180,7 +180,7 @@
           	 %>
 	          	<c:forEach items="${lang}" var="item">
 	          		<c:set var="currentLanguage">${item.languageCode}-${item.countryCode}</c:set>
-	          		<c:if test="${item.languageCode != 'xx'}">
+	          		<c:if test="${item.languageCode != 'xx' && item.languageCode != 'en'}">
 	          			<c:if test="${language == currentLanguage}">
 	          				<c:set var="languageId" value="${item.uuid}" scope="page"/>
 	          			</c:if>
