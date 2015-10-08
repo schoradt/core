@@ -53,7 +53,7 @@ response.setStatus(401);
 <tr class="top"><td rowspan=4>gemischt</td><td>max</td><td>max</td><td>Projektgast (lesender Zugriff) für das Projekt Palatin und das Testprojekt</td></tr>
 <tr><td>lieschen</td><td>lieschen</td><td>Projektbearbeiter (lesen + schreiben) auf das Baalbek-Projekt (Zugriff nur auf Foto, Areal und &Ouml;ffnung)</td></tr>
 <tr><td>anonymous</td><td>anonymous</td><td>Zugriff auf Baalbek und Palatin (nur lesen) jeweils nur Foto</td></tr>
-<tr><td>siehstnix</td><td>siehstnix</td><td>Nutzer ohne rechte (Verhalten aus Verison 1.2.0)</td></tr>
+<tr><td>siehstnix</td><td>siehstnix</td><td>Nutzer ohne rechte</td></tr>
 </table>
 <td>
 </tr>
