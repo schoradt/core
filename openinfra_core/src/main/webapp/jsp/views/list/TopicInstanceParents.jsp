@@ -38,7 +38,8 @@
 			${pojo.relationshipType.description.names.localizedStrings[0].characterString}
 		</div>
 		<c:set var="settingCount" value="${fn:length(pojo.associatedInstance.topicCharacteristic.metaData)}"/>
-		<c:if test="${settingCount == 0}">
+		<c:set var="settingCount" value="${0}"/>
+		<c:if test="${settingCount != 0}">
 			<div class="panel-body">
 	    		<p><fmt:message key="nosettings.label"/></p>
 	  		</div>
@@ -49,6 +50,7 @@
 					<c:set var="columnName" value=""/>
 					<c:set var="metaData" value="${pojo.associatedInstance.topicCharacteristic.metaData}"/>
 					<c:set var="columns" value="${metaData.list_view_columns}"/>
+					<c:remove var="columns"/>
 					<c:forEach items="${columns}" var="setting">
 						<th style="width: ${100/settingCount}%">
 						<%
@@ -92,7 +94,7 @@
 					<c:forEach items="${pojo.associatedInstance.topicCharacteristic.metaData}" var="setting">
 						<c:set var="found" value="false"/>
 						<c:forEach items="${pojo.associatedInstance.values}" var="value">
-							<c:if test="${setting == value.attributeTypeId}">
+							<c:if test="${setting == value.attributeTypeId && false}">
 								<c:set var="found" value="true"/>
 								<td>
 									<c:if test="${value.attributeValueDomain != null}">
@@ -130,11 +132,13 @@
 								</td> 
 							</c:if>
 						</c:forEach>
+						<!--
 						<c:if test="${found == 'false'}">
 							<td>
 								-
 							</td>
 						</c:if>
+						-->
 					</c:forEach>
 					<c:if test="${settingCount == 0}">
 						<td>
