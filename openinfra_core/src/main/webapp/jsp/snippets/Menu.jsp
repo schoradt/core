@@ -28,7 +28,7 @@
 				<h1>
 					<a href="${homePage}">
 						penInfRA
-						<span class="small">(${openInfraVersion})</span>
+						<!-- <span class="small">(${openInfraVersion})</span> -->
 					</a>
 					</h1>
 					
