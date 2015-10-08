@@ -18,7 +18,7 @@
 <%@ include file="../../snippets/Menu.jsp" %>
 
 <div class="row">
-	<div class="col-md-8">
+	<div class="col-md">
 		<c:choose>
 			<c:when test="${fn:length(it) == 0}">
 				<fmt:message key="nosubprojects.label"/>
@@ -122,7 +122,7 @@
 			</c:otherwise>
 		</c:choose>
 	</div>
-
+<!--
 	<div class="col-md-4">
 		<div id="githubDiv" class="panel panel-default">
 			<div class="panel-heading">
@@ -132,6 +132,7 @@
 			</table>
 		</div>
 	</div>
+-->
 </div>
 
 <script>
