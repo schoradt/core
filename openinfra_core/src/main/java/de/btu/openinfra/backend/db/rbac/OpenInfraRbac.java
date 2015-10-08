@@ -432,7 +432,11 @@ public abstract class OpenInfraRbac<
 						String tcId = uriInfo.getPath().substring(
 								uriInfo.getPath().lastIndexOf(tc) +
 								tc.length());
-						tcId = tcId.substring(0, tcId.indexOf("/"));
+						try {
+						    tcId = tcId.substring(0, tcId.indexOf("/"));
+						} catch (StringIndexOutOfBoundsException e) {
+                            /* do nothing */
+                        }
 						// Generate the required access string
 						String req_access = "/projects/" + currentProjectId +
 								"/topiccharacteristics/{id}:" +
