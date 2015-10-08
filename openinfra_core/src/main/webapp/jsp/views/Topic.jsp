@@ -246,7 +246,7 @@
 		  <div style="display: none;" id="result"></div>
 		  <div class="alert alert-success" style="display: none;" role="alert" id="success"></div>
 		  <div class="alert alert-danger" style="display: none;" role="alert" id="alert"></div>
-
+	  <!--
 	  <a class="btn btn-default view" role="button" id="edit">
 	  	<fmt:message key="edit.button.label"/>
 	  </a>
@@ -256,6 +256,7 @@
 	  <a class="btn btn-default input" style="display: none;" id="save" role="button">
 	  	<fmt:message key="save.button.label"/>
 	  </a>
+	  -->
 	
 		
 	
