@@ -97,6 +97,7 @@
 		        		<fmt:message key="projects.label"/>
 		        	</a>
 		        </li>
+		        <c:if test="${currentProject != 'maps'}">
 		        <li class="dropdown">
 		          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 		          	<fmt:message key="menu.label"/><span class="caret"></span>
@@ -129,6 +130,7 @@
 					<li><a href="${link}/multiplicities"><fmt:message key="multiplicities.label"/></a></li>
 		          </ul>
 		        </li>
+		        </c:if>
         	</c:when>
         	<c:when test="${fn:contains(requestUrl, '/rest/v1/projects')}">
         		<!--
