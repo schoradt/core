@@ -103,23 +103,29 @@
 		          </a>
 		          <c:set var="link" value="${req.scheme}://${req.serverName}:${req.serverPort}${contextPath}/rest/v1/projects/${currentProject}"/>
 		          <ul class="dropdown-menu" role="menu">
+		            <!--
         			<c:if test="${fn:contains(requestUrl, '/topicinstances/')}">
         				<li><a style="cursor: pointer;"><fmt:message key="new.topicinstance.label"/></a></li>
         				<li class="divider"></li>
         			</c:if>
+        			-->
 		          	<!-- not implemented yet -->
 		          	<!--  li><fmt:message key="new.subproject.label"/></li -->
+		          	<!--
 		          	<li><a href="${link}"><fmt:message key="edit.project.label"/></a></li>
+		          	-->
 		          	<!-- http://jsfiddle.net/L3ddq/1/ -->
+		          	<!--
 		          	<li><a id="deleteProject" style="cursor: pointer;"><fmt:message key="delete.project.label"/></a></li>
-		          						
+		          	
 		          	<li class="divider"></li>
+		          	-->
 			        <li><a href="${link}/subprojects"><fmt:message key="subprojects.label"/></a></li>
 					<li><a href="${link}/topiccharacteristics"><fmt:message key="topiccharacteristics.label"/></a></li>
 					<li><a href="${link}/attributetypes"><fmt:message key="attributetypes.label"/></a></li>
 					<li><a href="${link}/attributetypegroups"><fmt:message key="attributetypegroups.label"/></a></li>
 					<li><a href="${link}/valuelists"><fmt:message key="valuelists.label"/></a></li>
-					<li><a href="${link}/ptlocales"><fmt:message key="locales.label"/></a></li>
+					<!--<li><a href="${link}/ptlocales"><fmt:message key="locales.label"/></a></li>-->
 					<li><a href="${link}/multiplicities"><fmt:message key="multiplicities.label"/></a></li>
 		          </ul>
 		        </li>
@@ -137,6 +143,7 @@
 		        		<fmt:message key="projects.label"/>
 		        	</a>
 		        </li>
+		        <!--
 		        <li class="dropdown">
 		          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 		          	<fmt:message key="menu.label"></fmt:message><span class="caret"></span>
@@ -145,6 +152,7 @@
 		          	<li>Neues Projekt</li>
 		          </ul>
 		        </li>
+		        -->
         	</c:when>
         </c:choose>
         <li>
