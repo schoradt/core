@@ -31,12 +31,12 @@
 <!-- a global variable that defines if we are in a project or in the system database -->
 <c:choose>
 	<c:when test="${fn:contains(requestUrl, '/rest/v1/projects')}">
+		<c:set var="schema" value="projects" />
+	</c:when>
+	<c:otherwise>
 		<c:set var="schema" value="system" />
 		<!-- override the project id -->
 		<c:set var="currentProject" value="" />
-	</c:when>
-	<c:otherwise>
-		<c:set var="schema" value="projects" />
 	</c:otherwise>
 </c:choose>
 
