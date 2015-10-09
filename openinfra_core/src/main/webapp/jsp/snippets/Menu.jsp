@@ -121,7 +121,7 @@
 		          	
 		          	<li class="divider"></li>
 		          	-->
-			        <li><a href="${link}/subprojects"><fmt:message key="subprojects.label"/></a></li>
+			        <!--<li><a href="${link}/subprojects"><fmt:message key="subprojects.label"/></a></li>-->
 					<li><a href="${link}/topiccharacteristics"><fmt:message key="topiccharacteristics.label"/></a></li>
 					<li><a href="${link}/attributetypes"><fmt:message key="attributetypes.label"/></a></li>
 					<li><a href="${link}/attributetypegroups"><fmt:message key="attributetypegroups.label"/></a></li>

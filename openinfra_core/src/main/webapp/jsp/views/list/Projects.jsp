@@ -85,7 +85,7 @@
 							    			</span>
 						    			</a>					    		
 						    		</div>
-						    		
+						    		<%--
 					    			<a href="<%= request.getContextPath() %>/rest/v1/projects/${pojo.uuid}/subprojects">
 					    				<fmt:message key="subprojects.label"/>:
 						    			<span class="badge">
@@ -113,6 +113,7 @@
 									   		</li>
 								   		</c:forEach>
 								   	</ul>
+								   	 --%>
 					    		</div>   		
 							</div>
 							
