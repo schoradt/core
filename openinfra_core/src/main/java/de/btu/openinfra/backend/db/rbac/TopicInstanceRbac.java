@@ -44,7 +44,7 @@ public class TopicInstanceRbac extends OpenInfraValueRbac<TopicInstancePojo,
             int size) {
 		checkPermission(httpMethod, uriInfo);
 		return new TopicInstanceDao(
-				topicCharacteristicId,
+		        currentProjectId,
 				schema).readWithGeomz(locale,
 						topicCharacteristicId, offset, size);
 	}
@@ -54,7 +54,7 @@ public class TopicInstanceRbac extends OpenInfraValueRbac<TopicInstancePojo,
 			UriInfo uriInfo, UUID topicCharacteristicId) {
 		checkPermission(httpMethod, uriInfo);
 		return new TopicInstanceDao(
-				topicCharacteristicId,
+		        currentProjectId,
 				schema).getCountWithGeomz(topicCharacteristicId);
 		}
 
