@@ -16,14 +16,14 @@ public class TopicInstanceRbac extends OpenInfraValueRbac<TopicInstancePojo,
 	TopicInstance, TopicCharacteristic, TopicInstanceDao> {
 
 	public TopicInstanceRbac(
-			UUID currentProjectId, 
+			UUID currentProjectId,
 			OpenInfraSchemas schema) {
-		super(currentProjectId, schema, 
+		super(currentProjectId, schema,
 				TopicCharacteristic.class, TopicInstanceDao.class);
 	}
-	
+
 	public List<TopicInstancePojo> read(
-			OpenInfraHttpMethod httpMethod, 
+			OpenInfraHttpMethod httpMethod,
 			UriInfo uriInfo,
 			Locale locale,
 			UUID topicCharacteristicId,
@@ -31,12 +31,12 @@ public class TopicInstanceRbac extends OpenInfraValueRbac<TopicInstancePojo,
 			int offset,
 			int size) {
 		checkPermission(httpMethod, uriInfo);
-		return new TopicInstanceDao(topicCharacteristicId, schema).read(
+		return new TopicInstanceDao(currentProjectId, schema).read(
 				locale, topicCharacteristicId, filter, offset, size);
 	}
-	
+
 	public List<TopicInstancePojo> readWithGeomz(
-			OpenInfraHttpMethod httpMethod, 
+			OpenInfraHttpMethod httpMethod,
 			UriInfo uriInfo,
             Locale locale,
             UUID topicCharacteristicId,
@@ -44,17 +44,17 @@ public class TopicInstanceRbac extends OpenInfraValueRbac<TopicInstancePojo,
             int size) {
 		checkPermission(httpMethod, uriInfo);
 		return new TopicInstanceDao(
-				topicCharacteristicId, 
-				schema).readWithGeomz(locale, 
+				topicCharacteristicId,
+				schema).readWithGeomz(locale,
 						topicCharacteristicId, offset, size);
 	}
-	
+
 	public long getCountWithGeomz(
-			OpenInfraHttpMethod httpMethod, 
+			OpenInfraHttpMethod httpMethod,
 			UriInfo uriInfo, UUID topicCharacteristicId) {
 		checkPermission(httpMethod, uriInfo);
 		return new TopicInstanceDao(
-				topicCharacteristicId, 
+				topicCharacteristicId,
 				schema).getCountWithGeomz(topicCharacteristicId);
 		}
 
