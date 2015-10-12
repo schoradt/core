@@ -9,8 +9,7 @@ import java.util.UUID;
 
 import javax.persistence.ParameterMode;
 import javax.persistence.Persistence;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
+import javax.persistence.PersistenceException;
 
 import jersey.repackaged.com.google.common.collect.Lists;
 import de.btu.openinfra.backend.OpenInfraProperties;
@@ -35,6 +34,8 @@ import de.btu.openinfra.backend.db.pojos.PtFreeTextPojo;
 import de.btu.openinfra.backend.db.pojos.meta.DatabaseConnectionPojo;
 import de.btu.openinfra.backend.db.pojos.meta.ProjectsPojo;
 import de.btu.openinfra.backend.db.pojos.meta.SchemasPojo;
+import de.btu.openinfra.backend.exception.OpenInfraDatabaseException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 /**
  * This class represents the Project and is used to access the underlying layer
@@ -277,17 +278,17 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 	 * necessary to create a new database schema and write some data into the
 	 * meta data schema.
 	 *
-	 * TODO check permission for this method!
-	 *
 	 * @param project the project pojo
 	 * @return        the UUID of the new created project or NULL if something
 	 *                went wrong
 	 */
 	public UUID createProject(ProjectPojo pojo) {
-		System.out.println("This method (ProjectDao - createProject) is "
-				+ "currently not secured!!!!!!!!!");
 
+		// the UUID that will be returned
 	    UUID id = null;
+
+	    // generate a UUID for the new project
+        UUID newProjectId = UUID.randomUUID();
 
 	    // determine if we want to create a sub or a main project
 	    if (pojo.getSubprojectOf() != null) {
@@ -295,192 +296,47 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 	                OpenInfraSchemas.PROJECTS).createOrUpdate(pojo);
 	    } else {
 	        try {
-    	        // set the default database connection properties
-    	        Map<String, String> properties =
-    	                OpenInfraProperties.getConnectionProperties();
+    	        // create the database schema
+                createSchema(pojo, newProjectId);
 
-    	        // create the new project schema with trigger and initial project
-    	        // data
-                Persistence.generateSchema("openinfra_schema_creation", properties);
+                // insert the necessary data into the meta data schema
+                writeMetaData(newProjectId);
 
-                // generate a UUID for the new project
-                UUID newProjectId = UUID.randomUUID();
+                // insert the basic project data into the project table in the
+                // new project schema
+                writeBasicProjectData(pojo, newProjectId);
 
-                // rename the project schema
-                if (!em.createStoredProcedureQuery(
-                        "rename_project_schema", Boolean.class)
-                        .registerStoredProcedureParameter(
-                                "name",
-                                String.class,
-                                ParameterMode.IN)
-                        .registerStoredProcedureParameter(
-                                "uuid",
-                                UUID.class,
-                                ParameterMode.IN)
-                        .setParameter(
-                                "name", pojo.getNames()
-                                .getLocalizedStrings().get(0).getCharacterString())
-                        .setParameter("uuid", newProjectId)
-                        .execute()) {
-                    throw new WebApplicationException(
-                            "Failed to rename project schema.",
-                            Response.Status.INTERNAL_SERVER_ERROR);
-                }
+                // copy the initial data from the system schema into the new
+                // project schema
+                mergeSystemData(newProjectId);
 
-                // create a POJO for the schema in the meta data schema
-                SchemasPojo metaSchemasPojo = new SchemasPojo();
-                // set all necessary data for the schema
-                metaSchemasPojo.setSchema("project_" + newProjectId);
-                // create the DAO for the schema
-                SchemasDao schemaDao = new SchemasDao(OpenInfraSchemas.META_DATA);
-                // insert the data
-                UUID schemaId = schemaDao.createOrUpdate(metaSchemasPojo);
-                if (schemaId == null) {
-                    throw new WebApplicationException(
-                            "Failed to create an entry in the table schema.");
-                }
-
-                // create a POJO for the database connection in the meta data schema
-                DatabaseConnectionPojo dbCPojo = new DatabaseConnectionPojo();
-                // set all necessary data for the database connection
-                dbCPojo.setSchema(schemaDao.read(null, schemaId));
-                // create necessary DAOs for the credentials, ports, databases and
-                // servers
-                CredentialsDao credentialsDao =
-                        new CredentialsDao(OpenInfraSchemas.META_DATA);
-                PortsDao portDao = new PortsDao(OpenInfraSchemas.META_DATA);
-                DatabasesDao dbDao = new DatabasesDao(OpenInfraSchemas.META_DATA);
-                ServersDao serverDao = new ServersDao(OpenInfraSchemas.META_DATA);
-
-                // TODO Only the default values from the properties file will be
-                //      used for the new connection. Find a better way?
-                // retrieve the default credentials
-                dbCPojo.setCredentials(
-                        credentialsDao.mapToPojo(
-                                null,
-                                em.createNamedQuery(
-                                        "Credentials.findByUsernameAndPassword",
-                                        Credentials.class)
-                                  .setParameter(
-                                          "username",
-                                          OpenInfraProperties.getProperty(
-                                                  OpenInfraPropertyKeys.USER
-                                                  .toString()))
-                                  .setParameter(
-                                          "password",
-                                          OpenInfraProperties.getProperty(
-                                                  OpenInfraPropertyKeys.PASSWORD
-                                                  .toString()))
-                                  .getSingleResult()));
-                // retrieve the default port
-                dbCPojo.setPort(
-                        portDao.mapToPojo(
-                                null,
-                                em.createNamedQuery(
-                                        "Ports.findByPort",
-                                        Ports.class)
-                                  .setParameter(
-                                          "port",
-                                          Integer.parseInt(
-                                                  OpenInfraProperties.getProperty(
-                                                          OpenInfraPropertyKeys.PORT
-                                                          .toString())))
-                                  .getSingleResult()));
-                // retrieve the default database
-                dbCPojo.setDatabase(
-                        dbDao.mapToPojo(
-                                null,
-                                em.createNamedQuery(
-                                        "Databases.findByDatabase",
-                                        Databases.class)
-                                  .setParameter(
-                                          "database",
-                                          OpenInfraProperties.getProperty(
-                                                  OpenInfraPropertyKeys.DB_NAME
-                                                  .toString()))
-                                  .getSingleResult()));
-                // retrieve the default server
-                dbCPojo.setServer(
-                        serverDao.mapToPojo(
-                                null,
-                                em.createNamedQuery(
-                                        "Servers.findByServer",
-                                        Servers.class)
-                                  .setParameter(
-                                          "server",
-                                          OpenInfraProperties.getProperty(
-                                                  OpenInfraPropertyKeys.SERVER
-                                                  .toString()))
-                                  .getSingleResult()));
-                // create the DAO for the database connection
-                DatabaseConnectionDao dbCDao =
-                        new DatabaseConnectionDao(OpenInfraSchemas.META_DATA);
-                // insert the database connection information
-                UUID dbCId = dbCDao.createOrUpdate(dbCPojo);
-                if (dbCId == null) {
-                    throw new WebApplicationException(
-                            "Failed to create an entry in the table "
-                            + "database_connection.",
-                            Response.Status.INTERNAL_SERVER_ERROR);
-                }
-
-
-                // create a POJO for the project in the meta data schema
-                ProjectsPojo metaProjectsPojo = new ProjectsPojo();
-                metaProjectsPojo.setUuid(newProjectId);
-                // set the subproject flag to false
-                metaProjectsPojo.setIsSubproject(false);
-                // set the database connection information
-                metaProjectsPojo.setDatabaseConnection(dbCDao.read(null, dbCId));
-                // insert the informations into the meta_data schema
-                new ProjectsDao(OpenInfraSchemas.META_DATA)
-                    .createOrUpdate(metaProjectsPojo);
-
-
-                // create a POJO for the project in the recent created project
-                // schema
-                ProjectPojo newProjectPojo = new ProjectPojo();
-                // set the recently generated UUID as id of the project
-                newProjectPojo.setUuid(newProjectId);
-                // take on the parameters of the passed POJO
-                newProjectPojo.setNames(pojo.getNames());
-                newProjectPojo.setDescriptions(pojo.getDescriptions());
-                // set the sub project to null because it is a main project
-                newProjectPojo.setSubprojectOf(null);
-
-                // write the data of the project
-                new ProjectDao(newProjectId, OpenInfraSchemas.PROJECTS)
-                        .createOrUpdate(newProjectPojo);
                 id = newProjectId;
-                if (id == null) {
-                    throw new WebApplicationException(
-                            "Failed to write the project data into the new created "
-                            + "project schema.",
-                            Response.Status.INTERNAL_SERVER_ERROR);
-                }
 
-                // merge the content of the system schema into the new project
-                // schema
-                boolean result = false;
-                try {
-                    result = em.createStoredProcedureQuery(
-                            "merge_system_schema", Boolean.class)
-                            .registerStoredProcedureParameter(
-                                    "project_id",
-                                    UUID.class,
-                                    ParameterMode.IN)
-                            .setParameter("project_id", id)
-                            .execute();
-                } catch (Exception e) { /* do nothing */ }
-                if (!result) {
-                    throw new WebApplicationException(
-                            "The new project database was created successfully with"
-                            + " the id '"+ id +"'. But merging the content of the "
-                            + "system database failed.",
-                            Response.Status.INTERNAL_SERVER_ERROR);
+	        } catch (OpenInfraDatabaseException e) {
+	            // execute a roll back
+	            // 1) remove entries from meta data
+	            // 2) delete database schema
+
+	            switch (e.getType()) {
+	            case MERGE_SYSTEM:
+	                /* run through */
+	            case INSERT_BASIC_PROJECT_DATA:
+	                /* run through */
+                case INSERT_META_DATA:
+                    /* run through */
+                case RENAME_SCHEMA:
+                    /* run through */
+                case CREATE_SCHEMA:
+
+                    break;
+
+
+
+
+                default:
+                    /* no roll back necessary */
+                    break;
                 }
-	        } catch (Exception e) {
-                // TODO implement rollback
             }
 	    }
 	    return id;
@@ -543,5 +399,246 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
         pojo.setSubprojectOf(currentProjectId);
 
         return pojo;
+    }
+
+    /**
+     * This method creates a new project schema with the given project id. The
+     * schema creation will be handled by JPA using a special persistence
+     * context. After schema creation a stored procedure is called that will
+     * rename the schema.
+     *
+     * @param pojo
+     * @param newProjectId
+     * @throws OpenInfraDatabaseException if the creation or renaming of the
+     *         schema failed.
+     * @return
+     */
+    private void createSchema(ProjectPojo pojo, UUID newProjectId)
+            throws OpenInfraDatabaseException {
+        try {
+            // set the default database connection properties
+            Map<String, String> properties =
+                    OpenInfraProperties.getConnectionProperties();
+
+            // create the new project schema with trigger and initial project
+            // data
+            Persistence.generateSchema("openinfra_schema_creation", properties);
+
+            // rename the project schema
+            if (!em.createStoredProcedureQuery(
+                "rename_project_schema", Boolean.class)
+                    .registerStoredProcedureParameter(
+                        "name",
+                        String.class,
+                        ParameterMode.IN)
+                    .registerStoredProcedureParameter(
+                        "uuid",
+                        UUID.class,
+                        ParameterMode.IN)
+                    .setParameter(
+                        "name",
+                        pojo.getNames().getLocalizedStrings().get(0)
+                            .getCharacterString())
+                    .setParameter("uuid", newProjectId)
+                                .execute()) {
+                throw new OpenInfraDatabaseException(
+                        OpenInfraExceptionTypes.RENAME_SCHEMA);
+            }
+        } catch (PersistenceException pe) {
+            throw new OpenInfraDatabaseException(
+                    OpenInfraExceptionTypes.CREATE_SCHEMA);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
+     * This method writes all necessary meta data for the new project into the
+     * meta data schema.
+     *
+     * @param newProjectId
+     * @throws SchemaCreationException
+     * @return
+     */
+    private void writeMetaData(UUID newProjectId)
+            throws OpenInfraDatabaseException {
+        try {
+            // create a POJO for the schema in the meta data schema
+            SchemasPojo metaSchemasPojo = new SchemasPojo();
+            // set all necessary data for the schema
+            metaSchemasPojo.setSchema("project_" + newProjectId);
+            // create the DAO for the schema
+            SchemasDao schemaDao = new SchemasDao(OpenInfraSchemas.META_DATA);
+            // insert the data
+            // TODO: createOrUpdate can throw an exception!
+            UUID schemaId = schemaDao.createOrUpdate(metaSchemasPojo);
+
+            // create a POJO for the database connection in the meta data schema
+            DatabaseConnectionPojo dbCPojo = new DatabaseConnectionPojo();
+            // set all necessary data for the database connection
+            dbCPojo.setSchema(schemaDao.read(null, schemaId));
+            // create necessary DAOs for the credentials, ports, databases and
+            // servers
+            CredentialsDao credentialsDao =
+                    new CredentialsDao(OpenInfraSchemas.META_DATA);
+            PortsDao portDao = new PortsDao(OpenInfraSchemas.META_DATA);
+            DatabasesDao dbDao = new DatabasesDao(OpenInfraSchemas.META_DATA);
+            ServersDao serverDao = new ServersDao(OpenInfraSchemas.META_DATA);
+
+            // TODO Only the default values from the properties file will be
+            //      used for the new connection. Find a better way?
+            // retrieve the default credentials
+            dbCPojo.setCredentials(
+                    credentialsDao.mapToPojo(
+                            null,
+                            em.createNamedQuery(
+                                    "Credentials.findByUsernameAndPassword",
+                                    Credentials.class)
+                              .setParameter(
+                                      "username",
+                                      OpenInfraProperties.getProperty(
+                                              OpenInfraPropertyKeys.USER
+                                              .toString()))
+                              .setParameter(
+                                      "password",
+                                      OpenInfraProperties.getProperty(
+                                              OpenInfraPropertyKeys.PASSWORD
+                                              .toString()))
+                              .getSingleResult()));
+            // retrieve the default port
+            dbCPojo.setPort(
+                    portDao.mapToPojo(
+                            null,
+                            em.createNamedQuery(
+                                    "Ports.findByPort",
+                                    Ports.class)
+                              .setParameter(
+                                      "port",
+                                      Integer.parseInt(
+                                              OpenInfraProperties.getProperty(
+                                                      OpenInfraPropertyKeys.PORT
+                                                      .toString())))
+                              .getSingleResult()));
+            // retrieve the default database
+            dbCPojo.setDatabase(
+                    dbDao.mapToPojo(
+                            null,
+                            em.createNamedQuery(
+                                    "Databases.findByDatabase",
+                                    Databases.class)
+                              .setParameter(
+                                      "database",
+                                      OpenInfraProperties.getProperty(
+                                              OpenInfraPropertyKeys.DB_NAME
+                                              .toString()))
+                              .getSingleResult()));
+            // retrieve the default server
+            dbCPojo.setServer(
+                    serverDao.mapToPojo(
+                            null,
+                            em.createNamedQuery(
+                                    "Servers.findByServer",
+                                    Servers.class)
+                              .setParameter(
+                                      "server",
+                                      OpenInfraProperties.getProperty(
+                                              OpenInfraPropertyKeys.SERVER
+                                              .toString()))
+                              .getSingleResult()));
+            // create the DAO for the database connection
+            DatabaseConnectionDao dbCDao =
+                    new DatabaseConnectionDao(OpenInfraSchemas.META_DATA);
+            // insert the database connection information
+            UUID dbCId = dbCDao.createOrUpdate(dbCPojo);
+            if (dbCId == null) {
+                throw new OpenInfraDatabaseException(
+                        OpenInfraExceptionTypes.INSERT_META_DATA);
+            }
+
+            // create a POJO for the project in the meta data schema
+            ProjectsPojo metaProjectsPojo = new ProjectsPojo();
+            metaProjectsPojo.setUuid(newProjectId);
+            // set the subproject flag to false
+            metaProjectsPojo.setIsSubproject(false);
+            // set the database connection information
+            metaProjectsPojo.setDatabaseConnection(dbCDao.read(null, dbCId));
+            // insert the informations into the meta_data schema
+            new ProjectsDao(OpenInfraSchemas.META_DATA)
+                .createOrUpdate(metaProjectsPojo);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void deleteMetaData() {
+        // delete from meta_data
+    }
+
+    /**
+     * This method writes the basic project data in the new created project
+     * schema. This covers only an initial entry in the table project.
+     *
+     * @param pojo
+     * @param newProjectId
+     * @throws SchemaCreationException
+     * @return
+     */
+    private void writeBasicProjectData(ProjectPojo pojo, UUID newProjectId)
+            throws OpenInfraDatabaseException {
+        try {
+            // create a POJO for the project in the recent created project
+            // schema
+            ProjectPojo newProjectPojo = new ProjectPojo();
+            // set the recently generated UUID as id of the project
+            newProjectPojo.setUuid(newProjectId);
+            // take on the parameters of the passed POJO
+            newProjectPojo.setNames(pojo.getNames());
+            newProjectPojo.setDescriptions(pojo.getDescriptions());
+            // set the sub project to null because it is a main project
+            newProjectPojo.setSubprojectOf(null);
+
+            // write the data of the project
+            new ProjectDao(newProjectId, OpenInfraSchemas.PROJECTS)
+                    .createOrUpdate(newProjectPojo);
+
+        } catch (RuntimeException re) {
+            throw new OpenInfraDatabaseException(
+                    OpenInfraExceptionTypes.INSERT_BASIC_PROJECT_DATA);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * This method merges the initial topic framework from the system schema
+     * into the project schema with the passed project id.
+     *
+     * @param newProjectId
+     * @throws SchemaCreationException
+     * @return
+     */
+    private void mergeSystemData(UUID newProjectId)
+            throws OpenInfraDatabaseException {
+        try {
+            // merge the content of the system schema into the new project
+            // schema
+            if(em.createStoredProcedureQuery(
+                    "merge_system_schema", Boolean.class)
+                    .registerStoredProcedureParameter(
+                            "project_id",
+                            UUID.class,
+                            ParameterMode.IN)
+                    .setParameter("project_id", newProjectId)
+                    .execute()) {
+
+            } else {
+                throw new OpenInfraDatabaseException(
+                        OpenInfraExceptionTypes.MERGE_SYSTEM);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
