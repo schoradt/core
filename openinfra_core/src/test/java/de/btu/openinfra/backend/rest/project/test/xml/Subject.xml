@@ -1,0 +1,9 @@
+<subjectPojo>
+	<uuid></uuid>
+	<description>test person</description>
+	<login>Hans</login>
+	<name>Hans im Glück</name>
+	<status>1</status>
+	<password>Hans</password>
+	<status>1</status>
+</subjectPojo>

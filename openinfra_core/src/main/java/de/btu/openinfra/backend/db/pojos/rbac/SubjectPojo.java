@@ -1,8 +1,6 @@
 package de.btu.openinfra.backend.db.pojos.rbac;
 
-import java.sql.Timestamp;
 import java.util.List;
-import java.util.Locale;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -12,13 +10,13 @@ import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 @XmlRootElement
 public class SubjectPojo extends OpenInfraPojo {
 
-	private Timestamp createdOn;
+	private String createdOn;
 
-	private Locale defaultLanguage;
+	private String defaultLanguage;
 
 	private String description;
 
-	private Timestamp lastLoginOn;
+	private String lastLoginOn;
 
 	private String login;
 
@@ -28,15 +26,23 @@ public class SubjectPojo extends OpenInfraPojo {
 
 	private String password;
 
-	private Timestamp passwordCreatedOn;
+	private String passwordCreatedOn;
 
+	/**
+	 * The status:
+	 * -1 blocked
+	 * 0  inactive
+	 * 1  active
+	 */
 	private Integer status;
 
-	private Timestamp updatedOn;
+	private String updatedOn;
 	
 	private List<RolePojo> roles;
 	
 	private List<SubjectProjectPojo> projects;
+	
+	private String webApp;
 	
 	public SubjectPojo() {}
 	
@@ -44,19 +50,19 @@ public class SubjectPojo extends OpenInfraPojo {
 		super(modelObject);
 	}
 
-	public Timestamp getCreatedOn() {
+	public String getCreatedOn() {
 		return this.createdOn;
 	}
 
-	public void setCreatedOn(Timestamp createdOn) {
+	public void setCreatedOn(String createdOn) {
 		this.createdOn = createdOn;
 	}
 
-	public Locale getDefaultLanguage() {
+	public String getDefaultLanguage() {
 		return this.defaultLanguage;
 	}
 
-	public void setDefaultLanguage(Locale defaultLanguage) {
+	public void setDefaultLanguage(String defaultLanguage) {
 		this.defaultLanguage = defaultLanguage;
 	}
 
@@ -68,11 +74,11 @@ public class SubjectPojo extends OpenInfraPojo {
 		this.description = description;
 	}
 
-	public Timestamp getLastLoginOn() {
+	public String getLastLoginOn() {
 		return this.lastLoginOn;
 	}
 
-	public void setLastLoginOn(Timestamp lastLoginOn) {
+	public void setLastLoginOn(String lastLoginOn) {
 		this.lastLoginOn = lastLoginOn;
 	}
 
@@ -108,11 +114,11 @@ public class SubjectPojo extends OpenInfraPojo {
 		this.password = password;
 	}
 
-	public Timestamp getPasswordCreatedOn() {
+	public String getPasswordCreatedOn() {
 		return this.passwordCreatedOn;
 	}
 
-	public void setPasswordCreatedOn(Timestamp passwordCreatedOn) {
+	public void setPasswordCreatedOn(String passwordCreatedOn) {
 		this.passwordCreatedOn = passwordCreatedOn;
 	}
 
@@ -124,11 +130,11 @@ public class SubjectPojo extends OpenInfraPojo {
 		this.status = status;
 	}
 
-	public Timestamp getUpdatedOn() {
+	public String getUpdatedOn() {
 		return this.updatedOn;
 	}
 
-	public void setUpdatedOn(Timestamp updatedOn) {
+	public void setUpdatedOn(String updatedOn) {
 		this.updatedOn = updatedOn;
 	}
 
@@ -146,6 +152,14 @@ public class SubjectPojo extends OpenInfraPojo {
 
 	public void setProjects(List<SubjectProjectPojo> projects) {
 		this.projects = projects;
+	}
+
+	public String getWebApp() {
+		return webApp;
+	}
+
+	public void setWebApp(String webApp) {
+		this.webApp = webApp;
 	}
 
 }
