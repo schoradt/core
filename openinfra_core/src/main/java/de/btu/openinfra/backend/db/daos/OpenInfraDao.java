@@ -539,15 +539,15 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 		TypeModel tm = null;
 		if(id != null) {
 			tm = em.find(modelClass, id);
-			// TODO check if tm null
-		} else {
+		}
+		if(tm == null) {
 			try {
 				tm = modelClass.newInstance();
 				tm.setId(UUID.randomUUID());
 			} catch(Exception ex) {
 				ex.printStackTrace();
-			} // end try catch
-		} // end if else
+			} // end try catch			
+		}
 		return tm;
 	}
 

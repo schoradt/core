@@ -21,6 +21,8 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 @Entity
 @NamedQueries({
 	@NamedQuery(name="Subject.findAll", query="SELECT s FROM Subject s"),
+	@NamedQuery(name="Subject.count",
+		query="SELECT COUNT(s) FROM Subject s"),
 	@NamedQuery(name="Subject.findByLogin", 
 		query="SELECT s "
 			+ "FROM Subject s "

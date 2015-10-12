@@ -30,8 +30,7 @@ import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
  * 
  * Permission examples:
  *  
- * Root permission (access to all rest resources with read, write, update and
- * delete):
+ * Root permission (access to all rest resources with read, write):
  * *:*:*
  *  
  * Permission to access all projects with read and write (update and delete)
@@ -51,10 +50,16 @@ import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
  * example you want to secure the following url:
  * /projects/{id}/topiccharacteristics/{id}/topicinstances
  * Insert the currentProjectId like so
- * /projects/e7d42bff-4e40-4f43-9d1b-1dc5a190cd75/topiccharacteristics/{id}/topicinstances:r:{id}
+ * /projects/e7d42bff-4e40-4f43-9d1b-1dc5a190cd75/topiccharacteristics/{id}/topicinstances:r:* or specific uuid
  * 
  * Permission to read information from system schema:
  * /system:r
+ * 
+ * Permission to create a main project:
+ * /projects:w
+ * 
+ * Permission to create a subproject related to the parent project:
+ * /projects/e7d42bff-4e40-4f43-9d1b-1dc5a190cd75/subprojects:w
  * 
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *

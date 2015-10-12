@@ -180,6 +180,11 @@ public class EntityManagerFactoryCache {
             // Override default properties and set project and default search
             // path
             ProjectsPojo p = MetaDataManager.getProjects(currentProjectId);
+            // The current project id might wrong which means that the id is not 
+            // associated to an existing project
+            if(p == null) {
+            	break;
+            }
             user = p.getDatabaseConnection().getCredentials().getUsername();
             password = p.getDatabaseConnection().getCredentials().getPassword();
             url = String.format(
