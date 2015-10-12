@@ -54,6 +54,17 @@ public class SubjectResource {
 				size);
 	}
 	
+	@GET
+    @Path("count")
+	@Produces({MediaType.TEXT_PLAIN})
+    public long getSubjectsCount(
+    		@Context UriInfo uriInfo,
+    		@Context HttpServletRequest request) {
+		return new SubjectRbac().getCount(
+				OpenInfraHttpMethod.valueOf(request.getMethod()), uriInfo);
+	}
+    		
+	
 	@POST
 	public Response create(
 			@Context UriInfo uriInfo,
