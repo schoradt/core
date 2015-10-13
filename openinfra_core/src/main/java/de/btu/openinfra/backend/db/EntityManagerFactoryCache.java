@@ -166,6 +166,12 @@ public class EntityManagerFactoryCache {
             // path
             ProjectsPojo p = MetaDataManager.getProjects(currentProjectId);
 
+            // The current project id might wrong which means that the id is not
+            // associated to an existing project
+            if(p == null) {
+                break;
+            }
+
             properties.put(
                     OpenInfraPropertyKeys.USER.toString(),
                     p.getDatabaseConnection().getCredentials().getUsername());
@@ -179,6 +185,7 @@ public class EntityManagerFactoryCache {
                         p.getDatabaseConnection().getServer().getServer(),
                         p.getDatabaseConnection().getPort().getPort(),
                         p.getDatabaseConnection().getDatabase().getDatabase()));
+
             currentSchema +=
                     p.getDatabaseConnection().getSchema().getSchema() + "," +
                     OpenInfraPropertyValues.SEARCH_PATH;

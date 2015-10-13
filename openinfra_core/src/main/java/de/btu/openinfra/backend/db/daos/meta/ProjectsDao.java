@@ -42,6 +42,7 @@ public class ProjectsDao
     public static ProjectsPojo mapToPojoStatically(Projects p) {
         if (p != null) {
             ProjectsPojo pojo = new ProjectsPojo(p);
+            pojo.setProjectId(p.getProjectId());
             pojo.setDatabaseConnection(
                     DatabaseConnectionDao.mapToPojoStatically(
                             p.getDatabaseConnection()));
@@ -79,6 +80,7 @@ public class ProjectsDao
                 resultProjects = new Projects();
                 resultProjects.setId(pojo.getUuid());
             }
+            resultProjects.setProjectId(pojo.getProjectId());
             resultProjects.setIsSubproject(pojo.getIsSubproject());
             resultProjects.setDatabaseConnection(
                     DatabaseConnectionDao.mapToModelStatically(

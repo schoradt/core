@@ -108,12 +108,12 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 	 */
 	public List<ProjectPojo> readMainProjects(Locale locale) {
 		// 1. We need to deliver each main Project from meta data database
-		List<ProjectsPojo> projects = new ProjectsDao(
+		List<ProjectsPojo> metaProjects = new ProjectsDao(
 				OpenInfraSchemas.META_DATA).read(
 						locale,
 						0,
 						Integer.MAX_VALUE);
-		Iterator<ProjectsPojo> it = projects.iterator();
+		Iterator<ProjectsPojo> it = metaProjects.iterator();
 		// 2. Only keep main projects in the list
 		while (it.hasNext()) {
 			if(it.next().getIsSubproject()) {
@@ -123,10 +123,11 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 		// 3. Create a list of main projects and add a corresponding main
 		//    project to the list found in the metadata database
 		List<ProjectPojo> mainProjects = new LinkedList<ProjectPojo>();
-		for(ProjectsPojo item : projects) {
+		for(ProjectsPojo item : metaProjects) {
 			ProjectPojo pp = new ProjectDao(
-					 item.getUuid(),
-					 OpenInfraSchemas.PROJECTS).read(locale, item.getUuid());
+					 item.getProjectId(),
+					 OpenInfraSchemas.PROJECTS).read(
+					         locale, item.getProjectId());
 			if(pp != null) {
 				mainProjects.add(pp);
 			}

@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.ws.rs.WebApplicationException;
+
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SaltedAuthenticationInfo;
@@ -43,14 +45,21 @@ public class OpenInfraRealm extends AuthorizingRealm {
 			AuthenticationToken token) throws AuthenticationException {
 		
 		UsernamePasswordToken upt = (UsernamePasswordToken)token;
-		Subject s = new SubjectDao().readModel(upt.getUsername());
+		SubjectDao dao = new SubjectDao();
+		Subject s = dao.readModel(upt.getUsername());
+		dao.updateLoginTime(s);
 		
-		return new SimpleAuthenticationInfo(
-				new SimplePrincipalCollection(
-						upt.getUsername(),
-						OpenInfraRealmNames.LOGIN.name()), 
-						s.getPassword(),
-						new SimpleByteSource(s.getSalt().toString()));
+		// Grant only access to users which have the status 1
+		if(s.getStatus() == 1) {
+			return new SimpleAuthenticationInfo(
+					new SimplePrincipalCollection(
+							upt.getUsername(),
+							OpenInfraRealmNames.LOGIN.name()), 
+							s.getPassword(),
+							new SimpleByteSource(s.getSalt().toString()));
+		} else {
+			throw new WebApplicationException(403);
+		}
 	}
 	
 	@Override
