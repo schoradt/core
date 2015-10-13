@@ -96,5 +96,15 @@ public class PasswordBlacklistResource {
 						OpenInfraHttpMethod.valueOf(request.getMethod()), 
 						uriInfo, uuid), uuid);
 	}
+	
+	@GET
+	@Path("count")
+	@Produces({MediaType.TEXT_PLAIN})
+	public long getCount(
+			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request) {
+		return new PasswordBlacklistRbac().getCount(
+				OpenInfraHttpMethod.valueOf(request.getMethod()), uriInfo);
+	}
 
 }

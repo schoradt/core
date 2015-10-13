@@ -70,7 +70,7 @@ public class OpenInfraObjectResource {
 	@GET
 	@Path("count")
 	@Produces({MediaType.TEXT_PLAIN})
-	public long getAttributeTypeGroupCount(
+	public long getCount(
 			@Context UriInfo uriInfo,
 			@Context HttpServletRequest request) {
 		return new OpenInfraObjectRbac().getCount(
