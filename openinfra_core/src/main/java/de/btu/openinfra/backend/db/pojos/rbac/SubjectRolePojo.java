@@ -1,5 +1,7 @@
 package de.btu.openinfra.backend.db.pojos.rbac;
 
+import java.util.UUID;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
@@ -8,9 +10,8 @@ import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 @XmlRootElement
 public class SubjectRolePojo extends OpenInfraPojo {
 
-	private RolePojo role;
-
-	private SubjectPojo subject;
+	private UUID role;
+	private UUID subject;
 	
 	public SubjectRolePojo() {}
 	
@@ -18,23 +19,20 @@ public class SubjectRolePojo extends OpenInfraPojo {
 		super(modelObject);
 	}
 
-	public RolePojo getRole() {
+	public UUID getRole() {
 		return role;
 	}
 
-	public void setRole(RolePojo role) {
+	public void setRole(UUID role) {
 		this.role = role;
 	}
 
-	public SubjectPojo getSubject() {
+	public UUID getSubject() {
 		return subject;
 	}
 
-	public void setSubject(SubjectPojo subject) {
+	public void setSubject(UUID subject) {
 		this.subject = subject;
 	}
-	
-	
-
 
 }

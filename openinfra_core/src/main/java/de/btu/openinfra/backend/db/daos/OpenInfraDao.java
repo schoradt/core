@@ -233,6 +233,12 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	public UUID createOrUpdate(TypePojo pojo, UUID valueId)
 			throws RuntimeException {
 
+		if(valueId != null && !valueId.equals(pojo.getUuid())) {
+			// TODO throw openinfra exception
+			// TODO rework create or update urgently!!!!!!!!!!!!!!!!!!!!!!
+			throw new RuntimeException("UUIDs are incompatible URI vs POJO");
+		}
+		
 	    TypeModel model = createModelObject(valueId);
         // abort if the pojo and the type model is null
         if (pojo == null || model == null) {
