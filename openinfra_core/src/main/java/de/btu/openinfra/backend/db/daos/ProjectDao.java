@@ -353,13 +353,21 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 
 	    boolean result = false;
 
-	    // determine if we want to delete a sub or a main project
-	    if (em.find(Project.class, currentProjectId)
-	            .getProject().getId() != null) {
-	        // delete a sub project
-	        result = delete(currentProjectId);
-	    } else {
-	        // TODO implement the deletion of a project database schema
+	    try {
+	        Project p = em.find(Project.class, currentProjectId);
+	        // determine if we want to delete a sub or a main project
+	        if (p.getProject() != null) {
+	            // delete a sub project
+	            result = delete(currentProjectId);
+	        } else {
+	            // first delete the meta data
+                deleteMetaData(currentProjectId);
+                // second remove the schema
+                deleteSchema(currentProjectId);
+                result = true;
+	        }
+	    } catch (Exception e) {
+            return false;
 	    }
 	    return result;
 	}
@@ -459,7 +467,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
     private void deleteSchema(UUID projectId) {
 
         try {
-            // delete a project schema
+            // delete the project schema
             if(em.createStoredProcedureQuery(
                     "delete_project_schema", Boolean.class)
                     .registerStoredProcedureParameter(
@@ -609,18 +617,38 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
         try {
             // find the id of the projects table in the meta data schema by the
             // given project id
-            Projects p = em.createNamedQuery(
+            Projects pMeta = em.createNamedQuery(
                   "Projects.findByProject",
                   Projects.class)
                   .setParameter("value", projectId)
                   .getSingleResult();
 
             // save the database connection Id for the next steps
-            UUID dbConnId = p.getDatabaseConnection().getId();
+            UUID dbConnId = pMeta.getDatabaseConnection().getId();
 
             try {
+                Projects subP = null;
+                ProjectsDao pDao = new ProjectsDao(OpenInfraSchemas.META_DATA);
+                // find all sub projects
+                List<Project> pList = new ProjectDao(
+                        projectId, OpenInfraSchemas.PROJECTS).read();
+                for (Project project : pList) {
+                    // for every project that is a sub project
+                    if (project.getProject() != null) {
+                        // retrieve the model object
+                        subP = em.createNamedQuery(
+                                "Projects.findByProject",
+                                Projects.class)
+                                .setParameter("value", project.getId())
+                                .getSingleResult();
+                        // deleted from the projects table in the meta data
+                        // schema
+                        pDao.delete(subP.getId());
+                    }
+                }
+
                 // delete the entry from projects in the meta data schema
-                new ProjectsDao(OpenInfraSchemas.META_DATA).delete(p.getId());
+                pDao.delete(pMeta.getId());
             } catch (RuntimeException ex) {
                 throw ex;
             }

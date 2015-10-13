@@ -240,20 +240,13 @@ public class ProjectResource {
 			@Context UriInfo uriInfo,
 			@Context HttpServletRequest request,
 	        @PathParam("projectId") UUID projectId) {
-	    // TODO this method will work correctly if the project creation works
-	    //      completely
-		// TODO Use RBAC-Class here!
-	    System.out.println("not implemented yet");
-	    return null;
-	    /*
-	     * Use RBAC-Class here!
-		return OpenInfraResponseBuilder.deleteResponse(
-                new ProjectDao(
-                        projectId,
-                        OpenInfraSchemas.PROJECTS)
-                    .deleteProject(),
+	    return OpenInfraResponseBuilder.deleteResponse(
+	            new ProjectRbac(
+    	            projectId,
+    	            OpenInfraSchemas.PROJECTS).deleteProject(
+    	                    OpenInfraHttpMethod.valueOf(request.getMethod()),
+    	                    uriInfo),
                 projectId);
-                */
 	}
 
 	@GET
