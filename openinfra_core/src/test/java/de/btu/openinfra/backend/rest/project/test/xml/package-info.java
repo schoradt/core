@@ -21,6 +21,8 @@
  * curl -i -b cookie.txt -X PUT -H "Content-Type: application/xml" -d @C:\Users\tino\git\core\openinfra_core\src\test\java\de\btu\openinfra\backend\rest\project\test\xml\Permission.xml http://localhost:8080/openinfra_core/rest/v1/rbac/permissions/fc41683a-ac78-46ce-8c2f-d54778093091
  * curl -i -b cookie.txt -X DELETE http://localhost:8080/openinfra_core/rest/v1/rbac/permissions/fc41683a-ac78-46ce-8c2f-d54778093091
  * 
+ * -- 
+ * 
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
  */

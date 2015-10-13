@@ -21,7 +21,7 @@ import de.btu.openinfra.backend.db.rbac.rbac.OpenInfraObjectRbac;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
 /**
- * This class is used to retireve all available OpenInfRA objects which can
+ * This class is used to retrieve all available OpenInfRA objects which can
  * be secured by the role-based access control system. Every related object
  * must be manually defined with a related adaption of the RBAC implementation.
  * Thus, this class only provides GET methods. PUT, POST or DELETE are not
