@@ -54,7 +54,7 @@ public class CredentialsResource {
     @POST
     public Response create(CredentialsPojo pojo) {
         UUID id = new CredentialsDao(
-                OpenInfraSchemas.META_DATA).createOrUpdate(pojo);
+                OpenInfraSchemas.META_DATA).createOrUpdate(pojo, null);
         return OpenInfraResponseBuilder.postResponse(id);
     }
 

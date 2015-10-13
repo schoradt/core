@@ -54,7 +54,7 @@ public class SettingKeysResource {
     @POST
     public Response create(SettingKeysPojo pojo) {
         UUID id = new SettingKeysDao(
-                OpenInfraSchemas.META_DATA).createOrUpdate(pojo);
+                OpenInfraSchemas.META_DATA).createOrUpdate(pojo, null);
         return OpenInfraResponseBuilder.postResponse(id);
     }
 

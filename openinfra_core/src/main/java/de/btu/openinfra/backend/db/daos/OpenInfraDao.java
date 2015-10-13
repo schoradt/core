@@ -223,15 +223,17 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	/**
 	 * This function creates a new or updates an existing object in the
 	 * database. The update function depends on the specified language.
-	 *
+	 *  
 	 * @param pojo    the POJO object which should be stored in the database
+	 * @param valueId the UUID of the specific object - should be null for 
+	 *                create or POST requests
 	 * @return        the UUID of the newly created or replaced object
 	 * @throws RuntimeException
 	 */
-	public UUID createOrUpdate(TypePojo pojo)
+	public UUID createOrUpdate(TypePojo pojo, UUID valueId)
 			throws RuntimeException {
 
-	    TypeModel model = createModelObject(pojo.getUuid());
+	    TypeModel model = createModelObject(valueId);
         // abort if the pojo and the type model is null
         if (pojo == null || model == null) {
             return null;
@@ -272,13 +274,14 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	 *                 associated to the POJO
 	 * @return
 	 */
-	public UUID createOrUpdate(TypePojo pojo, JSONObject metaData) {
+	public UUID createOrUpdateAndAddMetadata(
+			TypePojo pojo, UUID valueId, JSONObject metaData) {
 
 	    UUID retId = null;
 
 	    if (pojo != null) {
 	        // first createOrUpdate the TypePojo
-	        retId = createOrUpdate(pojo);
+	        retId = createOrUpdate(pojo, valueId);
 
 	        if (metaData != null) {
     	        // only check for meta data in project and system schema
@@ -304,7 +307,7 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
     	                    // write the meta data
     	                    UUID metaId = new MetaDataDao(
     	                            currentProjectId, schema)
-    	                        .createOrUpdate(mdPojo);
+    	                        .createOrUpdate(mdPojo, valueId);
     	                    if (metaId == null) {
     	                        // TODO give feedback about meta data creation?
     	                    }
@@ -342,9 +345,9 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
         } catch (NullPointerException e) { /* do nothing */ }
         if (metaData != null) {
             // update the meta data as well if it exists
-            return createOrUpdate(pojo, metaData);
+            return createOrUpdateAndAddMetadata(pojo, valueId, metaData);
         } else {
-            return createOrUpdate(pojo);
+            return createOrUpdate(pojo, valueId);
         }
     }
 
@@ -377,9 +380,10 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 
         if (metaData != null) {
             // update the meta data as well if it exists
-            return createOrUpdate(pojo, metaData);
+            return createOrUpdateAndAddMetadata(pojo, 
+            		firstAssociationId, metaData);
         } else {
-            return createOrUpdate(pojo);
+            return createOrUpdate(pojo, firstAssociationId);
         }
     }
 
@@ -423,9 +427,10 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 
         if (metaData != null) {
             // update the meta data as well if it exists
-            return createOrUpdate(pojo, metaData);
+            return createOrUpdateAndAddMetadata(pojo, 
+            		firstAssociationId, metaData);
         } else {
-            return createOrUpdate(pojo);
+            return createOrUpdate(pojo, firstAssociationId);
         }
     }
 
@@ -530,6 +535,9 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	 * This method delivers a model object. When the UUID is not null this
 	 * method tries to deliver an existing object. When the UUID is null it
 	 * creates a new object and generates a random UUID.
+	 * 
+	 * This is a very central method which is always called when a POJO object
+	 * is mapped into a model object.
 	 *
 	 * @param id the UUID of the requested object or null
 	 * @return   a model object (new or old) or null if the pojo id doesn't

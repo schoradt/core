@@ -52,7 +52,7 @@ public class PortsResource {
     @POST
     public Response create(PortsPojo pojo) {
         UUID id = new PortsDao(
-                OpenInfraSchemas.META_DATA).createOrUpdate(pojo);
+                OpenInfraSchemas.META_DATA).createOrUpdate(pojo, null);
         return OpenInfraResponseBuilder.postResponse(id);
     }
 

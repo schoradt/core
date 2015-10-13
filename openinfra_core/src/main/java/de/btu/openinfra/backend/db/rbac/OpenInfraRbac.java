@@ -243,13 +243,14 @@ public abstract class OpenInfraRbac<
 	public UUID createOrUpdate(
 			OpenInfraHttpMethod httpMethod, 
 			UriInfo uriInfo,
+			UUID valueId,
 			TypePojo pojo)
 			throws RuntimeException {
 		checkPermission(httpMethod, uriInfo);
 		try {
 			return dao.getDeclaredConstructor(constructorTypes).newInstance(
 					currentProjectId, 
-					schema).createOrUpdate(pojo);
+					schema).createOrUpdate(pojo, valueId);
 		} catch(Exception ex) {
 			ex.printStackTrace();
 			throw new WebApplicationException(
@@ -268,15 +269,16 @@ public abstract class OpenInfraRbac<
 	 */
     public UUID createOrUpdate(
     		OpenInfraHttpMethod httpMethod, 
-			UriInfo uriInfo, 
-			TypePojo pojo, 
+			UriInfo uriInfo,
+			UUID valueId,
+			TypePojo pojo,
 			JSONObject json)
             throws RuntimeException {
     	checkPermission(httpMethod, uriInfo);
 		try {
 			return dao.getDeclaredConstructor(constructorTypes).newInstance(
 					currentProjectId, 
-					schema).createOrUpdate(pojo, json);
+					schema).createOrUpdateAndAddMetadata(pojo, valueId, json);
 		} catch(Exception ex) {
 			ex.printStackTrace();
 			throw new WebApplicationException(

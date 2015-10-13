@@ -121,6 +121,9 @@ public class SubjectDao extends OpenInfraDao<SubjectPojo, Subject> {
 	@Override
 	public MappingResult<Subject> mapToModel(
 			SubjectPojo pojoObject, Subject modelObject) {
+		// Please remember that the model object might be a new instance or an
+		// already existing which was retrieved a few milliseconds before from 
+		// database.
 		if(pojoObject.getDefaultLanguage() != null) {
 			modelObject.setDefaultLanguage(pojoObject.getDefaultLanguage());
 		} else {
@@ -131,11 +134,23 @@ public class SubjectDao extends OpenInfraDao<SubjectPojo, Subject> {
 		modelObject.setDescription(pojoObject.getDescription());
 		modelObject.setLogin(pojoObject.getLogin());
 		modelObject.setMail(pojoObject.getMail());
-		modelObject.setSalt(UUID.randomUUID());
 		modelObject.setName(pojoObject.getName());
-		modelObject.setPassword(
-				OpenInfraRealm.encrypt(
-						pojoObject.getPassword(), modelObject.getSalt()));
+		// Set the password when the password is initially null and when a new 
+		// password was send by the client.
+		// TODO throw Exception when password in passwordblacklist
+		if(modelObject.getPasswordCreatedOn() == null || 
+				(pojoObject.getPassword() != null && 
+				!modelObject.getPassword().equalsIgnoreCase(
+						OpenInfraRealm.encrypt(
+								pojoObject.getPassword(), 
+								modelObject.getSalt())))) {
+			modelObject.setPasswordCreatedOn(OpenInfraTime.now());
+			modelObject.setSalt(UUID.randomUUID());
+			modelObject.setPassword(
+					OpenInfraRealm.encrypt(
+							pojoObject.getPassword(), modelObject.getSalt()));
+		}
+		
 		modelObject.setWebapp(pojoObject.getWebApp());
 		modelObject.setUpdatedOn(OpenInfraTime.now());
 		// status: -1 blocked, 0 inactive, 1 active
@@ -145,12 +160,7 @@ public class SubjectDao extends OpenInfraDao<SubjectPojo, Subject> {
 		if(modelObject.getCreatedOn() == null) {
 			modelObject.setCreatedOn(OpenInfraTime.now());
 		}
-		if(modelObject.getPasswordCreatedOn() == null) {
-			modelObject.setPasswordCreatedOn(OpenInfraTime.now());
-		}
 		return new MappingResult<Subject>(modelObject.getId(), modelObject);
 	}
-
-
 
 }

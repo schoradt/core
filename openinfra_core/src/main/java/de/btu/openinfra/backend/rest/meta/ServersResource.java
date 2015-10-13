@@ -54,7 +54,7 @@ public class ServersResource {
     @POST
     public Response create(ServersPojo pojo) {
         UUID id = new ServersDao(
-                OpenInfraSchemas.META_DATA).createOrUpdate(pojo);
+                OpenInfraSchemas.META_DATA).createOrUpdate(pojo, null);
         return OpenInfraResponseBuilder.postResponse(id);
     }
 

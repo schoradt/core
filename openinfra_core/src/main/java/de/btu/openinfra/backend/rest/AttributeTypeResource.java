@@ -250,7 +250,8 @@ public class AttributeTypeResource {
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
 						OpenInfraHttpMethod.valueOf(request.getMethod()), 
 						uriInfo,
-                        pojo, 
+                        pojo,
+                        null,
                         pojo.getMetaData());
         return OpenInfraResponseBuilder.postResponse(id);
     }
