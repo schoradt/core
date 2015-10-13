@@ -7,6 +7,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.persistence.NoResultException;
 import javax.persistence.ParameterMode;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
@@ -25,8 +26,10 @@ import de.btu.openinfra.backend.db.daos.meta.SchemasDao;
 import de.btu.openinfra.backend.db.daos.meta.ServersDao;
 import de.btu.openinfra.backend.db.jpa.model.Project;
 import de.btu.openinfra.backend.db.jpa.model.meta.Credentials;
+import de.btu.openinfra.backend.db.jpa.model.meta.DatabaseConnection;
 import de.btu.openinfra.backend.db.jpa.model.meta.Databases;
 import de.btu.openinfra.backend.db.jpa.model.meta.Ports;
+import de.btu.openinfra.backend.db.jpa.model.meta.Projects;
 import de.btu.openinfra.backend.db.jpa.model.meta.Servers;
 import de.btu.openinfra.backend.db.pojos.LocalizedString;
 import de.btu.openinfra.backend.db.pojos.ProjectPojo;
@@ -297,6 +300,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 	                OpenInfraSchemas.PROJECTS).createOrUpdate(pojo);
 	    } else {
 	        try {
+
     	        // create the database schema
                 createSchema(pojo, newProjectId);
 
@@ -311,33 +315,27 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
                 // project schema
                 mergeSystemData(newProjectId);
 
+                // save the new id for returning it to the client
                 id = newProjectId;
-
 	        } catch (OpenInfraDatabaseException e) {
-	            // execute a roll back
-	            // 1) remove entries from meta data
-	            // 2) delete database schema
-
+	            // execute different roll backs depending on the thrown error
 	            switch (e.getType()) {
 	            case MERGE_SYSTEM:
 	                /* run through */
 	            case INSERT_BASIC_PROJECT_DATA:
 	                /* run through */
                 case INSERT_META_DATA:
+                    deleteMetaData(newProjectId);
                     /* run through */
                 case RENAME_SCHEMA:
-                    /* run through */
-                case CREATE_SCHEMA:
-
+                    deleteSchema(newProjectId);
                     break;
-
-
-
-
                 default:
-                    /* no roll back necessary */
+                    /* no roll back necessary for e.g. CREATE_SCHEMA */
                     break;
                 }
+	            // TODO: throw error to resource
+	            return null;
             }
 	    }
 	    return id;
@@ -451,7 +449,31 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
+    /**
+     * This method delete a project schema for the given project id.
+     *
+     * @param projectId
+     */
+    private void deleteSchema(UUID projectId) {
+
+        try {
+            // delete a project schema
+            if(em.createStoredProcedureQuery(
+                    "delete_project_schema", Boolean.class)
+                    .registerStoredProcedureParameter(
+                            "project_id",
+                            UUID.class,
+                            ParameterMode.IN)
+                    .setParameter("project_id", projectId)
+                    .execute()) {
+            } else {
+                // TODO: throw something if the delete process fails
+            }
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -559,7 +581,9 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 
             // create a POJO for the project in the meta data schema
             ProjectsPojo metaProjectsPojo = new ProjectsPojo();
-            metaProjectsPojo.setUuid(newProjectId);
+
+            // set the project id
+            metaProjectsPojo.setProjectId(newProjectId);
             // set the subproject flag to false
             metaProjectsPojo.setIsSubproject(false);
             // set the database connection information
@@ -573,8 +597,81 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
         }
     }
 
-    private void deleteMetaData() {
-        // delete from meta_data
+    /**
+     * This method delete all entries in the meta data schema for the passed
+     * project id that are necessary to access the corresponding project schema.
+     *
+     * @throws RuntimeException if it fails to delete the meta data correctly
+     * @param projectId
+     */
+    private void deleteMetaData(UUID projectId) {
+
+        try {
+            // find the id of the projects table in the meta data schema by the
+            // given project id
+            Projects p = em.createNamedQuery(
+                  "Projects.findByProject",
+                  Projects.class)
+                  .setParameter("value", projectId)
+                  .getSingleResult();
+
+            // save the database connection Id for the next steps
+            UUID dbConnId = p.getDatabaseConnection().getId();
+
+            try {
+                // delete the entry from projects in the meta data schema
+                new ProjectsDao(OpenInfraSchemas.META_DATA).delete(p.getId());
+            } catch (RuntimeException ex) {
+                throw ex;
+            }
+
+            // read the database connection to retrieve the id's for the next
+            // step
+            DatabaseConnection dc = em.find(DatabaseConnection.class, dbConnId);
+
+            // save necessary UUIDs
+            UUID serverId = dc.getServerBean().getId();
+            UUID portId = dc.getPortBean().getId();
+            UUID databaseId = dc.getDatabaseBean().getId();
+            UUID schemaId = dc.getSchemaBean().getId();
+            UUID credentialsId = dc.getCredential().getId();
+
+            try {
+                // delete the entry from database connection
+                new DatabaseConnectionDao(OpenInfraSchemas.META_DATA).delete(
+                        dbConnId);
+            } catch (RuntimeException ex) { /* do nothing */ }
+
+            try {
+                // delete the entry from server if possible
+                new ServersDao(OpenInfraSchemas.META_DATA).delete(serverId);
+            } catch (RuntimeException ex) { /* do nothing */ }
+
+            try {
+                // delete the entry from port if possible
+                new PortsDao(OpenInfraSchemas.META_DATA).delete(portId);
+            } catch (RuntimeException ex) { /* do nothing */ }
+
+            try {
+                // delete the entry from database if possible
+                new DatabasesDao(OpenInfraSchemas.META_DATA).delete(databaseId);
+            } catch (RuntimeException ex) { /* do nothing */ }
+
+            try {
+                // delete the entry from schema if possible
+                new SchemasDao(OpenInfraSchemas.META_DATA).delete(schemaId);
+            } catch (RuntimeException ex) { /* do nothing */ }
+
+            try {
+                // delete the entry from credentials if possible
+                new CredentialsDao(OpenInfraSchemas.META_DATA).delete(
+                    credentialsId);
+            } catch (RuntimeException ex) { /* do nothing */ }
+
+        } catch (NoResultException nre) {
+            // abort if the project id was not found in the meta data
+            // TODO throw something to inform the REST interface
+        }
     }
 
     /**
@@ -638,7 +735,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
                 throw new OpenInfraDatabaseException(
                         OpenInfraExceptionTypes.MERGE_SYSTEM);
             }
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
     }
