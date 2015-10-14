@@ -6,6 +6,8 @@ import java.util.UUID;
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
+import de.btu.openinfra.backend.db.jpa.model.rbac.Role;
+import de.btu.openinfra.backend.db.jpa.model.rbac.Subject;
 import de.btu.openinfra.backend.db.jpa.model.rbac.SubjectRole;
 import de.btu.openinfra.backend.db.pojos.rbac.SubjectRolePojo;
 
@@ -23,19 +25,18 @@ public class SubjectRoleDao extends OpenInfraDao<SubjectRolePojo, SubjectRole> {
 	@Override
 	public SubjectRolePojo mapToPojo(Locale locale, SubjectRole modelObject) {
 		SubjectRolePojo pojo = new SubjectRolePojo(modelObject);
-		pojo.setRole(
-				new RoleDao().mapToPojo(locale, modelObject.getRoleBean()));
-		pojo.setSubject(
-				new SubjectDao().mapToPojo(
-						locale, modelObject.getSubjectBean()));
+		pojo.setRole(modelObject.getRoleBean().getId());
+		pojo.setSubject(modelObject.getSubjectBean().getId());
 		return pojo;
 	}
 
 	@Override
 	public MappingResult<SubjectRole> mapToModel(SubjectRolePojo pojoObject,
 			SubjectRole modelObject) {
-		// TODO Auto-generated method stub
-		return null;
+		modelObject.setRoleBean(em.find(Role.class, pojoObject.getRole()));
+		modelObject.setSubjectBean(
+				em.find(Subject.class, pojoObject.getSubject()));
+		return new MappingResult<SubjectRole>(modelObject.getId(), modelObject);
 	}
 
 

@@ -2,6 +2,7 @@ package de.btu.openinfra.backend.db.daos.meta;
 
 import java.util.Locale;
 
+import de.btu.openinfra.backend.OpenInfraTime;
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
@@ -43,7 +44,7 @@ public class SettingsDao
         if (s != null) {
             SettingsPojo pojo = new SettingsPojo(s);
             pojo.setKey(SettingKeysDao.mapPojoStatically(s.getSettingKey()));
-            pojo.setUpdatedOn(s.getUpdatedOn());
+            pojo.setUpdatedOn(OpenInfraTime.format(s.getUpdatedOn()));
             pojo.setValue(s.getValue());
             pojo.setProject(ProjectsDao.mapPojoStatically(s.getProject()));
             return pojo;
@@ -83,7 +84,13 @@ public class SettingsDao
             resultSettings.setSettingKey(
                     SettingKeysDao.mapToModelStatically(pojo.getKey(), null));
             resultSettings.setValue(pojo.getValue());
-            resultSettings.setUpdatedOn(pojo.getUpdatedOn());
+            // Set a new timestamp in any case since the probability is 
+            // extremely high that the model object is stored in the database.
+            // It's recommended to use POJO objects for internal usage. In any 
+            // case, it should be avoided to retrieve a POJO object from 
+            // database and to transform it into model object afterwards for 
+            // internal processing.
+            resultSettings.setUpdatedOn(OpenInfraTime.now());
             resultSettings.setProject(
                     ProjectsDao.mapToModelStatically(pojo.getProject(), null));
         }

@@ -52,7 +52,7 @@ public class LevelResource {
     @POST
     public Response create(LevelPojo pojo) {
         UUID id = new LevelDao(
-                OpenInfraSchemas.META_DATA).createOrUpdate(pojo);
+                OpenInfraSchemas.META_DATA).createOrUpdate(pojo, null);
         return OpenInfraResponseBuilder.postResponse(id);
     }
 

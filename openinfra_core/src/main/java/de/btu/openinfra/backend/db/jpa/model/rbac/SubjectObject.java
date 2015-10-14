@@ -29,7 +29,9 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 	@NamedQuery(name="SubjectObject.findBySubjectAndProject", 
 			query="SELECT s FROM SubjectObject s "
 					+ "WHERE s.subjectBean.id = :subjectId "
-					+ "AND s.projectId = :projectId ")
+					+ "AND s.projectId = :projectId "),
+	@NamedQuery(name="SubjectObject.count", 
+			query="SELECT COUNT(s) FROM SubjectObject s")
 })
 
 public class SubjectObject extends OpenInfraModelObject

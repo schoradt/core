@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -17,8 +18,12 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
  */
 @Entity
 @Table(name="openinfra_objects")
-@NamedQuery(name="OpenInfraObject.findAll", 
-	query="SELECT o FROM OpenInfraObject o")
+@NamedQueries({
+	@NamedQuery(name="OpenInfraObject.findAll", 
+			query="SELECT o FROM OpenInfraObject o"),
+	@NamedQuery(name="OpenInfraObject.count",
+			query="SELECT COUNT(o) FROM OpenInfraObject o")
+})
 public class OpenInfraObject extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 

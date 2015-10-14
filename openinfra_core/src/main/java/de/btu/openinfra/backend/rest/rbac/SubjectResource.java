@@ -73,7 +73,8 @@ public class SubjectResource {
 		return OpenInfraResponseBuilder.postResponse(	
 				new SubjectRbac().createOrUpdate(
 						OpenInfraHttpMethod.valueOf(request.getMethod()),
-						uriInfo, 
+						uriInfo,
+						null,
 						pojo));		
 	}
 	
@@ -101,7 +102,8 @@ public class SubjectResource {
 		return OpenInfraResponseBuilder.putResponse(
 				new SubjectRbac().createOrUpdate(
 						OpenInfraHttpMethod.valueOf(request.getMethod()), 
-						uriInfo, 
+						uriInfo,
+						uuid,
 						pojo));		
 	}
 	

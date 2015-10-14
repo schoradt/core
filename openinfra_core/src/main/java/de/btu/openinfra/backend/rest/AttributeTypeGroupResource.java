@@ -289,7 +289,7 @@ public class AttributeTypeGroupResource {
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
                 		OpenInfraHttpMethod.valueOf(request.getMethod()), 
 						uriInfo,
-                        pojo, pojo.getMetaData());
+                        pojo, null, pojo.getMetaData());
         return OpenInfraResponseBuilder.postResponse(id);
     }
 

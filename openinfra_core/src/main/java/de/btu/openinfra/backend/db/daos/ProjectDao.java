@@ -274,7 +274,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 	    // determine if we want to create a sub or a main project
 	    if (project.getSubprojectOf() != null) {
 	        id = new ProjectDao(project.getSubprojectOf(),
-	                OpenInfraSchemas.PROJECTS).createOrUpdate(project);
+	                OpenInfraSchemas.PROJECTS).createOrUpdate(project, null);
 	    } else {
 	        // TODO implement the creation of a new project database schema
 	    }

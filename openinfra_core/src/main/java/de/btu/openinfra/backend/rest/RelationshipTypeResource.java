@@ -180,8 +180,10 @@ public class RelationshipTypeResource {
                             projectId,
                             OpenInfraSchemas.valueOf(schema.toUpperCase()))
                             .createOrUpdate(
-                            		OpenInfraHttpMethod.valueOf(request.getMethod()), 
+                            		OpenInfraHttpMethod.valueOf(
+                            				request.getMethod()), 
             						uriInfo,
+            						null,
             						pojo, pojo.getMetaData()));
     }
 

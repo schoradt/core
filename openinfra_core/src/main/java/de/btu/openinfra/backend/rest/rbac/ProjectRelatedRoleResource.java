@@ -20,6 +20,15 @@ import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
 import de.btu.openinfra.backend.db.rbac.rbac.ProjectRelatedRoleRbac;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
+/**
+ * This class is used to retrieve all available OpenInfRA related roles. Every 
+ * role must be manually defined with a related adaption of the RBAC 
+ * implementation. Thus, this class only provides GET methods. PUT, POST or 
+ * DELETE are not provided here! 
+ * 
+ * @author <a href="http://www.b-tu.de">BTU</a> DBIS
+ *
+ */
 @Path(OpenInfraResponseBuilder.REST_URI_RBAC + "/projectrelatedrole")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET,
@@ -55,6 +64,16 @@ public class ProjectRelatedRoleResource {
 				uriInfo,
 				PtLocaleDao.forLanguageTag(language), 
 				uuid);
+	}
+	
+	@GET
+	@Path("count")
+	@Produces({MediaType.TEXT_PLAIN})
+	public long getCount(
+			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request) {
+		return new ProjectRelatedRoleRbac().getCount(
+				OpenInfraHttpMethod.valueOf(request.getMethod()), uriInfo);
 	}
 	
 }
