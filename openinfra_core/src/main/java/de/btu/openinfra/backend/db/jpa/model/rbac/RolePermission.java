@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
@@ -17,7 +18,12 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
  */
 @Entity
 @Table(name="role_permissions")
-@NamedQuery(name="RolePermission.findAll", query="SELECT r FROM RolePermission r")
+@NamedQueries({
+	@NamedQuery(name="RolePermission.findAll", 
+			query="SELECT r FROM RolePermission r"),
+	@NamedQuery(name="RolePermission.count", 
+			query="SELECT COUNT(r) FROM RolePermission r")
+})
 public class RolePermission extends OpenInfraModelObject
 	implements Serializable {
 	private static final long serialVersionUID = 1L;

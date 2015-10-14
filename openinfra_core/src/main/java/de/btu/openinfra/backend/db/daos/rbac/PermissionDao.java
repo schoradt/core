@@ -30,8 +30,9 @@ public class PermissionDao extends OpenInfraDao<PermissionPojo, Permission> {
 	@Override
 	public MappingResult<Permission> mapToModel(PermissionPojo pojoObject,
 			Permission modelObject) {
-		// TODO Auto-generated method stub
-		return null;
+		modelObject.setDescription(pojoObject.getDescription());
+		modelObject.setPermission(pojoObject.getPermission());
+		return new MappingResult<Permission>(modelObject.getId(), modelObject);
 	}
 	
 }

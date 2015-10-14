@@ -1,9 +1,8 @@
 <subjectPojo>
-	<uuid>09fa5455-709f-47c7-b6f5-195c78aee795</uuid>
+	<uuid>d2d0c86d-750e-438f-8f54-60699d30a29c</uuid>
 	<description>test person</description>
 	<login>Hans</login>
-	<name>Hans im zzz Glücke</name>
-	<status>1</status>
+	<name>Hans im Glück</name>
 	<password>Hans</password>
 	<status>1</status>
 </subjectPojo>

@@ -11,9 +11,7 @@ import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 public class RolePojo extends OpenInfraPojo {
 
 	private String description;
-
 	private String name;
-	
 	private List<PermissionPojo> permissions;
 	
 	public RolePojo() {}

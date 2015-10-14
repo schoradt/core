@@ -1,7 +1,7 @@
 package de.btu.openinfra.backend.db.jpa.model.meta;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -40,7 +40,7 @@ public class Settings extends OpenInfraModelObject implements Serializable {
     private SettingKeys settingKey;
 
 	@Column(name="updated_on")
-	private Date updatedOn;
+	private Timestamp updatedOn;
 	
 	@ManyToOne
 	@JoinColumn(name = "project")
@@ -65,11 +65,11 @@ public class Settings extends OpenInfraModelObject implements Serializable {
         this.settingKey = settingKey;
     }
 
-	public Date getUpdatedOn() {
+	public Timestamp getUpdatedOn() {
 		return this.updatedOn;
 	}
 
-	public void setUpdatedOn(Date updatedOn) {
+	public void setUpdatedOn(Timestamp updatedOn) {
 		this.updatedOn = updatedOn;
 	}
 

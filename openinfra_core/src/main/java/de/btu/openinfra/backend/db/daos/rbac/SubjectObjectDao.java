@@ -8,6 +8,7 @@ import java.util.UUID;
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraValueDao;
+import de.btu.openinfra.backend.db.jpa.model.rbac.OpenInfraObject;
 import de.btu.openinfra.backend.db.jpa.model.rbac.Subject;
 import de.btu.openinfra.backend.db.jpa.model.rbac.SubjectObject;
 import de.btu.openinfra.backend.db.pojos.rbac.SubjectObjectPojo;
@@ -47,11 +48,9 @@ public class SubjectObjectDao extends
 	public SubjectObjectPojo mapToPojo(
 			Locale locale, SubjectObject modelObject) {
 		SubjectObjectPojo pojo = new SubjectObjectPojo(modelObject);
-		pojo.setObject(OpenInfraObjectDao.mapToPojoStatically(
-				locale, modelObject.getObjectBean()));
+		pojo.setObject(modelObject.getObjectBean().getId());
 		pojo.setProjectId(modelObject.getProjectId());
-		pojo.setSubject(SubjectDao.mapToPojoStatically(
-				locale, modelObject.getSubjectBean()));
+		pojo.setSubject(modelObject.getSubjectBean().getId());
 		pojo.setWriteObject(modelObject.getObjectWrite().booleanValue());
 		pojo.setObjectId(modelObject.getObjectId());
 		return pojo;
@@ -60,8 +59,15 @@ public class SubjectObjectDao extends
 	@Override
 	public MappingResult<SubjectObject> mapToModel(
 			SubjectObjectPojo pojoObject, SubjectObject modelObject) {
-		// TODO Auto-generated method stub
-		return null;
+		modelObject.setObjectBean(
+				em.find(OpenInfraObject.class, pojoObject.getObject()));
+		modelObject.setObjectId(pojoObject.getObjectId());
+		modelObject.setObjectWrite(pojoObject.isWriteObject());
+		modelObject.setProjectId(pojoObject.getProjectId());
+		modelObject.setSubjectBean(
+				em.find(Subject.class, pojoObject.getSubject()));
+		return new MappingResult<SubjectObject>(
+				modelObject.getId(), modelObject);
 	}
 
 	

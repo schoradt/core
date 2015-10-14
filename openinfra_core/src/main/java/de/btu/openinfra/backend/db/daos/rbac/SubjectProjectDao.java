@@ -6,6 +6,8 @@ import java.util.UUID;
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
+import de.btu.openinfra.backend.db.jpa.model.rbac.ProjectRelatedRole;
+import de.btu.openinfra.backend.db.jpa.model.rbac.Subject;
 import de.btu.openinfra.backend.db.jpa.model.rbac.SubjectProject;
 import de.btu.openinfra.backend.db.pojos.rbac.SubjectProjectPojo;
 
@@ -23,8 +25,7 @@ public class SubjectProjectDao
 	@Override
 	public SubjectProjectPojo mapToPojo(Locale locale,
 			SubjectProject modelObject) {
-		// TODO Auto-generated method stub
-		return null;
+		return mapToPojoStatically(locale, modelObject);
 	}
 	
 	public static SubjectProjectPojo mapToPojoStatically(
@@ -34,19 +35,21 @@ public class SubjectProjectDao
 		pojo.setProjectId(modelObject.getProjectId());
 		pojo.setSubject(modelObject.getSubjectBean().getId());
 		pojo.setProjectRelatedRole(
-				ProjectRelatedRoleDao.mapToPojoStatically(
-						locale, 
-						modelObject.getProjectRelatedRoleBean()));
+				modelObject.getProjectRelatedRoleBean().getId());
 		return pojo;
 	}
 
 	@Override
 	public MappingResult<SubjectProject> mapToModel(
 			SubjectProjectPojo pojoObject, SubjectProject modelObject) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	
+		modelObject.setProjectId(pojoObject.getProjectId());
+		modelObject.setProjectRelatedRoleBean(
+				em.find(ProjectRelatedRole.class, 
+						pojoObject.getProjectRelatedRole()));
+		modelObject.setSubjectBean(
+				em.find(Subject.class, pojoObject.getSubject()));
+		return new MappingResult<SubjectProject>(
+				modelObject.getId(), modelObject);
+	}	
 
 }

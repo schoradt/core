@@ -151,9 +151,11 @@ public class ValueListResource {
 	                new ValueListRbac(
 	                        projectId,
 	                        OpenInfraSchemas.valueOf(schema.toUpperCase()))
-	                        .createOrUpdate(OpenInfraHttpMethod.valueOf(request.getMethod()), 
+	                        .createOrUpdate(OpenInfraHttpMethod.valueOf(
+	                        		request.getMethod()), 
 	        						uriInfo,
-	        						pojo, 
+	        						pojo,
+	        						null,
 	        						pojo.getMetaData()));
 	}
 
@@ -267,7 +269,8 @@ public class ValueListResource {
                             projectId,
                             OpenInfraSchemas.valueOf(schema.toUpperCase()))
                             .createOrUpdate(
-                            		OpenInfraHttpMethod.valueOf(request.getMethod()), 
+                            		OpenInfraHttpMethod.valueOf(
+                            				request.getMethod()), 
             						uriInfo,
             						pojo, 
             						valueListId,

@@ -55,7 +55,7 @@ public class ProjectsResource {
     @POST
     public Response create(ProjectsPojo pojo) {
         UUID id = new ProjectsDao(OpenInfraSchemas.META_DATA).createOrUpdate(
-                        pojo);
+                        pojo, null);
         return OpenInfraResponseBuilder.postResponse(id);
     }
 

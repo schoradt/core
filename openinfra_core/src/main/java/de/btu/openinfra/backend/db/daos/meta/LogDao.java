@@ -1,15 +1,13 @@
 package de.btu.openinfra.backend.db.daos.meta;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+import de.btu.openinfra.backend.OpenInfraTime;
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
 import de.btu.openinfra.backend.db.jpa.model.meta.Log;
 import de.btu.openinfra.backend.db.pojos.meta.LogPojo;
-import de.btu.openinfra.backend.helper.OpenInfraTime;
 
 /**
  * This class represents the Log and is used to access the underlying layer
@@ -45,7 +43,6 @@ public class LogDao
     public static LogPojo mapPojoStatically(Log l) {
         if(l != null) {
             LogPojo pojo = new LogPojo(l);
-
             pojo.setUserId(l.getUserId());
             pojo.setUserName(l.getUserName());
             pojo.setCreatedOn(OpenInfraTime.format(l.getCreatedOn()));
@@ -83,17 +80,8 @@ public class LogDao
             if(resultLog == null) {
                 resultLog = new Log();
                 resultLog.setId(pojo.getUuid());
-            }
-
-            try {
-                // TODO this must be placed somewhere in the properties
-                String format = "yyyy-MM-dd'T'HH:mm:ssX";
-                SimpleDateFormat df = new SimpleDateFormat(format);
-                resultLog.setCreatedOn(df.parse(pojo.getCreatedOn()));
-            } catch (ParseException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+            }            
+            resultLog.setCreatedOn(OpenInfraTime.now());
             resultLog.setMessage(pojo.getMessage());
             resultLog.setUserId(pojo.getUserId());
             resultLog.setUserName(pojo.getUserName());

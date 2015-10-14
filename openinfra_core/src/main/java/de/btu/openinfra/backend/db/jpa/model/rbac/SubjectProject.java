@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
@@ -19,7 +20,12 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
  */
 @Entity
 @Table(name="subject_projects")
-@NamedQuery(name="SubjectProject.findAll", query="SELECT s FROM SubjectProject s")
+@NamedQueries({
+	@NamedQuery(name="SubjectProject.findAll", 
+			query="SELECT s FROM SubjectProject s"),
+	@NamedQuery(name="SubjectProject.count", 
+		query="SELECT COUNT(s) FROM SubjectProject s")
+})
 public class SubjectProject extends OpenInfraModelObject
 	implements Serializable {
 	private static final long serialVersionUID = 1L;
