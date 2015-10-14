@@ -135,8 +135,28 @@ public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
 	public TopicInstanceAssociationPojo mapToPojo(
 			Locale locale,
 			TopicInstanceXTopicInstance txt) {
+	    if (txt != null) {
+	        MetaDataDao mdDao = new MetaDataDao(currentProjectId, schema);
+	        TopicInstanceAssociationPojo pojo =
+	                new TopicInstanceAssociationPojo(txt, mdDao);
+
+	        pojo.setRelationshipType(
+	                RelationshipTypeDao.mapToPojoStatically(
+	                        locale,
+	                        txt.getRelationshipType(),
+	                        mdDao));
+	        pojo.setAssociatedInstance(
+	                new TopicInstanceDao(currentProjectId, schema).mapToPojo(
+	                        locale,
+	                        txt.getTopicInstance2Bean()));
+            return pojo;
+        } else {
+            return null;
+        }
+	    /*
 	    return mapToPojoStatically(locale, txt,
                 new MetaDataDao(currentProjectId, schema));
+                */
 	}
 
 	/**
