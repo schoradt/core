@@ -48,7 +48,7 @@ public class TopicCharacteristicResource {
 		return new TopicCharacteristicRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo);
 	}
 
@@ -70,7 +70,7 @@ public class TopicCharacteristicResource {
 					OpenInfraSchemas.valueOf(
 							schema.toUpperCase())).read(
 									OpenInfraHttpMethod.valueOf(
-											request.getMethod()), 
+											request.getMethod()),
 									uriInfo,
 									PtLocaleDao.forLanguageTag(
 											language), filter);
@@ -80,7 +80,7 @@ public class TopicCharacteristicResource {
 					OpenInfraSchemas.valueOf(
 							schema.toUpperCase())).read(
 									OpenInfraHttpMethod.valueOf(
-											request.getMethod()), 
+											request.getMethod()),
 									uriInfo,
 									PtLocaleDao.forLanguageTag(
 											language),
@@ -103,7 +103,7 @@ public class TopicCharacteristicResource {
 		return new TopicCharacteristicRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						topicCharacteristicId);
@@ -123,7 +123,7 @@ public class TopicCharacteristicResource {
 		return new AttributeTypeGroupToTopicCharacteristicRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						topicCharacteristicId,
@@ -143,7 +143,7 @@ public class TopicCharacteristicResource {
         return new AttributeTypeGroupToTopicCharacteristicRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
-                		OpenInfraHttpMethod.valueOf(request.getMethod()), 
+                		OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
                         topicCharacteristicId);
     }
@@ -164,7 +164,7 @@ public class TopicCharacteristicResource {
 		return new AttributeTypeGroupToTopicCharacteristicRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						topicCharacteristicId,
@@ -188,7 +188,7 @@ public class TopicCharacteristicResource {
 		return new RelationshipTypeToTopicCharacteristicRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						topicCharacteristicId,
@@ -211,7 +211,7 @@ public class TopicCharacteristicResource {
 		return new RelationshipTypeToTopicCharacteristicRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						topicCharacteristicId,
@@ -232,7 +232,7 @@ public class TopicCharacteristicResource {
 		return new RelationshipTypeRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						topicCharacteristicId);
 	}
@@ -247,10 +247,11 @@ public class TopicCharacteristicResource {
         UUID id = new TopicCharacteristicRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
-                		OpenInfraHttpMethod.valueOf(request.getMethod()), 
+                		OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
-						null,
-                        pojo, pojo.getMetaData());
+                        pojo,
+                        null,
+                        pojo.getMetaData());
         return OpenInfraResponseBuilder.postResponse(id);
     }
 
@@ -268,10 +269,10 @@ public class TopicCharacteristicResource {
                         projectId,
                         OpenInfraSchemas.PROJECTS).createOrUpdate(
                         		OpenInfraHttpMethod.valueOf(
-                        				request.getMethod()), 
+                        				request.getMethod()),
         						uriInfo,
         						pojo,
-                                topicCharacteristicId, 
+                                topicCharacteristicId,
                                 pojo.getMetaData()));
     }
 
@@ -288,7 +289,7 @@ public class TopicCharacteristicResource {
                         projectId,
                         OpenInfraSchemas.valueOf(schema.toUpperCase())).delete(
                         		OpenInfraHttpMethod.valueOf(
-                        				request.getMethod()), 
+                        				request.getMethod()),
         						uriInfo,
                                 topicCharacteristicId),
                                 topicCharacteristicId);

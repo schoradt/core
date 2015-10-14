@@ -66,7 +66,7 @@ public class DatabaseConnectionResource {
             DatabaseConnectionPojo pojo) {
         UUID id = new DatabaseConnectionDao(
                 OpenInfraSchemas.META_DATA).createOrUpdate(pojo,
-                        databaseConnectionId, null);
+                        databaseConnectionId);
         return OpenInfraResponseBuilder.putResponse(id);
     }
 

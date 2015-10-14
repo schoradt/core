@@ -64,8 +64,9 @@ public class CredentialsResource {
             @PathParam("credentialsId") UUID credentialsId,
             CredentialsPojo pojo) {
         UUID id = new CredentialsDao(
-                OpenInfraSchemas.META_DATA).createOrUpdate(pojo, credentialsId,
-                        null);
+                OpenInfraSchemas.META_DATA).createOrUpdate(
+                        pojo,
+                        credentialsId);
         return OpenInfraResponseBuilder.putResponse(id);
     }
 
