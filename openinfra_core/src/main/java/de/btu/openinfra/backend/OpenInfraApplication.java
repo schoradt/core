@@ -55,6 +55,7 @@ public class OpenInfraApplication extends ResourceConfig {
 			f.createNewFile();
 			f.delete();
 			
+			// Try to create the project data path.
 			File pdata = new File(OpenInfraProperties.FILE_PATH + 
 					OpenInfraPropertyValues.PROJECTDATA_PATH.getValue());
 			if(!pdata.exists()) {
