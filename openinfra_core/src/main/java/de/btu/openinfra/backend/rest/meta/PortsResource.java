@@ -60,7 +60,7 @@ public class PortsResource {
     @Path("{portsId}")
     public Response update(@PathParam("portsId") UUID portsId, PortsPojo pojo) {
         UUID id = new PortsDao(
-                OpenInfraSchemas.META_DATA).createOrUpdate(pojo, portsId, null);
+                OpenInfraSchemas.META_DATA).createOrUpdate(pojo, portsId);
         return OpenInfraResponseBuilder.putResponse(id);
     }
 

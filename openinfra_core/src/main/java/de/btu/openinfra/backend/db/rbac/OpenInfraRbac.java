@@ -270,15 +270,15 @@ public abstract class OpenInfraRbac<
     public UUID createOrUpdate(
     		OpenInfraHttpMethod httpMethod,
 			UriInfo uriInfo,
-			UUID valueId,
 			TypePojo pojo,
+			UUID valueId,
 			JSONObject json)
             throws RuntimeException {
     	checkPermission(httpMethod, uriInfo);
 		try {
 			return dao.getDeclaredConstructor(constructorTypes).newInstance(
 					currentProjectId,
-					schema).createOrUpdateAndAddMetadata(pojo, valueId, json);
+					schema).createOrUpdate(pojo, valueId, json);
 		} catch(Exception ex) {
 			ex.printStackTrace();
 			throw new WebApplicationException(
@@ -295,6 +295,7 @@ public abstract class OpenInfraRbac<
 	 * @return
 	 * @throws RuntimeException
 	 */
+    /*
     public UUID createOrUpdate(
     		OpenInfraHttpMethod httpMethod,
 			UriInfo uriInfo,
@@ -313,70 +314,7 @@ public abstract class OpenInfraRbac<
 					ex.getMessage(),
 					Response.Status.INTERNAL_SERVER_ERROR);
 		}
-    }
-
-    /**
-     * This is a generic method which is provided by all RBAC classes.
-     *
-     * @param pojo
-     * @param firstAssociationId
-     * @param firstAssociationIdFromPojo
-     * @return
-     * @throws RuntimeException
-     */
-    public UUID createOrUpdate(
-    		OpenInfraHttpMethod httpMethod,
-			UriInfo uriInfo,
-			TypePojo pojo,
-			UUID firstAssociationId,
-            UUID firstAssociationIdFromPojo, JSONObject json)
-            		throws RuntimeException {
-		checkPermission(httpMethod, uriInfo);
-		try {
-			return dao.getDeclaredConstructor(constructorTypes).newInstance(
-					currentProjectId,
-					schema).createOrUpdate(pojo,
-							firstAssociationId, firstAssociationIdFromPojo,
-							json);
-		} catch(Exception ex) {
-			ex.printStackTrace();
-			throw new WebApplicationException(
-					ex.getMessage(),
-					Response.Status.INTERNAL_SERVER_ERROR);
-		}
-    }
-
-    /**
-     * This is a generic method which is provided by all RBAC classes.
-     *
-     * @param pojo
-     * @param firstAssociationId
-     * @param firstAssociationIdFromPojo
-     * @param secondAssociationId
-     * @param secondAssociationIdFromPojo
-     * @return
-     * @throws RuntimeException
-     */
-    public UUID createOrUpdate(
-    		OpenInfraHttpMethod httpMethod,
-			UriInfo uriInfo, TypePojo pojo, UUID firstAssociationId,
-            UUID firstAssociationIdFromPojo, UUID secondAssociationId,
-            UUID secondAssociationIdFromPojo, JSONObject json)
-            throws RuntimeException {
-		checkPermission(httpMethod, uriInfo);
-		try {
-			return dao.getDeclaredConstructor(constructorTypes).newInstance(
-					currentProjectId,
-					schema).createOrUpdate(pojo, firstAssociationId,
-							firstAssociationIdFromPojo, secondAssociationId,
-							secondAssociationIdFromPojo, json);
-		} catch(Exception ex) {
-			ex.printStackTrace();
-			throw new WebApplicationException(
-					ex.getMessage(),
-					Response.Status.INTERNAL_SERVER_ERROR);
-		}
-    }
+    }*/
 
     /**
      * This is a generic method which is provided by all RBAC classes.

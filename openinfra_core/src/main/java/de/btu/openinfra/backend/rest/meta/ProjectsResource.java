@@ -65,7 +65,7 @@ public class ProjectsResource {
             @PathParam("projectsId") UUID projectsId,
             ProjectsPojo pojo) {
         UUID id = new ProjectsDao(OpenInfraSchemas.META_DATA).createOrUpdate(
-                pojo, projectsId, null);
+                pojo, projectsId);
         return OpenInfraResponseBuilder.putResponse(id);
     }
 
