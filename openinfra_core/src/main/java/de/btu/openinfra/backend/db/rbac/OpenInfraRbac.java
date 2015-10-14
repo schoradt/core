@@ -439,13 +439,9 @@ public abstract class OpenInfraRbac<
 						String tcId = uriInfo.getPath().substring(
 								uriInfo.getPath().lastIndexOf(tc) +
 								tc.length());
-						try {
-						    tcId = tcId.substring(0, tcId.indexOf("/"));
-                        } catch (StringIndexOutOfBoundsException e) {
-                            // TODO abort check permission?
-                            System.out.println("Problem in checkPermission "
-                                    + "while reading tcId!");
-                        }
+						if(tcId.indexOf("/") > -1) {
+							tcId = tcId.substring(0, tcId.indexOf("/"));
+						}
 						// Generate the required access string
 						String req_access = "/projects/" + currentProjectId +
 								"/topiccharacteristics/{id}:" +
@@ -459,13 +455,9 @@ public abstract class OpenInfraRbac<
 						String tiId = uriInfo.getPath().substring(
 								uriInfo.getPath().lastIndexOf(ti) +
 								ti.length());
-						try {
-						    tiId = tiId.substring(0, tiId.indexOf("/"));
-						} catch (StringIndexOutOfBoundsException e) {
-                            // TODO abort check permission?
-						    System.out.println("Problem in checkPermission "
-						            + "while reading tiId!");
-                        }
+						if(tiId.indexOf("/") > -1) {
+							tiId = tiId.substring(0, tiId.indexOf("/"));
+						}
 						// Get the responding topic characteristic UUID from DB
 						UUID tcId = new TopicInstanceDao(
 								currentProjectId, schema).read(
