@@ -49,7 +49,7 @@ public class ValueListResource {
 		return new ValueListRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo);
 	}
 
@@ -67,7 +67,7 @@ public class ValueListResource {
 		return new ValueListRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						sortOrder,
@@ -90,7 +90,7 @@ public class ValueListResource {
 		return new ValueListAssociationRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						valueListId,
@@ -110,7 +110,7 @@ public class ValueListResource {
         return new ValueListAssociationRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
-                		OpenInfraHttpMethod.valueOf(request.getMethod()), 
+                		OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
                         valueListId);
     }
@@ -130,7 +130,7 @@ public class ValueListResource {
 		return new ValueListAssociationRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						valueListId,
@@ -152,7 +152,7 @@ public class ValueListResource {
 	                        projectId,
 	                        OpenInfraSchemas.valueOf(schema.toUpperCase()))
 	                        .createOrUpdate(OpenInfraHttpMethod.valueOf(
-	                        		request.getMethod()), 
+	                        		request.getMethod()),
 	        						uriInfo,
 	        						pojo,
 	        						null,
@@ -171,7 +171,7 @@ public class ValueListResource {
 		return new ValueListRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						valueListId);
@@ -190,7 +190,7 @@ public class ValueListResource {
 	                    projectId,
 	                    OpenInfraSchemas.valueOf(schema.toUpperCase()))
 	                .delete(
-	                		OpenInfraHttpMethod.valueOf(request.getMethod()), 
+	                		OpenInfraHttpMethod.valueOf(request.getMethod()),
     						uriInfo,
     						valueListId),
 	                valueListId);
@@ -208,7 +208,7 @@ public class ValueListResource {
                         projectId,
                         OpenInfraSchemas.valueOf(schema.toUpperCase()))
                     .newValueList(
-                    		OpenInfraHttpMethod.valueOf(request.getMethod()), 
+                    		OpenInfraHttpMethod.valueOf(request.getMethod()),
     						uriInfo,
     						PtLocaleDao.forLanguageTag(language));
     }
@@ -226,7 +226,7 @@ public class ValueListResource {
 	    UUID uuid = new ValueListRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
-                		OpenInfraHttpMethod.valueOf(request.getMethod()), 
+                		OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
                         pojo, valueListId, pojo.getMetaData());
         return OpenInfraResponseBuilder.postResponse(uuid);
@@ -246,7 +246,7 @@ public class ValueListResource {
 		return new ValueListValueRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						valueListId,
@@ -270,10 +270,11 @@ public class ValueListResource {
                             OpenInfraSchemas.valueOf(schema.toUpperCase()))
                             .createOrUpdate(
                             		OpenInfraHttpMethod.valueOf(
-                            				request.getMethod()), 
+                            				request.getMethod()),
             						uriInfo,
-            						pojo, 
+            						pojo,
             						valueListId,
+            						pojo.getBelongsToValueList(),
                                     pojo.getMetaData()));
 	}
 
@@ -289,7 +290,7 @@ public class ValueListResource {
 		return new ValueListValueRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						valueListId);
 	}
