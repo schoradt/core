@@ -70,7 +70,12 @@ public class AttributeValueGeomzDao
 		super(currentProjectId, schema, AttributeValueGeomz.class,
 		        TopicInstance.class);
 		if(geomType != null) {
-			defaultGeomType = geomType;
+		    // only set the passed geom type if it is TEXT or X3D, all other
+		    // formats can not be converted correctly by PostGIS
+		    if (geomType.equals(AttributeValueGeomType.TEXT) ||
+		            geomType.equals(AttributeValueGeomType.X3D)) {
+		        defaultGeomType = geomType;
+		    }
 		} // end if
 	}
 
@@ -96,8 +101,9 @@ public class AttributeValueGeomzDao
 
         // set the topic instance id
         pojo.setTopicInstanceId(avgz.getTopicInstance().getId());
-	    // execute the SQL statement and set the geometry value
+        // execute the SQL statement and set the geometry value
         pojo.setGeom(qGeom.getResultList().get(0).toString());
+
 		// set the geometry type
 		pojo.setGeomType(defaultGeomType);
 		// set the attribute type to attribute type id group of the value
