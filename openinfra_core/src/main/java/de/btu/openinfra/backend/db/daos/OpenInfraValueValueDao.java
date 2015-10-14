@@ -145,7 +145,7 @@ public abstract class OpenInfraValueValueDao<
             return createOrUpdate(pojo,
                     secondAssociationId, metaData);
         } else {
-            // pass null because the POJO uuid is not part of the resource URI
+            // pass the pojo UUID because this uuid is not part of the URI
             return createOrUpdate(pojo, pojo.getUuid());
         }
     }
