@@ -57,7 +57,7 @@ public class AttributeTypeGroupResource {
 		return new AttributeTypeGroupRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo);
 	}
 
@@ -75,7 +75,7 @@ public class AttributeTypeGroupResource {
 		return new AttributeTypeGroupRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						sortOrder,
@@ -96,7 +96,7 @@ public class AttributeTypeGroupResource {
 		return new AttributeTypeGroupRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						attributeTypeGroupId);
@@ -118,7 +118,7 @@ public class AttributeTypeGroupResource {
 		return new AttributeTypeToAttributeTypeGroupRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						attributeTypeGroupId,
@@ -138,7 +138,7 @@ public class AttributeTypeGroupResource {
 		return new AttributeTypeRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						attributeTypeGroupId);
 	}
@@ -158,7 +158,7 @@ public class AttributeTypeGroupResource {
 		return new AttributeTypeToAttributeTypeGroupRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						attributeTypeGroupId,
@@ -184,7 +184,7 @@ public class AttributeTypeGroupResource {
 		return new TopicCharacteristicToAttributeTypeGroupRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						attributeTypeGroupId,
@@ -204,7 +204,7 @@ public class AttributeTypeGroupResource {
 	    return new TopicCharacteristicToAttributeTypeGroupRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
                         attributeTypeGroupId);
     }
@@ -225,7 +225,7 @@ public class AttributeTypeGroupResource {
 		return new TopicCharacteristicToAttributeTypeGroupRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						attributeTypeGroupId,
@@ -254,7 +254,7 @@ public class AttributeTypeGroupResource {
 		return new AttributeTypeGroupRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).readSubGroups(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						attributeTypeGroupId);
@@ -272,7 +272,7 @@ public class AttributeTypeGroupResource {
                         projectId,
                         OpenInfraSchemas.valueOf(schema.toUpperCase()))
                     .newAttributeTypeGroup(
-    						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+    						OpenInfraHttpMethod.valueOf(request.getMethod()),
     						uriInfo,
                             PtLocaleDao.forLanguageTag(language));
     }
@@ -287,9 +287,11 @@ public class AttributeTypeGroupResource {
         UUID id = new AttributeTypeGroupRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
-                		OpenInfraHttpMethod.valueOf(request.getMethod()), 
+                		OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
-                        pojo, null, pojo.getMetaData());
+						pojo,
+						null,
+						pojo.getMetaData());
         return OpenInfraResponseBuilder.postResponse(id);
     }
 
@@ -305,9 +307,11 @@ public class AttributeTypeGroupResource {
 	    UUID id = new AttributeTypeGroupRbac(
 	            projectId,
 	            OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
-	            		OpenInfraHttpMethod.valueOf(request.getMethod()), 
+	            		OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
-                        pojo, attributeTypeGroupId, pojo.getMetaData());
+						pojo,
+						attributeTypeGroupId,
+						pojo.getMetaData());
 	    return OpenInfraResponseBuilder.putResponse(id);
 	}
 
@@ -323,8 +327,8 @@ public class AttributeTypeGroupResource {
 	            new AttributeTypeGroupRbac(
 	                    projectId,
 	                    OpenInfraSchemas.valueOf(schema.toUpperCase()))
-	            .delete(OpenInfraHttpMethod.valueOf(request.getMethod()), 
-						uriInfo, 
+	            .delete(OpenInfraHttpMethod.valueOf(request.getMethod()),
+						uriInfo,
 						attributeTypeGroupId), attributeTypeGroupId);
 	}
 }

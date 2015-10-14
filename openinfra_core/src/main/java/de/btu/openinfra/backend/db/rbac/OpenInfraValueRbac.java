@@ -19,21 +19,21 @@ public abstract class OpenInfraValueRbac<
 		TypePojo extends OpenInfraPojo,
 		TypeModel extends OpenInfraModelObject,
 		TypeModelValue,
-		TypeDao extends OpenInfraValueDao<TypePojo, TypeModel, TypeModelValue>> 
+		TypeDao extends OpenInfraValueDao<TypePojo, TypeModel, TypeModelValue>>
 			extends OpenInfraRbac<TypePojo, TypeModel, TypeDao> {
-	
+
 	protected Class<TypeModelValue> valueClass;
-	
+
 	/**
-	 * This defines the constructor types in order to call the constructor in a 
-	 * generic way via: 
+	 * This defines the constructor types in order to call the constructor in a
+	 * generic way via:
 	 */
-	protected Class<?>[] constructorTypesValue =	
+	protected Class<?>[] constructorTypesValue =
 			new Class[] {UUID.class, OpenInfraSchemas.class};
-	
+
 	/**
 	 * Refers to the OpenInfraValueDao
-	 * 
+	 *
 	 * @param currentProjectId
 	 * @param schema
 	 * @param valueClass
@@ -41,15 +41,15 @@ public abstract class OpenInfraValueRbac<
 	 */
 	protected OpenInfraValueRbac(
 			UUID currentProjectId,
-			OpenInfraSchemas schema, 
+			OpenInfraSchemas schema,
 			Class<TypeModelValue> valueClass,
 			Class<TypeDao> dao) {
 		super(currentProjectId, schema, dao);
-		this.valueClass = valueClass; 
+		this.valueClass = valueClass;
 	}
 
 	public List<TypePojo> read(
-			OpenInfraHttpMethod httpMethod, 
+			OpenInfraHttpMethod httpMethod,
 			UriInfo uriInfo,
 			Locale locale,
 			UUID valueId,
@@ -59,7 +59,7 @@ public abstract class OpenInfraValueRbac<
 		try {
 			return dao.getDeclaredConstructor(
 					constructorTypesValue).newInstance(
-							currentProjectId, 
+							currentProjectId,
 							schema).read(locale, valueId, offset, size);
 		} catch(Exception ex) {
 			ex.printStackTrace();
@@ -68,9 +68,9 @@ public abstract class OpenInfraValueRbac<
 					Response.Status.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	public List<TypePojo> read(
-			OpenInfraHttpMethod httpMethod, 
+			OpenInfraHttpMethod httpMethod,
 			UriInfo uriInfo,
             Locale locale,
             UUID valueId,
@@ -82,13 +82,13 @@ public abstract class OpenInfraValueRbac<
 		try {
 			return dao.getDeclaredConstructor(
 					constructorTypesValue).newInstance(
-							currentProjectId, 
+							currentProjectId,
 							schema).read(
-									locale, 
-									valueId, 
-									order, 
-									column, 
-									offset, 
+									locale,
+									valueId,
+									order,
+									column,
+									offset,
 									size);
 		} catch(Exception ex) {
 			ex.printStackTrace();
@@ -97,15 +97,15 @@ public abstract class OpenInfraValueRbac<
 					Response.Status.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	public Long getCount(
-			OpenInfraHttpMethod httpMethod, 
+			OpenInfraHttpMethod httpMethod,
 			UriInfo uriInfo, UUID valueId) {
 		checkPermission(httpMethod, uriInfo);
 		try {
 			return dao.getDeclaredConstructor(
 					constructorTypesValue).newInstance(
-							currentProjectId, 
+							currentProjectId,
 							schema).getCount(valueId);
 		} catch(Exception ex) {
 			ex.printStackTrace();

@@ -64,8 +64,7 @@ public class ServersResource {
             @PathParam("serversId") UUID serversId,
             ServersPojo pojo) {
         UUID id = new ServersDao(
-                OpenInfraSchemas.META_DATA).createOrUpdate(pojo, serversId,
-                        null);
+                OpenInfraSchemas.META_DATA).createOrUpdate(pojo, serversId);
         return OpenInfraResponseBuilder.putResponse(id);
     }
 
