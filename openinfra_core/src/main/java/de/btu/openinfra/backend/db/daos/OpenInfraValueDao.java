@@ -6,6 +6,7 @@ import java.util.Locale;
 import java.util.UUID;
 
 import org.eclipse.persistence.jpa.JpaQuery;
+import org.json.simple.JSONObject;
 
 import de.btu.openinfra.backend.OpenInfraProperties;
 import de.btu.openinfra.backend.db.OpenInfraOrderBy;
@@ -95,6 +96,42 @@ public abstract class OpenInfraValueDao<
 
 		return pojos;
 	}
+
+	/**
+     * This method checks if the first associated id that is part of the URI
+     * matches with the association id in the POJO. If the matches are fulfilled
+     * the createOrUpdate method of the OpenInfraDao will be called. Otherwise
+     * it will return null.
+     *
+     * @param pojo                        the POJO object which should be stored
+     *                                    in the database
+     * @param firstAssociationId          the first association id from the URI
+     * @param firstAssociationIdFromPojo  the first association id from the POJO
+     * @param metaData                    the JSON data that should be stored in
+     *                                    the meta data associated to the POJO
+     * @return                            the UUID of the newly created or
+     *                                    replaced object or null
+     * @throws RuntimeException
+     */
+    public UUID createOrUpdate(TypePojo pojo, UUID firstAssociationId,
+            UUID firstAssociationIdFromPojo, JSONObject metaData)
+            throws RuntimeException {
+
+        // check if the value id of the URI map to the pojo uuid
+        if (firstAssociationId != null &&
+                !firstAssociationId.equals(firstAssociationIdFromPojo)) {
+            throw new RuntimeException("UUIDs are incompatible URI vs POJO");
+        }
+
+        if (metaData != null) {
+            // update the meta data as well if it exists
+            return createOrUpdate(pojo,
+                    firstAssociationId, metaData);
+        } else {
+            // pass null because the POJO uuid is not part of the resource URI
+            return createOrUpdate(pojo, pojo.getUuid());
+        }
+    }
 
 	/**
      * This is a generic method which reads a list of TypePojos defined by

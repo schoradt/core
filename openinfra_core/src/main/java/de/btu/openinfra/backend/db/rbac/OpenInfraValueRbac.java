@@ -8,6 +8,8 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import org.json.simple.JSONObject;
+
 import de.btu.openinfra.backend.db.OpenInfraOrderBy;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.OpenInfraSortOrder;
@@ -68,6 +70,40 @@ public abstract class OpenInfraValueRbac<
 					Response.Status.INTERNAL_SERVER_ERROR);
 		}
 	}
+
+	/**
+     * This is a generic method which is provided by all RBAC classes.
+     *
+     * @param pojo
+     * @param firstAssociationId
+     * @param firstAssociationIdFromPojo
+     * @return
+     * @throws RuntimeException
+     */
+    public UUID createOrUpdate(
+            OpenInfraHttpMethod httpMethod,
+            UriInfo uriInfo,
+            TypePojo pojo,
+            UUID firstAssociationId,
+            UUID firstAssociationIdFromPojo,
+            JSONObject json)
+            throws RuntimeException {
+        checkPermission(httpMethod, uriInfo);
+        try {
+            return dao.getDeclaredConstructor(constructorTypes).newInstance(
+                    currentProjectId,
+                    schema).createOrUpdate(
+                            pojo,
+                            firstAssociationId,
+                            firstAssociationIdFromPojo,
+                            json);
+        } catch(Exception ex) {
+            ex.printStackTrace();
+            throw new WebApplicationException(
+                    ex.getMessage(),
+                    Response.Status.INTERNAL_SERVER_ERROR);
+        }
+    }
 
 	public List<TypePojo> read(
 			OpenInfraHttpMethod httpMethod,
