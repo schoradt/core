@@ -2,12 +2,12 @@ package de.btu.openinfra.backend.db.daos.meta;
 
 import java.util.Locale;
 
+import de.btu.openinfra.backend.OpenInfraTime;
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
 import de.btu.openinfra.backend.db.jpa.model.meta.Log;
 import de.btu.openinfra.backend.db.pojos.meta.LogPojo;
-import de.btu.openinfra.backend.helper.OpenInfraTime;
 
 /**
  * This class represents the Log and is used to access the underlying layer

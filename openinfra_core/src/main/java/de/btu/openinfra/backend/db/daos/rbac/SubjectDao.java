@@ -10,6 +10,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
 import de.btu.openinfra.backend.OpenInfraProperties;
+import de.btu.openinfra.backend.OpenInfraTime;
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
@@ -20,7 +21,6 @@ import de.btu.openinfra.backend.db.pojos.rbac.RolePojo;
 import de.btu.openinfra.backend.db.pojos.rbac.SubjectPojo;
 import de.btu.openinfra.backend.db.pojos.rbac.SubjectProjectPojo;
 import de.btu.openinfra.backend.db.rbac.OpenInfraRealm;
-import de.btu.openinfra.backend.helper.OpenInfraTime;
 
 /**
  * This is the DAO class for users. In this case the map to model method skips

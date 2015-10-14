@@ -1,4 +1,4 @@
-package de.btu.openinfra.backend.helper;
+package de.btu.openinfra.backend;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
