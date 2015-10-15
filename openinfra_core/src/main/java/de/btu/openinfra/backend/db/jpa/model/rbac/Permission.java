@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
@@ -15,7 +16,12 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
  * 
  */
 @Entity
-@NamedQuery(name="Permission.findAll", query="SELECT p FROM Permission p")
+@NamedQueries({
+	@NamedQuery(name="Permission.findAll", query="SELECT p FROM Permission p"),
+	@NamedQuery(name="Permission.count", 
+		query="SELECT COUNT(p) FROM Permission p")
+})
+
 public class Permission extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 

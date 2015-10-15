@@ -38,8 +38,10 @@ public class ProjectRelatedRoleDao extends
 	@Override
 	public MappingResult<ProjectRelatedRole> mapToModel(
 			ProjectRelatedRolePojo pojoObject, ProjectRelatedRole modelObject) {
-		// TODO Auto-generated method stub
-		return null;
+		modelObject.setDescription(pojoObject.getDescription());
+		modelObject.setName(pojoObject.getName());
+		return new MappingResult<ProjectRelatedRole>(
+				modelObject.getId(), modelObject);
 	}
 
 }

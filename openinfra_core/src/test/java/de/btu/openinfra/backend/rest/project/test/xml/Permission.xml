@@ -1,0 +1,5 @@
+<permissionPojo>
+	<uuid>fc41683a-ac78-46ce-8c2f-d54778093091</uuid>
+	<description>new permission</description>
+	<permission>*:*:wurst</permission>
+</permissionPojo>

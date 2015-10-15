@@ -55,7 +55,7 @@ public class DatabaseConnectionResource {
     @POST
     public Response create(DatabaseConnectionPojo pojo) {
         UUID id = new DatabaseConnectionDao(
-                OpenInfraSchemas.META_DATA).createOrUpdate(pojo);
+                OpenInfraSchemas.META_DATA).createOrUpdate(pojo, null);
         return OpenInfraResponseBuilder.postResponse(id);
     }
 
@@ -66,7 +66,7 @@ public class DatabaseConnectionResource {
             DatabaseConnectionPojo pojo) {
         UUID id = new DatabaseConnectionDao(
                 OpenInfraSchemas.META_DATA).createOrUpdate(pojo,
-                        databaseConnectionId, null);
+                        databaseConnectionId);
         return OpenInfraResponseBuilder.putResponse(id);
     }
 

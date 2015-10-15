@@ -84,6 +84,7 @@ public class MetaDataResource {
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
                 		OpenInfraHttpMethod.valueOf(request.getMethod()), 
 						uriInfo,
+						null,
                         pojo);
         return OpenInfraResponseBuilder.postResponse(id);
     }
@@ -102,8 +103,9 @@ public class MetaDataResource {
                         projectId,
                         OpenInfraSchemas.valueOf(schema.toUpperCase())
                         ).createOrUpdate(
-                        		OpenInfraHttpMethod.valueOf(request.getMethod()), 
-        						uriInfo, pojo, metadataId, null));
+                        		OpenInfraHttpMethod.valueOf(
+                        				request.getMethod()),
+                        				uriInfo, pojo, metadataId, null));
     }
 
     @DELETE

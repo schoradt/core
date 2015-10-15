@@ -39,8 +39,9 @@ public class PasswordBlacklistDao extends
 	@Override
 	public MappingResult<PasswordBlacklist> mapToModel(
 			PasswordBlacklistPojo pojoObject, PasswordBlacklist modelObject) {
-		// TODO Auto-generated method stub
-		return null;
+		modelObject.setPassword(pojoObject.getPassword());
+		return new MappingResult<PasswordBlacklist>(
+				modelObject.getId(), modelObject);
 	}
 
 

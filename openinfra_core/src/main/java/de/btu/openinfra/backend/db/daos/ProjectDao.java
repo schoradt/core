@@ -297,7 +297,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 	    // determine if we want to create a sub or a main project
 	    if (pojo.getSubprojectOf() != null) {
 	        id = new ProjectDao(pojo.getSubprojectOf(),
-	                OpenInfraSchemas.PROJECTS).createOrUpdate(pojo);
+	                OpenInfraSchemas.PROJECTS).createOrUpdate(pojo, null);
 	    } else {
 	        try {
 
@@ -503,7 +503,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
             SchemasDao schemaDao = new SchemasDao(OpenInfraSchemas.META_DATA);
             // insert the data
             // TODO: createOrUpdate can throw an exception!
-            UUID schemaId = schemaDao.createOrUpdate(metaSchemasPojo);
+            UUID schemaId = schemaDao.createOrUpdate(metaSchemasPojo, null);
 
             // create a POJO for the database connection in the meta data schema
             DatabaseConnectionPojo dbCPojo = new DatabaseConnectionPojo();
@@ -581,7 +581,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
             DatabaseConnectionDao dbCDao =
                     new DatabaseConnectionDao(OpenInfraSchemas.META_DATA);
             // insert the database connection information
-            UUID dbCId = dbCDao.createOrUpdate(dbCPojo);
+            UUID dbCId = dbCDao.createOrUpdate(dbCPojo, null);
             if (dbCId == null) {
                 throw new OpenInfraDatabaseException(
                         OpenInfraExceptionTypes.INSERT_META_DATA);
@@ -598,8 +598,12 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
             metaProjectsPojo.setDatabaseConnection(dbCDao.read(null, dbCId));
             // insert the informations into the meta_data schema
             new ProjectsDao(OpenInfraSchemas.META_DATA)
-                .createOrUpdate(metaProjectsPojo);
+                .createOrUpdate(metaProjectsPojo, null);
 
+        } catch (RuntimeException re) {
+            // thrown by createOrUpdate
+            throw new OpenInfraDatabaseException(
+                    OpenInfraExceptionTypes.INSERT_META_DATA);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -727,7 +731,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 
             // write the data of the project
             new ProjectDao(newProjectId, OpenInfraSchemas.PROJECTS)
-                    .createOrUpdate(newProjectPojo);
+                    .createOrUpdate(newProjectPojo, null);
 
         } catch (RuntimeException re) {
             throw new OpenInfraDatabaseException(

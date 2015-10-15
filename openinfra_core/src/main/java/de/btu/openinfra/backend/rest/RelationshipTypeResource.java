@@ -50,7 +50,7 @@ public class RelationshipTypeResource {
         return new RelationshipTypeRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-                		OpenInfraHttpMethod.valueOf(request.getMethod()), 
+                		OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
                         PtLocaleDao.forLanguageTag(language),
 						sortOrder,
@@ -70,7 +70,7 @@ public class RelationshipTypeResource {
 		return new RelationshipTypeRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo);
 	}
 
@@ -86,7 +86,7 @@ public class RelationshipTypeResource {
         return new RelationshipTypeRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-                		OpenInfraHttpMethod.valueOf(request.getMethod()), 
+                		OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
                         PtLocaleDao.forLanguageTag(language),
                         relationshipTypeId);
@@ -107,7 +107,7 @@ public class RelationshipTypeResource {
 		return new TopicCharacteristicToRelationshipTypeRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						relationshipTypeId,
@@ -126,7 +126,7 @@ public class RelationshipTypeResource {
         return new TopicCharacteristicToRelationshipTypeRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
-                		OpenInfraHttpMethod.valueOf(request.getMethod()), 
+                		OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
                         relationshipTypeId);
     }
@@ -147,7 +147,7 @@ public class RelationshipTypeResource {
 		return new TopicCharacteristicToRelationshipTypeRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						relationshipTypeId,
@@ -180,9 +180,12 @@ public class RelationshipTypeResource {
                             projectId,
                             OpenInfraSchemas.valueOf(schema.toUpperCase()))
                             .createOrUpdate(
-                            		OpenInfraHttpMethod.valueOf(request.getMethod()), 
+                            		OpenInfraHttpMethod.valueOf(
+                            				request.getMethod()),
             						uriInfo,
-            						pojo, pojo.getMetaData()));
+            						pojo,
+            						null,
+            						pojo.getMetaData()));
     }
 
 	@PUT
@@ -198,7 +201,7 @@ public class RelationshipTypeResource {
 	    UUID uuid = new RelationshipTypeRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
-                		OpenInfraHttpMethod.valueOf(request.getMethod()), 
+                		OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
                         pojo, relationshipTypeId, pojo.getMetaData());
         return OpenInfraResponseBuilder.postResponse(uuid);
@@ -216,7 +219,7 @@ public class RelationshipTypeResource {
                 new RelationshipTypeRbac(
                         projectId,
                         OpenInfraSchemas.valueOf(schema.toUpperCase()))
-                    .delete(OpenInfraHttpMethod.valueOf(request.getMethod()), 
+                    .delete(OpenInfraHttpMethod.valueOf(request.getMethod()),
     						uriInfo,
     						relationshipTypeId),
                     relationshipTypeId);

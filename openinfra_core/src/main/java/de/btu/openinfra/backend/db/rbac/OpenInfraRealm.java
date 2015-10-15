@@ -121,7 +121,7 @@ public class OpenInfraRealm extends AuthorizingRealm {
         					"/topiccharacteristics/{id}:r,w:*");
         		} else {
             		for(SubjectObjectPojo so : soList) {
-            			String write = (so.getWriteObject()) ? "" : ",r";
+            			String write = (so.isWriteObject()) ? "" : ",r";
             			permissions.add("/projects/" + sp.getProjectId() + 
             					"/topiccharacteristics/{id}:r" + write + ":" + 
             					so.getObjectId());            			

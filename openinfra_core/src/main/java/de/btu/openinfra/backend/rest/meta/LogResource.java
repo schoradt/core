@@ -54,7 +54,7 @@ public class LogResource {
     @POST
     public Response create(LogPojo pojo) {
         UUID id = new LogDao(OpenInfraSchemas.META_DATA).createOrUpdate(
-                        pojo);
+                        pojo, null);
         return OpenInfraResponseBuilder.postResponse(id);
     }
     

@@ -11,9 +11,15 @@ import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 public class SubjectObjectPojo extends OpenInfraPojo {
 	
 	private UUID projectId;
-	private OpenInfraObjectPojo object;
-	private SubjectPojo subject;
+	/**
+	 * The openinfra object
+	 */
+	private UUID object;
+	private UUID subject;
 	private boolean writeObject;
+	/**
+	 * The id of the specific object: object = photo & objectId = which photo
+	 */
 	private UUID objectId;
 	
 	public SubjectObjectPojo() {}
@@ -21,32 +27,32 @@ public class SubjectObjectPojo extends OpenInfraPojo {
 	public SubjectObjectPojo(SubjectObject model) {
 		super(model);
 	}
-	
+
 	public UUID getProjectId() {
 		return projectId;
 	}
-	
+
 	public void setProjectId(UUID projectId) {
 		this.projectId = projectId;
 	}
-	
-	public OpenInfraObjectPojo getObject() {
+
+	public UUID getObject() {
 		return object;
 	}
-	
-	public void setObject(OpenInfraObjectPojo object) {
+
+	public void setObject(UUID object) {
 		this.object = object;
 	}
-	
-	public SubjectPojo getSubject() {
+
+	public UUID getSubject() {
 		return subject;
 	}
-	
-	public void setSubject(SubjectPojo subject) {
+
+	public void setSubject(UUID subject) {
 		this.subject = subject;
 	}
 
-	public boolean getWriteObject() {
+	public boolean isWriteObject() {
 		return writeObject;
 	}
 

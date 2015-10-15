@@ -50,18 +50,10 @@ import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
  * example you want to secure the following url:
  * /projects/{id}/topiccharacteristics/{id}/topicinstances
  * Insert the currentProjectId like so
-<<<<<<< HEAD
- * /projects/e7d42bff-4e40-4f43-9d1b-1dc5a190cd75/topiccharacteristics/{id}/topicinstances:r:{id}
- *
-=======
  * /projects/e7d42bff-4e40-4f43-9d1b-1dc5a190cd75/topiccharacteristics/{id}/topicinstances:r:* or specific uuid
  *
->>>>>>> refs/heads/master
  * Permission to read information from system schema:
  * /system:r
-<<<<<<< HEAD
- *
-=======
  *
  * Permission to create a main project:
  * /projects:w
@@ -69,7 +61,6 @@ import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
  * Permission to create a subproject related to the parent project:
  * /projects/e7d42bff-4e40-4f43-9d1b-1dc5a190cd75/subprojects:w
  *
->>>>>>> refs/heads/master
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
  * @param <TypePojo>
@@ -253,13 +244,14 @@ public abstract class OpenInfraRbac<
 	public UUID createOrUpdate(
 			OpenInfraHttpMethod httpMethod,
 			UriInfo uriInfo,
+			UUID valueId,
 			TypePojo pojo)
 			throws RuntimeException {
 		checkPermission(httpMethod, uriInfo);
 		try {
 			return dao.getDeclaredConstructor(constructorTypes).newInstance(
 					currentProjectId,
-					schema).createOrUpdate(pojo);
+					schema).createOrUpdate(pojo, valueId);
 		} catch(Exception ex) {
 			ex.printStackTrace();
 			throw new WebApplicationException(
@@ -280,13 +272,14 @@ public abstract class OpenInfraRbac<
     		OpenInfraHttpMethod httpMethod,
 			UriInfo uriInfo,
 			TypePojo pojo,
+			UUID valueId,
 			JSONObject json)
             throws RuntimeException {
     	checkPermission(httpMethod, uriInfo);
 		try {
 			return dao.getDeclaredConstructor(constructorTypes).newInstance(
 					currentProjectId,
-					schema).createOrUpdate(pojo, json);
+					schema).createOrUpdate(pojo, valueId, json);
 		} catch(Exception ex) {
 			ex.printStackTrace();
 			throw new WebApplicationException(
@@ -303,6 +296,7 @@ public abstract class OpenInfraRbac<
 	 * @return
 	 * @throws RuntimeException
 	 */
+    /*
     public UUID createOrUpdate(
     		OpenInfraHttpMethod httpMethod,
 			UriInfo uriInfo,
@@ -321,70 +315,7 @@ public abstract class OpenInfraRbac<
 					ex.getMessage(),
 					Response.Status.INTERNAL_SERVER_ERROR);
 		}
-    }
-
-    /**
-     * This is a generic method which is provided by all RBAC classes.
-     *
-     * @param pojo
-     * @param firstAssociationId
-     * @param firstAssociationIdFromPojo
-     * @return
-     * @throws RuntimeException
-     */
-    public UUID createOrUpdate(
-    		OpenInfraHttpMethod httpMethod,
-			UriInfo uriInfo,
-			TypePojo pojo,
-			UUID firstAssociationId,
-            UUID firstAssociationIdFromPojo, JSONObject json)
-            		throws RuntimeException {
-		checkPermission(httpMethod, uriInfo);
-		try {
-			return dao.getDeclaredConstructor(constructorTypes).newInstance(
-					currentProjectId,
-					schema).createOrUpdate(pojo,
-							firstAssociationId, firstAssociationIdFromPojo,
-							json);
-		} catch(Exception ex) {
-			ex.printStackTrace();
-			throw new WebApplicationException(
-					ex.getMessage(),
-					Response.Status.INTERNAL_SERVER_ERROR);
-		}
-    }
-
-    /**
-     * This is a generic method which is provided by all RBAC classes.
-     *
-     * @param pojo
-     * @param firstAssociationId
-     * @param firstAssociationIdFromPojo
-     * @param secondAssociationId
-     * @param secondAssociationIdFromPojo
-     * @return
-     * @throws RuntimeException
-     */
-    public UUID createOrUpdate(
-    		OpenInfraHttpMethod httpMethod,
-			UriInfo uriInfo, TypePojo pojo, UUID firstAssociationId,
-            UUID firstAssociationIdFromPojo, UUID secondAssociationId,
-            UUID secondAssociationIdFromPojo, JSONObject json)
-            throws RuntimeException {
-		checkPermission(httpMethod, uriInfo);
-		try {
-			return dao.getDeclaredConstructor(constructorTypes).newInstance(
-					currentProjectId,
-					schema).createOrUpdate(pojo, firstAssociationId,
-							firstAssociationIdFromPojo, secondAssociationId,
-							secondAssociationIdFromPojo, json);
-		} catch(Exception ex) {
-			ex.printStackTrace();
-			throw new WebApplicationException(
-					ex.getMessage(),
-					Response.Status.INTERNAL_SERVER_ERROR);
-		}
-    }
+    }*/
 
     /**
      * This is a generic method which is provided by all RBAC classes.
@@ -433,13 +364,13 @@ public abstract class OpenInfraRbac<
 		switch (schema) {
 		case PROJECTS:
 		    // Matches URI for creating new project schemas
-		    if(uriInfo.getPath().matches(regex_new_project)) {
-		        // Is the subject (user) permitted to create projects?
-		        if (currentProjectId == null && user.isPermitted(
-		                "/projects:"+ httpMethod.getAccess())) {
-		            return;
-		        }
-		    }
+            if(uriInfo.getPath().matches(regex_new_project)) {
+                // Is the subject (user) permitted to create projects?
+                if (currentProjectId == null && user.isPermitted(
+                        "/projects:"+ httpMethod.getAccess())) {
+                    return;
+                }
+            }
 			// Is the current URI path really a project path?
 			if(uriInfo.getPath().matches(regex_project)) {
 				// Is the subject (user) permitted to read or write the project?
@@ -455,7 +386,9 @@ public abstract class OpenInfraRbac<
 						String tcId = uriInfo.getPath().substring(
 								uriInfo.getPath().lastIndexOf(tc) +
 								tc.length());
-						tcId = tcId.substring(0, tcId.indexOf("/"));
+						if(tcId.indexOf("/") > -1) {
+							tcId = tcId.substring(0, tcId.indexOf("/"));
+						}
 						// Generate the required access string
 						String req_access = "/projects/" + currentProjectId +
 								"/topiccharacteristics/{id}:" +
@@ -469,7 +402,9 @@ public abstract class OpenInfraRbac<
 						String tiId = uriInfo.getPath().substring(
 								uriInfo.getPath().lastIndexOf(ti) +
 								ti.length());
-						tiId = tiId.substring(0, tiId.indexOf("/"));
+						if(tiId.indexOf("/") > -1) {
+							tiId = tiId.substring(0, tiId.indexOf("/"));
+						}
 						// Get the responding topic characteristic UUID from DB
 						UUID tcId = new TopicInstanceDao(
 								currentProjectId, schema).read(

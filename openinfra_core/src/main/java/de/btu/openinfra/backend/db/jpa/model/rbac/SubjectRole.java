@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
@@ -17,7 +18,12 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
  */
 @Entity
 @Table(name="subject_roles")
-@NamedQuery(name="SubjectRole.findAll", query="SELECT s FROM SubjectRole s")
+@NamedQueries({
+	@NamedQuery(name="SubjectRole.findAll", 
+			query="SELECT s FROM SubjectRole s"),
+	@NamedQuery(name="SubjectRole.count", 
+			query="SELECT COUNT(s) FROM SubjectRole s")
+})
 public class SubjectRole extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 

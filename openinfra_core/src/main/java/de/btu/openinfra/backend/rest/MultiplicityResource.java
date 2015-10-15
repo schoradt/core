@@ -50,7 +50,7 @@ public class MultiplicityResource {
 		return new MultiplicityRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						offset,
@@ -68,7 +68,7 @@ public class MultiplicityResource {
         return new MultiplicityRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
-                		OpenInfraHttpMethod.valueOf(request.getMethod()), 
+                		OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo);
     }
 
@@ -84,7 +84,7 @@ public class MultiplicityResource {
 		return new MultiplicityRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						multiplicityId);
@@ -110,9 +110,11 @@ public class MultiplicityResource {
 		UUID id = new MultiplicityRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
-						pojo, pojo.getMetaData());
+						pojo,
+						null,
+						pojo.getMetaData());
 		return OpenInfraResponseBuilder.postResponse(id);
 	}
 
@@ -128,7 +130,7 @@ public class MultiplicityResource {
 				new MultiplicityRbac(
 						projectId,
 						OpenInfraSchemas.valueOf(schema.toUpperCase())).delete(
-								OpenInfraHttpMethod.valueOf(request.getMethod()), 
+								OpenInfraHttpMethod.valueOf(request.getMethod()),
 								uriInfo,
 								multiplicityId),
 				multiplicityId);
@@ -147,7 +149,7 @@ public class MultiplicityResource {
 				new MultiplicityRbac(
 						projectId,
 						OpenInfraSchemas.PROJECTS).createOrUpdate(
-								OpenInfraHttpMethod.valueOf(request.getMethod()), 
+								OpenInfraHttpMethod.valueOf(request.getMethod()),
 								uriInfo,
 								pojo,
 						        multiplicityId, pojo.getMetaData()));

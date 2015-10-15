@@ -52,7 +52,7 @@ public class AttributeTypeResource {
 		return new AttributeTypeRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						sortOrder,
@@ -75,7 +75,7 @@ public class AttributeTypeResource {
 		return new AttributeTypeAssociationRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						attributeTypeId,
@@ -95,7 +95,7 @@ public class AttributeTypeResource {
         return new AttributeTypeAssociationRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
                         attributeTypeId);
     }
@@ -116,7 +116,7 @@ public class AttributeTypeResource {
 		return new AttributeTypeAssociationRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						attributeTypeId,
@@ -136,7 +136,7 @@ public class AttributeTypeResource {
 		return new AttributeTypeRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo);
 	}
 
@@ -152,7 +152,7 @@ public class AttributeTypeResource {
 		return new AttributeTypeRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						attributeTypeId);
@@ -172,7 +172,7 @@ public class AttributeTypeResource {
 		return new AttributeTypeGroupToAttributeTypeRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						attributeTypeId,
@@ -192,7 +192,7 @@ public class AttributeTypeResource {
 		return new AttributeTypeGroupToAttributeTypeRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						attributeTypeId);
 	}
@@ -212,7 +212,7 @@ public class AttributeTypeResource {
 		return new AttributeTypeGroupToAttributeTypeRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						attributeTypeId,
@@ -233,7 +233,7 @@ public class AttributeTypeResource {
                         projectId,
                         OpenInfraSchemas.valueOf(schema.toUpperCase()))
                     .newAttributeType(
-    						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+    						OpenInfraHttpMethod.valueOf(request.getMethod()),
     						uriInfo,
     						PtLocaleDao.forLanguageTag(language));
     }
@@ -248,9 +248,10 @@ public class AttributeTypeResource {
         UUID id = new AttributeTypeRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
-                        pojo, 
+						pojo,
+						null,
                         pojo.getMetaData());
         return OpenInfraResponseBuilder.postResponse(id);
     }
@@ -268,7 +269,7 @@ public class AttributeTypeResource {
                         projectId,
                         OpenInfraSchemas.valueOf(schema.toUpperCase())).delete(
         						OpenInfraHttpMethod.valueOf(
-        								request.getMethod()), 
+        								request.getMethod()),
         						uriInfo,
                                 attributeTypeId),
                         attributeTypeId);
@@ -288,10 +289,10 @@ public class AttributeTypeResource {
                         projectId,
                         OpenInfraSchemas.PROJECTS).createOrUpdate(
         						OpenInfraHttpMethod.valueOf(
-        								request.getMethod()), 
+        								request.getMethod()),
         						uriInfo,
         						pojo,
-                                attributeTypeId, 
+                                attributeTypeId,
                                 pojo.getMetaData()));
     }
 
@@ -308,7 +309,7 @@ public class AttributeTypeResource {
                         projectId,
                         OpenInfraSchemas.valueOf(schema.toUpperCase()))
                     .newAttributeTypeAssociation(
-    						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+    						OpenInfraHttpMethod.valueOf(request.getMethod()),
     						uriInfo,
     						attributeTypeId);
     }
@@ -325,10 +326,13 @@ public class AttributeTypeResource {
         UUID id = new AttributeTypeAssociationRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
-                        pojo, attributeTypeId,
+                        pojo,
+                        attributeTypeId,
                         pojo.getAssociationAttributeTypeId(),
+                        null,
+                        null,
                         pojo.getMetaData());
         return OpenInfraResponseBuilder.postResponse(id);
     }
@@ -347,7 +351,7 @@ public class AttributeTypeResource {
                         projectId,
                         OpenInfraSchemas.valueOf(schema.toUpperCase())).delete(
         						OpenInfraHttpMethod.valueOf(
-        								request.getMethod()), 
+        								request.getMethod()),
         						uriInfo,
                                 associatedAttributeTypeId),
                                 associatedAttributeTypeId);
@@ -370,9 +374,10 @@ public class AttributeTypeResource {
                         OpenInfraSchemas.valueOf(schema.toUpperCase()))
                             .createOrUpdate(
                             		OpenInfraHttpMethod.valueOf(
-                            				request.getMethod()), 
+                            				request.getMethod()),
             						uriInfo,
-                                    pojo, attributeTypeId,
+                                    pojo,
+                                    attributeTypeId,
                                     pojo.getAssociationAttributeTypeId(),
                                     associatedAttributeTypeId,
                                     pojo.getAssociatedAttributeType().getUuid(),

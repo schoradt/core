@@ -46,8 +46,86 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
 	// TODO add named query in order to retrieve attribute values
 	@Override
 	public TopicInstancePojo mapToPojo(Locale locale, TopicInstance ti) {
+	    if (ti != null) {
+	        MetaDataDao mdDao = new MetaDataDao(currentProjectId, schema);
+
+            // 1. Create new POJO object and set necessary stuff
+            TopicInstancePojo pojo = new TopicInstancePojo(ti, mdDao);
+
+            // set the topic characteristic POJO
+            pojo.setTopicCharacteristic(TopicCharacteristicDao
+                    .mapToPojoStatically(
+                            locale, ti.getTopicCharacteristic(), null));
+
+            String metaData = null;
+            // check if meta data exists for this topic instance
+            if (pojo.getTopicCharacteristic().getMetaData() != null) {
+                if (pojo.getTopicCharacteristic().getMetaData()
+                        .containsKey(OpenInfraMetaDataEnum.LIST_VIEW_COLUMNS)) {
+                    metaData = pojo.getTopicCharacteristic().getMetaData()
+                                   .get(OpenInfraMetaDataEnum.LIST_VIEW_COLUMNS)
+                                   .toString();
+                }
+            }
+
+            // 2. Associate only attribute values to the topic instance which are
+            //    mentioned in the meta data.
+            List<AttributeValuePojo> values =
+                    new LinkedList<AttributeValuePojo>();
+
+            // 3. This is for all attribute value domains
+            for(AttributeValueDomain avd : ti.getAttributeValueDomains()) {
+                // 3.a Check if the current id is mentioned in the meta data
+                if( metaData != null && metaData.contains(
+                        avd.getAttributeTypeToAttributeTypeGroup()
+                            .getAttributeType().getId().toString()) ||
+                        metaData == null ) {
+                    AttributeValuePojo avPojo = new AttributeValuePojo(avd);
+                    avPojo.setAttributeTypeId(
+                            avd.getAttributeTypeToAttributeTypeGroup()
+                            .getAttributeType().getId());
+                    avPojo.setAttributeValueType(
+                            AttributeValueTypes.ATTRIBUTE_VALUE_DOMAIN);
+                    avPojo.setAttributeValueDomain(
+                            AttributeValueDomainDao.mapToPojoStatically(
+                                    locale,
+                                    avd,
+                                    mdDao));
+                    values.add(avPojo);
+                } // end if
+            } // end for
+
+            // 4. This is for all attribute value values
+            for(AttributeValueValue avv : ti.getAttributeValueValues()) {
+                // 4.a Check if the current id is mentioned in the settings
+                if( metaData != null && metaData.contains(
+                        avv.getAttributeTypeToAttributeTypeGroup()
+                            .getAttributeType().getId().toString()) ||
+                        metaData == null ) {
+                    AttributeValuePojo avPojo = new AttributeValuePojo(avv);
+                    avPojo.setAttributeTypeId(
+                            avv.getAttributeTypeToAttributeTypeGroup()
+                            .getAttributeType().getId());
+                    avPojo.setAttributeValueType(
+                            AttributeValueTypes.ATTRIBUTE_VALUE_VALUE);
+                    avPojo.setAttributeValueValue(
+                            AttributeValueValueDao.mapToPojoStatically(
+                                    locale,
+                                    avv,
+                                    mdDao));
+                    values.add(avPojo);
+                } // end if
+            } // end for
+
+            pojo.setValues(values);
+            return pojo;
+        } else {
+            return null;
+        }
+	    /*
         return mapToPojoStatically(locale, ti,
                 new MetaDataDao(currentProjectId, schema));
+                */
 	}
 
 	/**
