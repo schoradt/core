@@ -96,6 +96,7 @@ public abstract class OpenInfraRbac<
 	private String p = "/projects/";
 	private String tc = "topiccharacteristics/";
 	private String ti = "topicinstances/";
+	private String regex_new_project = v + "/projects";
 	private String regex_project = v + p +
 			"[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}.{1,}";
 	private String regex_project_admin = v + p +
@@ -362,6 +363,14 @@ public abstract class OpenInfraRbac<
 
 		switch (schema) {
 		case PROJECTS:
+		    // Matches URI for creating new project schemas
+            if(uriInfo.getPath().matches(regex_new_project)) {
+                // Is the subject (user) permitted to create projects?
+                if (currentProjectId == null && user.isPermitted(
+                        "/projects:"+ httpMethod.getAccess())) {
+                    return;
+                }
+            }
 			// Is the current URI path really a project path?
 			if(uriInfo.getPath().matches(regex_project)) {
 				// Is the subject (user) permitted to read or write the project?
