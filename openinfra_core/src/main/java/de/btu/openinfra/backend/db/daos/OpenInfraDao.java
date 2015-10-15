@@ -302,7 +302,8 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 
 	    if (pojo != null) {
 	        // first createOrUpdate the TypePojo
-	        retId = createOrUpdate(pojo, valueId);if (metaData != null) {
+	        retId = createOrUpdate(pojo, valueId);
+	        if (metaData != null) {
     	        // only check for meta data in project and system schema
     	        switch (schema) {
     	            case PROJECTS:
