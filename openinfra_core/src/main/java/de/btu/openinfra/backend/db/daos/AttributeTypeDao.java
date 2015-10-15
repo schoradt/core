@@ -142,6 +142,9 @@ public class AttributeTypeDao
         if (pojo.getDescriptions() != null) {
             at.setPtFreeText1(
                     ptfDao.getPtFreeTextModel(pojo.getDescriptions()));
+        } else {
+            // reset the description
+            at.setPtFreeText1(null);
         }
 
         // set the name
@@ -152,25 +155,21 @@ public class AttributeTypeDao
                 pojo.getDataType().getUuid()));
 
         // set the unit (optional)
-        if (pojo.getUnit() != null) {
-            if (pojo.getUnit().getUuid() != null) {
+        if (pojo.getUnit() != null && pojo.getUnit().getUuid() != null) {
                 at.setValueListValue2(em.find(ValueListValue.class,
-                                              pojo.getUnit().getUuid()));
-            } else {
-                // reset the unit
-                at.setValueListValue2(null);
-            }
+                        pojo.getUnit().getUuid()));
+        } else {
+            // reset the unit
+            at.setValueListValue2(null);
         }
 
         // set the domain (optional)
-        if (pojo.getDomain() != null) {
-            if (pojo.getDomain().getUuid() != null) {
-                at.setValueList(em.find(ValueList.class,
-                        pojo.getDomain().getUuid()));
-            } else {
-                // reset the domain
-                at.setValueList(null);
-            }
+        if (pojo.getDomain() != null && pojo.getDomain().getUuid() != null) {
+            at.setValueList(em.find(ValueList.class,
+                    pojo.getDomain().getUuid()));
+        } else {
+            // reset the domain
+            at.setValueList(null);
         }
 
         // return the model as mapping result
