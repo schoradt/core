@@ -239,9 +239,24 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 		}
 
 	    TypeModel model = createModelObject(valueId);
-        // abort if the pojo and the type model is null
+        // abort if the POJO or the type model is null
         if (pojo == null || model == null) {
             return null;
+        }
+
+        // check if we come from a PUT request (special case handling for
+        // projects, because the can perform a POST with a passed value id)
+        if (valueId != null && !modelClass.getSimpleName().equals("Project")) {
+            // check if a TRID was sent by the client
+            if (pojo.getTrid() == 0) {
+                // TODO throw openinfra exception
+                throw new RuntimeException("No TRID passed");
+            }
+            // check if the TRID from the POJO equals the models xmin
+            if (pojo.getTrid() != model.getXmin()) {
+                // TODO throw openinfra exception
+                throw new RuntimeException("Out of date");
+            }
         }
 
         // 1. Map the POJO object to a JPA model object
@@ -287,9 +302,7 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 
 	    if (pojo != null) {
 	        // first createOrUpdate the TypePojo
-	        retId = createOrUpdate(pojo, valueId);
-
-	        if (metaData != null) {
+	        retId = createOrUpdate(pojo, valueId);if (metaData != null) {
     	        // only check for meta data in project and system schema
     	        switch (schema) {
     	            case PROJECTS:
