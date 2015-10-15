@@ -86,7 +86,8 @@ public class OpenInfraProperties {
 	/**
 	 * This method retrieves the information that are necessary to connect to
 	 * the central database. It contain the JDBC driver, user, password and
-	 * database URL.
+	 * database URL. It will retrieve the information from the
+	 * OpenInfRA.properties file.
 	 *
 	 * @return connection properties for the central database
 	 */

@@ -172,6 +172,8 @@ public class EntityManagerFactoryCache {
                 break;
             }
 
+            // overwrite the properties from the properties file with content
+            // from the database
             properties.put(
                     OpenInfraPropertyKeys.USER.toString(),
                     p.getDatabaseConnection().getCredentials().getUsername());
