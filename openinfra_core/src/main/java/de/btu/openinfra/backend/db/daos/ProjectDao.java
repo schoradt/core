@@ -34,9 +34,13 @@ import de.btu.openinfra.backend.db.jpa.model.meta.Servers;
 import de.btu.openinfra.backend.db.pojos.LocalizedString;
 import de.btu.openinfra.backend.db.pojos.ProjectPojo;
 import de.btu.openinfra.backend.db.pojos.PtFreeTextPojo;
+import de.btu.openinfra.backend.db.pojos.meta.CredentialsPojo;
 import de.btu.openinfra.backend.db.pojos.meta.DatabaseConnectionPojo;
+import de.btu.openinfra.backend.db.pojos.meta.DatabasesPojo;
+import de.btu.openinfra.backend.db.pojos.meta.PortsPojo;
 import de.btu.openinfra.backend.db.pojos.meta.ProjectsPojo;
 import de.btu.openinfra.backend.db.pojos.meta.SchemasPojo;
+import de.btu.openinfra.backend.db.pojos.meta.ServersPojo;
 import de.btu.openinfra.backend.exception.OpenInfraDatabaseException;
 import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
@@ -300,7 +304,6 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 	                OpenInfraSchemas.PROJECTS).createOrUpdate(pojo, null);
 	    } else {
 	        try {
-
     	        // create the database schema
                 createSchema(pojo, newProjectId);
 
@@ -514,14 +517,24 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
             // servers
             CredentialsDao credentialsDao =
                     new CredentialsDao(OpenInfraSchemas.META_DATA);
-            PortsDao portDao = new PortsDao(OpenInfraSchemas.META_DATA);
+            PortsDao portsDao = new PortsDao(OpenInfraSchemas.META_DATA);
             DatabasesDao dbDao = new DatabasesDao(OpenInfraSchemas.META_DATA);
-            ServersDao serverDao = new ServersDao(OpenInfraSchemas.META_DATA);
+            ServersDao serversDao = new ServersDao(OpenInfraSchemas.META_DATA);
 
-            // TODO Only the default values from the properties file will be
-            //      used for the new connection. Find a better way?
+            // Use the default values from the properties file for the new
+            // connection.
+            // TODO: Find a better way?
+
             // retrieve the default credentials
-            dbCPojo.setCredentials(
+            CredentialsPojo credentialsPojo = new CredentialsPojo();
+            credentialsPojo.setPassword(OpenInfraProperties.getProperty(
+                    OpenInfraPropertyKeys.PASSWORD.toString()));
+            credentialsPojo.setUsername(OpenInfraProperties.getProperty(
+                    OpenInfraPropertyKeys.USER.toString()));
+            // check if credentials for the default user and password exists and
+            // save the id into the credentials POJO
+            try {
+                credentialsPojo.setUuid(
                     credentialsDao.mapToPojo(
                             null,
                             em.createNamedQuery(
@@ -537,10 +550,22 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
                                       OpenInfraProperties.getProperty(
                                               OpenInfraPropertyKeys.PASSWORD
                                               .toString()))
-                              .getSingleResult()));
+                              .getSingleResult()).getUuid());
+            } catch(NoResultException nre){
+                // their is no entry in the database, create a new one
+                credentialsPojo.setUuid(
+                        credentialsDao.createOrUpdate(credentialsPojo, null));
+            }
+
             // retrieve the default port
-            dbCPojo.setPort(
-                    portDao.mapToPojo(
+            PortsPojo portsPojo = new PortsPojo();
+            portsPojo.setPort(new Integer(OpenInfraProperties.getProperty(
+                    OpenInfraPropertyKeys.PORT.toString())));
+            // check if ports for the default port exists and save the id into
+            // the port POJO
+            try {
+                portsPojo.setUuid(
+                    portsDao.mapToPojo(
                             null,
                             em.createNamedQuery(
                                     "Ports.findByPort",
@@ -551,9 +576,21 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
                                               OpenInfraProperties.getProperty(
                                                       OpenInfraPropertyKeys.PORT
                                                       .toString())))
-                              .getSingleResult()));
+                              .getSingleResult()).getUuid());
+            } catch (NoResultException nre) {
+                // their is no entry in the database, create a new one
+                portsPojo.setUuid(
+                        portsDao.createOrUpdate(portsPojo, null));
+            }
+
             // retrieve the default database
-            dbCPojo.setDatabase(
+            DatabasesPojo databasesPojo = new DatabasesPojo();
+            databasesPojo.setDatabase(OpenInfraProperties.getProperty(
+                    OpenInfraPropertyKeys.DB_NAME.toString()));
+            // check if databases for the default database exists and save the
+            // id into the database POJO
+            try {
+                databasesPojo.setUuid(
                     dbDao.mapToPojo(
                             null,
                             em.createNamedQuery(
@@ -564,10 +601,22 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
                                       OpenInfraProperties.getProperty(
                                               OpenInfraPropertyKeys.DB_NAME
                                               .toString()))
-                              .getSingleResult()));
+                              .getSingleResult()).getUuid());
+            } catch (NoResultException nre) {
+                // their is no entry in the database, create a new one
+                databasesPojo.setUuid(
+                        dbDao.createOrUpdate(databasesPojo, null));
+            }
+
             // retrieve the default server
-            dbCPojo.setServer(
-                    serverDao.mapToPojo(
+            ServersPojo serversPojo = new ServersPojo();
+            serversPojo.setServer(OpenInfraProperties.getProperty(
+                    OpenInfraPropertyKeys.SERVER.toString()));
+            // check if servers for the default server exists and save the
+            // id into the server POJO
+            try {
+                serversPojo.setUuid(
+                    serversDao.mapToPojo(
                             null,
                             em.createNamedQuery(
                                     "Servers.findByServer",
@@ -577,7 +626,19 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
                                       OpenInfraProperties.getProperty(
                                               OpenInfraPropertyKeys.SERVER
                                               .toString()))
-                              .getSingleResult()));
+                              .getSingleResult()).getUuid());
+            } catch (NoResultException nre) {
+                // their is no entry in the database, create a new one
+                serversPojo.setUuid(
+                        serversDao.createOrUpdate(serversPojo, null));
+            }
+
+            // add the POJOs to the database connection POJO
+            dbCPojo.setCredentials(credentialsPojo);
+            dbCPojo.setPort(portsPojo);
+            dbCPojo.setDatabase(databasesPojo);
+            dbCPojo.setServer(serversPojo);
+
             // create the DAO for the database connection
             DatabaseConnectionDao dbCDao =
                     new DatabaseConnectionDao(OpenInfraSchemas.META_DATA);
