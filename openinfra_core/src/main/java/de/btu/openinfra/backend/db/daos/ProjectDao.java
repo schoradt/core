@@ -335,6 +335,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
                     break;
                 }
 	            // TODO: throw error to resource
+	            System.out.println("THROW ERROR TO REST API: " + e.toString());
 	            return null;
             }
 	    }
@@ -731,7 +732,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 
             // write the data of the project
             new ProjectDao(newProjectId, OpenInfraSchemas.PROJECTS)
-                    .createOrUpdate(newProjectPojo, null);
+                    .createOrUpdate(newProjectPojo, newProjectId);
 
         } catch (RuntimeException re) {
             throw new OpenInfraDatabaseException(
@@ -767,6 +768,10 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
                 throw new OpenInfraDatabaseException(
                         OpenInfraExceptionTypes.MERGE_SYSTEM);
             }
+        } catch (PersistenceException pe) {
+            // something went wrong while merging the data
+            throw new OpenInfraDatabaseException(
+                    OpenInfraExceptionTypes.MERGE_SYSTEM);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
