@@ -1,23 +1,33 @@
 package de.btu.openinfra.backend.rest.project.files;
 
+import java.io.InputStream;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 
-@Path(OpenInfraResponseBuilder.REST_URI_PROJECTS + "/files")
+@Path("/v1/projects")
 public class OpenInfraFileUpload {
 	
 	@POST
-	@Path("upload")
+	@Path("{projectId}/files/upload")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response uploadFile() {
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response uploadFile(
+	        @FormDataParam("file") InputStream fileContent,
+	        @FormDataParam("file") FormDataContentDisposition fileInformation) {
 		
-		
-		return Response.ok("").build();
+		System.out.println("--> " + fileInformation.getFileName());
+		System.out.println("--> " + fileInformation.getType());
+		System.out.println("--> " + fileInformation.getParameters());
+
+	    return Response.ok().entity("uploaded").build();
 	}
 
 }
