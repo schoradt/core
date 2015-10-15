@@ -31,7 +31,7 @@ public class SettingsDao
 
     @Override
     public SettingsPojo mapToPojo(Locale locale, Settings s) {
-        return mapPojoStatically(s);
+        return mapToPojoStatically(s);
     }
 
     /**
@@ -40,13 +40,13 @@ public class SettingsDao
      * @param s     the model object
      * @return       the POJO object when the model object is not null else null
      */
-    public static SettingsPojo mapPojoStatically(Settings s) {
+    public static SettingsPojo mapToPojoStatically(Settings s) {
         if (s != null) {
             SettingsPojo pojo = new SettingsPojo(s);
-            pojo.setKey(SettingKeysDao.mapPojoStatically(s.getSettingKey()));
+            pojo.setKey(SettingKeysDao.mapToPojoStatically(s.getSettingKey()));
             pojo.setUpdatedOn(OpenInfraTime.format(s.getUpdatedOn()));
             pojo.setValue(s.getValue());
-            pojo.setProject(ProjectsDao.mapPojoStatically(s.getProject()));
+            pojo.setProject(ProjectsDao.mapToPojoStatically(s.getProject()));
             return pojo;
         } else {
             return null;
@@ -84,11 +84,11 @@ public class SettingsDao
             resultSettings.setSettingKey(
                     SettingKeysDao.mapToModelStatically(pojo.getKey(), null));
             resultSettings.setValue(pojo.getValue());
-            // Set a new timestamp in any case since the probability is 
+            // Set a new timestamp in any case since the probability is
             // extremely high that the model object is stored in the database.
-            // It's recommended to use POJO objects for internal usage. In any 
-            // case, it should be avoided to retrieve a POJO object from 
-            // database and to transform it into model object afterwards for 
+            // It's recommended to use POJO objects for internal usage. In any
+            // case, it should be avoided to retrieve a POJO object from
+            // database and to transform it into model object afterwards for
             // internal processing.
             resultSettings.setUpdatedOn(OpenInfraTime.now());
             resultSettings.setProject(
