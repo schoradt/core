@@ -26,7 +26,7 @@ public class SystemResource {
 	public Response getView(
 			@Context UriInfo uri,
 			@Context HttpHeaders headers) {
-		if(SecurityUtils.getSubject().isPermitted("/system:get")) {
+		if(SecurityUtils.getSubject().isPermitted("/system:r")) {
 			return Response.ok("system resource").build();
 		} else {
 			throw new WebApplicationException(Response.Status.FORBIDDEN);

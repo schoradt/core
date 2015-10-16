@@ -3,12 +3,15 @@ package de.btu.openinfra.backend.rest.view;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriInfo;
 
 import org.glassfish.jersey.server.mvc.Template;
 
@@ -30,13 +33,15 @@ public class MultiplicityResource {
 	@GET
 	@Template(name="/views/list/Multiplicities.jsp")
 	public List<MultiplicityPojo> get(
+			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new de.btu.openinfra.backend.rest.MultiplicityResource()
-			.get(language, projectId, schema, offset, size);
+			.get(uriInfo, request, language, projectId, schema, offset, size);
 	}
 
 }

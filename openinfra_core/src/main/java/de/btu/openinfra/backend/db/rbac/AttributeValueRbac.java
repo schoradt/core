@@ -3,6 +3,8 @@ package de.btu.openinfra.backend.db.rbac;
 import java.util.Locale;
 import java.util.UUID;
 
+import javax.ws.rs.core.UriInfo;
+
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.AttributeValueDao;
 import de.btu.openinfra.backend.db.daos.AttributeValueGeomType;
@@ -11,8 +13,8 @@ import de.btu.openinfra.backend.db.jpa.model.AttributeValue;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
 import de.btu.openinfra.backend.db.pojos.AttributeValuePojo;
 
-public class AttributeValueRbac extends 
-	OpenInfraValueValueRbac<AttributeValuePojo, AttributeValue, TopicInstance, 
+public class AttributeValueRbac extends
+	OpenInfraValueValueRbac<AttributeValuePojo, AttributeValue, TopicInstance,
 	AttributeType, AttributeValueDao> {
 
 	public AttributeValueRbac(
@@ -21,33 +23,41 @@ public class AttributeValueRbac extends
 		super(currentProjectId, schema, TopicInstance.class,
 				AttributeType.class, AttributeValueDao.class);
 	}
-	
+
 	public AttributeValuePojo read(
+			OpenInfraHttpMethod httpMethod,
+			UriInfo uriInfo,
 			Locale locale,
 			UUID attributeValueId,
 			AttributeValueGeomType geomType) {
-		checkPermission();
+		checkPermission(httpMethod, uriInfo);
 		return new AttributeValueDao(
-					currentProjectId, 
+					currentProjectId,
 					schema).read(locale, attributeValueId, geomType);
 
 	}
-	
-	public UUID distributeTypes(AttributeValuePojo pojo, UUID projectId,
+
+	public UUID distributeTypes(
+			OpenInfraHttpMethod httpMethod,
+			UriInfo uriInfo,
+			AttributeValuePojo pojo,
+			UUID projectId,
 	        UUID attributeValueId) {
-		checkPermission();
+		checkPermission(httpMethod, uriInfo);
 		return new AttributeValueDao(
-				currentProjectId, 
+				currentProjectId,
 				schema).distributeTypes(pojo, projectId, attributeValueId);
 	}
-	
+
 	public AttributeValuePojo newAttributeValue(
+			OpenInfraHttpMethod httpMethod,
+			UriInfo uriInfo,
 	        UUID topicInstanceId,
 	        UUID attributeTypeId,
 	        Locale locale) {
-		checkPermission();
+		checkPermission(httpMethod, uriInfo);
 		return new AttributeValueDao(
-				attributeTypeId, 
+		        currentProjectId,
 				schema).newAttributeValue(
 						topicInstanceId, attributeTypeId, locale);
 	}

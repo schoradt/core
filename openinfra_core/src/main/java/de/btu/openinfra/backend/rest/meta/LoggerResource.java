@@ -52,7 +52,7 @@ public class LoggerResource {
     @POST
     public Response create(LoggerPojo pojo) {
         UUID id = new LoggerDao(
-                OpenInfraSchemas.META_DATA).createOrUpdate(pojo);
+                OpenInfraSchemas.META_DATA).createOrUpdate(pojo, null);
         return OpenInfraResponseBuilder.postResponse(id);
     }
 
@@ -62,8 +62,7 @@ public class LoggerResource {
             @PathParam("loggerId") UUID loggerId,
             LoggerPojo pojo) {
         UUID id = new LoggerDao(
-                OpenInfraSchemas.META_DATA).createOrUpdate(pojo, loggerId,
-                        null);
+                OpenInfraSchemas.META_DATA).createOrUpdate(pojo, loggerId);
         return OpenInfraResponseBuilder.putResponse(id);
     }
 

@@ -1,7 +1,7 @@
 package de.btu.openinfra.backend.db.jpa.model.meta;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Timestamp;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -31,7 +31,7 @@ public class Log extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Column(name="created_on")
-	private Date createdOn;
+	private Timestamp createdOn;
 
 	private String message;
 
@@ -54,11 +54,11 @@ public class Log extends OpenInfraModelObject implements Serializable {
 	public Log() {
 	}
 
-	public Date getCreatedOn() {
+	public Timestamp getCreatedOn() {
 		return this.createdOn;
 	}
 
-	public void setCreatedOn(Date createdOn) {
+	public void setCreatedOn(Timestamp createdOn) {
 		this.createdOn = createdOn;
 	}
 

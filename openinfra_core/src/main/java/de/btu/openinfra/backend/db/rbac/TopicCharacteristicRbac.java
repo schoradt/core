@@ -1,10 +1,16 @@
 package de.btu.openinfra.backend.db.rbac;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
+import javax.ws.rs.core.UriInfo;
+
+import de.btu.openinfra.backend.db.OpenInfraOrderBy;
+import de.btu.openinfra.backend.db.OpenInfraOrderByEnum;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.TopicCharacteristicDao;
 import de.btu.openinfra.backend.db.jpa.model.Project;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
@@ -23,10 +29,74 @@ public class TopicCharacteristicRbac extends OpenInfraValueRbac<
 				TopicCharacteristicDao.class);
 	}
 
-	public List<TopicCharacteristicPojo> read(Locale locale, String filter) {
-		checkPermission();
-		return new TopicCharacteristicDao(
+	@Override
+	public List<TopicCharacteristicPojo> read(
+			OpenInfraHttpMethod httpMethod, 
+			UriInfo uriInfo, Locale locale, int offset, int size) {
+		checkPermission(httpMethod, uriInfo);
+		return removeItems(
+				super.read(httpMethod, uriInfo, locale, offset, size));
+	};
+	
+	@Override
+	public List<TopicCharacteristicPojo> read(
+			OpenInfraHttpMethod httpMethod, 
+			UriInfo uriInfo, Locale locale, 
+			OpenInfraSortOrder order, OpenInfraOrderByEnum column, 
+			int offset, int size) {
+		checkPermission(httpMethod, uriInfo);
+		return removeItems(
+				super.read(httpMethod, uriInfo, locale, 
+						order, column, offset, size));		
+	};
+	
+	@Override
+	public List<TopicCharacteristicPojo> read(
+			OpenInfraHttpMethod httpMethod, 
+			UriInfo uriInfo, Locale locale, UUID valueId, 
+			int offset, int size) {
+		checkPermission(httpMethod, uriInfo);
+		return removeItems(
+				super.read(httpMethod, uriInfo, locale, valueId, offset, size));				
+	};
+	
+	@Override
+	public List<TopicCharacteristicPojo> read(OpenInfraHttpMethod httpMethod, 
+			UriInfo uriInfo, Locale locale, UUID valueId, 
+			OpenInfraSortOrder order, OpenInfraOrderBy column, 
+			int offset, int size) {
+		checkPermission(httpMethod, uriInfo);
+		return removeItems(
+				super.read(httpMethod, uriInfo, locale, valueId, order,
+						column, offset, size));		
+	};
+	
+	public List<TopicCharacteristicPojo> read(
+			OpenInfraHttpMethod httpMethod, 
+			UriInfo uriInfo, Locale locale, String filter) {
+		checkPermission(httpMethod, uriInfo);
+		return removeItems(new TopicCharacteristicDao(
 				currentProjectId, 
-				schema).read(locale, filter);
+				schema).read(locale, filter));
+	}
+	
+	/**
+	 * This method is used to remove items the current subject doesn't has
+	 * access.
+	 * 
+	 * @param pojos
+	 * @return
+	 */
+	private List<TopicCharacteristicPojo> removeItems(
+			List<TopicCharacteristicPojo> pojos) {
+		Iterator<TopicCharacteristicPojo> it = pojos.iterator();
+		while(it.hasNext()) {
+			if(!user.isPermitted(
+					"/projects/" + currentProjectId + 
+					"/topiccharacteristics/{id}:r:" + it.next().getUuid())) {
+				it.remove();
+			}
+		}
+		return pojos;
 	}
 }

@@ -3,6 +3,8 @@ package de.btu.openinfra.backend.db.rbac;
 import java.util.Locale;
 import java.util.UUID;
 
+import javax.ws.rs.core.UriInfo;
+
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.jpa.model.PtLocale;
@@ -15,8 +17,10 @@ public class PtLocaleRbac extends
 		super(currentProjectId, schema, PtLocaleDao.class);
 	}
 	
-	public PtLocale read(Locale locale) {
-		checkPermission();
+	public PtLocale read(
+			OpenInfraHttpMethod httpMethod, 
+			UriInfo uriInfo, Locale locale) {
+		checkPermission(httpMethod, uriInfo);
 		return new PtLocaleDao(currentProjectId, schema).read(locale);
 	}
 

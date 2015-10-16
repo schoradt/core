@@ -3,6 +3,8 @@ package de.btu.openinfra.backend.db.rbac;
 import java.util.Locale;
 import java.util.UUID;
 
+import javax.ws.rs.core.UriInfo;
+
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.ValueListValueDao;
 import de.btu.openinfra.backend.db.jpa.model.ValueList;
@@ -19,8 +21,10 @@ public class ValueListValueRbac extends OpenInfraValueRbac<ValueListValuePojo,
 				ValueList.class, ValueListValueDao.class);
 	}
 	
-	public ValueListValuePojo newAttributeValueValues(Locale locale) {
-		checkPermission();
+	public ValueListValuePojo newAttributeValueValues(
+			OpenInfraHttpMethod httpMethod, 
+			UriInfo uriInfo, Locale locale) {
+		checkPermission(httpMethod, uriInfo);
 		return new ValueListValueDao(
 				currentProjectId, schema).newAttributeValueValues(locale);
 	}

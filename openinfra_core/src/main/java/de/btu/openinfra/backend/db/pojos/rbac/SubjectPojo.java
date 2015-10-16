@@ -1,6 +1,5 @@
 package de.btu.openinfra.backend.db.pojos.rbac;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -13,149 +12,178 @@ import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 @XmlRootElement
 public class SubjectPojo extends OpenInfraPojo {
 
-    private Timestamp createdOn;
+    private String createdOn;
 
-    private Locale defaultLanguage;
+	private String defaultLanguage;
 
-    private String description;
+	private String description;
 
-    private Timestamp lastLoginOn;
+	private String lastLoginOn;
 
-    private String login;
+	private String login;
 
-    private String mail;
+	private String mail;
 
-    private String name;
+	private String name;
 
-    private String password;
+	private String password;
 
-    private Timestamp passwordCreatedOn;
+	private String passwordCreatedOn;
 
-    private Integer status;
+	/**
+	 * The status:
+	 * -1 blocked
+	 * 0  inactive
+	 * 1  active
+	 */
+	private Integer status;
 
-    private Timestamp updatedOn;
+	private String updatedOn;
+	
+	private List<RolePojo> roles;
+	
+	private List<SubjectProjectPojo> projects;
+	
+	private String webApp;
+	
+	public SubjectPojo() {}
+	
+	public SubjectPojo(OpenInfraModelObject modelObject) {
+		super(modelObject);
+	}
 
-    private List<RolePojo> roles;
+	public String getCreatedOn() {
+		return this.createdOn;
+	}
 
-    public SubjectPojo() {
-    }
+	public void setCreatedOn(String createdOn) {
+		this.createdOn = createdOn;
+	}
 
-    public SubjectPojo(OpenInfraModelObject modelObject) {
-        super(modelObject);
-    }
+	public String getDefaultLanguage() {
+		return this.defaultLanguage;
+	}
 
-    public Timestamp getCreatedOn() {
-        return this.createdOn;
-    }
+	public void setDefaultLanguage(String defaultLanguage) {
+		this.defaultLanguage = defaultLanguage;
+	}
 
-    public void setCreatedOn(Timestamp createdOn) {
-        this.createdOn = createdOn;
-    }
+	public String getDescription() {
+		return this.description;
+	}
 
-    public Locale getDefaultLanguage() {
-        return this.defaultLanguage;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public void setDefaultLanguage(Locale defaultLanguage) {
-        this.defaultLanguage = defaultLanguage;
-    }
+	public String getLastLoginOn() {
+		return this.lastLoginOn;
+	}
 
-    public String getDescription() {
-        return this.description;
-    }
+	public void setLastLoginOn(String lastLoginOn) {
+		this.lastLoginOn = lastLoginOn;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public String getLogin() {
+		return this.login;
+	}
 
-    public Timestamp getLastLoginOn() {
-        return this.lastLoginOn;
-    }
+	public void setLogin(String login) {
+		this.login = login;
+	}
 
-    public void setLastLoginOn(Timestamp lastLoginOn) {
-        this.lastLoginOn = lastLoginOn;
-    }
+	public String getMail() {
+		return this.mail;
+	}
 
-    public String getLogin() {
-        return this.login;
-    }
+	public void setMail(String mail) {
+		this.mail = mail;
+	}
 
-    public void setLogin(String login) {
-        this.login = login;
-    }
+	public String getName() {
+		return this.name;
+	}
 
-    public String getMail() {
-        return this.mail;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setMail(String mail) {
-        this.mail = mail;
-    }
+	public String getPassword() {
+		return this.password;
+	}
 
-    public String getName() {
-        return this.name;
-    }
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public String getPasswordCreatedOn() {
+		return this.passwordCreatedOn;
+	}
 
-    public String getPassword() {
-        return this.password;
-    }
+	public void setPasswordCreatedOn(String passwordCreatedOn) {
+		this.passwordCreatedOn = passwordCreatedOn;
+	}
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	public Integer getStatus() {
+		return this.status;
+	}
 
-    public Timestamp getPasswordCreatedOn() {
-        return this.passwordCreatedOn;
-    }
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
 
-    public void setPasswordCreatedOn(Timestamp passwordCreatedOn) {
-        this.passwordCreatedOn = passwordCreatedOn;
-    }
+	public String getUpdatedOn() {
+		return this.updatedOn;
+	}
 
-    public Integer getStatus() {
-        return this.status;
-    }
+	public void setUpdatedOn(String updatedOn) {
+		this.updatedOn = updatedOn;
+	}
 
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
+	public List<RolePojo> getRoles() {
+		return roles;
+	}
 
-    public Timestamp getUpdatedOn() {
-        return this.updatedOn;
-    }
+	public void setRoles(List<RolePojo> roles) {
+		this.roles = roles;
+	}
 
-    public void setUpdatedOn(Timestamp updatedOn) {
-        this.updatedOn = updatedOn;
-    }
+	public List<SubjectProjectPojo> getProjects() {
+		return projects;
+	}
 
-    public List<RolePojo> getRoles() {
-        return roles;
-    }
+	public void setProjects(List<SubjectProjectPojo> projects) {
+		this.projects = projects;
+	}
 
-    public void setRoles(List<RolePojo> roles) {
-        this.roles = roles;
-    }
+	public String getWebApp() {
+		return webApp;
+	}
+
+	public void setWebApp(String webApp) {
+		this.webApp = webApp;
+	}
 
     @Override
     protected void makePrimerHelper() {
-        createdOn = null;
-        defaultLanguage = Locale.ENGLISH;
+        createdOn = "";
+        defaultLanguage = Locale.ENGLISH.toString();
         description = "";
-        lastLoginOn = null;
+        lastLoginOn = "";
         login = "";
         mail = "";
         name = "";
         password = "";
-        passwordCreatedOn = null;
+        passwordCreatedOn = "";
         status = Integer.valueOf(-1);
-        updatedOn = null;
+        updatedOn = "";
         roles = new ArrayList<RolePojo>();
         roles.add(new RolePojo());
         roles.get(0).makePrimerHelper();
+        projects = new ArrayList<SubjectProjectPojo>();
+        projects.add(new SubjectProjectPojo());
+        projects.get(0).makePrimerHelper();
+        webApp = "";
     }
 
 }

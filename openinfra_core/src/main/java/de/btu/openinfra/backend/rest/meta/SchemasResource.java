@@ -54,7 +54,7 @@ public class SchemasResource {
     @POST
     public Response create(SchemasPojo pojo) {
         UUID id = new SchemasDao(
-                OpenInfraSchemas.META_DATA).createOrUpdate(pojo);
+                OpenInfraSchemas.META_DATA).createOrUpdate(pojo, null);
         return OpenInfraResponseBuilder.postResponse(id);
     }
 
@@ -64,8 +64,7 @@ public class SchemasResource {
             @PathParam("schemasId") UUID schemasId,
             SchemasPojo pojo) {
         UUID id = new SchemasDao(
-                OpenInfraSchemas.META_DATA).createOrUpdate(pojo, schemasId,
-                        null);
+                OpenInfraSchemas.META_DATA).createOrUpdate(pojo, schemasId);
         return OpenInfraResponseBuilder.putResponse(id);
     }
 

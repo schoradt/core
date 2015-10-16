@@ -1,6 +1,7 @@
 package de.btu.openinfra.backend.db.daos.rbac;
 
 import java.util.Locale;
+import java.util.UUID;
 
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
@@ -19,6 +20,11 @@ public class PasswordBlacklistDao extends
 	public PasswordBlacklistDao() {
 		super(null, OpenInfraSchemas.RBAC, PasswordBlacklist.class);
 	}
+	
+	public PasswordBlacklistDao(
+			UUID currentProjectId, OpenInfraSchemas schema) {
+		super(currentProjectId, schema, PasswordBlacklist.class);
+	}
 
 	@Override
 	public PasswordBlacklistPojo mapToPojo(
@@ -33,8 +39,9 @@ public class PasswordBlacklistDao extends
 	@Override
 	public MappingResult<PasswordBlacklist> mapToModel(
 			PasswordBlacklistPojo pojoObject, PasswordBlacklist modelObject) {
-		// TODO Auto-generated method stub
-		return null;
+		modelObject.setPassword(pojoObject.getPassword());
+		return new MappingResult<PasswordBlacklist>(
+				modelObject.getId(), modelObject);
 	}
 
 

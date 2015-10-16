@@ -1,10 +1,8 @@
 package de.btu.openinfra.backend.db.daos.meta;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+import de.btu.openinfra.backend.OpenInfraTime;
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
@@ -33,7 +31,7 @@ public class LogDao
 
     @Override
     public LogPojo mapToPojo(Locale locale, Log l) {
-        return mapPojoStatically(l);
+        return mapToPojoStatically(l);
     }
 
     /**
@@ -42,17 +40,14 @@ public class LogDao
      * @param at     the model object
      * @return       the POJO object when the model object is not null else null
      */
-    public static LogPojo mapPojoStatically(Log l) {
+    public static LogPojo mapToPojoStatically(Log l) {
         if(l != null) {
             LogPojo pojo = new LogPojo(l);
-            // TODO this must be placed somewhere in the properties
-            String format = "yyyy-MM-dd'T'HH:mm:ssZ";
-            DateFormat df = new SimpleDateFormat(format);
             pojo.setUserId(l.getUserId());
             pojo.setUserName(l.getUserName());
-            pojo.setCreatedOn(df.format(l.getCreatedOn()).toString());
-            pojo.setLogger(LoggerDao.mapPojoStatically(l.getLoggerBean()));
-            pojo.setLevel(LevelDao.mapPojoStatically(l.getLevelBean()));
+            pojo.setCreatedOn(OpenInfraTime.format(l.getCreatedOn()));
+            pojo.setLogger(LoggerDao.mapToPojoStatically(l.getLoggerBean()));
+            pojo.setLevel(LevelDao.mapToPojoStatically(l.getLevelBean()));
             pojo.setMessage(l.getMessage());
             return pojo;
         } else {
@@ -85,17 +80,8 @@ public class LogDao
             if(resultLog == null) {
                 resultLog = new Log();
                 resultLog.setId(pojo.getUuid());
-            }
-
-            try {
-                // TODO this must be placed somewhere in the properties
-                String format = "yyyy-MM-dd'T'HH:mm:ssX";
-                SimpleDateFormat df = new SimpleDateFormat(format);
-                resultLog.setCreatedOn(df.parse(pojo.getCreatedOn()));
-            } catch (ParseException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+            }            
+            resultLog.setCreatedOn(OpenInfraTime.now());
             resultLog.setMessage(pojo.getMessage());
             resultLog.setUserId(pojo.getUserId());
             resultLog.setUserName(pojo.getUserName());

@@ -47,7 +47,7 @@ import javax.persistence.Table;
 })
 @NamedNativeQueries({
 	@NamedNativeQuery(name="TopicCharacteristic.findAllByLocaleAndOrder",
-			query="select *, xmin "
+			query="select *, tc.xmin "
 					+ "from topic_characteristic as tc "
 					+ "LEFT OUTER JOIN ( "
 						+ "select * "

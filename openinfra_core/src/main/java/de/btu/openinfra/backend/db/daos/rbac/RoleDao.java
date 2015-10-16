@@ -3,6 +3,7 @@ package de.btu.openinfra.backend.db.daos.rbac;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
@@ -16,6 +17,10 @@ public class RoleDao extends OpenInfraDao<RolePojo, Role> {
 
 	public RoleDao() {
 		super(null, OpenInfraSchemas.RBAC, Role.class);
+	}
+	
+	public RoleDao(UUID currentProjectId, OpenInfraSchemas schema) {
+		super(currentProjectId, schema, Role.class);
 	}
 
 	@Override
@@ -34,10 +39,11 @@ public class RoleDao extends OpenInfraDao<RolePojo, Role> {
 	}
 
 	@Override
-	public MappingResult<Role> mapToModel(RolePojo pojoObject, Role modelObject) {
-		// TODO Auto-generated method stub
-		return null;
+	public MappingResult<Role> mapToModel(
+			RolePojo pojoObject, Role modelObject) {
+		modelObject.setName(pojoObject.getName());
+		modelObject.setDescription(pojoObject.getDescription());
+		return new MappingResult<Role>(modelObject.getId(), modelObject);
 	}
-
 
 }

@@ -1,5 +1,7 @@
 package de.btu.openinfra.backend.db.pojos.meta;
 
+import java.util.UUID;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
@@ -9,6 +11,7 @@ import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 public class ProjectsPojo extends OpenInfraPojo {
 
     private boolean isSubproject;
+    private UUID projectId;
     private DatabaseConnectionPojo databaseConnection;
 
     /* Default constructor */
@@ -26,6 +29,14 @@ public class ProjectsPojo extends OpenInfraPojo {
 
     public void setIsSubproject(boolean isSubproject) {
         this.isSubproject = isSubproject;
+    }
+
+    public UUID getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(UUID projectId) {
+        this.projectId = projectId;
     }
 
     public DatabaseConnectionPojo getDatabaseConnection() {

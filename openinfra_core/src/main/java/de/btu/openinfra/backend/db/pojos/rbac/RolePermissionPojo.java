@@ -1,5 +1,7 @@
 package de.btu.openinfra.backend.db.pojos.rbac;
 
+import java.util.UUID;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
@@ -8,38 +10,34 @@ import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 @XmlRootElement
 public class RolePermissionPojo extends OpenInfraPojo {
 
-    private RolePojo role;
-    private PermissionPojo permission;
+	private UUID role;
+	private UUID permission;
+	
+	public RolePermissionPojo() {}
+	
+	public RolePermissionPojo(OpenInfraModelObject modelObject) {
+		super(modelObject);
+	}
 
-    public RolePermissionPojo() {
-    }
+	public UUID getRole() {
+		return role;
+	}
 
-    public RolePermissionPojo(OpenInfraModelObject modelObject) {
-        super(modelObject);
-    }
+	public void setRole(UUID role) {
+		this.role = role;
+	}
 
-    public RolePojo getRole() {
-        return role;
-    }
+	public UUID getPermission() {
+		return permission;
+	}
 
-    public void setRole(RolePojo role) {
-        this.role = role;
-    }
+	public void setPermission(UUID permission) {
+		this.permission = permission;
+	}
 
-    public PermissionPojo getPermission() {
-        return permission;
-    }
-
-    public void setPermission(PermissionPojo permission) {
-        this.permission = permission;
-    }
-
-    @Override
+	@Override
     protected void makePrimerHelper() {
-        role = new RolePojo();
-        role.makePrimerHelper();
-        permission = new PermissionPojo();
-        permission.makePrimerHelper();
+        role = null;
+        permission = null;
     }
-
 }
