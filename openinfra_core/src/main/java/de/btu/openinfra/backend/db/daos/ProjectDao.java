@@ -305,15 +305,27 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 
 	    // determine if we want to create a sub or a main project
 	    if (pojo.getSubprojectOf() != null) {
-	        id = new ProjectDao(pojo.getSubprojectOf(),
-	                OpenInfraSchemas.PROJECTS).createOrUpdate(pojo, null);
+	        ProjectDao pDao = new ProjectDao(pojo.getSubprojectOf(),
+	                OpenInfraSchemas.PROJECTS);
+	        id = pDao.createOrUpdate(pojo, null);
+	        if (id != null) {
+	            try {
+	                // insert the necessary data into the meta data schema
+	                writeMetaData(id, pojo.getSubprojectOf());
+                } catch (OpenInfraDatabaseException e) {
+                    // if it fails to generate the meta data the project must be
+                    // removed
+                    pDao.deleteProject();
+                }
+
+	        }
 	    } else {
 	        try {
     	        // create the database schema
                 createSchema(pojo, newProjectId);
 
                 // insert the necessary data into the meta data schema
-                writeMetaData(newProjectId);
+                writeMetaData(newProjectId, null);
 
                 // insert the basic project data into the project table in the
                 // new project schema
@@ -364,13 +376,15 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 
 	    try {
 	        Project p = em.find(Project.class, currentProjectId);
+
+	        // first delete the meta data
+            deleteMetaData(currentProjectId);
+
 	        // determine if we want to delete a sub or a main project
 	        if (p.getProject() != null) {
 	            // delete a sub project
 	            result = delete(currentProjectId);
 	        } else {
-	            // first delete the meta data
-                deleteMetaData(currentProjectId);
                 // second remove the schema
                 deleteSchema(currentProjectId);
                 result = true;
@@ -497,161 +511,192 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
      * This method writes all necessary meta data for the new project into the
      * meta data schema.
      *
-     * @param newProjectId
+     * @param newProjectId the project id for the meta data
+     * @param mainProjectId the id of the main project
      * @throws SchemaCreationException
      * @return
      */
-    private void writeMetaData(UUID newProjectId)
+    private void writeMetaData(UUID newProjectId, UUID mainProjectId)
             throws OpenInfraDatabaseException {
         try {
-            // create a POJO for the schema in the meta data schema
-            SchemasPojo metaSchemasPojo = new SchemasPojo();
-            // set all necessary data for the schema
-            metaSchemasPojo.setSchema("project_" + newProjectId);
-            // create the DAO for the schema
-            SchemasDao schemaDao = new SchemasDao(OpenInfraSchemas.META_DATA);
-            // insert the data
-            // TODO: createOrUpdate can throw an exception!
-            UUID schemaId = schemaDao.createOrUpdate(metaSchemasPojo, null);
 
-            // create a POJO for the database connection in the meta data schema
-            DatabaseConnectionPojo dbCPojo = new DatabaseConnectionPojo();
-            // set all necessary data for the database connection
-            dbCPojo.setSchema(schemaDao.read(null, schemaId));
-            // create necessary DAOs for the credentials, ports, databases and
-            // servers
-            CredentialsDao credentialsDao =
-                    new CredentialsDao(OpenInfraSchemas.META_DATA);
-            PortsDao portsDao = new PortsDao(OpenInfraSchemas.META_DATA);
-            DatabasesDao dbDao = new DatabasesDao(OpenInfraSchemas.META_DATA);
-            ServersDao serversDao = new ServersDao(OpenInfraSchemas.META_DATA);
-
-            // Use the default values from the properties file for the new
-            // connection.
-            // TODO: Find a better way?
-
-            // retrieve the default credentials
-            CredentialsPojo credentialsPojo = new CredentialsPojo();
-            credentialsPojo.setPassword(OpenInfraProperties.getProperty(
-                    OpenInfraPropertyKeys.PASSWORD.toString()));
-            credentialsPojo.setUsername(OpenInfraProperties.getProperty(
-                    OpenInfraPropertyKeys.USER.toString()));
-            // check if credentials for the default user and password exists and
-            // save the id into the credentials POJO
-            try {
-                credentialsPojo.setUuid(
-                    credentialsDao.mapToPojo(
-                            null,
-                            em.createNamedQuery(
-                                    "Credentials.findByUsernameAndPassword",
-                                    Credentials.class)
-                              .setParameter(
-                                      "username",
-                                      OpenInfraProperties.getProperty(
-                                              OpenInfraPropertyKeys.USER
-                                              .toString()))
-                              .setParameter(
-                                      "password",
-                                      OpenInfraProperties.getProperty(
-                                              OpenInfraPropertyKeys.PASSWORD
-                                              .toString()))
-                              .getSingleResult()).getUuid());
-            } catch(NoResultException nre){
-                // their is no entry in the database, create a new one
-                credentialsPojo.setUuid(
-                        credentialsDao.createOrUpdate(credentialsPojo, null));
-            }
-
-            // retrieve the default port
-            PortsPojo portsPojo = new PortsPojo();
-            portsPojo.setPort(new Integer(OpenInfraProperties.getProperty(
-                    OpenInfraPropertyKeys.PORT.toString())));
-            // check if ports for the default port exists and save the id into
-            // the port POJO
-            try {
-                portsPojo.setUuid(
-                    portsDao.mapToPojo(
-                            null,
-                            em.createNamedQuery(
-                                    "Ports.findByPort",
-                                    Ports.class)
-                              .setParameter(
-                                      "port",
-                                      Integer.parseInt(
-                                              OpenInfraProperties.getProperty(
-                                                      OpenInfraPropertyKeys.PORT
-                                                      .toString())))
-                              .getSingleResult()).getUuid());
-            } catch (NoResultException nre) {
-                // their is no entry in the database, create a new one
-                portsPojo.setUuid(
-                        portsDao.createOrUpdate(portsPojo, null));
-            }
-
-            // retrieve the default database
-            DatabasesPojo databasesPojo = new DatabasesPojo();
-            databasesPojo.setDatabase(OpenInfraProperties.getProperty(
-                    OpenInfraPropertyKeys.DB_NAME.toString()));
-            // check if databases for the default database exists and save the
-            // id into the database POJO
-            try {
-                databasesPojo.setUuid(
-                    dbDao.mapToPojo(
-                            null,
-                            em.createNamedQuery(
-                                    "Databases.findByDatabase",
-                                    Databases.class)
-                              .setParameter(
-                                      "database",
-                                      OpenInfraProperties.getProperty(
-                                              OpenInfraPropertyKeys.DB_NAME
-                                              .toString()))
-                              .getSingleResult()).getUuid());
-            } catch (NoResultException nre) {
-                // their is no entry in the database, create a new one
-                databasesPojo.setUuid(
-                        dbDao.createOrUpdate(databasesPojo, null));
-            }
-
-            // retrieve the default server
-            ServersPojo serversPojo = new ServersPojo();
-            serversPojo.setServer(OpenInfraProperties.getProperty(
-                    OpenInfraPropertyKeys.SERVER.toString()));
-            // check if servers for the default server exists and save the
-            // id into the server POJO
-            try {
-                serversPojo.setUuid(
-                    serversDao.mapToPojo(
-                            null,
-                            em.createNamedQuery(
-                                    "Servers.findByServer",
-                                    Servers.class)
-                              .setParameter(
-                                      "server",
-                                      OpenInfraProperties.getProperty(
-                                              OpenInfraPropertyKeys.SERVER
-                                              .toString()))
-                              .getSingleResult()).getUuid());
-            } catch (NoResultException nre) {
-                // their is no entry in the database, create a new one
-                serversPojo.setUuid(
-                        serversDao.createOrUpdate(serversPojo, null));
-            }
-
-            // add the POJOs to the database connection POJO
-            dbCPojo.setCredentials(credentialsPojo);
-            dbCPojo.setPort(portsPojo);
-            dbCPojo.setDatabase(databasesPojo);
-            dbCPojo.setServer(serversPojo);
-
+            // the id of the database connection
+            UUID dbCId = null;
             // create the DAO for the database connection
             DatabaseConnectionDao dbCDao =
                     new DatabaseConnectionDao(OpenInfraSchemas.META_DATA);
-            // insert the database connection information
-            UUID dbCId = dbCDao.createOrUpdate(dbCPojo, null);
-            if (dbCId == null) {
-                throw new OpenInfraDatabaseException(
-                        OpenInfraExceptionTypes.INSERT_META_DATA);
+
+            boolean isSubProject = false;
+
+            if (mainProjectId != null) {
+                // retrieve the database connection from the main project
+                // find the id of the projects table in the meta data schema by
+                // the given project id
+                Projects pMeta = em.createNamedQuery(
+                      "Projects.findByProject",
+                      Projects.class)
+                      .setParameter("value", mainProjectId)
+                      .getSingleResult();
+
+                // save the database connection Id for the next steps
+                dbCId = pMeta.getDatabaseConnection().getId();
+                isSubProject = true;
+            } else {
+                // create a new database connection for main projects
+                // create a POJO for the schema in the meta data schema
+                SchemasPojo metaSchemasPojo = new SchemasPojo();
+                // set all necessary data for the schema
+                metaSchemasPojo.setSchema("project_" + newProjectId);
+                // create the DAO for the schema
+                SchemasDao schemaDao = new SchemasDao(
+                        OpenInfraSchemas.META_DATA);
+                // insert the data
+                // TODO: createOrUpdate can throw an exception!
+                UUID schemaId = schemaDao.createOrUpdate(metaSchemasPojo, null);
+
+                // create a POJO for the database connection in the meta data
+                // schema
+                DatabaseConnectionPojo dbCPojo = new DatabaseConnectionPojo();
+
+                // set all necessary data for the database connection
+                dbCPojo.setSchema(schemaDao.read(null, schemaId));
+                // create necessary DAOs for the credentials, ports, databases and
+                // servers
+                CredentialsDao credentialsDao =
+                        new CredentialsDao(OpenInfraSchemas.META_DATA);
+                PortsDao portsDao = new PortsDao(OpenInfraSchemas.META_DATA);
+                DatabasesDao dbDao = new DatabasesDao(
+                        OpenInfraSchemas.META_DATA);
+                ServersDao serversDao = new ServersDao(
+                        OpenInfraSchemas.META_DATA);
+
+                // Use the default values from the properties file for the new
+                // connection.
+                // TODO: Find a better way?
+
+                // retrieve the default credentials
+                CredentialsPojo credentialsPojo = new CredentialsPojo();
+                credentialsPojo.setPassword(OpenInfraProperties.getProperty(
+                        OpenInfraPropertyKeys.PASSWORD.toString()));
+                credentialsPojo.setUsername(OpenInfraProperties.getProperty(
+                        OpenInfraPropertyKeys.USER.toString()));
+                // check if credentials for the default user and password exists
+                // and save the id into the credentials POJO
+                try {
+                    credentialsPojo.setUuid(
+                        credentialsDao.mapToPojo(
+                                null,
+                                em.createNamedQuery(
+                                        "Credentials.findByUsernameAndPassword",
+                                        Credentials.class)
+                                  .setParameter(
+                                          "username",
+                                          OpenInfraProperties.getProperty(
+                                                  OpenInfraPropertyKeys.USER
+                                                  .toString()))
+                                  .setParameter(
+                                          "password",
+                                          OpenInfraProperties.getProperty(
+                                                  OpenInfraPropertyKeys.PASSWORD
+                                                  .toString()))
+                                  .getSingleResult()).getUuid());
+                } catch(NoResultException nre){
+                    // their is no entry in the database, create a new one
+                    credentialsPojo.setUuid(
+                            credentialsDao.createOrUpdate(
+                                    credentialsPojo, null));
+                }
+
+                // retrieve the default port
+                PortsPojo portsPojo = new PortsPojo();
+                portsPojo.setPort(new Integer(OpenInfraProperties.getProperty(
+                        OpenInfraPropertyKeys.PORT.toString())));
+                // check if ports for the default port exists and save the id
+                // into the port POJO
+                try {
+                    portsPojo.setUuid(
+                        portsDao.mapToPojo(
+                                null,
+                                em.createNamedQuery(
+                                        "Ports.findByPort",
+                                        Ports.class)
+                                  .setParameter(
+                                          "port",
+                                          Integer.parseInt(
+                                                  OpenInfraProperties
+                                                  .getProperty(
+                                                          OpenInfraPropertyKeys
+                                                          .PORT
+                                                          .toString())))
+                                  .getSingleResult()).getUuid());
+                } catch (NoResultException nre) {
+                    // their is no entry in the database, create a new one
+                    portsPojo.setUuid(
+                            portsDao.createOrUpdate(portsPojo, null));
+                }
+
+                // retrieve the default database
+                DatabasesPojo databasesPojo = new DatabasesPojo();
+                databasesPojo.setDatabase(OpenInfraProperties.getProperty(
+                        OpenInfraPropertyKeys.DB_NAME.toString()));
+                // check if databases for the default database exists and save
+                // the id into the database POJO
+                try {
+                    databasesPojo.setUuid(
+                        dbDao.mapToPojo(
+                                null,
+                                em.createNamedQuery(
+                                        "Databases.findByDatabase",
+                                        Databases.class)
+                                  .setParameter(
+                                          "database",
+                                          OpenInfraProperties.getProperty(
+                                                  OpenInfraPropertyKeys.DB_NAME
+                                                  .toString()))
+                                  .getSingleResult()).getUuid());
+                } catch (NoResultException nre) {
+                    // their is no entry in the database, create a new one
+                    databasesPojo.setUuid(
+                            dbDao.createOrUpdate(databasesPojo, null));
+                }
+
+                // retrieve the default server
+                ServersPojo serversPojo = new ServersPojo();
+                serversPojo.setServer(OpenInfraProperties.getProperty(
+                        OpenInfraPropertyKeys.SERVER.toString()));
+                // check if servers for the default server exists and save the
+                // id into the server POJO
+                try {
+                    serversPojo.setUuid(
+                        serversDao.mapToPojo(
+                                null,
+                                em.createNamedQuery(
+                                        "Servers.findByServer",
+                                        Servers.class)
+                                  .setParameter(
+                                          "server",
+                                          OpenInfraProperties.getProperty(
+                                                  OpenInfraPropertyKeys.SERVER
+                                                  .toString()))
+                                  .getSingleResult()).getUuid());
+                } catch (NoResultException nre) {
+                    // their is no entry in the database, create a new one
+                    serversPojo.setUuid(
+                            serversDao.createOrUpdate(serversPojo, null));
+                }
+
+                // add the POJOs to the database connection POJO
+                dbCPojo.setCredentials(credentialsPojo);
+                dbCPojo.setPort(portsPojo);
+                dbCPojo.setDatabase(databasesPojo);
+                dbCPojo.setServer(serversPojo);
+
+                // insert the database connection information
+                dbCId = dbCDao.createOrUpdate(dbCPojo, null);
+                if (dbCId == null) {
+                    throw new OpenInfraDatabaseException(
+                            OpenInfraExceptionTypes.INSERT_META_DATA);
+                }
             }
 
             // create a POJO for the project in the meta data schema
@@ -660,7 +705,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
             // set the project id
             metaProjectsPojo.setProjectId(newProjectId);
             // set the subproject flag to false
-            metaProjectsPojo.setIsSubproject(false);
+            metaProjectsPojo.setIsSubproject(isSubProject);
             // set the database connection information
             metaProjectsPojo.setDatabaseConnection(dbCDao.read(null, dbCId));
             // insert the informations into the meta_data schema
@@ -700,21 +745,25 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
             try {
                 Projects subP = null;
                 ProjectsDao pDao = new ProjectsDao(OpenInfraSchemas.META_DATA);
-                // find all sub projects
-                List<Project> pList = new ProjectDao(
-                        projectId, OpenInfraSchemas.PROJECTS).read();
-                for (Project project : pList) {
-                    // for every project that is a sub project
-                    if (project.getProject() != null) {
-                        // retrieve the model object
-                        subP = em.createNamedQuery(
-                                "Projects.findByProject",
-                                Projects.class)
-                                .setParameter("value", project.getId())
-                                .getSingleResult();
-                        // deleted from the projects table in the meta data
-                        // schema
-                        pDao.delete(subP.getId());
+                // if we want to delete a main project we must also delete the
+                // subprojects from the meta data
+                if (!pMeta.getIsSubproject()) {
+                    // find all sub projects
+                    List<Project> pList = new ProjectDao(
+                            projectId, OpenInfraSchemas.PROJECTS).read();
+                    for (Project project : pList) {
+                        // for every project that is a sub project
+                        if (project.getProject() != null) {
+                            // retrieve the model object
+                            subP = em.createNamedQuery(
+                                    "Projects.findByProject",
+                                    Projects.class)
+                                    .setParameter("value", project.getId())
+                                    .getSingleResult();
+                            // deleted from the projects table in the meta data
+                            // schema
+                            pDao.delete(subP.getId());
+                        }
                     }
                 }
 
