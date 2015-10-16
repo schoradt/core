@@ -24,6 +24,10 @@ public enum OpenInfraSchemas {
 	/**
 	 * Schema for Role-based access control
 	 */
-	RBAC
+	RBAC,
+	/**
+	 * Schema for file service
+	 */
+	FILE
 
 }

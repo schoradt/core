@@ -91,6 +91,16 @@ public class EntityManagerFactoryCache {
         		ee.printStackTrace();
         	}
         }
+        // Add File entity manager factory
+        if(cacheSize - cache.size() > 0) {
+        	try {
+        		cache.get(new CacheTuple(
+        				OpenInfraApplication.PERSISTENCE_CONTEXT,
+        				createProperties(null, OpenInfraSchemas.FILE)));
+        	} catch(ExecutionException ee) {
+        		ee.printStackTrace();
+        	}
+        }
         // Add project entity manager factories
         if(cacheSize - cache.size() > 0) {
             ProjectDao projectDao = new ProjectDao(null,
@@ -196,6 +206,11 @@ public class EntityManagerFactoryCache {
         case RBAC:
         	currentSchema += OpenInfraPropertyValues.RBAC_SEARCH_PATH.getValue() 
         	+ "," + OpenInfraPropertyValues.SEARCH_PATH.getValue();
+        	break;
+        case FILE:
+        	currentSchema += 
+        		OpenInfraPropertyValues.FILE_SEARCH_PATH.getValue() + 
+        		"," + OpenInfraPropertyValues.SEARCH_PATH.getValue();
         	break;
         case SYSTEM:
             // fall through

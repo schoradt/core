@@ -41,14 +41,42 @@ public enum OpenInfraPropertyValues {
 	RBAC_SEARCH_PATH("rbac"),
 	
 	/**
-	 * The path for the project data.
+	 * The static search path for the file service
 	 */
-	PROJECTDATA_PATH("projectdata/"),
+	FILE_SEARCH_PATH("file"),	
 	
 	/**
-	 * The path to the specific project followed by the UUID.
+	 * The path for the project data.
 	 */
-	PROJECT_PATH("project_");
+	PROJECTDATA_PATH(OpenInfraProperties.FILE_PATH + "projectdata/"),
+	
+	/**
+	 * The path to the upload folder.
+	 */
+	UPLOAD_PATH(OpenInfraPropertyValues.PROJECTDATA_PATH.getValue()  
+			+ "upload/"),
+			
+	/**
+	 * The path to the image folder.
+	 */
+	IMAGE_PATH(OpenInfraPropertyValues.UPLOAD_PATH.getValue() + "images/"),
+	
+	/**
+	 * The path to the small images folder.
+	 */
+	IMAGE_SMALL_PATH(OpenInfraPropertyValues.IMAGE_PATH.getValue() + "small/"),
+
+	/**
+	 * The path to the middle images folder.
+	 */
+	IMAGE_MIDDLE_PATH(
+			OpenInfraPropertyValues.IMAGE_PATH.getValue() + "middle/"),
+	
+	/**
+	 * The path to the file folder.
+	 */
+	FILE_PATH(OpenInfraPropertyValues.UPLOAD_PATH.getValue() + "files/");
+
 	
 	private String value;
 	private OpenInfraPropertyValues(String value) {

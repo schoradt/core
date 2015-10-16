@@ -41,13 +41,21 @@ public class OpenInfraApplication extends ResourceConfig {
 		// This is done recursively
 		packages("de.btu.openinfra.backend.rest");
 		packages("de.btu.openinfra.plugins.solr.rest");
+		
+		checkFileSystem();
 
-		// Check the file system
+	}
+	
+	/**
+	 * This method checks the file system and creates the necessary directory
+	 * structure.
+	 */
+	private void checkFileSystem() {
 		try {
 			// Try to create the OpenInfRA file path when it doesn't exists.
 			File dir = new File(OpenInfraProperties.FILE_PATH);
 			if(!dir.exists()) {
-				dir.createNewFile();
+				dir.mkdir();
 			}
 			
 			// Try to write in the given directory.
@@ -56,11 +64,47 @@ public class OpenInfraApplication extends ResourceConfig {
 			f.delete();
 			
 			// Try to create the project data path.
-			File pdata = new File(OpenInfraProperties.FILE_PATH + 
+			File pdata = new File(
 					OpenInfraPropertyValues.PROJECTDATA_PATH.getValue());
 			if(!pdata.exists()) {
 				pdata.mkdir();
+			}
+			
+			// Try to create the upload path.
+			File upload = new File(
+					OpenInfraPropertyValues.UPLOAD_PATH.getValue());
+			if(!upload.exists()) {
+				upload.mkdir();
+			}
+			
+			// Try to create the images path.
+			File images = new File(
+					OpenInfraPropertyValues.IMAGE_PATH.getValue());
+			if(!images.exists()) {
+				images.mkdir();
+			}
+			
+			// Try to create the small images path.
+			File samllImages = new File(
+					OpenInfraPropertyValues.IMAGE_SMALL_PATH.getValue());
+			if(!samllImages.exists()) {
+				samllImages.mkdir();
+			}
+			
+			// Try to create the middle images path.
+			File middleImages = new File(
+					OpenInfraPropertyValues.IMAGE_MIDDLE_PATH.getValue());
+			if(!middleImages.exists()) {
+				middleImages.mkdir();
+			}
+
+			// Try to create the files path.
+			File files = new File(
+					OpenInfraPropertyValues.FILE_PATH.getValue());
+			if(!files.exists()) {
+				files.mkdir();
 			}			
+			
 		} catch(Exception ex) {
 			System.err.print("Couldn't write on file System! \n");
 			ex.printStackTrace();
