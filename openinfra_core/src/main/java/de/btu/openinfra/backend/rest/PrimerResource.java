@@ -19,8 +19,8 @@ import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 public class PrimerResource {
 
     @GET
-    public OpenInfraPojo primePojo(@QueryParam("pojoName") String pojoName) {
-        return PojoPrimer.primePojoStatically(pojoName);
+    public OpenInfraPojo primePojo(@QueryParam("pojoClass") String pojoClass) {
+        return PojoPrimer.primePojoStatically(pojoClass);
     }
     
     @GET
