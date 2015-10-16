@@ -195,17 +195,22 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 	    if (pojo != null) {
 
             // avoid empty names
-            if (pojo.getNames().getLocalizedStrings().get(0)
+            if (pojo.getNames() == null ||
+                    pojo.getNames().getLocalizedStrings().get(0)
                     .getCharacterString().equals("")) {
                 return null;
             }
 
         	PtFreeTextDao ptfDao =
                     new PtFreeTextDao(currentProjectId, schema);
+
             // set the description (optional)
             if (pojo.getDescriptions() != null) {
                 p.setPtFreeText1(
                         ptfDao.getPtFreeTextModel(pojo.getDescriptions()));
+            } else {
+                // reset the description
+                p.setPtFreeText1(null);
             }
 
             // set the name
