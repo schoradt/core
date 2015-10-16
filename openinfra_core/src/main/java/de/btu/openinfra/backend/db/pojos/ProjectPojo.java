@@ -51,9 +51,9 @@ public class ProjectPojo extends OpenInfraMetaDataPojo {
     protected void makePrimerHelper() {
         subprojectOf = null;
         names = new PtFreeTextPojo();
-        names.makePrimerHelper();
+        names.makePrimer();
         descriptions = new PtFreeTextPojo();
-        descriptions.makePrimerHelper();
+        descriptions.makePrimer();
     }
 
 }

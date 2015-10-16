@@ -59,10 +59,10 @@ public class TopicCharacteristicToAttributeTypeGroupPojo extends OpenInfraMetaDa
     @Override
     protected void makePrimerHelper() {
         topicCharacteristic = new TopicCharacteristicPojo();
-        topicCharacteristic.makePrimerHelper();
+        topicCharacteristic.makePrimer();
         attributTypeGroupId = null;
         multiplicity = new MultiplicityPojo();
-        multiplicity.makePrimerHelper();
+        multiplicity.makePrimer();
         order = -1;
     }
 

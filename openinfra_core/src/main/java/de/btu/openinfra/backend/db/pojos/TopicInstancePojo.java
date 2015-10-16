@@ -50,10 +50,10 @@ public class TopicInstancePojo extends OpenInfraMetaDataPojo {
     @Override
     protected void makePrimerHelper() {
         topicCharacteristic = new TopicCharacteristicPojo();
-        topicCharacteristic.makePrimerHelper();
+        topicCharacteristic.makePrimer();
         values = new ArrayList<AttributeValuePojo>();
         values.add(new AttributeValuePojo());
-        values.get(0).makePrimerHelper();
+        values.get(0).makePrimer();
     }
 
 }

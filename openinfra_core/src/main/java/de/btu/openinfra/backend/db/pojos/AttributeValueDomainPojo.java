@@ -48,7 +48,7 @@ public class AttributeValueDomainPojo extends OpenInfraMetaDataPojo {
     protected void makePrimerHelper() {
         topicInstanceId = null;
         domain = new ValueListValuePojo();
-        domain.makePrimerHelper();
+        domain.makePrimer();
         attributeTypeToAttributeTypeGroupId = null;
     }
 

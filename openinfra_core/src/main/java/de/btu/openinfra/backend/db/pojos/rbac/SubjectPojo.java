@@ -179,10 +179,10 @@ public class SubjectPojo extends OpenInfraPojo {
         updatedOn = "";
         roles = new ArrayList<RolePojo>();
         roles.add(new RolePojo());
-        roles.get(0).makePrimerHelper();
+        roles.get(0).makePrimer();
         projects = new ArrayList<SubjectProjectPojo>();
         projects.add(new SubjectProjectPojo());
-        projects.get(0).makePrimerHelper();
+        projects.get(0).makePrimer();
         webApp = "";
     }
 

@@ -1,5 +1,6 @@
 package de.btu.openinfra.backend.db.pojos.rbac;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -48,6 +49,9 @@ public class RolePojo extends OpenInfraPojo {
     protected void makePrimerHelper() {
         description = "";
         name = "";
+        permissions = new ArrayList<PermissionPojo>();
+        permissions.add(new PermissionPojo());
+        permissions.get(0).makePrimer();
     }
 
 }

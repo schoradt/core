@@ -48,9 +48,9 @@ public class TopicInstanceAssociationPojo extends OpenInfraMetaDataPojo {
     @Override
     protected void makePrimerHelper() {
         associatedInstance = new TopicInstancePojo();
-        associatedInstance.makePrimerHelper();
+        associatedInstance.makePrimer();
         relationshipType = new RelationshipTypePojo();
-        relationshipType.makePrimerHelper();
+        relationshipType.makePrimer();
     }
 
 }

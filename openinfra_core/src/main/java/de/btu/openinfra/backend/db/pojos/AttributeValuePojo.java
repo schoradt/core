@@ -79,13 +79,13 @@ public class AttributeValuePojo extends OpenInfraPojo {
         attributeTypeId = null;
         attributeValueType = AttributeValueTypes.ATTRIBUTE_VALUE_VALUE;
         attributeValueDomain = new AttributeValueDomainPojo();
-        attributeValueDomain.makePrimerHelper();
+        attributeValueDomain.makePrimer();
         attributeValueGeom = new AttributeValueGeomPojo();
-        attributeValueGeom.makePrimerHelper();
+        attributeValueGeom.makePrimer();
         attributeValueGeomz = new AttributeValueGeomzPojo();
-        attributeValueGeomz.makePrimerHelper();
+        attributeValueGeomz.makePrimer();
         attributeValueValue = new AttributeValueValuePojo();
-        attributeValueValue.makePrimerHelper();
+        attributeValueValue.makePrimer();
     }
 
 }

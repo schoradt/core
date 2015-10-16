@@ -39,7 +39,7 @@ public class PtFreeTextPojo extends OpenInfraPojo {
         localizedStrings.add(new LocalizedString());
         localizedStrings.get(0).setCharacterString("");
         localizedStrings.get(0).setLocale(new PtLocalePojo());
-        localizedStrings.get(0).getLocale().makePrimerHelper();
+        localizedStrings.get(0).getLocale().makePrimer();
     }
 
 }

@@ -57,11 +57,11 @@ public class SettingsPojo extends OpenInfraPojo {
     @Override
     protected void makePrimerHelper() {
         key = new SettingKeysPojo();
-        key.makePrimerHelper();
+        key.makePrimer();
         value = "";
         updatedOn = "";
         project = new ProjectsPojo();
-        project.makePrimerHelper();
+        project.makePrimer();
     }
 
 }

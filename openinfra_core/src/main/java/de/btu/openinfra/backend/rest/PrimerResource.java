@@ -9,8 +9,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import de.btu.openinfra.backend.db.PojoPrimer;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
-import de.btu.openinfra.backend.db.pojos.PojoPrimer;
 
 @Path("/v1/primer")
 @Produces({ MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY + OpenInfraResponseBuilder.UTF8_CHARSET,

@@ -51,9 +51,9 @@ public class AttributeTypeGroupPojo extends OpenInfraMetaDataPojo {
     @Override
     protected void makePrimerHelper() {
         names = new PtFreeTextPojo();
-        names.makePrimerHelper();
+        names.makePrimer();
         descriptions = new PtFreeTextPojo();
-        descriptions.makePrimerHelper();
+        descriptions.makePrimer();
         subgroupOf = null;
     }
 

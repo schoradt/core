@@ -80,9 +80,9 @@ public class LogPojo extends OpenInfraPojo {
         userName = "";
         createdOn = "";
         logger = new LoggerPojo();
-        logger.makePrimerHelper();
+        logger.makePrimer();
         level = new LevelPojo();
-        level.makePrimerHelper();
+        level.makePrimer();
         message = "";
     }
 

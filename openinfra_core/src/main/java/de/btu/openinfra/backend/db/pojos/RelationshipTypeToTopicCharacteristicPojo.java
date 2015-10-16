@@ -51,9 +51,9 @@ public class RelationshipTypeToTopicCharacteristicPojo extends OpenInfraMetaData
     protected void makePrimerHelper() {
         topicCharacteristicId = null;
         multiplicity = new MultiplicityPojo();
-        multiplicity.makePrimerHelper();
+        multiplicity.makePrimer();
         relationshipType = new RelationshipTypePojo();
-        relationshipType.makePrimerHelper();
+        relationshipType.makePrimer();
     }
 
 }

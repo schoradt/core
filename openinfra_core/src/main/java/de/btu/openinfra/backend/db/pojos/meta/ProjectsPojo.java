@@ -51,7 +51,7 @@ public class ProjectsPojo extends OpenInfraPojo {
     protected void makePrimerHelper() {
         isSubproject = false;
         databaseConnection = new DatabaseConnectionPojo();
-        databaseConnection.makePrimerHelper();
+        databaseConnection.makePrimer();
     }
 
 }

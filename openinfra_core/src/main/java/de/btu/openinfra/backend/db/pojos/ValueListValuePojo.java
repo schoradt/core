@@ -61,9 +61,9 @@ public class ValueListValuePojo extends OpenInfraMetaDataPojo {
         visibility = false;
         belongsToValueList = null;
         names = new PtFreeTextPojo();
-        names.makePrimerHelper();
+        names.makePrimer();
         descriptions = new PtFreeTextPojo();
-        descriptions.makePrimerHelper();
+        descriptions.makePrimer();
     }
 
 }
