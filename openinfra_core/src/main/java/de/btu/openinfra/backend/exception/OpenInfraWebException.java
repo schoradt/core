@@ -33,6 +33,15 @@ public class OpenInfraWebException extends WebApplicationException {
 						type.getMessage())).build());
 	}
 	
+	/**
+	 * A constructor to handle all JAVA-based exceptions. Currently, it prints
+	 * the stack trace and informs the client that something was wrong.
+	 * 
+	 * In the future this could be used to replace the stack trace printing
+	 * with a log mechanism.
+	 * 
+	 * @param ex
+	 */
 	public OpenInfraWebException(Exception ex) {
 		super(Response.status(Status.INTERNAL_SERVER_ERROR).entity(
 				new OpenInfraExceptionItem(
