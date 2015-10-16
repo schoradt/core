@@ -9,6 +9,8 @@ import de.btu.openinfra.backend.db.jpa.model.RelationshipType;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
 import de.btu.openinfra.backend.db.jpa.model.ValueListValue;
 import de.btu.openinfra.backend.db.pojos.RelationshipTypePojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 /**
  * This class represents the RelationshipType and is used to access the
@@ -84,20 +86,19 @@ public class RelationshipTypeDao extends
 			RelationshipTypePojo pojo,
 			RelationshipType rt) {
 
-        // in case the description or the relationship type is null
-        if (pojo.getDescription() == null ||
-                pojo.getRelationshipType() == null) {
-            return null;
+	    try {
+            // set the description
+            rt.setValueListValue1(em.find(ValueListValue.class,
+                    pojo.getDescription().getUuid()));
+
+            // set the reference_to
+            rt.setValueListValue2(em.find(ValueListValue.class,
+                    pojo.getRelationshipType().getUuid()));
+
+        } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.NULL_VALUE_IN_POJO);
         }
-
-        // set the description
-        rt.setValueListValue1(em.find(ValueListValue.class,
-                pojo.getDescription().getUuid()));
-
-        // set the reference_to
-        rt.setValueListValue2(em.find(ValueListValue.class,
-                pojo.getRelationshipType().getUuid()));
-
         // return the model as mapping result
         return new MappingResult<RelationshipType>(rt.getId(), rt);
 	}
