@@ -8,6 +8,8 @@ import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.ValueList;
 import de.btu.openinfra.backend.db.jpa.model.ValueListXValueList;
 import de.btu.openinfra.backend.db.pojos.ValueListAssociationPojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 /**
  * This class represents the ValueListAssociation and is used to access the
@@ -66,7 +68,7 @@ public class ValueListAssociationDao
 			ValueListXValueList vlxvl,
 			MetaDataDao mdDao) {
 
-		if(vlxvl != null) {
+		try {
 			ValueListAssociationPojo pojo =
 					new ValueListAssociationPojo(vlxvl, mdDao);
 
@@ -76,9 +78,9 @@ public class ValueListAssociationDao
 					vlxvl.getValueList2Bean(), null));
 
 			return pojo;
-		}
-		else {
-			return null;
-		}
+		} catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
+        }
 	}
 }

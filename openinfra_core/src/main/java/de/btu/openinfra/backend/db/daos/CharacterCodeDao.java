@@ -51,7 +51,7 @@ public class CharacterCodeDao
 	public MappingResult<CharacterCode> mapToModel(
 			CharacterCodePojo pojo, CharacterCode cc) {
 
-        // TODO set the model values
+        // no POST or PUT for character code appropriated
 
         // return the model as mapping result
         return new MappingResult<CharacterCode>(cc.getId(), cc);

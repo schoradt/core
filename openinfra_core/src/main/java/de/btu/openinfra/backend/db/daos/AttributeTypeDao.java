@@ -15,6 +15,8 @@ import de.btu.openinfra.backend.db.jpa.model.ValueListValue;
 import de.btu.openinfra.backend.db.pojos.AttributeTypePojo;
 import de.btu.openinfra.backend.db.pojos.LocalizedString;
 import de.btu.openinfra.backend.db.pojos.PtFreeTextPojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 /**
  * This class represents the AttributeType and is used to access the underlying
@@ -142,35 +144,51 @@ public class AttributeTypeDao
         if (pojo.getDescriptions() != null) {
             at.setPtFreeText1(
                     ptfDao.getPtFreeTextModel(pojo.getDescriptions()));
+        } else {
+            // reset the description
+            at.setPtFreeText1(null);
         }
 
-        // set the name
-        at.setPtFreeText2(ptfDao.getPtFreeTextModel(pojo.getNames()));
+        try {
+            // in case the name value is empty
+            if (pojo.getNames().getLocalizedStrings().get(0)
+                    .getCharacterString() == "") {
+                throw new OpenInfraEntityException(
+                        OpenInfraExceptionTypes.MISSING_NAME_IN_POJO);
+            }
 
-        // set the data type
-        at.setValueListValue1(em.find(ValueListValue.class,
-                pojo.getDataType().getUuid()));
+            // set the name
+            at.setPtFreeText2(ptfDao.getPtFreeTextModel(pojo.getNames()));
+        } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_NAME_IN_POJO);
+        }
+
+        try {
+            // set the data type
+            at.setValueListValue1(em.find(ValueListValue.class,
+                    pojo.getDataType().getUuid()));
+        } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
+        }
 
         // set the unit (optional)
-        if (pojo.getUnit() != null) {
-            if (pojo.getUnit().getUuid() != null) {
+        if (pojo.getUnit() != null && pojo.getUnit().getUuid() != null) {
                 at.setValueListValue2(em.find(ValueListValue.class,
-                                              pojo.getUnit().getUuid()));
-            } else {
-                // reset the unit
-                at.setValueListValue2(null);
-            }
+                        pojo.getUnit().getUuid()));
+        } else {
+            // reset the unit
+            at.setValueListValue2(null);
         }
 
         // set the domain (optional)
-        if (pojo.getDomain() != null) {
-            if (pojo.getDomain().getUuid() != null) {
-                at.setValueList(em.find(ValueList.class,
-                        pojo.getDomain().getUuid()));
-            } else {
-                // reset the domain
-                at.setValueList(null);
-            }
+        if (pojo.getDomain() != null && pojo.getDomain().getUuid() != null) {
+            at.setValueList(em.find(ValueList.class,
+                    pojo.getDomain().getUuid()));
+        } else {
+            // reset the domain
+            at.setValueList(null);
         }
 
         // return the model as mapping result
