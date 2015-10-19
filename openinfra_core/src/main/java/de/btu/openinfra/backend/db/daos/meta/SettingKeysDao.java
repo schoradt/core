@@ -7,6 +7,8 @@ import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
 import de.btu.openinfra.backend.db.jpa.model.meta.SettingKeys;
 import de.btu.openinfra.backend.db.pojos.meta.SettingKeysPojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 public class SettingKeysDao extends OpenInfraDao<SettingKeysPojo, SettingKeys> {
 
@@ -58,20 +60,23 @@ public class SettingKeysDao extends OpenInfraDao<SettingKeysPojo, SettingKeys> {
      * This method implements the method mapToModel in a static way.
      * @param pojo the POJO object
      * @param sk the pre initialized model object
-     * @return return a corresponding JPA model object or null if the pojo
-     * object is null
+     * @return return a corresponding JPA model object
+     * @throws OpenInfraEntityException
      */
     public static SettingKeys mapToModelStatically(
             SettingKeysPojo pojo,
             SettingKeys sk) {
         SettingKeys resultSettingKeys = null;
-        if(pojo != null) {
+        try {
             resultSettingKeys = sk;
             if(resultSettingKeys == null) {
                 resultSettingKeys = new SettingKeys();
                 resultSettingKeys.setId(pojo.getUuid());
             }
             resultSettingKeys.setKey(pojo.getKey());
+        } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
         }
         return resultSettingKeys;
     }

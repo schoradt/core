@@ -7,6 +7,8 @@ import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
 import de.btu.openinfra.backend.db.jpa.model.meta.Schemas;
 import de.btu.openinfra.backend.db.pojos.meta.SchemasPojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 /**
  * This class represents the Schemas and is used to access the underlying layer
@@ -64,18 +66,21 @@ public class SchemasDao
      * This method implements the method mapToModel in a static way.
      * @param pojo the POJO object
      * @param s the pre initialized model object
-     * @return return a corresponding JPA model object or null if the pojo
-     * object is null
+     * @return return a corresponding JPA model object
+     * @throws OpenInfraEntityException
      */
     public static Schemas mapToModelStatically(SchemasPojo pojo, Schemas s) {
         Schemas resultSchemas = null;
-        if(pojo != null) {
+        try {
             resultSchemas = s;
             if(resultSchemas == null) {
                 resultSchemas = new Schemas();
                 resultSchemas.setId(pojo.getUuid());
             }
             resultSchemas.setSchema(pojo.getSchema());
+        } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
         }
         return resultSchemas;
     }

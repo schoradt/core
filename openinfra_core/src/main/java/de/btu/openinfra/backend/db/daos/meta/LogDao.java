@@ -8,6 +8,8 @@ import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
 import de.btu.openinfra.backend.db.jpa.model.meta.Log;
 import de.btu.openinfra.backend.db.pojos.meta.LogPojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 /**
  * This class represents the Log and is used to access the underlying layer
@@ -70,17 +72,17 @@ public class LogDao
      * This method implements the method mapToModel in a static way.
      * @param pojo the POJO object
      * @param log the pre initialized model object
-     * @return return a corresponding JPA model object or null if the pojo
-     * object is null
+     * @return return a corresponding JPA model object
+     * @throws OpenInfraEntityException
      */
     public Log mapToModelStatically(LogPojo pojo, Log log) {
         Log resultLog = null;
-        if(pojo != null) {
+        try {
             resultLog = log;
             if(resultLog == null) {
                 resultLog = new Log();
                 resultLog.setId(pojo.getUuid());
-            }            
+            }
             resultLog.setCreatedOn(OpenInfraTime.now());
             resultLog.setMessage(pojo.getMessage());
             resultLog.setUserId(pojo.getUserId());
@@ -91,6 +93,9 @@ public class LogDao
             resultLog.setLoggerBean(LoggerDao.mapToModelStatically(
                     pojo.getLogger(),
                     null));
+        } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
         }
         return resultLog;
     }

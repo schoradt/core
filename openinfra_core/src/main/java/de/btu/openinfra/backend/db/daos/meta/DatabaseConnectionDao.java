@@ -7,6 +7,8 @@ import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
 import de.btu.openinfra.backend.db.jpa.model.meta.DatabaseConnection;
 import de.btu.openinfra.backend.db.pojos.meta.DatabaseConnectionPojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 /**
  * This class represents the DatabaseConnection and is used to access the
@@ -74,14 +76,15 @@ public class DatabaseConnectionDao
      * This method implements the method mapToModel in a static way.
      * @param pojo the POJO object
      * @param dbc the pre initialized model object
-     * @return return a corresponding JPA model object or null if the pojo
-     * object is null
+     * @return return a corresponding JPA model object
+     * @throws OpenInfraEntityException
      */
     public static DatabaseConnection mapToModelStatically(
             DatabaseConnectionPojo pojo,
             DatabaseConnection dbc) {
         DatabaseConnection resultDatabaseConnection = null;
-        if(pojo != null) {
+
+        try {
             resultDatabaseConnection = dbc;
             if(resultDatabaseConnection == null) {
                 resultDatabaseConnection = new DatabaseConnection();
@@ -101,7 +104,9 @@ public class DatabaseConnectionDao
                     SchemasDao.mapToModelStatically(pojo.getSchema(), null));
             resultDatabaseConnection.setServerBean(
                     ServersDao.mapToModelStatically(pojo.getServer(), null));
-
+        } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
         }
         return resultDatabaseConnection;
     }
