@@ -286,8 +286,8 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 	 * meta data schema.
 	 *
 	 * @param project the project pojo
-	 * @return        the UUID of the new created project or NULL if something
-	 *                went wrong
+	 * @return        the UUID of the new created project
+	 * @throws OpenInfraWebException if something went wrong
 	 */
 	public UUID createProject(ProjectPojo pojo) {
 
@@ -348,9 +348,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
                     /* no roll back necessary for e.g. CREATE_SCHEMA */
                     break;
                 }
-	            // TODO: throw error to resource
-	            System.out.println("THROW ERROR TO REST API: " + e.toString());
-	            return null;
+	            throw new OpenInfraWebException(e);
             }
 	    }
 	    return id;
@@ -362,7 +360,8 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
      * delete the database schema and remove the project entry in the meta data
      * schema.
      *
-	 * @return true if the project was deleted otherwise false
+	 * @return true if the project was deleted
+	 * @throws OpenInfraWebException
 	 */
 	public boolean deleteProject() {
 
@@ -384,8 +383,8 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
                 result = true;
 	        }
 	    } catch (Exception e) {
-            return false;
-	    }
+            throw new OpenInfraWebException(e);
+        }
 	    return result;
 	}
 
