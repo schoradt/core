@@ -387,8 +387,8 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	 *
 	 * @param modelObject the pre initialized model object
 	 * @param pojoObject  the POJO object
-	 * @return            a corresponding JPA model object or null if the pojo
-	 *                    object is null
+	 * @return            a corresponding JPA model object
+	 * @throws            OpenInfraEntityException
 	 */
 	public abstract MappingResult<TypeModel> mapToModel(
 			TypePojo pojoObject, TypeModel modelObject);
