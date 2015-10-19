@@ -3,6 +3,7 @@ package de.btu.openinfra.backend.db.pojos.meta;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
+import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 
 @XmlRootElement
@@ -28,7 +29,7 @@ public class LoggerPojo extends OpenInfraPojo {
     }
 
     @Override
-    protected void makePrimerHelper() {
+    protected void makePrimerHelper(PtLocale locale) {
         logger = "";
     }
 

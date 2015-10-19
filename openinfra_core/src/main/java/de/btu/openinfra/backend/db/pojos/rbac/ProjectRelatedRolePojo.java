@@ -2,6 +2,7 @@ package de.btu.openinfra.backend.db.pojos.rbac;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.jpa.model.rbac.ProjectRelatedRole;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 
@@ -34,7 +35,7 @@ public class ProjectRelatedRolePojo extends OpenInfraPojo {
 	}
 
     @Override
-    protected void makePrimerHelper() {
+    protected void makePrimerHelper(PtLocale locale) {
         name = "";
         description = "";
     }

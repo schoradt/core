@@ -32,6 +32,14 @@ public class OpenInfraResponseBuilder {
 	public static final String REST_URI_SYSTEM = "/v1/system";
 	public static final String REST_URI_SEARCH = "/v1/search";
 	
+	/**
+	 * This variable defines the REST URI for primer requests. It contains the
+	 * schema definition (system, rbac or metadata). The schema projects is
+	 * not supported. For the schema projects use REST_URI_PROJECTS instead.
+	 */
+	public static final String REST_URI_PRIMER = 
+            "/v1/{schema:(system|rbac|metadata)}";
+	
 
 	/**
 	 * This variable defines the character set utf8 which is returned by the

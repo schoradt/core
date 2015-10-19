@@ -5,6 +5,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import de.btu.openinfra.backend.db.daos.AttributeValueTypes;
 import de.btu.openinfra.backend.db.daos.MetaDataDao;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
+import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 
 @XmlRootElement
 public class AttributeTypePojo extends OpenInfraMetaDataPojo {
@@ -74,18 +75,18 @@ public class AttributeTypePojo extends OpenInfraMetaDataPojo {
     }
 
     @Override
-    protected void makePrimerHelper() {
+    protected void makePrimerHelper(PtLocale locale) {
         names = new PtFreeTextPojo();
-        names.makePrimer();
+        names.makePrimer(locale);
         descriptions = new PtFreeTextPojo();
-        descriptions.makePrimer();
+        descriptions.makePrimer(locale);
         dataType = new ValueListValuePojo();
-        dataType.makePrimer();
+        dataType.makePrimer(locale);
         unit = new ValueListValuePojo();
-        unit.makePrimer();
+        unit.makePrimer(locale);
         domain = new ValueListPojo();
-        domain.makePrimer();
-        type = AttributeValueTypes.ATTRIBUTE_VALUE_VALUE;
+        domain.makePrimer(locale);
+        type = null;
     }
 
 }

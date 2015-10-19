@@ -4,6 +4,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import de.btu.openinfra.backend.db.daos.MetaDataDao;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
+import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 
 @XmlRootElement
 public class MultiplicityPojo extends OpenInfraMetaDataPojo {
@@ -37,7 +38,7 @@ public class MultiplicityPojo extends OpenInfraMetaDataPojo {
     }
 
     @Override
-    protected void makePrimerHelper() {
+    protected void makePrimerHelper(PtLocale locale) {
         min = Integer.valueOf(-1);
         max = Integer.valueOf(-1);
     }

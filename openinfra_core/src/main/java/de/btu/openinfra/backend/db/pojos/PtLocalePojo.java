@@ -3,6 +3,7 @@ package de.btu.openinfra.backend.db.pojos;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
+import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 
 @XmlRootElement
 public class PtLocalePojo extends OpenInfraPojo {
@@ -45,10 +46,10 @@ public class PtLocalePojo extends OpenInfraPojo {
     }
 
     @Override
-    protected void makePrimerHelper() {
-        languageCode = "";
-        countryCode = "";
-        characterCode = "";
+    protected void makePrimerHelper(PtLocale locale) {
+        languageCode = locale.getLanguageCode().getLanguageCode();
+        countryCode = locale.getCountryCode().getCountryCode();
+        characterCode = locale.getCharacterCode().getCharacterCode();
     }
 
 }

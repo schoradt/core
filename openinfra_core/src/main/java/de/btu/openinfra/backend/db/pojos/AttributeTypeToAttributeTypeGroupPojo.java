@@ -6,6 +6,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import de.btu.openinfra.backend.db.daos.MetaDataDao;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
+import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 
 @XmlRootElement
 public class AttributeTypeToAttributeTypeGroupPojo extends OpenInfraMetaDataPojo {
@@ -66,14 +67,14 @@ public class AttributeTypeToAttributeTypeGroupPojo extends OpenInfraMetaDataPojo
     }
 
     @Override
-    protected void makePrimerHelper() {
+    protected void makePrimerHelper(PtLocale locale) {
         attributeType = new AttributeTypePojo();
-        attributeType.makePrimer();
+        attributeType.makePrimer(locale);
         attributeTypeGroupId = null;
         multiplicity = new MultiplicityPojo();
-        multiplicity.makePrimer();
+        multiplicity.makePrimer(locale);
         defaultValue = new ValueListValuePojo();
-        defaultValue.makePrimer();
+        defaultValue.makePrimer(locale);
         order = Integer.valueOf(-1);
     }
 

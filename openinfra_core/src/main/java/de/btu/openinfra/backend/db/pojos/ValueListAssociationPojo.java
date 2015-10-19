@@ -4,6 +4,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import de.btu.openinfra.backend.db.daos.MetaDataDao;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
+import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 
 @XmlRootElement
 public class ValueListAssociationPojo extends OpenInfraMetaDataPojo {
@@ -37,11 +38,11 @@ public class ValueListAssociationPojo extends OpenInfraMetaDataPojo {
     }
 
     @Override
-    protected void makePrimerHelper() {
+    protected void makePrimerHelper(PtLocale locale) {
         associatedValueList = new ValueListPojo();
-        associatedValueList.makePrimer();
+        associatedValueList.makePrimer(locale);
         relationship = new ValueListValuePojo();
-        relationship.makePrimer();
+        relationship.makePrimer(locale);
     }
 
 }

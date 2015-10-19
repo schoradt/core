@@ -3,8 +3,12 @@ package de.btu.openinfra.backend.db;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 
+import de.btu.openinfra.backend.db.daos.PtLocaleDao;
+import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeAssociationPojo;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupPojo;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupToAttributeTypePojo;
@@ -57,6 +61,7 @@ import de.btu.openinfra.backend.db.pojos.rbac.SubjectObjectPojo;
 import de.btu.openinfra.backend.db.pojos.rbac.SubjectPojo;
 import de.btu.openinfra.backend.db.pojos.rbac.SubjectProjectPojo;
 import de.btu.openinfra.backend.db.pojos.rbac.SubjectRolePojo;
+import de.btu.openinfra.backend.exception.OpenInfraWebException;
 
 /**
  * This class supplies methods to create primer objects and to request
@@ -75,7 +80,9 @@ public class PojoPrimer {
     /**
      * Hash map of OpenInfraPojo subclasses.
      */
-    private Map<String, Class<? extends OpenInfraPojo>> pojoClasses;
+    //private Map<String, Class<? extends OpenInfraPojo>> pojoClasses;
+    private Map<OpenInfraSchemas,
+        Map<String, Class<? extends OpenInfraPojo>>> pojoClasses;
 
     /**
      * Default non-argument constructor. The constructor initiates
@@ -86,109 +93,265 @@ public class PojoPrimer {
     }
 
     /**
-     * Creates a primer object for the given pojo class.
+     * Creates a primer object for the given schema and pojo class.
+     * @param schema the schema
+     * @param projectId the project id
+     * @param locale A Java.util locale objects.
      * @param pojoClass the pojo class
-     * @return primer object if pojoClass exists in the pojo hash map otherwise
-     * null
+     * @return primer object if pojoClass and the schema exist in the pojo
+     * hash map otherwise throws OpenInfraWebException
+     * @throws OpenInfraWebException
      */
-    public static OpenInfraPojo primePojoStatically(String pojoClass) {
-        return pojoPrimer.primePojo(pojoClass);
+    public static OpenInfraPojo primePojoStatically(
+            OpenInfraSchemas schema,
+            UUID projectId,
+            Locale locale,
+            String pojoClass) {
+        switch(schema) {
+            case SYSTEM:
+            case PROJECTS:
+                return pojoPrimer.primePojo(
+                        schema,
+                        new PtLocaleDao(projectId, schema).read(locale),
+                        pojoClass);
+            default:
+                return pojoPrimer.primePojo(schema, null, pojoClass);
+        }
+        
     }
     
     /**
-     * Returns all primer class names.
-     * @return a list of all primer class names
+     * Returns all primer class names for the given schema.
+     * @param schema the schema
+     * @return a list of all primer class names if schema exists in the pojo
+     * hash map otherwise throws OpenInfraWebException
+     * @throws OpenInfraWebException
      */
-    public static List<String> getPrimerNamesStatically() {
-        return pojoPrimer.getPrimerNames();
+    public static List<String> getPrimerNamesStatically(
+            OpenInfraSchemas schema) {
+        return pojoPrimer.getPrimerNames(schema);
     }
 
     /**
      * This methods initiates the hash map of OpenInfraPojo subclasses.
      */
     private void initiatePojoClasses() {
+        pojoClasses = new HashMap<OpenInfraSchemas,
+                Map<String, Class<? extends OpenInfraPojo>>>();
+        
         // add meta pojos
-        pojoClasses = new HashMap<String, Class<? extends OpenInfraPojo>>();
-        pojoClasses.put("meta_credential", CredentialsPojo.class);
-        pojoClasses.put("meta_databaseconnection", DatabaseConnectionPojo.class);
-        pojoClasses.put("meta_database", DatabasesPojo.class);
-        pojoClasses.put("meta_level", LevelPojo.class);
-        pojoClasses.put("meta_logger", LoggerPojo.class);
-        pojoClasses.put("meta_log", LogPojo.class);
-        pojoClasses.put("meta_port", PortsPojo.class);
-        pojoClasses.put("meta_project", ProjectsPojo.class);
-        pojoClasses.put("meta_schema", SchemasPojo.class);
-        pojoClasses.put("meta_server", ServersPojo.class);
-        pojoClasses.put("meta_settingkey", SettingKeysPojo.class);
-        pojoClasses.put("meta_setting", SettingsPojo.class);
+        pojoClasses.put(
+                OpenInfraSchemas.META_DATA,
+                new HashMap<String, Class<? extends OpenInfraPojo>>());
+        pojoClasses.get(OpenInfraSchemas.META_DATA).put(
+                "credential",
+                CredentialsPojo.class);
+        pojoClasses.get(OpenInfraSchemas.META_DATA).put(
+                "databaseconnection",
+                DatabaseConnectionPojo.class);
+        pojoClasses.get(OpenInfraSchemas.META_DATA).put(
+                "database",
+                DatabasesPojo.class);
+        pojoClasses.get(OpenInfraSchemas.META_DATA).put(
+                "level",
+                LevelPojo.class);
+        pojoClasses.get(OpenInfraSchemas.META_DATA).put(
+                "logger",
+                LoggerPojo.class);
+        pojoClasses.get(OpenInfraSchemas.META_DATA).put(
+                "log",
+                LogPojo.class);
+        pojoClasses.get(OpenInfraSchemas.META_DATA).put(
+                "port",
+                PortsPojo.class);
+        pojoClasses.get(OpenInfraSchemas.META_DATA).put(
+                "project",
+                ProjectsPojo.class);
+        pojoClasses.get(OpenInfraSchemas.META_DATA).put(
+                "schema",
+                SchemasPojo.class);
+        pojoClasses.get(OpenInfraSchemas.META_DATA).put(
+                "server",
+                ServersPojo.class);
+        pojoClasses.get(OpenInfraSchemas.META_DATA).put(
+                "settingkey",
+                SettingKeysPojo.class);
+        pojoClasses.get(OpenInfraSchemas.META_DATA).put(
+                "setting",
+                SettingsPojo.class);
 
         // add rbac pojos
-        pojoClasses.put("rbac_passwordblacklist", PasswordBlacklistPojo.class);
-        pojoClasses.put("rbac_permission", PermissionPojo.class);
-        pojoClasses.put("rbac_rolepermission", RolePermissionPojo.class);
-        pojoClasses.put("rbac_projectrelatedrole", ProjectRelatedRolePojo.class);
-        pojoClasses.put("rbac_role", RolePojo.class);
-        pojoClasses.put("rbac_subjectobject", SubjectObjectPojo.class);
-        pojoClasses.put("rbac_subject", SubjectPojo.class);
-        pojoClasses.put("rbac_subjectproject", SubjectProjectPojo.class);
-        pojoClasses.put("rbac_subjectrole", SubjectRolePojo.class);
+        pojoClasses.put(
+                OpenInfraSchemas.RBAC,
+                new HashMap<String, Class<? extends OpenInfraPojo>>());
+        pojoClasses.get(OpenInfraSchemas.RBAC).put(
+                "passwordblacklist",
+                PasswordBlacklistPojo.class);
+        pojoClasses.get(OpenInfraSchemas.RBAC).put(
+                "permission",
+                PermissionPojo.class);
+        pojoClasses.get(OpenInfraSchemas.RBAC).put(
+                "rolepermission",
+                RolePermissionPojo.class);
+        pojoClasses.get(OpenInfraSchemas.RBAC).put(
+                "projectrelatedrole",
+                ProjectRelatedRolePojo.class);
+        pojoClasses.get(OpenInfraSchemas.RBAC).put(
+                "role",
+                RolePojo.class);
+        pojoClasses.get(OpenInfraSchemas.RBAC).put(
+                "subjectobject",
+                SubjectObjectPojo.class);
+        pojoClasses.get(OpenInfraSchemas.RBAC).put(
+                "subject",
+                SubjectPojo.class);
+        pojoClasses.get(OpenInfraSchemas.RBAC).put(
+                "subjectproject",
+                SubjectProjectPojo.class);
+        pojoClasses.get(OpenInfraSchemas.RBAC).put(
+                "subjectrole",
+                SubjectRolePojo.class);
 
-        // add normal pojos
-        pojoClasses.put("attributetypeassociation", AttributeTypeAssociationPojo.class);
-        pojoClasses.put("attributetypegroup", AttributeTypeGroupPojo.class);
-        pojoClasses.put("attributetypegrouptoattributetype", AttributeTypeGroupToAttributeTypePojo.class);
-        pojoClasses.put("attributetypegrouptotopiccharacteristic", AttributeTypeGroupToTopicCharacteristicPojo.class);
-        pojoClasses.put("attributetype", AttributeTypePojo.class);
-        pojoClasses.put("attributetypetoattributetypegroup", AttributeTypeToAttributeTypeGroupPojo.class);
-        pojoClasses.put("attributevaluedomain", AttributeValueDomainPojo.class);
-        pojoClasses.put("attributevaluegeom", AttributeValueGeomPojo.class);
-        pojoClasses.put("attributevaluegeomz", AttributeValueGeomzPojo.class);
-        pojoClasses.put("attributevalue", AttributeValuePojo.class);
-        pojoClasses.put("attributevaluevalue", AttributeValueValuePojo.class);
-        pojoClasses.put("charactercode", CharacterCodePojo.class);
-        pojoClasses.put("countrycode", CountryCodePojo.class);
-        pojoClasses.put("languagecode", LanguageCodePojo.class);
-        pojoClasses.put("metadata", MetaDataPojo.class);
-        pojoClasses.put("multiplicity", MultiplicityPojo.class);
-        pojoClasses.put("project", ProjectPojo.class);
-        pojoClasses.put("ptfreetext", PtFreeTextPojo.class);
-        pojoClasses.put("ptlocale", PtLocalePojo.class);
-        pojoClasses.put("relationshiptype", RelationshipTypePojo.class);
-        pojoClasses.put("relationshiptypetotopiccharacteristic", RelationshipTypeToTopicCharacteristicPojo.class);
-        pojoClasses.put("topiccharacteristic", TopicCharacteristicPojo.class);
-        pojoClasses.put("topiccharacteristictoattributetypegroup", TopicCharacteristicToAttributeTypeGroupPojo.class);
-        pojoClasses.put("topiccharacteristictorelationshiptype", TopicCharacteristicToRelationshipTypePojo.class);
-        pojoClasses.put("topicinstanceassociation", TopicInstanceAssociationPojo.class);
-        pojoClasses.put("topicinstance", TopicInstancePojo.class);
-        pojoClasses.put("valuelistassociation", ValueListAssociationPojo.class);
-        pojoClasses.put("valuelist", ValueListPojo.class);
-        pojoClasses.put("valuelistvalueassociation", ValueListValueAssociationPojo.class);
-        pojoClasses.put("valuelistvalue", ValueListValuePojo.class);
+        // add SYSTEM pojos
+        pojoClasses.put(
+                OpenInfraSchemas.SYSTEM,
+                new HashMap<String, Class<? extends OpenInfraPojo>>());
+        pojoClasses.get(OpenInfraSchemas.SYSTEM).put(
+                "attributetypeassociation",
+                AttributeTypeAssociationPojo.class);
+        pojoClasses.get(OpenInfraSchemas.SYSTEM).put(
+                "attributetypegroup",
+                AttributeTypeGroupPojo.class);
+        pojoClasses.get(OpenInfraSchemas.SYSTEM).put(
+                "attributetypegrouptoattributetype",
+                AttributeTypeGroupToAttributeTypePojo.class);
+        pojoClasses.get(OpenInfraSchemas.SYSTEM).put(
+                "attributetypegrouptotopiccharacteristic",
+                AttributeTypeGroupToTopicCharacteristicPojo.class);
+        pojoClasses.get(OpenInfraSchemas.SYSTEM).put(
+                "attributetype",
+                AttributeTypePojo.class);
+        pojoClasses.get(OpenInfraSchemas.SYSTEM).put(
+                "attributetypetoattributetypegroup",
+                AttributeTypeToAttributeTypeGroupPojo.class);
+        pojoClasses.get(OpenInfraSchemas.SYSTEM).put(
+                "attributevaluedomain",
+                AttributeValueDomainPojo.class);
+        pojoClasses.get(OpenInfraSchemas.SYSTEM).put(
+                "attributevaluegeomz",
+                AttributeValueGeomzPojo.class);
+        pojoClasses.get(OpenInfraSchemas.SYSTEM).put(
+                "attributevaluevalue",
+                AttributeValueValuePojo.class);
+        pojoClasses.get(OpenInfraSchemas.SYSTEM).put(
+                "charactercode",
+                CharacterCodePojo.class);
+        pojoClasses.get(OpenInfraSchemas.SYSTEM).put(
+                "countrycode",
+                CountryCodePojo.class);
+        pojoClasses.get(OpenInfraSchemas.SYSTEM).put(
+                "languagecode",
+                LanguageCodePojo.class);
+        pojoClasses.get(OpenInfraSchemas.SYSTEM).put(
+                "metadata",
+                MetaDataPojo.class);
+        pojoClasses.get(OpenInfraSchemas.SYSTEM).put(
+                "multiplicity",
+                MultiplicityPojo.class);
+        pojoClasses.get(OpenInfraSchemas.SYSTEM).put(
+                "ptfreetext",
+                PtFreeTextPojo.class);
+        pojoClasses.get(OpenInfraSchemas.SYSTEM).put(
+                "ptlocale",
+                PtLocalePojo.class);
+        pojoClasses.get(OpenInfraSchemas.SYSTEM).put(
+                "relationshiptype",
+                RelationshipTypePojo.class);
+        pojoClasses.get(OpenInfraSchemas.SYSTEM).put(
+                "relationshiptypetotopiccharacteristic",
+                RelationshipTypeToTopicCharacteristicPojo.class);
+        pojoClasses.get(OpenInfraSchemas.SYSTEM).put(
+                "topiccharacteristic",
+                TopicCharacteristicPojo.class);
+        pojoClasses.get(OpenInfraSchemas.SYSTEM).put(
+                "topiccharacteristictoattributetypegroup",
+                TopicCharacteristicToAttributeTypeGroupPojo.class);
+        pojoClasses.get(OpenInfraSchemas.SYSTEM).put(
+                "topiccharacteristictorelationshiptype",
+                TopicCharacteristicToRelationshipTypePojo.class);
+        pojoClasses.get(OpenInfraSchemas.SYSTEM).put(
+                "valuelistassociation",
+                ValueListAssociationPojo.class);
+        pojoClasses.get(OpenInfraSchemas.SYSTEM).put(
+                "valuelist",
+                ValueListPojo.class);
+        pojoClasses.get(OpenInfraSchemas.SYSTEM).put(
+                "valuelistvalueassociation",
+                ValueListValueAssociationPojo.class);
+        pojoClasses.get(OpenInfraSchemas.SYSTEM).put(
+                "valuelistvalue",
+                ValueListValuePojo.class);
+        
+        // add projects pojos
+        pojoClasses.put(
+                OpenInfraSchemas.PROJECTS,
+                new HashMap<String, Class<? extends OpenInfraPojo>>());
+        pojoClasses.get(OpenInfraSchemas.PROJECTS).putAll(
+                pojoClasses.get(OpenInfraSchemas.SYSTEM));
+        pojoClasses.get(OpenInfraSchemas.PROJECTS).put(
+                "attributevalue",
+                AttributeValuePojo.class);
+        pojoClasses.get(OpenInfraSchemas.PROJECTS).put(
+                "attributevaluegeom",
+                AttributeValueGeomPojo.class);
+        pojoClasses.get(OpenInfraSchemas.PROJECTS).put(
+                "project",
+                ProjectPojo.class);
+        pojoClasses.get(OpenInfraSchemas.PROJECTS).put(
+                "topicinstance",
+                TopicInstancePojo.class);
+        pojoClasses.get(OpenInfraSchemas.PROJECTS).put(
+                "topicinstanceassociation",
+                TopicInstanceAssociationPojo.class);
     }
 
     /**
-     * Creates a primer object for the given pojo class.
+     * Creates a primer object for the given schema and pojo class.
+     * @param schema the schema
+     * @param locale a PtLocale object
      * @param pojoClass the pojo class
-     * @return primer object if pojoClass exists in the pojo hash map otherwise
-     * null
+     * @return primer object if pojoClass and the schema exist in the pojo
+     * hash map otherwise throws OpenInfraWebException
+     * @throws OpenInfraWebException
      */
-    private OpenInfraPojo primePojo(String pojoClass) {
-        OpenInfraPojo pojo = null;
+    private OpenInfraPojo primePojo(
+            OpenInfraSchemas schema,
+            PtLocale locale,
+            String pojoClass) {
         try {
-            pojo = pojoClasses.get(pojoClass).newInstance();
-            pojo.makePrimer();
-        } catch (InstantiationException | IllegalAccessException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            OpenInfraPojo pojo =
+                    pojoClasses.get(schema).get(pojoClass).newInstance();
+            pojo.makePrimer(locale);
+            return pojo;
+        } catch (InstantiationException | IllegalAccessException |
+                NullPointerException e) {
+            throw new OpenInfraWebException(e);
         }
-        return pojo;
     }
     
     /**
-     * Returns all primer class names.
-     * @return a list of all primer class names
+     * Returns all primer class names for the given schema.
+     * @param schema the schema
+     * @return a list of all primer class names if schema exists in the pojo
+     * hash map otherwise throws OpenInfraWebException
+     * @throws OpenInfraWebException
      */
-    private List<String> getPrimerNames() {
-        return new ArrayList<String>(pojoClasses.keySet());
+    private List<String> getPrimerNames(OpenInfraSchemas schema) {
+        try {
+            return new ArrayList<String>(pojoClasses.get(schema).keySet());
+        }
+        catch(NullPointerException e) {
+            throw new OpenInfraWebException(e);
+        }
     }
 }

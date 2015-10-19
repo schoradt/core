@@ -7,6 +7,7 @@ import java.util.Locale;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
+import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 
 @XmlRootElement
@@ -165,7 +166,7 @@ public class SubjectPojo extends OpenInfraPojo {
 	}
 
     @Override
-    protected void makePrimerHelper() {
+    protected void makePrimerHelper(PtLocale locale) {
         createdOn = "";
         defaultLanguage = Locale.ENGLISH.toString();
         description = "";
@@ -179,10 +180,10 @@ public class SubjectPojo extends OpenInfraPojo {
         updatedOn = "";
         roles = new ArrayList<RolePojo>();
         roles.add(new RolePojo());
-        roles.get(0).makePrimer();
+        roles.get(0).makePrimer(locale);
         projects = new ArrayList<SubjectProjectPojo>();
         projects.add(new SubjectProjectPojo());
-        projects.get(0).makePrimer();
+        projects.get(0).makePrimer(locale);
         webApp = "";
     }
 

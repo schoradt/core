@@ -6,6 +6,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
+import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 
 @XmlRootElement
@@ -46,12 +47,12 @@ public class RolePojo extends OpenInfraPojo {
     }
 
     @Override
-    protected void makePrimerHelper() {
+    protected void makePrimerHelper(PtLocale locale) {
         description = "";
         name = "";
         permissions = new ArrayList<PermissionPojo>();
         permissions.add(new PermissionPojo());
-        permissions.get(0).makePrimer();
+        permissions.get(0).makePrimer(locale);
     }
 
 }

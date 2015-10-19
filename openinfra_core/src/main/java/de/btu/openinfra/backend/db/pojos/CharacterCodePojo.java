@@ -3,6 +3,7 @@ package de.btu.openinfra.backend.db.pojos;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
+import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 
 @XmlRootElement
 public class CharacterCodePojo extends OpenInfraPojo {
@@ -27,7 +28,7 @@ public class CharacterCodePojo extends OpenInfraPojo {
     }
 
     @Override
-    protected void makePrimerHelper() {
+    protected void makePrimerHelper(PtLocale locale) {
         characterCode = "";
     }
 
