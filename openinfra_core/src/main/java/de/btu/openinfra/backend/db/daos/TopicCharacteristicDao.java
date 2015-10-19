@@ -138,6 +138,13 @@ public class TopicCharacteristicDao
                 new PtFreeTextDao(currentProjectId, schema);
 
 	    try {
+	        // in case the description value is empty
+            if (pojo.getDescriptions().getLocalizedStrings().get(0)
+                    .getCharacterString() == "") {
+                throw new OpenInfraEntityException(
+                        OpenInfraExceptionTypes.MISSING_DESCRIPTION_IN_POJO);
+            }
+
             // set the description
             tc.setPtFreeText(ptfDao.getPtFreeTextModel(pojo.getDescriptions()));
 	    } catch (NullPointerException npe) {

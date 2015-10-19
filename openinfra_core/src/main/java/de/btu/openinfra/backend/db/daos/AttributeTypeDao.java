@@ -150,6 +150,13 @@ public class AttributeTypeDao
         }
 
         try {
+            // in case the name value is empty
+            if (pojo.getNames().getLocalizedStrings().get(0)
+                    .getCharacterString() == "") {
+                throw new OpenInfraEntityException(
+                        OpenInfraExceptionTypes.MISSING_NAME_IN_POJO);
+            }
+
             // set the name
             at.setPtFreeText2(ptfDao.getPtFreeTextModel(pojo.getNames()));
         } catch (NullPointerException npe) {
