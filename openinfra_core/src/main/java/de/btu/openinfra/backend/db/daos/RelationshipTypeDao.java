@@ -90,14 +90,19 @@ public class RelationshipTypeDao extends
             // set the description
             rt.setValueListValue1(em.find(ValueListValue.class,
                     pojo.getDescription().getUuid()));
+	    } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DESCRIPTION_IN_POJO);
+        }
 
+        try {
             // set the reference_to
             rt.setValueListValue2(em.find(ValueListValue.class,
                     pojo.getRelationshipType().getUuid()));
 
         } catch (NullPointerException npe) {
             throw new OpenInfraEntityException(
-                    OpenInfraExceptionTypes.NULL_VALUE_IN_POJO);
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
         }
         // return the model as mapping result
         return new MappingResult<RelationshipType>(rt.getId(), rt);

@@ -32,7 +32,17 @@ public enum OpenInfraExceptionTypes {
 
     ENTITY_EXPIRED("The entity is expired."),
 
-    NULL_VALUE_IN_POJO("Relevant information in the sent data are missing.");
+    MISSING_NAME_IN_POJO("The name of the object has not been set."),
+
+    MISSING_DESCRIPTION_IN_POJO("The description of the object has not been "
+            + "set."),
+
+    MISSING_GEOM_IN_POJO("The geometry value must not be empty."),
+
+    MISSING_VALUE_IN_POJO("The attribute value must not be empty."),
+
+    MISSING_DATA_IN_POJO("Necessary information of the object has not been "
+            + "set");
 
     private String msg;
 

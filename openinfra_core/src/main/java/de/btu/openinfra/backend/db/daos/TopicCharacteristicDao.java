@@ -134,13 +134,18 @@ public class TopicCharacteristicDao
 			TopicCharacteristicPojo pojo,
 			TopicCharacteristic tc) {
 
-	    try {
-            PtFreeTextDao ptfDao =
-                    new PtFreeTextDao(currentProjectId, schema);
+	    PtFreeTextDao ptfDao =
+                new PtFreeTextDao(currentProjectId, schema);
 
+	    try {
             // set the description
             tc.setPtFreeText(ptfDao.getPtFreeTextModel(pojo.getDescriptions()));
+	    } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DESCRIPTION_IN_POJO);
+        }
 
+        try {
             // set the topic
             tc.setValueListValue(em.find(
                     ValueListValue.class, pojo.getTopic().getUuid()));
@@ -154,7 +159,7 @@ public class TopicCharacteristicDao
             }
 	    } catch (NullPointerException npe) {
             throw new OpenInfraEntityException(
-                    OpenInfraExceptionTypes.NULL_VALUE_IN_POJO);
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
         }
 
         // return the model as mapping result

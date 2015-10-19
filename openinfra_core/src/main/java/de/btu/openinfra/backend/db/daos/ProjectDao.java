@@ -193,43 +193,35 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 	@Override
 	public MappingResult<Project> mapToModel(ProjectPojo pojo, Project p) {
 
-	    // return null if the pojo is null
-	    if (pojo != null) {
+	    PtFreeTextDao ptfDao =
+                new PtFreeTextDao(currentProjectId, schema);
 
-            // avoid empty names
-            if (pojo.getNames() == null ||
-                    pojo.getNames().getLocalizedStrings().get(0)
-                    .getCharacterString().equals("")) {
-                return null;
-            }
-
-        	PtFreeTextDao ptfDao =
-                    new PtFreeTextDao(currentProjectId, schema);
-
-            // set the description (optional)
-            if (pojo.getDescriptions() != null) {
-                p.setPtFreeText1(
-                        ptfDao.getPtFreeTextModel(pojo.getDescriptions()));
-            } else {
-                // reset the description
-                p.setPtFreeText1(null);
-            }
-
-            // set the name
+	    try {
+	        // set the name
             p.setPtFreeText2(ptfDao.getPtFreeTextModel(pojo.getNames()));
+	    } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_NAME_IN_POJO);
+        }
 
-    		// set the sub project (optional)
-    		if(pojo.getSubprojectOf() != null) {
-    			p.setProject(em.find(Project.class, pojo.getSubprojectOf()));
-    		} else {
-    		    // reset the subProject id
-    		    p.setProject(null);
-    		}
+        // set the description (optional)
+        if (pojo.getDescriptions() != null) {
+            p.setPtFreeText1(
+                    ptfDao.getPtFreeTextModel(pojo.getDescriptions()));
+        } else {
+            // reset the description
+            p.setPtFreeText1(null);
+        }
 
-    		return new MappingResult<Project>(p.getId(), p);
-	    } else {
-	        return null;
-	    }
+		// set the sub project (optional)
+		if(pojo.getSubprojectOf() != null) {
+			p.setProject(em.find(Project.class, pojo.getSubprojectOf()));
+		} else {
+		    // reset the subProject id
+		    p.setProject(null);
+		}
+
+		return new MappingResult<Project>(p.getId(), p);
 	}
 
 	/**

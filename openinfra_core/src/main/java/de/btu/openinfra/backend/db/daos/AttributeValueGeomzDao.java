@@ -13,6 +13,8 @@ import de.btu.openinfra.backend.db.jpa.model.AttributeTypeToAttributeTypeGroup;
 import de.btu.openinfra.backend.db.jpa.model.AttributeValueGeomz;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
 import de.btu.openinfra.backend.db.pojos.AttributeValueGeomzPojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 /**
  * This class represents the AttributeValueGeomz and is used to access the
@@ -118,30 +120,28 @@ public class AttributeValueGeomzDao
 			AttributeValueGeomzPojo pojo,
 			AttributeValueGeomz avgz) {
 
-        // in case the attribute type to attribute type group id, the
-        // topic instance id or the geometry is null
-        if (pojo.getAttributeTypeToAttributeTypeGroupId() == null ||
-                pojo.getTopicInstanceId() == null ||
-                pojo.getGeom() == null) {
-            return null;
+        try {
+            // in case the geometry is an empty string
+            if (pojo.getGeom().equals("")) {
+                throw new OpenInfraEntityException(
+                        OpenInfraExceptionTypes.MISSING_GEOM_IN_POJO);
+            }
+
+            // set the textual information
+            avgz.setGeom(pojo.getGeom());
+
+            // set the attribute type to attribute type group
+            avgz.setAttributeTypeToAttributeTypeGroup(em.find(
+                    AttributeTypeToAttributeTypeGroup.class,
+                    pojo.getAttributeTypeToAttributeTypeGroupId()));
+
+            // set the topic instance
+            avgz.setTopicInstance(
+                    em.find(TopicInstance.class, pojo.getTopicInstanceId()));
+        } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
         }
-
-        // in case the geometry is an empty string
-        if (pojo.getGeom().equals("")) {
-            return null;
-        }
-
-        // set the textual information
-        avgz.setGeom(pojo.getGeom());
-
-        // set the attribute type to attribute type group
-        avgz.setAttributeTypeToAttributeTypeGroup(em.find(
-                AttributeTypeToAttributeTypeGroup.class,
-                pojo.getAttributeTypeToAttributeTypeGroupId()));
-
-        // set the topic instance
-        avgz.setTopicInstance(
-                em.find(TopicInstance.class, pojo.getTopicInstanceId()));
 
         return new MappingResult<AttributeValueGeomz>(avgz.getId(), avgz);
 	}
