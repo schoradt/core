@@ -1,6 +1,7 @@
 package de.btu.openinfra.backend.db.daos.file;
 
 import java.util.Locale;
+import java.util.UUID;
 
 import de.btu.openinfra.backend.OpenInfraTime;
 import de.btu.openinfra.backend.db.MappingResult;
@@ -11,8 +12,12 @@ import de.btu.openinfra.backend.db.pojos.file.FilePojo;
 
 public class FileDao extends OpenInfraDao<FilePojo, File> {
 
-	protected FileDao() {
+	public FileDao() {
 		super(null, OpenInfraSchemas.FILE, File.class);
+	}
+
+	public FileDao(UUID currentProject, OpenInfraSchemas schema) {
+		super(currentProject, schema, File.class);
 	}
 
 	@Override
@@ -29,12 +34,10 @@ public class FileDao extends OpenInfraDao<FilePojo, File> {
 	public MappingResult<File> mapToModel(
 			FilePojo pojoObject, File modelObject) {
 		modelObject.setMimeType(pojoObject.getMimeType());
-		modelObject.setOriginFileName(modelObject.getOriginFileName());
+		modelObject.setOriginFileName(pojoObject.getOriginFileName());
 		modelObject.setSubject(pojoObject.getSubject());
 		modelObject.setUploadedOn(OpenInfraTime.now());
-		return null;
+		return new MappingResult<File>(modelObject.getId(), modelObject);
 	}
-	
-	
 
 }

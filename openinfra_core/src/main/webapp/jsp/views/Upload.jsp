@@ -12,8 +12,8 @@
 	
 	<h2>File upload:</h2>
 	
-	<form action="./files/upload" method="post" enctype="multipart/form-data">
-		<p>Select a file : <input type="file" name="files" multiple="multiple"/></p>
+	<form action="./upload" method="post" enctype="multipart/form-data">
+		<p>Select one or more files : <input type="file" name="files" multiple="multiple"/></p>
 		<input type="submit" value="Upload It" />
 	</form>
 	

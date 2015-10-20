@@ -8,7 +8,7 @@ import de.btu.openinfra.backend.db.rbac.OpenInfraRbac;
 
 public class FileRbac extends OpenInfraRbac<FilePojo, File, FileDao> {
 
-	protected FileRbac() {
+	public FileRbac() {
 		super(null, OpenInfraSchemas.FILE, FileDao.class);
 	}
 
