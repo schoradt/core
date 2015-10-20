@@ -316,10 +316,11 @@ public abstract class OpenInfraValueDao<
                         .getResultList();
                 }
             }
-        } catch (NullPointerException npe) {
-            // Accessing the column object will lead to an NullPointerException
-            // if no orderBy parameter was passed. So we can call the standard
-            // read method.
+        } catch (NullPointerException | IllegalArgumentException e) {
+            // Accessing the column object will lead to a NullPointerException
+            // if no orderBy parameter was passed. If no NamedQuery exists in
+            // the model class an IllegalArgumentException is thrown. In both
+            // cases we can call the standard read method.
             return read(locale, valueId, offset, size);
         }
 
