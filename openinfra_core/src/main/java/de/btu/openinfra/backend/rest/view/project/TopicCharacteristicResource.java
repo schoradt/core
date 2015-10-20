@@ -15,11 +15,12 @@ import javax.ws.rs.core.UriInfo;
 
 import org.glassfish.jersey.server.mvc.Template;
 
+import de.btu.openinfra.backend.db.OpenInfraOrderBy;
 import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.pojos.TopicInstancePojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
-@Path(OpenInfraResponseBuilder.REST_URI_PROJECTS + 
+@Path(OpenInfraResponseBuilder.REST_URI_PROJECTS +
 		"/topiccharacteristics/{topicCharacteristicId}/topicinstances")
 @Produces(MediaType.TEXT_HTML +
 		OpenInfraResponseBuilder.UTF8_CHARSET +
@@ -36,7 +37,7 @@ public class TopicCharacteristicResource {
 			@PathParam("topicCharacteristicId") UUID topicCharacteristicId,
 			@QueryParam("filter") String filter,
 			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
-			@QueryParam("orderBy") String orderBy,
+			@QueryParam("orderBy") OpenInfraOrderBy orderBy,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new de.btu.openinfra.backend.rest.project.
