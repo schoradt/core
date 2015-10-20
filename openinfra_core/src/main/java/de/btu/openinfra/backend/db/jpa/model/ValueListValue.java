@@ -46,7 +46,7 @@ import javax.persistence.Table;
                     + "ON (vlv.id = sq.id) "
                     + "WHERE vlv.belongs_to_value_list = ? "
                     + "ORDER BY free_text ",
-            resultClass=ValueList.class)
+            resultClass=ValueListValue.class)
 })
 public class ValueListValue extends OpenInfraModelObject
     implements Serializable {
