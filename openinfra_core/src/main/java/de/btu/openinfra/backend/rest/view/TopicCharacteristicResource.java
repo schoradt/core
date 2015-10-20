@@ -15,7 +15,7 @@ import javax.ws.rs.core.UriInfo;
 
 import org.glassfish.jersey.server.mvc.Template;
 
-import de.btu.openinfra.backend.db.OpenInfraOrderByEnum;
+import de.btu.openinfra.backend.db.OpenInfraOrderBy;
 import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupToTopicCharacteristicPojo;
 import de.btu.openinfra.backend.db.pojos.TopicCharacteristicPojo;
@@ -37,11 +37,11 @@ public class TopicCharacteristicResource {
 			@PathParam("schema") String schema,
 			@QueryParam("filter") String filter,
 			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
-			@QueryParam("orderBy") OpenInfraOrderByEnum orderBy,
+			@QueryParam("orderBy") OpenInfraOrderBy orderBy,
 			@PathParam("offset") int offset,
 			@PathParam("size") int size) {
 		return new de.btu.openinfra.backend.rest.TopicCharacteristicResource()
-			.get(uriInfo, request, language, projectId, schema, 
+			.get(uriInfo, request, language, projectId, schema,
 					filter, sortOrder, orderBy, offset, size);
 	}
 
@@ -56,7 +56,7 @@ public class TopicCharacteristicResource {
 			@PathParam("schema") String schema,
 			@PathParam("topicCharacteristicId") UUID topicCharacteristicId) {
 		return new de.btu.openinfra.backend.rest.TopicCharacteristicResource()
-			.get(uriInfo, request, language, 
+			.get(uriInfo, request, language,
 					projectId, schema, topicCharacteristicId);
 	}
 

@@ -18,7 +18,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import de.btu.openinfra.backend.db.OpenInfraOrderByEnum;
+import de.btu.openinfra.backend.db.OpenInfraOrderBy;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
@@ -42,13 +42,13 @@ public class MetaDataResource {
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema,
 			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
-			@QueryParam("orderBy") OpenInfraOrderByEnum orderBy,
+			@QueryParam("orderBy") OpenInfraOrderBy orderBy,
             @QueryParam("offset") int offset,
             @QueryParam("size") int size) {
         return new MetaDataRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-                		OpenInfraHttpMethod.valueOf(request.getMethod()), 
+                		OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
                         PtLocaleDao.forLanguageTag(language),
 						sortOrder,
@@ -68,7 +68,7 @@ public class MetaDataResource {
                         projectId,
                         OpenInfraSchemas.valueOf(schema.toUpperCase()))
                     .newMetaData(
-                    		OpenInfraHttpMethod.valueOf(request.getMethod()), 
+                    		OpenInfraHttpMethod.valueOf(request.getMethod()),
     						uriInfo);
     }
 
@@ -82,7 +82,7 @@ public class MetaDataResource {
         UUID id = new MetaDataRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
-                		OpenInfraHttpMethod.valueOf(request.getMethod()), 
+                		OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						null,
                         pojo);
@@ -120,7 +120,7 @@ public class MetaDataResource {
                 new MetaDataRbac(
                         projectId,
                         OpenInfraSchemas.valueOf(schema.toUpperCase())).delete(
-                        		OpenInfraHttpMethod.valueOf(request.getMethod()), 
+                        		OpenInfraHttpMethod.valueOf(request.getMethod()),
         						uriInfo,
                                 metadataId),
                 metadataId);
@@ -137,7 +137,7 @@ public class MetaDataResource {
 		return new MetaDataRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
-                		OpenInfraHttpMethod.valueOf(request.getMethod()), 
+                		OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo);
 	}
 
@@ -153,7 +153,7 @@ public class MetaDataResource {
         return new MetaDataRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-                		OpenInfraHttpMethod.valueOf(request.getMethod()), 
+                		OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
                         PtLocaleDao.forLanguageTag(language),
                         metaDataId);

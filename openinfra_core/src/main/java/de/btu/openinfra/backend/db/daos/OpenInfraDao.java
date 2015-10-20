@@ -16,7 +16,7 @@ import org.json.simple.JSONObject;
 import de.btu.openinfra.backend.OpenInfraProperties;
 import de.btu.openinfra.backend.db.EntityManagerFactoryCache;
 import de.btu.openinfra.backend.db.MappingResult;
-import de.btu.openinfra.backend.db.OpenInfraOrderByEnum;
+import de.btu.openinfra.backend.db.OpenInfraOrderBy;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.jpa.model.MetaData;
@@ -165,7 +165,7 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
     public List<TypePojo> read(
     		Locale locale,
     		OpenInfraSortOrder order,
-    		OpenInfraOrderByEnum column,
+    		OpenInfraOrderBy column,
     		int offset,
     		int size) {
 		// 1. Define a list which holds the POJO objects
@@ -191,7 +191,7 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	        String sqlString = em.createNamedQuery(
 	        		modelClass.getSimpleName() + ".findAllByLocaleAndOrder")
 	        		.unwrap(JpaQuery.class).getDatabaseQuery().getSQLString();
-	        sqlString = String.format(sqlString, column.name());
+	        sqlString = String.format(sqlString, column.getColumn().name());
 	        sqlString += " " + order.name();
 	        // 5.b Retrieve the requested model objects from database
 	        models = em.createNativeQuery(

@@ -63,8 +63,8 @@ public abstract class OpenInfraValueRbac<
 					constructorTypesValue).newInstance(
 							currentProjectId,
 							schema).read(locale, valueId, offset, size);
-		} catch (InstantiationException   | IllegalAccessException | 
-				 IllegalArgumentException | InvocationTargetException | 
+		} catch (InstantiationException   | IllegalAccessException |
+				 IllegalArgumentException | InvocationTargetException |
 				 NoSuchMethodException    | SecurityException ex) {
 			throw new OpenInfraWebException(ex);
 		}
@@ -96,8 +96,8 @@ public abstract class OpenInfraValueRbac<
                             firstAssociationId,
                             firstAssociationIdFromPojo,
                             json);
-		} catch (InstantiationException   | IllegalAccessException | 
-				 IllegalArgumentException | InvocationTargetException | 
+		} catch (InstantiationException   | IllegalAccessException |
+				 IllegalArgumentException | InvocationTargetException |
 				 NoSuchMethodException    | SecurityException ex) {
 			throw new OpenInfraWebException(ex);
 		}
@@ -124,8 +124,8 @@ public abstract class OpenInfraValueRbac<
 									column,
 									offset,
 									size);
-		} catch (InstantiationException   | IllegalAccessException | 
-				 IllegalArgumentException | InvocationTargetException | 
+		} catch (InstantiationException   | IllegalAccessException |
+				 IllegalArgumentException | InvocationTargetException |
 				 NoSuchMethodException    | SecurityException ex) {
 			throw new OpenInfraWebException(ex);
 		}
@@ -140,8 +140,8 @@ public abstract class OpenInfraValueRbac<
 					constructorTypesValue).newInstance(
 							currentProjectId,
 							schema).getCount(valueId);
-		} catch (InstantiationException   | IllegalAccessException | 
-				 IllegalArgumentException | InvocationTargetException | 
+		} catch (InstantiationException   | IllegalAccessException |
+				 IllegalArgumentException | InvocationTargetException |
 				 NoSuchMethodException    | SecurityException ex) {
 			throw new OpenInfraWebException(ex);
 		}
