@@ -70,14 +70,14 @@ public class TopicCharacteristicDao
 		// 3. Map the model objects to POJOs
 		Map<UUID, TopicCharacteristicPojo> tcp =
 				new HashMap<UUID, TopicCharacteristicPojo>();
-		MetaDataDao mdDao = new MetaDataDao(currentProjectId, schema);
+//		MetaDataDao mdDao = new MetaDataDao(currentProjectId, schema);
 		for(TopicCharacteristic tc : tcs) {
 		    UUID id = tc.getId();
 		    if (!tcp.containsKey(id)) {
 		        tcp.put(id, TopicCharacteristicDao.mapToPojoStatically(
 	                    locale,
-	                    tc,
-	                    mdDao));
+	                    tc));//,
+//	                    mdDao));
 		    }
 
 		} // end for
@@ -88,8 +88,8 @@ public class TopicCharacteristicDao
 	public TopicCharacteristicPojo mapToPojo(
 			Locale locale,
 			TopicCharacteristic tc) {
-		return mapToPojoStatically(locale, tc,
-		        new MetaDataDao(currentProjectId, schema));
+		return mapToPojoStatically(locale, tc);//,
+//		        new MetaDataDao(currentProjectId, schema));
 	}
 
 	/**
@@ -102,11 +102,13 @@ public class TopicCharacteristicDao
 	 */
 	public static TopicCharacteristicPojo mapToPojoStatically(
 			Locale locale,
-			TopicCharacteristic tc,
-			MetaDataDao mdDao) {
+			TopicCharacteristic tc) {//,
+//			MetaDataDao mdDao) {
 		if (tc != null) {
 		    TopicCharacteristicPojo pojo =
-		            new TopicCharacteristicPojo(tc, mdDao);
+		            new TopicCharacteristicPojo(tc);//, mdDao);
+
+		    pojo.setMetaData(MetaDataDao.mapPojoStatically(tc.getMetaData()));
 
             // set the project if exists
             try {
@@ -154,6 +156,8 @@ public class TopicCharacteristicDao
             // reset the project
             tc.setProject(null);
         }
+
+        tc.setMetaData(MetaDataDao.mapToModelStatically(pojo.getMetaData(), null));
 
         // return the model as mapping result
         return new MappingResult<TopicCharacteristic>(tc.getId(), tc);

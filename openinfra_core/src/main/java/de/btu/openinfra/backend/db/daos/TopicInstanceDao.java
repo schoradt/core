@@ -55,15 +55,17 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
             // set the topic characteristic POJO
             pojo.setTopicCharacteristic(TopicCharacteristicDao
                     .mapToPojoStatically(
-                            locale, ti.getTopicCharacteristic(), null));
+                            locale, ti.getTopicCharacteristic()));//, null));
 
             String metaData = null;
             // check if meta data exists for this topic instance
             if (pojo.getTopicCharacteristic().getMetaData() != null) {
                 if (pojo.getTopicCharacteristic().getMetaData()
-                        .containsKey(OpenInfraMetaDataEnum.LIST_VIEW_COLUMNS)) {
+                        //.containsKey(OpenInfraMetaDataEnum.LIST_VIEW_COLUMNS)) {
+                        .getData().containsKey(OpenInfraMetaDataEnum.LIST_VIEW_COLUMNS)) {
                     metaData = pojo.getTopicCharacteristic().getMetaData()
-                                   .get(OpenInfraMetaDataEnum.LIST_VIEW_COLUMNS)
+//                                   .get(OpenInfraMetaDataEnum.LIST_VIEW_COLUMNS)
+                                    .getData().get(OpenInfraMetaDataEnum.LIST_VIEW_COLUMNS)
                                    .toString();
                 }
             }
@@ -147,15 +149,17 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
             // set the topic characteristic POJO
             pojo.setTopicCharacteristic(TopicCharacteristicDao
                     .mapToPojoStatically(
-                            locale, ti.getTopicCharacteristic(), null));
+                            locale, ti.getTopicCharacteristic()));//, null));
 
             String metaData = null;
             // check if meta data exists for this topic instance
             if (pojo.getTopicCharacteristic().getMetaData() != null) {
                 if (pojo.getTopicCharacteristic().getMetaData()
-                        .containsKey(OpenInfraMetaDataEnum.LIST_VIEW_COLUMNS)) {
+//                        .containsKey(OpenInfraMetaDataEnum.LIST_VIEW_COLUMNS)) {
+                        .getData().containsKey(OpenInfraMetaDataEnum.LIST_VIEW_COLUMNS)) {
                     metaData = pojo.getTopicCharacteristic().getMetaData()
-                                   .get(OpenInfraMetaDataEnum.LIST_VIEW_COLUMNS)
+//                                   .get(OpenInfraMetaDataEnum.LIST_VIEW_COLUMNS)
+                                    .getData().get(OpenInfraMetaDataEnum.LIST_VIEW_COLUMNS)
                                    .toString();
                 }
             }

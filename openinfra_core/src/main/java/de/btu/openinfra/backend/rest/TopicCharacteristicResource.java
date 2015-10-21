@@ -251,7 +251,8 @@ public class TopicCharacteristicResource {
 						uriInfo,
                         pojo,
                         null,
-                        pojo.getMetaData());
+//                        pojo.getMetaData());
+                        pojo.getMetaData().getData());
         return OpenInfraResponseBuilder.postResponse(id);
     }
 
@@ -273,7 +274,8 @@ public class TopicCharacteristicResource {
         						uriInfo,
         						pojo,
                                 topicCharacteristicId,
-                                pojo.getMetaData()));
+//                                pojo.getMetaData()));
+                                pojo.getMetaData().getData()));
     }
 
     @DELETE

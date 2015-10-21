@@ -81,8 +81,9 @@ public class TopicCharacteristicToRelationshipTypeDao
 			pojo.setTopicCharacteristic(
 				TopicCharacteristicDao.mapToPojoStatically(
 					locale,
-					rtttc.getTopicCharacteristic(),
-					mdDao));
+					rtttc.getTopicCharacteristic()//,
+//					mdDao));
+					));
 
 			return pojo;
 		}

@@ -8,6 +8,7 @@ import javax.persistence.NoResultException;
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.MetaData;
+import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObjectMetaData;
 import de.btu.openinfra.backend.db.pojos.MetaDataPojo;
 
 /**
@@ -64,7 +65,8 @@ public class MetaDataDao extends OpenInfraDao<MetaDataPojo, MetaData> {
     public static MetaDataPojo mapPojoStatically(MetaData md) {
         if(md != null) {
             MetaDataPojo pojo = new MetaDataPojo(md);
-            pojo.setObjectId(md.getObjectId());
+//            pojo.setObjectId(md.getObjectId());
+            pojo.setObjectId(md.getObject().getId());
             pojo.setTableName(md.getTableName());
             pojo.setPkColumn(md.getPkColumn());
             pojo.setData(md.getData());
@@ -102,7 +104,10 @@ public class MetaDataDao extends OpenInfraDao<MetaDataPojo, MetaData> {
                 resultM.setId(pojo.getUuid());
             }
             // set the object id
-            resultM.setObjectId(pojo.getObjectId());
+//            resultM.setObjectId(pojo.getObjectId());
+            resultM.setObject(new OpenInfraModelObjectMetaData());
+            resultM.getObject().setId(pojo.getObjectId());
+            resultM.getObject().setMetaData(resultM);
             // set the data
             resultM.setData(pojo.getData());
             // set the primary key column

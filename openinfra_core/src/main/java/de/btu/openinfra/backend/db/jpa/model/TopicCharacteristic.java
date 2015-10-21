@@ -59,7 +59,7 @@ import javax.persistence.Table;
 						+ "order by free_text ",
 				resultClass=ValueList.class)
 })
-public class TopicCharacteristic extends OpenInfraModelObject
+public class TopicCharacteristic extends OpenInfraModelObjectMetaData//OpenInfraModelObject
     implements Serializable {
 	private static final long serialVersionUID = 1L;
 

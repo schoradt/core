@@ -1,13 +1,14 @@
 package de.btu.openinfra.backend.db.jpa.model;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.json.simple.JSONObject;
@@ -27,19 +28,25 @@ import de.btu.openinfra.backend.db.PostgresJsonConverter;
 	@NamedQuery(
 	        name="MetaData.findByObjectId",
 	        query="SELECT m FROM MetaData m WHERE "
-	                + "m.objectId = :oId"),
+//	                + "m.objectId = :oId"),
+	                + "m.object = :oId"),
 	@NamedQuery(
 	        name="MetaData.findByTableColumn",
 	        query="SELECT m FROM MetaData m WHERE "
-	                + "m.objectId = :oId AND "
+//	                + "m.objectId = :oId AND "
+	                + "m.object = :oId AND "
 	                + "m.pkColumn = :column AND "
 	                + "m.tableName = :table")
 })
 public class MetaData extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Column(name="object_id")
-	private UUID objectId;
+//	@Column(name="object_id")
+//	private UUID objectId;
+
+	@OneToOne
+    @JoinColumn(name="object_id")
+	private OpenInfraModelObjectMetaData object;
 
 	@Convert(converter = PostgresJsonConverter.class)
 	private JSONObject data;
@@ -53,15 +60,23 @@ public class MetaData extends OpenInfraModelObject implements Serializable {
 	public MetaData() {
 	}
 
-	public UUID getObjectId() {
-		return this.objectId;
-	}
+	public OpenInfraModelObjectMetaData getObject() {
+        return object;
+    }
 
-	public void setObjectId(UUID objectId) {
-		this.objectId = objectId;
-	}
+    public void setObject(OpenInfraModelObjectMetaData object) {
+        this.object = object;
+    }
 
-	public JSONObject getData() {
+//	public UUID getObjectId() {
+//		return this.objectId;
+//	}
+//
+//	public void setObjectId(UUID objectId) {
+//		this.objectId = objectId;
+//	}
+
+    public JSONObject getData() {
 		return this.data;
 	}
 

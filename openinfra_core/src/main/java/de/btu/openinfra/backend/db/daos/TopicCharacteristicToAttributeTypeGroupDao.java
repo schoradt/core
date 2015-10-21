@@ -68,7 +68,7 @@ public class TopicCharacteristicToAttributeTypeGroupDao extends
             pojo.setTopicCharacteristic(
                     TopicCharacteristicDao.mapToPojoStatically(
                             locale,
-                            atgttc.getTopicCharacteristic(), mdDao));
+                            atgttc.getTopicCharacteristic()));//, mdDao));
             pojo.setAttributTypeGroupId(
                     atgttc.getAttributeTypeGroup().getId());
             pojo.setMultiplicity(MultiplicityDao.mapToPojoStatically(
