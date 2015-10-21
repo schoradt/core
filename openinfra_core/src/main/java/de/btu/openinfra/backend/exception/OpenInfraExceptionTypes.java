@@ -42,7 +42,10 @@ public enum OpenInfraExceptionTypes {
     MISSING_VALUE_IN_POJO("The attribute value must not be empty."),
 
     MISSING_DATA_IN_POJO("Necessary information of the object has not been "
-            + "set");
+            + "set"),
+
+    WRONG_SORT_TYPE("The requested sort type is not supported for this "
+            + "object.");
 
     private String msg;
 

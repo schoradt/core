@@ -15,6 +15,8 @@ import javax.ws.rs.core.UriInfo;
 
 import org.glassfish.jersey.server.mvc.Template;
 
+import de.btu.openinfra.backend.db.OpenInfraOrderBy;
+import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.pojos.MultiplicityPojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
@@ -38,10 +40,13 @@ public class MultiplicityResource {
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
+			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
+            @QueryParam("orderBy") OpenInfraOrderBy orderBy,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new de.btu.openinfra.backend.rest.MultiplicityResource()
-			.get(uriInfo, request, language, projectId, schema, offset, size);
+			.get(uriInfo, request, language, projectId, schema, sortOrder,
+			        orderBy, offset, size);
 	}
 
 }

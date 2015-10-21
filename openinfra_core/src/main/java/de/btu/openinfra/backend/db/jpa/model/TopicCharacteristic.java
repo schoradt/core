@@ -53,7 +53,7 @@ import javax.persistence.Table;
 						+ "select * "
 						+ "from topic_characteristic as a, "
 							+ "localized_character_string as b "
-						+ "where a.description = b.pt_free_text_id "
+						+ "where a.%s = b.pt_free_text_id "
 						+ "and b.pt_locale_id = cast(? as uuid) ) as sq "
 						+ "on (tc.id = sq.id) "
 						+ "order by free_text ",

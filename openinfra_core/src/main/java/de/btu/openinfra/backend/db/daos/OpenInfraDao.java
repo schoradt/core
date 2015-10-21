@@ -17,6 +17,7 @@ import de.btu.openinfra.backend.OpenInfraProperties;
 import de.btu.openinfra.backend.db.EntityManagerFactoryCache;
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraOrderBy;
+import de.btu.openinfra.backend.db.OpenInfraOrderByEnum;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.jpa.model.MetaData;
@@ -186,14 +187,40 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
             // 5.a When the column is null redirect to another method
             return read(locale, offset, size);
         } else {
-	        // 5.a Construct the origin SQL-based named query and replace the
-			//     the placeholder by the required column and sort order.
+            // flag to determine if the orderBy type is supported
+            boolean wrongSortType = true;
+
+            // get the list of classes that fit to the orderBy column
+            List<String> orderByClasses =
+                    OpenInfraOrderByEnum.valueOf(
+                            column.getColumn().name()).getList();
+
+            // iterate over all class names
+            for (String cl : orderByClasses) {
+                // check if the current modelClass fits to a class from the
+                // orderBy column
+                if (modelClass.getSimpleName().equals(cl)) {
+                    wrongSortType = false;
+                    break;
+                }
+            }
+
+            // throw an exception if a wrong sort type was detected
+            if (wrongSortType) {
+                throw new OpenInfraEntityException(
+                        OpenInfraExceptionTypes.WRONG_SORT_TYPE);
+            }
+
+            // 5.a Construct the origin SQL-based named query and replace the
+            //     the placeholder by the required column and sort order.
 	        String sqlString = em.createNamedQuery(
 	        		modelClass.getSimpleName() + ".findAllByLocaleAndOrder")
 	        		.unwrap(JpaQuery.class).getDatabaseQuery().getSQLString();
 	        sqlString = String.format(sqlString, column.getColumn().name());
 	        sqlString += " " + order.name();
-	        // 5.b Retrieve the requested model objects from database
+
+	        // 5.b Retrieve the requested model objects from database for
+	        //     standard classes (with name & description).
 	        models = em.createNativeQuery(
 	        		sqlString,
 	                modelClass)
