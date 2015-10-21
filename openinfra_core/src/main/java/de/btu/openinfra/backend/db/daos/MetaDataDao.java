@@ -9,6 +9,8 @@ import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.MetaData;
 import de.btu.openinfra.backend.db.pojos.MetaDataPojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 /**
  * This class represents the MetaData and is used to access the underlying layer
@@ -85,15 +87,16 @@ public class MetaDataDao extends OpenInfraDao<MetaDataPojo, MetaData> {
      * This method implements the method mapToModel in a static way.
      * @param pojo the POJO object
      * @param md   the pre initialized model object
-     * @return     return a corresponding JPA model object or null if the pojo
-     *             object is null
+     * @return     return a corresponding JPA model object
+     * @throws     OpenInfraEntityException
      */
     public static MetaData mapToModelStatically(
             MetaDataPojo pojo,
             MetaData md) {
         // create the return object
         MetaData resultM = null;
-        if (pojo != null) {
+
+        try {
             // set the passed model object to the return object
             resultM = md;
             // create a new model object if the passed model object is null
@@ -109,6 +112,9 @@ public class MetaDataDao extends OpenInfraDao<MetaDataPojo, MetaData> {
             resultM.setPkColumn(pojo.getPkColumn());
             // set the table name
             resultM.setTableName(pojo.getTableName());
+        } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
         }
         return resultM;
     }

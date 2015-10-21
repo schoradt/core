@@ -248,6 +248,8 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 
         // check if we come from a PUT request (special case handling for
         // projects, because the can perform a POST with a passed value id)
+        // TODO this will avoid the TRID check for updating projects /
+        //      subprojects
         if (valueId != null && !modelClass.getSimpleName().equals("Project")) {
             // check if a TRID was sent by the client
             if (pojo.getTrid() == 0) {
@@ -385,8 +387,8 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	 *
 	 * @param modelObject the pre initialized model object
 	 * @param pojoObject  the POJO object
-	 * @return            a corresponding JPA model object or null if the pojo
-	 *                    object is null
+	 * @return            a corresponding JPA model object
+	 * @throws            OpenInfraEntityException
 	 */
 	public abstract MappingResult<TypeModel> mapToModel(
 			TypePojo pojoObject, TypeModel modelObject);

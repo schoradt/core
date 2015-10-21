@@ -14,6 +14,8 @@ import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
 import de.btu.openinfra.backend.db.jpa.model.ValueListValue;
 import de.btu.openinfra.backend.db.pojos.TopicCharacteristicPojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 /**
  * This class represents the TopicCharacteristic and is used to access the
@@ -131,28 +133,40 @@ public class TopicCharacteristicDao
 	public MappingResult<TopicCharacteristic> mapToModel(
 			TopicCharacteristicPojo pojo,
 			TopicCharacteristic tc) {
-	    // avoid empty names
-        if (pojo.getDescriptions().getLocalizedStrings().get(0)
-                .getCharacterString().equals("")) {
-            return null;
-        }
 
-        PtFreeTextDao ptfDao =
+	    PtFreeTextDao ptfDao =
                 new PtFreeTextDao(currentProjectId, schema);
 
-        // set the description
-        tc.setPtFreeText(ptfDao.getPtFreeTextModel(pojo.getDescriptions()));
+	    try {
+	        // in case the description value is empty
+            if (pojo.getDescriptions().getLocalizedStrings().get(0)
+                    .getCharacterString() == "") {
+                throw new OpenInfraEntityException(
+                        OpenInfraExceptionTypes.MISSING_DESCRIPTION_IN_POJO);
+            }
 
-        // set the topic
-        tc.setValueListValue(em.find(
-                ValueListValue.class, pojo.getTopic().getUuid()));
+            // set the description
+            tc.setPtFreeText(ptfDao.getPtFreeTextModel(pojo.getDescriptions()));
+	    } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DESCRIPTION_IN_POJO);
+        }
 
-        // set the project (can be null for system database)
-        if (pojo.getProjectId() != null) {
-            tc.setProject(em.find(Project.class, pojo.getProjectId()));
-        } else {
-            // reset the project
-            tc.setProject(null);
+        try {
+            // set the topic
+            tc.setValueListValue(em.find(
+                    ValueListValue.class, pojo.getTopic().getUuid()));
+
+            // set the project (can be null for system database)
+            if (pojo.getProjectId() != null) {
+                tc.setProject(em.find(Project.class, pojo.getProjectId()));
+            } else {
+                // reset the project
+                tc.setProject(null);
+            }
+	    } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
         }
 
         // return the model as mapping result

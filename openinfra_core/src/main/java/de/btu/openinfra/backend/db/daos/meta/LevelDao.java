@@ -7,6 +7,8 @@ import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
 import de.btu.openinfra.backend.db.jpa.model.meta.Level;
 import de.btu.openinfra.backend.db.pojos.meta.LevelPojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 /**
  * This class represents the log level and is used to access the underlying
@@ -64,18 +66,21 @@ public class LevelDao
      * This method implements the method mapToModel in a static way.
      * @param pojo the POJO object
      * @param level the pre initialized model object
-     * @return return a corresponding JPA model object or null if the pojo
-     * object is null
+     * @return return a corresponding JPA model object
+     * @throws OpenInfraEntityException
      */
     public static Level mapToModelStatically(LevelPojo pojo, Level level) {
         Level resultLevel = null;
-        if(pojo != null) {
+        try {
             resultLevel = level;
             if(resultLevel == null) {
                 resultLevel = new Level();
                 resultLevel.setId(pojo.getUuid());
             }
             resultLevel.setLevel(pojo.getLevel());
+        } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
         }
         return resultLevel;
     }

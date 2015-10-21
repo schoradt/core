@@ -4,37 +4,45 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import de.btu.openinfra.backend.db.daos.MetaDataDao;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
+import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 
 @XmlRootElement
 public class ValueListAssociationPojo extends OpenInfraMetaDataPojo {
 
-	private ValueListPojo associatedValueList;
-	private ValueListValuePojo relationship;
+    private ValueListPojo associatedValueList;
+    private ValueListValuePojo relationship;
 
-	/* Default constructor */
-    public ValueListAssociationPojo() {}
+    /* Default constructor */
+    public ValueListAssociationPojo() {
+    }
 
     /* Constructor that will set the id, trid and meta data automatically */
-    public ValueListAssociationPojo(
-            OpenInfraModelObject modelObject, MetaDataDao mdDao) {
+    public ValueListAssociationPojo(OpenInfraModelObject modelObject, MetaDataDao mdDao) {
         super(modelObject, mdDao);
     }
 
-	public ValueListPojo getAssociatedValueList() {
-		return associatedValueList;
-	}
+    public ValueListPojo getAssociatedValueList() {
+        return associatedValueList;
+    }
 
-	public void setAssociatedValueList(ValueListPojo associatedValueList) {
-		this.associatedValueList = associatedValueList;
-	}
+    public void setAssociatedValueList(ValueListPojo associatedValueList) {
+        this.associatedValueList = associatedValueList;
+    }
 
-	public ValueListValuePojo getRelationship() {
-		return relationship;
-	}
+    public ValueListValuePojo getRelationship() {
+        return relationship;
+    }
 
-	public void setRelationship(ValueListValuePojo relationship) {
-		this.relationship = relationship;
-	}
+    public void setRelationship(ValueListValuePojo relationship) {
+        this.relationship = relationship;
+    }
 
+    @Override
+    protected void makePrimerHelper(PtLocale locale) {
+        associatedValueList = new ValueListPojo();
+        associatedValueList.makePrimer(locale);
+        relationship = new ValueListValuePojo();
+        relationship.makePrimer(locale);
+    }
 
 }

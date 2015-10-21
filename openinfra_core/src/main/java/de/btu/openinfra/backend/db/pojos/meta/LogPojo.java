@@ -5,6 +5,7 @@ import java.util.UUID;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
+import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 
 @XmlRootElement
@@ -18,7 +19,8 @@ public class LogPojo extends OpenInfraPojo {
     private String message;
 
     /* Default constructor */
-    public LogPojo() {}
+    public LogPojo() {
+    }
 
     /* Constructor that will set the id, trid and meta data automatically */
     public LogPojo(OpenInfraModelObject modelObject) {
@@ -71,6 +73,18 @@ public class LogPojo extends OpenInfraPojo {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    @Override
+    protected void makePrimerHelper(PtLocale locale) {
+        userId = null;
+        userName = "";
+        createdOn = "";
+        logger = new LoggerPojo();
+        logger.makePrimer(locale);
+        level = new LevelPojo();
+        level.makePrimer(locale);
+        message = "";
     }
 
 }

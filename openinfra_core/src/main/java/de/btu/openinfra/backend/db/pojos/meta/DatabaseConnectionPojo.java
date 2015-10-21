@@ -3,6 +3,7 @@ package de.btu.openinfra.backend.db.pojos.meta;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
+import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 
 @XmlRootElement
@@ -15,7 +16,8 @@ public class DatabaseConnectionPojo extends OpenInfraPojo {
     private CredentialsPojo credentials;
 
     /* Default constructor */
-    public DatabaseConnectionPojo() {}
+    public DatabaseConnectionPojo() {
+    }
 
     /* Constructor that will set the id, trid and meta data automatically */
     public DatabaseConnectionPojo(OpenInfraModelObject modelObject) {
@@ -60,6 +62,20 @@ public class DatabaseConnectionPojo extends OpenInfraPojo {
 
     public void setCredentials(CredentialsPojo credentials) {
         this.credentials = credentials;
+    }
+
+    @Override
+    protected void makePrimerHelper(PtLocale locale) {
+        server = new ServersPojo();
+        server.makePrimer(locale);
+        port = new PortsPojo();
+        port.makePrimer(locale);
+        database = new DatabasesPojo();
+        database.makePrimer(locale);
+        schema = new SchemasPojo();
+        schema.makePrimer(locale);
+        credentials = new CredentialsPojo();
+        credentials.makePrimer(locale);
     }
 
 }

@@ -20,18 +20,26 @@ public class OpenInfraResponseBuilder {
 	 * as regular expression. The slash and the project UUID are optional and
 	 * are not used for the system schema.
 	 */
-	public static final String REST_URI_DEFAULT = 
+	public static final String REST_URI_DEFAULT =
 			"/v1/{schema:(projects|system)}"
 			+ "{optional:(/?)}"
 			+ "{projectId:([0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12})?}";
-	
+
 	public static final String REST_URI_METADATA = "/v1/metadata";
 	public static final String REST_URI_PROJECTS = "/v1/{schema:(projects)}/"
 			+ "{projectId:([0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12})}";
 	public static final String REST_URI_RBAC = "/v1/rbac";
 	public static final String REST_URI_SYSTEM = "/v1/system";
 	public static final String REST_URI_SEARCH = "/v1/search";
-	
+
+	/**
+	 * This variable defines the REST URI for primer requests. It contains the
+	 * schema definition (system, rbac or metadata). The schema projects is
+	 * not supported. For the schema projects use REST_URI_PROJECTS instead.
+	 */
+	public static final String REST_URI_PRIMER =
+            "/v1/{schema:(system|rbac|metadata|files)}";
+
 
 	/**
 	 * This variable defines the character set utf8 which is returned by the
@@ -61,7 +69,7 @@ public class OpenInfraResponseBuilder {
 	 * browsers which don't provide its own priority setting.
 	 */
 	public static final String PDF_PRIORITY = ";qs=.4";
-	
+
 	/**
 	 * This method builds a response for post requests.
 	 *

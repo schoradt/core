@@ -1,16 +1,19 @@
 package de.btu.openinfra.backend.db.pojos.rbac;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
+import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 
 @XmlRootElement
 public class SubjectPojo extends OpenInfraPojo {
 
-	private String createdOn;
+    private String createdOn;
 
 	private String defaultLanguage;
 
@@ -161,5 +164,27 @@ public class SubjectPojo extends OpenInfraPojo {
 	public void setWebApp(String webApp) {
 		this.webApp = webApp;
 	}
+
+    @Override
+    protected void makePrimerHelper(PtLocale locale) {
+        createdOn = "";
+        defaultLanguage = Locale.ENGLISH.toString();
+        description = "";
+        lastLoginOn = "";
+        login = "";
+        mail = "";
+        name = "";
+        password = "";
+        passwordCreatedOn = "";
+        status = Integer.valueOf(-1);
+        updatedOn = "";
+        roles = new ArrayList<RolePojo>();
+        roles.add(new RolePojo());
+        roles.get(0).makePrimer(locale);
+        projects = new ArrayList<SubjectProjectPojo>();
+        projects.add(new SubjectProjectPojo());
+        projects.get(0).makePrimer(locale);
+        webApp = "";
+    }
 
 }

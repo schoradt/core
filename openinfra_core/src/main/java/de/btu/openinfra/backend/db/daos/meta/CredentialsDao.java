@@ -7,6 +7,8 @@ import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
 import de.btu.openinfra.backend.db.jpa.model.meta.Credentials;
 import de.btu.openinfra.backend.db.pojos.meta.CredentialsPojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 /**
  * This class represents the Credentials and is used to access the underlying
@@ -67,14 +69,14 @@ public class CredentialsDao
      * This method implements the method mapToModel in a static way.
      * @param pojo the POJO object
      * @param cd the pre initialized model object
-     * @return return a corresponding JPA model object or null if the pojo
-     * object is null
+     * @return return a corresponding JPA model object
+     * @throws OpenInfraEntityException
      */
     public static Credentials mapToModelStatically(
             CredentialsPojo pojo,
             Credentials cd) {
         Credentials resultCredentials = null;
-        if(pojo != null) {
+        try {
             resultCredentials = cd;
             if(resultCredentials == null) {
                 resultCredentials = new Credentials();
@@ -82,6 +84,9 @@ public class CredentialsDao
             }
             resultCredentials.setPassword(pojo.getPassword());
             resultCredentials.setUsername(pojo.getUsername());
+        } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
         }
         return resultCredentials;
     }

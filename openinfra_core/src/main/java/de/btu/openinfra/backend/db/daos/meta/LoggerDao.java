@@ -7,6 +7,8 @@ import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
 import de.btu.openinfra.backend.db.jpa.model.meta.Logger;
 import de.btu.openinfra.backend.db.pojos.meta.LoggerPojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 /**
  * This class represents the Logger and is used to access the underlying layer
@@ -64,18 +66,21 @@ public class LoggerDao
      * This method implements the method mapToModel in a static way.
      * @param pojo the POJO object
      * @param logger the pre initialized model object
-     * @return return a corresponding JPA model object or null if the pojo
-     * object is null
+     * @return return a corresponding JPA model object
+     * @throws OpenInfraEntityException
      */
     public static Logger mapToModelStatically(LoggerPojo pojo, Logger logger) {
         Logger resultLogger = null;
-        if(pojo != null) {
+        try {
             resultLogger = logger;
             if(resultLogger == null) {
                 resultLogger = new Logger();
                 resultLogger.setId(pojo.getUuid());
             }
             resultLogger.setLogger(pojo.getLogger());
+        } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
         }
         return resultLogger;
     }
