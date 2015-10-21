@@ -2,6 +2,7 @@ package de.btu.openinfra.backend.db.pojos.rbac;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.jpa.model.rbac.OpenInfraObject;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 
@@ -32,5 +33,11 @@ public class OpenInfraObjectPojo extends OpenInfraPojo {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+    @Override
+    protected void makePrimerHelper(PtLocale locale) {
+        description = "";
+        name = "";
+    }
 	
 }

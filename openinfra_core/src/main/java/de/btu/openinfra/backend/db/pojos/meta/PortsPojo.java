@@ -3,6 +3,7 @@ package de.btu.openinfra.backend.db.pojos.meta;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
+import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 
 @XmlRootElement
@@ -11,7 +12,8 @@ public class PortsPojo extends OpenInfraPojo {
     private Integer port;
 
     /* Default constructor */
-    public PortsPojo() {}
+    public PortsPojo() {
+    }
 
     /* Constructor that will set the id, trid and meta data automatically */
     public PortsPojo(OpenInfraModelObject modelObject) {
@@ -24,6 +26,11 @@ public class PortsPojo extends OpenInfraPojo {
 
     public void setPort(Integer port) {
         this.port = port;
+    }
+
+    @Override
+    protected void makePrimerHelper(PtLocale locale) {
+        port = Integer.valueOf(-1);
     }
 
 }
