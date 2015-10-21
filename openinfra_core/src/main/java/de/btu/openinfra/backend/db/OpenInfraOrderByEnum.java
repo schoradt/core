@@ -8,6 +8,8 @@ import de.btu.openinfra.backend.db.jpa.model.AttributeType;
 import de.btu.openinfra.backend.db.jpa.model.AttributeTypeGroup;
 import de.btu.openinfra.backend.db.jpa.model.Multiplicity;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
+import de.btu.openinfra.backend.db.jpa.model.ValueList;
+import de.btu.openinfra.backend.db.jpa.model.ValueListValue;
 
 /**
  * This enumeration defines table columns which should be ordered. In addition a
@@ -24,14 +26,18 @@ public enum OpenInfraOrderByEnum {
 	 */
 	NAME(Collections.unmodifiableList(Arrays.asList(
 	        AttributeType.class.getSimpleName(),
-	        AttributeTypeGroup.class.getSimpleName()))),
+	        AttributeTypeGroup.class.getSimpleName(),
+	        ValueList.class.getSimpleName(),
+	        ValueListValue.class.getSimpleName()))),
 	/**
 	 * Defines the description column.
 	 */
 	DESCRIPTION(Collections.unmodifiableList(Arrays.asList(
 	        AttributeType.class.getSimpleName(),
 	        AttributeTypeGroup.class.getSimpleName(),
-	        TopicCharacteristic.class.getSimpleName()))),
+	        TopicCharacteristic.class.getSimpleName(),
+	        ValueList.class.getSimpleName(),
+	        ValueListValue.class.getSimpleName()))),
     /**
      * Defines the column for minimum multiplicity values
      */
