@@ -47,20 +47,20 @@ public class OpenInfraApplication extends ResourceConfig {
 			// Try to create the OpenInfRA file path when it doesn't exists.
 			File dir = new File(OpenInfraProperties.FILE_PATH);
 			if(!dir.exists()) {
-				dir.createNewFile();
+				dir.mkdir();
 			}
-			
+
 			// Try to write in the given directory.
 			File f = new File(OpenInfraProperties.FILE_PATH + "test.txt");
 			f.createNewFile();
 			f.delete();
-			
+
 			// Try to create the project data path.
-			File pdata = new File(OpenInfraProperties.FILE_PATH + 
+			File pdata = new File(OpenInfraProperties.FILE_PATH +
 					OpenInfraPropertyValues.PROJECTDATA_PATH.getValue());
 			if(!pdata.exists()) {
 				pdata.mkdir();
-			}			
+			}
 		} catch(Exception ex) {
 			System.err.print("Couldn't write on file System! \n");
 			ex.printStackTrace();
