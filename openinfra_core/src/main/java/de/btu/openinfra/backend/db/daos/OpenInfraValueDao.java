@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
+import javax.persistence.PersistenceException;
+
 import org.eclipse.persistence.jpa.JpaQuery;
 import org.json.simple.JSONObject;
 
@@ -18,6 +20,7 @@ import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 import de.btu.openinfra.backend.exception.OpenInfraEntityException;
 import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
+import de.btu.openinfra.backend.exception.OpenInfraWebException;
 
 /**
  * This class extends the OpenInfraDao class in order to provide another
@@ -181,6 +184,10 @@ public abstract class OpenInfraValueDao<
 
         try {
             if (!column.isUuid()) {
+                // check if the orderBy column is supported for the current
+                // object
+                checkOrderBy(column);
+
                 // Construct the origin SQL-based named query and replace the
                 // placeholder by the required column and sort order.
                 String sqlString = em.createNamedQuery(
@@ -190,15 +197,21 @@ public abstract class OpenInfraValueDao<
                 sqlString = String.format(sqlString, column.getColumn().name());
                 sqlString += " " + order.name();
 
-                // Retrieve the requested model objects from database
-                models = em.createNativeQuery(
-                        sqlString,
-                        modelClass)
-                        .setParameter(1, localeId)
-                        .setParameter(2, valueId)
-                        .setFirstResult(offset)
-                        .setMaxResults(size)
-                        .getResultList();
+                try {
+                    // Retrieve the requested model objects from database
+                    models = em.createNativeQuery(
+                            sqlString,
+                            modelClass)
+                            .setParameter(1, localeId)
+                            .setParameter(2, valueId)
+                            .setFirstResult(offset)
+                            .setMaxResults(size)
+                            .getResultList();
+                } catch (PersistenceException e) {
+                    // can be thrown if the orderByEnum is incorrectly
+                    // configured
+                    throw new OpenInfraWebException(e);
+                }
 
             } else if (modelClass == TopicInstance.class) {
                 // Flag to determine if the query has to run again with a

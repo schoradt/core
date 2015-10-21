@@ -190,29 +190,8 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
             // 5.a When the column is null redirect to another method
             return read(locale, offset, size);
         } else {
-            // flag to determine if the orderBy type is supported
-            boolean wrongSortType = true;
-
-            // get the list of classes that fit to the orderBy column
-            List<String> orderByClasses =
-                    OpenInfraOrderByEnum.valueOf(
-                            column.getColumn().name()).getList();
-
-            // iterate over all class names
-            for (String cl : orderByClasses) {
-                // check if the current modelClass fits to a class from the
-                // orderBy column
-                if (modelClass.getSimpleName().equals(cl)) {
-                    wrongSortType = false;
-                    break;
-                }
-            }
-
-            // throw an exception if a wrong sort type was detected
-            if (wrongSortType) {
-                throw new OpenInfraEntityException(
-                        OpenInfraExceptionTypes.WRONG_SORT_TYPE);
-            }
+            // check if the orderBy column is supported for the current object
+            checkOrderBy(column);
 
             // 5.a Construct the origin SQL-based named query and replace the
             //     the placeholder by the required column and sort order.
@@ -246,7 +225,7 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 		return pojos;
 	}
 
-	/**
+    /**
 	 * A special method which returns model objects. This method is primarily
 	 * used to create a search index.
 	 *
@@ -543,5 +522,42 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 		} // end if
 		super.finalize();
 	}
+
+	/**
+     * This method retrieves the list of objects from the OpenInfraOrderByEnum
+     * for the passed orderBy column and compares it with the current object. If
+     * the current object is not part of the retrieved list, an
+     * OpenInfraEntityException is thrown.
+     *
+     * @param column
+     * @throws OpenInfraEntityException if the current object is not supported
+     *         by the OpenInfraOrderByEnum for the passed column
+     */
+    protected void checkOrderBy(OpenInfraOrderBy column) {
+        // flag to determine if the orderBy type is supported
+        boolean wrongSortType = true;
+
+        // get the list of classes that fit to the orderBy column
+        List<String> orderByClasses =
+                OpenInfraOrderByEnum.valueOf(
+                        column.getColumn().name()).getList();
+
+        // iterate over all class names
+        for (String cl : orderByClasses) {
+            // check if the current modelClass fits to a class from the
+            // orderBy column
+            if (modelClass.getSimpleName().equals(cl)) {
+                wrongSortType = false;
+                break;
+            }
+        }
+
+        // throw an exception if a wrong sort type was detected
+        if (wrongSortType) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.WRONG_SORT_TYPE);
+        }
+
+    }
 
 }
