@@ -30,7 +30,7 @@ public abstract class OpenInfraModelObject {
     // TODO updates the attribute 'xmin' of the model object after an update
     // operation of the model object (remove if it is not necessary)
     @ReturnUpdate
-    @Convert(converter = de.btu.openinfra.backend.db.PostgresIntegerConverter.class)
+    @Convert(converter = de.btu.openinfra.backend.db.converter.PostgresIntegerConverter.class)
     @Column(insertable = false)
     private Integer xmin;
 
