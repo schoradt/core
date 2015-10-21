@@ -8,6 +8,7 @@ import java.util.UUID;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
+import javax.persistence.PersistenceException;
 import javax.persistence.Table;
 
 import org.eclipse.persistence.jpa.JpaQuery;
@@ -161,6 +162,8 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	 * @param offset     the number where to start
 	 * @param size       the size of items to provide
 	 * @return           a list of objects of type POJO class
+	 * @throws           OpenInfraEntityException for unsupported orderBy types
+	 * @throws           OpenInfraWebException for internal server errors
 	 */
 	@SuppressWarnings("unchecked")
     public List<TypePojo> read(
@@ -221,13 +224,19 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 
 	        // 5.b Retrieve the requested model objects from database for
 	        //     standard classes (with name & description).
-	        models = em.createNativeQuery(
-	        		sqlString,
-	                modelClass)
-	                .setParameter(1, ptl.getId().toString())
-	                .setFirstResult(offset)
-	                .setMaxResults(size)
-	                .getResultList();
+	        try {
+	            models = em.createNativeQuery(
+	                    sqlString,
+	                    modelClass)
+	                    .setParameter(1, ptl.getId().toString())
+	                    .setFirstResult(offset)
+	                    .setMaxResults(size)
+	                    .getResultList();
+            } catch (PersistenceException e) {
+                // can be thrown if the orderByEnum is incorrectly configured
+                throw new OpenInfraWebException(e);
+            }
+
 		} // end if else
 
 		// 6. Finally, map the JPA model objects to POJO objects
