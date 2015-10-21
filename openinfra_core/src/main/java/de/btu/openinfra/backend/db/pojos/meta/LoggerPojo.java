@@ -3,6 +3,7 @@ package de.btu.openinfra.backend.db.pojos.meta;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
+import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 
 @XmlRootElement
@@ -11,7 +12,8 @@ public class LoggerPojo extends OpenInfraPojo {
     private String logger;
 
     /* Default constructor */
-    public LoggerPojo() {}
+    public LoggerPojo() {
+    }
 
     /* Constructor that will set the id, trid and meta data automatically */
     public LoggerPojo(OpenInfraModelObject modelObject) {
@@ -24,6 +26,11 @@ public class LoggerPojo extends OpenInfraPojo {
 
     public void setLogger(String logger) {
         this.logger = logger;
+    }
+
+    @Override
+    protected void makePrimerHelper(PtLocale locale) {
+        logger = "";
     }
 
 }

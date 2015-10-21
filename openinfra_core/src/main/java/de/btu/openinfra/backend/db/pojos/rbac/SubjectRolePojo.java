@@ -5,6 +5,7 @@ import java.util.UUID;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
+import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 
 @XmlRootElement
@@ -19,20 +20,26 @@ public class SubjectRolePojo extends OpenInfraPojo {
 		super(modelObject);
 	}
 
-	public UUID getRole() {
-		return role;
-	}
+    public UUID getRole() {
+        return role;
+    }
 
-	public void setRole(UUID role) {
-		this.role = role;
-	}
+    public void setRole(UUID role) {
+        this.role = role;
+    }
 
-	public UUID getSubject() {
-		return subject;
-	}
+    public UUID getSubject() {
+        return subject;
+    }
 
-	public void setSubject(UUID subject) {
-		this.subject = subject;
-	}
+    public void setSubject(UUID subject) {
+        this.subject = subject;
+    }
+
+    @Override
+    protected void makePrimerHelper(PtLocale locale) {
+        role = null;
+        subject = null;
+    }
 
 }

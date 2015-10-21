@@ -9,6 +9,8 @@ import de.btu.openinfra.backend.db.jpa.model.RelationshipType;
 import de.btu.openinfra.backend.db.jpa.model.RelationshipTypeToTopicCharacteristic;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
 import de.btu.openinfra.backend.db.pojos.TopicCharacteristicToRelationshipTypePojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 /**
  * This class represents the TopicCharacteristicToRelationshipType and is used
@@ -71,7 +73,7 @@ public class TopicCharacteristicToRelationshipTypeDao
 			RelationshipTypeToTopicCharacteristic rtttc,
 			MetaDataDao mdDao) {
 
-		if(rtttc != null) {
+		try {
 			TopicCharacteristicToRelationshipTypePojo pojo =
 					new TopicCharacteristicToRelationshipTypePojo(rtttc, mdDao);
 
@@ -85,10 +87,10 @@ public class TopicCharacteristicToRelationshipTypeDao
 					mdDao));
 
 			return pojo;
-		}
-		else {
-			return null;
-		}
+		} catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
+        }
 	}
 
 }

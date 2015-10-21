@@ -9,6 +9,8 @@ import de.btu.openinfra.backend.db.jpa.model.AttributeTypeToAttributeTypeGroup;
 import de.btu.openinfra.backend.db.jpa.model.AttributeValueValue;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
 import de.btu.openinfra.backend.db.pojos.AttributeValueValuePojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 /**
  * This class represents the AttributeType and is used to access the underlying
@@ -78,31 +80,32 @@ public class AttributeValueValueDao
 			AttributeValueValuePojo pojo,
 			AttributeValueValue avv) {
 
-        // in case the attribute type to attribute type group id, the
-        // topic instance id or the value is null
-        if (pojo.getAttributeTypeToAttributeTypeGroupId() == null ||
-                pojo.getValue() == null) {
-            return null;
+        try {
+
+            // in case the value is an empty string
+            if (pojo.getValue().getLocalizedStrings().get(0)
+                    .getCharacterString().equals("")) {
+                throw new OpenInfraEntityException(
+                        OpenInfraExceptionTypes.MISSING_VALUE_IN_POJO);
+            }
+
+            // set the textual information
+            PtFreeTextDao ptfDao = new PtFreeTextDao(currentProjectId, schema);
+            avv.setPtFreeText(ptfDao.getPtFreeTextModel(pojo.getValue()));
+
+            // set the attribute type to attribute type group
+            avv.setAttributeTypeToAttributeTypeGroup(em.find(
+                    AttributeTypeToAttributeTypeGroup.class,
+                    pojo.getAttributeTypeToAttributeTypeGroupId()));
+
+            // set the topic instance
+            avv.setTopicInstance(
+                    em.find(TopicInstance.class, pojo.getTopicInstanceId()));
+
+        } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
         }
-
-        // in case the value is an empty string
-        if (pojo.getValue().getLocalizedStrings().get(0)
-                .getCharacterString().equals("")) {
-            return null;
-        }
-
-        // set the textual information
-        PtFreeTextDao ptfDao = new PtFreeTextDao(currentProjectId, schema);
-        avv.setPtFreeText(ptfDao.getPtFreeTextModel(pojo.getValue()));
-
-        // set the attribute type to attribute type group
-        avv.setAttributeTypeToAttributeTypeGroup(em.find(
-                AttributeTypeToAttributeTypeGroup.class,
-                pojo.getAttributeTypeToAttributeTypeGroupId()));
-
-        // set the topic instance
-        avv.setTopicInstance(
-                em.find(TopicInstance.class, pojo.getTopicInstanceId()));
 
         return new MappingResult<AttributeValueValue>(avv.getId(), avv);
 	}

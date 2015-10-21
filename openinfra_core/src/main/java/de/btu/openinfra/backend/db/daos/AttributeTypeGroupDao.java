@@ -11,6 +11,8 @@ import de.btu.openinfra.backend.db.jpa.model.AttributeTypeGroup;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupPojo;
 import de.btu.openinfra.backend.db.pojos.LocalizedString;
 import de.btu.openinfra.backend.db.pojos.PtFreeTextPojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 /**
  * This class represents the AttributeTypeGroup and is used to access the
@@ -120,8 +122,20 @@ public class AttributeTypeGroupDao
                     ptfDao.getPtFreeTextModel(pojo.getDescriptions()));
         }
 
-        // set the name
-        atg.setPtFreeText2(ptfDao.getPtFreeTextModel(pojo.getNames()));
+        try {
+            // in case the name value is empty
+            if (pojo.getNames().getLocalizedStrings().get(0)
+                    .getCharacterString() == "") {
+                throw new OpenInfraEntityException(
+                        OpenInfraExceptionTypes.MISSING_NAME_IN_POJO);
+            }
+
+            // set the name
+            atg.setPtFreeText2(ptfDao.getPtFreeTextModel(pojo.getNames()));
+        } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_NAME_IN_POJO);
+        }
 
         // set the parent attribute type group id (optional)
         if (pojo.getSubgroupOf() != null) {

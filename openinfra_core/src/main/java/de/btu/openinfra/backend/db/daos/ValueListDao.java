@@ -11,6 +11,8 @@ import de.btu.openinfra.backend.db.jpa.model.ValueList;
 import de.btu.openinfra.backend.db.pojos.LocalizedString;
 import de.btu.openinfra.backend.db.pojos.PtFreeTextPojo;
 import de.btu.openinfra.backend.db.pojos.ValueListPojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 /**
  * This class represents the ValueListValue and is used to access the underlying
@@ -71,30 +73,32 @@ public class ValueListDao extends OpenInfraDao<ValueListPojo, ValueList> {
 			ValueListPojo pojo,
 			ValueList vl) {
 
-        // in case the name is empty
-        if (pojo.getNames() == null) {
-            return null;
-        }
-
-        // in case the name value is empty
-        if (pojo.getNames().getLocalizedStrings().get(0)
-                .getCharacterString().equals("")) {
-            return null;
-        }
-
-    	PtFreeTextDao ptfDao =
-    			new PtFreeTextDao(currentProjectId, schema);
+	    PtFreeTextDao ptfDao =
+                new PtFreeTextDao(currentProjectId, schema);
         // set the description (is optional)
         if (pojo.getDescriptions() != null) {
             vl.setPtFreeText1(
-            		ptfDao.getPtFreeTextModel(pojo.getDescriptions()));
+                    ptfDao.getPtFreeTextModel(pojo.getDescriptions()));
         }
 
-        // set the name
-        vl.setPtFreeText2(ptfDao.getPtFreeTextModel(pojo.getNames()));
+	    try {
+            // in case the name value is empty
+            if (pojo.getNames().getLocalizedStrings().get(0)
+                    .getCharacterString().equals("")) {
+                throw new OpenInfraEntityException(
+                        OpenInfraExceptionTypes.MISSING_NAME_IN_POJO);
+            }
+
+            // set the name
+            vl.setPtFreeText2(ptfDao.getPtFreeTextModel(pojo.getNames()));
+	    } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_NAME_IN_POJO);
+        }
 
         // return the model as mapping result
         return new MappingResult<ValueList>(vl.getId(), vl);
+
 	}
 
 	/**

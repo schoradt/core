@@ -218,7 +218,7 @@ public class ProjectResource {
     			OpenInfraSchemas.PROJECTS).createOrUpdate(
     					OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
-						null,
+						projectId,
 						project);
     	return OpenInfraResponseBuilder.putResponse(uuid);
     }
