@@ -66,7 +66,7 @@ public class CountryCodeDao
 			CountryCodePojo pojo,
 			CountryCode cc) {
 
-        // TODO set the model values
+        // no POST or PUT for country code appropriated
 
         // return the model as mapping result
         return new MappingResult<CountryCode>(cc.getId(), cc);

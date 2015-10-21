@@ -13,7 +13,7 @@ import javax.persistence.Table;
 
 import org.json.simple.JSONObject;
 
-import de.btu.openinfra.backend.db.PostgresJsonConverter;
+import de.btu.openinfra.backend.db.converter.PostgresJsonConverter;
 
 
 /**

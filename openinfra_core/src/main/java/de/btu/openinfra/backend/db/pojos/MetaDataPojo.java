@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.json.simple.JSONObject;
 
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
+import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 
 @XmlRootElement
 public class MetaDataPojo extends OpenInfraPojo {
@@ -17,7 +18,8 @@ public class MetaDataPojo extends OpenInfraPojo {
     private JSONObject data;
 
     /* Default constructor */
-    public MetaDataPojo() {}
+    public MetaDataPojo() {
+    }
 
     /* Constructor that will set the id and trid data automatically */
     public MetaDataPojo(OpenInfraModelObject modelObject) {
@@ -54,6 +56,14 @@ public class MetaDataPojo extends OpenInfraPojo {
 
     public void setData(JSONObject data) {
         this.data = data;
+    }
+
+    @Override
+    protected void makePrimerHelper(PtLocale locale) {
+        objectId = null;
+        tableName = "";
+        pkColumn = "";
+        data = new JSONObject();
     }
 
 }

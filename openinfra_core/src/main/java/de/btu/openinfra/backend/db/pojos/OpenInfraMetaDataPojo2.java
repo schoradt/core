@@ -1,6 +1,7 @@
 package de.btu.openinfra.backend.db.pojos;
 
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
+import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 
 public class OpenInfraMetaDataPojo2 extends OpenInfraPojo {
 
@@ -21,6 +22,11 @@ public class OpenInfraMetaDataPojo2 extends OpenInfraPojo {
 
     public void setMetaData(MetaDataPojo metaData) {
         this.metaData = metaData;
+    }
+
+    @Override
+    protected void makePrimerHelper(PtLocale locale) {
+        // TODO Auto-generated method stub
     }
 
 }

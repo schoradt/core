@@ -15,6 +15,7 @@ import de.btu.openinfra.backend.db.jpa.model.PtFreeText;
 import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.pojos.LocalizedString;
 import de.btu.openinfra.backend.db.pojos.PtFreeTextPojo;
+import de.btu.openinfra.backend.exception.OpenInfraWebException;
 
 /**
  * This class represents the PtFreeText and is used to access the underlying
@@ -154,9 +155,7 @@ public class PtFreeTextDao extends OpenInfraDao<PtFreeTextPojo, PtFreeText> {
 			PtFreeTextPojo pojo,
 			PtFreeText ptf) {
 
-        // return null if the pojo or the model object is null
-        if (pojo != null && ptf != null) {
-
+        try {
     		// 1. Define the List of LocalizedCharacterStrings and
     		//    a. take the existing list when the PtFreeText already has one
     		//    b. create a new one when the PtFreeText doesn't have one yet
@@ -214,8 +213,9 @@ public class PtFreeTextDao extends OpenInfraDao<PtFreeTextPojo, PtFreeText> {
 
     		// return the model as mapping result
     		return new MappingResult<PtFreeText>(ptf.getId(), ptf);
-        } else {
-            return null;
+
+        } catch (NullPointerException npe) {
+            throw new OpenInfraWebException(npe);
         }
 	}
 

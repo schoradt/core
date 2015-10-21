@@ -7,6 +7,8 @@ import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
 import de.btu.openinfra.backend.db.jpa.model.meta.Servers;
 import de.btu.openinfra.backend.db.pojos.meta.ServersPojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 /**
  * This class represents the Servers and is used to access the underlying layer
@@ -64,18 +66,21 @@ public class ServersDao
      * This method implements the method mapToModel in a static way.
      * @param pojo the POJO object
      * @param s the pre initialized model object
-     * @return return a corresponding JPA model object or null if the pojo
-     * object is null
+     * @return return a corresponding JPA model object
+     * @throws OpenInfraEntityException
      */
     public static Servers mapToModelStatically(ServersPojo pojo, Servers s) {
         Servers resultServers = null;
-        if(pojo != null) {
+        try {
             resultServers = s;
             if(resultServers == null) {
                 resultServers = new Servers();
                 resultServers.setId(pojo.getUuid());
             }
             resultServers.setServer(pojo.getServer());
+        } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
         }
         return resultServers;
     }

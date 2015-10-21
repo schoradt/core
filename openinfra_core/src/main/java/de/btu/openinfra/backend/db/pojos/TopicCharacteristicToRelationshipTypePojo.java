@@ -6,48 +6,55 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import de.btu.openinfra.backend.db.daos.MetaDataDao;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
+import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 
 @XmlRootElement
-public class TopicCharacteristicToRelationshipTypePojo
-                extends OpenInfraMetaDataPojo {
+public class TopicCharacteristicToRelationshipTypePojo extends OpenInfraMetaDataPojo {
 
-	private UUID relationshipType;
-	private MultiplicityPojo multiplicity;
-	private TopicCharacteristicPojo topicCharacteristic;
+    private UUID relationshipType;
+    private MultiplicityPojo multiplicity;
+    private TopicCharacteristicPojo topicCharacteristic;
 
-	/* Default constructor */
-    public TopicCharacteristicToRelationshipTypePojo() {}
+    /* Default constructor */
+    public TopicCharacteristicToRelationshipTypePojo() {
+    }
 
     /* Constructor that will set the id, trid and meta data automatically */
-    public TopicCharacteristicToRelationshipTypePojo(
-            OpenInfraModelObject modelObject, MetaDataDao mdDao) {
+    public TopicCharacteristicToRelationshipTypePojo(OpenInfraModelObject modelObject, MetaDataDao mdDao) {
         super(modelObject, mdDao);
     }
 
-	public UUID getRelationshipe() {
-		return relationshipType;
-	}
+    public UUID getRelationshipe() {
+        return relationshipType;
+    }
 
-	public void setRelationshipe(UUID relationShipe) {
-		this.relationshipType = relationShipe;
-	}
+    public void setRelationshipe(UUID relationShipe) {
+        this.relationshipType = relationShipe;
+    }
 
-	public MultiplicityPojo getMultiplicity() {
-		return multiplicity;
-	}
+    public MultiplicityPojo getMultiplicity() {
+        return multiplicity;
+    }
 
-	public void setMultiplicity(MultiplicityPojo multiplicity) {
-		this.multiplicity = multiplicity;
-	}
+    public void setMultiplicity(MultiplicityPojo multiplicity) {
+        this.multiplicity = multiplicity;
+    }
 
-	public TopicCharacteristicPojo getTopicCharacteristic() {
-		return topicCharacteristic;
-	}
+    public TopicCharacteristicPojo getTopicCharacteristic() {
+        return topicCharacteristic;
+    }
 
-	public void setTopicCharacteristic(
-			TopicCharacteristicPojo topicCharacteristic) {
-		this.topicCharacteristic = topicCharacteristic;
-	}
+    public void setTopicCharacteristic(TopicCharacteristicPojo topicCharacteristic) {
+        this.topicCharacteristic = topicCharacteristic;
+    }
 
+    @Override
+    protected void makePrimerHelper(PtLocale locale) {
+        relationshipType = null;
+        multiplicity = new MultiplicityPojo();
+        multiplicity.makePrimer(locale);
+        topicCharacteristic = new TopicCharacteristicPojo();
+        topicCharacteristic.makePrimer(locale);
+    }
 
 }

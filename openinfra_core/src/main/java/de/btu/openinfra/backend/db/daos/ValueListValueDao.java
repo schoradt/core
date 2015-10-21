@@ -12,6 +12,8 @@ import de.btu.openinfra.backend.db.jpa.model.ValueListValue;
 import de.btu.openinfra.backend.db.pojos.LocalizedString;
 import de.btu.openinfra.backend.db.pojos.PtFreeTextPojo;
 import de.btu.openinfra.backend.db.pojos.ValueListValuePojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 /**
  * This class represents the ValueListValue and is used to access the underlying
@@ -77,36 +79,39 @@ public class ValueListValueDao
 			ValueListValuePojo pojo,
 			ValueListValue vlv) {
 
-        // in case the name or the belongs to value is empty
-        if (pojo.getNames() == null ||
-                pojo.getBelongsToValueList() == null) {
-            return null;
-        }
-
-        // in case the name value is empty
-        if (pojo.getNames().getLocalizedStrings().get(0)
-                .getCharacterString() == "") {
-            return null;
-        }
-
-        PtFreeTextDao ptfDao = new PtFreeTextDao(currentProjectId, schema);
+	    PtFreeTextDao ptfDao = new PtFreeTextDao(currentProjectId, schema);
         // set the description (is optional)
         if (pojo.getDescriptions() != null) {
             vlv.setPtFreeText1(
                     ptfDao.getPtFreeTextModel(pojo.getDescriptions()));
         }
 
-        // set the name
-        vlv.setPtFreeText2(ptfDao.getPtFreeTextModel(pojo.getNames()));
+	    try {
+            // in case the name value is empty
+            if (pojo.getNames().getLocalizedStrings().get(0)
+                    .getCharacterString() == "") {
+                throw new OpenInfraEntityException(
+                        OpenInfraExceptionTypes.MISSING_NAME_IN_POJO);
+            }
 
-        // set the value list the value belongs to
-        if (pojo.getBelongsToValueList() != null) {
-            vlv.setValueList(
-                    em.find(ValueList.class, pojo.getBelongsToValueList()));
+            // set the name
+            vlv.setPtFreeText2(ptfDao.getPtFreeTextModel(pojo.getNames()));
+	    } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_NAME_IN_POJO);
         }
 
-        // set the visibility of the value
-        vlv.setVisibility(pojo.getVisibility());
+	    try {
+            // set the value list the value belongs to
+            vlv.setValueList(
+                    em.find(ValueList.class, pojo.getBelongsToValueList()));
+
+            // set the visibility of the value
+            vlv.setVisibility(pojo.getVisibility());
+	    } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
+        }
 
         // return the model as mapping result
         return new MappingResult<ValueListValue>(vlv.getId(), vlv);

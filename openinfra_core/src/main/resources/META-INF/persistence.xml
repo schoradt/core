@@ -3,9 +3,9 @@
 	<persistence-unit name="openinfra_core">
 		
 		<!-- Register converter classes -->
-	    <class>de.btu.openinfra.backend.db.PostgresUuidConverter</class>
-	    <class>de.btu.openinfra.backend.db.PostgresJsonConverter</class>
-	    <class>de.btu.openinfra.backend.db.PostgresIntegerConverter</class>
+	    <class>de.btu.openinfra.backend.db.converter.PostgresUuidConverter</class>
+	    <class>de.btu.openinfra.backend.db.converter.PostgresJsonConverter</class>
+	    <class>de.btu.openinfra.backend.db.converter.PostgresIntegerConverter</class>
 	    
 	    <!-- Register entity classes -->
 	    <!-- Project databases -->

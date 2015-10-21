@@ -67,7 +67,7 @@ public class LanguageCodeDao
 			LanguageCodePojo pojo,
 			LanguageCode lc) {
 
-        // TODO set the model values
+        // no POST or PUT for language code appropriated
 
         // return the model as mapping result
         return new MappingResult<LanguageCode>(lc.getId(), lc);

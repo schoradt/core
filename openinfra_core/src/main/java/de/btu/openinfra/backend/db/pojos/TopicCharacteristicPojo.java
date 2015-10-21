@@ -5,6 +5,7 @@ import java.util.UUID;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
+import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 
 @XmlRootElement
 public class TopicCharacteristicPojo extends OpenInfraMetaDataPojo2 {//OpenInfraMetaDataPojo {
@@ -49,5 +50,12 @@ public class TopicCharacteristicPojo extends OpenInfraMetaDataPojo2 {//OpenInfra
 	public void setProjectId(UUID projectId) {
 		this.projectId = projectId;
 	}
-
+	@Override
+    protected void makePrimerHelper(PtLocale locale) {
+        descriptions = new PtFreeTextPojo();
+        descriptions.makePrimer(locale);
+        topic = new ValueListValuePojo();
+        topic.makePrimer(locale);
+        projectId = null;
+    }
 }
