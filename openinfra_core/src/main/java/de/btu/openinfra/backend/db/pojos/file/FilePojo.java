@@ -12,6 +12,12 @@ public class FilePojo extends OpenInfraPojo {
 	private String originFileName;
 	private UUID subject;
 	private String uploadedOn;
+	private String exifData;
+	private String middleDimension;
+	private String originDimension;
+	private String popupDimension;
+	private String thumbnailDimension;
+	private String signature;
 
 	public FilePojo() {}
 
@@ -49,6 +55,54 @@ public class FilePojo extends OpenInfraPojo {
 
 	public void setUploadedOn(String uploadedOn) {
 		this.uploadedOn = uploadedOn;
+	}
+
+	public String getExifData() {
+		return exifData;
+	}
+
+	public void setExifData(String exifData) {
+		this.exifData = exifData;
+	}
+
+	public String getMiddleDimension() {
+		return middleDimension;
+	}
+
+	public void setMiddleDimension(String middleDimension) {
+		this.middleDimension = middleDimension;
+	}
+
+	public String getOriginDimension() {
+		return originDimension;
+	}
+
+	public void setOriginDimension(String originDimension) {
+		this.originDimension = originDimension;
+	}
+
+	public String getPopupDimension() {
+		return popupDimension;
+	}
+
+	public void setPopupDimension(String popupDimension) {
+		this.popupDimension = popupDimension;
+	}
+
+	public String getSignature() {
+		return signature;
+	}
+
+	public void setSignature(String signature) {
+		this.signature = signature;
+	}
+
+	public String getThumbnailDimension() {
+		return thumbnailDimension;
+	}
+
+	public void setThumbnailDimension(String thumbnailDimension) {
+		this.thumbnailDimension = thumbnailDimension;
 	}
 
 	@Override

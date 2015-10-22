@@ -27,6 +27,11 @@ public class FileDao extends OpenInfraDao<FilePojo, File> {
 		pojo.setOriginFileName(modelObject.getOriginFileName());
 		pojo.setSubject(modelObject.getSubject());
 		pojo.setUploadedOn(OpenInfraTime.format(modelObject.getUploadedOn()));
+		pojo.setExifData(modelObject.getExifData());
+		pojo.setMiddleDimension(modelObject.getMiddleDimension());
+		pojo.setOriginDimension(modelObject.getOriginDimension());
+		pojo.setPopupDimension(modelObject.getPopupDimension());
+		pojo.setThumbnailDimension(modelObject.getThumbnailDimension());
 		return pojo;
 	}
 
@@ -37,6 +42,12 @@ public class FileDao extends OpenInfraDao<FilePojo, File> {
 		modelObject.setOriginFileName(pojoObject.getOriginFileName());
 		modelObject.setSubject(pojoObject.getSubject());
 		modelObject.setUploadedOn(OpenInfraTime.now());
+		modelObject.setExifData(pojoObject.getExifData());
+		modelObject.setMiddleDimension(pojoObject.getMiddleDimension());
+		modelObject.setOriginDimension(pojoObject.getOriginDimension());
+		modelObject.setPopupDimension(pojoObject.getPopupDimension());
+		modelObject.setSignature(pojoObject.getSignature());
+		modelObject.setThumbnailDimension(pojoObject.getThumbnailDimension());
 		return new MappingResult<File>(modelObject.getId(), modelObject);
 	}
 

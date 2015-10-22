@@ -2,9 +2,11 @@ package de.btu.openinfra.backend.rest.file;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,20 +20,12 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import net.coobird.thumbnailator.Thumbnails;
-
 import org.apache.commons.io.FilenameUtils;
+import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
-
-import com.drew.imaging.ImageMetadataReader;
-import com.drew.imaging.ImageProcessingException;
-import com.drew.metadata.Directory;
-import com.drew.metadata.Metadata;
-import com.drew.metadata.Tag;
 
 import de.btu.openinfra.backend.OpenInfraPropertyValues;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
@@ -78,47 +72,64 @@ public class FileResource {
 	@POST
 	@Path("/upload")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response uploadFile(
+	public List<FilePojo> uploadFile(
     		@Context UriInfo uriInfo,
     		@Context HttpServletRequest request,
 			FormDataMultiPart multiPart) {
 
+		// Get the current user id and create a list to hold uploaded files
 		UUID subject = new SubjectResource().self().getUuid();
+		List<FilePojo> files = new LinkedList<FilePojo>();
 
 		List<FormDataBodyPart> fields = multiPart.getFields("files");
 	    for(FormDataBodyPart field : fields) {
-	    	InputStream fileStream = field.getEntityAs(InputStream.class);
 	    	FilePojo pojo = new FilePojo();
-	    	String fileName =
+	    	// Store the file and rename it
+	    	String originFileName =
 	    			field.getFormDataContentDisposition().getFileName();
-	    	pojo.setOriginFileName(fileName);
+	    	InputStream fileStream = field.getEntityAs(InputStream.class);
+	    	String fileName = saveFile(fileStream, originFileName);
+	    	// Take the first image to generate the signature
+	    	String signature = "";
+    		try {
+    			signature = new Sha256Hash(
+    					Files.readAllBytes(Paths.get(fileName))).toString();
+    		} catch(Exception ex) {
+    			throw new OpenInfraWebException(ex);
+    		}
+
+//	    	for(File f : savedFiles) {
+//	    		f.renameTo(new File(
+//	    				f.getParentFile().getAbsolutePath() + signature));
+//	    	}
+
+	    	pojo.setSignature(signature);
+	    	pojo.setOriginFileName(originFileName);
 	    	pojo.setMimeType(field.getMediaType().toString());
 	    	pojo.setSubject(subject);
-	    	UUID result = new FileRbac().createOrUpdate(
+	    	FileRbac rbac = new FileRbac();
+	    	UUID result = rbac.createOrUpdate(
 	    			OpenInfraHttpMethod.valueOf(request.getMethod()),
 	    			uriInfo, null, pojo);
-	    	if(result != null) {
-	    		saveFile(fileStream, field.getMediaType().toString(),
-	    				result, fileName);
-	    	}
+	    	files.add(rbac.read(
+	    			OpenInfraHttpMethod.valueOf(request.getMethod()),
+	    			uriInfo, null, result));
+
 	    }
-	    // TODO gesamte liste der infos zurückgeben
-	    return Response.ok().entity("uploaded").build();
+
+	    // Delete the signatures
+	    for(FilePojo fp : files) {
+	    	fp.setSignature(null);
+	    }
+	    return files;
 	}
 
-	private void saveFile(InputStream fileStream,
-			String mimeType, UUID file, String fileName) {
-		String filePath = "";
-		String newFileName =
-				"/" + file + "." + FilenameUtils.getExtension(fileName);
-		if(mimeType.startsWith("image")) {
-			filePath = OpenInfraPropertyValues.IMAGE_PATH.getValue();
-		} else {
-			filePath = OpenInfraPropertyValues.FILE_PATH.getValue();
-		}
+	private String saveFile(InputStream fileStream, String fileName) {
+		String filePath = OpenInfraPropertyValues.UPLOAD_PATH.getValue() +
+				UUID.randomUUID() + "." + FilenameUtils.getExtension(fileName);
 		try {
-			OutputStream os = new FileOutputStream(
-					new File(filePath + newFileName));
+			File oFile = new File(filePath);
+			OutputStream os = new FileOutputStream(oFile);
 			int read = 0;
 			byte[] buffer = new byte[1024];
 			while((read = fileStream.read(buffer)) != -1) {
@@ -130,34 +141,7 @@ public class FileResource {
 			throw new OpenInfraWebException(ex);
 		}
 
-		// Create thumbnails
-		// Thumbnail 60x60 fix
-		// Middle    400x400 scaled (dimension in table)
-		// Popup     800x800 scaled (dimension in table)
-		if(mimeType.startsWith("image")) {
-			// small & middle
-			try {
-
-				Metadata md = ImageMetadataReader.readMetadata(
-						new File(filePath + newFileName));
-				System.out.println("--> " + md.getDirectoryCount());
-
-				for (Directory directory : md.getDirectories()) {
-				    for (Tag tag : directory.getTags()) {
-				        System.out.println(tag);
-				    }
-				}
-
-				Thumbnails.of(filePath + newFileName).size(125, 125).toFile(
-						OpenInfraPropertyValues.IMAGE_SMALL_PATH.getValue() +
-						newFileName);
-				Thumbnails.of(filePath + newFileName).size(400, 400).toFile(
-						OpenInfraPropertyValues.IMAGE_MIDDLE_PATH.getValue() +
-						newFileName);
-			} catch (IOException | ImageProcessingException ex) {
-				throw new OpenInfraWebException(ex);
-			}
-		}
+		return filePath;
 	}
 
 }

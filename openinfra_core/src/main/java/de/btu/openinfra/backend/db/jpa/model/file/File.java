@@ -14,13 +14,30 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 
 /**
  * The persistent class for the files database table.
- * 
+ *
  */
 @Entity
 @Table(name="files")
 @NamedQuery(name="File.findAll", query="SELECT f FROM File f")
 public class File extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;
+
+	@Column(name="exif_data")
+	private String exifData;
+
+	@Column(name="middle_dimension")
+	private String middleDimension;
+
+	@Column(name="origin_dimension")
+	private String originDimension;
+
+	@Column(name="popup_dimension")
+	private String popupDimension;
+
+	@Column(name="thumbnail_dimension")
+	private String thumbnailDimension;
+
+	private String signature;
 
 	@Column(name="mime_type")
 	private String mimeType;
@@ -66,6 +83,54 @@ public class File extends OpenInfraModelObject implements Serializable {
 
 	public void setUploadedOn(Timestamp uploadedOn) {
 		this.uploadedOn = uploadedOn;
+	}
+
+	public String getExifData() {
+		return this.exifData;
+	}
+
+	public void setExifData(String exifData) {
+		this.exifData = exifData;
+	}
+
+	public String getMiddleDimension() {
+		return this.middleDimension;
+	}
+
+	public void setMiddleDimension(String middleDimension) {
+		this.middleDimension = middleDimension;
+	}
+
+	public String getOriginDimension() {
+		return this.originDimension;
+	}
+
+	public void setOriginDimension(String originDimension) {
+		this.originDimension = originDimension;
+	}
+
+	public String getPopupDimension() {
+		return this.popupDimension;
+	}
+
+	public void setPopupDimension(String popupDimension) {
+		this.popupDimension = popupDimension;
+	}
+
+	public String getSignature() {
+		return this.signature;
+	}
+
+	public void setSignature(String signature) {
+		this.signature = signature;
+	}
+
+	public String getThumbnailDimension() {
+		return thumbnailDimension;
+	}
+
+	public void setThumbnailDimension(String thumbnailDimension) {
+		this.thumbnailDimension = thumbnailDimension;
 	}
 
 }

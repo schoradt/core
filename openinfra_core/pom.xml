@@ -220,11 +220,11 @@
 		    <version>${shiro.version}</version>
 		</dependency>
 		
-		<!-- Create thumbnails -->
+		<!-- Image processing -->
 		<dependency>
-		    <groupId>net.coobird</groupId>
-		    <artifactId>thumbnailator</artifactId>
-		    <version>0.4.8</version>
+		    <groupId>org.im4java</groupId>
+		    <artifactId>im4java</artifactId>
+		    <version>1.4.0</version>
 		</dependency>
 		
 		<!-- Read exif data -->
