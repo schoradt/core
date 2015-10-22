@@ -28,6 +28,7 @@ import de.btu.openinfra.backend.db.jpa.model.meta.SettingKeys;
 import de.btu.openinfra.backend.db.jpa.model.meta.Settings;
 import de.btu.openinfra.backend.db.jpa.model.rbac.OpenInfraObject;
 import de.btu.openinfra.backend.db.jpa.model.rbac.PasswordBlacklist;
+import de.btu.openinfra.backend.db.jpa.model.rbac.Permission;
 
 /**
  * This enumeration defines table columns which should be ordered. In addition a
@@ -57,6 +58,7 @@ public enum OpenInfraOrderByEnum {
 	DESCRIPTION(Collections.unmodifiableList(Arrays.asList(
 	        AttributeType.class.getSimpleName(),
 	        AttributeTypeGroup.class.getSimpleName(),
+	        Permission.class.getSimpleName(),
 	        OpenInfraObject.class.getSimpleName(),
 	        RelationshipType.class.getSimpleName(),
 	        TopicCharacteristic.class.getSimpleName(),
@@ -163,7 +165,12 @@ public enum OpenInfraOrderByEnum {
      * Defines the column for created on.
      */
     CREATED_ON(Collections.unmodifiableList(Arrays.asList(
-            Log.class.getSimpleName())));
+            Log.class.getSimpleName()))),
+    /**
+     * Defines the column for created on.
+     */
+    PERMISSION(Collections.unmodifiableList(Arrays.asList(
+            Permission.class.getSimpleName())));
 
 
 	private List<String> lst;
