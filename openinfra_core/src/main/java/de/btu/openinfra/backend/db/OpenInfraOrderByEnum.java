@@ -26,6 +26,7 @@ import de.btu.openinfra.backend.db.jpa.model.meta.Schemas;
 import de.btu.openinfra.backend.db.jpa.model.meta.Servers;
 import de.btu.openinfra.backend.db.jpa.model.meta.SettingKeys;
 import de.btu.openinfra.backend.db.jpa.model.meta.Settings;
+import de.btu.openinfra.backend.db.jpa.model.rbac.OpenInfraObject;
 
 /**
  * This enumeration defines table columns which should be ordered. In addition a
@@ -46,6 +47,7 @@ public enum OpenInfraOrderByEnum {
 	NAME(Collections.unmodifiableList(Arrays.asList(
 	        AttributeType.class.getSimpleName(),
 	        AttributeTypeGroup.class.getSimpleName(),
+	        OpenInfraObject.class.getSimpleName(),
 	        ValueList.class.getSimpleName(),
 	        ValueListValue.class.getSimpleName()))),
 	/**
@@ -54,6 +56,7 @@ public enum OpenInfraOrderByEnum {
 	DESCRIPTION(Collections.unmodifiableList(Arrays.asList(
 	        AttributeType.class.getSimpleName(),
 	        AttributeTypeGroup.class.getSimpleName(),
+	        OpenInfraObject.class.getSimpleName(),
 	        RelationshipType.class.getSimpleName(),
 	        TopicCharacteristic.class.getSimpleName(),
 	        ValueList.class.getSimpleName(),
