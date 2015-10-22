@@ -18,6 +18,7 @@ import de.btu.openinfra.backend.db.jpa.model.ValueListValue;
 import de.btu.openinfra.backend.db.jpa.model.meta.Credentials;
 import de.btu.openinfra.backend.db.jpa.model.meta.Databases;
 import de.btu.openinfra.backend.db.jpa.model.meta.Level;
+import de.btu.openinfra.backend.db.jpa.model.meta.Logger;
 
 /**
  * This enumeration defines table columns which should be ordered. In addition a
@@ -89,7 +90,12 @@ public enum OpenInfraOrderByEnum {
      * Defines the column for levels.
      */
     LEVEL(Collections.unmodifiableList(Arrays.asList(
-            Level.class.getSimpleName())));
+            Level.class.getSimpleName()))),
+    /**
+     * Defines the column for levels.
+     */
+    LOGGER(Collections.unmodifiableList(Arrays.asList(
+            Logger.class.getSimpleName())));
 
 
 	private List<String> lst;

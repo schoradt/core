@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -13,11 +15,18 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 
 /**
  * The persistent class for the logger database table.
- * 
+ *
  */
 @Entity
 @Table(schema="meta_data")
 @NamedQuery(name="Logger.findAll", query="SELECT l FROM Logger l")
+@NamedNativeQueries({
+    @NamedNativeQuery(name="Logger.findAllByLocaleAndOrder",
+            query="SELECT *, xmin "
+                    + "FROM logger "
+                    + "ORDER BY %s ",
+                resultClass=Logger.class)
+})
 public class Logger extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 
