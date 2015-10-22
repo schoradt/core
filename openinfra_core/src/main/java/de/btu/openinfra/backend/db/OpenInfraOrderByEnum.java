@@ -31,6 +31,7 @@ import de.btu.openinfra.backend.db.jpa.model.rbac.PasswordBlacklist;
 import de.btu.openinfra.backend.db.jpa.model.rbac.Permission;
 import de.btu.openinfra.backend.db.jpa.model.rbac.ProjectRelatedRole;
 import de.btu.openinfra.backend.db.jpa.model.rbac.Role;
+import de.btu.openinfra.backend.db.jpa.model.rbac.RolePermission;
 import de.btu.openinfra.backend.db.jpa.model.rbac.Subject;
 
 /**
@@ -55,6 +56,7 @@ public enum OpenInfraOrderByEnum {
 	        OpenInfraObject.class.getSimpleName(),
 	        ProjectRelatedRole.class.getSimpleName(),
 	        Role.class.getSimpleName(),
+	        RolePermission.class.getSimpleName(),
 	        Subject.class.getSimpleName(),
 	        ValueList.class.getSimpleName(),
 	        ValueListValue.class.getSimpleName()))),
@@ -191,7 +193,8 @@ public enum OpenInfraOrderByEnum {
      * Defines the column for created on.
      */
     PERMISSION(Collections.unmodifiableList(Arrays.asList(
-            Permission.class.getSimpleName()))),
+            Permission.class.getSimpleName(),
+            RolePermission.class.getSimpleName()))),
     /**
      * Defines the column for mail.
      */
