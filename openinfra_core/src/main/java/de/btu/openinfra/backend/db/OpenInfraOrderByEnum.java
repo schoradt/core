@@ -16,6 +16,7 @@ import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
 import de.btu.openinfra.backend.db.jpa.model.ValueList;
 import de.btu.openinfra.backend.db.jpa.model.ValueListValue;
 import de.btu.openinfra.backend.db.jpa.model.meta.Credentials;
+import de.btu.openinfra.backend.db.jpa.model.meta.DatabaseConnection;
 import de.btu.openinfra.backend.db.jpa.model.meta.Databases;
 import de.btu.openinfra.backend.db.jpa.model.meta.Level;
 import de.btu.openinfra.backend.db.jpa.model.meta.Log;
@@ -90,12 +91,14 @@ public enum OpenInfraOrderByEnum {
      */
     USERNAME(Collections.unmodifiableList(Arrays.asList(
             Credentials.class.getSimpleName(),
-            Log.class.getSimpleName()))),
+            Log.class.getSimpleName(),
+            DatabaseConnection.class.getSimpleName()))),
     /**
      * Defines the column for databases.
      */
     DATABASE(Collections.unmodifiableList(Arrays.asList(
-            Databases.class.getSimpleName()))),
+            Databases.class.getSimpleName(),
+            DatabaseConnection.class.getSimpleName()))),
     /**
      * Defines the column for levels.
      */
@@ -112,17 +115,20 @@ public enum OpenInfraOrderByEnum {
      * Defines the column for ports.
      */
     PORT(Collections.unmodifiableList(Arrays.asList(
-            Ports.class.getSimpleName()))),
+            Ports.class.getSimpleName(),
+            DatabaseConnection.class.getSimpleName()))),
     /**
      * Defines the column for schema.
      */
     SCHEMA(Collections.unmodifiableList(Arrays.asList(
-            Schemas.class.getSimpleName()))),
+            Schemas.class.getSimpleName(),
+            DatabaseConnection.class.getSimpleName()))),
     /**
      * Defines the column for server.
      */
     SERVER(Collections.unmodifiableList(Arrays.asList(
-            Servers.class.getSimpleName()))),
+            Servers.class.getSimpleName(),
+            DatabaseConnection.class.getSimpleName()))),
     /**
      * Defines the column for setting keys.
      */
