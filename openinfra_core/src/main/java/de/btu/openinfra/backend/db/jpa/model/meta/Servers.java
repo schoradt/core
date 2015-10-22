@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -23,6 +25,13 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
     @NamedQuery(
             name="Servers.findByServer",
             query="SELECT s FROM Servers s WHERE s.server = :server")
+})
+@NamedNativeQueries({
+    @NamedNativeQuery(name="Servers.findAllByLocaleAndOrder",
+            query="SELECT *, xmin "
+                    + "FROM servers "
+                    + "ORDER BY %s ",
+                resultClass=Servers.class)
 })
 public class Servers extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;

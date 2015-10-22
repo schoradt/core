@@ -14,7 +14,9 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import de.btu.openinfra.backend.db.OpenInfraOrderBy;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.meta.ServersDao;
 import de.btu.openinfra.backend.db.pojos.meta.ServersPojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
@@ -28,10 +30,14 @@ public class ServersResource {
 
     @GET
     public List<ServersPojo> get(
+            @QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
+            @QueryParam("orderBy") OpenInfraOrderBy orderBy,
             @QueryParam("offset") int offset,
             @QueryParam("size") int size) {
         return new ServersDao(OpenInfraSchemas.META_DATA).read(
                 null,
+                sortOrder,
+                orderBy,
                 offset,
                 size);
     }

@@ -21,11 +21,15 @@ import de.btu.openinfra.backend.db.jpa.model.meta.Level;
 import de.btu.openinfra.backend.db.jpa.model.meta.Logger;
 import de.btu.openinfra.backend.db.jpa.model.meta.Ports;
 import de.btu.openinfra.backend.db.jpa.model.meta.Schemas;
+import de.btu.openinfra.backend.db.jpa.model.meta.Servers;
 
 /**
  * This enumeration defines table columns which should be ordered. In addition a
  * list of model classes must be specified that will support this column for
  * sorting.
+ *
+ * The enum must be written in the same way as the table column name that should
+ * be sorted.
  *
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
@@ -107,7 +111,12 @@ public enum OpenInfraOrderByEnum {
      * Defines the column for ports.
      */
     SCHEMA(Collections.unmodifiableList(Arrays.asList(
-            Schemas.class.getSimpleName())));
+            Schemas.class.getSimpleName()))),
+    /**
+     * Defines the column for ports.
+     */
+    SERVER(Collections.unmodifiableList(Arrays.asList(
+            Servers.class.getSimpleName())));
 
 
 	private List<String> lst;
