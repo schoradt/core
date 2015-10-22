@@ -203,11 +203,20 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	        String sqlString = em.createNamedQuery(
 	        		modelClass.getSimpleName() + ".findAllByLocaleAndOrder")
 	        		.unwrap(JpaQuery.class).getDatabaseQuery().getSQLString();
-	        sqlString = String.format(sqlString, column.getColumn().name());
+	        // pt locales must be handled in a special way because we have to
+	        // insert the name of the orderBy column four times
+	        if (modelClass == PtLocale.class) {
+	            sqlString = String.format(sqlString,
+	                    column.getColumn().name(),
+	                    column.getColumn().name(),
+	                    column.getColumn().name(),
+	                    column.getColumn().name());
+	        } else {
+	            sqlString = String.format(sqlString, column.getColumn().name());
+	        }
 	        sqlString += " " + order.name();
 
-	        // 5.b Retrieve the requested model objects from database for
-	        //     standard classes (with name & description).
+	        // 5.b Retrieve the requested model objects from database.
 	        try {
 	            models = em.createNativeQuery(
 	                    sqlString,

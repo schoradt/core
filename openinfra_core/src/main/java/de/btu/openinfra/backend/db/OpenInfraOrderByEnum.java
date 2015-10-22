@@ -10,6 +10,7 @@ import de.btu.openinfra.backend.db.jpa.model.CharacterCode;
 import de.btu.openinfra.backend.db.jpa.model.CountryCode;
 import de.btu.openinfra.backend.db.jpa.model.LanguageCode;
 import de.btu.openinfra.backend.db.jpa.model.Multiplicity;
+import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.jpa.model.RelationshipType;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
 import de.btu.openinfra.backend.db.jpa.model.ValueList;
@@ -57,17 +58,20 @@ public enum OpenInfraOrderByEnum {
      * Defines the column for character codes.
      */
     CHARACTER_CODE(Collections.unmodifiableList(Arrays.asList(
-            CharacterCode.class.getSimpleName()))),
+            CharacterCode.class.getSimpleName(),
+            PtLocale.class.getSimpleName()))),
     /**
      * Defines the column for country codes.
      */
     COUNTRY_CODE(Collections.unmodifiableList(Arrays.asList(
-            CountryCode.class.getSimpleName()))),
+            CountryCode.class.getSimpleName(),
+            PtLocale.class.getSimpleName()))),
 	/**
      * Defines the column for language codes.
      */
     LANGUAGE_CODE(Collections.unmodifiableList(Arrays.asList(
-            LanguageCode.class.getSimpleName())));
+            LanguageCode.class.getSimpleName(),
+            PtLocale.class.getSimpleName())));
 
 	private List<String> lst;
 

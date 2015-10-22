@@ -6,6 +6,8 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -35,6 +37,17 @@ import javax.persistence.Table;
             + "SELECT p "
             + "FROM PtLocale p "
             + "WHERE p.countryCode IS NULL ")
+})
+@NamedNativeQueries({
+    @NamedNativeQuery(name="PtLocale.findAllByLocaleAndOrder",
+            query="SELECT pl.*, pl.xmin "
+                    + "FROM pt_locale AS pl "
+                    + "LEFT OUTER JOIN ( "
+                        + "SELECT b.id, b.%s "
+                        + "FROM pt_locale AS a, %s AS b) AS sq "
+                        + "ON (pl.%s_id = sq.id) "
+                        + "ORDER BY sq.%s ",
+            resultClass=PtLocale.class)
 })
 public class PtLocale extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -106,5 +119,5 @@ public class PtLocale extends OpenInfraModelObject implements Serializable {
 	public void setLanguageCode(LanguageCode languageCode) {
 		this.languageCode = languageCode;
 	}
-	
+
 }
