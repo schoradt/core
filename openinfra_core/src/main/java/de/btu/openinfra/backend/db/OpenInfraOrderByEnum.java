@@ -7,6 +7,7 @@ import java.util.List;
 import de.btu.openinfra.backend.db.jpa.model.AttributeType;
 import de.btu.openinfra.backend.db.jpa.model.AttributeTypeGroup;
 import de.btu.openinfra.backend.db.jpa.model.Multiplicity;
+import de.btu.openinfra.backend.db.jpa.model.RelationshipType;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
 import de.btu.openinfra.backend.db.jpa.model.ValueList;
 import de.btu.openinfra.backend.db.jpa.model.ValueListValue;
@@ -35,6 +36,7 @@ public enum OpenInfraOrderByEnum {
 	DESCRIPTION(Collections.unmodifiableList(Arrays.asList(
 	        AttributeType.class.getSimpleName(),
 	        AttributeTypeGroup.class.getSimpleName(),
+	        RelationshipType.class.getSimpleName(),
 	        TopicCharacteristic.class.getSimpleName(),
 	        ValueList.class.getSimpleName(),
 	        ValueListValue.class.getSimpleName()))),
