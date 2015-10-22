@@ -1,4 +1,4 @@
-package de.btu.openinfra.backend.db.pojos;
+package de.btu.openinfra.backend.db.pojos.project;
 
 import java.util.UUID;
 
@@ -7,6 +7,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 import de.btu.openinfra.backend.db.daos.AttributeValueTypes;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 import de.btu.openinfra.backend.db.jpa.model.PtLocale;
+import de.btu.openinfra.backend.db.pojos.AttributeValueDomainPojo;
+import de.btu.openinfra.backend.db.pojos.AttributeValueGeomzPojo;
+import de.btu.openinfra.backend.db.pojos.AttributeValueValuePojo;
+import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 
 @XmlRootElement
 public class AttributeValuePojo extends OpenInfraPojo {

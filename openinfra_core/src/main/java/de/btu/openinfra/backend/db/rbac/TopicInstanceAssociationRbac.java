@@ -10,7 +10,7 @@ import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.TopicInstanceAssociationDao;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstanceXTopicInstance;
-import de.btu.openinfra.backend.db.pojos.TopicInstanceAssociationPojo;
+import de.btu.openinfra.backend.db.pojos.project.TopicInstanceAssociationPojo;
 
 public class TopicInstanceAssociationRbac extends OpenInfraValueValueRbac<
 	TopicInstanceAssociationPojo, TopicInstanceXTopicInstance, 
