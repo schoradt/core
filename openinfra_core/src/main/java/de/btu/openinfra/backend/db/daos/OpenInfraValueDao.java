@@ -328,6 +328,9 @@ public abstract class OpenInfraValueDao<
                         .setMaxResults(size)
                         .getResultList();
                 }
+            } else {
+                throw new OpenInfraEntityException(
+                        OpenInfraExceptionTypes.WRONG_SORT_TYPE);
             }
         } catch (NullPointerException | IllegalArgumentException e) {
             // Accessing the column object will lead to a NullPointerException

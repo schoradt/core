@@ -190,6 +190,11 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
             // 5.a When the column is null redirect to another method
             return read(locale, offset, size);
         } else {
+            // orderBy UUIDs is not supported
+            if (column.isUuid()) {
+                throw new OpenInfraEntityException(
+                        OpenInfraExceptionTypes.WRONG_SORT_TYPE);
+            }
             // check if the orderBy column is supported for the current object
             checkOrderBy(column);
 
