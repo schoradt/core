@@ -27,6 +27,7 @@ import de.btu.openinfra.backend.db.jpa.model.meta.Servers;
 import de.btu.openinfra.backend.db.jpa.model.meta.SettingKeys;
 import de.btu.openinfra.backend.db.jpa.model.meta.Settings;
 import de.btu.openinfra.backend.db.jpa.model.rbac.OpenInfraObject;
+import de.btu.openinfra.backend.db.jpa.model.rbac.PasswordBlacklist;
 
 /**
  * This enumeration defines table columns which should be ordered. In addition a
@@ -96,6 +97,11 @@ public enum OpenInfraOrderByEnum {
             Credentials.class.getSimpleName(),
             Log.class.getSimpleName(),
             DatabaseConnection.class.getSimpleName()))),
+    /**
+     * Defines the column for password.
+     */
+    PASSWORD(Collections.unmodifiableList(Arrays.asList(
+            PasswordBlacklist.class.getSimpleName()))),
     /**
      * Defines the column for databases.
      */
