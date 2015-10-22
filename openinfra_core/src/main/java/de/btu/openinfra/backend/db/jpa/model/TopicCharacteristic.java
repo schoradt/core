@@ -57,7 +57,7 @@ import javax.persistence.Table;
 						+ "and b.pt_locale_id = cast(? as uuid) ) as sq "
 						+ "on (tc.id = sq.id) "
 						+ "order by free_text ",
-				resultClass=ValueList.class)
+				resultClass=TopicCharacteristic.class)
 })
 public class TopicCharacteristic extends OpenInfraModelObject
     implements Serializable {
