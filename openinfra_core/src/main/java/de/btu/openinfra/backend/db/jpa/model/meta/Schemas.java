@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -21,6 +23,13 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 @NamedQueries({
     @NamedQuery(name="Schemas.findAll", query="SELECT s FROM Schemas s"),
     @NamedQuery(name="Schemas.count", query="SELECT COUNT(s) FROM Schemas s")
+})
+@NamedNativeQueries({
+    @NamedNativeQuery(name="Schemas.findAllByLocaleAndOrder",
+            query="SELECT *, xmin "
+                    + "FROM schemas "
+                    + "ORDER BY %s ",
+                resultClass=Schemas.class)
 })
 public class Schemas extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;

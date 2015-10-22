@@ -20,6 +20,7 @@ import de.btu.openinfra.backend.db.jpa.model.meta.Databases;
 import de.btu.openinfra.backend.db.jpa.model.meta.Level;
 import de.btu.openinfra.backend.db.jpa.model.meta.Logger;
 import de.btu.openinfra.backend.db.jpa.model.meta.Ports;
+import de.btu.openinfra.backend.db.jpa.model.meta.Schemas;
 
 /**
  * This enumeration defines table columns which should be ordered. In addition a
@@ -101,7 +102,12 @@ public enum OpenInfraOrderByEnum {
      * Defines the column for ports.
      */
     PORT(Collections.unmodifiableList(Arrays.asList(
-            Ports.class.getSimpleName())));
+            Ports.class.getSimpleName()))),
+    /**
+     * Defines the column for ports.
+     */
+    SCHEMA(Collections.unmodifiableList(Arrays.asList(
+            Schemas.class.getSimpleName())));
 
 
 	private List<String> lst;
