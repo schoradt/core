@@ -16,6 +16,7 @@ import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
 import de.btu.openinfra.backend.db.jpa.model.ValueList;
 import de.btu.openinfra.backend.db.jpa.model.ValueListValue;
 import de.btu.openinfra.backend.db.jpa.model.meta.Credentials;
+import de.btu.openinfra.backend.db.jpa.model.meta.Databases;
 
 /**
  * This enumeration defines table columns which should be ordered. In addition a
@@ -77,7 +78,12 @@ public enum OpenInfraOrderByEnum {
      * Defines the column for credentials.
      */
     USERNAME(Collections.unmodifiableList(Arrays.asList(
-            Credentials.class.getSimpleName())));
+            Credentials.class.getSimpleName()))),
+    /**
+     * Defines the column for credentials.
+     */
+    DATABASE(Collections.unmodifiableList(Arrays.asList(
+            Databases.class.getSimpleName())));
 
 
 	private List<String> lst;
