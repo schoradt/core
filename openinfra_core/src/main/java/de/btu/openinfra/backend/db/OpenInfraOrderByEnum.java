@@ -30,6 +30,7 @@ import de.btu.openinfra.backend.db.jpa.model.rbac.OpenInfraObject;
 import de.btu.openinfra.backend.db.jpa.model.rbac.PasswordBlacklist;
 import de.btu.openinfra.backend.db.jpa.model.rbac.Permission;
 import de.btu.openinfra.backend.db.jpa.model.rbac.ProjectRelatedRole;
+import de.btu.openinfra.backend.db.jpa.model.rbac.Role;
 
 /**
  * This enumeration defines table columns which should be ordered. In addition a
@@ -52,6 +53,7 @@ public enum OpenInfraOrderByEnum {
 	        AttributeTypeGroup.class.getSimpleName(),
 	        OpenInfraObject.class.getSimpleName(),
 	        ProjectRelatedRole.class.getSimpleName(),
+	        Role.class.getSimpleName(),
 	        ValueList.class.getSimpleName(),
 	        ValueListValue.class.getSimpleName()))),
 	/**
@@ -64,6 +66,7 @@ public enum OpenInfraOrderByEnum {
 	        OpenInfraObject.class.getSimpleName(),
 	        ProjectRelatedRole.class.getSimpleName(),
 	        RelationshipType.class.getSimpleName(),
+	        Role.class.getSimpleName(),
 	        TopicCharacteristic.class.getSimpleName(),
 	        ValueList.class.getSimpleName(),
 	        ValueListValue.class.getSimpleName()))),
