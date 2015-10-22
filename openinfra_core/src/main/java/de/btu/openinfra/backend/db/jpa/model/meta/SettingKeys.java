@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -13,11 +15,18 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 
 /**
  * The persistent class for the setting_keys database table.
- * 
+ *
  */
 @Entity
 @Table(schema="meta_data", name="setting_keys")
 @NamedQuery(name="SettingKey.findAll", query="SELECT s FROM SettingKeys s")
+@NamedNativeQueries({
+    @NamedNativeQuery(name="SettingKeys.findAllByLocaleAndOrder",
+            query="SELECT *, xmin "
+                    + "FROM setting_keys "
+                    + "ORDER BY %s ",
+                resultClass=SettingKeys.class)
+})
 public class SettingKeys extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 
