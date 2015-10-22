@@ -14,7 +14,9 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import de.btu.openinfra.backend.db.OpenInfraOrderBy;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.meta.CredentialsDao;
 import de.btu.openinfra.backend.db.pojos.meta.CredentialsPojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
@@ -28,10 +30,14 @@ public class CredentialsResource {
 
     @GET
     public List<CredentialsPojo> get(
+            @QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
+            @QueryParam("orderBy") OpenInfraOrderBy orderBy,
             @QueryParam("offset") int offset,
             @QueryParam("size") int size) {
         return new CredentialsDao(OpenInfraSchemas.META_DATA).read(
                 null,
+                sortOrder,
+                orderBy,
                 offset,
                 size);
     }

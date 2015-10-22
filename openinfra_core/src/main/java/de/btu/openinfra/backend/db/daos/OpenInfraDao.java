@@ -183,8 +183,17 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 		if(order == null) {
 			order = OpenInfraProperties.DEFAULT_ORDER;
 		}
-		// 4. Read the required ptlocale object
-		PtLocale ptl = new PtLocaleDao(currentProjectId, schema).read(locale);
+		// 4. Read the required ptlocale object if exists
+		String ptlId = "";
+		try {
+		    PtLocale ptl = new PtLocaleDao(currentProjectId, schema)
+		        .read(locale);
+		    ptlId = ptl.getId().toString();
+		} catch (PersistenceException e) {
+		    // The pt locale table only exists in projects and system schemas.
+		    // If a sorting is requested by another schema, we must catch the
+		    // exception and just do nothing.
+		}
 		// 5. Handle requests that contains an order by column
         if(column == null) {
             // 5.a When the column is null redirect to another method
@@ -221,7 +230,7 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	            models = em.createNativeQuery(
 	                    sqlString,
 	                    modelClass)
-	                    .setParameter(1, ptl.getId().toString())
+	                    .setParameter(1, ptlId)
 	                    .setFirstResult(offset)
 	                    .setMaxResults(size)
 	                    .getResultList();
