@@ -13,7 +13,9 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import de.btu.openinfra.backend.db.OpenInfraOrderBy;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.meta.LogDao;
 import de.btu.openinfra.backend.db.pojos.meta.LogPojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
@@ -27,10 +29,17 @@ public class LogResource {
 
     @GET
     public List<LogPojo> get(
+            @QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
+            @QueryParam("orderBy") OpenInfraOrderBy orderBy,
             @QueryParam("offset") int offset,
             @QueryParam("size") int size) {
         return new LogDao(
-                OpenInfraSchemas.META_DATA).read(null, offset, size);
+                OpenInfraSchemas.META_DATA).read(
+                        null,
+                        sortOrder,
+                        orderBy,
+                        offset,
+                        size);
     }
 
     @GET
@@ -50,14 +59,14 @@ public class LogResource {
 		return new LogDao(
 				OpenInfraSchemas.META_DATA).getCount();
 	}
-    
+
     @POST
     public Response create(LogPojo pojo) {
         UUID id = new LogDao(OpenInfraSchemas.META_DATA).createOrUpdate(
                         pojo, null);
         return OpenInfraResponseBuilder.postResponse(id);
     }
-    
+
     @DELETE
     @Path("{logId}")
     public Response delete(@PathParam("logId") UUID logId) {
@@ -66,7 +75,7 @@ public class LogResource {
                         logId),
                 logId);
     }
-    
+
     @GET
     @Path("/new")
     public LogPojo newLog() {

@@ -18,6 +18,7 @@ import de.btu.openinfra.backend.db.jpa.model.ValueListValue;
 import de.btu.openinfra.backend.db.jpa.model.meta.Credentials;
 import de.btu.openinfra.backend.db.jpa.model.meta.Databases;
 import de.btu.openinfra.backend.db.jpa.model.meta.Level;
+import de.btu.openinfra.backend.db.jpa.model.meta.Log;
 import de.btu.openinfra.backend.db.jpa.model.meta.Logger;
 import de.btu.openinfra.backend.db.jpa.model.meta.Ports;
 import de.btu.openinfra.backend.db.jpa.model.meta.Schemas;
@@ -88,7 +89,8 @@ public enum OpenInfraOrderByEnum {
      * Defines the column for credentials.
      */
     USERNAME(Collections.unmodifiableList(Arrays.asList(
-            Credentials.class.getSimpleName()))),
+            Credentials.class.getSimpleName(),
+            Log.class.getSimpleName()))),
     /**
      * Defines the column for databases.
      */
@@ -98,12 +100,14 @@ public enum OpenInfraOrderByEnum {
      * Defines the column for levels.
      */
     LEVEL(Collections.unmodifiableList(Arrays.asList(
-            Level.class.getSimpleName()))),
+            Level.class.getSimpleName(),
+            Log.class.getSimpleName()))),
     /**
      * Defines the column for logger.
      */
     LOGGER(Collections.unmodifiableList(Arrays.asList(
-            Logger.class.getSimpleName()))),
+            Logger.class.getSimpleName(),
+            Log.class.getSimpleName()))),
     /**
      * Defines the column for ports.
      */
@@ -134,7 +138,17 @@ public enum OpenInfraOrderByEnum {
      * Defines the column for values.
      */
     VALUE(Collections.unmodifiableList(Arrays.asList(
-            Settings.class.getSimpleName())));
+            Settings.class.getSimpleName()))),
+    /**
+     * Defines the column for message.
+     */
+    MESSAGE(Collections.unmodifiableList(Arrays.asList(
+            Log.class.getSimpleName()))),
+    /**
+     * Defines the column for created on.
+     */
+    CREATED_ON(Collections.unmodifiableList(Arrays.asList(
+            Log.class.getSimpleName())));
 
 
 	private List<String> lst;
