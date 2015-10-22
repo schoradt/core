@@ -6,6 +6,9 @@ import java.util.List;
 
 import de.btu.openinfra.backend.db.jpa.model.AttributeType;
 import de.btu.openinfra.backend.db.jpa.model.AttributeTypeGroup;
+import de.btu.openinfra.backend.db.jpa.model.CharacterCode;
+import de.btu.openinfra.backend.db.jpa.model.CountryCode;
+import de.btu.openinfra.backend.db.jpa.model.LanguageCode;
 import de.btu.openinfra.backend.db.jpa.model.Multiplicity;
 import de.btu.openinfra.backend.db.jpa.model.RelationshipType;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
@@ -41,15 +44,30 @@ public enum OpenInfraOrderByEnum {
 	        ValueList.class.getSimpleName(),
 	        ValueListValue.class.getSimpleName()))),
     /**
-     * Defines the column for minimum multiplicity values
+     * Defines the column for minimum multiplicity.
      */
     MIN_VALUE(Collections.unmodifiableList(Arrays.asList(
             Multiplicity.class.getSimpleName()))),
     /**
-     * Defines the column for maximum multiplicity values
+     * Defines the column for maximum multiplicity.
      */
     MAX_VALUE(Collections.unmodifiableList(Arrays.asList(
-            Multiplicity.class.getSimpleName())));
+            Multiplicity.class.getSimpleName()))),
+    /**
+     * Defines the column for character codes.
+     */
+    CHARACTER_CODE(Collections.unmodifiableList(Arrays.asList(
+            CharacterCode.class.getSimpleName()))),
+    /**
+     * Defines the column for country codes.
+     */
+    COUNTRY_CODE(Collections.unmodifiableList(Arrays.asList(
+            CountryCode.class.getSimpleName()))),
+	/**
+     * Defines the column for language codes.
+     */
+    LANGUAGE_CODE(Collections.unmodifiableList(Arrays.asList(
+            LanguageCode.class.getSimpleName())));
 
 	private List<String> lst;
 
