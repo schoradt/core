@@ -14,7 +14,9 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import de.btu.openinfra.backend.db.OpenInfraOrderBy;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.meta.SettingsDao;
 import de.btu.openinfra.backend.db.pojos.meta.SettingsPojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
@@ -28,10 +30,17 @@ public class SettingsResource {
 
     @GET
     public List<SettingsPojo> get(
+            @QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
+            @QueryParam("orderBy") OpenInfraOrderBy orderBy,
             @QueryParam("offset") int offset,
             @QueryParam("size") int size) {
         return new SettingsDao(
-                OpenInfraSchemas.META_DATA).read(null, offset, size);
+                OpenInfraSchemas.META_DATA).read(
+                        null,
+                        sortOrder,
+                        orderBy,
+                        offset,
+                        size);
     }
 
     @GET

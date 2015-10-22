@@ -23,6 +23,7 @@ import de.btu.openinfra.backend.db.jpa.model.meta.Ports;
 import de.btu.openinfra.backend.db.jpa.model.meta.Schemas;
 import de.btu.openinfra.backend.db.jpa.model.meta.Servers;
 import de.btu.openinfra.backend.db.jpa.model.meta.SettingKeys;
+import de.btu.openinfra.backend.db.jpa.model.meta.Settings;
 
 /**
  * This enumeration defines table columns which should be ordered. In addition a
@@ -122,7 +123,18 @@ public enum OpenInfraOrderByEnum {
      * Defines the column for setting keys.
      */
     KEY(Collections.unmodifiableList(Arrays.asList(
-            SettingKeys.class.getSimpleName())));
+            Settings.class.getSimpleName(),
+            SettingKeys.class.getSimpleName()))),
+    /**
+     * Defines the column for updated on.
+     */
+    UPDATED_ON(Collections.unmodifiableList(Arrays.asList(
+            Settings.class.getSimpleName()))),
+    /**
+     * Defines the column for values.
+     */
+    VALUE(Collections.unmodifiableList(Arrays.asList(
+            Settings.class.getSimpleName())));
 
 
 	private List<String> lst;
