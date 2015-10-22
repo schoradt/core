@@ -31,6 +31,7 @@ import de.btu.openinfra.backend.db.jpa.model.rbac.PasswordBlacklist;
 import de.btu.openinfra.backend.db.jpa.model.rbac.Permission;
 import de.btu.openinfra.backend.db.jpa.model.rbac.ProjectRelatedRole;
 import de.btu.openinfra.backend.db.jpa.model.rbac.Role;
+import de.btu.openinfra.backend.db.jpa.model.rbac.Subject;
 
 /**
  * This enumeration defines table columns which should be ordered. In addition a
@@ -54,6 +55,7 @@ public enum OpenInfraOrderByEnum {
 	        OpenInfraObject.class.getSimpleName(),
 	        ProjectRelatedRole.class.getSimpleName(),
 	        Role.class.getSimpleName(),
+	        Subject.class.getSimpleName(),
 	        ValueList.class.getSimpleName(),
 	        ValueListValue.class.getSimpleName()))),
 	/**
@@ -67,6 +69,7 @@ public enum OpenInfraOrderByEnum {
 	        ProjectRelatedRole.class.getSimpleName(),
 	        RelationshipType.class.getSimpleName(),
 	        Role.class.getSimpleName(),
+	        Subject.class.getSimpleName(),
 	        TopicCharacteristic.class.getSimpleName(),
 	        ValueList.class.getSimpleName(),
 	        ValueListValue.class.getSimpleName()))),
@@ -99,6 +102,11 @@ public enum OpenInfraOrderByEnum {
             LanguageCode.class.getSimpleName(),
             PtLocale.class.getSimpleName()))),
     /**
+     * Defines the column for login.
+     */
+    LOGIN(Collections.unmodifiableList(Arrays.asList(
+            Subject.class.getSimpleName()))),
+    /**
      * Defines the column for credentials.
      */
     USERNAME(Collections.unmodifiableList(Arrays.asList(
@@ -110,6 +118,11 @@ public enum OpenInfraOrderByEnum {
      */
     PASSWORD(Collections.unmodifiableList(Arrays.asList(
             PasswordBlacklist.class.getSimpleName()))),
+    /**
+     * Defines the column for password created on.
+     */
+    PASSWORD_CREATED_ON(Collections.unmodifiableList(Arrays.asList(
+            Subject.class.getSimpleName()))),
     /**
      * Defines the column for databases.
      */
@@ -156,7 +169,8 @@ public enum OpenInfraOrderByEnum {
      * Defines the column for updated on.
      */
     UPDATED_ON(Collections.unmodifiableList(Arrays.asList(
-            Settings.class.getSimpleName()))),
+            Settings.class.getSimpleName(),
+            Subject.class.getSimpleName()))),
     /**
      * Defines the column for values.
      */
@@ -171,12 +185,33 @@ public enum OpenInfraOrderByEnum {
      * Defines the column for created on.
      */
     CREATED_ON(Collections.unmodifiableList(Arrays.asList(
-            Log.class.getSimpleName()))),
+            Log.class.getSimpleName(),
+            Subject.class.getSimpleName()))),
     /**
      * Defines the column for created on.
      */
     PERMISSION(Collections.unmodifiableList(Arrays.asList(
-            Permission.class.getSimpleName())));
+            Permission.class.getSimpleName()))),
+    /**
+     * Defines the column for mail.
+     */
+    MAIL(Collections.unmodifiableList(Arrays.asList(
+            Subject.class.getSimpleName()))),
+	/**
+     * Defines the column for status.
+     */
+    STATUS(Collections.unmodifiableList(Arrays.asList(
+            Subject.class.getSimpleName()))),
+	/**
+     * Defines the column for default language.
+     */
+    DEFAULT_LANGUAGE(Collections.unmodifiableList(Arrays.asList(
+            Subject.class.getSimpleName()))),
+	/**
+     * Defines the column for last login on.
+     */
+    LAST_LOGIN_ON(Collections.unmodifiableList(Arrays.asList(
+            Subject.class.getSimpleName())));
 
 
 	private List<String> lst;
