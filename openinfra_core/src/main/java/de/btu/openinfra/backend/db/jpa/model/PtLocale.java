@@ -43,10 +43,15 @@ import javax.persistence.Table;
             query="SELECT pl.*, pl.xmin "
                     + "FROM pt_locale AS pl "
                     + "LEFT OUTER JOIN ( "
-                        + "SELECT b.id, b.%s "
-                        + "FROM pt_locale AS a, %s AS b) AS sq "
-                        + "ON (pl.%s_id = sq.id) "
-                        + "ORDER BY sq.%s ",
+                        + "SELECT * FROM character_code) AS sq1 "
+                    + "ON (pl.character_code_id = sq1.id) "
+                    + "LEFT OUTER JOIN ( "
+                        + "SELECT * FROM country_code) AS sq2 "
+                    + "ON (pl.country_code_id = sq2.id) "
+                    + "LEFT OUTER JOIN ( "
+                        + "SELECT * FROM language_code) AS sq3 "
+                    + "ON (pl.language_code_id = sq3.id) "
+                    + "ORDER BY %s ",
             resultClass=PtLocale.class)
 })
 public class PtLocale extends OpenInfraModelObject implements Serializable {
