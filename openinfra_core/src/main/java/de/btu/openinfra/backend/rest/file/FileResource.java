@@ -21,6 +21,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.apache.commons.io.FilenameUtils;
@@ -57,7 +58,61 @@ public class FileResource {
     public long getFilesCount(
     		@Context UriInfo uriInfo,
     		@Context HttpServletRequest request) {
-		return 0;
+		// In this case we don't need the RBAC class since we only retrieve
+		// data which belongs to the current subject (user).
+		return new FileDao().countBySubject(
+				new SubjectResource().self().getUuid());
+	}
+
+	@GET
+	@Path("{fileId:([0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12})}")
+	public FilePojo getFile(
+			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
+			@PathParam("fileId") UUID fileId) {
+		return new FileRbac().read(
+				OpenInfraHttpMethod.valueOf(request.getMethod()),
+				uriInfo, null, fileId);
+	}
+
+	@GET
+	@Path("{fileId:([0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12})}/{dim}")
+	public Response getFileContent(
+			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
+			@PathParam("fileId") UUID fileId,
+			@PathParam("dim") String dim) {
+		FilePojo pojo = getFile(uriInfo, request, fileId);
+		String filePath = "";
+		String fileExtension = "png";
+		if(dim.equalsIgnoreCase("origin")) {
+			filePath = OpenInfraPropertyValues.UPLOAD_PATH.getValue();
+			fileExtension = FilenameUtils.getExtension(
+					pojo.getOriginFileName());
+		} else if(dim.equalsIgnoreCase("thumbnail")) {
+			filePath = OpenInfraPropertyValues.IMAGE_THUMBNAIL_PATH.getValue();
+		} else if(dim.equalsIgnoreCase("middle")) {
+			filePath = OpenInfraPropertyValues.IMAGE_MIDDLE_PATH.getValue();
+		} else if(dim.equalsIgnoreCase("popup")) {
+			filePath = OpenInfraPropertyValues.IMAGE_POPUP_PATH.getValue();
+		}
+		String fileName = filePath + pojo.getSignature() + "." + fileExtension;
+		// Send not found status code when file desn't exists
+		if(!new File(fileName).exists()) {
+			Response.status(404).build();
+		}
+		java.nio.file.Path p = Paths.get(fileName);
+		byte[] document = null;
+		String contentType = "";
+		try {
+			document = Files.readAllBytes(p);
+			contentType = Files.probeContentType(p);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return Response.ok(document, contentType)
+				.header("content-disposition","attachment; filename = " +
+						pojo.getOriginFileName()).build();
 	}
 
 	@GET
@@ -120,7 +175,6 @@ public class FileResource {
     	FilePojo fp = rbac.read(
     			OpenInfraHttpMethod.valueOf(request.getMethod()),
     			uriInfo, null, result);
-    	fp.setSignature(null);
 		return fp;
 	}
 
@@ -174,11 +228,6 @@ public class FileResource {
 	    	files.add(rbac.read(
 	    			OpenInfraHttpMethod.valueOf(request.getMethod()),
 	    			uriInfo, null, result));
-	    }
-
-	    // Delete the signatures
-	    for(FilePojo fp : files) {
-	    	fp.setSignature(null);
 	    }
 	    return files;
 	}

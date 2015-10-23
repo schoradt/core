@@ -16,6 +16,40 @@
 <body>
 	<!-- include the menu -->
 	<%@ include file="../../snippets/Menu.jsp" %>
+
+<h3><a href="./files/upload">Neue Datei(en) hochladen</a></h3>	
 	
+	<div class="panel panel-default">
+
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th>&nbsp;</th>
+					<th>Name</th>
+					<th>Typ</th>
+					<th>Original</th>
+					<th>Popup</th>
+					<th>Mitte</th>
+					<th>Vorschau</th>
+					<th>Uploaddatum</th>
+					<th>UUID</th>
+				</tr>
+			</thead>
+			<c:forEach items="${it}" var="pojo">
+				<tr id="tr_${pojo.uuid}">    		
+					<td><img src="./files/${pojo.uuid}/thumbnail"/></td>
+					<td>${pojo.originFileName}</td>
+					<td>${pojo.mimeType}</td>
+					<td><a href="./files/${pojo.uuid}/origin">${pojo.originDimension}</a></td>
+					<td><a href="./files/${pojo.uuid}/popup">${pojo.popupDimension}</a></td>
+					<td><a href="./files/${pojo.uuid}/middle">${pojo.middleDimension}</a></td>
+					<td><a href="./files/${pojo.uuid}/thumbnail">${pojo.thumbnailDimension}</a></td>
+					<td>${pojo.uploadedOn}</td>
+					<td>${pojo.uuid}</td>
+	    		</tr>
+			</c:forEach>
+		</table>
+	</div>
+
 </body>
 </html>

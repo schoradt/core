@@ -143,7 +143,7 @@ ChunkedUploader.prototype = {
         // can assume that our last chunk has been processed and exit
         // out of the function.
         if (this.range_end === this.file_size) {
-            //this._onUploadComplete();
+        	$("#url").hide();
             return;
         }
  
@@ -160,6 +160,7 @@ ChunkedUploader.prototype = {
 // Public Methods ____________________________________________________
  
     start: function() {
+    	$("#url").show();
         this._upload();
     },
  
@@ -197,6 +198,7 @@ ChunkedUploader.prototype = {
 	        <input id="submit_btn" type="submit" value="Upload" disabled>
 	    </div>
 	</form>
+	<img id="url" style="width: 20%;display:none;" src="${contextPath}/img/url.gif"/>
 	<ul id="file_list" style="display: none;">
 	    <!-- File data will be listed here -->
 	</ul>

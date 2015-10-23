@@ -44,7 +44,8 @@ public class FileDao extends OpenInfraDao<FilePojo, File> {
 		Long count = 0L;
 		count = em.createNamedQuery(
             "File.countBySubject",
-            Long.class).getSingleResult().longValue();
+            Long.class).setParameter("subject", subject)
+            .getSingleResult().longValue();
 		return count;
 	}
 
@@ -56,6 +57,7 @@ public class FileDao extends OpenInfraDao<FilePojo, File> {
 		pojo.setSubject(modelObject.getSubject());
 		pojo.setUploadedOn(OpenInfraTime.format(modelObject.getUploadedOn()));
 		pojo.setExifData(modelObject.getExifData());
+		pojo.setSignature(modelObject.getSignature());
 		pojo.setMiddleDimension(modelObject.getMiddleDimension());
 		pojo.setOriginDimension(modelObject.getOriginDimension());
 		pojo.setPopupDimension(modelObject.getPopupDimension());
