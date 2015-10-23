@@ -31,6 +31,7 @@ public class OpenInfraResponseBuilder {
 	public static final String REST_URI_RBAC = "/v1/rbac";
 	public static final String REST_URI_SYSTEM = "/v1/system";
 	public static final String REST_URI_SEARCH = "/v1/search";
+	public static final String REST_URI_ORDERBY = "v1/orderby";
 
 	/**
 	 * This variable defines the REST URI for primer requests. It contains the

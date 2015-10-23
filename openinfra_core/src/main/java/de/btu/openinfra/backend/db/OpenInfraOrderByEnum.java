@@ -1,5 +1,6 @@
 package de.btu.openinfra.backend.db;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -225,6 +226,56 @@ public enum OpenInfraOrderByEnum {
 
     public List<String> getList() {
         return this.lst;
+    }
+
+    /**
+     * This method returns all enum's that contain the passed object as
+     * property.
+     *
+     * @param object The name of the OpenInfra object
+     * @return       A list of OpenInfraOrderByEnum's that contain the object
+     */
+    public static List<OpenInfraOrderByEnum> getEnumsByProperty(String object) {
+        // the return list
+        List<OpenInfraOrderByEnum> returnList =
+                new ArrayList<OpenInfraOrderByEnum>();
+
+        // run through all enum's
+        for (OpenInfraOrderByEnum o : values()) {
+            // run through the list of values of the current enum
+            for (String objectClass : o.lst) {
+                // check if the passed object name fits to the currently
+                // retrieved enum property
+                if (objectClass.equals(object)) {
+                    returnList.add(o);
+                }
+            }
+        }
+        return returnList;
+    }
+
+    /**
+     * This method returns all objects as string list, that are used as
+     * properties in the enum's. Duplicates are ignored.
+     *
+     * @return  A list of strings that are properties of the enum's
+     */
+    public static List<String> getAllObjectNames() {
+        // the return list
+        List<String> returnList = new ArrayList<String>();
+
+        // run through all enum's
+        for (OpenInfraOrderByEnum o : values()) {
+            // run through the list of values of the current enum
+            for (String objectClass : o.lst) {
+                // check if the object is not in the list
+                if (!returnList.contains(objectClass)) {
+                    // add the object to the list
+                    returnList.add(objectClass);
+                }
+            }
+        }
+        return returnList;
     }
 
 }

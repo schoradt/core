@@ -1,57 +1,60 @@
 package de.btu.openinfra.backend.helper;
 
+import de.btu.openinfra.backend.db.OpenInfraOrderByEnum;
+
+
 
 
 
 public class TestClass {
-	
+
 	public static void main(String[] args) {
-		
+
 //		PtLocale l = new PtLocaleDao(
-//				UUID.fromString("fd27a347-4e33-4ed7-aebc-eeff6dbf1054"), 
+//				UUID.fromString("fd27a347-4e33-4ed7-aebc-eeff6dbf1054"),
 //				OpenInfraSchemas.PROJECT).read(PtLocaleDao.forLanguageTag("de-DE"));
 //		System.out.println(l.getId() + " " + l.getCountryCode().getCountryCode());
-		
+
 //		List<TopicCharacteristicPojo> list = new TopicCharacteristicDao(
-//				UUID.fromString("fd27a347-4e33-4ed7-aebc-eeff6dbf1054"), 
+//				UUID.fromString("fd27a347-4e33-4ed7-aebc-eeff6dbf1054"),
 //				OpenInfraSchemas.PROJECT).read(
 //						PtLocaleDao.forLanguageTag("de-DE"), "%und%");
-//		
+//
 //		System.out.println(list.size());
 //		for(TopicCharacteristicPojo tcp : list) {
 //			System.out.println(tcp.getDescriptions().getLocalizedStrings().get(0).getCharacterString());
 //		}
-//		
+//
 //		List<TopicInstancePojo> list = new TopicInstanceDao(
-//				UUID.fromString("fd27a347-4e33-4ed7-aebc-eeff6dbf1054"), 
+//				UUID.fromString("fd27a347-4e33-4ed7-aebc-eeff6dbf1054"),
 //				OpenInfraSchemas.PROJECTS).read(
-//						PtLocaleDao.forLanguageTag("de-DE"), 
+//						PtLocaleDao.forLanguageTag("de-DE"),
 //						UUID.fromString("50d4cb6f-46f1-4422-954c-4c3ec371f063"),
 //						"%afsiyeh%",
 //						0,
 //						30);
 
 //		System.out.println(UUID.fromString(null));
-		
+
 //		List<TopicCharacteristicPojo> list = new TopicCharacteristicDao(
-//		UUID.fromString("fd27a347-4e33-4ed7-aebc-eeff6dbf1054"), 
+//		UUID.fromString("fd27a347-4e33-4ed7-aebc-eeff6dbf1054"),
 //		OpenInfraSchemas.PROJECT).read(
 //				PtLocaleDao.forLanguageTag("de-DE"), "%und%");
-//		
+//
 //		System.out.println(list.size());
 //		for(TopicCharacteristicPojo tcp : list) {
 //			System.out.println(tcp.getDescriptions().getLocalizedStrings().get(0).getCharacterString());
 //		}
 
-//		
+//
 //		MultiplicityDao dao = new MultiplicityDao(UUID.fromString("fd27a347-4e33-4ed7-aebc-eeff6dbf1054"), OpenInfraSchemas.PROJECTS);
 //		MultiplicityPojo m = dao.read(null, UUID.fromString("09d832bc-2ea8-4874-8f60-9f5878cb89e3"));
-//		
+//
 //		m.setMax(new Integer(5));
 //		System.out.println(m.getTrid());
-//		
+//
 //		dao.createOrUpdate(m);
-		
+
 		// encrypt the raw passwords
 //		for(int i = 0; i < 3; i++) {
 //			System.out.println("--" + i + "--");
@@ -67,9 +70,15 @@ public class TestClass {
 //			System.out.println(OpenInfraRealm.encrypt("projecteditor_baal", UUID.fromString("64573585-8546-429c-98dc-e1b379744d42")));
 //			System.out.println(OpenInfraRealm.encrypt("siehstnix", UUID.fromString("db848094-0ead-4214-a850-d3c8cb23971c")));
 //		}
-		
-		System.out.println(System.getProperty("os.name"));
-		
+
+
+		for (String string : OpenInfraOrderByEnum.getAllObjectNames()) {
+            System.out.println(string);
+        }
+
+
 	}
+
+
 
 }

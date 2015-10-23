@@ -45,7 +45,11 @@ public enum OpenInfraExceptionTypes {
             + "set"),
 
     WRONG_SORT_TYPE("The requested sort type is not supported for this "
-            + "object.");
+            + "object."),
+
+	NO_SORT_TYPE("This object does not contain any orderBy parameter."),
+
+	MISSING_PARAMETER("This URI requires a parameter.");
 
     private String msg;
 
