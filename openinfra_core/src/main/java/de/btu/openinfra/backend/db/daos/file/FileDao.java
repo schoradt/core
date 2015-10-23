@@ -1,5 +1,7 @@
 package de.btu.openinfra.backend.db.daos.file;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -18,6 +20,32 @@ public class FileDao extends OpenInfraDao<FilePojo, File> {
 
 	public FileDao(UUID currentProject, OpenInfraSchemas schema) {
 		super(currentProject, schema, File.class);
+	}
+
+	public List<FilePojo> readBySubject(
+			Locale locale,
+			UUID subject,
+			int offset,
+			int size) {
+		List<File> files = em.createNamedQuery(
+				"File.findBySubject", File.class)
+				.setFirstResult(offset)
+				.setMaxResults(size)
+				.setParameter("subject", subject)
+				.getResultList();
+		List<FilePojo> res = new LinkedList<FilePojo>();
+		for(File f : files) {
+			res.add(mapToPojo(locale, f));
+		}
+		return res;
+	}
+
+	public long countBySubject(UUID subject) {
+		Long count = 0L;
+		count = em.createNamedQuery(
+            "File.countBySubject",
+            Long.class).getSingleResult().longValue();
+		return count;
 	}
 
 	@Override

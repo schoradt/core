@@ -82,7 +82,22 @@ public enum OpenInfraPropertyKeys {
     /**
      * This variable defines the default ImageMagick path.
      */
-	WIN_IMAGEMAGICK_PATH("de.btu.openinfra.backend.win.imagemagick.path");
+	WIN_IMAGEMAGICK_PATH("de.btu.openinfra.backend.win.imagemagick.path"),
+
+	/**
+	 * This variable defines the default thumbnail dimension.
+	 */
+	IMG_THUMBNAIL_DIMENSION("de.btu.openinfra.backend.img.thumbnail.dimension"),
+
+	/**
+	 * This variable defines the default image middle dimension.
+	 */
+	IMG_MIDDLE_DIMENSION("de.btu.openinfra.backend.img.middle.dimension"),
+
+	/**
+	 * This variable defines the default image popup dimension.
+	 */
+	IMG_POPUP_DIMENSION("de.btu.openinfra.backend.img.popup.dimension");
 
 	private String key;
 	private OpenInfraPropertyKeys(String key) {

@@ -2,10 +2,13 @@ package de.btu.openinfra.backend.db.pojos.file;
 
 import java.util.UUID;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.jpa.model.file.File;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 
+@XmlRootElement
 public class FilePojo extends OpenInfraPojo {
 
 	private String mimeType;

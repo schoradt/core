@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
@@ -18,7 +19,18 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
  */
 @Entity
 @Table(name="files")
-@NamedQuery(name="File.findAll", query="SELECT f FROM File f")
+@NamedQueries({
+	@NamedQuery(name="File.findAll", query="SELECT f FROM File f"),
+	@NamedQuery(name="File.count", query="SELECT COUNT(f) FROM File f"),
+	@NamedQuery(name="File.findBySubject",
+		query="SELECT f "
+				+ "FROM File f "
+				+ "WHERE f.subject = :subject"),
+	@NamedQuery(name="File.countBySubject",
+		query="SELECT COUNT(f) "
+				+ "FROM File f "
+				+ "WHERE f.subject = :subject")
+})
 public class File extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 

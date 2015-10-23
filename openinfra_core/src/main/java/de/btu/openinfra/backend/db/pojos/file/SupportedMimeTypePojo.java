@@ -1,9 +1,12 @@
 package de.btu.openinfra.backend.db.pojos.file;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.jpa.model.file.SupportedMimeType;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 
+@XmlRootElement
 public class SupportedMimeTypePojo extends OpenInfraPojo {
 
 	private String mimeType;

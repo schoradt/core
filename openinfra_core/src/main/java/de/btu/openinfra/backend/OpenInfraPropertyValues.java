@@ -72,7 +72,11 @@ public enum OpenInfraPropertyValues {
 	 * The path to the popup image folder.
 	 */
 	IMAGE_POPUP_PATH(OpenInfraPropertyValues.UPLOAD_PATH.getValue()
-			+ "popup/");
+			+ "popup/"),
+
+    OPENINFRA_PROPERTIES_PATH(
+    		OpenInfraPropertyValues.PROJECTDATA_PATH.getValue()
+    		+ "OpenInfRA.properties");
 
 	private String value;
 	private OpenInfraPropertyValues(String value) {

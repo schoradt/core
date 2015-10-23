@@ -1,5 +1,7 @@
 package de.btu.openinfra.backend.helper;
 
+import javax.ws.rs.core.MediaType;
+
 import org.im4java.core.ConvertCmd;
 import org.im4java.core.IMOperation;
 import org.im4java.core.Info;
@@ -11,6 +13,8 @@ import de.btu.openinfra.backend.OpenInfraPropertyKeys;
 public class TestImageMagick {
 
 	public static void main(String[] args) throws Exception {
+		System.out.println("--> " + MediaType.APPLICATION_OCTET_STREAM);
+
 		ProcessStarter.setGlobalSearchPath(
 				OpenInfraProperties.getProperty(
 						OpenInfraPropertyKeys.WIN_IMAGEMAGICK_PATH
