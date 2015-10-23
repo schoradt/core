@@ -6,24 +6,25 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import de.btu.openinfra.backend.db.daos.MetaDataDao;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
+import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 
 @XmlRootElement
 public class AttributeTypeAssociationPojo extends OpenInfraMetaDataPojo {
 
-	private UUID associationAttributeTypeId;
+    private UUID associationAttributeTypeId;
     private AttributeTypePojo associatedAttributeType;
-	private ValueListValuePojo relationship;
+    private ValueListValuePojo relationship;
 
-	/* Default constructor */
-	public AttributeTypeAssociationPojo() {}
+    /* Default constructor */
+    public AttributeTypeAssociationPojo() {
+    }
 
-	/* Constructor that will set the id, trid and meta data automatically */
-	public AttributeTypeAssociationPojo(
-	        OpenInfraModelObject modelObject, MetaDataDao mdDao) {
-	    super(modelObject, mdDao);
-	}
+    /* Constructor that will set the id, trid and meta data automatically */
+    public AttributeTypeAssociationPojo(OpenInfraModelObject modelObject, MetaDataDao mdDao) {
+        super(modelObject, mdDao);
+    }
 
-	public UUID getAssociationAttributeTypeId() {
+    public UUID getAssociationAttributeTypeId() {
         return associationAttributeTypeId;
     }
 
@@ -32,21 +33,28 @@ public class AttributeTypeAssociationPojo extends OpenInfraMetaDataPojo {
     }
 
     public AttributeTypePojo getAssociatedAttributeType() {
-		return associatedAttributeType;
-	}
+        return associatedAttributeType;
+    }
 
-	public void setAssociatedAttributeType(
-		AttributeTypePojo associatedAttributeType) {
-		this.associatedAttributeType = associatedAttributeType;
-	}
+    public void setAssociatedAttributeType(AttributeTypePojo associatedAttributeType) {
+        this.associatedAttributeType = associatedAttributeType;
+    }
 
-	public ValueListValuePojo getRelationship() {
-		return relationship;
-	}
+    public ValueListValuePojo getRelationship() {
+        return relationship;
+    }
 
-	public void setRelationship(ValueListValuePojo relationship) {
-		this.relationship = relationship;
-	}
+    public void setRelationship(ValueListValuePojo relationship) {
+        this.relationship = relationship;
+    }
 
+    @Override
+    protected void makePrimerHelper(PtLocale locale) {
+        associationAttributeTypeId = null;
+        associatedAttributeType = new AttributeTypePojo();
+        associatedAttributeType.makePrimer(locale);
+        relationship = new ValueListValuePojo();
+        relationship.makePrimer(locale);
+    }
 
 }
