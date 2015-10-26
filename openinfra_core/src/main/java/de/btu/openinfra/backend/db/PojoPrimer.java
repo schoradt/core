@@ -197,7 +197,8 @@ public class PojoPrimer {
             if(Modifier.isAbstract(currentClass.getModifiers()) == false &&
                     currentClass.isInterface() == false) {
                 pojoClasses.get(schema).put(
-                        currentClass.getSimpleName().replaceAll("Pojo", ""),
+                        currentClass.getSimpleName().replaceAll(
+                                "Pojo", "").toLowerCase(),
                         currentClass);
             }
         }
