@@ -6,7 +6,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import de.btu.openinfra.backend.db.daos.MetaDataDao;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
-import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 
 @XmlRootElement
 public class AttributeTypeGroupPojo extends OpenInfraMetaDataPojo {
@@ -47,15 +46,6 @@ public class AttributeTypeGroupPojo extends OpenInfraMetaDataPojo {
 
     public void setSubgroupOf(UUID subgroupOf) {
         this.subgroupOf = subgroupOf;
-    }
-
-    @Override
-    protected void makePrimerHelper(PtLocale locale) {
-        names = new PtFreeTextPojo();
-        names.makePrimer(locale);
-        descriptions = new PtFreeTextPojo();
-        descriptions.makePrimer(locale);
-        subgroupOf = null;
     }
 
 }

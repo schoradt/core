@@ -6,7 +6,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import de.btu.openinfra.backend.db.daos.AttributeValueTypes;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
-import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.pojos.AttributeValueDomainPojo;
 import de.btu.openinfra.backend.db.pojos.AttributeValueGeomzPojo;
 import de.btu.openinfra.backend.db.pojos.AttributeValueValuePojo;
@@ -77,20 +76,6 @@ public class AttributeValuePojo extends OpenInfraPojo {
 
     public void setAttributeValueType(AttributeValueTypes attributeValueType) {
         this.attributeValueType = attributeValueType;
-    }
-
-    @Override
-    protected void makePrimerHelper(PtLocale locale) {
-        attributeTypeId = null;
-        attributeValueType = AttributeValueTypes.ATTRIBUTE_VALUE_VALUE;
-        attributeValueDomain = new AttributeValueDomainPojo();
-        attributeValueDomain.makePrimer(locale);
-        attributeValueGeom = new AttributeValueGeomPojo();
-        attributeValueGeom.makePrimer(locale);
-        attributeValueGeomz = new AttributeValueGeomzPojo();
-        attributeValueGeomz.makePrimer(locale);
-        attributeValueValue = new AttributeValueValuePojo();
-        attributeValueValue.makePrimer(locale);
     }
 
 }

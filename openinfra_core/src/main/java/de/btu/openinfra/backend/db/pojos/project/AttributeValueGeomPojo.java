@@ -7,7 +7,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import de.btu.openinfra.backend.db.daos.AttributeValueGeomType;
 import de.btu.openinfra.backend.db.daos.MetaDataDao;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
-import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.pojos.OpenInfraMetaDataPojo;
 
 @XmlRootElement
@@ -57,14 +56,6 @@ public class AttributeValueGeomPojo extends OpenInfraMetaDataPojo {
 
     public void setAttributeTypeToAttributeTypeGroupId(UUID attributeTypeToAttributeTypeGroupId) {
         this.attributeTypeToAttributeTypeGroupId = attributeTypeToAttributeTypeGroupId;
-    }
-
-    @Override
-    protected void makePrimerHelper(PtLocale locale) {
-        topicInstanceId = null;
-        geom = "";
-        geomType = AttributeValueGeomType.TEXT;
-        attributeTypeToAttributeTypeGroupId = null;
     }
 
 }
