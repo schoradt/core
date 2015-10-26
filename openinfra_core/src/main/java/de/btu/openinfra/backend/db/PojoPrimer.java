@@ -53,7 +53,7 @@ public class PojoPrimer {
      * Default non-argument constructor. The constructor initiates
      * the hash map.
      */
-    public PojoPrimer() {
+    private PojoPrimer() {
         initiatePojoClasses();
     }
 
