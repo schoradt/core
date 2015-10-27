@@ -206,7 +206,7 @@ public class PojoPrimer {
 
     /**
      * This method checks if the given pojo class is a subclass of PtLocalePojo.
-     * If it is true then the methods initiates the pojo object with the given
+     * If it is true then the method initiates the pojo object with the given
      * PtLocale object.
      * @param pojo the pojo object
      * @param pojoClass the pojo class
