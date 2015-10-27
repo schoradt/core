@@ -89,7 +89,7 @@ public class PojoPrimer {
      * Returns all primer class names for the given schema.
      * @param schema the schema
      * @return a list of all primer class names if schema exists in the pojo
-     * hash map otherwise throws OpenInfraWebException
+     * hash map, otherwise throws OpenInfraWebException
      * @throws OpenInfraWebException
      */
     public static List<String> getPrimerNamesStatically(
@@ -185,8 +185,8 @@ public class PojoPrimer {
     }
 
     /**
-     * This method adds for the given schema all given classes to the hash map
-     * (except interfaces and abstract classes).
+     * This method adds all given classes to the hash map (except interfaces
+     * and abstract classes) for the given schema.
      * @param schema the schema
      * @param classes the classes
      */
@@ -220,6 +220,8 @@ public class PojoPrimer {
         if(PtLocalePojo.class.isAssignableFrom(pojoClass) == true) {
             // initiate the pojo object with the given PtLocale object.
             PtLocalePojo ptLocalPojo = (PtLocalePojo) pojo;
+            ptLocalPojo.setUuid(locale.getId());
+            ptLocalPojo.setTrid(locale.getXmin());
             ptLocalPojo.setCharacterCode(
                     locale.getCharacterCode().getCharacterCode());
             ptLocalPojo.setCountryCode(
@@ -227,6 +229,116 @@ public class PojoPrimer {
             ptLocalPojo.setLanguageCode(
                     locale.getLanguageCode().getLanguageCode());
         }
+    }
+
+    /**
+     * This method checks if the parameter of the given method (a setter method
+     * of the given pojo) is of the type List<LocalizedString>. If it is true
+     * then a new list with one localized string will be created and the
+     * reference of new list will be set to the given pojo.
+     * @param method the setter method of the given pojo
+     * @param pojo the pojo object
+     * @return the new list with one localized string if the parameter of the
+     * given method is of the type List<LocalizedString>, otherwise null
+     */
+    private List<LocalizedString> checkCreateAndSetLocalizedStrings(
+            Method method,
+            OpenInfraPojo pojo) {
+        List<LocalizedString> localizedStrings = null;
+
+        // if the method parameter is a subclass of List
+        if(List.class.isAssignableFrom(
+                method.getParameterTypes()[0]) == true) {
+            // and if the list has one generic parameter
+            if(method.getGenericParameterTypes().length == 1) {
+                // get the class of the generic parameter
+                Type type = method.getGenericParameterTypes()[0];
+                ParameterizedType pType = (ParameterizedType) type;
+                Class<?> genericParameterClass =
+                        (Class<?>) pType.getActualTypeArguments()[0];
+                // if the class of the generic parameter is a subclass
+                // of LocalizedString
+                if(LocalizedString.class.isAssignableFrom(
+                        genericParameterClass) == true) {
+                    // create a new list of LocalizedString
+                    localizedStrings = new ArrayList<LocalizedString>();
+                    // add one LocalizedString
+                    localizedStrings.add(new LocalizedString());
+                    // create and set the PtLocalePojo of the
+                    // LocalizedString
+                    localizedStrings.get(0).setLocale(new PtLocalePojo());
+                    try {
+                        // invoke the set method
+                        method.invoke(pojo, localizedStrings);
+                    } catch (IllegalAccessException |
+                            IllegalArgumentException |
+                            InvocationTargetException e) {
+                        localizedStrings = null;
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
+        return localizedStrings;
+    }
+
+    /**
+     * This method checks if the parameter of the given method (a setter method
+     * of the given pojo) is a subclass of OpenInfraPojo. If it is true then
+     * a new sub pojo will be created and the reference of new sub pojo will be
+     * set to the given pojo.
+     * @param method the setter method of the given pojo
+     * @param pojo the pojo object
+     * @return the new sub pojo object if the parameter of the given method
+     * is a subclass of OpenInfraPojo, otherwise null
+     */
+    private OpenInfraPojo checkCreateAndSetSubPojo(
+            Method method,
+            OpenInfraPojo pojo) {
+        OpenInfraPojo subPojo = null;
+        // if the method parameter is a subclass of OpenInfraPojo
+        if(OpenInfraPojo.class.isAssignableFrom(
+                method.getParameterTypes()[0]) == true) {
+            // create a new pojo and invoke the set method
+            subPojo = createAndSetSubPojo(
+                    method,
+                    pojo,
+                    method.getParameterTypes()[0]);
+        }
+
+        return subPojo;
+    }
+
+    /**
+     * This method creates a new sub pojo using the given sub pojo class and
+     * sets the reference of new sub pojo to the given pojo using the given
+     * setter method.
+     * @param method the setter method of the given pojo
+     * @param pojo the pojo object
+     * @param subPojoClass the sub pojo class
+     * @return new sub pojo object if the sub pojo construction and the method
+     * invocation are successful, otherwise null
+     */
+    private OpenInfraPojo createAndSetSubPojo(
+            Method method,
+            OpenInfraPojo pojo,
+            Class<?> subPojoClass) {
+        OpenInfraPojo subPojo = null;
+
+        try {
+            // create a new pojo and invoke the set method
+            subPojo = (OpenInfraPojo) subPojoClass.newInstance();
+            method.invoke(pojo, subPojo);
+        } catch (IllegalAccessException |
+                IllegalArgumentException |
+                InvocationTargetException |
+                InstantiationException e) {
+            subPojo = null;
+            e.printStackTrace();
+        }
+
+        return subPojo;
     }
 
     /**
@@ -246,68 +358,36 @@ public class PojoPrimer {
         // the pojo class is a subclass of PtLocalePojo
         checkAndInitiatePtLocale(pojo, pojoClass, locale);
 
+        OpenInfraPojo subPojo = null;
+        List<LocalizedString> localizedStrings = null;
+
         for(Method method : pojoClass.getMethods()) {
             // for each setter method with exactly one parameter
             if(method.getName().startsWith("set") &&
                     void.class.isAssignableFrom(method.getReturnType()) &&
                     method.getParameterTypes().length == 1) {
 
-                // if the method parameter is a subclass of OpenInfraPojo
-                if(OpenInfraPojo.class.isAssignableFrom(
-                        method.getParameterTypes()[0]) == true) {
-                    // create a new pojo, invoke the set method and call
-                    // makePrimer for the new pojo
-                    try {
-                        OpenInfraPojo newPojo = (OpenInfraPojo)
-                                method.getParameterTypes()[0].newInstance();
-                        method.invoke(pojo, newPojo);
-                        makePrimer(newPojo, newPojo.getClass(), locale);
-                    } catch (IllegalAccessException |
-                            IllegalArgumentException |
-                            InvocationTargetException |
-                            InstantiationException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
+                // check, create and set new sub pojo
+                subPojo = checkCreateAndSetSubPojo(method, pojo);
+
+                // if a sub pojo was created
+                if(subPojo != null) {
+                    // call makePrimer for the new sub pojo
+                    makePrimer(subPojo, subPojo.getClass(), locale);
                 }
 
-                // if the method parameter is a subclass of List
-                if(List.class.isAssignableFrom(
-                        method.getParameterTypes()[0]) == true) {
-                    // and if the list has a generic parameter
-                    if(method.getGenericParameterTypes().length > 0) {
-                        // get the class of the generic parameter
-                        Type type = method.getGenericParameterTypes()[0];
-                        ParameterizedType pType = (ParameterizedType) type;
-                        Class<?> genericParameterClass =
-                                (Class<?>) pType.getActualTypeArguments()[0];
-                        // if the class of the generic parameter is a subclass
-                        // of LocalizedString
-                        if(LocalizedString.class.isAssignableFrom(
-                                genericParameterClass) == true) {
-                            // create a new list of LocalizedString
-                            List<LocalizedString> list =
-                                    new ArrayList<LocalizedString>();
-                            // add one LocalizedString
-                            list.add(new LocalizedString());
-                            // create and set the PtLocalePojo of the
-                            // LocalizedString
-                            list.get(0).setLocale(new PtLocalePojo());
-                            // call makePrimer for the PtLocalePojo
-                            makePrimer(
-                                    list.get(0).getLocale(),
-                                    list.get(0).getLocale().getClass(),
-                                    locale);
-                            try {
-                                method.invoke(pojo, list);
-                            } catch (IllegalAccessException |
-                                    IllegalArgumentException |
-                                    InvocationTargetException e) {
-                                // TODO Auto-generated catch block
-                                e.printStackTrace();
-                            }
-                        }
-                    }
+                // check, create and set new list of localized strings
+                localizedStrings = checkCreateAndSetLocalizedStrings(
+                        method,
+                        pojo);
+
+                // if a new list of localized strings was created
+                if(localizedStrings != null) {
+                    // call makePrimer for the PtLocalePojo
+                    makePrimer(
+                            localizedStrings.get(0).getLocale(),
+                            localizedStrings.get(0).getLocale().getClass(),
+                            locale);
                 }
             }
         }
