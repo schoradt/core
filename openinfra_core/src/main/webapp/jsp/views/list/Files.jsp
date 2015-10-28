@@ -38,7 +38,7 @@
 			<c:forEach items="${it}" var="pojo">
 				<tr id="tr_${pojo.uuid}">    		
 					<td><img src="./files/${pojo.uuid}/thumbnail"/></td>
-					<td>${pojo.originFileName}</td>
+					<td><a href="./files/${pojo.uuid}/origin">${pojo.originFileName}</a></td>
 					<td>${pojo.mimeType}</td>
 					<td><a href="./files/${pojo.uuid}/origin">${pojo.originDimension}</a></td>
 					<td><a href="./files/${pojo.uuid}/popup">${pojo.popupDimension}</a></td>

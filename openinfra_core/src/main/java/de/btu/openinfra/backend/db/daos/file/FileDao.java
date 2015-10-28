@@ -22,6 +22,23 @@ public class FileDao extends OpenInfraDao<FilePojo, File> {
 		super(currentProject, schema, File.class);
 	}
 
+	/**
+	 * This method deletes a file from database when the file belongs to the
+	 * user which is logged in.
+	 *
+	 * @param file
+	 * @param subject
+	 * @return
+	 */
+	public boolean delete(UUID file, UUID subject) {
+		FilePojo pojo = read(null, file);
+		if(pojo.getSubject().equals(subject)) {
+			return delete(file);
+		} else {
+			return false;
+		}
+	}
+
 	public List<FilePojo> readBySubject(
 			Locale locale,
 			UUID subject,

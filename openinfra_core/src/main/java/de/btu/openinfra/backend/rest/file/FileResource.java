@@ -13,15 +13,18 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
 import org.apache.commons.io.FilenameUtils;
@@ -52,6 +55,8 @@ import de.btu.openinfra.backend.rest.rbac.SubjectResource;
     + OpenInfraResponseBuilder.UTF8_CHARSET})
 public class FileResource {
 
+	private static final String EXTENSION = ".png";
+
 	@GET
     @Path("count")
 	@Produces({MediaType.TEXT_PLAIN})
@@ -65,6 +70,22 @@ public class FileResource {
 	}
 
 	@GET
+	public List<FilePojo> files(
+			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
+			@QueryParam("language") String language,
+			@QueryParam("offset") int offset,
+			@QueryParam("size") int size) {
+		// In this case we don't need the RBAC class since we only retrieve
+		// data which belongs to the current subject (user).
+		return new FileDao().readBySubject(
+				PtLocaleDao.forLanguageTag(language),
+				new SubjectResource().self().getUuid(),
+				offset,
+				size);
+	}
+
+	@GET
 	@Path("{fileId:([0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12})}")
 	public FilePojo getFile(
 			@Context UriInfo uriInfo,
@@ -73,6 +94,22 @@ public class FileResource {
 		return new FileRbac().read(
 				OpenInfraHttpMethod.valueOf(request.getMethod()),
 				uriInfo, null, fileId);
+	}
+
+	@DELETE
+	@Path("{fileId:([0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12})}")
+	public Response delete(
+			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
+			@PathParam("fileId") UUID fileId) {
+		FileDao dao = new FileDao();
+		FilePojo fp = dao.read(null, fileId);
+		boolean del = new FileDao().delete(
+				fileId, new SubjectResource().self().getUuid());
+		if(del) {
+			deleteFile(fp);
+		}
+		return OpenInfraResponseBuilder.deleteResponse(del, fileId);
 	}
 
 	@GET
@@ -108,27 +145,11 @@ public class FileResource {
 			document = Files.readAllBytes(p);
 			contentType = Files.probeContentType(p);
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new WebApplicationException(Status.NOT_FOUND);
 		}
 		return Response.ok(document, contentType)
 				.header("content-disposition","attachment; filename = " +
 						pojo.getOriginFileName()).build();
-	}
-
-	@GET
-	public List<FilePojo> files(
-			@Context UriInfo uriInfo,
-			@Context HttpServletRequest request,
-			@QueryParam("language") String language,
-			@QueryParam("offset") int offset,
-			@QueryParam("size") int size) {
-		// In this case we don't need the RBAC class since we only retrieve
-		// data which belongs to the current subject (user).
-		return new FileDao().readBySubject(
-				PtLocaleDao.forLanguageTag(language),
-				new SubjectResource().self().getUuid(),
-				offset,
-				size);
 	}
 
 	@POST
@@ -163,9 +184,8 @@ public class FileResource {
 				signature + "." + FilenameUtils.getExtension(fileName));
 		currentFile.renameTo(signatureFile);
 
-		pojo = resizeDimensions(signatureFile.getAbsolutePath(),
-				signature, pojo);
-    	pojo.setSignature(signature);
+		pojo.setSignature(signature);
+		pojo = resizeDimensions(signatureFile.getAbsolutePath(), pojo);
     	pojo.setOriginFileName(originFileName);
     	pojo.setSubject(subject);
     	FileRbac rbac = new FileRbac();
@@ -215,9 +235,8 @@ public class FileResource {
     				signature + "." + FilenameUtils.getExtension(fileName));
     		currentFile.renameTo(signatureFile);
 
-    		pojo = resizeDimensions(signatureFile.getAbsolutePath(),
-    				signature, pojo);
-	    	pojo.setSignature(signature);
+    		pojo.setSignature(signature);
+    		pojo = resizeDimensions(signatureFile.getAbsolutePath(), pojo);
 	    	pojo.setOriginFileName(originFileName);
 	    	pojo.setMimeType(field.getMediaType().toString());
 	    	pojo.setSubject(subject);
@@ -263,18 +282,29 @@ public class FileResource {
 		return filePath;
 	}
 
-	private FilePojo resizeDimensions(String file,
-			String signature, FilePojo pojo) {
+	private void deleteFile(FilePojo pojo) {
+
+	}
+
+	/**
+	 * This method is used to create a set of resized images of the uploaded
+	 * file. Therefore, ImageMagick is used. It will create the corresponding
+	 * resized images when it is possible.
+	 *
+	 * @param file the path to the file
+	 * @param pojo the corresponding pojo object
+	 * @return
+	 */
+	private FilePojo resizeDimensions(String file, FilePojo pojo) {
 
 		ConvertCmd cmd = new ConvertCmd();
-		String extension = ".png";
 
 		String[] thumbDim = OpenInfraProperties.getProperty(
 				OpenInfraPropertyKeys.IMG_THUMBNAIL_DIMENSION.getKey())
 				.split("x");
 		String thumbPath =
 				OpenInfraPropertyValues.IMAGE_THUMBNAIL_PATH.getValue() +
-				signature + extension;
+				pojo.getSignature() + EXTENSION;
 		IMOperation thumbnail = new IMOperation();
 		thumbnail.addImage(file);
 		thumbnail.resize(Integer.valueOf(thumbDim[0]),
@@ -286,7 +316,7 @@ public class FileResource {
 				.split("x");
 		String middlePath =
 				OpenInfraPropertyValues.IMAGE_MIDDLE_PATH.getValue() +
-				signature + extension;
+				pojo.getSignature() + EXTENSION;
 		IMOperation middle = new IMOperation();
 		middle.addImage(file);
 		middle.resize(Integer.valueOf(middleDim[0]),
@@ -298,7 +328,7 @@ public class FileResource {
 				.split("x");
 		String popupPath =
 				OpenInfraPropertyValues.IMAGE_POPUP_PATH.getValue() +
-				signature + extension;
+				pojo.getSignature() + EXTENSION;
 		IMOperation popup = new IMOperation();
 		popup.addImage(file);
 		popup.resize(Integer.valueOf(popupDim[0]),
@@ -325,7 +355,8 @@ public class FileResource {
 			pojo.setPopupDimension(
 					popupGeom.substring(0, popupGeom.indexOf("+")));
 		} catch (IOException | InterruptedException | IM4JavaException e) {
-			throw new OpenInfraWebException(e);
+			// do nothing
+			//e.printStackTrace();
 		}
 		return pojo;
 	}
