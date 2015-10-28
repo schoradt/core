@@ -2,85 +2,87 @@ package de.btu.openinfra.plugins.solr;
 
 import java.io.IOException;
 
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpSolrServer;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.impl.HttpSolrClient.RemoteSolrException;
+
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
+import de.btu.openinfra.backend.exception.OpenInfraWebException;
+import de.btu.openinfra.plugins.PluginProperties;
+import de.btu.openinfra.plugins.solr.exception.OpenInfraSolrException;
 
 /**
- * This class provides the connection to the Solr server.
- * 
- *  @author <a href="http://www.b-tu.de">BTU</a> DBIS
+ * This class creates a connection to the Solr server.
+ *
+ * @author <a href="http://www.b-tu.de">BTU</a> DBIS
+ *
  */
 public class SolrServer {
-    
-    private static HttpSolrServer solr;
-    private static String url;
-    
+
+    private String url;
+    private SolrClient solr;
+
     /**
-     * The constructor saves the URL to the Solr server.
-     * 
-     * @param url  the URL string for the connection to the Solr server
+     *  Default constructor that uses the Solr connection URL from the
+     *  OpenInfra.properties file
      */
-    public SolrServer(String url) {
-        // set the URL parameter
-        setUrl(url);
+    public SolrServer() {
+        // TODO find a better way to retrieve the plugin name
+        this(PluginProperties.getProperty(
+               SolrPropertyKeys.SOLR_URL.getKey(),
+               "Solr")
+               + "/" +
+               PluginProperties.getProperty(
+                       SolrPropertyKeys.SOLR_CORE.getKey(),
+                       "Solr")
+               );
     }
-    
+
     /**
-     * Creates a connection to the Solr server and returns the connection
-     * object. If the connection can not be established, NULL will be returned.
-     * 
-     * @return  HttpSolrServer  connection object to Solr server or NULL
+     *  Constructor that allows to override the Solr connection URL from the
+     *  OpenInfra.properties file
      */
-    public HttpSolrServer connectToServer() {
-        // create the Solr object
-        setSolr(new HttpSolrServer(getUrl()));
-        
-        // test the connection and return the object
-        if (testConnection()) {
-            return getSolr();
-        } else {
-            return null;
-        }
+    public SolrServer(String URL) {
+        setUrl(URL);
+        // initialize the server connection
+        init();
     }
-    
-    /**
-     * This function pings the Solr server. False will be returned if the
-     * server is not reachable.
-     * 
-     * @return  boolean  false if no connection is possible, else true
-     */
-    private boolean testConnection() {
-        try {
-            // just ping the server to test the connection
-            solr.ping().getElapsedTime();
-        } catch (SolrServerException e) {
-            // TODO Debug message should not be here
-            System.out.println("The Solr server on " + url + " is not reachable."
-                                + " Please be sure that the Solr server is"
-                                + " running.");
-            return false;
-        } catch (IOException e) {
-            // what ever will lead to this point
-            e.printStackTrace();
-            return false;
-        }
-        // Solr server seems to be alive, no connection error occurred
-        return true;
-    }
-    
-    private static HttpSolrServer getSolr() {
-        return solr;
-    }
-    
-    private static void setSolr(HttpSolrServer solr) {
-        SolrServer.solr = solr;
-    }
-    
+
     private String getUrl() {
         return url;
     }
 
     private void setUrl(String url) {
-        SolrServer.url = url;
+        this.url = url;
+    }
+
+    public SolrClient getSolr() {
+        return solr;
+    }
+
+    private void setSolr(SolrClient solr) {
+        this.solr = solr;
+    }
+
+    /**
+     * This method connects to the the Solr server and test the connection.
+     *
+     * @return boolean true if the connection was successful else false
+     * @throws OpenInfraWebException if an error occurs while pinging the server
+     */
+    private void init() {
+        try {
+            // connects to the Solr server
+            setSolr(new HttpSolrClient(getUrl()));
+
+            // test the connection
+            if (getSolr() == null || getSolr().ping().getStatus() != 0) {
+                throw new OpenInfraSolrException(
+                        OpenInfraExceptionTypes.INTERNAL_SERVER_EXCEPTION);
+            }
+        } catch (SolrServerException | IOException | RemoteSolrException e) {
+            throw new OpenInfraWebException(e);
+        }
     }
 }
