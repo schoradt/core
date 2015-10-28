@@ -10,10 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
-import org.reflections.ReflectionUtils;
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
 import org.reflections.scanners.SubTypesScanner;
@@ -22,6 +20,7 @@ import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 import org.reflections.util.FilterBuilder;
 
+import de.btu.openinfra.backend.Reflection;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.pojos.LocalizedString;
@@ -110,7 +109,8 @@ public class PojoPrimer {
                 new HashMap<String, Class<? extends OpenInfraPojo>>());
         addClassesForSchema(
                 OpenInfraSchemas.META_DATA,
-                findAllClasses("de.btu.openinfra.backend.db.pojos.meta"));
+                Reflection.<OpenInfraPojo>findAllClasses(
+                        "de.btu.openinfra.backend.db.pojos.meta"));
 
         // add rbac pojo classes
         pojoClasses.put(
@@ -118,7 +118,8 @@ public class PojoPrimer {
                 new HashMap<String, Class<? extends OpenInfraPojo>>());
         addClassesForSchema(
                 OpenInfraSchemas.RBAC,
-                findAllClasses("de.btu.openinfra.backend.db.pojos.rbac"));
+                Reflection.<OpenInfraPojo>findAllClasses(
+                        "de.btu.openinfra.backend.db.pojos.rbac"));
 
         // add SYSTEM pojo classes
         Reflections reflections = new Reflections(
@@ -138,7 +139,7 @@ public class PojoPrimer {
                 new HashMap<String, Class<? extends OpenInfraPojo>>());
         addClassesForSchema(
                 OpenInfraSchemas.SYSTEM,
-                findAllClasses(reflections));
+                Reflection.<OpenInfraPojo>findAllClasses(reflections));
 
         // add projects pojo classes
         pojoClasses.put(
@@ -148,40 +149,9 @@ public class PojoPrimer {
                 pojoClasses.get(OpenInfraSchemas.SYSTEM));
         addClassesForSchema(
                 OpenInfraSchemas.PROJECTS,
-                findAllClasses("de.btu.openinfra.backend.db.pojos.project"));
+                Reflection.<OpenInfraPojo>findAllClasses(
+                        "de.btu.openinfra.backend.db.pojos.project"));
 
-    }
-
-    /**
-     * This method finds all classes for the given package name.
-     * @param packageName the package name
-     * @return list of all classes for the given package name
-     */
-    private List<Class<? extends OpenInfraPojo>> findAllClasses(
-            String packageName) {
-        Reflections reflections = new Reflections(
-                packageName,
-                new SubTypesScanner(false),
-                new ResourcesScanner(),
-                new TypeElementsScanner());
-
-        return findAllClasses(reflections);
-    }
-
-    /**
-     * This method finds all classes for the given reflections object.
-     * @param reflections the reflections object
-     * @return list of all classes for the given reflections object
-     */
-    private List<Class<? extends OpenInfraPojo>> findAllClasses(
-            Reflections reflections) {
-        // get all class names
-        Set<String> classNames = reflections.getStore().getStoreMap().get(
-                "TypeElementsScanner").keySet();
-
-        // return the list of classes
-        return ReflectionUtils.forNames(classNames, reflections
-              .getConfiguration().getClassLoaders());
     }
 
     /**
