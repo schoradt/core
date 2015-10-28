@@ -32,6 +32,7 @@
 					<th>Mitte</th>
 					<th>Vorschau</th>
 					<th>Uploaddatum</th>
+					<th>Metadata</th>
 					<th>UUID</th>
 					<th>Aktion</th>
 				</tr>
@@ -46,6 +47,11 @@
 					<td><a href="./files/${pojo.uuid}/middle">${pojo.middleDimension}</a></td>
 					<td><a href="./files/${pojo.uuid}/thumbnail">${pojo.thumbnailDimension}</a></td>
 					<td>${pojo.uploadedOn}</td>
+					<td title="Metadaten in XML ansehen">
+						<c:if test="${pojo.exifData != null}">
+							<a href="./files/${pojo.uuid}.xml">vorhanden</a>
+						</c:if>
+					</td>
 					<td>${pojo.uuid}</td>
 					<td>
 						<c:set var="deleteButton" value="${pojo.uuid}" />

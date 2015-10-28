@@ -7,8 +7,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,6 +37,12 @@ import org.im4java.core.ConvertCmd;
 import org.im4java.core.IM4JavaException;
 import org.im4java.core.IMOperation;
 import org.im4java.core.Info;
+import org.json.simple.JSONObject;
+
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.metadata.Directory;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.Tag;
 
 import de.btu.openinfra.backend.OpenInfraProperties;
 import de.btu.openinfra.backend.OpenInfraPropertyKeys;
@@ -192,6 +200,11 @@ public class FileResource {
 
 		pojo.setSignature(signature);
 		pojo = resizeDimensions(signatureFile.getAbsolutePath(), pojo);
+		try {
+			pojo.setExifData(extractMetadata(signatureFile));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
     	pojo.setOriginFileName(originFileName);
     	pojo.setSubject(subject);
     	FileRbac rbac = new FileRbac();
@@ -247,6 +260,12 @@ public class FileResource {
 
     		pojo.setMimeType(field.getMediaType().toString());
     		pojo.setSignature(signature);
+    		try {
+    			pojo.setExifData(extractMetadata(signatureFile));
+    		} catch (Exception e) {
+    			e.printStackTrace();
+    		}
+
     		pojo = resizeDimensions(signatureFile.getAbsolutePath(), pojo);
 	    	pojo.setOriginFileName(originFileName);
 	    	pojo.setSubject(subject);
@@ -449,6 +468,25 @@ public class FileResource {
 		}
 		op.addImage(destination);
 		return op;
+	}
+
+	@SuppressWarnings("unchecked")
+	private String extractMetadata(File file) throws Exception {
+		Metadata md = null;
+		md = ImageMetadataReader.readMetadata(file);
+
+		JSONObject json = new JSONObject();
+		Map<String, Map<String, String>> dirMap =
+				new HashMap<String, Map<String, String>>();
+		for(Directory dir : md.getDirectories()) {
+			Map<String, String> tags = new HashMap<String, String>();
+			for(Tag tag : dir.getTags()) {
+				tags.put(tag.getTagName(), tag.getDescription());
+			}
+			dirMap.put(dir.getName(), tags);
+		}
+		json.putAll(dirMap);
+		return json.toJSONString();
 	}
 
 }
