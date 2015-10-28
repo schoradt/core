@@ -282,8 +282,40 @@ public class FileResource {
 		return filePath;
 	}
 
+	/**
+	 * This method deletes all files concerning the pojo.
+	 *
+	 * @param pojo the corresponding pojo object
+	 */
 	private void deleteFile(FilePojo pojo) {
+		File origin = new File(
+				OpenInfraPropertyValues.UPLOAD_PATH.getValue() +
+				pojo.getSignature() + "." +
+						FilenameUtils.getExtension(pojo.getOriginFileName()));
+		if(origin.exists()) {
+			origin.delete();
+		}
 
+		File thumbnail = new File(
+				OpenInfraPropertyValues.IMAGE_THUMBNAIL_PATH.getValue() +
+				pojo.getSignature() + EXTENSION);
+		if(thumbnail.exists()) {
+			thumbnail.delete();
+		}
+
+		File middle = new File(
+				OpenInfraPropertyValues.IMAGE_MIDDLE_PATH.getValue() +
+				pojo.getSignature() + EXTENSION);
+		if(middle.exists()) {
+			middle.delete();
+		}
+
+		File popup = new File(
+				OpenInfraPropertyValues.IMAGE_POPUP_PATH.getValue() +
+				pojo.getSignature() + EXTENSION);
+		if(popup.exists()) {
+			popup.delete();
+		}
 	}
 
 	/**
@@ -356,7 +388,7 @@ public class FileResource {
 					popupGeom.substring(0, popupGeom.indexOf("+")));
 		} catch (IOException | InterruptedException | IM4JavaException e) {
 			// do nothing
-			//e.printStackTrace();
+			e.printStackTrace();
 		}
 		return pojo;
 	}
