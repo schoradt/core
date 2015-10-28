@@ -106,7 +106,7 @@ public class FileResource {
 		FilePojo fp = dao.read(null, fileId);
 		boolean del = new FileDao().delete(
 				fileId, new SubjectResource().self().getUuid());
-		if(del) {
+		if(del && dao.countBySignature(fp.getSignature()) == 0) {
 			deleteFile(fp);
 		}
 		return OpenInfraResponseBuilder.deleteResponse(del, fileId);
@@ -121,10 +121,10 @@ public class FileResource {
 			@PathParam("dim") String dim) {
 		FilePojo pojo = getFile(uriInfo, request, fileId);
 		String filePath = "";
-		String fileExtension = "png";
+		String fileExtension = ".png";
 		if(dim.equalsIgnoreCase("origin")) {
 			filePath = OpenInfraPropertyValues.UPLOAD_PATH.getValue();
-			fileExtension = FilenameUtils.getExtension(
+			fileExtension = "." + FilenameUtils.getExtension(
 					pojo.getOriginFileName());
 		} else if(dim.equalsIgnoreCase("thumbnail")) {
 			filePath = OpenInfraPropertyValues.IMAGE_THUMBNAIL_PATH.getValue();
@@ -133,7 +133,7 @@ public class FileResource {
 		} else if(dim.equalsIgnoreCase("popup")) {
 			filePath = OpenInfraPropertyValues.IMAGE_POPUP_PATH.getValue();
 		}
-		String fileName = filePath + pojo.getSignature() + "." + fileExtension;
+		String fileName = filePath + pojo.getSignature() + fileExtension;
 		// Send not found status code when file desn't exists
 		if(!new File(fileName).exists()) {
 			Response.status(404).build();
@@ -149,7 +149,9 @@ public class FileResource {
 		}
 		return Response.ok(document, contentType)
 				.header("content-disposition","attachment; filename = " +
-						pojo.getOriginFileName()).build();
+						FilenameUtils.removeExtension(
+								pojo.getOriginFileName()) +
+								fileExtension).build();
 	}
 
 	@POST
@@ -182,7 +184,11 @@ public class FileResource {
 		File signatureFile = new File(
 				OpenInfraPropertyValues.UPLOAD_PATH.getValue() +
 				signature + "." + FilenameUtils.getExtension(fileName));
-		currentFile.renameTo(signatureFile);
+		if(signatureFile.exists()) {
+			currentFile.delete();
+		} else {
+			currentFile.renameTo(signatureFile);
+		}
 
 		pojo.setSignature(signature);
 		pojo = resizeDimensions(signatureFile.getAbsolutePath(), pojo);
@@ -233,12 +239,16 @@ public class FileResource {
     		File signatureFile = new File(
     				OpenInfraPropertyValues.UPLOAD_PATH.getValue() +
     				signature + "." + FilenameUtils.getExtension(fileName));
-    		currentFile.renameTo(signatureFile);
+    		if(signatureFile.exists()) {
+    			currentFile.delete();
+    		} else {
+    			currentFile.renameTo(signatureFile);
+    		}
 
+    		pojo.setMimeType(field.getMediaType().toString());
     		pojo.setSignature(signature);
     		pojo = resizeDimensions(signatureFile.getAbsolutePath(), pojo);
 	    	pojo.setOriginFileName(originFileName);
-	    	pojo.setMimeType(field.getMediaType().toString());
 	    	pojo.setSubject(subject);
 	    	FileRbac rbac = new FileRbac();
 	    	UUID result = rbac.createOrUpdate(
@@ -253,7 +263,9 @@ public class FileResource {
 
 	/**
 	 * This method saves a file into the file system. The path is specified
-	 * by the upload path variable.
+	 * by the upload path variable. The file name is used to extract the file
+	 * extension. A UUID is generated in order to store the file into the file
+	 * system.
 	 *
 	 * @param fileStream
 	 * @param fileName
@@ -331,66 +343,112 @@ public class FileResource {
 
 		ConvertCmd cmd = new ConvertCmd();
 
+		// Thumbnail
 		String[] thumbDim = OpenInfraProperties.getProperty(
 				OpenInfraPropertyKeys.IMG_THUMBNAIL_DIMENSION.getKey())
 				.split("x");
 		String thumbPath =
 				OpenInfraPropertyValues.IMAGE_THUMBNAIL_PATH.getValue() +
 				pojo.getSignature() + EXTENSION;
-		IMOperation thumbnail = new IMOperation();
-		thumbnail.addImage(file);
-		thumbnail.resize(Integer.valueOf(thumbDim[0]),
-				Integer.valueOf(thumbDim[1]),"!");
-		thumbnail.addImage(thumbPath);
+		File thumbFile = new File(thumbPath);
 
+		// Middle sized image
 		String[] middleDim = OpenInfraProperties.getProperty(
 				OpenInfraPropertyKeys.IMG_MIDDLE_DIMENSION.getKey())
 				.split("x");
 		String middlePath =
 				OpenInfraPropertyValues.IMAGE_MIDDLE_PATH.getValue() +
 				pojo.getSignature() + EXTENSION;
-		IMOperation middle = new IMOperation();
-		middle.addImage(file);
-		middle.resize(Integer.valueOf(middleDim[0]),
-				Integer.valueOf(middleDim[1]));
-		middle.addImage(middlePath);
+		File middleFile = new File(middlePath);
 
+		// Popup sized image
 		String[] popupDim = OpenInfraProperties.getProperty(
 				OpenInfraPropertyKeys.IMG_POPUP_DIMENSION.getKey())
 				.split("x");
 		String popupPath =
 				OpenInfraPropertyValues.IMAGE_POPUP_PATH.getValue() +
 				pojo.getSignature() + EXTENSION;
-		IMOperation popup = new IMOperation();
-		popup.addImage(file);
-		popup.resize(Integer.valueOf(popupDim[0]),
-				Integer.valueOf(popupDim[1]));
-		popup.addImage(popupPath);
+		File popupFile = new File(popupPath);
 
 		try {
 			String originGeom = new Info(file, true).getImageGeometry();
 			pojo.setOriginDimension(
 					originGeom.substring(0, originGeom.indexOf("+")));
 
-			cmd.run(thumbnail);
-			String thumbGeom = new Info(thumbPath, true).getImageGeometry();
-			pojo.setThumbnailDimension(
-					thumbGeom.substring(0, thumbGeom.indexOf("+")));
+			if(!thumbFile.exists()) {
+				cmd.run(opBuilder(thumbDim, file,
+						pojo.getMimeType(), thumbPath, true));
+			}
+			if(thumbFile.exists()) {
+				String thumbGeom = new Info(thumbPath, true).getImageGeometry();
+				pojo.setThumbnailDimension(
+						thumbGeom.substring(0, thumbGeom.indexOf("+")));
+			}
 
-			cmd.run(middle);
-			String middleGeom = new Info(middlePath, true).getImageGeometry();
-			pojo.setMiddleDimension(
-					middleGeom.substring(0, middleGeom.indexOf("+")));
+			if(!middleFile.exists()) {
+				cmd.run(opBuilder(middleDim, file,
+						pojo.getMimeType(), middlePath, false));
+			}
+			if(middleFile.exists()) {
+				String middleGeom =
+						new Info(middlePath, true).getImageGeometry();
+				pojo.setMiddleDimension(
+						middleGeom.substring(0, middleGeom.indexOf("+")));
+			}
 
-			cmd.run(popup);
-			String popupGeom = new Info(popupPath, true).getImageGeometry();
-			pojo.setPopupDimension(
-					popupGeom.substring(0, popupGeom.indexOf("+")));
+			if(!popupFile.exists()) {
+				cmd.run(opBuilder(popupDim, file,
+						pojo.getMimeType(), popupPath, false));
+			}
+			if(popupFile.exists()) {
+				String popupGeom = new Info(popupPath, true).getImageGeometry();
+				pojo.setPopupDimension(
+						popupGeom.substring(0, popupGeom.indexOf("+")));
+			}
 		} catch (IOException | InterruptedException | IM4JavaException e) {
 			// do nothing
-			e.printStackTrace();
+			// e.printStackTrace();
 		}
 		return pojo;
+	}
+
+	/**
+	 * This method is a simple ImageMagick operation builder.
+	 *
+	 * @param dimensions
+	 * @param filePath
+	 * @param mimeType
+	 * @param destination
+	 * @param isThumbnail
+	 * @return
+	 */
+	private IMOperation opBuilder(
+			String[] dimensions, String filePath,
+			String mimeType, String destination, boolean isThumbnail) {
+		IMOperation op = new IMOperation();
+		if(mimeType.contains("pdf")) {
+			if(isThumbnail) {
+				op.thumbnail(Integer.valueOf(dimensions[0]),
+						Integer.valueOf(dimensions[1]),"!");
+			} else {
+				op.thumbnail(Integer.valueOf(dimensions[0]),
+						Integer.valueOf(dimensions[1]));
+			}
+			op.background("white");
+			op.alpha("remove");
+			op.addImage(filePath + " [0]");
+		} else {
+			op.addImage(filePath);
+			if(isThumbnail) {
+				op.resize(Integer.valueOf(dimensions[0]),
+						Integer.valueOf(dimensions[1]),"!");
+			} else {
+				op.resize(Integer.valueOf(dimensions[0]),
+						Integer.valueOf(dimensions[1]));
+			}
+		}
+		op.addImage(destination);
+		return op;
 	}
 
 }

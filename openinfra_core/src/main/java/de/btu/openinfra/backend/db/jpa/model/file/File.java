@@ -29,7 +29,11 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 	@NamedQuery(name="File.countBySubject",
 		query="SELECT COUNT(f) "
 				+ "FROM File f "
-				+ "WHERE f.subject = :subject")
+				+ "WHERE f.subject = :subject"),
+	@NamedQuery(name="File.countBySignature",
+		query="SELECT COUNT(f) "
+				+ "FROM File f "
+				+ "WHERE f.signature = :signature")
 })
 public class File extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;

@@ -150,6 +150,11 @@
 			</a>
         </li>
         <li>
+        	<a style="color:green;" href="${contextPath}/rest/v1/files">
+        		Dateien
+        	</a>
+        </li>
+        <li>
         	<a style="color:red;" href="${contextPath}/logout">
         		<fmt:message key="logout.label"></fmt:message>
         	</a>

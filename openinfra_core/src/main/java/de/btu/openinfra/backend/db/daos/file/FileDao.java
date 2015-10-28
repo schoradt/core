@@ -57,6 +57,15 @@ public class FileDao extends OpenInfraDao<FilePojo, File> {
 		return res;
 	}
 
+	public long countBySignature(String signature) {
+		Long count = 0L;
+		count = em.createNamedQuery(
+            "File.countBySignature",
+            Long.class).setParameter("signature", signature)
+            .getSingleResult().longValue();
+		return count;
+	}
+
 	public long countBySubject(UUID subject) {
 		Long count = 0L;
 		count = em.createNamedQuery(
