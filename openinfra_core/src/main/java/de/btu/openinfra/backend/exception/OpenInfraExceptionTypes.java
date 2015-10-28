@@ -42,7 +42,9 @@ public enum OpenInfraExceptionTypes {
     MISSING_VALUE_IN_POJO("The attribute value must not be empty."),
 
     MISSING_DATA_IN_POJO("Necessary information of the object has not been "
-            + "set");
+            + "set"),
+
+	PLUGIN_NOT_FOUND("The requested plugin was not found.");
 
     private String msg;
 
