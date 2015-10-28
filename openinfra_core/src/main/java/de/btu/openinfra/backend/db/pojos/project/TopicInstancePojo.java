@@ -1,13 +1,13 @@
-package de.btu.openinfra.backend.db.pojos;
+package de.btu.openinfra.backend.db.pojos.project;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 import de.btu.openinfra.backend.db.daos.MetaDataDao;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
-import de.btu.openinfra.backend.db.jpa.model.PtLocale;
+import de.btu.openinfra.backend.db.pojos.OpenInfraMetaDataPojo;
+import de.btu.openinfra.backend.db.pojos.TopicCharacteristicPojo;
 
 @XmlRootElement
 public class TopicInstancePojo extends OpenInfraMetaDataPojo {
@@ -46,15 +46,6 @@ public class TopicInstancePojo extends OpenInfraMetaDataPojo {
 
     public void setValues(List<AttributeValuePojo> values) {
         this.values = values;
-    }
-
-    @Override
-    protected void makePrimerHelper(PtLocale locale) {
-        topicCharacteristic = new TopicCharacteristicPojo();
-        topicCharacteristic.makePrimer(locale);
-        values = new ArrayList<AttributeValuePojo>();
-        values.add(new AttributeValuePojo());
-        values.get(0).makePrimer(locale);
     }
 
 }

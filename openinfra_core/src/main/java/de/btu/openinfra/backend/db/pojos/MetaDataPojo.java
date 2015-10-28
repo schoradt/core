@@ -7,7 +7,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.json.simple.JSONObject;
 
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
-import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 
 @XmlRootElement
 public class MetaDataPojo extends OpenInfraPojo {
@@ -56,14 +55,6 @@ public class MetaDataPojo extends OpenInfraPojo {
 
     public void setData(JSONObject data) {
         this.data = data;
-    }
-
-    @Override
-    protected void makePrimerHelper(PtLocale locale) {
-        objectId = null;
-        tableName = "";
-        pkColumn = "";
-        data = new JSONObject();
     }
 
 }

@@ -18,12 +18,12 @@ import de.btu.openinfra.backend.db.jpa.model.AttributeValueValue;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
 import de.btu.openinfra.backend.db.pojos.AttributeTypePojo;
 import de.btu.openinfra.backend.db.pojos.AttributeValueDomainPojo;
-import de.btu.openinfra.backend.db.pojos.AttributeValueGeomPojo;
 import de.btu.openinfra.backend.db.pojos.AttributeValueGeomzPojo;
-import de.btu.openinfra.backend.db.pojos.AttributeValuePojo;
 import de.btu.openinfra.backend.db.pojos.AttributeValueValuePojo;
 import de.btu.openinfra.backend.db.pojos.LocalizedString;
 import de.btu.openinfra.backend.db.pojos.PtFreeTextPojo;
+import de.btu.openinfra.backend.db.pojos.project.AttributeValueGeomPojo;
+import de.btu.openinfra.backend.db.pojos.project.AttributeValuePojo;
 
 /**
  * This class represents the AttributeValue and is used to access the underlying

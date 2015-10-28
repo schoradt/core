@@ -10,8 +10,8 @@ import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupToTopicCharacteristic
 import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupToValues;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeToAttributeTypeGroupPojo;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeToValue;
-import de.btu.openinfra.backend.db.pojos.AttributeValuePojo;
 import de.btu.openinfra.backend.db.pojos.TopicPojo;
+import de.btu.openinfra.backend.db.pojos.project.AttributeValuePojo;
 
 /**
  * This class represents a TopicInstance and is used to access the underlying 

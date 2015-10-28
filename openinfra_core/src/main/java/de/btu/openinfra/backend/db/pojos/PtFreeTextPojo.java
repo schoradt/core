@@ -1,12 +1,9 @@
 package de.btu.openinfra.backend.db.pojos;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlRootElement;
-
-import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 
 @XmlRootElement
 public class PtFreeTextPojo extends OpenInfraPojo {
@@ -33,15 +30,6 @@ public class PtFreeTextPojo extends OpenInfraPojo {
 
     public void setLocalizedStrings(List<LocalizedString> localizedStrings) {
         this.localizedStrings = localizedStrings;
-    }
-
-    @Override
-    protected void makePrimerHelper(PtLocale locale) {
-        localizedStrings = new ArrayList<LocalizedString>();
-        localizedStrings.add(new LocalizedString());
-        localizedStrings.get(0).setCharacterString("");
-        localizedStrings.get(0).setLocale(new PtLocalePojo());
-        localizedStrings.get(0).getLocale().makePrimer(locale);
     }
 
 }
