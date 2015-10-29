@@ -11,6 +11,7 @@ import org.apache.solr.common.SolrInputDocument;
 
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.TopicInstanceDao;
+import de.btu.openinfra.backend.db.jpa.model.AttributeValueDomain;
 import de.btu.openinfra.backend.db.jpa.model.AttributeValueValue;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
 
@@ -122,7 +123,7 @@ public class SolrIndexer {
      * @param ti  the Topic Instance model that should be indexed
      * @return SolrInputDocument the Solr document
      */
-    public SolrInputDocument createDocument(TopicInstance ti) {
+    private SolrInputDocument createDocument(TopicInstance ti) {
         SolrInputDocument doc = new SolrInputDocument();
 
         // add the topic instance id
@@ -141,21 +142,52 @@ public class SolrIndexer {
         // TODO don't forget attribute_value_domain!
         // run through all attribute values
         for (AttributeValueValue avv : ti.getAttributeValueValues()) {
-            // all translations
+            // for every translation of the value
             for (int i = 0; i < avv.getPtFreeText()
                     .getLocalizedCharacterStrings().size(); i++) {
-                // Add the attribute type id's as field name and append the
-                // language code. The attribute value will be saved as object
-                // value for every translation.
-                doc.addField(
-                        avv.getAttributeTypeToAttributeTypeGroup()
-                        .getAttributeType().getId().toString() + "_" +
-                                avv.getPtFreeText()
-                                .getLocalizedCharacterStrings().get(i)
-                                .getPtLocale().getLanguageCode()
-                                .getLanguageCode(),
-                        avv.getPtFreeText().getLocalizedCharacterStrings()
-                        .get(i).getFreeText());
+                // Add the name of the attribute type as field name. The
+                // attribute value will be saved as object value.
+                try {
+                    doc.addField(
+                            SolrCharacterConverter.convert(
+                                    avv.getAttributeTypeToAttributeTypeGroup()
+                                    .getAttributeType().getPtFreeText2()
+                                    .getLocalizedCharacterStrings().get(i)
+                                    .getFreeText()),
+                            avv.getPtFreeText().getLocalizedCharacterStrings()
+                            .get(i).getFreeText());
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    // If we got this exception no translation for either the
+                    // attribute type or the attribute value exists. To avoid
+                    // mixed language forms in the index we will completely
+                    // ignore this attribute type or attribute value.
+                }
+            }
+        }
+
+        // run through all attribute value domains
+        for (AttributeValueDomain avd : ti.getAttributeValueDomains()) {
+            // for every translation of the domain value
+            for (int i = 0; i < avd.getValueListValue().getPtFreeText2()
+                    .getLocalizedCharacterStrings().size(); i++) {
+                // Add the name of the attribute type as field name. The name of
+                // the value list of the domain will be saved as object value.
+                try {
+                    doc.addField(
+                            SolrCharacterConverter.convert(
+                                    avd.getAttributeTypeToAttributeTypeGroup()
+                                    .getAttributeType().getPtFreeText2()
+                                    .getLocalizedCharacterStrings().get(i)
+                                    .getFreeText()),
+                            avd.getValueListValue().getPtFreeText2()
+                            .getLocalizedCharacterStrings().get(i)
+                            .getFreeText());
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    // If we got this exception no translation for either the
+                    // attribute type or the attribute value exists. To avoid
+                    // mixed language forms in the index we will completely
+                    // ignore this attribute type or attribute value.
+                }
             }
         }
         return doc;
