@@ -40,13 +40,13 @@ public class SolrCharacterConverter {
      * and disallowed characters.
      *
      * @param input The string that should be converted
-     * @return      The converted string
+     * @return      The converted string in lower case
      */
     public static String convert(String input) {
         input = mapCharacters(input);
         input = deAccent(input);
         input = replaceCharacters(input);
-        return input;
+        return input.toLowerCase();
     }
 
     /**
