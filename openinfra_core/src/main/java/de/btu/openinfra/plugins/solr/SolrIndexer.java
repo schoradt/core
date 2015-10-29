@@ -13,7 +13,9 @@ import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.TopicInstanceDao;
 import de.btu.openinfra.backend.db.jpa.model.AttributeValueDomain;
 import de.btu.openinfra.backend.db.jpa.model.AttributeValueValue;
+import de.btu.openinfra.backend.db.jpa.model.LocalizedCharacterString;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
+import de.btu.openinfra.backend.exception.OpenInfraWebException;
 
 
 /**
@@ -38,19 +40,17 @@ public class SolrIndexer {
 
 
     /**
+     * TODO this is a temporary method that can be deleted in production mode.
+     *
      * This function starts the indexing process.
      */
     public boolean start() {
 
+        // TODO debug message, remove this
         System.out.println("clear index ...");
 
         // TODO delete old index only for testing
-        if (!deleteAllDocuments()) {
-            return false;
-        }
-
-        // TODO check the index for entries
-        // TODO if no entry exists, start an initial indexing
+//        deleteAllDocuments();
 
         System.out.println("add documents ...");
 
@@ -60,33 +60,21 @@ public class SolrIndexer {
         // Palatin
 //        indexAll(UUID.fromString("7d431941-eece-48ac-bce5-3062d8d32e76"));
         // Test
-        indexAll(UUID.fromString("e7d42bff-4e40-4f43-9d1b-1dc5a190cd75"));
+        refreshIndex(UUID.fromString("e7d42bff-4e40-4f43-9d1b-1dc5a190cd75"));
 
         return true;
     }
 
-
     /**
-     * TODO implement the update of a specific topic instance
-     */
-    public void update() {
-
-    }
-
-
-    /**
-     * This function will index every configured source.
+     * This function will index every topic instance of the passed project.
      *
      * @param projectId The id of the project that should be indexed.
      */
-    private boolean indexAll(UUID projectId) {
-        System.out.println("retrieving topic instances ... ");
+    public void refreshIndex(UUID projectId) {
 
         // get all topic instances
         List<TopicInstance> tiList = new TopicInstanceDao(
                 projectId, OpenInfraSchemas.PROJECTS).read();
-
-        System.out.println("Creating Documents ... ");
 
         Collection<SolrInputDocument> docs = new ArrayList<SolrInputDocument>();
         // run through all topic instances
@@ -94,8 +82,6 @@ public class SolrIndexer {
             // create a new document
             docs.add(createDocument(ti));
         }
-
-        System.out.println("Adding values to index ... ");
 
         // send the documents to the solr server
         try {
@@ -107,9 +93,6 @@ public class SolrIndexer {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
-        System.out.println("Indexing complete");
-        return true;
     }
 
     /**
@@ -120,7 +103,10 @@ public class SolrIndexer {
      * to the topic instance will dynamically be added in every translated
      * language.
      *
-     * @param ti  the Topic Instance model that should be indexed
+     * This method avoid committing the document to Solr, because it is more
+     * performant to commit all docs at once.
+     *
+     * @param ti  The Topic Instance model that should be indexed.
      * @return SolrInputDocument the Solr document
      */
     private SolrInputDocument createDocument(TopicInstance ti) {
@@ -139,74 +125,125 @@ public class SolrIndexer {
         doc.addField("topicCharacteristicId",
                      ti.getTopicCharacteristic().getId());
 
-        // TODO don't forget attribute_value_domain!
         // run through all attribute values
         for (AttributeValueValue avv : ti.getAttributeValueValues()) {
-            // for every translation of the value
-            for (int i = 0; i < avv.getPtFreeText()
-                    .getLocalizedCharacterStrings().size(); i++) {
-                // Add the name of the attribute type as field name. The
-                // attribute value will be saved as object value.
-                try {
-                    doc.addField(
-                            SolrCharacterConverter.convert(
-                                    avv.getAttributeTypeToAttributeTypeGroup()
-                                    .getAttributeType().getPtFreeText2()
-                                    .getLocalizedCharacterStrings().get(i)
-                                    .getFreeText()),
-                            avv.getPtFreeText().getLocalizedCharacterStrings()
-                            .get(i).getFreeText());
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    // If we got this exception no translation for either the
-                    // attribute type or the attribute value exists. To avoid
-                    // mixed language forms in the index we will completely
-                    // ignore this attribute type or attribute value.
-                }
-            }
+            // add the current attribute value value to the doc
+            addValuesToDoc(
+                    avv.getAttributeTypeToAttributeTypeGroup()
+                        .getAttributeType().getPtFreeText2()
+                        .getLocalizedCharacterStrings(),
+                    avv.getPtFreeText().getLocalizedCharacterStrings(),
+                    doc);
         }
 
         // run through all attribute value domains
         for (AttributeValueDomain avd : ti.getAttributeValueDomains()) {
-            // for every translation of the domain value
-            for (int i = 0; i < avd.getValueListValue().getPtFreeText2()
-                    .getLocalizedCharacterStrings().size(); i++) {
-                // Add the name of the attribute type as field name. The name of
-                // the value list of the domain will be saved as object value.
-                try {
-                    doc.addField(
-                            SolrCharacterConverter.convert(
-                                    avd.getAttributeTypeToAttributeTypeGroup()
-                                    .getAttributeType().getPtFreeText2()
-                                    .getLocalizedCharacterStrings().get(i)
-                                    .getFreeText()),
-                            avd.getValueListValue().getPtFreeText2()
-                            .getLocalizedCharacterStrings().get(i)
-                            .getFreeText());
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    // If we got this exception no translation for either the
-                    // attribute type or the attribute value exists. To avoid
-                    // mixed language forms in the index we will completely
-                    // ignore this attribute type or attribute value.
-                }
-            }
+            // add the current attribute value domain to the doc
+            addValuesToDoc(
+                    avd.getAttributeTypeToAttributeTypeGroup()
+                        .getAttributeType().getPtFreeText2()
+                        .getLocalizedCharacterStrings(),
+                    avd.getValueListValue().getPtFreeText2()
+                        .getLocalizedCharacterStrings(),
+                    doc);
         }
         return doc;
     }
 
-
     /**
-     * This method deletes all documents from the Solr index.
+     * This method will update a specific topic instance in the Solr index. It
+     * simply calls the method to create documents, because this will do the
+     * update as well.
+     *
+     * @param ti The topic instance that should be updated.
      */
-    private boolean deleteAllDocuments() {
+    public void updateDocument(TopicInstance ti) {
+        Collection<SolrInputDocument> docs = new ArrayList<SolrInputDocument>();
+        // call the create method to update the document
+        docs.add(createDocument(ti));
+
+        // send the updated document to the solr server
         try {
-            getSolrConnection().getSolr().deleteByQuery("*:*");
+            // add the documents to solr
+            getSolrConnection().getSolr().add(docs);
+            // commit the changes to the server
             getSolrConnection().getSolr().commit();
         } catch (SolrServerException | IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            return false;
         }
-        return true;
+    }
+
+    /**
+     * This method deletes a specific document from the Solr index.
+     *
+     * @param ti The Topic Instance model that should be indexed.
+     */
+    public void deleteDocument(TopicInstance ti) {
+        try {
+            getSolrConnection().getSolr().deleteById(ti.getId().toString());
+            getSolrConnection().getSolr().commit();
+        } catch (SolrServerException | IOException e) {
+            throw new OpenInfraWebException(e);
+        }
+    }
+
+    /**
+     * This method deletes all documents from the Solr index.
+     *
+     * @return True if the deletion was successful, else false.
+     */
+    public void deleteAllDocuments() {
+        try {
+            getSolrConnection().getSolr().deleteByQuery("*:*");
+            getSolrConnection().getSolr().commit();
+        } catch (SolrServerException | IOException e) {
+            throw new OpenInfraWebException(e);
+        }
+    }
+
+    /**
+     * This method adds the passed type and value to the passed Solr document.
+     * It will add the types and values for every language separately. It will
+     * also react on values that have a undefined locale (xx) and save them into
+     * different fields, depending on the type translation.
+     *
+     * @param type
+     * @param value
+     * @param doc
+     */
+    private void addValuesToDoc(
+            List<LocalizedCharacterString> type,
+            List<LocalizedCharacterString> value,
+            SolrInputDocument doc
+            ) {
+        // for every translation of the attribute type
+        for (int i = 0; i < type.size(); i++) {
+            // set the value locale to the counter
+            int valueLocale = i;
+
+            // check if the locale of the attribute value is xx
+            if (value.get(0).getPtLocale().getLanguageCode().getLanguageCode()
+                    .equals("xx")) {
+                // set the value locale to 0, because their is only one
+                valueLocale = 0;
+            }
+
+            // Add the name of the attribute type as field name. The
+            // attribute value will be saved as object value.
+            try {
+                doc.addField(
+                        SolrCharacterConverter.convert(
+                                type.get(i)
+                                .getFreeText()),
+                        value.get(valueLocale).getFreeText());
+            } catch (ArrayIndexOutOfBoundsException e) {
+                // If we got this exception no translation for either the
+                // attribute type or the attribute value exists. To avoid
+                // mixed language forms in the index we will completely
+                // ignore this attribute type or attribute value.
+            }
+        }
     }
 
     private SolrServer getSolrConnection() {
