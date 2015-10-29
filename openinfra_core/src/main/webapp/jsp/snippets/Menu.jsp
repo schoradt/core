@@ -151,7 +151,7 @@
         </li>
         <li>
         	<a style="color:green;" href="${contextPath}/rest/v1/files">
-        		Dateien
+        		Dateien (Benutzer)
         	</a>
         </li>
         <li>

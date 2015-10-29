@@ -48,16 +48,15 @@ import com.drew.metadata.Tag;
 import de.btu.openinfra.backend.OpenInfraProperties;
 import de.btu.openinfra.backend.OpenInfraPropertyKeys;
 import de.btu.openinfra.backend.OpenInfraPropertyValues;
-import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.daos.file.FileDao;
 import de.btu.openinfra.backend.db.daos.file.FilesProjectDao;
 import de.btu.openinfra.backend.db.pojos.file.FilePojo;
 import de.btu.openinfra.backend.db.pojos.file.FilesProjectPojo;
 import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
 import de.btu.openinfra.backend.db.rbac.file.FileRbac;
+import de.btu.openinfra.backend.db.rbac.rbac.SubjectRbac;
 import de.btu.openinfra.backend.exception.OpenInfraWebException;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
-import de.btu.openinfra.backend.rest.rbac.SubjectResource;
 
 @Path("/v1/files")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
@@ -71,29 +70,22 @@ public class FileResource {
 	@GET
     @Path("count")
 	@Produces({MediaType.TEXT_PLAIN})
-    public long getFilesCount(
+    public long getFilesCountBySubject(
     		@Context UriInfo uriInfo,
     		@Context HttpServletRequest request) {
-		// In this case we don't need the RBAC class since we only retrieve
-		// data which belongs to the current subject (user).
-		return new FileDao().countBySubject(
-				new SubjectResource().self().getUuid());
+		return new FileRbac().getFilesCountBySubject(
+				OpenInfraHttpMethod.valueOf(request.getMethod()), uriInfo);
 	}
 
 	@GET
-	public List<FilePojo> files(
+	public List<FilePojo> readFilesBySubject(
 			@Context UriInfo uriInfo,
 			@Context HttpServletRequest request,
-			@QueryParam("language") String language,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
-		// In this case we don't need the RBAC class since we only retrieve
-		// data which belongs to the current subject (user).
-		return new FileDao().readBySubject(
-				PtLocaleDao.forLanguageTag(language),
-				new SubjectResource().self().getUuid(),
-				offset,
-				size);
+		return new FileRbac().readBySubject(
+				OpenInfraHttpMethod.valueOf(request.getMethod()),
+				uriInfo, offset, size);
 	}
 
 	@GET
@@ -104,7 +96,7 @@ public class FileResource {
 			@PathParam("fileId") UUID fileId) {
 		// Return the file, when the current user is owner of this file
 		FilePojo pojo = new FileDao().read(null, fileId);
-		if(new SubjectResource().self().getUuid().equals(pojo.getSubject())) {
+		if(new SubjectRbac().self().getUuid().equals(pojo.getSubject())) {
 			return pojo;
 		}
 
@@ -137,7 +129,7 @@ public class FileResource {
 		FileDao dao = new FileDao();
 		FilePojo fp = dao.read(null, fileId);
 		boolean del = new FileDao().delete(
-				fileId, new SubjectResource().self().getUuid());
+				fileId, new SubjectRbac().self().getUuid());
 		if(del && dao.countBySignature(fp.getSignature()) == 0) {
 			deleteFile(fp);
 		}
@@ -200,7 +192,7 @@ public class FileResource {
 		}
 
 		// Get the current user id and create a list to hold uploaded files
-		UUID subject = new SubjectResource().self().getUuid();
+		UUID subject = new SubjectRbac().self().getUuid();
 
 		FilePojo pojo = new FilePojo();
     	String signature = "";
@@ -258,7 +250,7 @@ public class FileResource {
 		}
 
 		// Get the current user id and create a list to hold uploaded files
-		UUID subject = new SubjectResource().self().getUuid();
+		UUID subject = new SubjectRbac().self().getUuid();
 		List<FilePojo> files = new LinkedList<FilePojo>();
 
 		List<FormDataBodyPart> fields = multiPart.getFields("files");

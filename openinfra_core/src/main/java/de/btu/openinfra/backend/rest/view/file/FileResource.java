@@ -25,26 +25,18 @@ public class FileResource {
 
 	@GET
 	@Template(name="/views/list/Files.jsp")
-	@Produces(MediaType.TEXT_HTML +
-			OpenInfraResponseBuilder.UTF8_CHARSET +
-			OpenInfraResponseBuilder.HTML_PRIORITY)
-    public List<FilePojo> files(
+    public List<FilePojo> filesByUser(
     		@Context UriInfo uriInfo,
 			@Context HttpServletRequest request,
-			@QueryParam("language") String language,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
         return new de.btu.openinfra.backend.rest.file.FileResource()
-        .files(uriInfo, request, language, offset, size);
+        .readFilesBySubject(uriInfo, request, offset, size);
     }
-
 
 	@GET
 	@Path("upload")
 	@Template(name="/views/Upload.jsp")
-	@Produces(MediaType.TEXT_HTML +
-			OpenInfraResponseBuilder.UTF8_CHARSET +
-			OpenInfraResponseBuilder.HTML_PRIORITY)
     public Response uploadFiles() {
         return Response.ok().entity("file upload").build();
     }

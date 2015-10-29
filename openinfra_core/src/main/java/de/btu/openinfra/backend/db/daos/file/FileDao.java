@@ -14,6 +14,7 @@ import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
 import de.btu.openinfra.backend.db.jpa.model.file.File;
 import de.btu.openinfra.backend.db.pojos.file.FilePojo;
+import de.btu.openinfra.backend.db.pojos.file.FilesProjectPojo;
 
 public class FileDao extends OpenInfraDao<FilePojo, File> {
 
@@ -58,6 +59,23 @@ public class FileDao extends OpenInfraDao<FilePojo, File> {
 			res.add(mapToPojo(locale, f));
 		}
 		return res;
+	}
+
+	/**
+	 * This method retrieves a list of FilesProject POJOs and uses this list
+	 * to retrieve the real File POJOs.
+	 *
+	 * @param project the project id
+	 * @return
+	 */
+	public List<FilePojo> readByProject(UUID project) {
+		List<FilesProjectPojo> fps =
+				new FilesProjectDao().readByProject(project);
+		List<FilePojo> files = new LinkedList<FilePojo>();
+		for(FilesProjectPojo fp : fps) {
+			files.add(read(null, fp.getFile()));
+		}
+		return files;
 	}
 
 	public long countBySignature(String signature) {

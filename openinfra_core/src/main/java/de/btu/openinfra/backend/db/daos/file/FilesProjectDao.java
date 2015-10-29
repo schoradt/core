@@ -23,9 +23,17 @@ public class FilesProjectDao extends
 	}
 
 	public List<FilesProjectPojo> readByFileId(UUID file) {
+		return readByValue("FilesProject.findByFileId", file);
+	}
+
+	public List<FilesProjectPojo> readByProject(UUID project) {
+		return readByValue("FilesProject.findByProject", project);
+	}
+
+	private List<FilesProjectPojo> readByValue(String namedQuery, UUID value) {
 		List<FilesProject> fps =
-				em.createNamedQuery("FilesProject.findByFileId",
-						FilesProject.class).setParameter("value", file)
+				em.createNamedQuery(namedQuery,
+						FilesProject.class).setParameter("value", value)
 						.getResultList();
 		List<FilesProjectPojo> pojos = new LinkedList<FilesProjectPojo>();
 		for(FilesProject fp : fps) {

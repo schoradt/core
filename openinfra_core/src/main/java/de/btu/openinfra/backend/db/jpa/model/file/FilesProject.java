@@ -24,7 +24,11 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 	@NamedQuery(name="FilesProject.findByFileId",
 			query="SELECT f FROM "
 					+ "FilesProject f "
-					+ "WHERE f.fileId = :value ")
+					+ "WHERE f.fileId = :value "),
+	@NamedQuery(name="FilesProject.findByProject",
+					query="SELECT f "
+							+ "FROM FilesProject f "
+							+ "WHERE f.projectId = :value")
 })
 public class FilesProject extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;
