@@ -1,3 +1,5 @@
+<%@page import="de.btu.openinfra.backend.db.rbac.rbac.SubjectRbac"%>
+<%@page import="de.btu.openinfra.backend.db.daos.rbac.SubjectDao"%>
 <%@page import="org.apache.xml.serializer.ToUnknownStream"%>
 <%@page import="de.btu.openinfra.backend.db.daos.ValueListValueDao"%>
 <%@page import="java.util.UUID"%>
@@ -17,7 +19,9 @@
 	<!-- include the menu -->
 	<%@ include file="../../snippets/Menu.jsp" %>
 
+<c:if test="${fn:contains(requestUrl, '/rest/v1/files')}">
 <h3><a href="./files/upload">Neue Datei(en) hochladen</a></h3>	
+</c:if>
 	
 	<div class="panel panel-default">
 
@@ -34,6 +38,9 @@
 					<th>Uploaddatum</th>
 					<th>Metadata</th>
 					<th>UUID</th>
+					<c:if test="${fn:contains(requestUrl, '/rest/v1/files')}">
+						<th>Zugeordnete Projekte</th>
+					</c:if>
 					<th>Aktion</th>
 				</tr>
 			</thead>
@@ -53,6 +60,22 @@
 						</c:if>
 					</td>
 					<td>${pojo.uuid}</td>
+					<c:if test="${fn:contains(requestUrl, '/rest/v1/files')}">
+						<td>
+					   		<c:set var="projects" value=""/>
+							<%
+								pageContext.setAttribute("projects", 
+																new SubjectRbac().self().getProjects());
+							%>
+							${projects}
+							<form action="" method="post">
+							   		<c:forEach var="pp" items="${projects}">
+							   			<input type="checkbox" name="project" value="${pp.uuid}">${pp.uuid}<br>
+							   		</c:forEach>
+								  <input type="submit" value="Submit">
+							</form>
+						</td>
+					</c:if>
 					<td>
 						<c:set var="deleteButton" value="${pojo.uuid}" />
 						<%@ include file="../../snippets/ButtonBar.jsp" %>

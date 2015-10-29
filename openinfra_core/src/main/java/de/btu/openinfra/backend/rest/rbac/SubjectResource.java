@@ -19,6 +19,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
+import de.btu.openinfra.backend.db.pojos.meta.ProjectsPojo;
 import de.btu.openinfra.backend.db.pojos.rbac.SubjectPojo;
 import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
 import de.btu.openinfra.backend.db.rbac.rbac.SubjectRbac;
@@ -139,6 +140,13 @@ public class SubjectResource {
 		return new SubjectRbac().self();
 	}
 
+	@GET
+	@Path("self/projects")
+	public List<ProjectsPojo> projects() {
 
+		//new ProjectsResource() Dao(OpenInfraSchemas.META_DATA).read()
+
+		return null;
+	}
 
 }

@@ -96,6 +96,10 @@ public class FileDao extends OpenInfraDao<FilePojo, File> {
 		return count;
 	}
 
+	public long countByProject(UUID projectId) {
+		return new FilesProjectDao().countByProject(projectId);
+	}
+
 	@Override
 	public FilePojo mapToPojo(Locale locale, File modelObject) {
 		FilePojo pojo = new FilePojo(modelObject);

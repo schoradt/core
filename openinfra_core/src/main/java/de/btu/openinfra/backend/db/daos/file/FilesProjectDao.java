@@ -30,6 +30,15 @@ public class FilesProjectDao extends
 		return readByValue("FilesProject.findByProject", project);
 	}
 
+	public long countByProject(UUID projectId) {
+		Long count = 0L;
+		count = em.createNamedQuery(
+            "FilesProject.countByProject",
+            Long.class).setParameter("value", projectId)
+            .getSingleResult().longValue();
+		return count;
+	}
+
 	private List<FilesProjectPojo> readByValue(String namedQuery, UUID value) {
 		List<FilesProject> fps =
 				em.createNamedQuery(namedQuery,

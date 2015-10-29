@@ -21,6 +21,10 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 @NamedQueries({
 	@NamedQuery(name="FilesProject.findAll",
 			query="SELECT f FROM FilesProject f"),
+	@NamedQuery(name="FilesProject.countByProject",
+			query="SELECT COUNT(f) FROM "
+					+ "FilesProject f "
+					+ "WHERE f.projectId = :value "),
 	@NamedQuery(name="FilesProject.findByFileId",
 			query="SELECT f FROM "
 					+ "FilesProject f "

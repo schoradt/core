@@ -1,3 +1,4 @@
+<%@page import="de.btu.openinfra.backend.db.daos.file.FileDao"%>
 <%@page import="de.btu.openinfra.backend.db.daos.ValueListDao"%>
 <%@page import="java.util.UUID"%>
 <%@page import="de.btu.openinfra.backend.db.daos.TopicCharacteristicDao"%>
@@ -62,7 +63,18 @@
 									</c:forEach>&nbsp;
 					    		</div>
 					    		<br/>
+					    		
 					    		<div class="media-body">
+									<div style="padding-bottom: 3px;">
+						    			<a style="color: green;" href="<%= request.getContextPath() %>/rest/v1/projects/${pojo.uuid}/files">
+						    				Dateien (Projekt)
+						    			</a>
+						    			<span class="badge">
+								    		<c:set var="currentProject" value="${pojo.uuid}"/>
+											<%=new FileDao().countByProject(UUID.fromString(pageContext.getAttribute("currentProject").toString())) %>
+						    			</span>
+						    		</div>
+
 									<div style="padding-bottom: 3px;">
 						    			<a href="<%= request.getContextPath() %>/rest/v1/projects/${pojo.uuid}/topiccharacteristics">
 						    				<fmt:message key="topiccharacteristics.label"/>
