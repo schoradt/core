@@ -17,16 +17,14 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 
 /**
  * The persistent class for the log database table.
- * 
+ *
  */
 @Entity
 @Table(schema="meta_data")
 @NamedQueries({
 	@NamedQuery(name="Log.findAll", query="SELECT l FROM Log l"),
-    @NamedQuery(name="Log.count",
-    	query="SELECT COUNT(l) FROM Log l")
+    @NamedQuery(name="Log.count", query="SELECT COUNT(l) FROM Log l")
 })
-
 public class Log extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 

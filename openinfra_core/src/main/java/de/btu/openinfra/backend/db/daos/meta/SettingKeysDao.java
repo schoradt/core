@@ -1,6 +1,7 @@
 package de.btu.openinfra.backend.db.daos.meta;
 
 import java.util.Locale;
+import java.util.UUID;
 
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
@@ -15,11 +16,11 @@ public class SettingKeysDao extends OpenInfraDao<SettingKeysPojo, SettingKeys> {
     /**
      * This is the required constructor which calls the super constructor and in
      * turn creates the corresponding entity manager.
-     *
+     * @param currentProjectId The identifier of the current project.
      * @param schema           the required schema
      */
-    public SettingKeysDao(OpenInfraSchemas schema) {
-        super(null, schema, SettingKeys.class);
+    public SettingKeysDao(UUID currentProjectId, OpenInfraSchemas schema) {
+        super(null, OpenInfraSchemas.META_DATA, SettingKeys.class);
     }
 
     @Override
@@ -79,22 +80,6 @@ public class SettingKeysDao extends OpenInfraDao<SettingKeysPojo, SettingKeys> {
                     OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
         }
         return resultSettingKeys;
-    }
-
-    /**
-     * Creates an empty setting keys pojo.
-     * @return an empty setting keys pojo
-     */
-    public SettingKeysPojo newSettingKeys() {
-       return newPojoStatically();
-    }
-
-    /**
-     * This method implements the method newSettingKeys in a static way.
-     * @return an empty setting keys pojo
-     */
-    public static SettingKeysPojo newPojoStatically() {
-        return new SettingKeysPojo();
     }
 
 }
