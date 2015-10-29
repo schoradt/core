@@ -85,4 +85,10 @@ public class SolrServer {
             throw new OpenInfraWebException(e);
         }
     }
+
+    @Override
+    protected void finalize() throws Throwable {
+        getSolr().close();
+        super.finalize();
+    }
 }
