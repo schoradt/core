@@ -1,6 +1,7 @@
 package de.btu.openinfra.backend.db.daos.meta;
 
 import java.util.Locale;
+import java.util.UUID;
 
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
@@ -23,11 +24,13 @@ public class DatabaseConnectionDao
     /**
      * This is the required constructor which calls the super constructor and in
      * turn creates the corresponding entity manager.
-     *
+     * @param currentProjectId The identifier of the current project.
      * @param schema           the required schema
      */
-    public DatabaseConnectionDao(OpenInfraSchemas schema) {
-        super(null, schema, DatabaseConnection.class);
+    public DatabaseConnectionDao(
+            UUID currentProjectId,
+            OpenInfraSchemas schema) {
+        super(null, OpenInfraSchemas.META_DATA, DatabaseConnection.class);
     }
 
     @Override
@@ -109,36 +112,6 @@ public class DatabaseConnectionDao
                     OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
         }
         return resultDatabaseConnection;
-    }
-
-    /**
-     * Creates an empty database connection pojo.
-     * @return an empty database connection pojo
-     */
-    public DatabaseConnectionPojo newDatabaseConnection() {
-       return newPojoStatically();
-    }
-
-    /**
-     * This method implements the method newDatabaseConnection in a static way.
-     * @return an empty database connection pojo
-     */
-    public static DatabaseConnectionPojo newPojoStatically() {
-        DatabaseConnectionPojo newDatabaseConncetionPojo =
-                new DatabaseConnectionPojo();
-
-        newDatabaseConncetionPojo.setCredentials(
-                CredentialsDao.newPojoStatically());
-        newDatabaseConncetionPojo.setDatabase(
-                DatabasesDao.newPojoStatically());
-        newDatabaseConncetionPojo.setPort(
-                PortsDao.newPojoStatically());
-        newDatabaseConncetionPojo.setSchema(
-                SchemasDao.newPojoStatically());
-        newDatabaseConncetionPojo.setServer(
-                ServersDao.newPojoStatically());
-
-        return newDatabaseConncetionPojo;
     }
 
 }

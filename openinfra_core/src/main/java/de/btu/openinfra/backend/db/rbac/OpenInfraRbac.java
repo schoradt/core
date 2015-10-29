@@ -153,8 +153,8 @@ public abstract class OpenInfraRbac<
 			return dao.getDeclaredConstructor(constructorTypes).newInstance(
 					currentProjectId,
 					schema).read(locale, offset, size);
-		} catch (InstantiationException   | IllegalAccessException | 
-				 IllegalArgumentException | InvocationTargetException | 
+		} catch (InstantiationException   | IllegalAccessException |
+				 IllegalArgumentException | InvocationTargetException |
 				 NoSuchMethodException    | SecurityException ex) {
 			throw new OpenInfraWebException(ex);
 		}
@@ -183,8 +183,8 @@ public abstract class OpenInfraRbac<
 			return dao.getDeclaredConstructor(constructorTypes).newInstance(
 					currentProjectId,
 					schema).read(locale, order, column, offset, size);
-		} catch (InstantiationException   | IllegalAccessException | 
-				 IllegalArgumentException | InvocationTargetException | 
+		} catch (InstantiationException   | IllegalAccessException |
+				 IllegalArgumentException | InvocationTargetException |
 				 NoSuchMethodException    | SecurityException ex) {
 			throw new OpenInfraWebException(ex);
 		}
@@ -207,8 +207,8 @@ public abstract class OpenInfraRbac<
 			return dao.getDeclaredConstructor(constructorTypes).newInstance(
 					currentProjectId,
 					schema).read(locale, id);
-		} catch (InstantiationException   | IllegalAccessException | 
-				 IllegalArgumentException | InvocationTargetException | 
+		} catch (InstantiationException   | IllegalAccessException |
+				 IllegalArgumentException | InvocationTargetException |
 				 NoSuchMethodException    | SecurityException ex) {
 			throw new OpenInfraWebException(ex);
 		}
@@ -225,8 +225,8 @@ public abstract class OpenInfraRbac<
 			return dao.getDeclaredConstructor(constructorTypes).newInstance(
 					currentProjectId,
 					schema).getCount();
-		} catch (InstantiationException   | IllegalAccessException | 
-				 IllegalArgumentException | InvocationTargetException | 
+		} catch (InstantiationException   | IllegalAccessException |
+				 IllegalArgumentException | InvocationTargetException |
 				 NoSuchMethodException    | SecurityException ex) {
 			throw new OpenInfraWebException(ex);
 		}
@@ -249,8 +249,8 @@ public abstract class OpenInfraRbac<
 			return dao.getDeclaredConstructor(constructorTypes).newInstance(
 					currentProjectId,
 					schema).createOrUpdate(pojo, valueId);
-		} catch (InstantiationException   | IllegalAccessException | 
-				 IllegalArgumentException | InvocationTargetException | 
+		} catch (InstantiationException   | IllegalAccessException |
+				 IllegalArgumentException | InvocationTargetException |
 				 NoSuchMethodException    | SecurityException ex) {
 			throw new OpenInfraWebException(ex);
 		}
@@ -275,8 +275,8 @@ public abstract class OpenInfraRbac<
 			return dao.getDeclaredConstructor(constructorTypes).newInstance(
 					currentProjectId,
 					schema).createOrUpdate(pojo, valueId, json);
-		} catch (InstantiationException   | IllegalAccessException | 
-				 IllegalArgumentException | InvocationTargetException | 
+		} catch (InstantiationException   | IllegalAccessException |
+				 IllegalArgumentException | InvocationTargetException |
 				 NoSuchMethodException    | SecurityException ex) {
 			throw new OpenInfraWebException(ex);
 		}
@@ -297,8 +297,8 @@ public abstract class OpenInfraRbac<
 			return dao.getDeclaredConstructor(constructorTypes).newInstance(
 					currentProjectId,
 					schema).delete(uuid);
-		} catch (InstantiationException   | IllegalAccessException | 
-				 IllegalArgumentException | InvocationTargetException | 
+		} catch (InstantiationException   | IllegalAccessException |
+				 IllegalArgumentException | InvocationTargetException |
 				 NoSuchMethodException    | SecurityException ex) {
 			throw new OpenInfraWebException(ex);
 		}
@@ -396,6 +396,9 @@ public abstract class OpenInfraRbac<
 			break;
 
 		case META_DATA:
+		    if(user.isPermitted("/rbac:" + httpMethod.getAccess())) {
+                return;
+            }
 			break;
 
 		case RBAC:

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -13,11 +14,14 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 
 /**
  * The persistent class for the level database table.
- * 
+ *
  */
 @Entity
 @Table(schema="meta_data")
-@NamedQuery(name="Level.findAll", query="SELECT l FROM Level l")
+@NamedQueries({
+    @NamedQuery(name="Level.findAll", query="SELECT l FROM Level l"),
+    @NamedQuery(name="Level.count", query="SELECT COUNT(l) FROM Level l")
+})
 public class Level extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -1,6 +1,7 @@
 package de.btu.openinfra.backend.db.daos.meta;
 
 import java.util.Locale;
+import java.util.UUID;
 
 import de.btu.openinfra.backend.OpenInfraTime;
 import de.btu.openinfra.backend.db.MappingResult;
@@ -24,11 +25,11 @@ public class LogDao
     /**
      * This is the required constructor which calls the super constructor and in
      * turn creates the corresponding entity manager.
-     *
+     * @param currentProjectId The identifier of the current project.
      * @param schema           the required schema
      */
-    public LogDao(OpenInfraSchemas schema) {
-        super(null, schema, Log.class);
+    public LogDao(UUID currentProjectId, OpenInfraSchemas schema) {
+        super(null, OpenInfraSchemas.META_DATA, Log.class);
     }
 
     @Override
@@ -98,25 +99,5 @@ public class LogDao
                     OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
         }
         return resultLog;
-    }
-
-    /**
-     * Creates an empty log pojo.
-     * @return an empty log pojo
-     */
-    public LogPojo newLog() {
-        return newPojoStatically();
-    }
-
-    /**
-     * This method implements the method newLog in a static way.
-     * @return an empty log pojo
-     */
-    public static LogPojo newPojoStatically() {
-        LogPojo newLogPojo = new LogPojo();
-        newLogPojo.setLevel(LevelDao.newPojoStatically());
-        newLogPojo.setLogger(LoggerDao.newPojoStatically());
-
-        return newLogPojo;
     }
 }

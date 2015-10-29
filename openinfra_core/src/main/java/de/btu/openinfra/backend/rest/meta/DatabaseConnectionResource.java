@@ -3,6 +3,7 @@ package de.btu.openinfra.backend.rest.meta;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -11,12 +12,14 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
-import de.btu.openinfra.backend.db.OpenInfraSchemas;
-import de.btu.openinfra.backend.db.daos.meta.DatabaseConnectionDao;
 import de.btu.openinfra.backend.db.pojos.meta.DatabaseConnectionPojo;
+import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
+import de.btu.openinfra.backend.db.rbac.meta.DatabaseConnectionRbac;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
 @Path(OpenInfraResponseBuilder.REST_URI_METADATA + "/dbconnections")
@@ -28,65 +31,82 @@ public class DatabaseConnectionResource {
 
     @GET
     public List<DatabaseConnectionPojo> get(
+            @Context UriInfo uriInfo,
+            @Context HttpServletRequest request,
             @QueryParam("offset") int offset,
             @QueryParam("size") int size) {
-        return new DatabaseConnectionDao(
-                OpenInfraSchemas.META_DATA).read(null, offset, size);
+        return new DatabaseConnectionRbac().read(
+                OpenInfraHttpMethod.valueOf(request.getMethod()),
+                uriInfo,
+                null,
+                offset, size);
     }
 
     @GET
     @Path("{databaseConnectionId}")
     public DatabaseConnectionPojo get(
+            @Context UriInfo uriInfo,
+            @Context HttpServletRequest request,
             @PathParam("databaseConnectionId") UUID databaseConnectionId) {
-        return new DatabaseConnectionDao(
-                OpenInfraSchemas.META_DATA).read(
-                        null,
-                        databaseConnectionId);
+        return new DatabaseConnectionRbac().read(
+                OpenInfraHttpMethod.valueOf(request.getMethod()),
+                uriInfo,
+                null,
+                databaseConnectionId);
     }
 
     @GET
 	@Path("count")
 	@Produces({MediaType.TEXT_PLAIN})
-	public long getCount() {
-		return new DatabaseConnectionDao(
-				OpenInfraSchemas.META_DATA).getCount();
+	public long getCount(
+	        @Context UriInfo uriInfo,
+            @Context HttpServletRequest request) {
+        return new DatabaseConnectionRbac().getCount(
+                OpenInfraHttpMethod.valueOf(request.getMethod()),
+                uriInfo);
 	}
 
     @POST
-    public Response create(DatabaseConnectionPojo pojo) {
-        UUID id = new DatabaseConnectionDao(
-                OpenInfraSchemas.META_DATA).createOrUpdate(pojo, null);
+    public Response create(
+            @Context UriInfo uriInfo,
+            @Context HttpServletRequest request,
+            DatabaseConnectionPojo pojo) {
+        UUID id = new DatabaseConnectionRbac().createOrUpdate(
+                OpenInfraHttpMethod.valueOf(request.getMethod()),
+                uriInfo,
+                null,
+                pojo);
         return OpenInfraResponseBuilder.postResponse(id);
     }
 
     @PUT
     @Path("{databaseConnectionId}")
     public Response update(
+            @Context UriInfo uriInfo,
+            @Context HttpServletRequest request,
             @PathParam("databaseConnectionId") UUID databaseConnectionId,
             DatabaseConnectionPojo pojo) {
-        UUID id = new DatabaseConnectionDao(
-                OpenInfraSchemas.META_DATA).createOrUpdate(pojo,
-                        databaseConnectionId);
+        UUID id = new DatabaseConnectionRbac().createOrUpdate(
+                OpenInfraHttpMethod.valueOf(request.getMethod()),
+                uriInfo,
+                databaseConnectionId,
+                pojo);
         return OpenInfraResponseBuilder.putResponse(id);
     }
 
     @DELETE
     @Path("{databaseConnectionId}")
     public Response delete(
+            @Context UriInfo uriInfo,
+            @Context HttpServletRequest request,
             @PathParam("databaseConnectionId") UUID databaseConnectionId) {
-        boolean deleteResult =
-                new DatabaseConnectionDao(OpenInfraSchemas.META_DATA).delete(
-                        databaseConnectionId);
+        boolean deleteResult = new DatabaseConnectionRbac().delete(
+                OpenInfraHttpMethod.valueOf(request.getMethod()),
+                uriInfo,
+                databaseConnectionId);
         return OpenInfraResponseBuilder.deleteResponse(
                 deleteResult,
                 databaseConnectionId);
-    }
-
-    @GET
-    @Path("/new")
-    public DatabaseConnectionPojo newDatabaseConncetion() {
-        return new DatabaseConnectionDao(
-                OpenInfraSchemas.META_DATA).newDatabaseConnection();
     }
 
 }
