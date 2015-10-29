@@ -410,7 +410,6 @@ public abstract class OpenInfraRbac<
 			}
 			break;
 
-		// TODO Currently, there is no permission check for file upload.
 		case FILE:
 			return;
 		}

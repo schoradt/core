@@ -30,6 +30,7 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
@@ -49,7 +50,9 @@ import de.btu.openinfra.backend.OpenInfraPropertyKeys;
 import de.btu.openinfra.backend.OpenInfraPropertyValues;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.daos.file.FileDao;
+import de.btu.openinfra.backend.db.daos.file.FilesProjectDao;
 import de.btu.openinfra.backend.db.pojos.file.FilePojo;
+import de.btu.openinfra.backend.db.pojos.file.FilesProjectPojo;
 import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
 import de.btu.openinfra.backend.db.rbac.file.FileRbac;
 import de.btu.openinfra.backend.exception.OpenInfraWebException;
@@ -99,9 +102,25 @@ public class FileResource {
 			@Context UriInfo uriInfo,
 			@Context HttpServletRequest request,
 			@PathParam("fileId") UUID fileId) {
-		return new FileRbac().read(
-				OpenInfraHttpMethod.valueOf(request.getMethod()),
-				uriInfo, null, fileId);
+		// Return the file, when the current user is owner of this file
+		FilePojo pojo = new FileDao().read(null, fileId);
+		if(new SubjectResource().self().getUuid().equals(pojo.getSubject())) {
+			return pojo;
+		}
+
+		// Set the required permission
+		String requiredPermission = "/projects/{id}:" +
+			OpenInfraHttpMethod.valueOf(request.getMethod()).getAccess() + ":";
+		// Get the list of projects where this file belongs to
+		List<FilesProjectPojo> fpPojos =
+				new FilesProjectDao().readByFileId(fileId);
+		for(FilesProjectPojo fpp : fpPojos) {
+			if(SecurityUtils.getSubject().isPermitted(
+					requiredPermission + fpp.getProject())) {
+				return pojo;
+			}
+		}
+		throw new WebApplicationException(Status.FORBIDDEN);
 	}
 
 	@DELETE
@@ -110,6 +129,11 @@ public class FileResource {
 			@Context UriInfo uriInfo,
 			@Context HttpServletRequest request,
 			@PathParam("fileId") UUID fileId) {
+
+		if(!SecurityUtils.getSubject().isPermitted("/files:w")) {
+			throw new WebApplicationException(Status.FORBIDDEN);
+		}
+
 		FileDao dao = new FileDao();
 		FilePojo fp = dao.read(null, fileId);
 		boolean del = new FileDao().delete(
@@ -171,6 +195,10 @@ public class FileResource {
     		@PathParam("originFileName") String originFileName,
     		InputStream is) {
 
+		if(!SecurityUtils.getSubject().isPermitted("/files:w")) {
+			throw new WebApplicationException(Status.FORBIDDEN);
+		}
+
 		// Get the current user id and create a list to hold uploaded files
 		UUID subject = new SubjectResource().self().getUuid();
 
@@ -203,7 +231,7 @@ public class FileResource {
 		try {
 			pojo.setExifData(extractMetadata(signatureFile));
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.err.append("Metadata Extractor: " + e.getMessage());
 		}
     	pojo.setOriginFileName(originFileName);
     	pojo.setSubject(subject);
@@ -224,6 +252,10 @@ public class FileResource {
     		@Context UriInfo uriInfo,
     		@Context HttpServletRequest request,
 			FormDataMultiPart multiPart) {
+
+		if(!SecurityUtils.getSubject().isPermitted("/files:w")) {
+			throw new WebApplicationException(Status.FORBIDDEN);
+		}
 
 		// Get the current user id and create a list to hold uploaded files
 		UUID subject = new SubjectResource().self().getUuid();
@@ -263,7 +295,7 @@ public class FileResource {
     		try {
     			pojo.setExifData(extractMetadata(signatureFile));
     		} catch (Exception e) {
-    			e.printStackTrace();
+    			System.err.append("Metadata Extractor: " + e.getMessage());
     		}
 
     		pojo = resizeDimensions(signatureFile.getAbsolutePath(), pojo);
@@ -425,8 +457,7 @@ public class FileResource {
 						popupGeom.substring(0, popupGeom.indexOf("+")));
 			}
 		} catch (IOException | InterruptedException | IM4JavaException e) {
-			// do nothing
-			// e.printStackTrace();
+			System.err.append("ImageMagick: " + e.getMessage() + "\n");
 		}
 		return pojo;
 	}

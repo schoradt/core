@@ -1,5 +1,7 @@
 package de.btu.openinfra.backend.db.daos.file;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -12,12 +14,24 @@ import de.btu.openinfra.backend.db.pojos.file.FilesProjectPojo;
 public class FilesProjectDao extends
 	OpenInfraDao<FilesProjectPojo, FilesProject> {
 
+	public FilesProjectDao(UUID currentProject, OpenInfraSchemas schema) {
+		super(currentProject, schema, FilesProject.class);
+	}
+
 	public FilesProjectDao() {
 		super(null, OpenInfraSchemas.FILE, FilesProject.class);
 	}
 
-	public FilesProjectDao(UUID currentProject, OpenInfraSchemas schema) {
-		super(currentProject, schema, FilesProject.class);
+	public List<FilesProjectPojo> readByFileId(UUID file) {
+		List<FilesProject> fps =
+				em.createNamedQuery("FilesProject.findByFileId",
+						FilesProject.class).setParameter("value", file)
+						.getResultList();
+		List<FilesProjectPojo> pojos = new LinkedList<FilesProjectPojo>();
+		for(FilesProject fp : fps) {
+			pojos.add(mapToPojo(null, fp));
+		}
+		return pojos;
 	}
 
 	@Override

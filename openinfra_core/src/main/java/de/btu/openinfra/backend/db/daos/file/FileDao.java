@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response.Status;
+
 import de.btu.openinfra.backend.OpenInfraTime;
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
@@ -35,7 +38,7 @@ public class FileDao extends OpenInfraDao<FilePojo, File> {
 		if(pojo.getSubject().equals(subject)) {
 			return delete(file);
 		} else {
-			return false;
+			throw new WebApplicationException(Status.FORBIDDEN);
 		}
 	}
 

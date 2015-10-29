@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
@@ -13,11 +14,18 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 
 /**
  * The persistent class for the files_projects database table.
- * 
+ *
  */
 @Entity
 @Table(name="files_projects")
-@NamedQuery(name="FilesProject.findAll", query="SELECT f FROM FilesProject f")
+@NamedQueries({
+	@NamedQuery(name="FilesProject.findAll",
+			query="SELECT f FROM FilesProject f"),
+	@NamedQuery(name="FilesProject.findByFileId",
+			query="SELECT f FROM "
+					+ "FilesProject f "
+					+ "WHERE f.fileId = :value ")
+})
 public class FilesProject extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 
