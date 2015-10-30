@@ -1,3 +1,4 @@
+<%@page import="de.btu.openinfra.backend.rest.rbac.SubjectResource"%>
 <%@page import="de.btu.openinfra.backend.db.rbac.rbac.SubjectRbac"%>
 <%@page import="de.btu.openinfra.backend.db.daos.rbac.SubjectDao"%>
 <%@page import="org.apache.xml.serializer.ToUnknownStream"%>
@@ -37,13 +38,16 @@
 					<th>Vorschau</th>
 					<th>Uploaddatum</th>
 					<th>Metadata</th>
-					<th>UUID</th>
 					<c:if test="${fn:contains(requestUrl, '/rest/v1/files')}">
 						<th>Zugeordnete Projekte</th>
+						<th>Aktion</th>
 					</c:if>
-					<th>Aktion</th>
 				</tr>
 			</thead>
+			
+			<c:set var="projects" value=""/>
+			<% pageContext.setAttribute("projects", new SubjectResource().projects("DE-de")); %>
+			
 			<c:forEach items="${it}" var="pojo">
 				<tr id="tr_${pojo.uuid}">    		
 					<td><img src="./files/${pojo.uuid}/thumbnail"/></td>
@@ -59,27 +63,27 @@
 							<a href="./files/${pojo.uuid}.xml">vorhanden</a>
 						</c:if>
 					</td>
-					<td>${pojo.uuid}</td>
 					<c:if test="${fn:contains(requestUrl, '/rest/v1/files')}">
 						<td>
-					   		<c:set var="projects" value=""/>
-							<%
-								pageContext.setAttribute("projects", 
-																new SubjectRbac().self().getProjects());
-							%>
-							${projects}
 							<form action="" method="post">
 							   		<c:forEach var="pp" items="${projects}">
-							   			<input type="checkbox" name="project" value="${pp.uuid}">${pp.uuid}<br>
+							   			<input type="checkbox" name="project" value="${pp.uuid}">
+							   			<c:set var="name" value=""/>
+										<c:forEach items="${pp.names.localizedStrings}" var="item">
+								    		<c:set var="name" value="${name} ${item.characterString}"/>
+								    	</c:forEach>
+								    	${name}
+							   			<br>
 							   		</c:forEach>
 								  <input type="submit" value="Submit">
 							</form>
 						</td>
-					</c:if>
 					<td>
 						<c:set var="deleteButton" value="${pojo.uuid}" />
 						<%@ include file="../../snippets/ButtonBar.jsp" %>
 					</td>
+						
+					</c:if>
 	    		</tr>
 			</c:forEach>
 		</table>

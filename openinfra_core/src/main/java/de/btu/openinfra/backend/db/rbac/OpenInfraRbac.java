@@ -350,7 +350,7 @@ public abstract class OpenInfraRbac<
             if(uriInfo.getPath().matches(regex_new_project)) {
                 // Is the subject (user) permitted to create projects?
                 if (currentProjectId == null && user.isPermitted(
-                        "/projects:"+ httpMethod.getAccess())) {
+                        "/projects:" + httpMethod.getAccess())) {
                     return;
                 }
             }
