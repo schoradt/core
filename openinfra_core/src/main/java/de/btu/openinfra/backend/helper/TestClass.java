@@ -1,6 +1,13 @@
 package de.btu.openinfra.backend.helper;
 
 import de.btu.openinfra.backend.db.OpenInfraOrderByEnum;
+import de.btu.openinfra.backend.db.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.daos.OrderByDao;
+import de.btu.openinfra.backend.db.pojos.OrderByNamesPojo;
+import de.btu.openinfra.backend.db.pojos.OrderByPojo;
+
+
+
 
 public class TestClass {
 
@@ -68,8 +75,13 @@ public class TestClass {
 //		}
 
 
+	    OrderByPojo p = OrderByDao.read(OpenInfraSchemas.PROJECTS, "TopicCharacteristic");
+	    for (OpenInfraOrderByEnum string : p.getOrderByTypes()) {
+            System.out.println(string.toString());
+        }
 
-		for (String string : OpenInfraOrderByEnum.getAllObjectNames()) {
+        OrderByNamesPojo np = OrderByDao.getNames(OpenInfraSchemas.SYSTEM);
+        for (String string : np.getClassNames()) {
             System.out.println(string);
         }
 	}

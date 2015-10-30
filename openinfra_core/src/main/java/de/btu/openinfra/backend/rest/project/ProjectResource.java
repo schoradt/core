@@ -19,7 +19,10 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.daos.OrderByDao;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
+import de.btu.openinfra.backend.db.pojos.OrderByNamesPojo;
+import de.btu.openinfra.backend.db.pojos.OrderByPojo;
 import de.btu.openinfra.backend.db.pojos.project.ProjectPojo;
 import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
 import de.btu.openinfra.backend.db.rbac.ProjectRbac;
@@ -265,4 +268,18 @@ public class ProjectResource {
 						PtLocaleDao.forLanguageTag(language));
 	}
 
+	@GET
+    @Path("/orderby")
+    public OrderByPojo getP(
+            @PathParam("schema") OpenInfraSchemas schema,
+            @QueryParam("class") String classObject) {
+        return OrderByDao.read(OpenInfraSchemas.PROJECTS, classObject);
+    }
+
+    @GET
+    @Path("/orderby/names")
+    public OrderByNamesPojo getNamesP(
+            @PathParam("schema") OpenInfraSchemas schema) {
+        return OrderByDao.getNames(OpenInfraSchemas.PROJECTS);
+    }
 }

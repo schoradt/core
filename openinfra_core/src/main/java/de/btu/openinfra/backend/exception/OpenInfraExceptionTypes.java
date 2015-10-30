@@ -49,7 +49,9 @@ public enum OpenInfraExceptionTypes {
 
 	NO_SORT_TYPE("This object does not contain any orderBy parameter."),
 
-	MISSING_PARAMETER("This URI requires a parameter.");
+	MISSING_PARAMETER("This URI requires a parameter."),
+
+	NO_CLASS_IN_SCHEMA("The requested class is not part of the specified schema.");
 
     private String msg;
 
