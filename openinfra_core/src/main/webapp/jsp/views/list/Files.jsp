@@ -1,3 +1,5 @@
+<%@page import="de.btu.openinfra.backend.db.daos.file.FilesProjectDao"%>
+<%@page import="de.btu.openinfra.backend.rest.file.FilesProjectResource"%>
 <%@page import="de.btu.openinfra.backend.rest.rbac.SubjectResource"%>
 <%@page import="de.btu.openinfra.backend.db.rbac.rbac.SubjectRbac"%>
 <%@page import="de.btu.openinfra.backend.db.daos.rbac.SubjectDao"%>
@@ -45,10 +47,21 @@
 				</tr>
 			</thead>
 			
+			<!-- all projects the current user has access to -->
 			<c:set var="projects" value=""/>
 			<% pageContext.setAttribute("projects", new SubjectResource().projects("DE-de")); %>
-			
+						
 			<c:forEach items="${it}" var="pojo">
+			
+				<c:set var="currentPojo" value="${pojo.uuid}"/>
+			
+				<!-- all projects the current file is related to -->
+				<c:set var="filesProjects" value=""/>
+				<% pageContext.setAttribute("filesProjects", new FilesProjectDao().readByFileId(
+						UUID.fromString(pageContext.getAttribute("currentPojo").toString()))); %>			
+			
+			${filesProjects}
+			
 				<tr id="tr_${pojo.uuid}">    		
 					<td><img src="./files/${pojo.uuid}/thumbnail"/></td>
 					<td><a href="./files/${pojo.uuid}/origin">${pojo.originFileName}</a></td>
@@ -67,7 +80,23 @@
 						<td>
 							<form action="" method="post">
 							   		<c:forEach var="pp" items="${projects}">
-							   			<input type="checkbox" name="project" value="${pp.uuid}">
+							   		
+							   			<c:set var="exists" value=""/>
+							   			<c:forEach var="fp" items="${filesProjects}">
+							   				<c:if test="${pp.uuid == fp.project}">
+							   					<c:set var="exists" value="true"/>
+							   				</c:if>
+							   			</c:forEach>
+							   			
+							   			<c:choose>
+								   			<c:when test="${exists == 'true'}">
+								   				<input type="checkbox" name="project" value="${pp.uuid}" checked>
+								   			</c:when>
+								   			<c:otherwise>
+								   				<input type="checkbox" name="project" value="${pp.uuid}">
+								   			</c:otherwise>
+							   			</c:choose>
+							   			
 							   			<c:set var="name" value=""/>
 										<c:forEach items="${pp.names.localizedStrings}" var="item">
 								    		<c:set var="name" value="${name} ${item.characterString}"/>
