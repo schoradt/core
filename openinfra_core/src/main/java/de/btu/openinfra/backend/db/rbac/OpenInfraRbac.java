@@ -415,6 +415,9 @@ public abstract class OpenInfraRbac<
 			break;
 
 		case META_DATA:
+		    if(user.isPermitted("/rbac:" + httpMethod.getAccess())) {
+                return;
+            }
 			break;
 
 		case RBAC:

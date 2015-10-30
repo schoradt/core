@@ -22,7 +22,9 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
     @NamedQuery(name="Databases.findAll", query="SELECT d FROM Databases d"),
     @NamedQuery(
             name="Databases.findByDatabase",
-            query="SELECT d FROM Databases d WHERE d.database = :database")
+            query="SELECT d FROM Databases d WHERE d.database = :database"),
+    @NamedQuery(name="Databases.count",
+        query="SELECT COUNT(d) FROM Databases d")
 })
 public class Databases extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;

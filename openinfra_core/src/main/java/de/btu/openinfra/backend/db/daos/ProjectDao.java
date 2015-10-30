@@ -12,7 +12,6 @@ import javax.persistence.ParameterMode;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
 
-import jersey.repackaged.com.google.common.collect.Lists;
 import de.btu.openinfra.backend.OpenInfraProperties;
 import de.btu.openinfra.backend.OpenInfraPropertyKeys;
 import de.btu.openinfra.backend.db.MappingResult;
@@ -32,7 +31,6 @@ import de.btu.openinfra.backend.db.jpa.model.meta.Ports;
 import de.btu.openinfra.backend.db.jpa.model.meta.Projects;
 import de.btu.openinfra.backend.db.jpa.model.meta.Servers;
 import de.btu.openinfra.backend.db.pojos.LocalizedString;
-import de.btu.openinfra.backend.db.pojos.ProjectPojo;
 import de.btu.openinfra.backend.db.pojos.PtFreeTextPojo;
 import de.btu.openinfra.backend.db.pojos.meta.CredentialsPojo;
 import de.btu.openinfra.backend.db.pojos.meta.DatabaseConnectionPojo;
@@ -41,10 +39,12 @@ import de.btu.openinfra.backend.db.pojos.meta.PortsPojo;
 import de.btu.openinfra.backend.db.pojos.meta.ProjectsPojo;
 import de.btu.openinfra.backend.db.pojos.meta.SchemasPojo;
 import de.btu.openinfra.backend.db.pojos.meta.ServersPojo;
+import de.btu.openinfra.backend.db.pojos.project.ProjectPojo;
 import de.btu.openinfra.backend.exception.OpenInfraDatabaseException;
 import de.btu.openinfra.backend.exception.OpenInfraEntityException;
 import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 import de.btu.openinfra.backend.exception.OpenInfraWebException;
+import jersey.repackaged.com.google.common.collect.Lists;
 
 /**
  * This class represents the Project and is used to access the underlying layer
@@ -118,7 +118,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 	public List<ProjectPojo> readMainProjects(Locale locale) {
 		// 1. We need to deliver each main Project from meta data database
 		List<ProjectsPojo> metaProjects = new ProjectsDao(
-				OpenInfraSchemas.META_DATA).read(
+				null, null).read(
 						locale,
 						0,
 						Integer.MAX_VALUE);
@@ -521,7 +521,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
             UUID dbCId = null;
             // create the DAO for the database connection
             DatabaseConnectionDao dbCDao =
-                    new DatabaseConnectionDao(OpenInfraSchemas.META_DATA);
+                    new DatabaseConnectionDao(null, null);
 
             boolean isSubProject = false;
 
@@ -545,8 +545,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
                 // set all necessary data for the schema
                 metaSchemasPojo.setSchema("project_" + newProjectId);
                 // create the DAO for the schema
-                SchemasDao schemaDao = new SchemasDao(
-                        OpenInfraSchemas.META_DATA);
+                SchemasDao schemaDao = new SchemasDao(null, null);
                 // insert the data
                 // TODO: createOrUpdate can throw an exception!
                 UUID schemaId = schemaDao.createOrUpdate(metaSchemasPojo, null);
@@ -560,12 +559,10 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
                 // create necessary DAOs for the credentials, ports, databases and
                 // servers
                 CredentialsDao credentialsDao =
-                        new CredentialsDao(OpenInfraSchemas.META_DATA);
-                PortsDao portsDao = new PortsDao(OpenInfraSchemas.META_DATA);
-                DatabasesDao dbDao = new DatabasesDao(
-                        OpenInfraSchemas.META_DATA);
-                ServersDao serversDao = new ServersDao(
-                        OpenInfraSchemas.META_DATA);
+                        new CredentialsDao(null, null);
+                PortsDao portsDao = new PortsDao(null, null);
+                DatabasesDao dbDao = new DatabasesDao(null, null);
+                ServersDao serversDao = new ServersDao(null, null);
 
                 // Use the default values from the properties file for the new
                 // connection.
@@ -706,7 +703,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
             // set the database connection information
             metaProjectsPojo.setDatabaseConnection(dbCDao.read(null, dbCId));
             // insert the informations into the meta_data schema
-            new ProjectsDao(OpenInfraSchemas.META_DATA)
+            new ProjectsDao(null, null)
                 .createOrUpdate(metaProjectsPojo, null);
 
         } catch (RuntimeException re) {
@@ -739,7 +736,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 
             try {
                 Projects subP = null;
-                ProjectsDao pDao = new ProjectsDao(OpenInfraSchemas.META_DATA);
+                ProjectsDao pDao = new ProjectsDao(null, null);
                 // if we want to delete a main project we must also delete the
                 // subprojects from the meta data
                 if (!pMeta.getIsSubproject()) {
@@ -781,33 +778,33 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 
             try {
                 // delete the entry from database connection
-                new DatabaseConnectionDao(OpenInfraSchemas.META_DATA).delete(
+                new DatabaseConnectionDao(null, null).delete(
                         dbConnId);
             } catch (RuntimeException ex) { /* do nothing */ }
 
             try {
                 // delete the entry from server if possible
-                new ServersDao(OpenInfraSchemas.META_DATA).delete(serverId);
+                new ServersDao(null, null).delete(serverId);
             } catch (RuntimeException ex) { /* do nothing */ }
 
             try {
                 // delete the entry from port if possible
-                new PortsDao(OpenInfraSchemas.META_DATA).delete(portId);
+                new PortsDao(null, null).delete(portId);
             } catch (RuntimeException ex) { /* do nothing */ }
 
             try {
                 // delete the entry from database if possible
-                new DatabasesDao(OpenInfraSchemas.META_DATA).delete(databaseId);
+                new DatabasesDao(null, null).delete(databaseId);
             } catch (RuntimeException ex) { /* do nothing */ }
 
             try {
                 // delete the entry from schema if possible
-                new SchemasDao(OpenInfraSchemas.META_DATA).delete(schemaId);
+                new SchemasDao(null, null).delete(schemaId);
             } catch (RuntimeException ex) { /* do nothing */ }
 
             try {
                 // delete the entry from credentials if possible
-                new CredentialsDao(OpenInfraSchemas.META_DATA).delete(
+                new CredentialsDao(null, null).delete(
                     credentialsId);
             } catch (RuntimeException ex) { /* do nothing */ }
 

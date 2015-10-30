@@ -28,7 +28,7 @@ import de.btu.openinfra.backend.db.daos.ProjectDao;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.daos.meta.ProjectsDao;
 import de.btu.openinfra.backend.db.jpa.model.meta.Projects;
-import de.btu.openinfra.backend.db.pojos.ProjectPojo;
+import de.btu.openinfra.backend.db.pojos.project.ProjectPojo;
 import de.btu.openinfra.backend.db.pojos.rbac.SubjectPojo;
 import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
 import de.btu.openinfra.backend.db.rbac.OpenInfraRealm;
@@ -159,7 +159,7 @@ public class SubjectResource {
 	@Path("self/projects")
 	public List<ProjectPojo> projects(
 			@QueryParam("language") String language) {
-		ProjectsDao dao = new ProjectsDao(OpenInfraSchemas.META_DATA);
+		ProjectsDao dao = new ProjectsDao(null, OpenInfraSchemas.META_DATA);
 		List<ProjectPojo> pojos = new LinkedList<ProjectPojo>();
 		Subject s = SecurityUtils.getSubject();
 		for(Projects p : dao.read()) {

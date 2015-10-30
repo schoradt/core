@@ -20,8 +20,8 @@ import javax.ws.rs.core.UriInfo;
 
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
-import de.btu.openinfra.backend.db.pojos.ProjectPojo;
 import de.btu.openinfra.backend.db.pojos.file.FilePojo;
+import de.btu.openinfra.backend.db.pojos.project.ProjectPojo;
 import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
 import de.btu.openinfra.backend.db.rbac.ProjectRbac;
 import de.btu.openinfra.backend.db.rbac.file.FileRbac;

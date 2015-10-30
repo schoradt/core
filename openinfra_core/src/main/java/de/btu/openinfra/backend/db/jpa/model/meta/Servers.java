@@ -20,6 +20,7 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 @Table(schema="meta_data")
 @NamedQueries({
     @NamedQuery(name="Servers.findAll", query="SELECT s FROM Servers s"),
+    @NamedQuery(name="Servers.count", query="SELECT COUNT(s) FROM Servers s"),
     @NamedQuery(
             name="Servers.findByServer",
             query="SELECT s FROM Servers s WHERE s.server = :server")

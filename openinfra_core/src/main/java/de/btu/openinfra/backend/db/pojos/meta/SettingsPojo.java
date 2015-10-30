@@ -3,7 +3,6 @@ package de.btu.openinfra.backend.db.pojos.meta;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
-import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 
 @XmlRootElement
@@ -53,16 +52,6 @@ public class SettingsPojo extends OpenInfraPojo {
 
     public void setProject(ProjectsPojo project) {
         this.project = project;
-    }
-
-    @Override
-    protected void makePrimerHelper(PtLocale locale) {
-        key = new SettingKeysPojo();
-        key.makePrimer(locale);
-        value = "";
-        updatedOn = "";
-        project = new ProjectsPojo();
-        project.makePrimer(locale);
     }
 
 }

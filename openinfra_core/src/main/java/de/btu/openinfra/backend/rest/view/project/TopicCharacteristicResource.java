@@ -16,7 +16,7 @@ import javax.ws.rs.core.UriInfo;
 import org.glassfish.jersey.server.mvc.Template;
 
 import de.btu.openinfra.backend.db.OpenInfraSortOrder;
-import de.btu.openinfra.backend.db.pojos.TopicInstancePojo;
+import de.btu.openinfra.backend.db.pojos.project.TopicInstancePojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
 @Path(OpenInfraResponseBuilder.REST_URI_PROJECTS + 

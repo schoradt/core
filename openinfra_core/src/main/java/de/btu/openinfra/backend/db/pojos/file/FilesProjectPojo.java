@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.jpa.model.file.FilesProject;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 
@@ -34,11 +33,6 @@ public class FilesProjectPojo extends OpenInfraPojo {
 
 	public void setProject(UUID project) {
 		this.project = project;
-	}
-
-	@Override
-	protected void makePrimerHelper(PtLocale locale) {
-		// do nothing
 	}
 
 }

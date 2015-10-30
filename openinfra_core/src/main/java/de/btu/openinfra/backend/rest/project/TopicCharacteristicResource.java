@@ -20,7 +20,7 @@ import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.AttributeValueGeomType;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.TopicGeomzPojo;
-import de.btu.openinfra.backend.db.pojos.TopicInstancePojo;
+import de.btu.openinfra.backend.db.pojos.project.TopicInstancePojo;
 import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
 import de.btu.openinfra.backend.db.rbac.TopicGeomzRbac;
 import de.btu.openinfra.backend.db.rbac.TopicInstanceRbac;

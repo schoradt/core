@@ -1,6 +1,7 @@
 package de.btu.openinfra.backend.db.daos.meta;
 
 import java.util.Locale;
+import java.util.UUID;
 
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
@@ -23,11 +24,11 @@ public class PortsDao
     /**
      * This is the required constructor which calls the super constructor and in
      * turn creates the corresponding entity manager.
-     *
+     * @param currentProjectId The identifier of the current project.
      * @param schema           the required schema
      */
-    public PortsDao(OpenInfraSchemas schema) {
-        super(null, schema, Ports.class);
+    public PortsDao(UUID currentProjectId, OpenInfraSchemas schema) {
+        super(null, OpenInfraSchemas.META_DATA, Ports.class);
     }
 
     @Override
@@ -83,21 +84,5 @@ public class PortsDao
                     OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
         }
         return resultPorts;
-    }
-
-    /**
-     * Creates an empty ports pojo.
-     * @return an empty ports pojo
-     */
-    public PortsPojo newPorts() {
-       return newPojoStatically();
-    }
-
-    /**
-     * This method implements the method newPorts in a static way.
-     * @return an empty ports pojo
-     */
-    public static PortsPojo newPojoStatically() {
-        return new PortsPojo();
     }
 }

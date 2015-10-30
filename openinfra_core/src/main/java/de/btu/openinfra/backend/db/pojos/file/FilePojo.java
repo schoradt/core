@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.jpa.model.file.File;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 
@@ -106,13 +105,5 @@ public class FilePojo extends OpenInfraPojo {
 
 	public void setThumbnailDimension(String thumbnailDimension) {
 		this.thumbnailDimension = thumbnailDimension;
-	}
-
-	@Override
-	protected void makePrimerHelper(PtLocale locale) {
-		mimeType = "";
-		originFileName = "";
-		subject = null;
-		uploadedOn = "";
 	}
 }

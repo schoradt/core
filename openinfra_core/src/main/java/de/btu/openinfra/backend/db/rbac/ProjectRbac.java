@@ -10,7 +10,7 @@ import javax.ws.rs.core.UriInfo;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.ProjectDao;
 import de.btu.openinfra.backend.db.jpa.model.Project;
-import de.btu.openinfra.backend.db.pojos.ProjectPojo;
+import de.btu.openinfra.backend.db.pojos.project.ProjectPojo;
 
 public class ProjectRbac extends
 	OpenInfraRbac<ProjectPojo, Project, ProjectDao> {

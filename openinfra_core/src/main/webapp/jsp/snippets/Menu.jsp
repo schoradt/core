@@ -7,7 +7,7 @@
 <%@page import="de.btu.openinfra.backend.db.daos.PtLocaleDao"%>
 <%@page import="java.awt.event.ItemEvent"%>
 <%@page import="de.btu.openinfra.backend.db.pojos.LocalizedString"%>
-<%@page import="de.btu.openinfra.backend.db.pojos.ProjectPojo"%>
+<%@page import="de.btu.openinfra.backend.db.pojos.project.ProjectPojo"%>
 <%@page import="de.btu.openinfra.backend.db.daos.ProjectDao"%>
 <%@page import="de.btu.openinfra.backend.OpenInfraApplication"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
