@@ -60,10 +60,8 @@
 				<% pageContext.setAttribute("filesProjects", new FilesProjectDao().readByFileId(
 						UUID.fromString(pageContext.getAttribute("currentPojo").toString()))); %>			
 			
-			${filesProjects}
-			
-				<tr id="tr_${pojo.uuid}">    		
-					<td><img src="./files/${pojo.uuid}/thumbnail"/></td>
+				<tr id="tr_${pojo.uuid}">
+					<td><img src="${contextPath}/rest/v1/files/${pojo.uuid}/thumbnail"/></td>
 					<td><a href="./files/${pojo.uuid}/origin">${pojo.originFileName}</a></td>
 					<td>${pojo.mimeType}</td>
 					<td><a href="./files/${pojo.uuid}/origin">${pojo.originDimension}</a></td>
@@ -79,32 +77,31 @@
 					<c:if test="${fn:contains(requestUrl, '/rest/v1/files')}">
 						<td>
 							<form action="" method="post">
-							   		<c:forEach var="pp" items="${projects}">
-							   		
-							   			<c:set var="exists" value=""/>
-							   			<c:forEach var="fp" items="${filesProjects}">
-							   				<c:if test="${pp.uuid == fp.project}">
-							   					<c:set var="exists" value="true"/>
-							   				</c:if>
-							   			</c:forEach>
-							   			
-							   			<c:choose>
-								   			<c:when test="${exists == 'true'}">
-								   				<input type="checkbox" name="project" value="${pp.uuid}" checked>
-								   			</c:when>
-								   			<c:otherwise>
-								   				<input type="checkbox" name="project" value="${pp.uuid}">
-								   			</c:otherwise>
-							   			</c:choose>
-							   			
-							   			<c:set var="name" value=""/>
-										<c:forEach items="${pp.names.localizedStrings}" var="item">
-								    		<c:set var="name" value="${name} ${item.characterString}"/>
-								    	</c:forEach>
-								    	${name}
-							   			<br>
-							   		</c:forEach>
-								  <input type="submit" value="Submit">
+						   		<c:forEach var="pp" items="${projects}">
+						   		
+						   			<c:set var="exists" value=""/>
+						   			<c:forEach var="fp" items="${filesProjects}">
+						   				<c:if test="${pp.uuid == fp.project}">
+						   					<c:set var="exists" value="${fp.uuid}"/>
+						   				</c:if>
+						   			</c:forEach>
+						   			
+						   			<c:choose>
+							   			<c:when test="${exists != ''}">
+							   				<input type="checkbox" id="${exists}" name="${pp.uuid}" value="${pojo.uuid}" checked>
+							   			</c:when>
+							   			<c:otherwise>
+							   				<input type="checkbox" name="${pp.uuid}" value="${pojo.uuid}">
+							   			</c:otherwise>
+						   			</c:choose>
+						   			
+						   			<c:set var="name" value=""/>
+									<c:forEach items="${pp.names.localizedStrings}" var="item">
+							    		<c:set var="name" value="${name} ${item.characterString}"/>
+							    	</c:forEach>
+							    	${name}
+						   			<br>
+						   		</c:forEach>
 							</form>
 						</td>
 					<td>
@@ -119,7 +116,66 @@
 	</div>
 	
 	<script type="text/javascript">
+	
+		$(document).ready(function () {
+		  $('input:checkbox').change(function () {
+			  if(this.checked) {
+				  //alert($(this).attr('value'));
+				  var id = addFileToProject($(this).attr('value'), $(this).attr('name'));
+				  $(this).attr('id', id);
+			  } else {
+				  deleteFileFromProject($(this).attr('id'), $(this).attr('value'));
+				  $(this).removeAttr('id');
+			  }
+		   });
+		 });
 		
+		function deleteFileFromProject(id, currentFile) {
+			var path = "${contextPath}/rest/v1/files/" + currentFile + "/filesproject/" + id;
+			$.ajax({
+				url: path,
+				type: 'delete',
+				contentType: "application/json; charset=utf-8",
+				cache: false,
+		 		error: function(xhr){
+					  if(xhr.responseText.search('<body>') > -1) {
+						  var source = xhr.responseText.split('<body>')[1];
+					      $('#alert').html(source.split('</body>')[0]);
+						  $('#alert').show();
+				  	  } // end if
+			  	}, // end error
+				success: function(res) {
+			          
+				}});
+		}
+		
+		function addFileToProject(currentFile, project) {
+			var path = "${contextPath}/rest/v1/files/" + currentFile + "/filesproject";
+			var returnId = "";
+			var filesProject = new Object();
+			filesProject.uuid = null;
+			filesProject.file = currentFile;
+			filesProject.project = project;
+			
+			$.ajax({
+				url: path,
+				type: 'post',
+				data: JSON.stringify(filesProject),
+				contentType: "application/json; charset=utf-8",
+				cache: false,
+		 		error: function(xhr){
+					  if(xhr.responseText.search('<body>') > -1) {
+						  var source = xhr.responseText.split('<body>')[1];
+					      $('#alert').html(source.split('</body>')[0]);
+						  $('#alert').show();
+				  	  } // end if
+			  	}, // end error
+				success: function(res) {
+			          returnId = res.uuid;
+				}});
+			return returnId;
+		}
+	
 		function deleteItem(uuid) {
 			globalUuid = uuid;
 			// execute the delete request
@@ -130,7 +186,9 @@
 		// if the ajax request has finished
 		$(document).ajaxStop(function () {
 		    // try to decrement the badge
-		    OPENINFRA_HELPER.Misc.decrementBadge(globalUuid);
+		    if(!(typeof(globalUuid)  === "undefined")) {
+		    	OPENINFRA_HELPER.Misc.decrementBadge(globalUuid);
+		    }
 			// set the message box with the response
 			OPENINFRA_HELPER.MessageBox.setResponse();
 		});

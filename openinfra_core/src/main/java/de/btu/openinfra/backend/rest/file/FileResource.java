@@ -58,6 +58,7 @@ import de.btu.openinfra.backend.db.rbac.rbac.SubjectRbac;
 import de.btu.openinfra.backend.exception.OpenInfraWebException;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
+//TODO Remove logic from resource file.
 @Path("/v1/files")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET,
@@ -122,6 +123,7 @@ public class FileResource {
 			@Context HttpServletRequest request,
 			@PathParam("fileId") UUID fileId) {
 
+		// TODO Security should be part of RBAC!
 		if(!SecurityUtils.getSubject().isPermitted("/files:w")) {
 			throw new WebApplicationException(Status.FORBIDDEN);
 		}
