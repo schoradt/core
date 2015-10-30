@@ -22,6 +22,7 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 @Table(schema="meta_data")
 @NamedQueries({
     @NamedQuery(name="Ports.findAll", query="SELECT p FROM Ports p"),
+    @NamedQuery(name="Ports.count",  query="SELECT COUNT(p) FROM Ports p"),
     @NamedQuery(
             name="Ports.findByPort",
             query="SELECT p FROM Ports p WHERE p.port = :port")

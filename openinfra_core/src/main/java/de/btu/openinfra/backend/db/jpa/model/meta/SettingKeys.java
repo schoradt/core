@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.NamedNativeQueries;
 import javax.persistence.NamedNativeQuery;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -19,7 +20,12 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
  */
 @Entity
 @Table(schema="meta_data", name="setting_keys")
-@NamedQuery(name="SettingKey.findAll", query="SELECT s FROM SettingKeys s")
+@NamedQueries({
+    @NamedQuery(name="SettingKeys.findAll",
+            query="SELECT s FROM SettingKeys s"),
+    @NamedQuery(name="SettingKeys.count",
+            query="SELECT COUNT(s) FROM SettingKeys s")
+})
 @NamedNativeQueries({
     @NamedNativeQuery(name="SettingKeys.findAllByLocaleAndOrder",
             query="SELECT *, xmin "

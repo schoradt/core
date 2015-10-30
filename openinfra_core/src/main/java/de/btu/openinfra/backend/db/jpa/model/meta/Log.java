@@ -25,8 +25,7 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 @Table(schema="meta_data")
 @NamedQueries({
 	@NamedQuery(name="Log.findAll", query="SELECT l FROM Log l"),
-    @NamedQuery(name="Log.count",
-    	query="SELECT COUNT(l) FROM Log l")
+    @NamedQuery(name="Log.count", query="SELECT COUNT(l) FROM Log l")
 })
 @NamedNativeQueries({
     @NamedNativeQuery(name="Log.findAllByLocaleAndOrder",

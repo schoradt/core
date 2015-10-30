@@ -5,7 +5,6 @@ import java.util.UUID;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
-import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 
 @XmlRootElement
@@ -46,13 +45,6 @@ public class ProjectsPojo extends OpenInfraPojo {
 
     public void setDatabaseConnection(DatabaseConnectionPojo databaseConnection) {
         this.databaseConnection = databaseConnection;
-    }
-
-    @Override
-    protected void makePrimerHelper(PtLocale locale) {
-        isSubproject = false;
-        databaseConnection = new DatabaseConnectionPojo();
-        databaseConnection.makePrimer(locale);
     }
 
 }

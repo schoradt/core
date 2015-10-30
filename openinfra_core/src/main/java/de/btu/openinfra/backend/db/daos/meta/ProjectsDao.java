@@ -1,6 +1,7 @@
 package de.btu.openinfra.backend.db.daos.meta;
 
 import java.util.Locale;
+import java.util.UUID;
 
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
@@ -23,11 +24,11 @@ public class ProjectsDao
     /**
      * This is the required constructor which calls the super constructor and in
      * turn creates the corresponding entity manager.
-     *
+     * @param currentProjectId The identifier of the current project.
      * @param schema           the required schema
      */
-    public ProjectsDao(OpenInfraSchemas schema) {
-        super(null, schema, Projects.class);
+    public ProjectsDao(UUID currentProjectId, OpenInfraSchemas schema) {
+        super(null, OpenInfraSchemas.META_DATA, Projects.class);
     }
 
     @Override
@@ -95,22 +96,4 @@ public class ProjectsDao
         return resultProjects;
     }
 
-    /**
-     * Creates an empty projects pojo.
-     * @return an empty projects pojo
-     */
-    public ProjectsPojo newProjects() {
-       return newPojoStatically();
-    }
-
-    /**
-     * This method implements the method newProjects in a static way.
-     * @return an empty projects pojo
-     */
-    public static ProjectsPojo newPojoStatically() {
-        ProjectsPojo newProjectsPojo = new ProjectsPojo();
-        newProjectsPojo.setDatabaseConnection(
-                DatabaseConnectionDao.newPojoStatically());
-        return newProjectsPojo;
-    }
 }

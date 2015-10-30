@@ -24,6 +24,8 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
     @NamedQuery(
             name="Credentials.findAll",
             query="SELECT c FROM Credentials c"),
+    @NamedQuery(name="Credentials.count",
+            query="SELECT COUNT(c) FROM Credentials c"),
     @NamedQuery(
             name="Credentials.findByUsernameAndPassword",
             query="SELECT c FROM Credentials c WHERE c.username = :username "

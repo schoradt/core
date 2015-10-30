@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.NamedNativeQueries;
 import javax.persistence.NamedNativeQuery;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -19,7 +20,10 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
  */
 @Entity
 @Table(schema="meta_data")
-@NamedQuery(name="Logger.findAll", query="SELECT l FROM Logger l")
+@NamedQueries({
+    @NamedQuery(name="Logger.findAll", query="SELECT l FROM Logger l"),
+    @NamedQuery(name="Logger.count",  query="SELECT COUNT(l) FROM Logger l")
+})
 @NamedNativeQueries({
     @NamedNativeQuery(name="Logger.findAllByLocaleAndOrder",
             query="SELECT *, xmin "

@@ -13,8 +13,8 @@ import de.btu.openinfra.backend.db.jpa.model.AttributeValueValue;
 import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
-import de.btu.openinfra.backend.db.pojos.AttributeValuePojo;
-import de.btu.openinfra.backend.db.pojos.TopicInstancePojo;
+import de.btu.openinfra.backend.db.pojos.project.AttributeValuePojo;
+import de.btu.openinfra.backend.db.pojos.project.TopicInstancePojo;
 
 /**
  * This class represents the TopicInstance and is used to access the underlying

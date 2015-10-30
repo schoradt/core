@@ -6,7 +6,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import de.btu.openinfra.backend.db.daos.MetaDataDao;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
-import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 
 @XmlRootElement
 public class ValueListValuePojo extends OpenInfraMetaDataPojo {
@@ -55,16 +54,6 @@ public class ValueListValuePojo extends OpenInfraMetaDataPojo {
 
     public void setDescriptions(PtFreeTextPojo descriptions) {
         this.descriptions = descriptions;
-    }
-
-    @Override
-    protected void makePrimerHelper(PtLocale locale) {
-        visibility = false;
-        belongsToValueList = null;
-        names = new PtFreeTextPojo();
-        names.makePrimer(locale);
-        descriptions = new PtFreeTextPojo();
-        descriptions.makePrimer(locale);
     }
 
 }

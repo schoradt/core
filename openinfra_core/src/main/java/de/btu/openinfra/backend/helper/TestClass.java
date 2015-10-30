@@ -2,10 +2,6 @@ package de.btu.openinfra.backend.helper;
 
 import de.btu.openinfra.backend.db.OpenInfraOrderByEnum;
 
-
-
-
-
 public class TestClass {
 
 	public static void main(String[] args) {
@@ -72,11 +68,10 @@ public class TestClass {
 //		}
 
 
+
 		for (String string : OpenInfraOrderByEnum.getAllObjectNames()) {
             System.out.println(string);
         }
-
-
 	}
 
 
