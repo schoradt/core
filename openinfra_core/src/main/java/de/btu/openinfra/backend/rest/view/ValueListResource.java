@@ -77,16 +77,4 @@ public class ValueListResource {
 					valueListId, sortOrder, orderBy, offset, size);
 	}
 
-    @GET
-    @Path("/new")
-    @Template(name="/views/detail/ValueLists.jsp")
-    public ValueListPojo newValueList(
-    		@Context UriInfo uriInfo,
-    		@Context HttpServletRequest request,
-            @QueryParam("language") String language,
-            @PathParam("projectId") UUID projectId,
-            @PathParam("schema") String schema) {
-        return new de.btu.openinfra.backend.rest.ValueListResource()
-            .newValueList(uriInfo, request, language, projectId, schema);
-    }
 }

@@ -196,23 +196,6 @@ public class ValueListResource {
 	                valueListId);
 	}
 
-	@GET
-    @Path("/new")
-    public ValueListPojo newValueList(
-    		@Context UriInfo uriInfo,
-    		@Context HttpServletRequest request,
-            @QueryParam("language") String language,
-            @PathParam("projectId") UUID projectId,
-            @PathParam("schema") String schema) {
-        return new ValueListRbac(
-                        projectId,
-                        OpenInfraSchemas.valueOf(schema.toUpperCase()))
-                    .newValueList(
-                    		OpenInfraHttpMethod.valueOf(request.getMethod()),
-    						uriInfo,
-    						PtLocaleDao.forLanguageTag(language));
-    }
-
 	@PUT
     @Path("{valueListId}")
     public Response update(

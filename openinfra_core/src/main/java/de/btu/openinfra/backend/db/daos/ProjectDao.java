@@ -30,8 +30,6 @@ import de.btu.openinfra.backend.db.jpa.model.meta.Databases;
 import de.btu.openinfra.backend.db.jpa.model.meta.Ports;
 import de.btu.openinfra.backend.db.jpa.model.meta.Projects;
 import de.btu.openinfra.backend.db.jpa.model.meta.Servers;
-import de.btu.openinfra.backend.db.pojos.LocalizedString;
-import de.btu.openinfra.backend.db.pojos.PtFreeTextPojo;
 import de.btu.openinfra.backend.db.pojos.meta.CredentialsPojo;
 import de.btu.openinfra.backend.db.pojos.meta.DatabaseConnectionPojo;
 import de.btu.openinfra.backend.db.pojos.meta.DatabasesPojo;
@@ -394,42 +392,6 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
         }
 	    return result;
 	}
-
-    /**
-     * This method creates a ProjectPojo shell that contains informations about
-     * the name, the description and the parent project.
-     *
-     * @param locale the locale the informations should be saved at
-     * @return       the ProjectPojo
-     */
-    public ProjectPojo newSubProject(Locale locale) {
-        // create the return pojo
-        ProjectPojo pojo = new ProjectPojo();
-
-        PtLocaleDao ptl = new PtLocaleDao(currentProjectId, schema);
-        List<LocalizedString> lcs = new LinkedList<LocalizedString>();
-        LocalizedString ls = new LocalizedString();
-
-        // set an empty character string
-        ls.setCharacterString("");
-
-        // set the locale of the character string
-        ls.setLocale(PtLocaleDao.mapToPojoStatically(
-                locale,
-                ptl.read(locale)));
-        lcs.add(ls);
-
-        // add the localized string for the name
-        pojo.setNames(new PtFreeTextPojo(lcs, null));
-
-        // add the localized string for the description
-        pojo.setDescriptions(new PtFreeTextPojo(lcs, null));
-
-        // set the id of the main project to the current project
-        pojo.setSubprojectOf(currentProjectId);
-
-        return pojo;
-    }
 
     /**
      * This method creates a new project schema with the given project id. The

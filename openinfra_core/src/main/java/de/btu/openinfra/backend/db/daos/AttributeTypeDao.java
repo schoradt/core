@@ -1,7 +1,5 @@
 package de.btu.openinfra.backend.db.daos;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -13,8 +11,6 @@ import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.jpa.model.ValueList;
 import de.btu.openinfra.backend.db.jpa.model.ValueListValue;
 import de.btu.openinfra.backend.db.pojos.AttributeTypePojo;
-import de.btu.openinfra.backend.db.pojos.LocalizedString;
-import de.btu.openinfra.backend.db.pojos.PtFreeTextPojo;
 import de.btu.openinfra.backend.exception.OpenInfraEntityException;
 import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
@@ -195,45 +191,4 @@ public class AttributeTypeDao
         return new MappingResult<AttributeType>(at.getId(), at);
 	}
 
-	/**
-     * This method creates a AttributeTypePojo shell that contains informations
-     * about the name, description, data type, unit and domain.
-     *
-     * @param locale the locale the informations should be saved at
-     * @return       the AttributeTypePojo
-     */
-    public AttributeTypePojo newAttributeType(Locale locale) {
-        // create the return pojo
-        AttributeTypePojo pojo = new AttributeTypePojo();
-
-        PtLocaleDao ptl = new PtLocaleDao(currentProjectId, schema);
-        List<LocalizedString> lcs = new LinkedList<LocalizedString>();
-        LocalizedString ls = new LocalizedString();
-
-        // set an empty character string
-        ls.setCharacterString("");
-
-        // set the locale of the character string
-        ls.setLocale(PtLocaleDao.mapToPojoStatically(
-                locale,
-                ptl.read(locale)));
-        lcs.add(ls);
-
-        // add the localized string for the name
-        pojo.setNames(new PtFreeTextPojo(lcs, null));
-
-        // add the localized string for the description
-        pojo.setDescriptions(new PtFreeTextPojo(lcs, null));
-
-        // add the value list value for the data type
-        pojo.setDataType(null);
-
-        // add the value list value for the unit
-        pojo.setUnit(null);
-
-        // add the value list value for the domain
-        pojo.setDomain(null);
-
-        return pojo;
-    }
 }
