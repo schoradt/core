@@ -62,16 +62,16 @@
 			
 				<tr id="tr_${pojo.uuid}">
 					<td><img src="${contextPath}/rest/v1/files/${pojo.uuid}/thumbnail"/></td>
-					<td><a href="./files/${pojo.uuid}/origin">${pojo.originFileName}</a></td>
+					<td><a href="${contextPath}/rest/v1/files/${pojo.uuid}/origin">${pojo.originFileName}</a></td>
 					<td>${pojo.mimeType}</td>
-					<td><a href="./files/${pojo.uuid}/origin">${pojo.originDimension}</a></td>
-					<td><a href="./files/${pojo.uuid}/popup">${pojo.popupDimension}</a></td>
-					<td><a href="./files/${pojo.uuid}/middle">${pojo.middleDimension}</a></td>
-					<td><a href="./files/${pojo.uuid}/thumbnail">${pojo.thumbnailDimension}</a></td>
+					<td><a href="${contextPath}/rest/v1/files/${pojo.uuid}/origin">${pojo.originDimension}</a></td>
+					<td><a href="${contextPath}/rest/v1/files/${pojo.uuid}/popup">${pojo.popupDimension}</a></td>
+					<td><a href="${contextPath}/rest/v1/files/${pojo.uuid}/middle">${pojo.middleDimension}</a></td>
+					<td><a href="${contextPath}/rest/v1/files/${pojo.uuid}/thumbnail">${pojo.thumbnailDimension}</a></td>
 					<td>${pojo.uploadedOn}</td>
 					<td title="Metadaten in XML ansehen">
 						<c:if test="${pojo.exifData != null}">
-							<a href="./files/${pojo.uuid}.xml">vorhanden</a>
+							<a href="${contextPath}/rest/v1/files/${pojo.uuid}.xml">vorhanden</a>
 						</c:if>
 					</td>
 					<c:if test="${fn:contains(requestUrl, '/rest/v1/files')}">
