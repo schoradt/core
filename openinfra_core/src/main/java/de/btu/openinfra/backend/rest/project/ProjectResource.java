@@ -150,22 +150,6 @@ public class ProjectResource {
 						uriInfo);
 	}
 
-	@GET
-	@Path("{projectId}/new")
-    public ProjectPojo newSubProject(
-    		@Context UriInfo uriInfo,
-    		@Context HttpServletRequest request,
-            @QueryParam("language") String language,
-            @PathParam("projectId") UUID projectId) {
-        return new ProjectRbac(
-                        projectId,
-                        OpenInfraSchemas.PROJECTS)
-                    .newSubProject(
-                    		OpenInfraHttpMethod.valueOf(request.getMethod()),
-    						uriInfo,
-    						PtLocaleDao.forLanguageTag(language));
-    }
-
 	/**
 	 * This method creates a new project.
 	 *

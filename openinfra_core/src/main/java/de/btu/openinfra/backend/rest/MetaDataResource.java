@@ -57,21 +57,6 @@ public class MetaDataResource {
                         size);
     }
 
-    @GET
-    @Path("/new")
-    public MetaDataPojo newMetaData(
-    		@Context UriInfo uriInfo,
-    		@Context HttpServletRequest request,
-            @PathParam("projectId") UUID projectId,
-            @PathParam("schema") String schema) {
-        return new MetaDataRbac(
-                        projectId,
-                        OpenInfraSchemas.valueOf(schema.toUpperCase()))
-                    .newMetaData(
-                    		OpenInfraHttpMethod.valueOf(request.getMethod()),
-    						uriInfo);
-    }
-
     @POST
     public Response create(
     		@Context UriInfo uriInfo,

@@ -9,8 +9,6 @@ import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.AttributeTypeGroup;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupPojo;
-import de.btu.openinfra.backend.db.pojos.LocalizedString;
-import de.btu.openinfra.backend.db.pojos.PtFreeTextPojo;
 import de.btu.openinfra.backend.exception.OpenInfraEntityException;
 import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
@@ -150,38 +148,5 @@ public class AttributeTypeGroupDao
         // return the model as mapping result
         return new MappingResult<AttributeTypeGroup>(atg.getId(), atg);
 	}
-
-	/**
-     * This method creates a AttributeTypeGroupPojo shell that contains
-     * informations about the name, description and the parent group id.
-     *
-     * @param locale the locale the informations should be saved at
-     * @return       the AttributeTypePojo
-     */
-    public AttributeTypeGroupPojo newAttributeTypeGroup(Locale locale) {
-        // create the return pojo
-        AttributeTypeGroupPojo pojo = new AttributeTypeGroupPojo();
-
-        PtLocaleDao ptl = new PtLocaleDao(currentProjectId, schema);
-        List<LocalizedString> lcs = new LinkedList<LocalizedString>();
-        LocalizedString ls = new LocalizedString();
-
-        // set an empty character string
-        ls.setCharacterString("");
-
-        // set the locale of the character string
-        ls.setLocale(PtLocaleDao.mapToPojoStatically(
-                locale,
-                ptl.read(locale)));
-        lcs.add(ls);
-
-        // add the localized string for the name
-        pojo.setNames(new PtFreeTextPojo(lcs, null));
-
-        // add the localized string for the description
-        pojo.setDescriptions(new PtFreeTextPojo(lcs, null));
-
-        return pojo;
-    }
 
 }

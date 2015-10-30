@@ -259,23 +259,6 @@ public class AttributeTypeGroupResource {
 						attributeTypeGroupId);
 	}
 
-	@GET
-    @Path("/new")
-    public AttributeTypeGroupPojo newAttributeTypeGroup(
-    		@Context UriInfo uriInfo,
-    		@Context HttpServletRequest request,
-            @QueryParam("language") String language,
-            @PathParam("projectId") UUID projectId,
-            @PathParam("schema") String schema) {
-        return new AttributeTypeGroupRbac(
-                        projectId,
-                        OpenInfraSchemas.valueOf(schema.toUpperCase()))
-                    .newAttributeTypeGroup(
-    						OpenInfraHttpMethod.valueOf(request.getMethod()),
-    						uriInfo,
-                            PtLocaleDao.forLanguageTag(language));
-    }
-
 	@POST
     public Response create(
     		@Context UriInfo uriInfo,
