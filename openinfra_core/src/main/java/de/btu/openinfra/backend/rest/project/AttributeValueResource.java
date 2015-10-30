@@ -25,7 +25,7 @@ import de.btu.openinfra.backend.db.rbac.AttributeValueRbac;
 import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
-@Path("/projects/{projectId}/attributevalues")
+@Path(OpenInfraResponseBuilder.REST_URI_PROJECTS + "/attributevalues")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET,
     MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
@@ -45,7 +45,7 @@ public class AttributeValueResource {
 		return new AttributeValueRbac(
 				projectId,
 				OpenInfraSchemas.PROJECTS).read(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						attributeValueId,
@@ -64,7 +64,7 @@ public class AttributeValueResource {
 	    UUID id = new AttributeValueRbac(
                 projectId,
                 OpenInfraSchemas.PROJECTS).distributeTypes(
-                		OpenInfraHttpMethod.valueOf(request.getMethod()), 
+                		OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						pojo, projectId,
                         attributeValueId);
@@ -86,7 +86,7 @@ public class AttributeValueResource {
 	    UUID id = new AttributeValueRbac(
                 projectId,
                 OpenInfraSchemas.PROJECTS).distributeTypes(
-                		OpenInfraHttpMethod.valueOf(request.getMethod()), 
+                		OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						pojo, projectId,
                         null);
@@ -102,7 +102,7 @@ public class AttributeValueResource {
             @PathParam("attributeValueId") UUID attributeValueId) {
 	    return OpenInfraResponseBuilder.deleteResponse(
 	            new AttributeValueRbac(projectId, OpenInfraSchemas.PROJECTS)
-	                .delete(OpenInfraHttpMethod.valueOf(request.getMethod()), 
+	                .delete(OpenInfraHttpMethod.valueOf(request.getMethod()),
 							uriInfo,
 							attributeValueId),
                 attributeValueId);

@@ -38,7 +38,7 @@ public class OpenInfraResponseBuilder {
 	 * not supported. For the schema projects use REST_URI_PROJECTS instead.
 	 */
 	public static final String REST_URI_PRIMER =
-            "/v1/{schema:(system|rbac|metadata)}";
+            "/v1/{schema:(system|rbac|metadata|files)}";
 
 
 	/**
