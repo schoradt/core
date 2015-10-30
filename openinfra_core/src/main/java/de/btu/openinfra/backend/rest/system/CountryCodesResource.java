@@ -13,7 +13,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
-import de.btu.openinfra.backend.db.OpenInfraOrderByEnum;
+import de.btu.openinfra.backend.db.OpenInfraOrderBy;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
@@ -35,13 +35,13 @@ public class CountryCodesResource {
 			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
 			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
-			@QueryParam("orderBy") OpenInfraOrderByEnum orderBy,
+			@QueryParam("orderBy") OpenInfraOrderBy orderBy,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new CountryCodeRbac(
 					null,
 					OpenInfraSchemas.SYSTEM).read(
-							OpenInfraHttpMethod.valueOf(request.getMethod()), 
+							OpenInfraHttpMethod.valueOf(request.getMethod()),
 							uriInfo,
 							PtLocaleDao.forLanguageTag(language),
 							sortOrder,
@@ -60,7 +60,7 @@ public class CountryCodesResource {
 		return new CountryCodeRbac(
 				null,
 				OpenInfraSchemas.SYSTEM).read(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						countryCodeId);
@@ -70,12 +70,12 @@ public class CountryCodesResource {
     @Path("count")
     @Produces({MediaType.TEXT_PLAIN})
     public long getCountryCodeCount(
-    		@Context UriInfo uriInfo, 
+    		@Context UriInfo uriInfo,
     		@Context HttpServletRequest request) {
         return new CountryCodeRbac(
                 null,
                 OpenInfraSchemas.SYSTEM).getCount(
-                		OpenInfraHttpMethod.valueOf(request.getMethod()), 
+                		OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo);
     }
 

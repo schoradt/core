@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -12,7 +14,7 @@ import javax.persistence.OneToMany;
 
 /**
  * The persistent class for the multiplicity database table.
- * 
+ *
  */
 @Entity
 
@@ -22,10 +24,17 @@ import javax.persistence.OneToMany;
     @NamedQuery(name="Multiplicity.findAll",
         query="SELECT m FROM Multiplicity m")
 })
+@NamedNativeQueries({
+    @NamedNativeQuery(name="Multiplicity.findAllByLocaleAndOrder",
+            query="SELECT *, xmin "
+                  + "FROM multiplicity "
+                  + "ORDER BY %s ",
+            resultClass=Multiplicity.class)
+})
 public class Multiplicity extends OpenInfraModelObject implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Column(name="max_value")
 	private Integer maxValue;
 

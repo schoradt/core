@@ -7,6 +7,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -30,6 +32,21 @@ import javax.persistence.Table;
 		query="SELECT COUNT(v) "
 			+ "FROM ValueListValue v "
 			+ "WHERE v.valueList = :value")
+})
+@NamedNativeQueries({
+    @NamedNativeQuery(name="ValueListValue.findAllByLocaleAndOrder",
+            query="SELECT vlv.*, vlv.xmin "
+                  + "FROM value_list_values AS vlv "
+                  + "LEFT OUTER JOIN ( "
+                    + "SELECT * "
+                    + "FROM value_list_values AS a, "
+                    + "localized_character_string AS b "
+                    + "WHERE a.%s = b.pt_free_text_id "
+                    + "AND b.pt_locale_id = cast(? as uuid) ) AS sq "
+                    + "ON (vlv.id = sq.id) "
+                    + "WHERE vlv.belongs_to_value_list = ? "
+                    + "ORDER BY free_text ",
+            resultClass=ValueListValue.class)
 })
 public class ValueListValue extends OpenInfraModelObject
     implements Serializable {

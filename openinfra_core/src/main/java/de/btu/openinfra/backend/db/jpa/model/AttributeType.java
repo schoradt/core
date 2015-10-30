@@ -6,6 +6,8 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -14,14 +16,14 @@ import javax.persistence.Table;
 
 /**
  * The persistent class for the attribute_type database table.
- * 
+ *
  */
 @Entity
 @Table(name="attribute_type")
 @NamedQueries({
-	@NamedQuery(name="AttributeType.findAll", 
+	@NamedQuery(name="AttributeType.findAll",
 		query="SELECT a FROM AttributeType a"),
-	@NamedQuery(name="AttributeType.findAllByLocale", 
+	@NamedQuery(name="AttributeType.findAllByLocale",
 		query="SELECT a "
 	            + "FROM AttributeType a "
 	            + "INNER JOIN a.ptFreeText1.localizedCharacterStrings l1 "
@@ -32,7 +34,7 @@ import javax.persistence.Table;
 	            + "AND l2.ptLocale = :locale "
 	            + "AND vl1.ptLocale = :locale "
 	            + "AND vl2.ptLocale = :locale "),
-		
+
 	@NamedQuery(name="AttributeType.count",
 		query="SELECT COUNT(a) FROM AttributeType a"),
 	@NamedQuery(name="AttributeType.findByAttributeTypeGroup",
@@ -54,7 +56,19 @@ import javax.persistence.Table;
                     + "WHERE l.ptLocale = :ptl "
                     + "AND l.freeText = :dataType)")
 })
-
+@NamedNativeQueries({
+    @NamedNativeQuery(name="AttributeType.findAllByLocaleAndOrder",
+            query="SELECT at.*, at.xmin "
+                  + "FROM attribute_type AS at "
+                  + "LEFT OUTER JOIN ( "
+                    + "SELECT * "
+                    + "FROM attribute_type AS a, localized_character_string AS b "
+                    + "WHERE a.%s = b.pt_free_text_id "
+                    + "AND b.pt_locale_id = cast(? as uuid) ) AS sq "
+                    + "ON (at.id = sq.id) "
+                    + "ORDER BY free_text ",
+            resultClass=AttributeType.class)
+})
 public class AttributeType extends OpenInfraModelObject
     implements Serializable {
 	private static final long serialVersionUID = 1L;

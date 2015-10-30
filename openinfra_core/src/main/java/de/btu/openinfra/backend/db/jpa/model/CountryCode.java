@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -13,12 +15,12 @@ import javax.persistence.Table;
 
 /**
  * The persistent class for the country_code database table.
- * 
+ *
  */
 @Entity
 @Table(name="country_code")
 @NamedQueries({
-	@NamedQuery(name="CountryCode.findAll", 
+	@NamedQuery(name="CountryCode.findAll",
 		query="SELECT c FROM CountryCode c"),
 	@NamedQuery(name="CountryCode.findByString",
 		query="SELECT c FROM CountryCode c "
@@ -26,7 +28,13 @@ import javax.persistence.Table;
 	@NamedQuery(name="CountryCode.count",
         query="SELECT COUNT(c) FROM CountryCode c ")
 })
-
+@NamedNativeQueries({
+    @NamedNativeQuery(name="CountryCode.findAllByLocaleAndOrder",
+            query="SELECT *, xmin "
+                    + "FROM country_code "
+                    + "ORDER BY %s ",
+                resultClass=CountryCode.class)
+})
 public class CountryCode extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -1,16 +1,13 @@
 package de.btu.openinfra.backend.helper;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import de.btu.openinfra.backend.db.OpenInfraOrderByEnum;
+import de.btu.openinfra.backend.db.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.daos.OrderByDao;
+import de.btu.openinfra.backend.db.pojos.OrderByNamesPojo;
+import de.btu.openinfra.backend.db.pojos.OrderByPojo;
 
-import org.reflections.Reflections;
-import org.reflections.util.ClasspathHelper;
-import org.reflections.util.ConfigurationBuilder;
-import org.reflections.util.FilterBuilder;
 
-import de.btu.openinfra.backend.db.PojoPrimer;
-import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
+
 
 public class TestClass {
 
@@ -77,29 +74,18 @@ public class TestClass {
 //			System.out.println(OpenInfraRealm.encrypt("siehstnix", UUID.fromString("db848094-0ead-4214-a850-d3c8cb23971c")));
 //		}
 
-		System.out.println(System.getProperty("os.name"));
 
-		System.out.println(PojoPrimer.class.getPackage().getName());
+	    OrderByPojo p = OrderByDao.read(OpenInfraSchemas.PROJECTS, "TopicCharacteristic");
+	    for (OpenInfraOrderByEnum string : p.getOrderByTypes()) {
+            System.out.println(string.toString());
+        }
 
-		Reflections reflection = new Reflections(new ConfigurationBuilder().
-		        addUrls(ClasspathHelper.forPackage("de.btu.openinfra.backend.db.pojos")).
-		        filterInputsBy(new FilterBuilder().
-		            include("de\\.btu\\.openinfra\\.backend\\.db\\.pojos\\..*\\.class").
-		            exclude("de\\.btu\\.openinfra\\.backend\\.db\\.pojos\\..*\\..*\\.class")));
-
-		List<String> classes = new ArrayList<>();
-
-		for(Class<? extends OpenInfraPojo> cls : reflection.getSubTypesOf(OpenInfraPojo.class)) {
-		    classes.add(cls.getSimpleName());
-
-		}
-
-		Collections.sort(classes);
-
-		System.out.println(classes.size());
-		for(String className : classes) {
-		    System.out.println(className);
-		}
+        OrderByNamesPojo np = OrderByDao.getNames(OpenInfraSchemas.SYSTEM);
+        for (String string : np.getClassNames()) {
+            System.out.println(string);
+        }
 	}
+
+
 
 }

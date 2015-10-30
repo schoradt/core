@@ -7,6 +7,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -16,7 +18,7 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 
 /**
  * The persistent class for the settings database table.
- * 
+ *
  */
 @Entity
 @Table(schema="meta_data")
@@ -28,6 +30,17 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
                     + " sk = :value"),
     @NamedQuery(name="Settings.count",
     	query="SELECT COUNT(s) FROM Settings s")
+})
+@NamedNativeQueries({
+    @NamedNativeQuery(name="Settings.findAllByLocaleAndOrder",
+            query="SELECT s.*, s.xmin "
+                    + "FROM settings AS s "
+                    + "LEFT OUTER JOIN ("
+                        + "SELECT * "
+                        + "FROM setting_keys) AS sq "
+                        + "ON (s.key = sq.id) "
+                        + "ORDER BY %s ",
+                resultClass=Settings.class)
 })
 public class Settings extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -41,7 +54,7 @@ public class Settings extends OpenInfraModelObject implements Serializable {
 
 	@Column(name="updated_on")
 	private Timestamp updatedOn;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "project")
 	private Projects project;

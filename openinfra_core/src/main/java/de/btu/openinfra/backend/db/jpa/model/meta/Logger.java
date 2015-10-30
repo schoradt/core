@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -21,6 +23,13 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 @NamedQueries({
     @NamedQuery(name="Logger.findAll", query="SELECT l FROM Logger l"),
     @NamedQuery(name="Logger.count",  query="SELECT COUNT(l) FROM Logger l")
+})
+@NamedNativeQueries({
+    @NamedNativeQuery(name="Logger.findAllByLocaleAndOrder",
+            query="SELECT *, xmin "
+                    + "FROM logger "
+                    + "ORDER BY %s ",
+                resultClass=Logger.class)
 })
 public class Logger extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;

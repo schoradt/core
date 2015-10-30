@@ -6,6 +6,8 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -14,17 +16,30 @@ import javax.persistence.Table;
 
 /**
  * The persistent class for the attribute_type_group database table.
- * 
+ *
  */
 @Entity
 @Table(name="attribute_type_group")
 @NamedQueries({
-	@NamedQuery(name="AttributeTypeGroup.findAll", 
+	@NamedQuery(name="AttributeTypeGroup.findAll",
 		query="SELECT a FROM AttributeTypeGroup a"),
 	@NamedQuery(name="AttributeTypeGroup.count",
 		query="SELECT COUNT(a) FROM AttributeTypeGroup a")
 })
-
+@NamedNativeQueries({
+    @NamedNativeQuery(name="AttributeTypeGroup.findAllByLocaleAndOrder",
+            query="SELECT atg.*, atg.xmin "
+                  + "FROM attribute_type_group AS atg "
+                  + "LEFT OUTER JOIN ( "
+                    + "SELECT * "
+                    + "FROM attribute_type_group AS a, "
+                    + "localized_character_string AS b "
+                    + "WHERE a.%s = b.pt_free_text_id "
+                    + "AND b.pt_locale_id = cast(? as uuid) ) AS sq "
+                    + "ON (atg.id = sq.id) "
+                    + "ORDER BY free_text ",
+            resultClass=AttributeTypeGroup.class)
+})
 public class AttributeTypeGroup extends OpenInfraModelObject
     implements Serializable {
 	private static final long serialVersionUID = 1L;

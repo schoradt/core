@@ -23,7 +23,9 @@ import javax.ws.rs.core.UriInfo;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 
+import de.btu.openinfra.backend.db.OpenInfraOrderBy;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.ProjectDao;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.daos.meta.ProjectsDao;
@@ -49,12 +51,16 @@ public class SubjectResource {
 			@Context UriInfo uriInfo,
 			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
+			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
+            @QueryParam("orderBy") OpenInfraOrderBy orderBy,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new SubjectRbac().read(
 				OpenInfraHttpMethod.valueOf(request.getMethod()),
 				uriInfo,
 				PtLocaleDao.forLanguageTag(language),
+				sortOrder,
+				orderBy,
 				offset,
 				size);
 	}
@@ -187,6 +193,7 @@ public class SubjectResource {
 		return new OpenInfraRealm().getPermissions(
 				SecurityUtils.getSubject().getPrincipals());
 	}
+
 
 
 }

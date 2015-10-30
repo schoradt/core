@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -13,18 +15,25 @@ import javax.persistence.Table;
 
 /**
  * The persistent class for the language_code database table.
- * 
+ *
  */
 @Entity
 @Table(name="language_code")
 @NamedQueries({
-	@NamedQuery(name="LanguageCode.findAll", 
+	@NamedQuery(name="LanguageCode.findAll",
 		query="SELECT l FROM LanguageCode l"),
 	@NamedQuery(name="LanguageCode.findByString",
 		query="SELECT l FROM LanguageCode l "
 				+ "WHERE l.languageCode = :value"),
 	@NamedQuery(name="LanguageCode.count",
         query="SELECT COUNT(l) FROM LanguageCode l ")
+})
+@NamedNativeQueries({
+    @NamedNativeQuery(name="LanguageCode.findAllByLocaleAndOrder",
+            query="SELECT *, xmin "
+                    + "FROM language_code "
+                    + "ORDER BY %s ",
+                resultClass=LanguageCode.class)
 })
 public class LanguageCode extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;
