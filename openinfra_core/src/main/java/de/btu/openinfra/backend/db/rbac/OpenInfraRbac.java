@@ -1,6 +1,7 @@
 package de.btu.openinfra.backend.db.rbac;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -18,8 +19,10 @@ import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
 import de.btu.openinfra.backend.db.daos.TopicInstanceDao;
+import de.btu.openinfra.backend.db.daos.rbac.SubjectDao;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
+import de.btu.openinfra.backend.db.pojos.rbac.SubjectPojo;
 import de.btu.openinfra.backend.exception.OpenInfraWebException;
 
 /**
@@ -286,7 +289,7 @@ public abstract class OpenInfraRbac<
      * This is a generic method which is provided by all RBAC classes.
      *
      * @param uuid
-     * @return
+     * @return true when the object has been deleted
      */
     public boolean delete(
     		OpenInfraHttpMethod httpMethod,
@@ -303,6 +306,22 @@ public abstract class OpenInfraRbac<
 			throw new OpenInfraWebException(ex);
 		}
     }
+
+    /**
+     * This method returns the current subject as POJO object.
+     *
+     * @return the current subject as POJO object
+     */
+	public SubjectPojo self() {
+		// Retrieve the login from principals (there might be multiple)
+		org.apache.shiro.subject.Subject s = SecurityUtils.getSubject();
+		List<String> login = new LinkedList<String>();
+		for(Object o : s.getPrincipals().fromRealm(
+				OpenInfraRealmNames.LOGIN.name())) {
+			login.add(o.toString());
+		}
+		return new SubjectDao().read(login.get(0));
+	}
 
     /**
      * This method is used to check the permissions of the current subject. This
@@ -331,7 +350,7 @@ public abstract class OpenInfraRbac<
             if(uriInfo.getPath().matches(regex_new_project)) {
                 // Is the subject (user) permitted to create projects?
                 if (currentProjectId == null && user.isPermitted(
-                        "/projects:"+ httpMethod.getAccess())) {
+                        "/projects:" + httpMethod.getAccess())) {
                     return;
                 }
             }
@@ -412,6 +431,9 @@ public abstract class OpenInfraRbac<
 				return;
 			}
 			break;
+
+		case FILE:
+			return;
 		}
 
 		throw new WebApplicationException(Response.Status.FORBIDDEN);

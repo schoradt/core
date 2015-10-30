@@ -3,7 +3,6 @@ package de.btu.openinfra.backend.db.daos;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
@@ -24,22 +23,8 @@ import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 public class OrderByDao {
 
-    private static Map<OpenInfraSchemas, Map<String, Class<? extends OpenInfraPojo>>>
-        pojoClasses;
-
     /* Default constructor */
     public OrderByDao() { }
-
-    public static OrderByPojo OrderByPojoStatically(
-            OpenInfraSchemas schema, String classString) {
-        switch(schema) {
-            case SYSTEM:
-            case PROJECTS:
-                return null;
-            default:
-                return read(schema, classString);
-        }
-    }
 
     /**
      * This method returns a OrderByPojo that represents the name of the
@@ -134,7 +119,8 @@ public class OrderByDao {
     private static List<String> getClassNames(OpenInfraSchemas schema) {
 
         String packagePath = "";
-        List<Class<? extends OpenInfraPojo>> classes = new ArrayList<Class<? extends OpenInfraPojo>>();
+        List<Class<? extends OpenInfraPojo>> classes =
+                new ArrayList<Class<? extends OpenInfraPojo>>();
 
         // retrieve all classes for the schema
         switch (schema) {
@@ -145,18 +131,19 @@ public class OrderByDao {
             // system schema
         case SYSTEM:
             Reflections reflections = new Reflections(
-                    new ConfigurationBuilder().addUrls(ClasspathHelper.forPackage(
-                            "de.btu.openinfra.backend.db.pojos")).
-                            filterInputsBy(new FilterBuilder().
-                            include("de\\.btu\\.openinfra\\.backend\\.db\\.pojos\\"
-                                    + "..*\\.class").
-                            exclude("de\\.btu\\.openinfra\\.backend\\.db\\.pojos\\"
-                                    + "..*\\..*\\.class")).
-                            setScanners(
-                                    new SubTypesScanner(false),
-                                    new ResourcesScanner(),
-                                    new TypeElementsScanner()));
-            classes.addAll(Reflection.<OpenInfraPojo>findAllClasses(reflections));
+                new ConfigurationBuilder().addUrls(ClasspathHelper.forPackage(
+                        "de.btu.openinfra.backend.db.pojos")).
+                        filterInputsBy(new FilterBuilder().
+                        include("de\\.btu\\.openinfra\\.backend\\.db\\.pojos\\"
+                                + "..*\\.class").
+                        exclude("de\\.btu\\.openinfra\\.backend\\.db\\.pojos\\"
+                                + "..*\\..*\\.class")).
+                        setScanners(
+                                new SubTypesScanner(false),
+                                new ResourcesScanner(),
+                                new TypeElementsScanner()));
+            classes.addAll(
+                    Reflection.<OpenInfraPojo>findAllClasses(reflections));
             break;
         case META_DATA:
             packagePath = "de.btu.openinfra.backend.db.pojos.meta";

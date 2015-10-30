@@ -23,9 +23,11 @@ import de.btu.openinfra.backend.db.daos.OrderByDao;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.OrderByNamesPojo;
 import de.btu.openinfra.backend.db.pojos.OrderByPojo;
+import de.btu.openinfra.backend.db.pojos.file.FilePojo;
 import de.btu.openinfra.backend.db.pojos.project.ProjectPojo;
 import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
 import de.btu.openinfra.backend.db.rbac.ProjectRbac;
+import de.btu.openinfra.backend.db.rbac.file.FileRbac;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
 /**
@@ -266,6 +268,17 @@ public class ProjectResource {
 						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language));
+	}
+
+    @GET
+	@Path("{projectId}/files")
+	public List<FilePojo> readFilesByProject(
+			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
+			@PathParam("projectId") UUID projectId) {
+		return new FileRbac().readByProject(
+				OpenInfraHttpMethod.valueOf(request.getMethod()),
+				uriInfo, projectId);
 	}
 
 	@GET
