@@ -19,9 +19,9 @@ public class AttributeTypeGroupRbac extends OpenInfraRbac<
 			OpenInfraSchemas schema) {
 		super(currentProjectId, schema, AttributeTypeGroupDao.class);
 	}
-	
+
 	public List<AttributeTypeGroupPojo> readSubGroups(
-			OpenInfraHttpMethod httpMethod, 
+			OpenInfraHttpMethod httpMethod,
 			UriInfo uriInfo,
 			Locale locale,
 			UUID attributeTypeGroupId) {
@@ -29,14 +29,6 @@ public class AttributeTypeGroupRbac extends OpenInfraRbac<
 		return new AttributeTypeGroupDao(
 				currentProjectId,
 				schema).readSubGroups(locale, attributeTypeGroupId);
-	}
-	
-	public AttributeTypeGroupPojo newAttributeTypeGroup(
-			OpenInfraHttpMethod httpMethod, 
-			UriInfo uriInfo,Locale locale) {
-		checkPermission(httpMethod, uriInfo);
-		return new AttributeTypeGroupDao(
-				currentProjectId, schema).newAttributeTypeGroup(locale);
 	}
 
 }

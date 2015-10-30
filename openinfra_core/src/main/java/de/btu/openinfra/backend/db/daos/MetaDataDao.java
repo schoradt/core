@@ -119,12 +119,4 @@ public class MetaDataDao extends OpenInfraDao<MetaDataPojo, MetaData> {
         return resultM;
     }
 
-    /**
-     * Creates an empty MetaDataPojo.
-     * @return an empty MetaDataPojo
-     */
-    public MetaDataPojo newMetaData() {
-       return new MetaDataPojo();
-    }
-
 }

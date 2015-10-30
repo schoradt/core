@@ -48,28 +48,13 @@ public class MetaDataResource {
         return new MetaDataRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-                		OpenInfraHttpMethod.valueOf(request.getMethod()), 
+                		OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
                         PtLocaleDao.forLanguageTag(language),
 						sortOrder,
 						orderBy,
                         offset,
                         size);
-    }
-
-    @GET
-    @Path("/new")
-    public MetaDataPojo newMetaData(
-    		@Context UriInfo uriInfo,
-    		@Context HttpServletRequest request,
-            @PathParam("projectId") UUID projectId,
-            @PathParam("schema") String schema) {
-        return new MetaDataRbac(
-                        projectId,
-                        OpenInfraSchemas.valueOf(schema.toUpperCase()))
-                    .newMetaData(
-                    		OpenInfraHttpMethod.valueOf(request.getMethod()), 
-    						uriInfo);
     }
 
     @POST
@@ -82,7 +67,7 @@ public class MetaDataResource {
         UUID id = new MetaDataRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
-                		OpenInfraHttpMethod.valueOf(request.getMethod()), 
+                		OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						null,
                         pojo);
@@ -120,7 +105,7 @@ public class MetaDataResource {
                 new MetaDataRbac(
                         projectId,
                         OpenInfraSchemas.valueOf(schema.toUpperCase())).delete(
-                        		OpenInfraHttpMethod.valueOf(request.getMethod()), 
+                        		OpenInfraHttpMethod.valueOf(request.getMethod()),
         						uriInfo,
                                 metadataId),
                 metadataId);
@@ -137,7 +122,7 @@ public class MetaDataResource {
 		return new MetaDataRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
-                		OpenInfraHttpMethod.valueOf(request.getMethod()), 
+                		OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo);
 	}
 
@@ -153,7 +138,7 @@ public class MetaDataResource {
         return new MetaDataRbac(
                 projectId,
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-                		OpenInfraHttpMethod.valueOf(request.getMethod()), 
+                		OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
                         PtLocaleDao.forLanguageTag(language),
                         metaDataId);
