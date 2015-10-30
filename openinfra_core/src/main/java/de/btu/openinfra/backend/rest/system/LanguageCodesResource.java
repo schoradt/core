@@ -13,7 +13,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
-import de.btu.openinfra.backend.db.OpenInfraOrderByEnum;
+import de.btu.openinfra.backend.db.OpenInfraOrderBy;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
@@ -41,13 +41,13 @@ public class LanguageCodesResource {
 			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
 			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
-			@QueryParam("orderBy") OpenInfraOrderByEnum orderBy,
+			@QueryParam("orderBy") OpenInfraOrderBy orderBy,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new LanguageCodeRbac(
 				null,
 				OpenInfraSchemas.SYSTEM ).read(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						sortOrder,
@@ -66,7 +66,7 @@ public class LanguageCodesResource {
 		return new LanguageCodeRbac(
 				null,
 				OpenInfraSchemas.SYSTEM ).read(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						languageCodeId);
@@ -76,12 +76,12 @@ public class LanguageCodesResource {
     @Path("count")
     @Produces({MediaType.TEXT_PLAIN})
     public long getLanguageCodeCount(
-    		@Context UriInfo uriInfo, 
+    		@Context UriInfo uriInfo,
     		@Context HttpServletRequest request) {
         return new LanguageCodeRbac(
                 null,
                 OpenInfraSchemas.SYSTEM).getCount(
-                		OpenInfraHttpMethod.valueOf(request.getMethod()), 
+                		OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo);
     }
 

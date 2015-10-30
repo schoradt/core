@@ -15,7 +15,7 @@ import javax.ws.rs.core.UriInfo;
 
 import org.glassfish.jersey.server.mvc.Template;
 
-import de.btu.openinfra.backend.db.OpenInfraOrderByEnum;
+import de.btu.openinfra.backend.db.OpenInfraOrderBy;
 import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupToAttributeTypePojo;
 import de.btu.openinfra.backend.db.pojos.AttributeTypePojo;
@@ -36,11 +36,11 @@ public class AttributeTypeResource {
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
-			@QueryParam("orderBy") OpenInfraOrderByEnum orderBy,
+			@QueryParam("orderBy") OpenInfraOrderBy orderBy,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new de.btu.openinfra.backend.rest.AttributeTypeResource()
-			.get(uriInfo, request, language, projectId, 
+			.get(uriInfo, request, language, projectId,
 					schema, sortOrder, orderBy, offset, size);
 	}
 
@@ -55,7 +55,7 @@ public class AttributeTypeResource {
 			@PathParam("schema") String schema,
 			@PathParam("attributeTypeId") UUID attributeTypeId) {
 		return new de.btu.openinfra.backend.rest.AttributeTypeResource()
-			.get(uriInfo, request, language, 
+			.get(uriInfo, request, language,
 					projectId, schema, attributeTypeId);
 	}
 
@@ -72,7 +72,7 @@ public class AttributeTypeResource {
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new de.btu.openinfra.backend.rest.AttributeTypeResource()
-			.get(uriInfo, request, language, projectId, schema, 
+			.get(uriInfo, request, language, projectId, schema,
 					attributeTypeId, offset, size);
 	}
 

@@ -7,6 +7,8 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -16,17 +18,24 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 
 /**
  * The persistent class for the subject database table.
- * 
+ *
  */
 @Entity
 @NamedQueries({
 	@NamedQuery(name="Subject.findAll", query="SELECT s FROM Subject s"),
 	@NamedQuery(name="Subject.count",
 		query="SELECT COUNT(s) FROM Subject s"),
-	@NamedQuery(name="Subject.findByLogin", 
+	@NamedQuery(name="Subject.findByLogin",
 		query="SELECT s "
 			+ "FROM Subject s "
 			+ "WHERE s.login = :login")
+})
+@NamedNativeQueries({
+    @NamedNativeQuery(name="Subject.findAllByLocaleAndOrder",
+            query="SELECT *, xmin "
+                    + "FROM subject "
+                    + "ORDER BY %s ",
+                resultClass=Subject.class)
 })
 public class Subject extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -59,7 +68,7 @@ public class Subject extends OpenInfraModelObject implements Serializable {
 
 	@Column(name="updated_on")
 	private Timestamp updatedOn;
-	
+
 	private String webapp;
 
 	//bi-directional many-to-one association to SubjectRole
@@ -238,7 +247,7 @@ public class Subject extends OpenInfraModelObject implements Serializable {
 
 		return subjectProject;
 	}
-	
+
 	public String getWebapp() {
 		return this.webapp;
 	}

@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -21,6 +23,13 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 @NamedQueries({
     @NamedQuery(name="Level.findAll", query="SELECT l FROM Level l"),
     @NamedQuery(name="Level.count", query="SELECT COUNT(l) FROM Level l")
+})
+@NamedNativeQueries({
+    @NamedNativeQuery(name="Level.findAllByLocaleAndOrder",
+            query="SELECT *, xmin "
+                    + "FROM level "
+                    + "ORDER BY %s ",
+                resultClass=Level.class)
 })
 public class Level extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;
