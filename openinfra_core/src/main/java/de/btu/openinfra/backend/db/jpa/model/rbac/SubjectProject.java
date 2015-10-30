@@ -16,14 +16,14 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 
 /**
  * The persistent class for the subject_projects database table.
- * 
+ *
  */
 @Entity
 @Table(name="subject_projects")
 @NamedQueries({
-	@NamedQuery(name="SubjectProject.findAll", 
+	@NamedQuery(name="SubjectProject.findAll",
 			query="SELECT s FROM SubjectProject s"),
-	@NamedQuery(name="SubjectProject.count", 
+	@NamedQuery(name="SubjectProject.count",
 		query="SELECT COUNT(s) FROM SubjectProject s")
 })
 public class SubjectProject extends OpenInfraModelObject
@@ -35,12 +35,12 @@ public class SubjectProject extends OpenInfraModelObject
 
 	//bi-directional many-to-one association to ProjectRelatedRole
 	@ManyToOne
-	@JoinColumn(name="project_related_role")
+	@JoinColumn(name="project_related_role_id")
 	private ProjectRelatedRole projectRelatedRoleBean;
 
 	//bi-directional many-to-one association to Subject
 	@ManyToOne
-	@JoinColumn(name="subject")
+	@JoinColumn(name="subject_id")
 	private Subject subjectBean;
 
 	public SubjectProject() {

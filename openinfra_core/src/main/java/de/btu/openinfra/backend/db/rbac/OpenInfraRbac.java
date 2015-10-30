@@ -14,7 +14,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.json.simple.JSONObject;
 
-import de.btu.openinfra.backend.db.OpenInfraOrderByEnum;
+import de.btu.openinfra.backend.db.OpenInfraOrderBy;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
@@ -178,7 +178,7 @@ public abstract class OpenInfraRbac<
 			UriInfo uriInfo,
     		Locale locale,
     		OpenInfraSortOrder order,
-    		OpenInfraOrderByEnum column,
+    		OpenInfraOrderBy column,
     		int offset,
     		int size) {
 		checkPermission(httpMethod, uriInfo);

@@ -8,6 +8,7 @@ import java.util.UUID;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
+import javax.persistence.PersistenceException;
 import javax.persistence.Table;
 
 import org.eclipse.persistence.jpa.JpaQuery;
@@ -16,6 +17,7 @@ import org.json.simple.JSONObject;
 import de.btu.openinfra.backend.OpenInfraProperties;
 import de.btu.openinfra.backend.db.EntityManagerFactoryCache;
 import de.btu.openinfra.backend.db.MappingResult;
+import de.btu.openinfra.backend.db.OpenInfraOrderBy;
 import de.btu.openinfra.backend.db.OpenInfraOrderByEnum;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.OpenInfraSortOrder;
@@ -160,12 +162,14 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	 * @param offset     the number where to start
 	 * @param size       the size of items to provide
 	 * @return           a list of objects of type POJO class
+	 * @throws           OpenInfraEntityException for unsupported orderBy types
+	 * @throws           OpenInfraWebException for internal server errors
 	 */
 	@SuppressWarnings("unchecked")
     public List<TypePojo> read(
     		Locale locale,
     		OpenInfraSortOrder order,
-    		OpenInfraOrderByEnum column,
+    		OpenInfraOrderBy column,
     		int offset,
     		int size) {
 		// 1. Define a list which holds the POJO objects
@@ -179,28 +183,52 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 		if(order == null) {
 			order = OpenInfraProperties.DEFAULT_ORDER;
 		}
-		// 4. Read the required ptlocale object
-		PtLocale ptl = new PtLocaleDao(currentProjectId, schema).read(locale);
+		// 4. Read the required ptlocale object if exists
+		String ptlId = "";
+		try {
+		    PtLocale ptl = new PtLocaleDao(currentProjectId, schema)
+		        .read(locale);
+		    ptlId = ptl.getId().toString();
+		} catch (PersistenceException e) {
+		    // The pt locale table only exists in projects and system schemas.
+		    // If a sorting is requested by another schema, we must catch the
+		    // exception and just do nothing.
+		}
 		// 5. Handle requests that contains an order by column
         if(column == null) {
             // 5.a When the column is null redirect to another method
             return read(locale, offset, size);
         } else {
-	        // 5.a Construct the origin SQL-based named query and replace the
-			//     the placeholder by the required column and sort order.
+            // orderBy UUIDs is not supported
+            if (column.isUuid()) {
+                throw new OpenInfraEntityException(
+                        OpenInfraExceptionTypes.WRONG_SORT_TYPE);
+            }
+            // check if the orderBy column is supported for the current object
+            checkOrderBy(column);
+
+            // 5.a Construct the origin SQL-based named query and replace the
+            //     the placeholder by the required column and sort order.
 	        String sqlString = em.createNamedQuery(
 	        		modelClass.getSimpleName() + ".findAllByLocaleAndOrder")
 	        		.unwrap(JpaQuery.class).getDatabaseQuery().getSQLString();
-	        sqlString = String.format(sqlString, column.name());
-	        sqlString += " " + order.name();
-	        // 5.b Retrieve the requested model objects from database
-	        models = em.createNativeQuery(
-	        		sqlString,
-	                modelClass)
-	                .setParameter(1, ptl.getId().toString())
-	                .setFirstResult(offset)
-	                .setMaxResults(size)
-	                .getResultList();
+            sqlString = String.format(sqlString, column.getColumn().name());
+            sqlString += " " + order.name();
+
+	        // 5.b Retrieve the requested model objects from database.
+	        try {
+	            models = em.createNativeQuery(
+	                    sqlString,
+	                    modelClass)
+	                    .setParameter(1, ptlId)
+	                    .setFirstResult(offset)
+	                    .setMaxResults(size)
+	                    .getResultList();
+            } catch (PersistenceException e) {
+                // can be thrown if the orderByEnum is incorrectly configured
+                throw new OpenInfraWebException(e);
+            }
+
 		} // end if else
 
 		// 6. Finally, map the JPA model objects to POJO objects
@@ -210,7 +238,7 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 		return pojos;
 	}
 
-	/**
+    /**
 	 * A special method which returns model objects. This method is primarily
 	 * used to create a search index.
 	 *
@@ -507,5 +535,42 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 		} // end if
 		super.finalize();
 	}
+
+	/**
+     * This method retrieves the list of objects from the OpenInfraOrderByEnum
+     * for the passed orderBy column and compares it with the current object. If
+     * the current object is not part of the retrieved list, an
+     * OpenInfraEntityException is thrown.
+     *
+     * @param column
+     * @throws OpenInfraEntityException if the current object is not supported
+     *         by the OpenInfraOrderByEnum for the passed column
+     */
+    protected void checkOrderBy(OpenInfraOrderBy column) {
+        // flag to determine if the orderBy type is supported
+        boolean wrongSortType = true;
+
+        // get the list of classes that fit to the orderBy column
+        List<String> orderByClasses =
+                OpenInfraOrderByEnum.valueOf(
+                        column.getColumn().name()).getList();
+
+        // iterate over all class names
+        for (String cl : orderByClasses) {
+            // check if the current modelClass fits to a class from the
+            // orderBy column
+            if (modelClass.getSimpleName().equals(cl)) {
+                wrongSortType = false;
+                break;
+            }
+        }
+
+        // throw an exception if a wrong sort type was detected
+        if (wrongSortType) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.WRONG_SORT_TYPE);
+        }
+
+    }
 
 }

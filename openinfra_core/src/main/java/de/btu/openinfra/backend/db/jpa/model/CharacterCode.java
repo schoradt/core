@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -13,7 +15,7 @@ import javax.persistence.Table;
 
 /**
  * The persistent class for the character_code database table.
- * 
+ *
  */
 @Entity
 @Table(name="character_code")
@@ -23,6 +25,13 @@ import javax.persistence.Table;
             query="SELECT c FROM CharacterCode c"),
     @NamedQuery(name="CharacterCode.count",
             query="SELECT COUNT(c) FROM CharacterCode c ")
+})
+@NamedNativeQueries({
+    @NamedNativeQuery(name="CharacterCode.findAllByLocaleAndOrder",
+            query="SELECT *, xmin "
+                    + "FROM character_code "
+                    + "ORDER BY %s ",
+                resultClass=CharacterCode.class)
 })
 public class CharacterCode extends OpenInfraModelObject
     implements Serializable {

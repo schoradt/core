@@ -16,6 +16,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import de.btu.openinfra.backend.db.OpenInfraOrderBy;
+import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.pojos.meta.LogPojo;
 import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
 import de.btu.openinfra.backend.db.rbac.meta.LogRbac;
@@ -32,13 +34,18 @@ public class LogResource {
     public List<LogPojo> get(
             @Context UriInfo uriInfo,
             @Context HttpServletRequest request,
+            @QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
+            @QueryParam("orderBy") OpenInfraOrderBy orderBy,
             @QueryParam("offset") int offset,
             @QueryParam("size") int size) {
         return new LogRbac().read(
                 OpenInfraHttpMethod.valueOf(request.getMethod()),
                 uriInfo,
                 null,
-                offset, size);
+                sortOrder,
+                orderBy,
+                offset,
+                size);
     }
 
     @GET

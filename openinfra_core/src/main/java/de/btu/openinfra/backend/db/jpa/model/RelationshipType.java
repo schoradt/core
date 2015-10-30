@@ -6,6 +6,8 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -14,14 +16,14 @@ import javax.persistence.Table;
 
 /**
  * The persistent class for the relationship_type database table.
- * 
+ *
  */
 @Entity
 @Table(name="relationship_type")
 @NamedQueries({
-	@NamedQuery(name="RelationshipType.findAll", 
+	@NamedQuery(name="RelationshipType.findAll",
 			query="SELECT r FROM RelationshipType r"),
-	@NamedQuery(name="RelationshipType.count", 
+	@NamedQuery(name="RelationshipType.count",
 			query="SELECT COUNT(r) FROM RelationshipType r"),
 	@NamedQuery(name="RelationshipType.findByTopicCharacteristic",
 			query="SELECT rt "
@@ -40,7 +42,20 @@ import javax.persistence.Table;
 				+ "FROM RelationshipTypeToTopicCharacteristic r "
 				+ "WHERE r.topicCharacteristic = :value)")
 })
-
+@NamedNativeQueries({
+    @NamedNativeQuery(name="RelationshipType.findAllByLocaleAndOrder",
+            query="SELECT rt.*, rt.xmin "
+                    + "FROM relationship_type AS rt "
+                    + "LEFT OUTER JOIN ( "
+                        + "SELECT * "
+                        + "FROM value_list_values AS a, "
+                            + "localized_character_string as b "
+                        + "WHERE a.name = b.pt_free_text_id "
+                        + "AND b.pt_locale_id = cast(? as uuid) ) AS sq "
+                        + "ON (rt.%s = sq.id) "
+                        + "ORDER BY free_text ",
+                resultClass=RelationshipType.class)
+})
 public class RelationshipType extends OpenInfraModelObject
     implements Serializable {
 	private static final long serialVersionUID = 1L;

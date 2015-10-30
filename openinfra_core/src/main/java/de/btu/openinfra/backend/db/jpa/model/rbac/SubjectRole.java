@@ -14,14 +14,14 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 
 /**
  * The persistent class for the subject_roles database table.
- * 
+ *
  */
 @Entity
 @Table(name="subject_roles")
 @NamedQueries({
-	@NamedQuery(name="SubjectRole.findAll", 
+	@NamedQuery(name="SubjectRole.findAll",
 			query="SELECT s FROM SubjectRole s"),
-	@NamedQuery(name="SubjectRole.count", 
+	@NamedQuery(name="SubjectRole.count",
 			query="SELECT COUNT(s) FROM SubjectRole s")
 })
 public class SubjectRole extends OpenInfraModelObject implements Serializable {
@@ -29,12 +29,12 @@ public class SubjectRole extends OpenInfraModelObject implements Serializable {
 
 	//bi-directional many-to-one association to Role
 	@ManyToOne
-	@JoinColumn(name="role")
+	@JoinColumn(name="role_id")
 	private Role roleBean;
 
 	//bi-directional many-to-one association to Subject
 	@ManyToOne
-	@JoinColumn(name="subject")
+	@JoinColumn(name="subject_id")
 	private Subject subjectBean;
 
 	public SubjectRole() {

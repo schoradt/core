@@ -18,6 +18,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import de.btu.openinfra.backend.db.OpenInfraOrderBy;
+import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.rbac.PasswordBlacklistPojo;
 import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
@@ -37,27 +39,31 @@ public class PasswordBlacklistResource {
 			@Context UriInfo uriInfo,
 			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
+			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
+            @QueryParam("orderBy") OpenInfraOrderBy orderBy,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new PasswordBlacklistRbac().read(
-				OpenInfraHttpMethod.valueOf(request.getMethod()), 
+				OpenInfraHttpMethod.valueOf(request.getMethod()),
 				uriInfo,
 				PtLocaleDao.forLanguageTag(language),
+				sortOrder,
+				orderBy,
 				offset,
 				size);
 	}
-	
+
 	@POST
 	public Response create(
 			@Context UriInfo uriInfo,
     		@Context HttpServletRequest request,
-    		PasswordBlacklistPojo pojo) {	
+    		PasswordBlacklistPojo pojo) {
 		return OpenInfraResponseBuilder.postResponse(
 				new PasswordBlacklistRbac().createOrUpdate(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
-						uriInfo, null, pojo));		
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
+						uriInfo, null, pojo));
 	}
-	
+
 	@GET
 	@Path("{id}")
 	public PasswordBlacklistPojo get(
@@ -66,12 +72,12 @@ public class PasswordBlacklistResource {
 			@QueryParam("language") String language,
 			@PathParam("id") UUID uuid) {
 		return new PasswordBlacklistRbac().read(
-				OpenInfraHttpMethod.valueOf(request.getMethod()), 
+				OpenInfraHttpMethod.valueOf(request.getMethod()),
 				uriInfo,
 				PtLocaleDao.forLanguageTag(language),
 				uuid);
 	}
-	
+
 	@PUT
 	@Path("{id}")
 	public Response put(
@@ -81,10 +87,10 @@ public class PasswordBlacklistResource {
 			PasswordBlacklistPojo pojo) {
 		return OpenInfraResponseBuilder.putResponse(
 				new PasswordBlacklistRbac().createOrUpdate(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
-						uriInfo, uuid, pojo));		
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
+						uriInfo, uuid, pojo));
 	}
-		
+
 	@DELETE
 	@Path("{id}")
 	public Response delete(
@@ -93,10 +99,10 @@ public class PasswordBlacklistResource {
 			@PathParam("id") UUID uuid) {
 		return OpenInfraResponseBuilder.deleteResponse(
 				new PasswordBlacklistRbac().delete(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo, uuid), uuid);
 	}
-	
+
 	@GET
 	@Path("count")
 	@Produces({MediaType.TEXT_PLAIN})

@@ -17,6 +17,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import de.btu.openinfra.backend.db.OpenInfraOrderBy;
+import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.pojos.meta.DatabasesPojo;
 import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
 import de.btu.openinfra.backend.db.rbac.meta.DatabasesRbac;
@@ -33,12 +35,16 @@ public class DatabasesResource {
     public List<DatabasesPojo> get(
             @Context UriInfo uriInfo,
             @Context HttpServletRequest request,
+            @QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
+            @QueryParam("orderBy") OpenInfraOrderBy orderBy,
             @QueryParam("offset") int offset,
             @QueryParam("size") int size) {
         return new DatabasesRbac().read(
                 OpenInfraHttpMethod.valueOf(request.getMethod()),
                 uriInfo,
                 null,
+                sortOrder,
+                orderBy,
                 offset, size);
     }
 
