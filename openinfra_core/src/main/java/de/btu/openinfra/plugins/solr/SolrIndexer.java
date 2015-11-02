@@ -29,6 +29,7 @@ import de.btu.openinfra.backend.exception.OpenInfraWebException;
 public class SolrIndexer {
 
     private SolrServer solrConnection = null;
+    private final String NO_TRANSLATION_FIELD = "NoTranslation_";
 
     /**
      * Default constructor
@@ -80,7 +81,7 @@ public class SolrIndexer {
         // run through all topic instances
         for (TopicInstance ti : tiList) {
             // create a new document
-            docs.add(createDocument(ti));
+            docs.add(createOrUpdateDocument(ti));
         }
 
         // send the documents to the solr server
@@ -96,25 +97,28 @@ public class SolrIndexer {
     }
 
     /**
-     * This method will create a Solr document from the passed topic instance
-     * model. The document always have a unique id that is represented by the
-     * topic instance id, the project id and topic characteristic id the topic
-     * instance belongs to. Further all attribute types and values that belongs
-     * to the topic instance will dynamically be added in every translated
-     * language.
+     * This method will create or update a Solr document from the passed topic
+     * instance model. The document always have a unique id that is represented
+     * by the topic instance id. Every Solr document will hold the information
+     * about the project id, the topic characteristic id and all attribute types
+     * and values that belongs to the topic instance.
      *
-     * This method avoid committing the document to Solr, because it is more
-     * performant to commit all docs at once.
+     * The attribute types will be used as field name. The attribute values will
+     * be used as field values. Every field will be saved in each language it is
+     * translated to. If only the attribute type or the attribute value is
+     * translated, the whole tuple will not be indexed. It should be avoided to
+     * mix the different languages in the index.
+     *
+     * This method does not commit the document to Solr, because it is
+     * performing more effectively to commit all docs at once.
      *
      * @param ti  The Topic Instance model that should be indexed.
      * @return SolrInputDocument the Solr document
      */
-    private SolrInputDocument createDocument(TopicInstance ti) {
+    public SolrInputDocument createOrUpdateDocument(TopicInstance ti) {
         SolrInputDocument doc = new SolrInputDocument();
 
-        // add the topic instance id
-        // TODO ids can be duplicated in different projects (initial topic
-        //      framework) but the data could differ
+        // add the topic instance id as document id
         doc.addField("id", ti.getId());
 
         // add the project id
@@ -151,30 +155,6 @@ public class SolrIndexer {
     }
 
     /**
-     * This method will update a specific topic instance in the Solr index. It
-     * simply calls the method to create documents, because this will do the
-     * update as well.
-     *
-     * @param ti The topic instance that should be updated.
-     */
-    public void updateDocument(TopicInstance ti) {
-        Collection<SolrInputDocument> docs = new ArrayList<SolrInputDocument>();
-        // call the create method to update the document
-        docs.add(createDocument(ti));
-
-        // send the updated document to the solr server
-        try {
-            // add the documents to solr
-            getSolrConnection().getSolr().add(docs);
-            // commit the changes to the server
-            getSolrConnection().getSolr().commit();
-        } catch (SolrServerException | IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * This method deletes a specific document from the Solr index.
      *
      * @param ti The Topic Instance model that should be indexed.
@@ -204,9 +184,10 @@ public class SolrIndexer {
 
     /**
      * This method adds the passed type and value to the passed Solr document.
-     * It will add the types and values for every language separately. It will
-     * also react on values that have a undefined locale (xx) and save them into
-     * different fields, depending on the type translation.
+     * It will add the types and values for every language separately. Values
+     * that has no translated type will be stored in a global field.
+     * Values that has an undefined locale (xx) will be saved into different
+     * fields, depending on the type translation.
      *
      * @param type
      * @param value
@@ -217,33 +198,74 @@ public class SolrIndexer {
             List<LocalizedCharacterString> value,
             SolrInputDocument doc
             ) {
-        // for every translation of the attribute type
-        for (int i = 0; i < type.size(); i++) {
-            // set the value locale to the counter
-            int valueLocale = i;
 
-            // check if the locale of the attribute value is xx
-            if (value.get(0).getPtLocale().getLanguageCode().getLanguageCode()
-                    .equals("xx")) {
-                // set the value locale to 0, because their is only one
-                valueLocale = 0;
-            }
-
-            // Add the name of the attribute type as field name. The
-            // attribute value will be saved as object value.
-            try {
+        // check if the language of the attribute value is xx
+        int x = containsAtPosition(value, "xx");
+        if (x > -1) {
+            // save the attribute value for every existing translation of the
+            // attribute type
+            for (int k = 0; k < type.size(); k++) {
                 doc.addField(
                         SolrCharacterConverter.convert(
-                                type.get(i)
+                                type.get(k)
                                 .getFreeText()),
-                        value.get(valueLocale).getFreeText());
+                        value.get(x).getFreeText());
+            }
+            // Abort here because the value should only exists in one language.
+            return;
+        }
+
+        // Run through every other translation of the attribute value.
+        for (int i = 0; i < value.size(); i++) {
+            try {
+
+                // Retrieve the position of the attribute type with the language
+                // of the attribute value.
+                int z = containsAtPosition(type, value.get(i).getPtLocale()
+                        .getLanguageCode().getLanguageCode());
+
+                if (z > -1) {
+                    // Add the type and the value with the same language.
+                    doc.addField(
+                            SolrCharacterConverter.convert(
+                                    type.get(z)
+                                    .getFreeText()),
+                                    value.get(i).getFreeText());
+                } else {
+                    // No translation for the attribute type was specified. To
+                    // avoid information loss we will save all this values
+                    // together in a special field.
+                    doc.addField(
+                            SolrCharacterConverter.convert(
+                                    NO_TRANSLATION_FIELD),
+                            value.get(i).getFreeText());
+                }
+
             } catch (ArrayIndexOutOfBoundsException e) {
-                // If we got this exception no translation for either the
-                // attribute type or the attribute value exists. To avoid
-                // mixed language forms in the index we will completely
-                // ignore this attribute type or attribute value.
+                throw new OpenInfraWebException(e);
             }
         }
+    }
+
+    /**
+     * This method search in the passed list for an entry with the specified
+     * language code and return its position in the list.
+     *
+     * @param lst  A list with LocalizedCharacterStrings where the language code
+     *             should be searched at.
+     * @param lang The language code
+     * @return     The position in the passed list where the specified language
+     *             was found at or -1 for no match.
+     */
+    private int containsAtPosition(
+            List<LocalizedCharacterString> lst, String lang) {
+        for (int i = 0; i < lst.size(); i++) {
+            if (lst.get(i).getPtLocale().getLanguageCode().getLanguageCode()
+                    .equals(lang)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     private SolrServer getSolrConnection() {
