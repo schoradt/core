@@ -39,7 +39,7 @@ public class PrimerResource {
                 PtLocaleDao.forLanguageTag(language.toUpperCase()),
                 pojoClass);
     }
-    
+
     @GET
     @Path("/names")
     public List<String> getPrimerNames(@PathParam("schema") String schema) {

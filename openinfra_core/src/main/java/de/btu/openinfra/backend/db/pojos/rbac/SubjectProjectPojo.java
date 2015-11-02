@@ -5,7 +5,6 @@ import java.util.UUID;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
-import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 import de.btu.openinfra.backend.db.pojos.PtFreeTextPojo;
 
@@ -54,12 +53,5 @@ public class SubjectProjectPojo extends OpenInfraPojo {
 	public void setSubject(UUID subject) {
 		this.subject = subject;
 	}
-
-    @Override
-    protected void makePrimerHelper(PtLocale locale) {
-        projectId = null;
-        projectRelatedRole = null;
-        subject = null;
-    }
 
 }

@@ -1,6 +1,7 @@
 package de.btu.openinfra.backend.db.daos.meta;
 
 import java.util.Locale;
+import java.util.UUID;
 
 import de.btu.openinfra.backend.OpenInfraTime;
 import de.btu.openinfra.backend.db.MappingResult;
@@ -24,11 +25,11 @@ public class SettingsDao
     /**
      * This is the required constructor which calls the super constructor and in
      * turn creates the corresponding entity manager.
-     *
+     * @param currentProjectId The identifier of the current project.
      * @param schema           the required schema
      */
-    public SettingsDao(OpenInfraSchemas schema) {
-        super(null, schema, Settings.class);
+    public SettingsDao(UUID currentProjectId, OpenInfraSchemas schema) {
+        super(null, OpenInfraSchemas.META_DATA, Settings.class);
     }
 
     @Override
@@ -100,25 +101,6 @@ public class SettingsDao
                     OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
         }
         return resultSettings;
-    }
-
-    /**
-     * Creates an empty settings pojo.
-     * @return an empty settings pojo
-     */
-    public SettingsPojo newSettings() {
-       return newPojoStatically();
-    }
-
-    /**
-     * This method implements the method newSettings in a static way.
-     * @return an empty settings pojo
-     */
-    public static SettingsPojo newPojoStatically() {
-        SettingsPojo newSettingsPojo = new SettingsPojo();
-        newSettingsPojo.setProject(ProjectsDao.newPojoStatically());
-        newSettingsPojo.setKey(SettingKeysDao.newPojoStatically());
-        return newSettingsPojo;
     }
 
 }

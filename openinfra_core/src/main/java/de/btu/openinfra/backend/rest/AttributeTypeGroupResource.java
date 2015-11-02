@@ -19,7 +19,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import de.btu.openinfra.backend.db.OpenInfraOrderBy;
-import de.btu.openinfra.backend.db.OpenInfraOrderByEnum;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
@@ -69,7 +68,7 @@ public class AttributeTypeGroupResource {
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
-			@QueryParam("orderBy") OpenInfraOrderByEnum orderBy,
+			@QueryParam("orderBy") OpenInfraOrderBy orderBy,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new AttributeTypeGroupRbac(
@@ -112,7 +111,7 @@ public class AttributeTypeGroupResource {
 			@PathParam("schema") String schema,
 			@PathParam("attributeTypeGroupId") UUID attributeTypeGroupId,
 			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
-			@QueryParam("orderBy") OpenInfraOrderByEnum orderBy,
+			@QueryParam("orderBy") OpenInfraOrderBy orderBy,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new AttributeTypeToAttributeTypeGroupRbac(
@@ -259,23 +258,6 @@ public class AttributeTypeGroupResource {
 						PtLocaleDao.forLanguageTag(language),
 						attributeTypeGroupId);
 	}
-
-	@GET
-    @Path("/new")
-    public AttributeTypeGroupPojo newAttributeTypeGroup(
-    		@Context UriInfo uriInfo,
-    		@Context HttpServletRequest request,
-            @QueryParam("language") String language,
-            @PathParam("projectId") UUID projectId,
-            @PathParam("schema") String schema) {
-        return new AttributeTypeGroupRbac(
-                        projectId,
-                        OpenInfraSchemas.valueOf(schema.toUpperCase()))
-                    .newAttributeTypeGroup(
-    						OpenInfraHttpMethod.valueOf(request.getMethod()),
-    						uriInfo,
-                            PtLocaleDao.forLanguageTag(language));
-    }
 
 	@POST
     public Response create(

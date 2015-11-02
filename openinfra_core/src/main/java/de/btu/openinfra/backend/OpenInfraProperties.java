@@ -61,24 +61,24 @@ public class OpenInfraProperties {
     public static final OpenInfraSortOrder DEFAULT_ORDER =
     		OpenInfraSortOrder.valueOf(getProperty(
     				OpenInfraPropertyKeys.DEFAULT_ORDER.getKey()));
-    
+
     /**
      * This variable defines the file path depending on the OS OpenInfRA is
      * currently running.
      */
     public static final String FILE_PATH = getFilePath();
-    	
+
     /**
      * This is a simple method to decide on which OS OpenInfRA is running.
      * http://stackoverflow.com/questions/3282498/how-can-i-detect-a-unix-like-os-in-java
-     * 
+     *
      * @return the specific file path
      */
     private static String getFilePath() {
         // includes: Windows 2000,  Windows 95, Windows 98, Windows NT,
     	// Windows Vista, Windows XP
     	// Otherwise return the unix file path
-    	if (System.getProperty("os.name").startsWith("Windows")) {
+    	if (OpenInfraApplication.runsOnWindows()) {
     		String path = getProperty(
     				OpenInfraPropertyKeys.WIN_FILE_PATH.getKey());
     		if(!path.endsWith("\\")) {
@@ -92,7 +92,7 @@ public class OpenInfraProperties {
         		path += "/";
         	}
             return path;
-        } 
+        }
     }
 
 	/**

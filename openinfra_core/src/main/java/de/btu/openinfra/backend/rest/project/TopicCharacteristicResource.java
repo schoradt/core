@@ -20,7 +20,7 @@ import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.AttributeValueGeomType;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.TopicGeomzPojo;
-import de.btu.openinfra.backend.db.pojos.TopicInstancePojo;
+import de.btu.openinfra.backend.db.pojos.project.TopicInstancePojo;
 import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
 import de.btu.openinfra.backend.db.rbac.TopicGeomzRbac;
 import de.btu.openinfra.backend.db.rbac.TopicInstanceRbac;
@@ -60,7 +60,7 @@ public class TopicCharacteristicResource {
 			@PathParam("topicCharacteristicId") UUID topicCharacteristicId,
 			@QueryParam("filter") String filter,
 			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
-            @QueryParam("orderBy") String orderBy,
+            @QueryParam("orderBy") OpenInfraOrderBy orderBy,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		// Define the specific parameters when not specified correctly
@@ -73,7 +73,7 @@ public class TopicCharacteristicResource {
 			return new TopicInstanceRbac(
 					projectId,
 					OpenInfraSchemas.PROJECTS).read(
-							OpenInfraHttpMethod.valueOf(request.getMethod()), 
+							OpenInfraHttpMethod.valueOf(request.getMethod()),
 							uriInfo,
 							PtLocaleDao.forLanguageTag(language),
 							topicCharacteristicId,
@@ -84,12 +84,12 @@ public class TopicCharacteristicResource {
 			return new TopicInstanceRbac(
 					projectId,
 					OpenInfraSchemas.PROJECTS).read(
-							OpenInfraHttpMethod.valueOf(request.getMethod()), 
+							OpenInfraHttpMethod.valueOf(request.getMethod()),
 							uriInfo,
 					PtLocaleDao.forLanguageTag(language),
 					topicCharacteristicId,
 					sortOrder,
-					new OpenInfraOrderBy(orderBy),
+					orderBy,
 					offset,
 					size);
 		} // end if else
@@ -106,7 +106,7 @@ public class TopicCharacteristicResource {
 		return new TopicInstanceRbac(
 				projectId,
 				OpenInfraSchemas.PROJECTS).getCount(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						topicCharacteristicId);
 	}
@@ -138,7 +138,7 @@ public class TopicCharacteristicResource {
 	            projectId,
 	            OpenInfraSchemas.PROJECTS,
 	            geomType).read(
-	            		OpenInfraHttpMethod.valueOf(request.getMethod()), 
+	            		OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 	                    PtLocaleDao.forLanguageTag(language),
 	                    topicCharacteristicId,
@@ -169,7 +169,7 @@ public class TopicCharacteristicResource {
                 projectId,
                 OpenInfraSchemas.PROJECTS,
                 geomType).getCount(
-                		OpenInfraHttpMethod.valueOf(request.getMethod()), 
+                		OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						topicCharacteristicId);
     }

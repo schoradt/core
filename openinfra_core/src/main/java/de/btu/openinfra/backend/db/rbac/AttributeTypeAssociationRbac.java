@@ -2,8 +2,6 @@ package de.btu.openinfra.backend.db.rbac;
 
 import java.util.UUID;
 
-import javax.ws.rs.core.UriInfo;
-
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.AttributeTypeAssociationDao;
 import de.btu.openinfra.backend.db.jpa.model.AttributeType;
@@ -19,16 +17,6 @@ public class AttributeTypeAssociationRbac extends OpenInfraValueValueRbac<
 			OpenInfraSchemas schema) {
 		super(currentProjectId,	schema, AttributeType.class,
 				AttributeType.class, AttributeTypeAssociationDao.class);
-	}
-
-	public AttributeTypeAssociationPojo newAttributeTypeAssociation(
-			OpenInfraHttpMethod httpMethod,
-			UriInfo uriInfo,
-			UUID attributeTypeId) {
-		checkPermission(httpMethod, uriInfo);
-		return new AttributeTypeAssociationDao(
-		        currentProjectId,
-				schema).newAttributeTypeAssociation(attributeTypeId);
 	}
 
 }

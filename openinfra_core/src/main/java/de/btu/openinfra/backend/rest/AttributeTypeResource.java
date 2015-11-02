@@ -18,7 +18,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import de.btu.openinfra.backend.db.OpenInfraOrderByEnum;
+import de.btu.openinfra.backend.db.OpenInfraOrderBy;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
@@ -46,7 +46,7 @@ public class AttributeTypeResource {
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
-			@QueryParam("orderBy") OpenInfraOrderByEnum orderBy,
+			@QueryParam("orderBy") OpenInfraOrderBy orderBy,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new AttributeTypeRbac(
@@ -221,23 +221,6 @@ public class AttributeTypeResource {
 						size);
 	}
 
-	@GET
-    @Path("/new")
-    public AttributeTypePojo newAttributeType(
-    		@Context UriInfo uriInfo,
-    		@Context HttpServletRequest request,
-            @QueryParam("language") String language,
-            @PathParam("projectId") UUID projectId,
-            @PathParam("schema") String schema) {
-        return new AttributeTypeRbac(
-                        projectId,
-                        OpenInfraSchemas.valueOf(schema.toUpperCase()))
-                    .newAttributeType(
-    						OpenInfraHttpMethod.valueOf(request.getMethod()),
-    						uriInfo,
-    						PtLocaleDao.forLanguageTag(language));
-    }
-
     @POST
     public Response create(
     		@Context UriInfo uriInfo,
@@ -294,24 +277,6 @@ public class AttributeTypeResource {
         						pojo,
                                 attributeTypeId,
                                 pojo.getMetaData()));
-    }
-
-    @GET
-    @Path("{attributeTypeId}/associations/new")
-    public AttributeTypeAssociationPojo newAttributeTypeAssociation(
-    		@Context UriInfo uriInfo,
-    		@Context HttpServletRequest request,
-            @QueryParam("language") String language,
-            @PathParam("projectId") UUID projectId,
-            @PathParam("schema") String schema,
-            @PathParam("attributeTypeId") UUID attributeTypeId) {
-        return new AttributeTypeAssociationRbac(
-                        projectId,
-                        OpenInfraSchemas.valueOf(schema.toUpperCase()))
-                    .newAttributeTypeAssociation(
-    						OpenInfraHttpMethod.valueOf(request.getMethod()),
-    						uriInfo,
-    						attributeTypeId);
     }
 
     @POST

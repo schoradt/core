@@ -16,8 +16,8 @@ import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.daos.TopicCharacteristicDao;
 import de.btu.openinfra.backend.db.daos.TopicInstanceDao;
 import de.btu.openinfra.backend.db.daos.ValueListDao;
-import de.btu.openinfra.backend.db.pojos.ProjectPojo;
 import de.btu.openinfra.backend.db.pojos.TopicCharacteristicPojo;
+import de.btu.openinfra.backend.db.pojos.project.ProjectPojo;
 
 /**
  * This static class is responsible for generating a bread crumb navigation for

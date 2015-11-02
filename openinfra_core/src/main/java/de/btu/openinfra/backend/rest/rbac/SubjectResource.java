@@ -2,6 +2,7 @@ package de.btu.openinfra.backend.rest.rbac;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,11 +23,17 @@ import javax.ws.rs.core.UriInfo;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 
+import de.btu.openinfra.backend.db.OpenInfraOrderBy;
+import de.btu.openinfra.backend.db.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.OpenInfraSortOrder;
+import de.btu.openinfra.backend.db.daos.ProjectDao;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
-import de.btu.openinfra.backend.db.daos.rbac.SubjectDao;
+import de.btu.openinfra.backend.db.daos.meta.ProjectsDao;
+import de.btu.openinfra.backend.db.jpa.model.meta.Projects;
+import de.btu.openinfra.backend.db.pojos.project.ProjectPojo;
 import de.btu.openinfra.backend.db.pojos.rbac.SubjectPojo;
 import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
-import de.btu.openinfra.backend.db.rbac.OpenInfraRealmNames;
+import de.btu.openinfra.backend.db.rbac.OpenInfraRealm;
 import de.btu.openinfra.backend.db.rbac.rbac.SubjectRbac;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
@@ -44,16 +51,20 @@ public class SubjectResource {
 			@Context UriInfo uriInfo,
 			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
+			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
+            @QueryParam("orderBy") OpenInfraOrderBy orderBy,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new SubjectRbac().read(
-				OpenInfraHttpMethod.valueOf(request.getMethod()), 
+				OpenInfraHttpMethod.valueOf(request.getMethod()),
 				uriInfo,
 				PtLocaleDao.forLanguageTag(language),
+				sortOrder,
+				orderBy,
 				offset,
 				size);
 	}
-	
+
 	@GET
     @Path("count")
 	@Produces({MediaType.TEXT_PLAIN})
@@ -63,21 +74,21 @@ public class SubjectResource {
 		return new SubjectRbac().getCount(
 				OpenInfraHttpMethod.valueOf(request.getMethod()), uriInfo);
 	}
-    		
-	
+
+
 	@POST
 	public Response create(
 			@Context UriInfo uriInfo,
     		@Context HttpServletRequest request,
-    		SubjectPojo pojo) {		
-		return OpenInfraResponseBuilder.postResponse(	
+    		SubjectPojo pojo) {
+		return OpenInfraResponseBuilder.postResponse(
 				new SubjectRbac().createOrUpdate(
 						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						null,
-						pojo));		
+						pojo));
 	}
-	
+
 	@GET
 	@Path("{id}")
 	public SubjectPojo get(
@@ -86,12 +97,12 @@ public class SubjectResource {
 			@QueryParam("language") String language,
 			@PathParam("id") UUID uuid) {
 		return new SubjectRbac().read(
-				OpenInfraHttpMethod.valueOf(request.getMethod()), 
+				OpenInfraHttpMethod.valueOf(request.getMethod()),
 				uriInfo,
 				PtLocaleDao.forLanguageTag(language),
 				uuid);
 	}
-	
+
 	@PUT
 	@Path("{id}")
 	public Response put(
@@ -101,12 +112,12 @@ public class SubjectResource {
 			SubjectPojo pojo) {
 		return OpenInfraResponseBuilder.putResponse(
 				new SubjectRbac().createOrUpdate(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						uuid,
-						pojo));		
+						pojo));
 	}
-	
+
 	@DELETE
 	@Path("{id}")
 	public Response delete(
@@ -118,16 +129,16 @@ public class SubjectResource {
 						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo, uuid), uuid);
 	}
- 
-	
+
+
 	@GET
 	@Path("bylogin")
 	public SubjectPojo getSubjectByLogin(
 			@Context UriInfo uriInfo,
 			@Context HttpServletRequest request,
-			@QueryParam("login") String login) {		
+			@QueryParam("login") String login) {
 		return new SubjectRbac().read(
-				OpenInfraHttpMethod.valueOf(request.getMethod()), 
+				OpenInfraHttpMethod.valueOf(request.getMethod()),
 				uriInfo,
 				login);
 	}
@@ -136,22 +147,53 @@ public class SubjectResource {
 	 * This method is not secured by the RBAC system since it retrieves the
 	 * information of the current subject (user). Each subject should be able
 	 * to view its own informations.
-	 * 
+	 *
 	 * @return the current subject as pojo
 	 */
 	@GET
 	@Path("self")
 	public SubjectPojo self() {
-		// Retrieve the login from principals (there might be multiple)
-		Subject s = SecurityUtils.getSubject();	
-		List<String> login = new LinkedList<String>();
-		for(Object o : s.getPrincipals().fromRealm(
-				OpenInfraRealmNames.LOGIN.name())) {
-			login.add(o.toString());
-		}
-		return new SubjectDao().read(login.get(0));
+		return new SubjectRbac().self();
 	}
-	
-	
+
+	//TODO This method must be rewritten and moved to the RBAC layer!
+	/**
+	 * This method retrieves all projects the current user has write access.
+	 * @return a list of project POJOs
+	 */
+	@GET
+	@Path("self/projects")
+	public List<ProjectPojo> projects(
+			@QueryParam("language") String language) {
+		ProjectsDao dao = new ProjectsDao(null, OpenInfraSchemas.META_DATA);
+		List<ProjectPojo> pojos = new LinkedList<ProjectPojo>();
+		Subject s = SecurityUtils.getSubject();
+		for(Projects p : dao.read()) {
+			if(s.isPermitted("/projects/{id}:w:" + p.getProjectId())) {
+				pojos.add(
+						new ProjectDao(p.getProjectId(),
+								OpenInfraSchemas.PROJECTS).read(
+										PtLocaleDao.forLanguageTag(language),
+										p.getProjectId()));
+			}
+		}
+		return pojos;
+	}
+
+	/**
+	 * This method retrieves all permissions the current user belongs to. Some
+	 * of these permissions are automatically generated by the OpenInfRA Realm
+	 * and might not be part of the Subject POJO.
+	 *
+	 * @return a list of permissions
+	 */
+	@GET
+	@Path("self/permissions")
+	public Set<String> permissions() {
+		return new OpenInfraRealm().getPermissions(
+				SecurityUtils.getSubject().getPrincipals());
+	}
+
+
 
 }

@@ -4,13 +4,12 @@ import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.jpa.model.rbac.SubjectObject;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 
 @XmlRootElement
 public class SubjectObjectPojo extends OpenInfraPojo {
-	
+
 	private UUID projectId;
 	/**
 	 * The openinfra object
@@ -22,9 +21,9 @@ public class SubjectObjectPojo extends OpenInfraPojo {
 	 * The id of the specific object: object = photo & objectId = which photo
 	 */
 	private UUID objectId;
-	
+
 	public SubjectObjectPojo() {}
-	
+
 	public SubjectObjectPojo(SubjectObject model) {
 		super(model);
 	}
@@ -69,12 +68,4 @@ public class SubjectObjectPojo extends OpenInfraPojo {
 		this.objectId = objectId;
 	}
 
-	@Override
-    protected void makePrimerHelper(PtLocale locale) {
-        projectId = null;
-        object = null;
-        subject = null;
-        writeObject = true;
-        objectId = null;
-    }
 }

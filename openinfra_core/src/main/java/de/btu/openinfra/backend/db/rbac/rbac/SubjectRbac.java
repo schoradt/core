@@ -15,9 +15,9 @@ public class SubjectRbac extends OpenInfraRbac<
 	public SubjectRbac() {
 		super(null, OpenInfraSchemas.RBAC, SubjectDao.class);
 	}
-		
+
 	public SubjectPojo read(
-			OpenInfraHttpMethod httpMethod, 
+			OpenInfraHttpMethod httpMethod,
 			UriInfo uriInfo,
 			String login) {
 		checkPermission(httpMethod, uriInfo);

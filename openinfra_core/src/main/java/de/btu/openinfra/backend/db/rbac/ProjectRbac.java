@@ -10,7 +10,7 @@ import javax.ws.rs.core.UriInfo;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.ProjectDao;
 import de.btu.openinfra.backend.db.jpa.model.Project;
-import de.btu.openinfra.backend.db.pojos.ProjectPojo;
+import de.btu.openinfra.backend.db.pojos.project.ProjectPojo;
 
 public class ProjectRbac extends
 	OpenInfraRbac<ProjectPojo, Project, ProjectDao> {
@@ -63,13 +63,6 @@ public class ProjectRbac extends
 		return readSubProjects(
 				httpMethod,
 				uriInfo, null, 0, Integer.MAX_VALUE).size();
-	}
-
-	public ProjectPojo newSubProject(
-			OpenInfraHttpMethod httpMethod,
-			UriInfo uriInfo, Locale locale) {
-		checkPermission(httpMethod, uriInfo);
-		return new ProjectDao(currentProjectId, schema).newSubProject(locale);
 	}
 
 	public List<ProjectPojo> readParents(

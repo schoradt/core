@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import de.btu.openinfra.backend.db.daos.MetaDataDao;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
-import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 
 public class AttributeValueDomainPojo extends OpenInfraMetaDataPojo {
 
@@ -43,14 +42,6 @@ public class AttributeValueDomainPojo extends OpenInfraMetaDataPojo {
 
     public void setAttributeTypeToAttributeTypeGroupId(UUID attributeTypeToAttributeTypeGroupId) {
         this.attributeTypeToAttributeTypeGroupId = attributeTypeToAttributeTypeGroupId;
-    }
-
-    @Override
-    protected void makePrimerHelper(PtLocale locale) {
-        topicInstanceId = null;
-        domain = new ValueListValuePojo();
-        domain.makePrimer(locale);
-        attributeTypeToAttributeTypeGroupId = null;
     }
 
 }

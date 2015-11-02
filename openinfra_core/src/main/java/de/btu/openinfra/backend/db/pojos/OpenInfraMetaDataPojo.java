@@ -4,7 +4,6 @@ import org.json.simple.JSONObject;
 
 import de.btu.openinfra.backend.db.daos.MetaDataDao;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
-import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 
 public abstract class OpenInfraMetaDataPojo extends OpenInfraPojo {
 
@@ -43,9 +42,8 @@ public abstract class OpenInfraMetaDataPojo extends OpenInfraPojo {
         return metaData;
     }
 
-    @Override
-    public void makePrimer(PtLocale locale) {
-        metaData = new JSONObject();
-        super.makePrimer(locale);
+    public void setMetaData(JSONObject metaData) {
+        this.metaData = metaData;
     }
+
 }

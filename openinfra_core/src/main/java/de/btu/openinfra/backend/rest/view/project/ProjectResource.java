@@ -18,7 +18,8 @@ import org.glassfish.jersey.server.mvc.Template;
 
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
-import de.btu.openinfra.backend.db.pojos.ProjectPojo;
+import de.btu.openinfra.backend.db.pojos.file.FilePojo;
+import de.btu.openinfra.backend.db.pojos.project.ProjectPojo;
 import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
 import de.btu.openinfra.backend.db.rbac.ProjectRbac;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
@@ -53,8 +54,8 @@ public class ProjectResource {
 		return new de.btu.openinfra.backend.rest.project.ProjectResource().get(
 				uriInfo,
 				request,
-				language, 
-				offset, 
+				language,
+				offset,
 				size);
 	}
 
@@ -69,7 +70,7 @@ public class ProjectResource {
 		return new de.btu.openinfra.backend.rest.project.ProjectResource().get(
 				uriInfo,
 				request,
-				language, 
+				language,
 				projectId);
 	}
 
@@ -94,16 +95,17 @@ public class ProjectResource {
 									offset,
 									size));
 	}
-	
+
 	@GET
 	@Path("{projectId}/files")
-	@Template(name="/views/Upload.jsp")
-	@Produces(MediaType.TEXT_HTML +
-			OpenInfraResponseBuilder.UTF8_CHARSET +
-			OpenInfraResponseBuilder.HTML_PRIORITY)
-    public Response files() {
-        return Response.ok().entity("file upload").build();
-    }
+	@Template(name="/views/list/Files.jsp")
+	public List<FilePojo> getSubProjectsView(
+			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
+			@PathParam("projectId") UUID projectId) {
+		return new de.btu.openinfra.backend.rest.project.ProjectResource()
+		.readFilesByProject(uriInfo, request, projectId);
+	}
 
 	@GET
 	@Path("/maps")

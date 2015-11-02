@@ -20,7 +20,8 @@ import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
  * schema projects use the class
  * 'de.btu.openinfra.backend.rest.project/PrimerResource' instead.
  * The reason therefore lay in the fact that the regex expression
- * '/v1/{schema:(projects|system|rbac|metadata)}{optional:(/?)}{projectId:([0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12})?}'
+ * '/v1/{schema:(projects|system|rbac|metadata)}{optional:(/?)}
+ * {projectId:([0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12})?}'
  * does not work for the schema projects.
  *
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS

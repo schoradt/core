@@ -25,39 +25,39 @@ Warning: The jstl variables will be removed after the button is printed.
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
-	<div id="singleButtonBar">
-		<c:if test="${deleteButton != null}">
-			<a id="deleteButtonLink" href="#" onclick="deleteItem('${deleteButton}')">
-				<i class="fa fa-trash-o" title="<fmt:message key="delete.button.label"/>"></i>
-			</a>
-			
-			<c:remove var="deleteButton"/>
-		</c:if>
-	</div>
+	<c:if test="${deleteButton != null}">
+		<div id="singleButtonBar">
+				<a id="deleteButtonLink" href="#" onclick="deleteItem('${deleteButton}')">
+					<i class="fa fa-trash-o" title="<fmt:message key="delete.button.label"/>"></i>
+				</a>
+				
+				<c:remove var="deleteButton"/>
+		</div>
+	</c:if>
 	
-	<div id="singleButtonBar">
-		<c:if test="${editButton != null}">
-			<a id="editButtonLink" href="${editButton}">
-				<i class="fa fa-pencil-square-o" title="<fmt:message key="edit.button.label"/>"></i>
-			</a>
-			<c:remove var="editButton"/>
-		</c:if>
-	</div>
+	<c:if test="${editButton != null}">
+		<div id="singleButtonBar">
+				<a id="editButtonLink" href="${editButton}">
+					<i class="fa fa-pencil-square-o" title="<fmt:message key="edit.button.label"/>"></i>
+				</a>
+				<c:remove var="editButton"/>
+		</div>
+	</c:if>
 	
-	<div id="singleButtonBar">
-		<c:if test="${createButton != null}">
-			<a id="createButtonLink" href="${createButton}">
-				<i class="fa fa-plus-square" title="<fmt:message key="create.button.label"/>"></i>
-			</a>
-			<c:remove var="createButton"/>
-		</c:if>
-	</div>
+	<c:if test="${createButton != null}">
+		<div id="singleButtonBar">
+				<a id="createButtonLink" href="${createButton}">
+					<i class="fa fa-plus-square" title="<fmt:message key="create.button.label"/>"></i>
+				</a>
+				<c:remove var="createButton"/>
+		</div>
+	</c:if>
 	
-	<div id="singleButtonBar">
-		<c:if test="${detailButton != null}">
-			<a id="detailButtonLink" href="${detailButton}">
-				<i class="fa fa-info-circle" title="<fmt:message key="detail.button.label"/>"></i>
-			</a>
-			<c:remove var="detailButton"/>
-		</c:if>
-	</div>
+	<c:if test="${detailButton != null}">
+		<div id="singleButtonBar">
+				<a id="detailButtonLink" href="${detailButton}">
+					<i class="fa fa-info-circle" title="<fmt:message key="detail.button.label"/>"></i>
+				</a>
+				<c:remove var="detailButton"/>
+		</div>
+	</c:if>
