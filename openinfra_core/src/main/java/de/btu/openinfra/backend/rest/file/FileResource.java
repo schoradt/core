@@ -480,7 +480,7 @@ public class FileResource {
 			}
 			op.background("white");
 			op.alpha("remove");
-			op.addImage(filePath + " [0]");
+			op.addImage(filePath + "[0]");
 		} else {
 			op.addImage(filePath);
 			if(isThumbnail) {
