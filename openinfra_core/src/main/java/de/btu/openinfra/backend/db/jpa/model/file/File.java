@@ -2,12 +2,15 @@ package de.btu.openinfra.backend.db.jpa.model.file;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
@@ -44,27 +47,31 @@ public class File extends OpenInfraModelObject implements Serializable {
 	@Column(name="middle_dimension")
 	private String middleDimension;
 
-	@Column(name="origin_dimension")
-	private String originDimension;
-
-	@Column(name="popup_dimension")
-	private String popupDimension;
-
-	@Column(name="thumbnail_dimension")
-	private String thumbnailDimension;
-
-	private String signature;
-
 	@Column(name="mime_type")
 	private String mimeType;
+
+	@Column(name="origin_dimension")
+	private String originDimension;
 
 	@Column(name="origin_file_name")
 	private String originFileName;
 
+	@Column(name="popup_dimension")
+	private String popupDimension;
+
+	private String signature;
+
 	private UUID subject;
+
+	@Column(name="thumbnail_dimension")
+	private String thumbnailDimension;
 
 	@Column(name="uploaded_on")
 	private Timestamp uploadedOn;
+
+	//bi-directional many-to-one association to FilesProject
+	@OneToMany(mappedBy="file",	cascade={CascadeType.ALL})
+	private List<FilesProject> filesProjects;
 
 	public File() {
 	}
@@ -147,6 +154,14 @@ public class File extends OpenInfraModelObject implements Serializable {
 
 	public void setThumbnailDimension(String thumbnailDimension) {
 		this.thumbnailDimension = thumbnailDimension;
+	}
+
+	public List<FilesProject> getFilesProjects() {
+		return this.filesProjects;
+	}
+
+	public void setFilesProjects(List<FilesProject> filesProjects) {
+		this.filesProjects = filesProjects;
 	}
 
 }

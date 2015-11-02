@@ -106,7 +106,7 @@ public class FileResource {
 			OpenInfraHttpMethod.valueOf(request.getMethod()).getAccess() + ":";
 		// Get the list of projects where this file belongs to
 		List<FilesProjectPojo> fpPojos =
-				new FilesProjectDao().readByFileId(fileId);
+				new FilesProjectDao().read(null, fileId, 0, Integer.MAX_VALUE);
 		for(FilesProjectPojo fpp : fpPojos) {
 			if(SecurityUtils.getSubject().isPermitted(
 					requiredPermission + fpp.getProject())) {

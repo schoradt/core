@@ -57,8 +57,8 @@
 			
 				<!-- all projects the current file is related to -->
 				<c:set var="filesProjects" value=""/>
-				<% pageContext.setAttribute("filesProjects", new FilesProjectDao().readByFileId(
-						UUID.fromString(pageContext.getAttribute("currentPojo").toString()))); %>			
+				<% pageContext.setAttribute("filesProjects", new FilesProjectDao().read(null, 
+						UUID.fromString(pageContext.getAttribute("currentPojo").toString()), 0, Integer.MAX_VALUE)); %>			
 			
 				<tr id="tr_${pojo.uuid}">
 					<td><img src="${contextPath}/rest/v1/files/${pojo.uuid}/thumbnail"/></td>

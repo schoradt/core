@@ -7,24 +7,17 @@ import javax.ws.rs.core.UriInfo;
 
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.file.FilesProjectDao;
+import de.btu.openinfra.backend.db.jpa.model.file.File;
 import de.btu.openinfra.backend.db.jpa.model.file.FilesProject;
 import de.btu.openinfra.backend.db.pojos.file.FilesProjectPojo;
 import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
-import de.btu.openinfra.backend.db.rbac.OpenInfraRbac;
+import de.btu.openinfra.backend.db.rbac.OpenInfraValueRbac;
 
-public class FilesProjectRbac extends OpenInfraRbac<
-	FilesProjectPojo, FilesProject, FilesProjectDao> {
+public class FilesProjectRbac extends OpenInfraValueRbac<
+FilesProjectPojo, FilesProject, File, FilesProjectDao> {
 
 	public FilesProjectRbac() {
-		super(null, OpenInfraSchemas.FILE, FilesProjectDao.class);
-	}
-
-	public List<FilesProjectPojo> readByFileId(
-			OpenInfraHttpMethod httpMethod,
-			UriInfo uriInfo,
-			UUID file) {
-		checkPermission(httpMethod, uriInfo);
-		return new FilesProjectDao().readByFileId(file);
+		super(null, OpenInfraSchemas.FILE, File.class, FilesProjectDao.class);
 	}
 
 	public List<FilesProjectPojo> readByProject(
