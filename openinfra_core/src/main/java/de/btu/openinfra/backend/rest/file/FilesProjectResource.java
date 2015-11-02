@@ -33,9 +33,9 @@ public class FilesProjectResource {
 			@Context UriInfo uriInfo,
 			@Context HttpServletRequest request,
 			@PathParam("fileId") UUID fileId) {
-		return new FilesProjectRbac().readByFileId(
-				OpenInfraHttpMethod.valueOf(
-						request.getMethod()), uriInfo, fileId);
+		return new FilesProjectRbac().read(
+				OpenInfraHttpMethod.valueOf(request.getMethod()),
+				uriInfo, null, fileId, 0, Integer.MAX_VALUE);
 	}
 
 	@GET
