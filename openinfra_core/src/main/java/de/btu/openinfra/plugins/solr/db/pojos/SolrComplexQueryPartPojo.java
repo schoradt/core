@@ -25,14 +25,59 @@ import de.btu.openinfra.plugins.solr.enums.RelationalOperatorEnum;
 @XmlRootElement
 public class SolrComplexQueryPartPojo {
 
+    /*
+     * Mandatory defines if the part must be part of the result or not. This
+     * property is optional.
+     */
     private MandatoryEnum mandatory;
+
+    /*
+     * The attribute type will be used as the field name in the Solr index. This
+     * property is optional.
+     */
     private String attributeType;
+
+    /*
+     * The relational operator defines the relation between the attribute type
+     * and the attribute value. This property is optional. Default is EQUAL.
+     */
     private RelationalOperatorEnum relationalOperator;
+
+    /*
+     * The attribute value is the value of the field in the Solr index. This
+     * property is mandatory. If this field is null the search request will be
+     * aborted.
+     */
     private String attributeValue;
+
+    /*
+     * The attribute value is as additional value of the field in the Solr
+     * index. This property is only mandatory if the relational operator is
+     * BETWEEN. This means we want to execute a range query. Else it will be
+     * ignored.
+     */
     private String tillAttributeValue;
+
+    /*
+     * The logic operator defines the relation of a query part to the direct
+     * previous query part. It will be ignored for the first part. This property
+     * is optional. Default is a whitespace that has the same meaning as OR.
+     */
     private LogicOperatorEnum logicOperator;
+
+    /*
+     * The relevance defines the relevance of the query part in the whole query.
+     * This property is optional.
+     */
     private float relevance;
-//    private float fuzziness;
+
+    /*
+     * The fuzziness defines a fuzzy search based on the Levenshtein Distance.
+     * It will not support any parameter and use the default value of 0.5. This
+     * property is optional. Default FALSE.
+     */
+    private boolean fuzziness;
+
 
     public MandatoryEnum getMandatory() {
         return mandatory;
@@ -88,5 +133,13 @@ public class SolrComplexQueryPartPojo {
 
     public void setRelevance(float relevance) {
         this.relevance = relevance;
+    }
+
+    public boolean isFuzziness() {
+        return fuzziness;
+    }
+
+    public void setFuzziness(boolean fuzziness) {
+        this.fuzziness = fuzziness;
     }
 }
