@@ -201,7 +201,11 @@ public class SolrQueryParser {
      */
     private String maskString(String str) {
         if (str.contains(" ")) {
-            str = "\"" + str +"\"";
+            // we must be sure that the client does not added quotation marks
+            // as well
+            if (!str.startsWith(("\"")) && !str.endsWith(("\""))) {
+                str = "\"" + str +"\"";
+            };
         }
         return str;
     }
