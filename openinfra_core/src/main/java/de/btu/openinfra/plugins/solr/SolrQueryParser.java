@@ -1,7 +1,6 @@
 package de.btu.openinfra.plugins.solr;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,8 +14,6 @@ import de.btu.openinfra.plugins.solr.exception.OpenInfraSolrException;
 
 public class SolrQueryParser {
 
-    private Locale locale;
-
     /**
      * This method returns a search query in Solr syntax. It will parse the
      * requested SolrSearchPojo and replace the field names for correct matching
@@ -24,10 +21,9 @@ public class SolrQueryParser {
      *
      * @return A String that represents the search query in Solr syntax.
      */
-    public String getSolrSyntaxQuery(SolrSearchPojo pojo, Locale locale) {
+    public String getSolrSyntaxQuery(SolrSearchPojo pojo) {
         try {
             if (pojo != null) {
-                this.locale = locale;
                 // Determine which query is set.
                 if (pojo.getRawSolrQuery() != null && !pojo.getRawSolrQuery()
                         .equals("")) {
@@ -52,12 +48,10 @@ public class SolrQueryParser {
      * This method parses a raw Solr query. It only converts the field
      * identifier.
      *
-     * @param rawQuery
-     * @return
+     * @param rawQuery The raw query in Solr syntax that should be converted.
+     * @return         The converted Solr query.
      */
     private String parseRawSolrQuery(String rawQuery) {
-        // TODO handle "x y" queries
-
         // pattern to capture everything in front of a colon
         Pattern pattern = Pattern.compile("(.*):");
         Matcher matcher = null;
@@ -88,44 +82,36 @@ public class SolrQueryParser {
                             attributeTypeName,
                             SolrCharacterConverter.convert(attributeTypeName));
                 }
-
             }
         }
         return rawQuery;
     }
 
     /**
-     * This method parses a complex Solr query. The locale must not be null
-     * because it is necessary to parse the query parts.
+     * This method parses a complex Solr query into a Solr syntax string.
      *
-     * @param complexQueryList
-     * @return
+     * @param complexQueryList A list of complex queries that should be parsed.
+     * @return                 The Solr syntax string.
      */
     private String parseComplexSolrQuery(
             List<SolrComplexQueryPartPojo> complexQueryList) {
-        if (locale != null) {
-            String query = "";
-            boolean firstRun = true;
-            for (SolrComplexQueryPartPojo part : complexQueryList) {
-                query += " " + parsePart(part, firstRun);
-                firstRun = false;
-            }
-            // remove leading and trailing whitespaces
-            return query.trim();
+        String query = "";
+        boolean firstRun = true;
+        for (SolrComplexQueryPartPojo part : complexQueryList) {
+            query += " " + parsePart(part, firstRun);
+            firstRun = false;
         }
-
-        // TODO replace with SolrExceptionType
-        throw new OpenInfraSolrException(
-                OpenInfraExceptionTypes.INTERNAL_SERVER_EXCEPTION);
+        // remove leading and trailing whitespaces
+        return query.trim();
     }
 
     /**
      * This method parses a SolrComplexQueryPartPojo to Solr syntax. There are
      * some special definitions for the POJO properties.
      *
-     * @param part
-     * @param firstRun
-     * @return
+     * @param part     The part of the complex query that should be parsed.
+     * @param firstRun Defines if it is the first part of the query.
+     * @return         The complex query part as string in Solr syntax.
      */
     private String parsePart(SolrComplexQueryPartPojo part, boolean firstRun) {
         String query = "";
