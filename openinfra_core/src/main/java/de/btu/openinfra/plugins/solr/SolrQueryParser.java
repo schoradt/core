@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
+import de.btu.openinfra.plugins.PluginProperties;
 import de.btu.openinfra.plugins.solr.db.pojos.SolrComplexQueryPartPojo;
 import de.btu.openinfra.plugins.solr.db.pojos.SolrSearchPojo;
 import de.btu.openinfra.plugins.solr.exception.OpenInfraSolrException;
@@ -27,7 +28,8 @@ public class SolrQueryParser {
         if (pojo != null) {
             this.locale = locale;
             // Determine which query is set.
-            if (pojo.getRawSolrQuery() != null && !pojo.getRawSolrQuery().equals("")) {
+            if (pojo.getRawSolrQuery() != null && !pojo.getRawSolrQuery()
+                    .equals("")) {
                 // start the parse process for a simple Solr query
                 return parseRawSolrQuery(pojo.getRawSolrQuery());
             } else if (pojo.getComplexQueryPart().size() > 0) {
@@ -90,7 +92,7 @@ public class SolrQueryParser {
             String query = "";
             boolean firstRun = true;
             for (SolrComplexQueryPartPojo part : complexQueryList) {
-                query += " " + matchPart(part, firstRun);
+                query += " " + paresePart(part, firstRun);
                 firstRun = false;
             }
             // remove leading and trailing whitespaces
@@ -103,18 +105,19 @@ public class SolrQueryParser {
     }
 
     /**
-     * x mandatory is optional, default: NOT_SPECIFIED
-     * x attribute type is optional
-     * x attribute value is mandatory
-     * x till attribute value is only mandatory if relational operator is BETWEEN
-     * x relational operator is mandatory if attribute type is set, default: EQUAL
+     * This method parses a SolrComplexQueryPartPojo to Solr syntax. There are
+     * some special definitions for the POJO properties.
+     *
+     * - attribute value is mandatory
+     * - till attribute value is only mandatory if relational operator is BETWEEN
+     * - relational operator is mandatory if attribute type is set, default: EQUAL
      * - logic operator is optional, default: OR
      * - relevance is optional
      * @param part
      * @param firstRun
      * @return
      */
-    private String matchPart(SolrComplexQueryPartPojo part, boolean firstRun) {
+    private String paresePart(SolrComplexQueryPartPojo part, boolean firstRun) {
         String query = "";
         // add the attribute type
         if (part.getAttributeType() != null) {
@@ -146,21 +149,15 @@ public class SolrQueryParser {
                     } else {
                         // TODO replace with SolrExceptionType
                         throw new OpenInfraSolrException(
-                                OpenInfraExceptionTypes.INTERNAL_SERVER_EXCEPTION);
+                                OpenInfraExceptionTypes
+                                .INTERNAL_SERVER_EXCEPTION);
                     }
                     break;
                 case BETWEEN:
-                    // only possible for numeric values
-                    if (NumberUtils.isNumber(part.getAttributeValue())) {
-                        query += String.format(
-                                part.getRelationalOperator().getString(),
-                                part.getAttributeValue(),
-                                part.getTillAttributeValue());
-                    } else {
-                        // TODO replace with SolrExceptionType
-                        throw new OpenInfraSolrException(
-                                OpenInfraExceptionTypes.INTERNAL_SERVER_EXCEPTION);
-                    }
+                    query += String.format(
+                            part.getRelationalOperator().getString(),
+                            part.getAttributeValue(),
+                            part.getTillAttributeValue());
                     break;
                 default:
                     query += maskString(part.getAttributeValue());
@@ -179,6 +176,12 @@ public class SolrQueryParser {
             if (part.getLogicOperator() != null) {
                 query = part.getLogicOperator().getString() + " " + query;
             }
+        }
+
+        // add fuzziness if required
+        if (part.isFuzziness()) {
+            query += "~" + PluginProperties.getProperty(
+                    SolrPropertyKeys.SOLR_DEFUALT_FUZZY.getKey(), "Solr");
         }
 
         // add the relevance if it was passed
