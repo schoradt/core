@@ -9,15 +9,20 @@ package de.btu.openinfra.plugins.solr;
  */
 public enum SolrPropertyKeys {
 
-	/**
+	/*
 	 * This variable defines the URL to the Solr server.
 	 */
 	SOLR_URL("de.btu.openinfra.plugins.solr.url"),
 
-	/**
+	/*
 	 * This variable defines the name of the Solr core.
 	 */
-	SOLR_CORE("de.btu.openinfra.plugins.solr.core");
+	SOLR_CORE("de.btu.openinfra.plugins.solr.core"),
+
+	/*
+	 * This variable defines the default fuzzy parameter.
+	 */
+	SOLR_DEFUALT_FUZZY("de.btu.openinfra.plugins.solr.defaultFuzzy");
 
 	private String key;
 	private SolrPropertyKeys(String key) {
