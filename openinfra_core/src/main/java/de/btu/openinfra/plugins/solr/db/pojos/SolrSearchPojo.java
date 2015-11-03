@@ -8,7 +8,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 /**
  * This POJO is a container for the search request from the client. It contains
  * either a simple query in Solr syntax (input from simple search) or a list of
- * complex query parts (input from extended search).
+ * complex query parts (input from extended search). The lists of projects and
+ * topic characteristics will be used to filter the results.
  *
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
@@ -16,9 +17,26 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class SolrSearchPojo {
 
+    /*
+     * Contains a raw Solr query in Solr syntax.
+     */
     private String rawSolrQuery;
+
+    /*
+     * This is a list of complex query parts that will be parsed into Solr
+     * syntax.
+     */
     private List<SolrComplexQueryPartPojo> complexQueryPart;
+
+    /*
+     * This list contains projects where the results should be part of.
+     */
     private List<UUID> projectId;
+
+    /*
+     * This list contains topic characteristics where the result should be part
+     * of.
+     */
     private List<UUID> topicCharacteristicId;
 
     public String getRawSolrQuery() {

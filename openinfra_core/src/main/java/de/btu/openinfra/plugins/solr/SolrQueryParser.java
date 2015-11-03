@@ -45,7 +45,7 @@ public class SolrQueryParser {
 
     /**
      * This method parses a raw Solr query. It only converts the field
-     * identifier and convert them.
+     * identifier.
      *
      * @param rawQuery
      * @return
@@ -56,27 +56,29 @@ public class SolrQueryParser {
         // pattern to capture everything in front of a colon
         Pattern pattern = Pattern.compile("(.*):");
         Matcher matcher = null;
-        String result = "";
         String attributeTypeName = "";
 
         // split on every whitespace to separate every part of the query
         for (String part : rawQuery.split(" ")) {
             // retrieve the attribute type
-            System.out.println("DEBUG: " + part);
+
             matcher = pattern.matcher(part);
             if (matcher.find()) {
                 // add the name to the result list
                 for (int i = 0; i < matcher.groupCount(); i++) {
-                    result = matcher.group(i);
-                    attributeTypeName = result.substring(0, result.length()-1);
-                    // convert the type name
-                    SolrCharacterConverter.convert(attributeTypeName);
-                    // TODO go on ...
+                    attributeTypeName = matcher.group(i);
+                    // remove the colon
+                    attributeTypeName = attributeTypeName
+                            .substring(0, attributeTypeName.length()-1);
+                    // convert the type name and replace it in the raw query
+                    rawQuery = rawQuery.replaceAll(
+                            attributeTypeName,
+                            SolrCharacterConverter.convert(attributeTypeName));
                 }
 
             }
         }
-        return "";
+        return rawQuery;
     }
 
     /**
