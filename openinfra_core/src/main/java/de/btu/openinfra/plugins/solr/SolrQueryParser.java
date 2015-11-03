@@ -107,7 +107,7 @@ public class SolrQueryParser {
             String query = "";
             boolean firstRun = true;
             for (SolrComplexQueryPartPojo part : complexQueryList) {
-                query += " " + paresePart(part, firstRun);
+                query += " " + parsePart(part, firstRun);
                 firstRun = false;
             }
             // remove leading and trailing whitespaces
@@ -123,16 +123,11 @@ public class SolrQueryParser {
      * This method parses a SolrComplexQueryPartPojo to Solr syntax. There are
      * some special definitions for the POJO properties.
      *
-     * - attribute value is mandatory
-     * - till attribute value is only mandatory if relational operator is BETWEEN
-     * - relational operator is mandatory if attribute type is set, default: EQUAL
-     * - logic operator is optional, default: OR
-     * - relevance is optional
      * @param part
      * @param firstRun
      * @return
      */
-    private String paresePart(SolrComplexQueryPartPojo part, boolean firstRun) {
+    private String parsePart(SolrComplexQueryPartPojo part, boolean firstRun) {
         String query = "";
         // add the attribute type
         if (part.getAttributeType() != null) {
