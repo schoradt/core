@@ -25,19 +25,24 @@ public class SolrQueryParser {
      * @return A String that represents the search query in Solr syntax.
      */
     public String getSolrSyntaxQuery(SolrSearchPojo pojo, Locale locale) {
-        if (pojo != null) {
-            this.locale = locale;
-            // Determine which query is set.
-            if (pojo.getRawSolrQuery() != null && !pojo.getRawSolrQuery()
-                    .equals("")) {
-                // start the parse process for a simple Solr query
-                return parseRawSolrQuery(pojo.getRawSolrQuery());
-            } else if (pojo.getComplexQueryPart().size() > 0) {
-                // start the parse process for a complex Solr query
-                return parseComplexSolrQuery(pojo.getComplexQueryPart());
+        try {
+            if (pojo != null) {
+                this.locale = locale;
+                // Determine which query is set.
+                if (pojo.getRawSolrQuery() != null && !pojo.getRawSolrQuery()
+                        .equals("")) {
+                    // start the parse process for a simple Solr query
+                    return parseRawSolrQuery(pojo.getRawSolrQuery());
+                } else if (pojo.getComplexQueryPart().size() > 0) {
+                    // start the parse process for a complex Solr query
+                    return parseComplexSolrQuery(pojo.getComplexQueryPart());
+                }
             }
+        } catch (Exception e) {
+            // TODO replace with SolrExceptionType
+            throw new OpenInfraSolrException(
+                    OpenInfraExceptionTypes.INTERNAL_SERVER_EXCEPTION);
         }
-
         // TODO replace with SolrExceptionType
         throw new OpenInfraSolrException(
                 OpenInfraExceptionTypes.INTERNAL_SERVER_EXCEPTION);
@@ -66,10 +71,18 @@ public class SolrQueryParser {
             if (matcher.find()) {
                 // add the name to the result list
                 for (int i = 0; i < matcher.groupCount(); i++) {
+                    // save the matched attribute type name
                     attributeTypeName = matcher.group(i);
+
                     // remove the colon
                     attributeTypeName = attributeTypeName
                             .substring(0, attributeTypeName.length()-1);
+
+                    // remove a leading + or - if it exists
+                    attributeTypeName = attributeTypeName.replaceAll("\\+", "");
+                    attributeTypeName = attributeTypeName.replaceAll("\\-", "");
+                    attributeTypeName = attributeTypeName.replaceAll("\\(", "");
+
                     // convert the type name and replace it in the raw query
                     rawQuery = rawQuery.replaceAll(
                             attributeTypeName,
