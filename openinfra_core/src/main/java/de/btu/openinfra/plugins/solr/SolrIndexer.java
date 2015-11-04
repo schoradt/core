@@ -16,6 +16,7 @@ import de.btu.openinfra.backend.db.jpa.model.AttributeValueValue;
 import de.btu.openinfra.backend.db.jpa.model.LocalizedCharacterString;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
 import de.btu.openinfra.backend.exception.OpenInfraWebException;
+import de.btu.openinfra.plugins.solr.enums.SolrIndexEnum;
 
 
 /**
@@ -29,7 +30,6 @@ import de.btu.openinfra.backend.exception.OpenInfraWebException;
 public class SolrIndexer {
 
     private SolrServer solrConnection = null;
-    private final String NO_TRANSLATION_FIELD = "NoTranslation_";
 
     /**
      * Default constructor
@@ -51,7 +51,7 @@ public class SolrIndexer {
         System.out.println("clear index ...");
 
         // TODO delete old index only for testing
-//        deleteAllDocuments();
+        deleteAllDocuments();
 
         System.out.println("add documents ...");
 
@@ -118,15 +118,16 @@ public class SolrIndexer {
     public SolrInputDocument createOrUpdateDocument(TopicInstance ti) {
         SolrInputDocument doc = new SolrInputDocument();
 
+        // TODO use same finals as in SolrSearcher!
         // add the topic instance id as document id
-        doc.addField("id", ti.getId());
+        doc.addField(SolrIndexEnum.TOPIC_INSTANCE_ID.getString(), ti.getId());
 
         // add the project id
-        doc.addField("projectId",
+        doc.addField(SolrIndexEnum.PROJECT_ID.getString(),
                 ti.getTopicCharacteristic().getProject().getId());
 
         // add the topic characteristic id
-        doc.addField("topicCharacteristicId",
+        doc.addField(SolrIndexEnum.TOPIC_CHARACTERISTIC_ID.getString(),
                      ti.getTopicCharacteristic().getId());
 
         // run through all attribute values
@@ -235,9 +236,8 @@ public class SolrIndexer {
                     // No translation for the attribute type was specified. To
                     // avoid information loss we will save all this values
                     // together in a special field.
-                    doc.addField(
-                            SolrCharacterConverter.convert(
-                                    NO_TRANSLATION_FIELD),
+                    doc.addField(SolrCharacterConverter.convert(
+                            SolrIndexEnum.NO_TRANSLATION_FIELD.toString()),
                             value.get(i).getFreeText());
                 }
 
