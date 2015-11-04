@@ -1,5 +1,6 @@
 package de.btu.openinfra.plugins.solr;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -52,37 +53,12 @@ public class SolrQueryParser {
      * @return         The converted Solr query.
      */
     private String parseRawSolrQuery(String rawQuery) {
-        // pattern to capture everything in front of a colon
-        Pattern pattern = Pattern.compile("(.*):");
-        Matcher matcher = null;
-        String attributeTypeName = "";
 
-        // split on every whitespace to separate every part of the query
-        for (String part : rawQuery.split(" ")) {
-            // retrieve the attribute type
-
-            matcher = pattern.matcher(part);
-            if (matcher.find()) {
-                // add the name to the result list
-                for (int i = 0; i < matcher.groupCount(); i++) {
-                    // save the matched attribute type name
-                    attributeTypeName = matcher.group(i);
-
-                    // remove the colon
-                    attributeTypeName = attributeTypeName
-                            .substring(0, attributeTypeName.length()-1);
-
-                    // remove a leading + or - if it exists
-                    attributeTypeName = attributeTypeName.replaceAll("\\+", "");
-                    attributeTypeName = attributeTypeName.replaceAll("\\-", "");
-                    attributeTypeName = attributeTypeName.replaceAll("\\(", "");
-
-                    // convert the type name and replace it in the raw query
-                    rawQuery = rawQuery.replaceAll(
-                            attributeTypeName,
-                            SolrCharacterConverter.convert(attributeTypeName));
-                }
-            }
+        for (String attributeTypeName : extractFields(rawQuery)) {
+            // convert the type name and replace it in the raw query
+            rawQuery = rawQuery.replaceAll(
+                    attributeTypeName,
+                    SolrCharacterConverter.convert(attributeTypeName));
         }
         return rawQuery;
     }
@@ -206,4 +182,46 @@ public class SolrQueryParser {
         return str;
     }
 
+    /**
+     * This method extracts the name of every field from a raw Solr query and
+     * return them in a list.
+     *
+     * @param query The raw Solr query.
+     * @return      A list of fields extracted from the raw Solr query.
+     */
+    List<String> extractFields(String query) {
+        List<String> lst = new ArrayList<String>();
+
+        // pattern to capture everything in front of a colon
+        Pattern pattern = Pattern.compile("(.*):");
+        Matcher matcher = null;
+        String attributeTypeName = "";
+
+        // split on every whitespace to separate every part of the query
+        for (String part : query.split(" ")) {
+            // retrieve the attribute type
+
+            matcher = pattern.matcher(part);
+            if (matcher.find()) {
+                // add the name to the result list
+                for (int i = 0; i < matcher.groupCount(); i++) {
+                    // save the matched attribute type name
+                    attributeTypeName = matcher.group(i);
+
+                    // remove the colon
+                    attributeTypeName = attributeTypeName
+                            .substring(0, attributeTypeName.length()-1);
+
+                    // remove a leading + or - if it exists
+                    attributeTypeName = attributeTypeName.replaceAll("\\+", "");
+                    attributeTypeName = attributeTypeName.replaceAll("\\-", "");
+                    attributeTypeName = attributeTypeName.replaceAll("\\(", "");
+
+                    // add the attribute type name to the result list
+                    lst.add(attributeTypeName);
+                }
+            }
+        }
+        return lst;
+    }
 }
