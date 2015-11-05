@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.activation.MimeType;
+import javax.activation.MimeTypeParseException;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -35,8 +37,6 @@ import org.im4java.core.ConvertCmd;
 import org.im4java.core.IM4JavaException;
 import org.im4java.core.IMOperation;
 import org.im4java.core.Info;
-import org.im4java.core.UFRawCmd;
-import org.im4java.core.UFRawOperation;
 import org.json.simple.JSONObject;
 
 import com.drew.imaging.ImageMetadataReader;
@@ -50,6 +50,8 @@ import de.btu.openinfra.backend.OpenInfraPropertyKeys;
 import de.btu.openinfra.backend.OpenInfraPropertyValues;
 import de.btu.openinfra.backend.db.daos.file.FileDao;
 import de.btu.openinfra.backend.db.daos.file.FilesProjectDao;
+import de.btu.openinfra.backend.db.daos.file.SupportedMimeTypeDao;
+import de.btu.openinfra.backend.db.jpa.model.file.SupportedMimeType;
 import de.btu.openinfra.backend.db.pojos.file.FilePojo;
 import de.btu.openinfra.backend.db.pojos.file.FilesProjectPojo;
 import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
@@ -58,7 +60,7 @@ import de.btu.openinfra.backend.db.rbac.rbac.SubjectRbac;
 import de.btu.openinfra.backend.exception.OpenInfraWebException;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
-//TODO Remove logic from resource file.
+//TODO Move the logic from the resource file to the DAO layer.
 @Path("/v1/files")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET,
@@ -215,10 +217,14 @@ public class FileResource {
 		FilePojo pojo = new FilePojo();
     	String signature = "";
     	String fileName = "";
+    	File currentFile = null;
     	java.nio.file.Path filePath = null;
+		boolean acceptedMimeType = false;
+		// Handle file stream
 		try {
 			fileName = saveFile(is, originFileName);
 			filePath = Paths.get(fileName);
+			currentFile = new File(fileName);
 			// Force to set the mime type when the mime type is unknown by the
 			// OS in order to avoid null values (e.g. DNG files are sometimes
 			// handled as tiff images)
@@ -226,14 +232,41 @@ public class FileResource {
 			if(pojo.getMimeType() == null) {
 				pojo.setMimeType(new Tika().detect(filePath));
 			}
+		} catch (IOException ex) {
+			throw new OpenInfraWebException(ex);
+		}
+
+		// Evaluate the mime type of the current file
+		try {
+			List<SupportedMimeType> mimeTypes =
+					new SupportedMimeTypeDao().read();
+			MimeType currentMimeType = new MimeType(pojo.getMimeType());
+			for(SupportedMimeType smt : mimeTypes) {
+				if(acceptedMimeType) {
+					break;
+				}
+				acceptedMimeType = currentMimeType.match(smt.getMimeType());
+			}
+		} catch (MimeTypeParseException ex) {
+			throw new OpenInfraWebException(ex);
+		}
+
+		// Handle unaccepted mime types
+		if(!acceptedMimeType) {
+			currentFile.delete();
+			throw new WebApplicationException(
+					Status.UNSUPPORTED_MEDIA_TYPE);
+		}
+
+		// Generate signature/hash
+		try {
 			signature = com.google.common.io.Files.hash(
 					new File(fileName), Hashing.sha256()).toString();
-		} catch(Exception ex) {
+		} catch (IOException ex) {
 			throw new OpenInfraWebException(ex);
 		}
 
 		// rename file
-		File currentFile = new File(fileName);
 		File signatureFile = new File(
 				OpenInfraPropertyValues.UPLOAD_PATH.getValue() +
 				signature + "." + FilenameUtils.getExtension(fileName));
@@ -378,32 +411,6 @@ public class FileResource {
 			pojo.setOriginDimension(
 					originGeom.substring(0, originGeom.indexOf("+")));
 
-			// When the file is in raw format try to use the ufraw converter
-			// directly. The ImageMagick command doesn't work correctly unter
-			// Linux since it is very slow and uses sometimes the wrong color
-			// layout. However, we don't know if the ufraw converter is
-			// installed correctly or the mime type was estimated correctly.
-			// Thus, try to use the normal command if the popup file wasn't
-			// created.
-			if(!popupFile.exists() &&
-				pojo.getMimeType() != null &&
-				pojo.getMimeType().contains("dng")) {
-				System.err.println("--> try to convert dng image file\n");
-				UFRawOperation ufop = new UFRawOperation();
-				ufop.addImage(file);
-				ufop.outType(THUMB_TYPE);
-				ufop.size(Integer.valueOf(popupDim[0]));
-				try {
-					new UFRawCmd(true).run(ufop);
-				} catch(Exception ex) {
-					System.err.append(ex.getMessage() + "\n");
-				}
-				File tmpFile = new File(
-						file.substring(0,(file.lastIndexOf(".") -1)));
-				if(tmpFile.exists()) {
-					tmpFile.renameTo(new File(popupPath));
-				}
-			}
 			if(!popupFile.exists()) {
 				cmd.run(opBuilder(popupDim, file,
 						pojo.getMimeType(), popupPath, false));
