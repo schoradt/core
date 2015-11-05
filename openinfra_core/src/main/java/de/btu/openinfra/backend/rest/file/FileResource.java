@@ -8,7 +8,6 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -31,19 +30,20 @@ import javax.ws.rs.core.UriInfo;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.crypto.hash.Sha256Hash;
-import org.glassfish.jersey.media.multipart.FormDataBodyPart;
-import org.glassfish.jersey.media.multipart.FormDataMultiPart;
+import org.apache.tika.Tika;
 import org.im4java.core.ConvertCmd;
 import org.im4java.core.IM4JavaException;
 import org.im4java.core.IMOperation;
 import org.im4java.core.Info;
+import org.im4java.core.UFRawCmd;
+import org.im4java.core.UFRawOperation;
 import org.json.simple.JSONObject;
 
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
+import com.google.common.hash.Hashing;
 
 import de.btu.openinfra.backend.OpenInfraProperties;
 import de.btu.openinfra.backend.OpenInfraPropertyKeys;
@@ -66,7 +66,8 @@ import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
     + OpenInfraResponseBuilder.UTF8_CHARSET})
 public class FileResource {
 
-	private static final String EXTENSION = ".png";
+	private static final String THUMB_TYPE = "png";
+	private static final String EXTENSION = "." + THUMB_TYPE;
 
 	@GET
     @Path("count")
@@ -180,6 +181,16 @@ public class FileResource {
 								fileExtension).build();
 	}
 
+	/**
+	 * You will need to install ufraw under Linux-based OS when you want
+	 * to support DNG images.
+	 *
+	 * @param uriInfo
+	 * @param request
+	 * @param originFileName
+	 * @param is
+	 * @return
+	 */
 	@POST
 	@Path("/upload/{originFileName}")
 	@Consumes(MediaType.APPLICATION_OCTET_STREAM)
@@ -188,6 +199,11 @@ public class FileResource {
     		@Context HttpServletRequest request,
     		@PathParam("originFileName") String originFileName,
     		InputStream is) {
+
+		if(originFileName == null ||
+				FilenameUtils.getExtension(originFileName) == null) {
+			throw new WebApplicationException(Status.BAD_REQUEST);
+		}
 
 		if(!SecurityUtils.getSubject().isPermitted("/files:w")) {
 			throw new WebApplicationException(Status.FORBIDDEN);
@@ -203,8 +219,15 @@ public class FileResource {
 		try {
 			fileName = saveFile(is, originFileName);
 			filePath = Paths.get(fileName);
+			// Force to set the mime type when the mime type is unknown by the
+			// OS in order to avoid null values (e.g. DNG files are sometimes
+			// handled as tiff images)
 			pojo.setMimeType(Files.probeContentType(filePath));
-			signature = new Sha256Hash(Files.readAllBytes(filePath)).toString();
+			if(pojo.getMimeType() == null) {
+				pojo.setMimeType(new Tika().detect(filePath));
+			}
+			signature = com.google.common.io.Files.hash(
+					new File(fileName), Hashing.sha256()).toString();
 		} catch(Exception ex) {
 			throw new OpenInfraWebException(ex);
 		}
@@ -237,73 +260,6 @@ public class FileResource {
     			OpenInfraHttpMethod.valueOf(request.getMethod()),
     			uriInfo, null, result);
 		return fp;
-	}
-
-	@POST
-	@Path("/upload")
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public List<FilePojo> uploadFile(
-    		@Context UriInfo uriInfo,
-    		@Context HttpServletRequest request,
-			FormDataMultiPart multiPart) {
-
-		if(!SecurityUtils.getSubject().isPermitted("/files:w")) {
-			throw new WebApplicationException(Status.FORBIDDEN);
-		}
-
-		// Get the current user id and create a list to hold uploaded files
-		UUID subject = new SubjectRbac().self().getUuid();
-		List<FilePojo> files = new LinkedList<FilePojo>();
-
-		List<FormDataBodyPart> fields = multiPart.getFields("files");
-	    for(FormDataBodyPart field : fields) {
-	    	FilePojo pojo = new FilePojo();
-	    	// Store the file and rename it
-	    	String originFileName =
-	    			field.getFormDataContentDisposition().getFileName();
-	    	// Take the first image to generate the signature
-	    	String signature = "";
-	    	String fileName = "";
-    		try {
-    			fileName = saveFile(
-    					field.getEntityAs(InputStream.class), originFileName);
-    			signature = new Sha256Hash(
-    					Files.readAllBytes(Paths.get(fileName))).toString();
-    		} catch(Exception ex) {
-    			throw new OpenInfraWebException(ex);
-    		}
-
-    		// rename file
-    		File currentFile = new File(fileName);
-    		File signatureFile = new File(
-    				OpenInfraPropertyValues.UPLOAD_PATH.getValue() +
-    				signature + "." + FilenameUtils.getExtension(fileName));
-    		if(signatureFile.exists()) {
-    			currentFile.delete();
-    		} else {
-    			currentFile.renameTo(signatureFile);
-    		}
-
-    		pojo.setMimeType(field.getMediaType().toString());
-    		pojo.setSignature(signature);
-    		try {
-    			pojo.setExifData(extractMetadata(signatureFile));
-    		} catch (Exception e) {
-    			System.err.append("Metadata Extractor: " + e.getMessage());
-    		}
-
-    		pojo = resizeDimensions(signatureFile.getAbsolutePath(), pojo);
-	    	pojo.setOriginFileName(originFileName);
-	    	pojo.setSubject(subject);
-	    	FileRbac rbac = new FileRbac();
-	    	UUID result = rbac.createOrUpdate(
-	    			OpenInfraHttpMethod.valueOf(request.getMethod()),
-	    			uriInfo, null, pojo);
-	    	files.add(rbac.read(
-	    			OpenInfraHttpMethod.valueOf(request.getMethod()),
-	    			uriInfo, null, result));
-	    }
-	    return files;
 	}
 
 	/**
@@ -380,6 +336,8 @@ public class FileResource {
 	 * file. Therefore, ImageMagick is used. It will create the corresponding
 	 * resized images when it is possible.
 	 *
+	 * In order to provide DNG images you need to install ufraw under linux.
+	 *
 	 * @param file the path to the file
 	 * @param pojo the corresponding pojo object
 	 * @return
@@ -420,27 +378,32 @@ public class FileResource {
 			pojo.setOriginDimension(
 					originGeom.substring(0, originGeom.indexOf("+")));
 
-			if(!thumbFile.exists()) {
-				cmd.run(opBuilder(thumbDim, file,
-						pojo.getMimeType(), thumbPath, true));
+			// When the file is in raw format try to use the ufraw converter
+			// directly. The ImageMagick command doesn't work correctly unter
+			// Linux since it is very slow and uses sometimes the wrong color
+			// layout. However, we don't know if the ufraw converter is
+			// installed correctly or the mime type was estimated correctly.
+			// Thus, try to use the normal command if the popup file wasn't
+			// created.
+			if(!popupFile.exists() &&
+				pojo.getMimeType() != null &&
+				pojo.getMimeType().contains("dng")) {
+				System.err.println("--> try to convert dng image file\n");
+				UFRawOperation ufop = new UFRawOperation();
+				ufop.addImage(file);
+				ufop.outType(THUMB_TYPE);
+				ufop.size(Integer.valueOf(popupDim[0]));
+				try {
+					new UFRawCmd(true).run(ufop);
+				} catch(Exception ex) {
+					System.err.append(ex.getMessage() + "\n");
+				}
+				File tmpFile = new File(
+						file.substring(0,(file.lastIndexOf(".") -1)));
+				if(tmpFile.exists()) {
+					tmpFile.renameTo(new File(popupPath));
+				}
 			}
-			if(thumbFile.exists()) {
-				String thumbGeom = new Info(thumbPath, true).getImageGeometry();
-				pojo.setThumbnailDimension(
-						thumbGeom.substring(0, thumbGeom.indexOf("+")));
-			}
-
-			if(!middleFile.exists()) {
-				cmd.run(opBuilder(middleDim, file,
-						pojo.getMimeType(), middlePath, false));
-			}
-			if(middleFile.exists()) {
-				String middleGeom =
-						new Info(middlePath, true).getImageGeometry();
-				pojo.setMiddleDimension(
-						middleGeom.substring(0, middleGeom.indexOf("+")));
-			}
-
 			if(!popupFile.exists()) {
 				cmd.run(opBuilder(popupDim, file,
 						pojo.getMimeType(), popupPath, false));
@@ -450,8 +413,30 @@ public class FileResource {
 				pojo.setPopupDimension(
 						popupGeom.substring(0, popupGeom.indexOf("+")));
 			}
+
+			if(!middleFile.exists() && new File(popupPath).exists()) {
+				cmd.run(opBuilder(middleDim, popupPath,
+						"image/png", middlePath, false));
+			}
+			if(middleFile.exists()) {
+				String middleGeom =
+						new Info(middlePath, true).getImageGeometry();
+				pojo.setMiddleDimension(
+						middleGeom.substring(0, middleGeom.indexOf("+")));
+			}
+
+			if(!thumbFile.exists() && new File(popupPath).exists()) {
+				cmd.run(opBuilder(thumbDim, popupPath,
+						"image/png", thumbPath, true));
+			}
+			if(thumbFile.exists()) {
+				String thumbGeom = new Info(thumbPath, true).getImageGeometry();
+				pojo.setThumbnailDimension(
+						thumbGeom.substring(0, thumbGeom.indexOf("+")));
+			}
+
 		} catch (IOException | InterruptedException | IM4JavaException e) {
-			System.err.append("ImageMagick: " + e.getMessage() + "\n");
+			System.err.println("ImageMagick: " + e.getMessage());
 		}
 		return pojo;
 	}
@@ -469,27 +454,22 @@ public class FileResource {
 	private IMOperation opBuilder(
 			String[] dimensions, String filePath,
 			String mimeType, String destination, boolean isThumbnail) {
+
 		IMOperation op = new IMOperation();
-		if(mimeType.contains("pdf")) {
-			if(isThumbnail) {
-				op.thumbnail(Integer.valueOf(dimensions[0]),
-						Integer.valueOf(dimensions[1]),"!");
-			} else {
-				op.thumbnail(Integer.valueOf(dimensions[0]),
-						Integer.valueOf(dimensions[1]));
-			}
+
+		if(isThumbnail) {
+			op.thumbnail(Integer.valueOf(dimensions[0]),
+					Integer.valueOf(dimensions[1]),"!");
+		} else {
+			op.thumbnail(Integer.valueOf(dimensions[0]),
+					Integer.valueOf(dimensions[1]));
+		}
+		if(mimeType != null && mimeType.contains("pdf")) {
+			op.addImage(filePath + "[0]");
 			op.background("white");
 			op.alpha("remove");
-			op.addImage(filePath + "[0]");
 		} else {
 			op.addImage(filePath);
-			if(isThumbnail) {
-				op.resize(Integer.valueOf(dimensions[0]),
-						Integer.valueOf(dimensions[1]),"!");
-			} else {
-				op.resize(Integer.valueOf(dimensions[0]),
-						Integer.valueOf(dimensions[1]));
-			}
 		}
 		op.addImage(destination);
 		return op;

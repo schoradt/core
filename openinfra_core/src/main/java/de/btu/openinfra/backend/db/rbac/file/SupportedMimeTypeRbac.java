@@ -9,7 +9,7 @@ import de.btu.openinfra.backend.db.rbac.OpenInfraRbac;
 public class SupportedMimeTypeRbac extends OpenInfraRbac<
 	SupportedMimeTypePojo, SupportedMimeType, SupportedMimeTypeDao> {
 
-	protected SupportedMimeTypeRbac() {
+	public SupportedMimeTypeRbac() {
 		super(null, OpenInfraSchemas.FILE, SupportedMimeTypeDao.class);
 	}
 

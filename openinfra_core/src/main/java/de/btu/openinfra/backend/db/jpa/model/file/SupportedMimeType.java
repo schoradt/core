@@ -18,6 +18,8 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 @Entity
 @Table(name="supported_mime_types")
 @NamedQueries({
+	@NamedQuery(name="SupportedMimeType.count",
+			query="SELECT COUNT(s) FROM SupportedMimeType s"),
 	@NamedQuery(name="SupportedMimeType.findAll",
 			query="SELECT s FROM SupportedMimeType s")
 })
