@@ -11,9 +11,9 @@ import java.util.UUID;
  */
 public class SolrResultPojo {
 
-    private UUID projectId;
     private UUID topicInstanceId;
     private UUID topicCharacteristicId;
+    private UUID projectId;
     private Map<String, List<String>> highlight;
 
     public UUID getProjectId() {
