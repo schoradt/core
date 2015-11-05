@@ -2,6 +2,7 @@ package de.btu.openinfra.plugins.solr.rest;
 
 import java.util.List;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -26,6 +27,7 @@ import de.btu.openinfra.plugins.solr.db.pojos.SolrSearchPojo;
     + OpenInfraResponseBuilder.UTF8_CHARSET,
     MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET})
+@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class SearchResource {
 
     @POST

@@ -196,7 +196,7 @@
 		    	</c:if>
       		</c:forEach>
 		</form>
-      <form class="navbar-form navbar-right" method="get" action="/openinfra_backend/rest/v1/search" role="search">
+      <form class="navbar-form navbar-right" method="get" action="${contextPath}/rest/v1/searchresult" role="search">
         <div class="form-group">
         <!-- Check the query parameter and create an input field with the query
         	 as value or an input field a placeholder -->

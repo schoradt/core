@@ -1,8 +1,12 @@
 package de.btu.openinfra.plugins.solr.rest.view;
 
+import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+
+import org.glassfish.jersey.server.mvc.Template;
 
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
@@ -16,20 +20,18 @@ import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
  *
  */
 
-@Path(OpenInfraResponseBuilder.REST_URI_SEARCH)
-@Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
-    + OpenInfraResponseBuilder.UTF8_CHARSET,
-    MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
-    + OpenInfraResponseBuilder.UTF8_CHARSET})
+@Path("/v1/searchresult")
+@Produces(MediaType.TEXT_HTML +
+        OpenInfraResponseBuilder.UTF8_CHARSET +
+        OpenInfraResponseBuilder.HTML_PRIORITY)
 public class SearchResource {
 
-//    @GET
-//    @Template(name="/views/SearchResult.jsp")
-//    public List<Result> get(
-//            @QueryParam("query") String query,
-//            @QueryParam("language") String locale) {
-//        return new de.btu.openinfra.plugins.solr.rest.SearchResource()
-//            .get(query, locale);
-//    }
+    @GET
+    @Template(name="/views/SearchResult.jsp")
+    public String getView(
+            @QueryParam("language") String locale,
+            @QueryParam("query") String query) {
+        return query;
+    }
 }
 
