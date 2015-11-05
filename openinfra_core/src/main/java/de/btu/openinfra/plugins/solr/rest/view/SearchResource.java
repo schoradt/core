@@ -27,7 +27,7 @@ import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 public class SearchResource {
 
     @GET
-    @Template(name="/views/SearchResult.jsp")
+    @Template(name="/views/list/SearchResult.jsp")
     public String getView(
             @QueryParam("language") String locale,
             @QueryParam("query") String query) {
