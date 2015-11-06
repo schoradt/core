@@ -1,7 +1,5 @@
 package de.btu.openinfra.plugins.solr.rest;
 
-import java.util.List;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -31,7 +29,7 @@ import de.btu.openinfra.plugins.solr.db.pojos.SolrSearchPojo;
 public class SearchResource {
 
     @POST
-    public List<SolrResultPojo> get(
+    public SolrResultPojo get(
             @QueryParam("language") String locale,
             @QueryParam("start") int start,
             @QueryParam("rows") int rows,

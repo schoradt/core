@@ -1,50 +1,41 @@
 package de.btu.openinfra.plugins.solr.db.pojos;
 
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+
 
 /**
- * This POJO is a container for the result of a Solr query.
+ * This POJO is a container for the result of a Solr query. It contains all Solr
+ * result pojos and some meta data for the request.
  *
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  */
 public class SolrResultPojo {
 
-    private UUID topicInstanceId;
-    private UUID topicCharacteristicId;
-    private UUID projectId;
-    private Map<String, List<String>> highlight;
+    private long elapsedTime;
+    private long resultCount;
+    private List<SolrResultDbPojo> databaseResult;
 
-    public UUID getProjectId() {
-        return projectId;
+    public long getElapsedTime() {
+        return elapsedTime;
     }
 
-    public void setProjectId(UUID projectId) {
-        this.projectId = projectId;
+    public void setElapsedTime(long elapsedTime) {
+        this.elapsedTime = elapsedTime;
     }
 
-    public UUID getTopicInstanceId() {
-        return topicInstanceId;
+    public long getResultCount() {
+        return resultCount;
     }
 
-    public void setTopicInstanceId(UUID topicInstanceId) {
-        this.topicInstanceId = topicInstanceId;
+    public void setResultCount(long resultCount) {
+        this.resultCount = resultCount;
     }
 
-    public UUID getTopicCharacteristicId() {
-        return topicCharacteristicId;
+    public List<SolrResultDbPojo> getDatabaseResult() {
+        return databaseResult;
     }
 
-    public void setTopicCharacteristicId(UUID topicCharacteristicId) {
-        this.topicCharacteristicId = topicCharacteristicId;
-    }
-
-    public Map<String, List<String>> getHighlight() {
-        return highlight;
-    }
-
-    public void setHighlight(Map<String, List<String>> highlight) {
-        this.highlight = highlight;
+    public void setDatabaseResult(List<SolrResultDbPojo> databaseResult) {
+        this.databaseResult = databaseResult;
     }
 }

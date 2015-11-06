@@ -1,7 +1,7 @@
 package de.btu.openinfra.plugins.solr;
 
 import java.io.IOException;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -13,6 +13,7 @@ import org.apache.solr.common.SolrDocumentList;
 
 import de.btu.openinfra.backend.exception.OpenInfraWebException;
 import de.btu.openinfra.plugins.PluginProperties;
+import de.btu.openinfra.plugins.solr.db.pojos.SolrResultDbPojo;
 import de.btu.openinfra.plugins.solr.db.pojos.SolrResultPojo;
 import de.btu.openinfra.plugins.solr.db.pojos.SolrSearchPojo;
 import de.btu.openinfra.plugins.solr.enums.SolrIndexEnum;
@@ -50,11 +51,14 @@ public class SolrSearcher {
      *
      * @param searchPojo The SolrSearchPojo that contains the query.
      */
-    public List<SolrResultPojo> search(SolrSearchPojo searchPojo,
+    public SolrResultPojo search(SolrSearchPojo searchPojo,
             int start, int rows) {
 
+        // create the result object
+        SolrResultPojo result = new SolrResultPojo();
+
         // create a list for the result objects
-        List<SolrResultPojo> resultList = new LinkedList<SolrResultPojo>();
+        List<SolrResultDbPojo> resultList = new ArrayList<SolrResultDbPojo>();
 
         // create a Solr query object
         SolrQuery query = new SolrQuery();
@@ -73,8 +77,8 @@ public class SolrSearcher {
             start = RESULT_WINDOW_START;
         }
 
-        // if the rows variable is negative, set it to the default
-        if (rows < 0) {
+        // if the rows variable is negative or zero, set it to the default
+        if (rows <= 0) {
             rows = Integer.parseInt(PluginProperties.getProperty(
                     SolrPropertyKeys.SOLR_DEFUALT_RESULTS_PER_PAGE.getKey(),
                     "Solr"));
@@ -83,7 +87,6 @@ public class SolrSearcher {
         // set the window of the results
         query.setStart(start);
         query.setRows(rows);
-
 
         // enable highlighting
         query.setHighlight(true);
@@ -114,8 +117,11 @@ public class SolrSearcher {
             // get the result list from the Solr server
             SolrDocumentList solrResults = response.getResults();
 
-            System.out.println("Found: " + response.getResponse().get("numFound"));
-            System.out.println("Time: " + response.getQTime());
+            // save the elapsed time for retrieving the results
+            result.setElapsedTime(response.getElapsedTime());
+
+            // save the count of results
+            result.setResultCount(response.getResults().getNumFound());
 
             // get the highlighting for the request
             Map<String, Map<String, List<String>>> hl =
@@ -123,7 +129,7 @@ public class SolrSearcher {
 
             // run through the results and add them to a list
             for (int i = 0; i < solrResults.size(); ++i) {
-                SolrResultPojo rP = new SolrResultPojo();
+                SolrResultDbPojo rP = new SolrResultDbPojo();
 
                 // save the topic instance id from the result object
                 rP.setTopicInstanceId(UUID.fromString(
@@ -134,15 +140,14 @@ public class SolrSearcher {
                 // save the topic characteristic id from the result object
                 rP.setTopicCharacteristicId(UUID.fromString(
                         solrResults.get(i).getFieldValue(
-                                SolrIndexEnum.TOPIC_CHARACTERISTIC_ID.getString())
-                                .toString()));
+                                SolrIndexEnum.TOPIC_CHARACTERISTIC_ID
+                                .getString()).toString()));
 
                 // save the project id from the result object
                 rP.setProjectId(UUID.fromString(
                         solrResults.get(i).getFieldValue(
                                 SolrIndexEnum.PROJECT_ID.getString())
                                 .toString()));
-
 
                 // remove the default_search field from the highlighting map to
                 // avoid double entries
@@ -155,7 +160,8 @@ public class SolrSearcher {
                 // add the current result to the result list
                 resultList.add(rP);
             }
-            return resultList;
+            result.setDatabaseResult(resultList);
+            return result;
         } catch (SolrServerException | IOException e) {
             throw new OpenInfraWebException(e);
         }
