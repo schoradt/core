@@ -11,6 +11,8 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
 
+import de.btu.openinfra.backend.exception.OpenInfraWebException;
+import de.btu.openinfra.plugins.PluginProperties;
 import de.btu.openinfra.plugins.solr.db.pojos.SolrResultPojo;
 import de.btu.openinfra.plugins.solr.db.pojos.SolrSearchPojo;
 import de.btu.openinfra.plugins.solr.enums.SolrIndexEnum;
@@ -27,6 +29,13 @@ import de.btu.openinfra.plugins.solr.enums.SolrIndexEnum;
 public class SolrSearcher {
 
     private SolrServer solrConnection = null;
+    /*
+     * This variable defines the default start of the results and will be set if
+     * no start variable was passed for the search method.
+     * ATTENTION: Setting this variable greater than 0 will cut the results with
+     * the highest relevance!
+     */
+    private final int RESULT_WINDOW_START = 0;
 
     /**
      * Default constructor
@@ -41,7 +50,8 @@ public class SolrSearcher {
      *
      * @param searchPojo The SolrSearchPojo that contains the query.
      */
-    public List<SolrResultPojo> search(SolrSearchPojo searchPojo) {
+    public List<SolrResultPojo> search(SolrSearchPojo searchPojo,
+            int start, int rows) {
 
         // create a list for the result objects
         List<SolrResultPojo> resultList = new LinkedList<SolrResultPojo>();
@@ -57,6 +67,23 @@ public class SolrSearcher {
 
         // define the return value
         query.set("wt", "json");
+
+        // if the start variable is negative, set it to the default
+        if (start < 0) {
+            start = RESULT_WINDOW_START;
+        }
+
+        // if the rows variable is negative, set it to the default
+        if (rows < 0) {
+            rows = Integer.parseInt(PluginProperties.getProperty(
+                    SolrPropertyKeys.SOLR_DEFUALT_RESULTS_PER_PAGE.getKey(),
+                    "Solr"));
+        }
+
+        // set the window of the results
+        query.setStart(start);
+        query.setRows(rows);
+
 
         // enable highlighting
         query.setHighlight(true);
@@ -86,6 +113,9 @@ public class SolrSearcher {
 
             // get the result list from the Solr server
             SolrDocumentList solrResults = response.getResults();
+
+            System.out.println("Found: " + response.getResponse().get("numFound"));
+            System.out.println("Time: " + response.getQTime());
 
             // get the highlighting for the request
             Map<String, Map<String, List<String>>> hl =
@@ -127,11 +157,7 @@ public class SolrSearcher {
             }
             return resultList;
         } catch (SolrServerException | IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new OpenInfraWebException(e);
         }
-
-        // return the highlighted result list
-        return null;
     }
 }

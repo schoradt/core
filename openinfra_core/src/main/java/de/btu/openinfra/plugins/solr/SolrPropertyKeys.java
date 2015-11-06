@@ -22,7 +22,13 @@ public enum SolrPropertyKeys {
 	/*
 	 * This variable defines the default fuzzy parameter.
 	 */
-	SOLR_DEFUALT_FUZZY("de.btu.openinfra.plugins.solr.defaultFuzzy");
+	SOLR_DEFUALT_FUZZY("de.btu.openinfra.plugins.solr.defaultFuzzy"),
+
+	/*
+     * This variable defines the default maximum number of results per request
+     */
+    SOLR_DEFUALT_RESULTS_PER_PAGE(
+            "de.btu.openinfra.plugins.solr.defaultResultsPerPage");
 
 	private String key;
 	private SolrPropertyKeys(String key) {
