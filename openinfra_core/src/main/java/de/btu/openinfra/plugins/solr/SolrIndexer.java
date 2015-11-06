@@ -11,12 +11,17 @@ import org.apache.solr.common.SolrInputDocument;
 
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.TopicInstanceDao;
+import de.btu.openinfra.backend.db.daos.meta.ProjectsDao;
 import de.btu.openinfra.backend.db.jpa.model.AttributeValueDomain;
 import de.btu.openinfra.backend.db.jpa.model.AttributeValueValue;
 import de.btu.openinfra.backend.db.jpa.model.LocalizedCharacterString;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
+import de.btu.openinfra.backend.db.jpa.model.meta.Projects;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 import de.btu.openinfra.backend.exception.OpenInfraWebException;
+import de.btu.openinfra.plugins.solr.db.pojos.SolrIndexPojo;
 import de.btu.openinfra.plugins.solr.enums.SolrIndexEnum;
+import de.btu.openinfra.plugins.solr.exception.OpenInfraSolrException;
 
 
 /**
@@ -41,29 +46,59 @@ public class SolrIndexer {
 
 
     /**
-     * TODO this is a temporary method that can be deleted in production mode.
      *
-     * This function starts the indexing process.
+     * This method starts the indexing process. It will accept a list of UUIDs
+     * that represents the project IDs. If the List is empty, all projects that
+     * can be found in the meta database will be indexed.
+     *
+     * @param projects A list of project UUIDs that should be indexed.
+     * @return
      */
-    public boolean start() {
+    public boolean indexProjects(SolrIndexPojo projectsPojo) {
 
-        // TODO debug message, remove this
-        System.out.println("clear index ...");
+        try {
+            // TODO delete old index only for testing
+            //deleteAllDocuments();
 
-        // TODO delete old index only for testing
-        deleteAllDocuments();
+            List<Projects> projectIndexList = new ArrayList<Projects>();
 
-        System.out.println("add documents ...");
+            // get all projects from the meta database
+            List<Projects> metaProjects = new ProjectsDao(
+                    null, OpenInfraSchemas.META_DATA).read();
 
-        // TODO read projects from meta database
-        // Baalbek
-//        indexAll(UUID.fromString("fd27a347-4e33-4ed7-aebc-eeff6dbf1054"));
-        // Palatin
-//        indexAll(UUID.fromString("7d431941-eece-48ac-bce5-3062d8d32e76"));
-        // Test
-        refreshIndex(UUID.fromString("e7d42bff-4e40-4f43-9d1b-1dc5a190cd75"));
+            // check if the specified list contain entries
+            if (projectsPojo != null && projectsPojo.getProjects().size() > 0) {
+                // run through all projects from the meta database
+                for (int i = 0; i < metaProjects.size(); i++) {
+                    // if the project is no subproject and the ID is in the
+                    // specified list
+                    if (!metaProjects.get(i).getIsSubproject() &&
+                            projectsPojo.getProjects().contains(
+                                    metaProjects.get(i).getProjectId())) {
+                        // then add the project to the index list
+                        projectIndexList.add(metaProjects.get(i));
+                    }
+                }
+            } else {
+                // if no project list is specified, take all projects found in
+                // the meta database
+                projectIndexList = metaProjects;
+            }
 
-        return true;
+            // index all projects
+            for (Projects project : projectIndexList) {
+                // filter for main projects
+                if (!project.getIsSubproject()) {
+                    indexProject(project.getProjectId());
+                }
+            }
+            return true;
+        } catch (Exception e) {
+            // TODO specify the exceptions?
+            // TODO replace with SolrExceptionType
+            throw new OpenInfraSolrException(
+                    OpenInfraExceptionTypes.INTERNAL_SERVER_EXCEPTION);
+        }
     }
 
     /**
@@ -71,7 +106,7 @@ public class SolrIndexer {
      *
      * @param projectId The id of the project that should be indexed.
      */
-    public void refreshIndex(UUID projectId) {
+    private void indexProject(UUID projectId) {
 
         // get all topic instances
         List<TopicInstance> tiList = new TopicInstanceDao(
