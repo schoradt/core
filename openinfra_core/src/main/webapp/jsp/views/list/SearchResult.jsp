@@ -12,6 +12,11 @@
 <body>
  	<%@ include file="../../snippets/Menu.jsp" %>
  	
+ 	Ihre Suche nach <span id="query"><b></b></span> ergab 
+ 	<span id="resultCount"><b></b></span> Treffer 
+ 	und dauerte <span id="elapsedTime"><b></b></span> Sekunden.
+ 	<br /><br />
+ 	
  	<div class="panel-group">
 		<table class="table">
 			<thead>
@@ -35,16 +40,26 @@
 			</tbody>
 		</table>
 	</div>
- 	
+	
+	<div class="urlImageContainer">
+		<img id="url" align="middle" src="${contextPath}/img/url.gif"/>
+	</div>
+		
 	<script language="javascript" type="text/javascript">
 
 		$(document).ready(function() {
 			// save the value of the search field
 		    var searchString = getUrlParameter("query");
+			var start = getUrlParameter("start");
+			var rows = getUrlParameter("rows");
+			
+			// this is just a workaround for the GUI
+			if (start == null || start < 0) { start = 0; }
+			if (rows == null || rows < 0) { rows = 20; }
 	    
 		    if (searchString != "") {
 		     	// create the base path of the application
-				var searchPath = "${contextPath}/rest/v1/search?language=de-DE";
+				var searchPath = "${contextPath}/rest/v1/search?language=de-DE&start="+ start +"&rows="+ rows;
 				var data = new Object();
 				
 				// build the data object with the information from the input field
@@ -61,10 +76,21 @@
 			 			alert("fail");
 				  	}, // end error
 					success: function(result) {
-					    for (var key in result) {
-					        addLine(result[key]);
+					    // write the results
+					    for (var key in result["databaseResult"]) {
+					        addLine(result["databaseResult"][key]);
 					    }
-					   	
+					    // write the query
+					    $("#query b").text(searchString);
+					    
+						// write the result count
+						$("#resultCount b").text(result["resultCount"]);
+					    
+					    // write the elapsed time
+					    $("#elapsedTime b").text(result["elapsedTime"]/1000);
+					    
+					    // hide the loading image
+					    $("#url").hide();
 					} // end success
 			  	}); // end ajax call
 			}
