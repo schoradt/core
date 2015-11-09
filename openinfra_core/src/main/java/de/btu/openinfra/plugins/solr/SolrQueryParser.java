@@ -192,35 +192,37 @@ public class SolrQueryParser {
     List<String> extractFields(String query) {
         List<String> lst = new ArrayList<String>();
 
-        // pattern to capture everything in front of a colon
-        Pattern pattern = Pattern.compile("(.*):");
+        // pattern to capture the attribute type name in front of a colon
+        Pattern pattern = Pattern.compile(
+                "(\"{1}\\w+(\\s*|(\\s*\\w+\\s*)*)\\w+\"{1}$|\\w+$)");
+
         Matcher matcher = null;
         String attributeTypeName = "";
 
-        // split on every whitespace to separate every part of the query
-        for (String part : query.split(" ")) {
-            // retrieve the attribute type
+        // split the query on every colon to separate the attribute types
+        String[] parts = query.split(":");
 
-            matcher = pattern.matcher(part);
-            if (matcher.find()) {
-                // add the name to the result list
-                for (int i = 0; i < matcher.groupCount(); i++) {
-                    // save the matched attribute type name
-                    attributeTypeName = matcher.group(i);
+        for (int i = 0; i < parts.length; i++) {
+            // the last entry is no attribute type
+            if (i < parts.length - 1) {
+                // retrieve the attribute type via regex
+                matcher = pattern.matcher(parts[i]);
+                if (matcher.find()) {
+                    // save the attribute type name
+                    attributeTypeName = matcher.group(0);
 
-                    // remove the colon
-                    attributeTypeName = attributeTypeName
-                            .substring(0, attributeTypeName.length()-1);
-
-                    // remove a leading + or - if it exists
+                    // remove chars that are not part of the attribute type name
                     attributeTypeName = attributeTypeName.replaceAll("\\+", "");
                     attributeTypeName = attributeTypeName.replaceAll("\\-", "");
                     attributeTypeName = attributeTypeName.replaceAll("\\(", "");
+                    attributeTypeName = attributeTypeName.replaceAll("\\)", "");
 
                     // add the attribute type name to the result list
                     lst.add(attributeTypeName);
                 }
+
             }
+
         }
         return lst;
     }

@@ -21,7 +21,7 @@ public class SolrCharacterConverter {
     /*
      * This is a list of characters that must not be converted.
      */
-    private static final String ALLOWED_CHARS = "[^0-9A-z-._ ]";
+    private static final String DISALLOWED_CHARS = "[^0-9A-z-._]";
 
     /*
      * This character should replace every disallowed character.
@@ -83,15 +83,18 @@ public class SolrCharacterConverter {
 
     /**
      * This function replaces all characters that are no digits, no normal word,
-     * no point, no hyphen and no underscore. It also remove leading and
-     * trailing whitespace.
+     * no point, no hyphen and no underscore. It also removes leading and
+     * trailing whitespace and quotation marks.
      *
      * @param input The string that holds characters that should be replaced.
      * @return      The converted input string.
      */
     private static String replaceCharacters(String input) {
         input = input.trim();
-        input = input.replaceAll(ALLOWED_CHARS, CHAR_REPLACEMENT);
+        // remove quotation marks before replacing disallowed characters
+        input = input.replaceAll("\"", "");
+        // replace disallowed characters with a regex
+        input = input.replaceAll(DISALLOWED_CHARS, CHAR_REPLACEMENT);
         return input;
     }
 }
