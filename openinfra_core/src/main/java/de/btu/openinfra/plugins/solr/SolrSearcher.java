@@ -80,7 +80,7 @@ public class SolrSearcher {
         // if the rows variable is negative or zero, set it to the default
         if (rows <= 0) {
             rows = Integer.parseInt(PluginProperties.getProperty(
-                    SolrPropertyKeys.SOLR_DEFUALT_RESULTS_PER_PAGE.getKey(),
+                    SolrPropertyKeys.SOLR_DEFAULT_RESULTS_PER_PAGE.getKey(),
                     "Solr"));
         }
 

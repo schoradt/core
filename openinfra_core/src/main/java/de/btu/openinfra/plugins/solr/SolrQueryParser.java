@@ -153,7 +153,7 @@ public class SolrQueryParser {
         // add fuzziness if required
         if (part.isFuzziness()) {
             query += "~" + PluginProperties.getProperty(
-                    SolrPropertyKeys.SOLR_DEFUALT_FUZZY.getKey(), "Solr");
+                    SolrPropertyKeys.SOLR_DEFAULT_FUZZY.getKey(), "Solr");
         }
 
         // add the relevance if it was passed
