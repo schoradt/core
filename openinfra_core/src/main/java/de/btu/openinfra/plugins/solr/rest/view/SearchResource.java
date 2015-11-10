@@ -20,18 +20,28 @@ import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
  *
  */
 
-@Path("/v1/searchresult")
+@Path(OpenInfraResponseBuilder.REST_URI_SEARCH)
 @Produces(MediaType.TEXT_HTML +
         OpenInfraResponseBuilder.UTF8_CHARSET +
         OpenInfraResponseBuilder.HTML_PRIORITY)
 public class SearchResource {
 
     @GET
+    @Path("/result")
     @Template(name="/views/list/SearchResult.jsp")
-    public String getView(
+    public boolean getView(
             @QueryParam("language") String locale,
             @QueryParam("query") String query) {
-        return query;
+        return true;
+    }
+
+    @GET
+    @Path("/extended")
+    @Template(name="/views/ExtendedSearch.jsp")
+    public boolean getExtSearchView(
+            @QueryParam("language") String locale,
+            @QueryParam("query") String query) {
+        return true;
     }
 }
 

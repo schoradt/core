@@ -196,21 +196,25 @@
 		    	</c:if>
       		</c:forEach>
 		</form>
-      <form class="navbar-form navbar-right" method="get" action="${contextPath}/rest/v1/searchresult" role="search">
+      <form class="navbar-form navbar-right" method="get" onsubmit="return validateForm()" action="${contextPath}/rest/v1/search/result" role="search">
         <div class="form-group">
         <!-- Check the query parameter and create an input field with the query
         	 as value or an input field a placeholder -->
 		  <c:choose>
             <c:when test="${fn:length(param.query) > 0}">
-              <input type="text" class="form-control" name="query" value="${param.query}">
+              <input type="text" class="form-control" id="query" name="query" value="${param.query}">
             </c:when>
             <c:otherwise>
-              <input type="text" class="form-control" name="query" placeholder="<fmt:message key="searchplaceholder.label"/>">
+              <input type="text" class="form-control" id="query" name="query" placeholder="<fmt:message key="searchplaceholder.label"/>">
             </c:otherwise>
           </c:choose>
         </div>
 
         <button type="submit" class="btn btn-default"><fmt:message key="searchbutton.label"/></button>
+        <br />
+        <a href="${contextPath}/rest/v1/search/extended">
+        	<span style="font-size:10pt;"><fmt:message key="search.extended.label"/></span>
+       	</a>
       </form>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->  
@@ -263,29 +267,37 @@
 <%@ include file="ConfirmDialog.jsp" %>
 
 <script>
-$(window).scroll(function() {
-	if($(window).scrollTop() > 30) {
-		$('#header').slideUp();
-	} else {
-		$('#header').slideDown(150);
+	$(window).scroll(function() {
+		if($(window).scrollTop() > 30) {
+			$('#header').slideUp();
+		} else {
+			$('#header').slideDown(150);
+		}
+	});
+	
+	$("#xml").click(function() {
+		getMediaType("xml");
+	});
+	
+	$("#json").click(function() {
+		getMediaType("json");
+	});
+	
+	function getMediaType(type) {
+		$.ajax({
+			url: window.location.href,
+	        dataType: type,
+			type: "GET",
+			cache: false
+		}).done(function(data,status,jqXHR) {
+			alert(jqXHR.responseText);
+		})}; 
+		
+	function validateForm() {
+	    if ($("#query").val() == "") {
+	        return false;
+	    } else {
+	        return true;
+	    }
 	}
-});
-
-$("#xml").click(function() {
-	getMediaType("xml");
-});
-
-$("#json").click(function() {
-	getMediaType("json");
-});
-
-function getMediaType(type) {
-	$.ajax({
-		url: window.location.href,
-        dataType: type,
-		type: "GET",
-		cache: false
-	}).done(function(data,status,jqXHR) {
-		alert(jqXHR.responseText);
-	})}; 
 </script>

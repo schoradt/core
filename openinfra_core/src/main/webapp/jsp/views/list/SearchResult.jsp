@@ -7,14 +7,15 @@
 <html>
 <head>
 	<%@ include file="../../snippets/Head.jsp" %>
-    <title> OpenInfRA <fmt:message key="topiccharacteristics.details.label"/></title>
+    <title> OpenInfRA <fmt:message key="search.results.label"/></title>
 </head>
 <body>
  	<%@ include file="../../snippets/Menu.jsp" %>
  	
- 	Ihre Suche nach <span id="query"><b></b></span> ergab 
- 	<span id="resultCount"><b></b></span> Treffer 
- 	und dauerte <span id="elapsedTime"><b></b></span> Sekunden.
+ 	<fmt:message key="search.statistics">
+ 		<fmt:param><span id="resultCount"><b></b></span></fmt:param>
+ 		<fmt:param><span id="elapsedTime"><b></b></span></fmt:param>
+ 	</fmt:message>
  	<br /><br />
  	
  	<div class="panel-group">
@@ -48,22 +49,47 @@
 	<script language="javascript" type="text/javascript">
 
 		$(document).ready(function() {
-			// save the value of the search field
-		    var searchString = getUrlParameter("query");
-			var start = getUrlParameter("start");
+		    var start = getUrlParameter("start");
 			var rows = getUrlParameter("rows");
+			var data = new Object();
+			var dataParts = [];
+			var dataPart = new Object();
 			
 			// this is just a workaround for the GUI
 			if (start == null || start < 0) { start = 0; }
 			if (rows == null || rows < 0) { rows = 20; }
-	    
-		    if (searchString != "") {
+			
+			// determine from which document we come from and build the data 
+			// object with the information from the input field
+		    if (document.referrer.indexOf("search/extended") > 0) {
+		        // iterate over value of the counter parameter
+		        for(var i = 1; i <= getUrlParameter("hc"); i++) {
+		            dataPart = new Object();
+			        dataPart["mandatory"] = getUrlParameter("m"+i);
+			        dataPart["attributeType"] = getUrlParameter("at"+i);
+			        dataPart["relationalOperator"] = getUrlParameter("ro"+i);
+			        dataPart["attributeValue"] = getUrlParameter("av"+i);
+			        dataPart["tillAttributeValue"] = getUrlParameter("tav"+i);
+			        dataPart["logicOperator"] = getUrlParameter("lo"+i);
+			        dataPart["relevance"] = getUrlParameter("r"+i);
+			        if (getUrlParameter("f"+i) == null) {
+			            dataPart["fuzziness"] = false;
+			        } else {
+			            dataPart["fuzziness"] = true;
+			        }
+			        
+			        dataParts.push(dataPart);
+		        }
+
+		        // add all parts to the data object
+		        data["complexQueryPart"] = dataParts;
+		    } else {
+			    data["rawSolrQuery"] = getUrlParameter("query");
+		    }
+			
+		    if (data["rawSolrQuery"] != "" || data["complexQueryPart"] != null && data["complexQueryPart"][0]["attributeValue"] != "") {
 		     	// create the base path of the application
 				var searchPath = "${contextPath}/rest/v1/search?language=de-DE&start="+ start +"&rows="+ rows;
-				var data = new Object();
-				
-				// build the data object with the information from the input field
-				data["rawSolrQuery"] = searchString;
 				
 				// set the new data
 				$.ajax({
@@ -73,7 +99,7 @@
 					contentType: "application/json; charset=utf-8",
 					cache: false,
 			 		error: function(xhr){
-			 			alert("fail");
+			 		    $("#url").hide();
 				  	}, // end error
 					success: function(result) {
 					    // write the results
@@ -81,7 +107,7 @@
 					        addLine(result["databaseResult"][key]);
 					    }
 					    // write the query
-					    $("#query b").text(searchString);
+					    //$("#query b").text(searchString);
 					    
 						// write the result count
 						$("#resultCount b").text(result["resultCount"]);
@@ -93,36 +119,46 @@
 					    $("#url").hide();
 					} // end success
 			  	}); // end ajax call
+			} else {
+			    // write the result count
+				$("#resultCount b").text("0");
+			    
+			    // write the elapsed time
+			    $("#elapsedTime b").text("-1");
+			    // hide the loading image
+			    $("#url").hide();
+			    
 			}
+			
 		});
 		
 		function addLine(result) {
-		    var tr = document.createElement("tr");
 		    var tiPath = "${contextPath}/rest/v1/projects/";
+		    var tmpLabel = "inWork";
+		    
+		    // create the tr element and add a working label id
+		    $("#results").append("<tr id=\"" + tmpLabel + "\"></tr>");
 		    
 		    for (var key in result) {
-		        var td = document.createElement("td");
-		        
-		        if (key == "highlight") {
-		            for (var hl in result[key]) {
-		                var t = document.createTextNode(hl + ": " + result[key][hl]);
-		                td.appendChild(t);
-		            }
+        		if (key == "highlight") {
+        		    var text = "";
+        		    for (var hl in result[key]) {
+        		    	text += hl +":"+ result[key][hl] + " ... ";
+        		    }
+        		    
+        		    $("#"+ tmpLabel).append("<td>"+ text.substring(0, text.length - 4) +"</td>");
+        		    
 		        } else {
-		    		var t = document.createTextNode(result[key]);
-		    		if(key =="topicInstanceId") {
-		    		    var a = document.createElement("a");
-		    		    a.setAttribute('href', tiPath + result["projectId"] + "/topicinstances/" + result[key] + "/topic");
-		    		    a.appendChild(t);
-		    		    t = a;
-		    		}
-		    		td.appendChild(t);
-		    	}
-			    tr.appendChild(td);
+		            var res = result[key];
+		            if(key =="topicInstanceId") {
+		                res = "<a href=\""+ tiPath + result["projectId"] + "/topicinstances/" + result[key] + "/topic\" >"+ res +"</a>";
+		            }
+		            $("#"+tmpLabel).append("<td>"+ res +"</td>");
+		        }
 		    }
 		    
-		    tr.appendChild(td);
-		    document.getElementById("results").appendChild(tr);
+		    // remove the working label
+		    $("#"+ tmpLabel).removeAttr("id");
 		    
 		};
 		
@@ -131,7 +167,7 @@
 		        sURLVariables = sPageURL.split('&'),
 		        sParameterName,
 		        i;
-
+				
 		    for (i = 0; i < sURLVariables.length; i++) {
 		        sParameterName = sURLVariables[i].split('=');
 
