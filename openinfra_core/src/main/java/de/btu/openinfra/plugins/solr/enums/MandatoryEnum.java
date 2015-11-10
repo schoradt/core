@@ -7,6 +7,7 @@ package de.btu.openinfra.plugins.solr.enums;
  */
 public enum MandatoryEnum {
 
+    NEVER_MIND(""),
     MUST_NOT("-"),
     MUST("+");
 
