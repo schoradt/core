@@ -98,6 +98,31 @@ public class ValueListResource {
 						size);
 	}
 
+	@POST
+    @Path("{valueListId}/associations")
+    public Response create(
+            @Context UriInfo uriInfo,
+            @Context HttpServletRequest request,
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            @PathParam("valueListId") UUID valueListId,
+            ValueListAssociationPojo pojo) {
+        return OpenInfraResponseBuilder.postResponse(
+                new ValueListAssociationRbac(
+                        projectId,
+                        OpenInfraSchemas.valueOf(schema.toUpperCase())
+                        ).createOrUpdate(
+                                OpenInfraHttpMethod.valueOf(
+                                        request.getMethod()),
+                                uriInfo,
+                                pojo,
+                                valueListId,
+                                pojo.getAssociationValueListId(),
+                                null,
+                                null,
+                                pojo.getMetaData()));
+	}
+
 	@GET
     @Path("{valueListId}/associations/count")
 	@Produces({MediaType.TEXT_PLAIN})
@@ -138,6 +163,52 @@ public class ValueListResource {
 						offset,
 						size);
 	}
+
+	@PUT
+	@Path("{valueListId}/associations/{associatedValueListId}")
+    public Response update(
+            @Context UriInfo uriInfo,
+            @Context HttpServletRequest request,
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            @PathParam("valueListId") UUID valueListId,
+            @PathParam("associatedValueListId") UUID associatedValueListId,
+            ValueListAssociationPojo pojo) {
+        return OpenInfraResponseBuilder.postResponse(
+                new ValueListAssociationRbac(
+                        projectId,
+                        OpenInfraSchemas.valueOf(schema.toUpperCase())
+                        ).createOrUpdate(
+                                OpenInfraHttpMethod.valueOf(
+                                        request.getMethod()),
+                                uriInfo,
+                                pojo,
+                                valueListId,
+                                pojo.getAssociationValueListId(),
+                                associatedValueListId,
+                                pojo.getAssociatedValueList().getUuid(),
+                                pojo.getMetaData()));
+    }
+
+    @DELETE
+    @Path("{valueListId}/associations/{associatedValueListId}")
+    public Response delete(
+            @Context UriInfo uriInfo,
+            @Context HttpServletRequest request,
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            @PathParam("valueListId") UUID valueListId,
+            @PathParam("associatedValueListId") UUID associatedValueListId) {
+        return OpenInfraResponseBuilder.deleteResponse(
+                new ValueListAssociationRbac(
+                        projectId,
+                        OpenInfraSchemas.valueOf(schema.toUpperCase())).delete(
+                                OpenInfraHttpMethod.valueOf(
+                                      request.getMethod()),
+                                uriInfo,
+                                valueListId,
+                                associatedValueListId));
+    }
 
 	@POST
 	public Response createValueList(
