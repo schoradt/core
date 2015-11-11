@@ -12,6 +12,7 @@ import javax.persistence.ParameterMode;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
 
+import jersey.repackaged.com.google.common.collect.Lists;
 import de.btu.openinfra.backend.OpenInfraProperties;
 import de.btu.openinfra.backend.OpenInfraPropertyKeys;
 import de.btu.openinfra.backend.db.MappingResult;
@@ -42,7 +43,6 @@ import de.btu.openinfra.backend.exception.OpenInfraDatabaseException;
 import de.btu.openinfra.backend.exception.OpenInfraEntityException;
 import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 import de.btu.openinfra.backend.exception.OpenInfraWebException;
-import jersey.repackaged.com.google.common.collect.Lists;
 
 /**
  * This class represents the Project and is used to access the underlying layer
@@ -533,9 +533,9 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
                 // retrieve the default credentials
                 CredentialsPojo credentialsPojo = new CredentialsPojo();
                 credentialsPojo.setPassword(OpenInfraProperties.getProperty(
-                        OpenInfraPropertyKeys.PASSWORD.toString()));
+                        OpenInfraPropertyKeys.PASSWORD.getKey()));
                 credentialsPojo.setUsername(OpenInfraProperties.getProperty(
-                        OpenInfraPropertyKeys.USER.toString()));
+                        OpenInfraPropertyKeys.USER.getKey()));
                 // check if credentials for the default user and password exists
                 // and save the id into the credentials POJO
                 try {
@@ -549,12 +549,12 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
                                           "username",
                                           OpenInfraProperties.getProperty(
                                                   OpenInfraPropertyKeys.USER
-                                                  .toString()))
+                                                  .getKey()))
                                   .setParameter(
                                           "password",
                                           OpenInfraProperties.getProperty(
                                                   OpenInfraPropertyKeys.PASSWORD
-                                                  .toString()))
+                                                  .getKey()))
                                   .getSingleResult()).getUuid());
                 } catch(NoResultException nre){
                     // their is no entry in the database, create a new one
@@ -566,7 +566,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
                 // retrieve the default port
                 PortsPojo portsPojo = new PortsPojo();
                 portsPojo.setPort(new Integer(OpenInfraProperties.getProperty(
-                        OpenInfraPropertyKeys.PORT.toString())));
+                        OpenInfraPropertyKeys.PORT.getKey())));
                 // check if ports for the default port exists and save the id
                 // into the port POJO
                 try {
@@ -583,7 +583,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
                                                   .getProperty(
                                                           OpenInfraPropertyKeys
                                                           .PORT
-                                                          .toString())))
+                                                          .getKey())))
                                   .getSingleResult()).getUuid());
                 } catch (NoResultException nre) {
                     // their is no entry in the database, create a new one
@@ -594,7 +594,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
                 // retrieve the default database
                 DatabasesPojo databasesPojo = new DatabasesPojo();
                 databasesPojo.setDatabase(OpenInfraProperties.getProperty(
-                        OpenInfraPropertyKeys.DB_NAME.toString()));
+                        OpenInfraPropertyKeys.DB_NAME.getKey()));
                 // check if databases for the default database exists and save
                 // the id into the database POJO
                 try {
@@ -608,7 +608,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
                                           "database",
                                           OpenInfraProperties.getProperty(
                                                   OpenInfraPropertyKeys.DB_NAME
-                                                  .toString()))
+                                                  .getKey()))
                                   .getSingleResult()).getUuid());
                 } catch (NoResultException nre) {
                     // their is no entry in the database, create a new one
@@ -619,7 +619,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
                 // retrieve the default server
                 ServersPojo serversPojo = new ServersPojo();
                 serversPojo.setServer(OpenInfraProperties.getProperty(
-                        OpenInfraPropertyKeys.SERVER.toString()));
+                        OpenInfraPropertyKeys.SERVER.getKey()));
                 // check if servers for the default server exists and save the
                 // id into the server POJO
                 try {
@@ -633,7 +633,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
                                           "server",
                                           OpenInfraProperties.getProperty(
                                                   OpenInfraPropertyKeys.SERVER
-                                                  .toString()))
+                                                  .getKey()))
                                   .getSingleResult()).getUuid());
                 } catch (NoResultException nre) {
                     // their is no entry in the database, create a new one

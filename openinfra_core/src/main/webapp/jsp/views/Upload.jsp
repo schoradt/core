@@ -178,7 +178,7 @@ ChunkedUploader.prototype = {
 </head>
 <body>
 	<%@ include file="../snippets/Menu.jsp" %>
-	<h1>Unterscheidung zwischen zwei Upload-Methoden aus technischen Gründen!</h1>
+	<!-- h1>Unterscheidung zwischen zwei Upload-Methoden aus technischen Gründen!</h1>
 	<br/>
 	<br/>
 	<h2>Browser-basierter Upload für mehrere Dateien:</h2>
@@ -188,7 +188,7 @@ ChunkedUploader.prototype = {
 		<input type="submit" value="Upload It" />
 	</form>
 	
-	<hr/>
+	<hr/-->
 	<h2>JavaScript-basierter (chunked) Upload für mehrere Dateien 
 	<br/> (intern wird für jede Datei ein eigenständiger POST ausgelöst):</h2>
 	<form id="upload_form" action="./upload" method="post">
