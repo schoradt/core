@@ -23,10 +23,9 @@
 					PageContext.SESSION_SCOPE);
 } %>
 <!-- Set the current project -->
-<c:set var="currentProject" scope="page">
-<%= ProjectDao.getCurrentProject(
-		request.getAttribute("javax.servlet.forward.request_uri").toString()) %>
-</c:set>
+<c:set var="currentProject" value=""/>
+<% pageContext.setAttribute("currentProject", ProjectDao.getCurrentProject(
+		request.getAttribute("javax.servlet.forward.request_uri").toString())); %>
 
 <!-- a global variable that defines if we are in a project or in the system database -->
 <c:choose>
