@@ -118,6 +118,22 @@ public class OpenInfraResponseBuilder {
 	}
 
 	/**
+	 * This method builds a response for delete requests.
+	 *
+	 * @param id the id of the deleted object
+	 * @return a specific and pre-build response
+	 */
+	public static Response deleteResponse(UUID id) {
+	    if(id != null) {
+	        return Response.ok().entity(
+	                new OpenInfraResultMessage("Entity deleted", id)).build();
+	    }
+	    else {
+	        return Response.status(Response.Status.NOT_FOUND).build();
+	    }
+	}
+
+	/**
 	 * This method builds a response for get requests.
 	 *
 	 * @param  result the object that should be returned
