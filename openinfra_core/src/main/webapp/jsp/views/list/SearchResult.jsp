@@ -45,7 +45,12 @@
 	<div class="urlImageContainer">
 		<img id="url" align="middle" src="${contextPath}/img/url.gif"/>
 	</div>
-		
+	
+	<nav>
+  		<ul class="pager">
+  		</ul>
+	</nav>
+    
 	<script language="javascript" type="text/javascript">
 
 		$(document).ready(function() {
@@ -99,24 +104,22 @@
 					contentType: "application/json; charset=utf-8",
 					cache: false,
 			 		error: function(xhr){
-			 		    $("#url").hide();
+			 		   $(".urlImageContainer").remove();
 				  	}, // end error
 					success: function(result) {
 					    // write the results
 					    for (var key in result["databaseResult"]) {
 					        addLine(result["databaseResult"][key]);
 					    }
-					    // write the query
-					    //$("#query b").text(searchString);
-					    
 						// write the result count
 						$("#resultCount b").text(result["resultCount"]);
+						createPagination(result["resultCount"], start, rows);
 					    
 					    // write the elapsed time
 					    $("#elapsedTime b").text(result["elapsedTime"]/1000);
 					    
 					    // hide the loading image
-					    $("#url").hide();
+					    $(".urlImageContainer").remove();
 					} // end success
 			  	}); // end ajax call
 			} else {
@@ -126,10 +129,9 @@
 			    // write the elapsed time
 			    $("#elapsedTime b").text("-1");
 			    // hide the loading image
-			    $("#url").hide();
+			    $(".urlImageContainer").remove();
 			    
 			}
-			
 		});
 		
 		function addLine(result) {
@@ -176,6 +178,33 @@
 		        }
 		    }
 		};
+		
+		function createPagination(count, start, rows) {
+		    var resultsPerPage = 20;
+		    var pages = count % resultsPerPage;
+		    var url = window.location.href;
+			var disableA = "style=\"pointer-events:none;";
+			var prevDisabled = "";
+			var nextDisabled = "";
+			
+		    var prev = 0;
+			var next = 0;
+			
+		    next = parseInt(start) + parseInt(rows);
+		    prev = parseInt(start) - parseInt(rows);
+		    
+		    
+		    if (prev < 0) {
+				prevDisabled = disableA;
+		    }
+		    
+		    if (next >= count) {
+				nextDisabled = disableA;
+		    }
+		    
+		    $(".pager").append("<li><a "+ prevDisabled +" href=\""+ url.replace(/start=\d+/g, "start="+ prev) +"\" >Previous</a></li>");
+		    $(".pager").append("<li><a "+ nextDisabled +" href=\""+ url.replace(/start=\d+/g, "start="+ next) +"\" >Next</a></li>");
+		}
 	</script>
 	
 </body>

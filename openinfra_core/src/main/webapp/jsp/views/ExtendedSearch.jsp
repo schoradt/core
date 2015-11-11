@@ -19,6 +19,8 @@
  	<form method="GET" action="${contextPath}/rest/v1/search/result">
 		<div class="form-group form-left">
 			<input id="hiddenCounter" name="hc" type="hidden" value="0"></input>
+			<input name="start" type="hidden" value="0"></input>
+			<input name="rows" type="hidden" value="20"></input>
 			<table class="table">
 				<tbody id="fields">
 					

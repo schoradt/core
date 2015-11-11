@@ -198,6 +198,8 @@
 		</form>
       <form class="navbar-form navbar-right" method="get" onsubmit="return validateForm()" action="${contextPath}/rest/v1/search/result" role="search">
         <div class="form-group">
+        	<input name="start" type="hidden" value="0"></input>
+			<input name="rows" type="hidden" value="20"></input>
         <!-- Check the query parameter and create an input field with the query
         	 as value or an input field a placeholder -->
 		  <c:choose>
