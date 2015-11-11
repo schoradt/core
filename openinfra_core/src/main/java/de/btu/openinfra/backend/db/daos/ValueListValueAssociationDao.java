@@ -73,6 +73,8 @@ public class ValueListValueAssociationDao
 			ValueListValueAssociationPojo pojo =
 					new ValueListValueAssociationPojo(vlvxvlv, mdDao);
 
+			pojo.setAssociationValueListValueId(
+			        vlvxvlv.getValueListValue2().getId());
 			pojo.setRelationship(ValueListValueDao.mapToPojoStatically(locale,
 					vlvxvlv.getValueListValue1(), null));
 			pojo.setAssociatedValueListValue(
