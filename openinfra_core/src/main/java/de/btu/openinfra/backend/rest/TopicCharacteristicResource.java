@@ -205,18 +205,20 @@ public class TopicCharacteristicResource {
             @PathParam("schema") String schema,
             @PathParam("topicCharacteristicId") UUID topicCharacteristicId,
             RelationshipTypeToTopicCharacteristicPojo pojo) {
-        UUID id = new RelationshipTypeToTopicCharacteristicRbac(
-                projectId,
-                OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
-                        OpenInfraHttpMethod.valueOf(request.getMethod()),
-                        uriInfo,
-                        pojo,
-                        topicCharacteristicId,
-                        pojo.getTopicCharacteristicId(),
-                        null,
-                        null,
-                        pojo.getMetaData());
-        return OpenInfraResponseBuilder.postResponse(id);
+        return OpenInfraResponseBuilder.postResponse(
+                new RelationshipTypeToTopicCharacteristicRbac(
+                        projectId,
+                        OpenInfraSchemas.valueOf(schema.toUpperCase())
+                        ).createOrUpdate(
+                                OpenInfraHttpMethod.valueOf(
+                                        request.getMethod()),
+                                uriInfo,
+                                pojo,
+                                topicCharacteristicId,
+                                pojo.getTopicCharacteristicId(),
+                                null,
+                                null,
+                                pojo.getMetaData()));
     }
 
 	@GET
