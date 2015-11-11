@@ -17,7 +17,8 @@ public class MetaDataPojo extends OpenInfraPojo {
     private JSONObject data;
 
     /* Default constructor */
-    public MetaDataPojo() {}
+    public MetaDataPojo() {
+    }
 
     /* Constructor that will set the id and trid data automatically */
     public MetaDataPojo(OpenInfraModelObject modelObject) {

@@ -69,6 +69,7 @@
             <th>Description</th>
         </tr>
         <xsl:for-each select="wadl:resources/wadl:resource">
+        	<xsl:sort select="@path" />
             <xsl:call-template name="processResourceSummary">
                 <xsl:with-param name="resourceBase" select="$g_resourcesBase"/>
                 <xsl:with-param name="resourcePath" select="@path"/>

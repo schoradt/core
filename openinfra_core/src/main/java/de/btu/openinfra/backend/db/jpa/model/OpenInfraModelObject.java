@@ -3,8 +3,12 @@ package de.btu.openinfra.backend.db.jpa.model;
 import java.util.UUID;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+
+import org.eclipse.persistence.annotations.ReturnInsert;
+import org.eclipse.persistence.annotations.ReturnUpdate;
 
 /**
  * This abstract class is manually added to the set of automatically generated
@@ -22,6 +26,11 @@ public abstract class OpenInfraModelObject {
     @Id
     private UUID id;
 
+    @ReturnInsert(returnOnly=true)
+    // TODO updates the attribute 'xmin' of the model object after an update
+    // operation of the model object (remove if it is not necessary)
+    @ReturnUpdate
+    @Convert(converter = de.btu.openinfra.backend.db.converter.PostgresIntegerConverter.class)
     @Column(insertable = false)
     private Integer xmin;
 

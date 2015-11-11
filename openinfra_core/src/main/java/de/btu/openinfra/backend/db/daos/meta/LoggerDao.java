@@ -1,12 +1,15 @@
 package de.btu.openinfra.backend.db.daos.meta;
 
 import java.util.Locale;
+import java.util.UUID;
 
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
 import de.btu.openinfra.backend.db.jpa.model.meta.Logger;
 import de.btu.openinfra.backend.db.pojos.meta.LoggerPojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 /**
  * This class represents the Logger and is used to access the underlying layer
@@ -21,16 +24,16 @@ public class LoggerDao
     /**
      * This is the required constructor which calls the super constructor and in
      * turn creates the corresponding entity manager.
-     *
+     * @param currentProjectId The identifier of the current project.
      * @param schema           the required schema
      */
-    public LoggerDao(OpenInfraSchemas schema) {
-        super(null, schema, Logger.class);
+    public LoggerDao(UUID currentProjectId, OpenInfraSchemas schema) {
+        super(null, OpenInfraSchemas.META_DATA, Logger.class);
     }
 
     @Override
     public LoggerPojo mapToPojo(Locale locale, Logger l) {
-        return mapPojoStatically(l);
+        return mapToPojoStatically(l);
     }
 
     /**
@@ -39,7 +42,7 @@ public class LoggerDao
      * @param at     the model object
      * @return       the POJO object when the model object is not null else null
      */
-    public static LoggerPojo mapPojoStatically(Logger l) {
+    public static LoggerPojo mapToPojoStatically(Logger l) {
         if (l != null) {
             LoggerPojo pojo = new LoggerPojo(l);
             pojo.setLogger(l.getLogger());
@@ -64,35 +67,23 @@ public class LoggerDao
      * This method implements the method mapToModel in a static way.
      * @param pojo the POJO object
      * @param logger the pre initialized model object
-     * @return return a corresponding JPA model object or null if the pojo
-     * object is null
+     * @return return a corresponding JPA model object
+     * @throws OpenInfraEntityException
      */
     public static Logger mapToModelStatically(LoggerPojo pojo, Logger logger) {
         Logger resultLogger = null;
-        if(pojo != null) {
+        try {
             resultLogger = logger;
             if(resultLogger == null) {
                 resultLogger = new Logger();
                 resultLogger.setId(pojo.getUuid());
             }
             resultLogger.setLogger(pojo.getLogger());
+        } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
         }
         return resultLogger;
     }
 
-    /**
-     * Creates an empty logger pojo.
-     * @return an empty logger pojo
-     */
-    public LoggerPojo newLogger() {
-        return newPojoStatically();
-    }
-
-    /**
-     * This method implements the method newLogger in a static way.
-     * @return an empty level pojo
-     */
-    public static LoggerPojo newPojoStatically() {
-        return new LoggerPojo();
-    }
 }

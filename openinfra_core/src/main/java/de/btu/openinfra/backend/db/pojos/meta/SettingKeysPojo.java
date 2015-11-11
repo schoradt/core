@@ -8,7 +8,8 @@ public class SettingKeysPojo extends OpenInfraPojo {
     private String key;
 
     /* Default constructor */
-    public SettingKeysPojo() {}
+    public SettingKeysPojo() {
+    }
 
     /* Constructor that will set the id, trid and meta data automatically */
     public SettingKeysPojo(OpenInfraModelObject modelObject) {

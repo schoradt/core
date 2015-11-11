@@ -1,28 +1,31 @@
 package de.btu.openinfra.backend.db.daos.meta;
 
 import java.util.Locale;
+import java.util.UUID;
 
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
 import de.btu.openinfra.backend.db.jpa.model.meta.SettingKeys;
 import de.btu.openinfra.backend.db.pojos.meta.SettingKeysPojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 public class SettingKeysDao extends OpenInfraDao<SettingKeysPojo, SettingKeys> {
 
     /**
      * This is the required constructor which calls the super constructor and in
      * turn creates the corresponding entity manager.
-     *
+     * @param currentProjectId The identifier of the current project.
      * @param schema           the required schema
      */
-    public SettingKeysDao(OpenInfraSchemas schema) {
-        super(null, schema, SettingKeys.class);
+    public SettingKeysDao(UUID currentProjectId, OpenInfraSchemas schema) {
+        super(null, OpenInfraSchemas.META_DATA, SettingKeys.class);
     }
 
     @Override
     public SettingKeysPojo mapToPojo(Locale locale, SettingKeys sk) {
-        return mapPojoStatically(sk);
+        return mapToPojoStatically(sk);
     }
 
     /**
@@ -31,7 +34,7 @@ public class SettingKeysDao extends OpenInfraDao<SettingKeysPojo, SettingKeys> {
      * @param sk     the model object
      * @return       the POJO object when the model object is not null else null
      */
-    public static SettingKeysPojo mapPojoStatically(SettingKeys sk) {
+    public static SettingKeysPojo mapToPojoStatically(SettingKeys sk) {
         if (sk != null) {
             SettingKeysPojo pojo = new SettingKeysPojo(sk);
             pojo.setKey(sk.getKey());
@@ -58,38 +61,25 @@ public class SettingKeysDao extends OpenInfraDao<SettingKeysPojo, SettingKeys> {
      * This method implements the method mapToModel in a static way.
      * @param pojo the POJO object
      * @param sk the pre initialized model object
-     * @return return a corresponding JPA model object or null if the pojo
-     * object is null
+     * @return return a corresponding JPA model object
+     * @throws OpenInfraEntityException
      */
     public static SettingKeys mapToModelStatically(
             SettingKeysPojo pojo,
             SettingKeys sk) {
         SettingKeys resultSettingKeys = null;
-        if(pojo != null) {
+        try {
             resultSettingKeys = sk;
             if(resultSettingKeys == null) {
                 resultSettingKeys = new SettingKeys();
                 resultSettingKeys.setId(pojo.getUuid());
             }
             resultSettingKeys.setKey(pojo.getKey());
+        } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
         }
         return resultSettingKeys;
-    }
-
-    /**
-     * Creates an empty setting keys pojo.
-     * @return an empty setting keys pojo
-     */
-    public SettingKeysPojo newSettingKeys() {
-       return newPojoStatically();
-    }
-
-    /**
-     * This method implements the method newSettingKeys in a static way.
-     * @return an empty setting keys pojo
-     */
-    public static SettingKeysPojo newPojoStatically() {
-        return new SettingKeysPojo();
     }
 
 }

@@ -12,7 +12,8 @@ public class CredentialsPojo extends OpenInfraPojo {
     private String password;
 
     /* Default constructor */
-    public CredentialsPojo() {}
+    public CredentialsPojo() {
+    }
 
     /* Constructor that will set the id, trid and meta data automatically */
     public CredentialsPojo(OpenInfraModelObject modelObject) {

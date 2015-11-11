@@ -9,6 +9,8 @@ import de.btu.openinfra.backend.db.jpa.model.AttributeType;
 import de.btu.openinfra.backend.db.jpa.model.AttributeTypeXAttributeType;
 import de.btu.openinfra.backend.db.jpa.model.ValueListValue;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeAssociationPojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 /**
  * This class represents the AttributeTypeAssociation and is used to access the
@@ -49,19 +51,23 @@ public class AttributeTypeAssociationDao
 			AttributeTypeAssociationPojo pojo,
 			AttributeTypeXAttributeType atxat) {
 
-        // set the first attribute type
-        atxat.setAttributeType1Bean(em.find(
-                AttributeType.class, pojo.getAssociationAttributeTypeId()));
+	    try {
+            // set the first attribute type
+            atxat.setAttributeType1Bean(em.find(
+                    AttributeType.class, pojo.getAssociationAttributeTypeId()));
 
-        // set the related attribute type
-        atxat.setAttributeType2Bean(em.find(
-                AttributeType.class,
-                pojo.getAssociatedAttributeType().getUuid()));
+            // set the related attribute type
+            atxat.setAttributeType2Bean(em.find(
+                    AttributeType.class,
+                    pojo.getAssociatedAttributeType().getUuid()));
 
-        // set the relationship
-        atxat.setValueListValue(em.find(
-                ValueListValue.class, pojo.getRelationship().getUuid()));
-
+            // set the relationship
+            atxat.setValueListValue(em.find(
+                    ValueListValue.class, pojo.getRelationship().getUuid()));
+	    } catch (NullPointerException npe) {
+	        throw new OpenInfraEntityException(
+	                OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
+	    }
         // return the model as mapping result
         return new MappingResult<AttributeTypeXAttributeType>(
                 atxat.getId(), atxat);
@@ -103,20 +109,4 @@ public class AttributeTypeAssociationDao
 		}
 	}
 
-	/**
-     * This method creates a AttributeTypeAssociationPojo shell that contains
-     * informations about the attribute type the association starts from.
-     *
-     * @param attributeTypeId the attribute type id the association starts from
-     * @return                the AttributeTypePojo
-     */
-    public AttributeTypeAssociationPojo newAttributeTypeAssociation(
-            UUID attributeTypeId) {
-        // create the return pojo
-        AttributeTypeAssociationPojo pojo = new AttributeTypeAssociationPojo();
-
-        //pojo.set
-
-        return pojo;
-    }
 }

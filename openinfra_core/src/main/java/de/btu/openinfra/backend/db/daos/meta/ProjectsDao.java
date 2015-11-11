@@ -1,12 +1,15 @@
 package de.btu.openinfra.backend.db.daos.meta;
 
 import java.util.Locale;
+import java.util.UUID;
 
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
 import de.btu.openinfra.backend.db.jpa.model.meta.Projects;
 import de.btu.openinfra.backend.db.pojos.meta.ProjectsPojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 /**
  * This class represents the Projects and is used to access the underlying
@@ -21,16 +24,16 @@ public class ProjectsDao
     /**
      * This is the required constructor which calls the super constructor and in
      * turn creates the corresponding entity manager.
-     *
+     * @param currentProjectId The identifier of the current project.
      * @param schema           the required schema
      */
-    public ProjectsDao(OpenInfraSchemas schema) {
-        super(null, schema, Projects.class);
+    public ProjectsDao(UUID currentProjectId, OpenInfraSchemas schema) {
+        super(null, OpenInfraSchemas.META_DATA, Projects.class);
     }
 
     @Override
     public ProjectsPojo mapToPojo(Locale locale, Projects p) {
-        return mapPojoStatically(p);
+        return mapToPojoStatically(p);
     }
 
     /**
@@ -39,11 +42,12 @@ public class ProjectsDao
      * @param p      the model object
      * @return       the POJO object when the model object is not null else null
      */
-    public static ProjectsPojo mapPojoStatically(Projects p) {
+    public static ProjectsPojo mapToPojoStatically(Projects p) {
         if (p != null) {
             ProjectsPojo pojo = new ProjectsPojo(p);
+            pojo.setProjectId(p.getProjectId());
             pojo.setDatabaseConnection(
-                    DatabaseConnectionDao.mapPojoStatically(
+                    DatabaseConnectionDao.mapToPojoStatically(
                             p.getDatabaseConnection()));
             pojo.setIsSubproject(p.getIsSubproject());
             return pojo;
@@ -67,43 +71,29 @@ public class ProjectsDao
      * This method implements the method mapToModel in a static way.
      * @param pojo the POJO object
      * @param projects the pre initialized model object
-     * @return return a corresponding JPA model object or null if the pojo
-     * object is null
+     * @return return a corresponding JPA model object
+     * @throws OpenInfraEntityException
      */
     public static Projects mapToModelStatically(
             ProjectsPojo pojo, Projects projects) {
         Projects resultProjects = null;
-        if(pojo != null) {
+        try {
             resultProjects = projects;
             if(resultProjects == null) {
                 resultProjects = new Projects();
                 resultProjects.setId(pojo.getUuid());
             }
+            resultProjects.setProjectId(pojo.getProjectId());
             resultProjects.setIsSubproject(pojo.getIsSubproject());
             resultProjects.setDatabaseConnection(
                     DatabaseConnectionDao.mapToModelStatically(
                             pojo.getDatabaseConnection(),
                             null));
+        } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
         }
         return resultProjects;
     }
 
-    /**
-     * Creates an empty projects pojo.
-     * @return an empty projects pojo
-     */
-    public ProjectsPojo newProjects() {
-       return newPojoStatically();
-    }
-
-    /**
-     * This method implements the method newProjects in a static way.
-     * @return an empty projects pojo
-     */
-    public static ProjectsPojo newPojoStatically() {
-        ProjectsPojo newProjectsPojo = new ProjectsPojo();
-        newProjectsPojo.setDatabaseConnection(
-                DatabaseConnectionDao.newPojoStatically());
-        return newProjectsPojo;
-    }
 }

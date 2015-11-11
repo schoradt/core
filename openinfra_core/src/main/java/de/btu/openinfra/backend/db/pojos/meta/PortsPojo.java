@@ -11,7 +11,8 @@ public class PortsPojo extends OpenInfraPojo {
     private Integer port;
 
     /* Default constructor */
-    public PortsPojo() {}
+    public PortsPojo() {
+    }
 
     /* Constructor that will set the id, trid and meta data automatically */
     public PortsPojo(OpenInfraModelObject modelObject) {

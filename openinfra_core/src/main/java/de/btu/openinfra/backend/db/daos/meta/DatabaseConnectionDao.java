@@ -1,12 +1,15 @@
 package de.btu.openinfra.backend.db.daos.meta;
 
 import java.util.Locale;
+import java.util.UUID;
 
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
 import de.btu.openinfra.backend.db.jpa.model.meta.DatabaseConnection;
 import de.btu.openinfra.backend.db.pojos.meta.DatabaseConnectionPojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 /**
  * This class represents the DatabaseConnection and is used to access the
@@ -21,17 +24,19 @@ public class DatabaseConnectionDao
     /**
      * This is the required constructor which calls the super constructor and in
      * turn creates the corresponding entity manager.
-     *
+     * @param currentProjectId The identifier of the current project.
      * @param schema           the required schema
      */
-    public DatabaseConnectionDao(OpenInfraSchemas schema) {
-        super(null, schema, DatabaseConnection.class);
+    public DatabaseConnectionDao(
+            UUID currentProjectId,
+            OpenInfraSchemas schema) {
+        super(null, OpenInfraSchemas.META_DATA, DatabaseConnection.class);
     }
 
     @Override
     public DatabaseConnectionPojo mapToPojo(Locale locale,
             DatabaseConnection dc) {
-        return mapPojoStatically(dc);
+        return mapToPojoStatically(dc);
     }
 
     /**
@@ -40,16 +45,16 @@ public class DatabaseConnectionDao
      * @param at     the model object
      * @return       the POJO object when the model object is not null else null
      */
-    public static DatabaseConnectionPojo mapPojoStatically(
+    public static DatabaseConnectionPojo mapToPojoStatically(
             DatabaseConnection dc) {
         if (dc != null) {
             DatabaseConnectionPojo pojo = new DatabaseConnectionPojo(dc);
-            pojo.setServer(ServersDao.mapPojoStatically(dc.getServerBean()));
-            pojo.setPort(PortsDao.mapPojoStatically(dc.getPortBean()));
-            pojo.setDatabase(DatabasesDao.mapPojoStatically(
+            pojo.setServer(ServersDao.mapToPojoStatically(dc.getServerBean()));
+            pojo.setPort(PortsDao.mapToPojoStatically(dc.getPortBean()));
+            pojo.setDatabase(DatabasesDao.mapToPojoStatically(
                     dc.getDatabaseBean()));
-            pojo.setSchema(SchemasDao.mapPojoStatically(dc.getSchemaBean()));
-            pojo.setCredentials(CredentialsDao.mapPojoStatically(
+            pojo.setSchema(SchemasDao.mapToPojoStatically(dc.getSchemaBean()));
+            pojo.setCredentials(CredentialsDao.mapToPojoStatically(
                     dc.getCredential()));
             return pojo;
         } else {
@@ -74,14 +79,15 @@ public class DatabaseConnectionDao
      * This method implements the method mapToModel in a static way.
      * @param pojo the POJO object
      * @param dbc the pre initialized model object
-     * @return return a corresponding JPA model object or null if the pojo
-     * object is null
+     * @return return a corresponding JPA model object
+     * @throws OpenInfraEntityException
      */
     public static DatabaseConnection mapToModelStatically(
             DatabaseConnectionPojo pojo,
             DatabaseConnection dbc) {
         DatabaseConnection resultDatabaseConnection = null;
-        if(pojo != null) {
+
+        try {
             resultDatabaseConnection = dbc;
             if(resultDatabaseConnection == null) {
                 resultDatabaseConnection = new DatabaseConnection();
@@ -101,39 +107,11 @@ public class DatabaseConnectionDao
                     SchemasDao.mapToModelStatically(pojo.getSchema(), null));
             resultDatabaseConnection.setServerBean(
                     ServersDao.mapToModelStatically(pojo.getServer(), null));
-
+        } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
         }
         return resultDatabaseConnection;
-    }
-
-    /**
-     * Creates an empty database connection pojo.
-     * @return an empty database connection pojo
-     */
-    public DatabaseConnectionPojo newDatabaseConnection() {
-       return newPojoStatically();
-    }
-
-    /**
-     * This method implements the method newDatabaseConnection in a static way.
-     * @return an empty database connection pojo
-     */
-    public static DatabaseConnectionPojo newPojoStatically() {
-        DatabaseConnectionPojo newDatabaseConncetionPojo =
-                new DatabaseConnectionPojo();
-
-        newDatabaseConncetionPojo.setCredentials(
-                CredentialsDao.newPojoStatically());
-        newDatabaseConncetionPojo.setDatabase(
-                DatabasesDao.newPojoStatically());
-        newDatabaseConncetionPojo.setPort(
-                PortsDao.newPojoStatically());
-        newDatabaseConncetionPojo.setSchema(
-                SchemasDao.newPojoStatically());
-        newDatabaseConncetionPojo.setServer(
-                ServersDao.newPojoStatically());
-
-        return newDatabaseConncetionPojo;
     }
 
 }

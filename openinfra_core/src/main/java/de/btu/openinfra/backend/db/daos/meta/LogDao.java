@@ -1,15 +1,16 @@
 package de.btu.openinfra.backend.db.daos.meta;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.UUID;
 
+import de.btu.openinfra.backend.OpenInfraTime;
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
 import de.btu.openinfra.backend.db.jpa.model.meta.Log;
 import de.btu.openinfra.backend.db.pojos.meta.LogPojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 /**
  * This class represents the Log and is used to access the underlying layer
@@ -24,16 +25,16 @@ public class LogDao
     /**
      * This is the required constructor which calls the super constructor and in
      * turn creates the corresponding entity manager.
-     *
+     * @param currentProjectId The identifier of the current project.
      * @param schema           the required schema
      */
-    public LogDao(OpenInfraSchemas schema) {
-        super(null, schema, Log.class);
+    public LogDao(UUID currentProjectId, OpenInfraSchemas schema) {
+        super(null, OpenInfraSchemas.META_DATA, Log.class);
     }
 
     @Override
     public LogPojo mapToPojo(Locale locale, Log l) {
-        return mapPojoStatically(l);
+        return mapToPojoStatically(l);
     }
 
     /**
@@ -42,17 +43,14 @@ public class LogDao
      * @param at     the model object
      * @return       the POJO object when the model object is not null else null
      */
-    public static LogPojo mapPojoStatically(Log l) {
+    public static LogPojo mapToPojoStatically(Log l) {
         if(l != null) {
             LogPojo pojo = new LogPojo(l);
-            // TODO this must be placed somewhere in the properties
-            String format = "yyyy-MM-dd'T'HH:mm:ssZ";
-            DateFormat df = new SimpleDateFormat(format);
             pojo.setUserId(l.getUserId());
             pojo.setUserName(l.getUserName());
-            pojo.setCreatedOn(df.format(l.getCreatedOn()).toString());
-            pojo.setLogger(LoggerDao.mapPojoStatically(l.getLoggerBean()));
-            pojo.setLevel(LevelDao.mapPojoStatically(l.getLevelBean()));
+            pojo.setCreatedOn(OpenInfraTime.format(l.getCreatedOn()));
+            pojo.setLogger(LoggerDao.mapToPojoStatically(l.getLoggerBean()));
+            pojo.setLevel(LevelDao.mapToPojoStatically(l.getLevelBean()));
             pojo.setMessage(l.getMessage());
             return pojo;
         } else {
@@ -75,27 +73,18 @@ public class LogDao
      * This method implements the method mapToModel in a static way.
      * @param pojo the POJO object
      * @param log the pre initialized model object
-     * @return return a corresponding JPA model object or null if the pojo
-     * object is null
+     * @return return a corresponding JPA model object
+     * @throws OpenInfraEntityException
      */
     public Log mapToModelStatically(LogPojo pojo, Log log) {
         Log resultLog = null;
-        if(pojo != null) {
+        try {
             resultLog = log;
             if(resultLog == null) {
                 resultLog = new Log();
                 resultLog.setId(pojo.getUuid());
             }
-
-            try {
-                // TODO this must be placed somewhere in the properties
-                String format = "yyyy-MM-dd'T'HH:mm:ssX";
-                SimpleDateFormat df = new SimpleDateFormat(format);
-                resultLog.setCreatedOn(df.parse(pojo.getCreatedOn()));
-            } catch (ParseException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+            resultLog.setCreatedOn(OpenInfraTime.now());
             resultLog.setMessage(pojo.getMessage());
             resultLog.setUserId(pojo.getUserId());
             resultLog.setUserName(pojo.getUserName());
@@ -105,27 +94,10 @@ public class LogDao
             resultLog.setLoggerBean(LoggerDao.mapToModelStatically(
                     pojo.getLogger(),
                     null));
+        } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
         }
         return resultLog;
-    }
-
-    /**
-     * Creates an empty log pojo.
-     * @return an empty log pojo
-     */
-    public LogPojo newLog() {
-        return newPojoStatically();
-    }
-
-    /**
-     * This method implements the method newLog in a static way.
-     * @return an empty log pojo
-     */
-    public static LogPojo newPojoStatically() {
-        LogPojo newLogPojo = new LogPojo();
-        newLogPojo.setLevel(LevelDao.newPojoStatically());
-        newLogPojo.setLogger(LoggerDao.newPojoStatically());
-
-        return newLogPojo;
     }
 }

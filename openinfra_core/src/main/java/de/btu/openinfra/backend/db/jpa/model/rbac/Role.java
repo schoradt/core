@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
@@ -12,10 +15,20 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 
 /**
  * The persistent class for the role database table.
- * 
+ *
  */
 @Entity
-@NamedQuery(name="Role.findAll", query="SELECT r FROM Role r")
+@NamedQueries({
+	@NamedQuery(name="Role.findAll", query="SELECT r FROM Role r"),
+	@NamedQuery(name="Role.count", query="SELECT COUNT(r) FROM Role r")
+})
+@NamedNativeQueries({
+    @NamedNativeQuery(name="Role.findAllByLocaleAndOrder",
+            query="SELECT *, xmin "
+                    + "FROM role "
+                    + "ORDER BY %s ",
+                resultClass=Role.class)
+})
 public class Role extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 

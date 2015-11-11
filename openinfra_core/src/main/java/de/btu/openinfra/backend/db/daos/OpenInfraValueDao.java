@@ -5,7 +5,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
+import javax.persistence.PersistenceException;
+
 import org.eclipse.persistence.jpa.JpaQuery;
+import org.json.simple.JSONObject;
 
 import de.btu.openinfra.backend.OpenInfraProperties;
 import de.btu.openinfra.backend.db.OpenInfraOrderBy;
@@ -15,6 +18,9 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
+import de.btu.openinfra.backend.exception.OpenInfraWebException;
 
 /**
  * This class extends the OpenInfraDao class in order to provide another
@@ -97,6 +103,43 @@ public abstract class OpenInfraValueDao<
 	}
 
 	/**
+     * This method checks if the first associated id that is part of the URI
+     * matches with the association id in the POJO. If the matches are fulfilled
+     * the createOrUpdate method of the OpenInfraDao will be called. Otherwise
+     * it will return null.
+     *
+     * @param pojo                        the POJO object which should be stored
+     *                                    in the database
+     * @param firstAssociationId          the first association id from the URI
+     * @param firstAssociationIdFromPojo  the first association id from the POJO
+     * @param metaData                    the JSON data that should be stored in
+     *                                    the meta data associated to the POJO
+     * @return                            the UUID of the newly created or
+     *                                    replaced object or null
+     * @throws RuntimeException
+     */
+    public UUID createOrUpdate(TypePojo pojo, UUID firstAssociationId,
+            UUID firstAssociationIdFromPojo, JSONObject metaData)
+            throws RuntimeException {
+
+        // check if the value id of the URI map to the pojo uuid
+        if (firstAssociationId != null &&
+                !firstAssociationId.equals(firstAssociationIdFromPojo)) {
+            throw new OpenInfraEntityException(
+            		OpenInfraExceptionTypes.INCOMPATIBLE_UUIDS);
+        }
+
+        if (metaData != null) {
+            // update the meta data as well if it exists
+            return createOrUpdate(pojo,
+                    firstAssociationId, metaData);
+        } else {
+            // pass the pojo UUID because this uuid is not part of the URI
+            return createOrUpdate(pojo, pojo.getUuid());
+        }
+    }
+
+	/**
      * This is a generic method which reads a list of TypePojos defined by
      * a specific UUID value (e.g. get a list of objects which belong to a
      * specific object). This method presumes a corresponding named query of
@@ -124,17 +167,8 @@ public abstract class OpenInfraValueDao<
         // Define a list which holds the POJO objects
         List<TypePojo> pojos = new LinkedList<TypePojo>();
 
-        // Get the specific value object from JPA layer
-        // TODO will be necessary for the not implemented else branch
-        // TODO Check: if tmv == null then return pojos
-        //TypeModelValue tmv = em.find(valueClass, valueId);
-
         // Define a model object that contains the query result
         List<TypeModel> models = null;
-
-        // Flag to determine if the query has to run again with a different
-        // locale
-        boolean runAgain = false;
 
         // Use the default values for language and order when null.
         if(locale == null) {
@@ -148,44 +182,143 @@ public abstract class OpenInfraValueDao<
         UUID localeId = new PtLocaleDao(
                 currentProjectId, schema).read(locale).getId();
 
-        // Handle topic instances separately
-        if (column == null || !column.isUuid()) {
-            // If the column is null redirect to another read method
-            return read(locale, valueId, offset, size);
-        } else if (modelClass == TopicInstance.class) {
-            String nativeQueryName = "";
-            // Get the attribute value types from the object with the passed
-            // attribute type id
-            AttributeValueTypes atType = new AttributeTypeDao(
-                    currentProjectId, schema).read(
-                            locale, UUID.fromString(
-                                    column.getContent().toString()))
-                                    .getType();
+        try {
+            if (!column.isUuid()) {
+                // check if the orderBy column is supported for the current
+                // object
+                checkOrderBy(column);
 
-            // Handle each attribute value type in a different way
-            switch (atType) {
-            case ATTRIBUTE_VALUE_VALUE:
-                // Set the native query name for attribute value value objects
-                nativeQueryName = "findAllByLocaleAndOrderForValues";
-                break;
-            case ATTRIBUTE_VALUE_DOMAIN:
-                // Set the native query name for attribute value domain objects
-                nativeQueryName = "findAllByLocaleAndOrderForDomains";
-                break;
-            default:
-                // Sorting by geometry is not supported
-                return read(locale, valueId, offset, size);
-            }
+                // Construct the origin SQL-based named query and replace the
+                // placeholder by the required column and sort order.
+                String sqlString = em.createNamedQuery(
+                        modelClass.getSimpleName() + ".findAllByLocaleAndOrder")
+                        .unwrap(JpaQuery.class).getDatabaseQuery()
+                        .getSQLString();
+                sqlString = String.format(sqlString, column.getColumn().name());
+                sqlString += " " + order.name();
 
-            // Construct the origin SQL-based named query and append the sort
-            // order.
-            String sqlString = em.createNamedQuery(
-                    modelClass.getSimpleName() + "." + nativeQueryName)
-                    .unwrap(JpaQuery.class).getDatabaseQuery().getSQLString();
-            sqlString += " " + order.name();
+                try {
+                    // Retrieve the requested model objects from database
+                    models = em.createNativeQuery(
+                            sqlString,
+                            modelClass)
+                            .setParameter(1, localeId)
+                            .setParameter(2, valueId)
+                            .setFirstResult(offset)
+                            .setMaxResults(size)
+                            .getResultList();
+                } catch (PersistenceException e) {
+                    // can be thrown if the orderByEnum is incorrectly
+                    // configured
+                    throw new OpenInfraWebException(e);
+                }
 
-            // Retrieve the informations from the database
-            models = em.createNativeQuery(
+            } else if (modelClass == TopicInstance.class) {
+                // Flag to determine if the query has to run again with a
+                // different locale
+                boolean runAgain = false;
+
+                // Handle topic instances separately
+                String nativeQueryName = "";
+                // Get the attribute value types from the object with the passed
+                // attribute type id
+                AttributeValueTypes atType = new AttributeTypeDao(
+                        currentProjectId, schema).read(
+                                locale, UUID.fromString(
+                                        column.getContent().toString()))
+                                        .getType();
+
+                // Handle each attribute value type in a different way
+                switch (atType) {
+                case ATTRIBUTE_VALUE_VALUE:
+                    // Set native query name for attribute value value objects
+                    nativeQueryName = "findAllByLocaleAndOrderForValues";
+                    break;
+                case ATTRIBUTE_VALUE_DOMAIN:
+                    // Set native query name for attribute value domain objects
+                    nativeQueryName = "findAllByLocaleAndOrderForDomains";
+                    break;
+                default:
+                    // Sorting by geometry is not supported
+                    return read(locale, valueId, offset, size);
+                }
+
+                // Construct origin SQL-based named query and append sort order
+                String sqlString = em.createNamedQuery(
+                        modelClass.getSimpleName() + "." + nativeQueryName)
+                        .unwrap(JpaQuery.class).getDatabaseQuery()
+                        .getSQLString();
+                sqlString += " " + order.name();
+
+                // Retrieve the informations from the database
+                models = em.createNativeQuery(
+                                sqlString,
+                                modelClass)
+                            .setParameter(1, column.getContent())
+                            .setParameter(2, localeId)
+                            .setParameter(3, valueId)
+                            .setFirstResult(offset)
+                            .setMaxResults(size)
+                            .getResultList();
+
+                // Get the first result as topic instance model
+                TopicInstance tim = (TopicInstance)models.get(0);
+
+                // TODO The condition checks are not tested for values with a
+                //      language != xx, real 0 value and a topic characteristic
+                //      that only contains 1 entry!
+                // Test if the request returns no sufficient result
+                switch (atType) {
+                case ATTRIBUTE_VALUE_VALUE:
+                    // Check if only one result was returned and if this is
+                    // equals 0. JPA returns the string 0 if the free text is
+                    // NULL.
+                    if (tim.getAttributeValueValues().get(0)
+                            .getPtFreeText()
+                            .getLocalizedCharacterStrings().get(0)
+                            .getFreeText().equals("0") &&
+                        tim.getAttributeValueValues().get(0)
+                            .getPtFreeText()
+                            .getLocalizedCharacterStrings().get(0)
+                            .getFreeText().length() == 1) {
+                        // Set flag to run the query again with the xx locale
+                        runAgain = true;
+                    }
+                    break;
+                case ATTRIBUTE_VALUE_DOMAIN:
+                    // Check if only one result was returned and if this is
+                    // equals 0. JPA returns the string 0 if the free text is
+                    // NULL.
+                    if (tim.getAttributeValueDomains().get(0)
+                            .getValueListValue().getPtFreeText2()
+                            .getLocalizedCharacterStrings().get(0)
+                            .getFreeText().equals("0") &&
+                        tim.getAttributeValueDomains().get(0)
+                            .getValueListValue().getPtFreeText2()
+                            .getLocalizedCharacterStrings().get(0)
+                            .getFreeText().length() == 1) {
+                        // Set flag to run the query again with the xx locale
+                        runAgain = true;
+                    }
+                    break;
+                default:
+                    // This part is unreachable because of the previously
+                    // executed switch case statement
+                    break;
+                }
+
+                // Run the query again with the xx locale instead of the passed
+                // locale
+                if (runAgain) {
+                    // Retrieve the uuid of the xx locale
+                    localeId = em.createNamedQuery(
+                                    "PtLocale.xx",
+                                    PtLocale.class)
+                                    .getSingleResult().getId();
+
+                    // Retrieve the informations from the database with the new
+                    // locale
+                    models = em.createNativeQuery(
                             sqlString,
                             modelClass)
                         .setParameter(1, column.getContent())
@@ -194,74 +327,17 @@ public abstract class OpenInfraValueDao<
                         .setFirstResult(offset)
                         .setMaxResults(size)
                         .getResultList();
-
-            // Get the first result as topic instance model
-            TopicInstance tim = (TopicInstance)models.get(0);
-
-            // TODO The condition checks are not tested for values with a
-            //      language != xx, a real 0 value and a topic characteristic
-            //      that only contains 1 entry!
-            // Test if the request returns no sufficient result
-            switch (atType) {
-            case ATTRIBUTE_VALUE_VALUE:
-                // Check if only one result was returned and if this is equals
-                // 0. JPA returns the string 0 if the free text is NULL.
-                if (tim.getAttributeValueValues().get(0)
-                        .getPtFreeText()
-                        .getLocalizedCharacterStrings().get(0)
-                        .getFreeText().equals("0") &&
-                    tim.getAttributeValueValues().get(0)
-                        .getPtFreeText()
-                        .getLocalizedCharacterStrings().get(0)
-                        .getFreeText().length() == 1) {
-                    // Set flag to run the query again with the xx locale
-                    runAgain = true;
                 }
-                break;
-            case ATTRIBUTE_VALUE_DOMAIN:
-                // Check if only one result was returned and if this is equals
-                // 0. JPA returns the string 0 if the free text is NULL.
-                if (tim.getAttributeValueDomains().get(0)
-                        .getValueListValue().getPtFreeText2()
-                        .getLocalizedCharacterStrings().get(0)
-                        .getFreeText().equals("0") &&
-                    tim.getAttributeValueDomains().get(0)
-                        .getValueListValue().getPtFreeText2()
-                        .getLocalizedCharacterStrings().get(0)
-                        .getFreeText().length() == 1) {
-                    // Set flag to run the query again with the xx locale
-                    runAgain = true;
-                }
-                break;
-            default:
-                // This part is unreachable because of the previously executed
-                // switch case statement
-                break;
+            } else {
+                throw new OpenInfraEntityException(
+                        OpenInfraExceptionTypes.WRONG_SORT_TYPE);
             }
-
-            // Run the query again with the xx locale instead of the passed
-            // locale
-            if (runAgain) {
-                // Retrieve the uuid of the xx locale
-                localeId = em.createNamedQuery(
-                                "PtLocale.xx",
-                                PtLocale.class)
-                                .getSingleResult().getId();
-
-                // Retrieve the informations from the database with the new
-                // locale
-                models = em.createNativeQuery(
-                        sqlString,
-                        modelClass)
-                    .setParameter(1, column.getContent())
-                    .setParameter(2, localeId)
-                    .setParameter(3, valueId)
-                    .setFirstResult(offset)
-                    .setMaxResults(size)
-                    .getResultList();
-            }
-        } else {
-            // TODO implement this for all the other classes
+        } catch (NullPointerException | IllegalArgumentException e) {
+            // Accessing the column object will lead to a NullPointerException
+            // if no orderBy parameter was passed. If no NamedQuery exists in
+            // the model class an IllegalArgumentException is thrown. In both
+            // cases we can call the standard read method.
+            return read(locale, valueId, offset, size);
         }
 
         // Map the JPA model objects to POJO objects

@@ -10,7 +10,7 @@ import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstanceXTopicInstance;
-import de.btu.openinfra.backend.db.pojos.TopicInstanceAssociationPojo;
+import de.btu.openinfra.backend.db.pojos.project.TopicInstanceAssociationPojo;
 
 /**
  * This class represents the TopicInstanceAssociation and is used to access the
@@ -135,8 +135,28 @@ public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
 	public TopicInstanceAssociationPojo mapToPojo(
 			Locale locale,
 			TopicInstanceXTopicInstance txt) {
+	    if (txt != null) {
+	        MetaDataDao mdDao = new MetaDataDao(currentProjectId, schema);
+	        TopicInstanceAssociationPojo pojo =
+	                new TopicInstanceAssociationPojo(txt, mdDao);
+
+	        pojo.setRelationshipType(
+	                RelationshipTypeDao.mapToPojoStatically(
+	                        locale,
+	                        txt.getRelationshipType(),
+	                        mdDao));
+	        pojo.setAssociatedInstance(
+	                new TopicInstanceDao(currentProjectId, schema).mapToPojo(
+	                        locale,
+	                        txt.getTopicInstance2Bean()));
+            return pojo;
+        } else {
+            return null;
+        }
+	    /*
 	    return mapToPojoStatically(locale, txt,
                 new MetaDataDao(currentProjectId, schema));
+                */
 	}
 
 	/**

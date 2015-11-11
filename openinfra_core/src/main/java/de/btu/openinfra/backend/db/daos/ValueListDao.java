@@ -1,16 +1,14 @@
 package de.btu.openinfra.backend.db.daos;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.ValueList;
-import de.btu.openinfra.backend.db.pojos.LocalizedString;
-import de.btu.openinfra.backend.db.pojos.PtFreeTextPojo;
 import de.btu.openinfra.backend.db.pojos.ValueListPojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 /**
  * This class represents the ValueListValue and is used to access the underlying
@@ -71,62 +69,32 @@ public class ValueListDao extends OpenInfraDao<ValueListPojo, ValueList> {
 			ValueListPojo pojo,
 			ValueList vl) {
 
-        // in case the name is empty
-        if (pojo.getNames() == null) {
-            return null;
-        }
-
-        // in case the name value is empty
-        if (pojo.getNames().getLocalizedStrings().get(0)
-                .getCharacterString().equals("")) {
-            return null;
-        }
-
-    	PtFreeTextDao ptfDao =
-    			new PtFreeTextDao(currentProjectId, schema);
+	    PtFreeTextDao ptfDao =
+                new PtFreeTextDao(currentProjectId, schema);
         // set the description (is optional)
         if (pojo.getDescriptions() != null) {
             vl.setPtFreeText1(
-            		ptfDao.getPtFreeTextModel(pojo.getDescriptions()));
+                    ptfDao.getPtFreeTextModel(pojo.getDescriptions()));
         }
 
-        // set the name
-        vl.setPtFreeText2(ptfDao.getPtFreeTextModel(pojo.getNames()));
+	    try {
+            // in case the name value is empty
+            if (pojo.getNames().getLocalizedStrings().get(0)
+                    .getCharacterString().equals("")) {
+                throw new OpenInfraEntityException(
+                        OpenInfraExceptionTypes.MISSING_NAME_IN_POJO);
+            }
+
+            // set the name
+            vl.setPtFreeText2(ptfDao.getPtFreeTextModel(pojo.getNames()));
+	    } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_NAME_IN_POJO);
+        }
 
         // return the model as mapping result
         return new MappingResult<ValueList>(vl.getId(), vl);
+
 	}
 
-	/**
-     * This method creates a ValueListPojo shell that contains some
-     * informations about the name, the description and the locale.
-     *
-     * @param locale the locale the informations should be saved at
-     * @return       the ValueListPojo
-     */
-	public ValueListPojo newValueList(Locale locale) {
-	    // create the return pojo
-        ValueListPojo pojo = new ValueListPojo();
-
-        PtLocaleDao ptl = new PtLocaleDao(currentProjectId, schema);
-        List<LocalizedString> lcs = new LinkedList<LocalizedString>();
-        LocalizedString ls = new LocalizedString();
-
-        // set an empty character string
-        ls.setCharacterString("");
-
-        // set the locale of the character string
-        ls.setLocale(PtLocaleDao.mapToPojoStatically(
-                locale,
-                ptl.read(locale)));
-        lcs.add(ls);
-
-        // add the localized string for the name
-        pojo.setNames(new PtFreeTextPojo(lcs, null));
-
-        // add the localized string for the description
-        pojo.setDescriptions(new PtFreeTextPojo(lcs, null));
-
-        return pojo;
-	}
 }

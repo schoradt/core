@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -13,11 +16,24 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 
 /**
  * The persistent class for the ports database table.
- * 
+ *
  */
 @Entity
 @Table(schema="meta_data")
-@NamedQuery(name="Ports.findAll", query="SELECT p FROM Ports p")
+@NamedQueries({
+    @NamedQuery(name="Ports.findAll", query="SELECT p FROM Ports p"),
+    @NamedQuery(name="Ports.count",  query="SELECT COUNT(p) FROM Ports p"),
+    @NamedQuery(
+            name="Ports.findByPort",
+            query="SELECT p FROM Ports p WHERE p.port = :port")
+})
+@NamedNativeQueries({
+    @NamedNativeQuery(name="Ports.findAllByLocaleAndOrder",
+            query="SELECT *, xmin "
+                    + "FROM ports "
+                    + "ORDER BY %s ",
+                resultClass=Ports.class)
+})
 public class Ports extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 

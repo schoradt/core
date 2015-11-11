@@ -5,7 +5,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.UUID;
 
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -61,16 +61,18 @@ public class TopicPdfResource {
 	@Produces({"application/pdf"})
 	@Path("{topicInstanceId}/topic.pdf")
 	public Response getTopicAsPdf(
+			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("topicInstanceId") UUID topicInstanceId,
-			@QueryParam("geomType") AttributeValueGeomType geomType,
-			@Context UriInfo uriInfo,
-			@Context HttpServletResponse servletResponse) {
+			@QueryParam("geomType") AttributeValueGeomType geomType) {
 		
 		// Don't care about accessing the RBAC system classes. Just use the 
 		// resource class to retrieve the requested object. 
 		TopicPojo pojo = new TopicInstanceResource().get(
+				uriInfo,
+				request,
 				language, 
 				projectId, 
 				topicInstanceId, 

@@ -25,17 +25,11 @@ public class OpenInfraOrderBy {
         try {
             id = UUID.fromString(column);
             isUuid = true;
-        } catch (Exception e) {
-            // do nothing
-        }
-
-        if (!isUuid) {
-            try {
-                this.column = OpenInfraOrderByEnum.valueOf(column.toUpperCase());
-                isUuid = false;
-            } catch (Exception e) {
-                // do nothing
-            }
+        } catch (IllegalArgumentException e) {
+            // Will be thrown if it is not possible to cast the column to an
+            // UUID. So it must be a value from the OpenInfraOrderByEnum
+            this.column = OpenInfraOrderByEnum.valueOf(column.toUpperCase());
+            isUuid = false;
         }
     }
 
@@ -63,5 +57,9 @@ public class OpenInfraOrderBy {
 
     public boolean isUuid() {
         return isUuid;
+    }
+
+    public void setColumn(OpenInfraOrderByEnum column) {
+        this.column = column;
     }
 }

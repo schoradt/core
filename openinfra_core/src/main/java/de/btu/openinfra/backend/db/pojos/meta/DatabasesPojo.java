@@ -11,7 +11,8 @@ public class DatabasesPojo extends OpenInfraPojo {
     private String database;
 
     /* Default constructor */
-    public DatabasesPojo() {}
+    public DatabasesPojo() {
+    }
 
     /* Constructor that will set the id, trid and meta data automatically */
     public DatabasesPojo(OpenInfraModelObject modelObject) {

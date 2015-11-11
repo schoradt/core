@@ -18,7 +18,8 @@ public class LogPojo extends OpenInfraPojo {
     private String message;
 
     /* Default constructor */
-    public LogPojo() {}
+    public LogPojo() {
+    }
 
     /* Constructor that will set the id, trid and meta data automatically */
     public LogPojo(OpenInfraModelObject modelObject) {

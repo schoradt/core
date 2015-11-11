@@ -1,12 +1,15 @@
 package de.btu.openinfra.backend.db.daos.meta;
 
 import java.util.Locale;
+import java.util.UUID;
 
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
 import de.btu.openinfra.backend.db.jpa.model.meta.Level;
 import de.btu.openinfra.backend.db.pojos.meta.LevelPojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 /**
  * This class represents the log level and is used to access the underlying
@@ -21,16 +24,16 @@ public class LevelDao
     /**
      * This is the required constructor which calls the super constructor and in
      * turn creates the corresponding entity manager.
-     *
+     * @param currentProjectId The identifier of the current project.
      * @param schema           the required schema
      */
-    public LevelDao(OpenInfraSchemas schema) {
-        super(null, schema, Level.class);
+    public LevelDao(UUID currentProjectId, OpenInfraSchemas schema) {
+        super(null, OpenInfraSchemas.META_DATA, Level.class);
     }
 
     @Override
     public LevelPojo mapToPojo(Locale locale, Level l) {
-        return null;
+        return mapToPojoStatically(l);
     }
 
     /**
@@ -39,7 +42,7 @@ public class LevelDao
      * @param at     the model object
      * @return       the POJO object when the model object is not null else null
      */
-    public static LevelPojo mapPojoStatically(Level l) {
+    public static LevelPojo mapToPojoStatically(Level l) {
         if(l != null) {
             LevelPojo pojo = new LevelPojo(l);
             pojo.setLevel(l.getLevel());
@@ -64,36 +67,23 @@ public class LevelDao
      * This method implements the method mapToModel in a static way.
      * @param pojo the POJO object
      * @param level the pre initialized model object
-     * @return return a corresponding JPA model object or null if the pojo
-     * object is null
+     * @return return a corresponding JPA model object
+     * @throws OpenInfraEntityException
      */
     public static Level mapToModelStatically(LevelPojo pojo, Level level) {
         Level resultLevel = null;
-        if(pojo != null) {
+        try {
             resultLevel = level;
             if(resultLevel == null) {
                 resultLevel = new Level();
                 resultLevel.setId(pojo.getUuid());
             }
             resultLevel.setLevel(pojo.getLevel());
+        } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
         }
         return resultLevel;
-    }
-
-    /**
-     * Creates an empty level pojo.
-     * @return an empty level pojo
-     */
-    public LevelPojo newLevel() {
-        return newPojoStatically();
-    }
-
-    /**
-     * This method implements the method newLevel in a static way.
-     * @return an empty level pojo
-     */
-    public static LevelPojo newPojoStatically() {
-        return new LevelPojo();
     }
 
 }

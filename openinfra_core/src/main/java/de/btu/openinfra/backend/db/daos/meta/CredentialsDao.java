@@ -1,12 +1,15 @@
 package de.btu.openinfra.backend.db.daos.meta;
 
 import java.util.Locale;
+import java.util.UUID;
 
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
 import de.btu.openinfra.backend.db.jpa.model.meta.Credentials;
 import de.btu.openinfra.backend.db.pojos.meta.CredentialsPojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 /**
  * This class represents the Credentials and is used to access the underlying
@@ -21,16 +24,16 @@ public class CredentialsDao
     /**
      * This is the required constructor which calls the super constructor and in
      * turn creates the corresponding entity manager.
-     *
-     * @param schema           the required schema
+     * @param currentProjectId The identifier of the current project.
+     * @param schema           This parameter defines the schema.
      */
-    public CredentialsDao(OpenInfraSchemas schema) {
-        super(null, schema, Credentials.class);
+    public CredentialsDao(UUID currentProjectId, OpenInfraSchemas schema) {
+        super(null, OpenInfraSchemas.META_DATA, Credentials.class);
     }
 
     @Override
     public CredentialsPojo mapToPojo(Locale locale, Credentials c) {
-        return mapPojoStatically(c);
+        return mapToPojoStatically(c);
     }
 
     /**
@@ -39,7 +42,7 @@ public class CredentialsDao
      * @param at     the model object
      * @return       the POJO object when the model object is not null else null
      */
-   public static CredentialsPojo mapPojoStatically(Credentials c) {
+   public static CredentialsPojo mapToPojoStatically(Credentials c) {
         if (c != null) {
             CredentialsPojo pojo = new CredentialsPojo(c);
             pojo.setUsername(c.getUsername());
@@ -67,14 +70,14 @@ public class CredentialsDao
      * This method implements the method mapToModel in a static way.
      * @param pojo the POJO object
      * @param cd the pre initialized model object
-     * @return return a corresponding JPA model object or null if the pojo
-     * object is null
+     * @return return a corresponding JPA model object
+     * @throws OpenInfraEntityException
      */
     public static Credentials mapToModelStatically(
             CredentialsPojo pojo,
             Credentials cd) {
         Credentials resultCredentials = null;
-        if(pojo != null) {
+        try {
             resultCredentials = cd;
             if(resultCredentials == null) {
                 resultCredentials = new Credentials();
@@ -82,24 +85,11 @@ public class CredentialsDao
             }
             resultCredentials.setPassword(pojo.getPassword());
             resultCredentials.setUsername(pojo.getUsername());
+        } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
         }
         return resultCredentials;
-    }
-
-    /**
-     * Creates an empty credentials pojo.
-     * @return an empty credentials pojo
-     */
-    public CredentialsPojo newCredentials() {
-       return newPojoStatically();
-    }
-
-    /**
-     * This method implements the method newCredentials in a static way.
-     * @return an empty credentials pojo
-     */
-    public static CredentialsPojo newPojoStatically() {
-        return new CredentialsPojo();
     }
 
 }

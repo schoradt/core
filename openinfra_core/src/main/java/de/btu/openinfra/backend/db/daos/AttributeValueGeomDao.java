@@ -12,7 +12,9 @@ import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.AttributeTypeToAttributeTypeGroup;
 import de.btu.openinfra.backend.db.jpa.model.AttributeValueGeom;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
-import de.btu.openinfra.backend.db.pojos.AttributeValueGeomPojo;
+import de.btu.openinfra.backend.db.pojos.project.AttributeValueGeomPojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 /**
  * This class represents the AttributeValueGeom and is used to access the
@@ -109,30 +111,28 @@ public class AttributeValueGeomDao
 			AttributeValueGeomPojo pojo,
 			AttributeValueGeom avg) {
 
-        // in case the attribute type to attribute type group id, the
-        // topic instance id or the geometry is null
-        if (pojo.getAttributeTypeToAttributeTypeGroupId() == null ||
-                pojo.getTopicInstanceId() == null ||
-                pojo.getGeom() == null) {
-            return null;
+        try {
+            // in case the geometry is an empty string
+            if (pojo.getGeom().equals("")) {
+                throw new OpenInfraEntityException(
+                        OpenInfraExceptionTypes.MISSING_GEOM_IN_POJO);
+            }
+
+            // set the textual information
+            avg.setGeom(pojo.getGeom());
+
+            // set the attribute type to attribute type group
+            avg.setAttributeTypeToAttributeTypeGroup(em.find(
+                    AttributeTypeToAttributeTypeGroup.class,
+                    pojo.getAttributeTypeToAttributeTypeGroupId()));
+
+            // set the topic instance
+            avg.setTopicInstance(
+                    em.find(TopicInstance.class, pojo.getTopicInstanceId()));
+        } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
         }
-
-        // in case the geometry is an empty string
-        if (pojo.getGeom().equals("")) {
-            return null;
-        }
-
-        // set the textual information
-        avg.setGeom(pojo.getGeom());
-
-        // set the attribute type to attribute type group
-        avg.setAttributeTypeToAttributeTypeGroup(em.find(
-                AttributeTypeToAttributeTypeGroup.class,
-                pojo.getAttributeTypeToAttributeTypeGroupId()));
-
-        // set the topic instance
-        avg.setTopicInstance(
-                em.find(TopicInstance.class, pojo.getTopicInstanceId()));
 
         return new MappingResult<AttributeValueGeom>(avg.getId(), avg);
 	}

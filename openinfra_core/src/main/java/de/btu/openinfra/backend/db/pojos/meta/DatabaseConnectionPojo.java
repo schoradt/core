@@ -15,7 +15,8 @@ public class DatabaseConnectionPojo extends OpenInfraPojo {
     private CredentialsPojo credentials;
 
     /* Default constructor */
-    public DatabaseConnectionPojo() {}
+    public DatabaseConnectionPojo() {
+    }
 
     /* Constructor that will set the id, trid and meta data automatically */
     public DatabaseConnectionPojo(OpenInfraModelObject modelObject) {

@@ -1,12 +1,16 @@
 package de.btu.openinfra.backend.db.daos.meta;
 
 import java.util.Locale;
+import java.util.UUID;
 
+import de.btu.openinfra.backend.OpenInfraTime;
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
 import de.btu.openinfra.backend.db.jpa.model.meta.Settings;
 import de.btu.openinfra.backend.db.pojos.meta.SettingsPojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 /**
  * This class represents the Settings and is used to access the underlying
@@ -21,16 +25,16 @@ public class SettingsDao
     /**
      * This is the required constructor which calls the super constructor and in
      * turn creates the corresponding entity manager.
-     *
+     * @param currentProjectId The identifier of the current project.
      * @param schema           the required schema
      */
-    public SettingsDao(OpenInfraSchemas schema) {
-        super(null, schema, Settings.class);
+    public SettingsDao(UUID currentProjectId, OpenInfraSchemas schema) {
+        super(null, OpenInfraSchemas.META_DATA, Settings.class);
     }
 
     @Override
     public SettingsPojo mapToPojo(Locale locale, Settings s) {
-        return mapPojoStatically(s);
+        return mapToPojoStatically(s);
     }
 
     /**
@@ -39,13 +43,13 @@ public class SettingsDao
      * @param s     the model object
      * @return       the POJO object when the model object is not null else null
      */
-    public static SettingsPojo mapPojoStatically(Settings s) {
+    public static SettingsPojo mapToPojoStatically(Settings s) {
         if (s != null) {
             SettingsPojo pojo = new SettingsPojo(s);
-            pojo.setKey(SettingKeysDao.mapPojoStatically(s.getSettingKey()));
-            pojo.setUpdatedOn(s.getUpdatedOn());
+            pojo.setKey(SettingKeysDao.mapToPojoStatically(s.getSettingKey()));
+            pojo.setUpdatedOn(OpenInfraTime.format(s.getUpdatedOn()));
             pojo.setValue(s.getValue());
-            pojo.setProject(ProjectsDao.mapPojoStatically(s.getProject()));
+            pojo.setProject(ProjectsDao.mapToPojoStatically(s.getProject()));
             return pojo;
         } else {
             return null;
@@ -67,14 +71,14 @@ public class SettingsDao
      * This method implements the method mapToModel in a static way.
      * @param pojo the POJO object
      * @param s the pre initialized model object
-     * @return return a corresponding JPA model object or null if the pojo
-     * object is null
+     * @return return a corresponding JPA model object
+     * @throws OpenInfraEntityException
      */
     public static Settings mapToModelStatically(
             SettingsPojo pojo,
             Settings s) {
         Settings resultSettings = null;
-        if(pojo != null) {
+        try {
             resultSettings = s;
             if(resultSettings == null) {
                 resultSettings = new Settings();
@@ -83,30 +87,20 @@ public class SettingsDao
             resultSettings.setSettingKey(
                     SettingKeysDao.mapToModelStatically(pojo.getKey(), null));
             resultSettings.setValue(pojo.getValue());
-            resultSettings.setUpdatedOn(pojo.getUpdatedOn());
+            // Set a new timestamp in any case since the probability is
+            // extremely high that the model object is stored in the database.
+            // It's recommended to use POJO objects for internal usage. In any
+            // case, it should be avoided to retrieve a POJO object from
+            // database and to transform it into model object afterwards for
+            // internal processing.
+            resultSettings.setUpdatedOn(OpenInfraTime.now());
             resultSettings.setProject(
                     ProjectsDao.mapToModelStatically(pojo.getProject(), null));
+        } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
         }
         return resultSettings;
-    }
-
-    /**
-     * Creates an empty settings pojo.
-     * @return an empty settings pojo
-     */
-    public SettingsPojo newSettings() {
-       return newPojoStatically();
-    }
-
-    /**
-     * This method implements the method newSettings in a static way.
-     * @return an empty settings pojo
-     */
-    public static SettingsPojo newPojoStatically() {
-        SettingsPojo newSettingsPojo = new SettingsPojo();
-        newSettingsPojo.setProject(ProjectsDao.newPojoStatically());
-        newSettingsPojo.setKey(SettingKeysDao.newPojoStatically());
-        return newSettingsPojo;
     }
 
 }

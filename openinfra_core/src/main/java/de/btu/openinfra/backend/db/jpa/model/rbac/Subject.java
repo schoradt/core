@@ -7,6 +7,8 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -16,20 +18,25 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 
 /**
  * The persistent class for the subject database table.
- * 
+ *
  */
 @Entity
 @NamedQueries({
 	@NamedQuery(name="Subject.findAll", query="SELECT s FROM Subject s"),
-	@NamedQuery(name="Subject.findByLogin", 
+	@NamedQuery(name="Subject.count",
+		query="SELECT COUNT(s) FROM Subject s"),
+	@NamedQuery(name="Subject.findByLogin",
 		query="SELECT s "
-				+ "FROM Subject s "
-				+ "WHERE s.login = :login")
+			+ "FROM Subject s "
+			+ "WHERE s.login = :login")
 })
-//@NamedNativeQueries({
-//	@NamedNativeQuery(name="Subject.findByLogin", 
-//			query="select *,xmin from subject where login = ?")
-//})
+@NamedNativeQueries({
+    @NamedNativeQuery(name="Subject.findAllByLocaleAndOrder",
+            query="SELECT *, xmin "
+                    + "FROM subject "
+                    + "ORDER BY %s ",
+                resultClass=Subject.class)
+})
 public class Subject extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -62,9 +69,19 @@ public class Subject extends OpenInfraModelObject implements Serializable {
 	@Column(name="updated_on")
 	private Timestamp updatedOn;
 
+	private String webapp;
+
 	//bi-directional many-to-one association to SubjectRole
-	@OneToMany(mappedBy="subject")
+	@OneToMany(mappedBy="subjectBean")
 	private List<SubjectRole> subjectRoles;
+
+	//bi-directional many-to-one association to SubjectObject
+	@OneToMany(mappedBy="subjectBean")
+	private List<SubjectObject> subjectObjects;
+
+	//bi-directional many-to-one association to SubjectProject
+	@OneToMany(mappedBy="subjectBean")
+	private List<SubjectProject> subjectProjects;
 
 	public Subject() {
 	}
@@ -175,16 +192,68 @@ public class Subject extends OpenInfraModelObject implements Serializable {
 
 	public SubjectRole addSubjectRole(SubjectRole subjectRole) {
 		getSubjectRoles().add(subjectRole);
-		subjectRole.setSubject(this);
+		subjectRole.setSubjectBean(this);
 
 		return subjectRole;
 	}
 
 	public SubjectRole removeSubjectRole(SubjectRole subjectRole) {
 		getSubjectRoles().remove(subjectRole);
-		subjectRole.setSubject(null);
+		subjectRole.setSubjectBean(null);
 
 		return subjectRole;
+	}
+
+	public List<SubjectObject> getSubjectObjects() {
+		return this.subjectObjects;
+	}
+
+	public void setSubjectObjects(List<SubjectObject> subjectObjects) {
+		this.subjectObjects = subjectObjects;
+	}
+
+	public SubjectObject addSubjectObject(SubjectObject subjectObject) {
+		getSubjectObjects().add(subjectObject);
+		subjectObject.setSubjectBean(this);
+
+		return subjectObject;
+	}
+
+	public SubjectObject removeSubjectObject(SubjectObject subjectObject) {
+		getSubjectObjects().remove(subjectObject);
+		subjectObject.setSubjectBean(null);
+
+		return subjectObject;
+	}
+
+	public List<SubjectProject> getSubjectProjects() {
+		return this.subjectProjects;
+	}
+
+	public void setSubjectProjects(List<SubjectProject> subjectProjects) {
+		this.subjectProjects = subjectProjects;
+	}
+
+	public SubjectProject addSubjectProject(SubjectProject subjectProject) {
+		getSubjectProjects().add(subjectProject);
+		subjectProject.setSubjectBean(this);
+
+		return subjectProject;
+	}
+
+	public SubjectProject removeSubjectProject(SubjectProject subjectProject) {
+		getSubjectProjects().remove(subjectProject);
+		subjectProject.setSubjectBean(null);
+
+		return subjectProject;
+	}
+
+	public String getWebapp() {
+		return this.webapp;
+	}
+
+	public void setWebapp(String webapp) {
+		this.webapp = webapp;
 	}
 
 }

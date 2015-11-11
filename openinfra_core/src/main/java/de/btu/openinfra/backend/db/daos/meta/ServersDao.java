@@ -1,12 +1,15 @@
 package de.btu.openinfra.backend.db.daos.meta;
 
 import java.util.Locale;
+import java.util.UUID;
 
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
 import de.btu.openinfra.backend.db.jpa.model.meta.Servers;
 import de.btu.openinfra.backend.db.pojos.meta.ServersPojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 /**
  * This class represents the Servers and is used to access the underlying layer
@@ -21,16 +24,16 @@ public class ServersDao
     /**
      * This is the required constructor which calls the super constructor and in
      * turn creates the corresponding entity manager.
-     *
+     * @param currentProjectId The identifier of the current project.
      * @param schema           the required schema
      */
-    public ServersDao(OpenInfraSchemas schema) {
-        super(null, schema, Servers.class);
+    public ServersDao(UUID currentProjectId, OpenInfraSchemas schema) {
+        super(null, OpenInfraSchemas.META_DATA, Servers.class);
     }
 
     @Override
     public ServersPojo mapToPojo(Locale locale, Servers s) {
-        return mapPojoStatically(s);
+        return mapToPojoStatically(s);
     }
 
     /**
@@ -39,7 +42,7 @@ public class ServersDao
      * @param at     the model object
      * @return       the POJO object when the model object is not null else null
      */
-    public static ServersPojo mapPojoStatically(Servers s) {
+    public static ServersPojo mapToPojoStatically(Servers s) {
         if (s != null) {
             ServersPojo pojo = new ServersPojo(s);
             pojo.setServer(s.getServer());
@@ -64,35 +67,23 @@ public class ServersDao
      * This method implements the method mapToModel in a static way.
      * @param pojo the POJO object
      * @param s the pre initialized model object
-     * @return return a corresponding JPA model object or null if the pojo
-     * object is null
+     * @return return a corresponding JPA model object
+     * @throws OpenInfraEntityException
      */
     public static Servers mapToModelStatically(ServersPojo pojo, Servers s) {
         Servers resultServers = null;
-        if(pojo != null) {
+        try {
             resultServers = s;
             if(resultServers == null) {
                 resultServers = new Servers();
                 resultServers.setId(pojo.getUuid());
             }
             resultServers.setServer(pojo.getServer());
+        } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
         }
         return resultServers;
     }
 
-    /**
-     * Creates an empty servers pojo.
-     * @return an empty servers pojo
-     */
-    public ServersPojo newServers() {
-       return newPojoStatically();
-    }
-
-    /**
-     * This method implements the method newServers in a static way.
-     * @return an empty servers pojo
-     */
-    public static ServersPojo newPojoStatically() {
-        return new ServersPojo();
-    }
 }

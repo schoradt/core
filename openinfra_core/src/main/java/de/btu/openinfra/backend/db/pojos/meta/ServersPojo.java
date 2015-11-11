@@ -11,7 +11,8 @@ public class ServersPojo extends OpenInfraPojo {
     private String server;
 
     /* Default constructor */
-    public ServersPojo() {}
+    public ServersPojo() {
+    }
 
     /* Constructor that will set the id, trid and meta data automatically */
     public ServersPojo(OpenInfraModelObject modelObject) {

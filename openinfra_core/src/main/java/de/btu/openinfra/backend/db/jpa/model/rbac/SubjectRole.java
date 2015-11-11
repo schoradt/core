@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
@@ -13,23 +14,28 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 
 /**
  * The persistent class for the subject_roles database table.
- * 
+ *
  */
 @Entity
 @Table(name="subject_roles")
-@NamedQuery(name="SubjectRole.findAll", query="SELECT s FROM SubjectRole s")
+@NamedQueries({
+	@NamedQuery(name="SubjectRole.findAll",
+			query="SELECT s FROM SubjectRole s"),
+	@NamedQuery(name="SubjectRole.count",
+			query="SELECT COUNT(s) FROM SubjectRole s")
+})
 public class SubjectRole extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	//bi-directional many-to-one association to Role
 	@ManyToOne
-	@JoinColumn(name="role")
+	@JoinColumn(name="role_id")
 	private Role roleBean;
 
 	//bi-directional many-to-one association to Subject
 	@ManyToOne
-	@JoinColumn(name="subject")
-	private Subject subject;
+	@JoinColumn(name="subject_id")
+	private Subject subjectBean;
 
 	public SubjectRole() {
 	}
@@ -42,12 +48,12 @@ public class SubjectRole extends OpenInfraModelObject implements Serializable {
 		this.roleBean = roleBean;
 	}
 
-	public Subject getSubject() {
-		return this.subject;
+	public Subject getSubjectBean() {
+		return this.subjectBean;
 	}
 
-	public void setSubject(Subject subject) {
-		this.subject = subject;
+	public void setSubjectBean(Subject subjectBean) {
+		this.subjectBean = subjectBean;
 	}
 
 }

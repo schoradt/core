@@ -2,6 +2,7 @@ package de.btu.openinfra.backend.rest.project;
 
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -11,17 +12,20 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
-import de.btu.openinfra.backend.db.daos.AttributeValueDao;
 import de.btu.openinfra.backend.db.daos.AttributeValueGeomType;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
-import de.btu.openinfra.backend.db.pojos.AttributeValuePojo;
+import de.btu.openinfra.backend.db.pojos.project.AttributeValuePojo;
+import de.btu.openinfra.backend.db.rbac.AttributeValueRbac;
+import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
-@Path("/projects/{projectId}/attributevalues")
+@Path(OpenInfraResponseBuilder.REST_URI_PROJECTS + "/attributevalues")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET,
     MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
@@ -32,13 +36,17 @@ public class AttributeValueResource {
 	@GET
 	@Path("{attributeValueId}")
 	public AttributeValuePojo get(
+			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("attributeValueId") UUID attributeValueId,
 			@QueryParam("geomType") AttributeValueGeomType geomType) {
-		return new AttributeValueDao(
+		return new AttributeValueRbac(
 				projectId,
 				OpenInfraSchemas.PROJECTS).read(
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
+						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						attributeValueId,
 						geomType);
@@ -47,13 +55,18 @@ public class AttributeValueResource {
 	@PUT
 	@Path("{attributeValueId}")
 	public Response update(
+			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("attributeValueId") UUID attributeValueId,
 			AttributeValuePojo pojo) {
-	    UUID id = new AttributeValueDao(
+	    UUID id = new AttributeValueRbac(
                 projectId,
-                OpenInfraSchemas.PROJECTS).distributeTypes(pojo, projectId,
+                OpenInfraSchemas.PROJECTS).distributeTypes(
+                		OpenInfraHttpMethod.valueOf(request.getMethod()),
+						uriInfo,
+						pojo, projectId,
                         attributeValueId);
         return OpenInfraResponseBuilder.putResponse(id);
 	}
@@ -66,11 +79,16 @@ public class AttributeValueResource {
 
 	@POST
     public Response create(
+    		@Context UriInfo uriInfo,
+    		@Context HttpServletRequest request,
             @PathParam("projectId") UUID projectId,
             AttributeValuePojo pojo) {
-	    UUID id = new AttributeValueDao(
+	    UUID id = new AttributeValueRbac(
                 projectId,
-                OpenInfraSchemas.PROJECTS).distributeTypes(pojo, projectId,
+                OpenInfraSchemas.PROJECTS).distributeTypes(
+                		OpenInfraHttpMethod.valueOf(request.getMethod()),
+						uriInfo,
+						pojo, projectId,
                         null);
         return OpenInfraResponseBuilder.postResponse(id);
     }
@@ -78,11 +96,15 @@ public class AttributeValueResource {
 	@DELETE
 	@Path("{attributeValueId}")
 	public Response delete(
+			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
     	    @PathParam("projectId") UUID projectId,
             @PathParam("attributeValueId") UUID attributeValueId) {
 	    return OpenInfraResponseBuilder.deleteResponse(
-	            new AttributeValueDao(projectId, OpenInfraSchemas.PROJECTS)
-	                .delete(attributeValueId),
+	            new AttributeValueRbac(projectId, OpenInfraSchemas.PROJECTS)
+	                .delete(OpenInfraHttpMethod.valueOf(request.getMethod()),
+							uriInfo,
+							attributeValueId),
                 attributeValueId);
 	}
 }

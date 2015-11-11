@@ -8,30 +8,31 @@ import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 @XmlRootElement
 public class PermissionPojo extends OpenInfraPojo {
 
-	private String description;
+    private String description;
 
-	private String permission;
-	
-	public PermissionPojo() {}
-	
-	public PermissionPojo(OpenInfraModelObject modelObject) {
-		super(modelObject);
-	}
+    private String permission;
 
-	public String getDescription() {
-		return this.description;
-	}
+    public PermissionPojo() {
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public PermissionPojo(OpenInfraModelObject modelObject) {
+        super(modelObject);
+    }
 
-	public String getPermission() {
-		return this.permission;
-	}
+    public String getDescription() {
+        return this.description;
+    }
 
-	public void setPermission(String permission) {
-		this.permission = permission;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getPermission() {
+        return this.permission;
+    }
+
+    public void setPermission(String permission) {
+        this.permission = permission;
+    }
 
 }

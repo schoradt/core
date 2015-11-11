@@ -1,7 +1,5 @@
 package de.btu.openinfra.backend.db.pojos.meta;
 
-import java.util.Date;
-
 import javax.xml.bind.annotation.XmlRootElement;
 
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
@@ -12,11 +10,12 @@ public class SettingsPojo extends OpenInfraPojo {
 
     private SettingKeysPojo key;
     private String value;
-    private Date updatedOn;
+    private String updatedOn;
     private ProjectsPojo project;
 
     /* Default constructor */
-    public SettingsPojo() {}
+    public SettingsPojo() {
+    }
 
     /* Constructor that will set the id, trid and meta data automatically */
     public SettingsPojo(OpenInfraModelObject modelObject) {
@@ -39,11 +38,11 @@ public class SettingsPojo extends OpenInfraPojo {
         this.value = value;
     }
 
-    public Date getUpdatedOn() {
+    public String getUpdatedOn() {
         return updatedOn;
     }
 
-    public void setUpdatedOn(Date updatedOn) {
+    public void setUpdatedOn(String updatedOn) {
         this.updatedOn = updatedOn;
     }
 

@@ -8,6 +8,7 @@ import java.util.UUID;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
+import javax.persistence.PersistenceException;
 import javax.persistence.Table;
 
 import org.eclipse.persistence.jpa.JpaQuery;
@@ -16,6 +17,7 @@ import org.json.simple.JSONObject;
 import de.btu.openinfra.backend.OpenInfraProperties;
 import de.btu.openinfra.backend.db.EntityManagerFactoryCache;
 import de.btu.openinfra.backend.db.MappingResult;
+import de.btu.openinfra.backend.db.OpenInfraOrderBy;
 import de.btu.openinfra.backend.db.OpenInfraOrderByEnum;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.OpenInfraSortOrder;
@@ -24,6 +26,9 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.pojos.MetaDataPojo;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
+import de.btu.openinfra.backend.exception.OpenInfraWebException;
 
 /**
  * This class is used to provide a sophisticated way to manage the JPA entity
@@ -157,12 +162,14 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	 * @param offset     the number where to start
 	 * @param size       the size of items to provide
 	 * @return           a list of objects of type POJO class
+	 * @throws           OpenInfraEntityException for unsupported orderBy types
+	 * @throws           OpenInfraWebException for internal server errors
 	 */
 	@SuppressWarnings("unchecked")
     public List<TypePojo> read(
     		Locale locale,
     		OpenInfraSortOrder order,
-    		OpenInfraOrderByEnum column,
+    		OpenInfraOrderBy column,
     		int offset,
     		int size) {
 		// 1. Define a list which holds the POJO objects
@@ -176,28 +183,52 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 		if(order == null) {
 			order = OpenInfraProperties.DEFAULT_ORDER;
 		}
-		// 4. Read the required ptlocale object
-		PtLocale ptl = new PtLocaleDao(currentProjectId, schema).read(locale);
+		// 4. Read the required ptlocale object if exists
+		String ptlId = "";
+		try {
+		    PtLocale ptl = new PtLocaleDao(currentProjectId, schema)
+		        .read(locale);
+		    ptlId = ptl.getId().toString();
+		} catch (PersistenceException e) {
+		    // The pt locale table only exists in projects and system schemas.
+		    // If a sorting is requested by another schema, we must catch the
+		    // exception and just do nothing.
+		}
 		// 5. Handle requests that contains an order by column
         if(column == null) {
             // 5.a When the column is null redirect to another method
             return read(locale, offset, size);
         } else {
-	        // 5.a Construct the origin SQL-based named query and replace the
-			//     the placeholder by the required column and sort order.
+            // orderBy UUIDs is not supported
+            if (column.isUuid()) {
+                throw new OpenInfraEntityException(
+                        OpenInfraExceptionTypes.WRONG_SORT_TYPE);
+            }
+            // check if the orderBy column is supported for the current object
+            checkOrderBy(column);
+
+            // 5.a Construct the origin SQL-based named query and replace the
+            //     the placeholder by the required column and sort order.
 	        String sqlString = em.createNamedQuery(
 	        		modelClass.getSimpleName() + ".findAllByLocaleAndOrder")
 	        		.unwrap(JpaQuery.class).getDatabaseQuery().getSQLString();
-	        sqlString = String.format(sqlString, column.name());
-	        sqlString += " " + order.name();
-	        // 5.b Retrieve the requested model objects from database
-	        models = em.createNativeQuery(
-	        		sqlString,
-	                modelClass)
-	                .setParameter(1, ptl.getId().toString())
-	                .setFirstResult(offset)
-	                .setMaxResults(size)
-	                .getResultList();
+            sqlString = String.format(sqlString, column.getColumn().name());
+            sqlString += " " + order.name();
+
+	        // 5.b Retrieve the requested model objects from database.
+	        try {
+	            models = em.createNativeQuery(
+	                    sqlString,
+	                    modelClass)
+	                    .setParameter(1, ptlId)
+	                    .setFirstResult(offset)
+	                    .setMaxResults(size)
+	                    .getResultList();
+            } catch (PersistenceException e) {
+                // can be thrown if the orderByEnum is incorrectly configured
+                throw new OpenInfraWebException(e);
+            }
+
 		} // end if else
 
 		// 6. Finally, map the JPA model objects to POJO objects
@@ -207,7 +238,7 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 		return pojos;
 	}
 
-	/**
+    /**
 	 * A special method which returns model objects. This method is primarily
 	 * used to create a search index.
 	 *
@@ -225,16 +256,39 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	 * database. The update function depends on the specified language.
 	 *
 	 * @param pojo    the POJO object which should be stored in the database
+	 * @param valueId the UUID of the specific object - should be null for
+	 *                create or POST requests
 	 * @return        the UUID of the newly created or replaced object
 	 * @throws RuntimeException
 	 */
-	public UUID createOrUpdate(TypePojo pojo)
-			throws RuntimeException {
+	public UUID createOrUpdate(TypePojo pojo, UUID valueId) {
 
-	    TypeModel model = createModelObject(pojo.getUuid());
-        // abort if the pojo and the type model is null
+		if(valueId != null && !valueId.equals(pojo.getUuid())) {
+			throw new OpenInfraEntityException(
+					OpenInfraExceptionTypes.INCOMPATIBLE_UUIDS);
+		}
+
+	    TypeModel model = createModelObject(valueId);
+        // abort if the POJO or the type model is null
         if (pojo == null || model == null) {
             return null;
+        }
+
+        // check if we come from a PUT request (special case handling for
+        // projects, because the can perform a POST with a passed value id)
+        // TODO this will avoid the TRID check for updating projects /
+        //      subprojects
+        if (valueId != null && !modelClass.getSimpleName().equals("Project")) {
+            // check if a TRID was sent by the client
+            if (pojo.getTrid() == 0) {
+                throw new OpenInfraEntityException(
+                		OpenInfraExceptionTypes.NO_TRID_PASSED);
+            }
+            // check if the TRID from the POJO equals the models xmin
+            if (pojo.getTrid() != model.getXmin()) {
+            	throw new OpenInfraEntityException(
+            			OpenInfraExceptionTypes.ENTITY_EXPIRED);
+            }
         }
 
         // 1. Map the POJO object to a JPA model object
@@ -250,21 +304,14 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 		EntityTransaction et = em.getTransaction();
 		try {
 			et.begin();
-	        em.merge(result.getModelObject());
+			em.merge(result.getModelObject());
 			et.commit();
-
-			// This will force a synchronization of the current created entity.
-			// Necessary for retrieving the xmin value for newly created
-			// entities.
-			// TODO avoid refresh for updated objects
-            em.refresh(em.find(modelClass, result.getId()));
-
 			return result.getId();
 		} catch(RuntimeException ex) {
 			if(et != null && et.isActive()) {
 				et.rollback();
 			} // end if
-			throw ex;
+			throw new OpenInfraWebException(ex);
 		} // end try catch
     }
 
@@ -275,18 +322,19 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	 * table meta_data.
 	 *
 	 * @param pojo     the POJO object which should be stored in the database
+	 * @param valueId  the value id from the URI
 	 * @param metaData the JSON data that should be stored in the meta data
 	 *                 associated to the POJO
 	 * @return
 	 */
-	public UUID createOrUpdate(TypePojo pojo, JSONObject metaData) {
+	public UUID createOrUpdate(
+			TypePojo pojo, UUID valueId, JSONObject metaData) {
 
 	    UUID retId = null;
 
 	    if (pojo != null) {
 	        // first createOrUpdate the TypePojo
-	        retId = createOrUpdate(pojo);
-
+	        retId = createOrUpdate(pojo, valueId);
 	        if (metaData != null) {
     	        // only check for meta data in project and system schema
     	        switch (schema) {
@@ -311,7 +359,7 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
     	                    // write the meta data
     	                    UUID metaId = new MetaDataDao(
     	                            currentProjectId, schema)
-    	                        .createOrUpdate(mdPojo);
+    	                        .createOrUpdate(mdPojo, valueId);
     	                    if (metaId == null) {
     	                        // TODO give feedback about meta data creation?
     	                    }
@@ -324,117 +372,6 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	    }
 	    return retId;
 	}
-
-    /**
-     * This method checks if the value that is part of the URI matches with
-     * the object id in the POJO. If it matches it will call the createOrUpdate
-     * method of the OpenInfraDao. Otherwise it will return null. If meta data
-     * is passed it will be created or updated as well.
-     *
-     * @param pojo     the POJO object which should be stored in the database
-     * @param valueId  the value id from the URI
-     * @param metaData the JSON data that should be stored in the meta data
-     *                 associated to the POJO
-     * @return         the UUID of the newly created or replaced object or null
-     * @throws RuntimeException
-     */
-    public UUID createOrUpdate(TypePojo pojo, UUID valueId, JSONObject metaData)
-            throws RuntimeException {
-
-        // check if the value id of the URI map to the POJO uuid
-        try {
-            if (!pojo.getUuid().equals(valueId)) {
-                return null;
-            }
-        } catch (NullPointerException e) { /* do nothing */ }
-        if (metaData != null) {
-            // update the meta data as well if it exists
-            return createOrUpdate(pojo, metaData);
-        } else {
-            return createOrUpdate(pojo);
-        }
-    }
-
-    /**
-     * This method checks if the first associated id that is part of the URI
-     * matches with the association id in the POJO. If it matches it will call
-     * the createOrUpdate method of the OpenInfraDao. Otherwise it will return
-     * null.
-     *
-     * @param pojo                        the POJO object which should be stored
-     *                                    in the database
-     * @param firstAssociationId          the first association id from the URI
-     * @param firstAssociationIdFromPojo  the first association id from the POJO
-     * @param metaData                    the JSON data that should be stored in
-     *                                    the meta data associated to the POJO
-     * @return                            the UUID of the newly created or
-     *                                    replaced object or null
-     * @throws RuntimeException
-     */
-    public UUID createOrUpdate(TypePojo pojo, UUID firstAssociationId,
-            UUID firstAssociationIdFromPojo, JSONObject metaData)
-            throws RuntimeException {
-
-        // check if the value id of the URI map to the pojo uuid
-        try {
-            if (!firstAssociationId.equals(firstAssociationIdFromPojo)) {
-                return null;
-            }
-        } catch (NullPointerException e) { /* do nothing */ }
-
-        if (metaData != null) {
-            // update the meta data as well if it exists
-            return createOrUpdate(pojo, metaData);
-        } else {
-            return createOrUpdate(pojo);
-        }
-    }
-
-    /**
-     * This method checks if the first associated id that is part of the URI
-     * matches with the association id in the POJO and the second associated id
-     * that is part of the URI matches with the id of the associated object in
-     * the POJO. If the matches are fulfilled the createOrUpdate method of the
-     * OpenInfraDao will be called. Otherwise it will return null.
-     *
-     * @param pojo                        the POJO object which should be stored
-     *                                    in the database
-     * @param firstAssociationId          the first association id from the URI
-     * @param firstAssociationIdFromPojo  the first association id from the POJO
-     * @param secondAssociationId         the second association id from the URI
-     * @param secondAssociationIdFromPojo the second association id from the
-     *                                    POJO
-     * @param metaData                    the JSON data that should be stored in
-     *                                    the meta data associated to the POJO
-     * @return                            the UUID of the newly created or
-     *                                    replaced object or null
-     * @throws RuntimeException
-     */
-    public UUID createOrUpdate(TypePojo pojo, UUID firstAssociationId,
-            UUID firstAssociationIdFromPojo, UUID secondAssociationId,
-            UUID secondAssociationIdFromPojo, JSONObject metaData)
-            throws RuntimeException {
-
-        // check if the value id of the URI map to the pojo uuid
-        try {
-            if (!firstAssociationId.equals(firstAssociationIdFromPojo)) {
-                return null;
-            }
-        } catch (NullPointerException e) { /* do nothing */ }
-
-        try {
-            if (!secondAssociationId.equals(secondAssociationIdFromPojo)) {
-                return null;
-            }
-        } catch (NullPointerException e) { /* do nothing */ }
-
-        if (metaData != null) {
-            // update the meta data as well if it exists
-            return createOrUpdate(pojo, metaData);
-        } else {
-            return createOrUpdate(pojo);
-        }
-    }
 
 	/**
 	 * This is a generic method which reads a specific pojo object. We decided
@@ -478,8 +415,8 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	 *
 	 * @param modelObject the pre initialized model object
 	 * @param pojoObject  the POJO object
-	 * @return            a corresponding JPA model object or null if the pojo
-	 *                    object is null
+	 * @return            a corresponding JPA model object
+	 * @throws            OpenInfraEntityException
 	 */
 	public abstract MappingResult<TypeModel> mapToModel(
 			TypePojo pojoObject, TypeModel modelObject);
@@ -538,23 +475,35 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	 * method tries to deliver an existing object. When the UUID is null it
 	 * creates a new object and generates a random UUID.
 	 *
+	 * This is a very central method which is always called when a POJO object
+	 * is mapped into a model object.
+	 *
 	 * @param id the UUID of the requested object or null
 	 * @return   a model object (new or old) or null if the pojo id doesn't
 	 *           exists
 	 */
 	protected TypeModel createModelObject(UUID id) {
 		TypeModel tm = null;
+		UUID uuid = UUID.randomUUID();
+
 		if(id != null) {
+		    // retrieve the object from the database
 			tm = em.find(modelClass, id);
-			// TODO check if tm null
-		} else {
+			// set the passed id as POJO id if we came from project class
+			if (modelClass.getSimpleName().equals("Project")) {
+                uuid = id;
+            }
+		}
+
+		if(tm == null) {
 			try {
 				tm = modelClass.newInstance();
-				tm.setId(UUID.randomUUID());
+				tm.setId(uuid);
 			} catch(Exception ex) {
 				ex.printStackTrace();
 			} // end try catch
-		} // end if else
+		}
+
 		return tm;
 	}
 
@@ -586,5 +535,42 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 		} // end if
 		super.finalize();
 	}
+
+	/**
+     * This method retrieves the list of objects from the OpenInfraOrderByEnum
+     * for the passed orderBy column and compares it with the current object. If
+     * the current object is not part of the retrieved list, an
+     * OpenInfraEntityException is thrown.
+     *
+     * @param column
+     * @throws OpenInfraEntityException if the current object is not supported
+     *         by the OpenInfraOrderByEnum for the passed column
+     */
+    protected void checkOrderBy(OpenInfraOrderBy column) {
+        // flag to determine if the orderBy type is supported
+        boolean wrongSortType = true;
+
+        // get the list of classes that fit to the orderBy column
+        List<String> orderByClasses =
+                OpenInfraOrderByEnum.valueOf(
+                        column.getColumn().name()).getList();
+
+        // iterate over all class names
+        for (String cl : orderByClasses) {
+            // check if the current modelClass fits to a class from the
+            // orderBy column
+            if (modelClass.getSimpleName().equals(cl)) {
+                wrongSortType = false;
+                break;
+            }
+        }
+
+        // throw an exception if a wrong sort type was detected
+        if (wrongSortType) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.WRONG_SORT_TYPE);
+        }
+
+    }
 
 }

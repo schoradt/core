@@ -1,5 +1,8 @@
 package de.btu.openinfra.backend.db.pojos;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class LocalizedString {
 	
 	protected String characterString;
