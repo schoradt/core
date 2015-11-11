@@ -45,6 +45,34 @@ public class OpenInfraValueValueRbac<
 		this.valueClass2 = valueClass2;
 	}
 
+	/**
+	 * This is a generic method to delete associations.
+	 *
+	 * @param httpMethod the method which has been used to access the current
+	 * resource
+	 * @param uriInfo the URI information
+	 * @param uuid1 first uuid
+	 * @param uuid2 second uuid
+	 * @return the uuid of the association when the association was deleted,
+     * otherwise null
+	 */
+	public UUID delete(
+	        OpenInfraHttpMethod httpMethod,
+            UriInfo uriInfo,
+            UUID uuid1,
+            UUID uuid2) {
+	    checkPermission(httpMethod, uriInfo);
+        try {
+            return dao.getDeclaredConstructor(constructorTypes).newInstance(
+                    currentProjectId,
+                    schema).delete(uuid1, uuid2);
+        } catch (InstantiationException   | IllegalAccessException |
+                 IllegalArgumentException | InvocationTargetException |
+                 NoSuchMethodException    | SecurityException ex) {
+            throw new OpenInfraWebException(ex);
+        }
+	}
+
 	public List<TypePojo> read(
 			OpenInfraHttpMethod httpMethod,
 			UriInfo uriInfo,
@@ -64,8 +92,8 @@ public class OpenInfraValueValueRbac<
 									valueId2,
 									offset,
 									size);
-		} catch (InstantiationException   | IllegalAccessException | 
-				 IllegalArgumentException | InvocationTargetException | 
+		} catch (InstantiationException   | IllegalAccessException |
+				 IllegalArgumentException | InvocationTargetException |
 				 NoSuchMethodException    | SecurityException ex) {
 			throw new OpenInfraWebException(ex);
 		}
@@ -103,8 +131,8 @@ public class OpenInfraValueValueRbac<
                             secondAssociationId,
                             secondAssociationIdFromPojo,
                             json);
-		} catch (InstantiationException   | IllegalAccessException | 
-				 IllegalArgumentException | InvocationTargetException | 
+		} catch (InstantiationException   | IllegalAccessException |
+				 IllegalArgumentException | InvocationTargetException |
 				 NoSuchMethodException    | SecurityException ex) {
 			throw new OpenInfraWebException(ex);
 		}
