@@ -309,17 +309,20 @@ public class AttributeTypeResource {
     		@Context HttpServletRequest request,
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema,
+            @PathParam("attributeTypeId") UUID attributeTypeId,
             @PathParam("associatedAttributeTypeId")
                 UUID associatedAttributeTypeId) {
+        UUID deletedUuid = new AttributeTypeAssociationRbac(
+              projectId,
+              OpenInfraSchemas.valueOf(schema.toUpperCase())).delete(
+                      OpenInfraHttpMethod.valueOf(
+                            request.getMethod()),
+                      uriInfo,
+                      attributeTypeId,
+                      associatedAttributeTypeId);
         return OpenInfraResponseBuilder.deleteResponse(
-                new AttributeTypeAssociationRbac(
-                        projectId,
-                        OpenInfraSchemas.valueOf(schema.toUpperCase())).delete(
-        						OpenInfraHttpMethod.valueOf(
-        								request.getMethod()),
-        						uriInfo,
-                                associatedAttributeTypeId),
-                                associatedAttributeTypeId);
+                deletedUuid != null,
+                deletedUuid);
     }
 
     @PUT
