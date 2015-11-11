@@ -150,15 +150,15 @@ public class SolrIndexer {
      * @return SolrInputDocument the Solr document
      */
     public SolrInputDocument createOrUpdateDocument(TopicInstance ti) {
+
+        UUID projectId = ti.getTopicCharacteristic().getProject().getId();
         SolrInputDocument doc = new SolrInputDocument();
 
-        // TODO use same finals as in SolrSearcher!
         // add the topic instance id as document id
         doc.addField(SolrIndexEnum.TOPIC_INSTANCE_ID.getString(), ti.getId());
 
         // add the project id
-        doc.addField(SolrIndexEnum.PROJECT_ID.getString(),
-                ti.getTopicCharacteristic().getProject().getId());
+        doc.addField(SolrIndexEnum.PROJECT_ID.getString(), projectId);
 
         // add the topic characteristic id
         doc.addField(SolrIndexEnum.TOPIC_CHARACTERISTIC_ID.getString(),
@@ -166,6 +166,13 @@ public class SolrIndexer {
 
         // run through all attribute values
         for (AttributeValueValue avv : ti.getAttributeValueValues()) {
+            // TODO get all data types from the specified value list and save
+            //      the values in fields that concurs to the data type
+            // get the id of the value list vl_data_type
+            //new ValueListDao(projectId, OpenInfraSchemas.PROJECTS).read
+            // get all value list values that are in the value list vl_data_type
+            //new ValueListValueDao(projectId,
+            //        OpenInfraSchemas.PROJECTS).read(null, valueId, offset, size)
             // add the current attribute value value to the doc
             addValuesToDoc(
                     avv.getAttributeTypeToAttributeTypeGroup()
