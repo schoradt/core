@@ -110,7 +110,7 @@
 		            "</select></td>");
 			
 			// add the attribute value
-		    $("#line_"+lines).append("<td><input class=form-control name=av"+lines+" type=text/></td>");
+		    $("#line_"+lines).append("<td><input class=form-control required=\"required\" name=av"+lines+" type=text/></td>");
 			
 			// add the till attribute value
 		    $("#line_"+lines).append("<td><input class=form-control name=tav"+lines+" id=tav"+lines+"_field /></td>");
@@ -144,8 +144,10 @@
 		        
 		        if (element.options[element.selectedIndex].value == "BETWEEN") {
 		            $("#tav"+id.split("_")[1]+"_field").show();
+		            $("#tav"+id.split("_")[1]+"_field").attr("required", "required");
 		        } else {
 		            $("#tav"+id.split("_")[1]+"_field").hide();
+		            $("#tav"+id.split("_")[1]+"_field").removeAttr("required");
 		        }
 		        
 		    }
