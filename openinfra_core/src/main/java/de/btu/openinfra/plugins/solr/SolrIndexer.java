@@ -94,10 +94,9 @@ public class SolrIndexer {
             }
             return true;
         } catch (Exception e) {
-            // TODO specify the exceptions?
             // TODO replace with SolrExceptionType
             throw new OpenInfraSolrException(
-                    OpenInfraExceptionTypes.INTERNAL_SERVER_EXCEPTION);
+                    OpenInfraExceptionTypes.SOLR_INDEX_FAILED);
         }
     }
 

@@ -38,11 +38,11 @@ public class SolrQueryParser {
         } catch (Exception e) {
             // TODO replace with SolrExceptionType
             throw new OpenInfraSolrException(
-                    OpenInfraExceptionTypes.INTERNAL_SERVER_EXCEPTION);
+                    OpenInfraExceptionTypes.SOLR_REQUEST_PARSE);
         }
         // TODO replace with SolrExceptionType
         throw new OpenInfraSolrException(
-                OpenInfraExceptionTypes.INTERNAL_SERVER_EXCEPTION);
+                OpenInfraExceptionTypes.SOLR_SEARCH_POJO_EMPTY);
     }
 
     /**
@@ -122,7 +122,7 @@ public class SolrQueryParser {
                         // TODO replace with SolrExceptionType
                         throw new OpenInfraSolrException(
                                 OpenInfraExceptionTypes
-                                .INTERNAL_SERVER_EXCEPTION);
+                                .SOLR_REQUEST_NUMERIC_EXPECTED);
                     }
                     break;
                 case BETWEEN:

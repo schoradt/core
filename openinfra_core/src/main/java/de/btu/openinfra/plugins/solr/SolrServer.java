@@ -77,12 +77,11 @@ public class SolrServer {
             setSolr(new HttpSolrClient(getUrl()));
 
             // test the connection
-            if (getSolr() == null || getSolr().ping().getStatus() != 0) {
-                throw new OpenInfraSolrException(
-                        OpenInfraExceptionTypes.INTERNAL_SERVER_EXCEPTION);
-            }
+            getSolr().ping();
+
         } catch (SolrServerException | IOException | RemoteSolrException e) {
-            throw new OpenInfraWebException(e);
+            throw new OpenInfraSolrException(
+                    OpenInfraExceptionTypes.SOLR_SERVER_NOT_FOUND);
         }
     }
 
