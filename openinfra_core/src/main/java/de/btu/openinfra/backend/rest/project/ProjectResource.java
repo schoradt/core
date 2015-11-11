@@ -167,11 +167,14 @@ public class ProjectResource {
 	public Response createProject(
 			@Context UriInfo uriInfo,
 			@Context HttpServletRequest request,
+			@QueryParam("createEmpty") boolean createEmpty,
 			ProjectPojo project) {
 	    // create the project
+		System.out.println("--> " + createEmpty);
 		UUID id = new ProjectRbac(
 		        null, OpenInfraSchemas.PROJECTS).createProject(
 		                project,
+		                createEmpty,
 		                OpenInfraHttpMethod.valueOf(
 		                        request.getMethod()), uriInfo);
 		// TODO add informations to the meta data schema, this is necessary for
