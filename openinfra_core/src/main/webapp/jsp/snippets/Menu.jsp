@@ -14,6 +14,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+<c:set var="currentProject" value=""/>
+<% pageContext.setAttribute("currentProject", ProjectDao.getCurrentProject(
+		request.getAttribute("javax.servlet.forward.request_uri").toString())); %>
+
 <header class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container" style="width: 100%;">
   <div id="header">
