@@ -125,6 +125,31 @@ public class AttributeTypeGroupResource {
 						size);
 	}
 
+	@POST
+	@Path("{attributeTypeGroupId}/attributetypes")
+    public Response createRelationshipType(
+            @Context UriInfo uriInfo,
+            @Context HttpServletRequest request,
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            @PathParam("attributeTypeGroupId") UUID attributeTypeGroupId,
+            AttributeTypeToAttributeTypeGroupPojo pojo) {
+        return OpenInfraResponseBuilder.postResponse(
+                new AttributeTypeToAttributeTypeGroupRbac(
+                        projectId,
+                        OpenInfraSchemas.valueOf(schema.toUpperCase())
+                        ).createOrUpdate(
+                                OpenInfraHttpMethod.valueOf(
+                                        request.getMethod()),
+                                uriInfo,
+                                pojo,
+                                attributeTypeGroupId,
+                                pojo.getAttributeTypeGroupId(),
+                                null,
+                                null,
+                                pojo.getMetaData()));
+    }
+
 	@GET
 	@Path("{attributeTypeGroupId}/attributetypes/count")
 	@Produces({MediaType.TEXT_PLAIN})
@@ -165,6 +190,52 @@ public class AttributeTypeGroupResource {
 						offset,
 						size);
 	}
+
+	@PUT
+	@Path("{attributeTypeGroupId}/attributetypes/{attributeTypeId}")
+    public Response update(
+            @Context UriInfo uriInfo,
+            @Context HttpServletRequest request,
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            @PathParam("attributeTypeGroupId") UUID attributeTypeGroupId,
+            @PathParam("attributeTypeId") UUID attributeTypeId,
+            AttributeTypeToAttributeTypeGroupPojo pojo) {
+        return OpenInfraResponseBuilder.putResponse(
+                new AttributeTypeToAttributeTypeGroupRbac(
+                        projectId,
+                        OpenInfraSchemas.valueOf(schema.toUpperCase())
+                        ).createOrUpdate(
+                                OpenInfraHttpMethod.valueOf(
+                                        request.getMethod()),
+                                uriInfo,
+                                pojo,
+                                attributeTypeGroupId,
+                                pojo.getAttributeTypeGroupId(),
+                                attributeTypeId,
+                                pojo.getAttributeType().getUuid(),
+                                pojo.getMetaData()));
+    }
+
+    @DELETE
+    @Path("{attributeTypeGroupId}/attributetypes/{attributeTypeId}")
+    public Response delete(
+            @Context UriInfo uriInfo,
+            @Context HttpServletRequest request,
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            @PathParam("attributeTypeGroupId") UUID attributeTypeGroupId,
+            @PathParam("attributeTypeId") UUID attributeTypeId) {
+        return OpenInfraResponseBuilder.deleteResponse(
+                new AttributeTypeToAttributeTypeGroupRbac(
+                        projectId,
+                        OpenInfraSchemas.valueOf(schema.toUpperCase())).delete(
+                                OpenInfraHttpMethod.valueOf(
+                                      request.getMethod()),
+                                uriInfo,
+                                attributeTypeGroupId,
+                                attributeTypeId));
+    }
 
 	@GET
 	@Path("{attributeTypeGroupId}/topiccharacteristics")
