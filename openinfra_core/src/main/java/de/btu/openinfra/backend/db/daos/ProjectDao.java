@@ -291,10 +291,11 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 	 * meta data schema.
 	 *
 	 * @param project the project pojo
+	 * @param createEmpty creates an empty project schema when true
 	 * @return        the UUID of the new created project
 	 * @throws OpenInfraWebException if something went wrong
 	 */
-	public UUID createProject(ProjectPojo pojo) {
+	public UUID createProject(ProjectPojo pojo, boolean createEmpty) {
 
 		// the UUID that will be returned
 	    UUID id = null;
