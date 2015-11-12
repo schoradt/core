@@ -156,17 +156,6 @@ public class RelationshipTypeResource {
 						size);
 	}
 
-	@GET
-    @Path("/new")
-    public RelationshipTypePojo newRelationshipType(
-    		@Context UriInfo uriInfo,
-    		@Context HttpServletRequest request,
-            @QueryParam("language") String language,
-            @PathParam("projectId") UUID projectId,
-            @PathParam("schema") String schema) {
-        return new RelationshipTypePojo();
-    }
-
 	@POST
     public Response createRelationshipType(
     		@Context UriInfo uriInfo,
