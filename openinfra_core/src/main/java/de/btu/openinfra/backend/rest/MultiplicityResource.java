@@ -144,7 +144,8 @@ public class MultiplicityResource {
 		return OpenInfraResponseBuilder.putResponse(
 				new MultiplicityRbac(
 						projectId,
-						OpenInfraSchemas.PROJECTS).createOrUpdate(
+						OpenInfraSchemas.valueOf(schema.toUpperCase())
+						).createOrUpdate(
 								OpenInfraHttpMethod.valueOf(request.getMethod()),
 								uriInfo,
 								pojo,
