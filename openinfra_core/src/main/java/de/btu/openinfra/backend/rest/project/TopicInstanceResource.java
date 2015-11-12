@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -178,7 +179,7 @@ public class TopicInstanceResource {
             @PathParam("associatedTopicInstanceId")
                 UUID associatedTopicInstanceId,
             TopicInstanceAssociationPojo pojo) {
-	    return OpenInfraResponseBuilder.postResponse(
+	    return OpenInfraResponseBuilder.putResponse(
                 new TopicInstanceAssociationRbac(
                         projectId,
                         OpenInfraSchemas.PROJECTS).createOrUpdate(
@@ -193,7 +194,7 @@ public class TopicInstanceResource {
                                 pojo.getMetaData()));
     }
 
-	@PUT
+	@DELETE
     @Path("{topicInstanceId}/associations/{associatedTopicInstanceId}")
     public Response delete(
             @Context UriInfo uriInfo,

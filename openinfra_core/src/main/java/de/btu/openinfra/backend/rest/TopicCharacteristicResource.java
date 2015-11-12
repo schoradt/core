@@ -255,7 +255,7 @@ public class TopicCharacteristicResource {
             @PathParam("topicCharacteristicId") UUID topicCharacteristicId,
             @PathParam("relationshipTypeId") UUID relationshipTypeId,
             RelationshipTypeToTopicCharacteristicPojo pojo) {
-        return OpenInfraResponseBuilder.postResponse(
+        return OpenInfraResponseBuilder.putResponse(
                 new RelationshipTypeToTopicCharacteristicRbac(
                         projectId,
                         OpenInfraSchemas.valueOf(schema.toUpperCase())
@@ -335,7 +335,7 @@ public class TopicCharacteristicResource {
             @PathParam("schema") String schema,
             @PathParam("topicCharacteristicId") UUID topicCharacteristicId,
             TopicCharacteristicPojo pojo) {
-        return OpenInfraResponseBuilder.postResponse(
+        return OpenInfraResponseBuilder.putResponse(
                 new TopicCharacteristicRbac(
                         projectId,
                         OpenInfraSchemas.PROJECTS).createOrUpdate(

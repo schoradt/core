@@ -117,7 +117,7 @@ public class RelationshipTypeResource {
 
     @POST
     @Path("{relationshipTypeId}/topiccharacteristics")
-    public Response createRelationshipType(
+    public Response create(
             @Context UriInfo uriInfo,
             @Context HttpServletRequest request,
             @PathParam("projectId") UUID projectId,
@@ -191,7 +191,7 @@ public class RelationshipTypeResource {
             @PathParam("relationshipTypeId") UUID relationshipTypeId,
             @PathParam("topicCharacteristicId") UUID topicCharacteristicId,
             TopicCharacteristicToRelationshipTypePojo pojo) {
-        return OpenInfraResponseBuilder.postResponse(
+        return OpenInfraResponseBuilder.putResponse(
                 new TopicCharacteristicToRelationshipTypeRbac(
                         projectId,
                         OpenInfraSchemas.valueOf(schema.toUpperCase())
@@ -264,7 +264,7 @@ public class RelationshipTypeResource {
                 		OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
                         pojo, relationshipTypeId, pojo.getMetaData());
-        return OpenInfraResponseBuilder.postResponse(uuid);
+        return OpenInfraResponseBuilder.putResponse(uuid);
 	}
 
 	@DELETE

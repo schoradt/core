@@ -152,7 +152,7 @@ public class ValueListValuesResource {
             @PathParam("associatedValueListValueId")
                 UUID associatedValueListValueId,
             ValueListValueAssociationPojo pojo) {
-        return OpenInfraResponseBuilder.postResponse(
+        return OpenInfraResponseBuilder.putResponse(
                 new ValueListValueAssociationRbac(
                         projectId,
                         OpenInfraSchemas.valueOf(schema.toUpperCase())
@@ -205,7 +205,7 @@ public class ValueListValuesResource {
                 		OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
                         pojo, valueListValueId, pojo.getMetaData());
-        return OpenInfraResponseBuilder.postResponse(uuid);
+        return OpenInfraResponseBuilder.putResponse(uuid);
     }
 
 	@DELETE

@@ -268,7 +268,7 @@ public class AttributeTypeGroupResource {
             @PathParam("attributeTypeGroupId") UUID attributeTypeGroupId,
             @PathParam("topicCharacteristicId") UUID topicCharacteristicId,
             TopicCharacteristicToAttributeTypeGroupPojo pojo) {
-	    return OpenInfraResponseBuilder.postResponse(
+	    return OpenInfraResponseBuilder.putResponse(
                 new TopicCharacteristicToAttributeTypeGroupRbac(
                         projectId,
                         OpenInfraSchemas.valueOf(schema.toUpperCase())
