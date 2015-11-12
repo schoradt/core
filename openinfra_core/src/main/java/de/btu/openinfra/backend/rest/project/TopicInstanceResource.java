@@ -69,6 +69,48 @@ public class TopicInstanceResource {
 						topicInstanceId);
 	}
 
+	@PUT
+    @Path("{topicInstanceId}")
+    public Response update(
+            @Context UriInfo uriInfo,
+            @Context HttpServletRequest request,
+            @QueryParam("language") String language,
+            @PathParam("projectId") UUID projectId,
+            @PathParam("topicInstanceId") UUID topicInstanceId,
+            TopicInstancePojo pojo) {
+	    return OpenInfraResponseBuilder.putResponse(
+	            new TopicInstanceRbac(
+	                    projectId,
+	                    OpenInfraSchemas.PROJECTS).createOrUpdate(
+	                            OpenInfraHttpMethod.valueOf(
+                                        request.getMethod()),
+	                            uriInfo,
+	                            pojo,
+	                            topicInstanceId,
+	                            pojo.getMetaData()));
+    }
+
+	@DELETE
+	@Path("{topicInstanceId}")
+	public Response delete(
+	        @Context UriInfo uriInfo,
+            @Context HttpServletRequest request,
+            @QueryParam("language") String language,
+            @PathParam("projectId") UUID projectId,
+            @PathParam("topicInstanceId") UUID topicInstanceId) {
+	    boolean deleteResult =
+	            new TopicInstanceRbac(
+                    projectId,
+                    OpenInfraSchemas.PROJECTS).delete(
+                            OpenInfraHttpMethod.valueOf(
+                                    request.getMethod()),
+                            uriInfo,
+                            topicInstanceId);
+	    return OpenInfraResponseBuilder.deleteResponse(
+	            deleteResult,
+	            topicInstanceId);
+	}
+
 	@GET
 	@Path("{topicInstanceId}/associations")
 	public List<TopicInstanceAssociationPojo> getAssociations(
