@@ -15,6 +15,8 @@ public enum OpenInfraExceptionTypes {
 
     RENAME_SCHEMA("Failed to rename the project schema."),
 
+    INSERT_INITIAL_DATA("Failed to load the static value lists."),
+
     INSERT_META_DATA("Failed to create an entry in the table "
     		+ "database_connection."),
 

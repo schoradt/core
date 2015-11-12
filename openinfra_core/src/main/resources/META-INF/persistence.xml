@@ -71,7 +71,7 @@
 		<class>de.btu.openinfra.backend.db.jpa.model.file.SupportedMimeType</class>
 	</persistence-unit>
 	
-	<!-- This PU is necessary to create new project schemas and fill them with some initial data -->
+	<!-- This PU is necessary to create new project schemas -->
 	<persistence-unit name="openinfra_schema_creation">
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>	
 		<properties>
@@ -79,9 +79,17 @@
 			<property name="javax.persistence.schema-generation.create-source" value="script" />
 			<property name="javax.persistence.schema-generation.create-script-source" 
 			          value="de/btu/openinfra/backend/sql/project_schema.sql" />
+		</properties>
+	</persistence-unit>
+	
+	<!-- This PU is necessary to fill the project schema with some initial data -->
+	<persistence-unit name="openinfra_static_valuelist_creation">
+		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>	
+		<properties>
+			<property name="javax.persistence.schema-generation.database.action" value="create" />
+			<property name="javax.persistence.schema-generation.create-source" value="script" />
 			<property name="javax.persistence.sql-load-script-source" 
 					  value="de/btu/openinfra/backend/sql/project_static_valuelist.sql"/>
 		</properties>
 	</persistence-unit>
-	
 </persistence>
