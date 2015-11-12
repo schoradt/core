@@ -67,9 +67,13 @@ public abstract class OpenInfraValueValueDao<
 	 * otherwise null
 	 */
 	public UUID delete(UUID uuid1, UUID uuid2) {
-	    UUID deleteUuid = read(null, uuid1, uuid2, 0, 1).get(0).getUuid();
-	    boolean deleteResult = delete(deleteUuid);
-	    return (deleteResult == true) ? deleteUuid : null;
+	    UUID deletedUuid = null;
+	    List<TypePojo> readResult = read(null, uuid1, uuid2, 0, 1);
+	    if(readResult != null && readResult.size() == 1) {
+	        deletedUuid = (delete(readResult.get(0).getUuid()) == true) ?
+	                readResult.get(0).getUuid() : null;
+	    }
+	    return deletedUuid;
 	}
 
 	/**
