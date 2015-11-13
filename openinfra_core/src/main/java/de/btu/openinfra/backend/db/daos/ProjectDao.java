@@ -309,6 +309,12 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 		// the UUID that will be returned
 	    UUID id = null;
 
+	    // if the POJO is empty we will abort here
+	    if (pojo == null) {
+	        throw new OpenInfraEntityException(
+	                OpenInfraExceptionTypes.EMPTY_POJO);
+	    }
+
 	    // set the default database properties
 	    properties = OpenInfraProperties.getConnectionProperties();
 

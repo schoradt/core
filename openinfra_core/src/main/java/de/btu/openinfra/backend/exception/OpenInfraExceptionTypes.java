@@ -11,6 +11,8 @@ public enum OpenInfraExceptionTypes {
 
 	INTERNAL_SERVER_EXCEPTION(""),
 
+	EMPTY_POJO("The specified POJO is empty. Progress arborted."),
+
     CREATE_SCHEMA("Failed to create the new project schema."),
 
     RENAME_SCHEMA("Failed to rename the project schema."),
