@@ -297,14 +297,14 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 	 *
 	 * @param project the      project pojo
 	 * @param createEmpty      Creates an empty project schema when true.
-	 * @param loadIntitialData Loads the initial data from the system schema
+	 * @param loadInitialData  Loads the initial data from the system schema
 	 *                         when true. This parameter will only have an
 	 *                         effect if createEmpty is false.
 	 * @return                 the UUID of the new created project
 	 * @throws OpenInfraWebException if something went wrong
 	 */
 	public UUID createProject(ProjectPojo pojo, boolean createEmpty,
-	        boolean loadIntitialData) {
+	        boolean loadInitialData) {
 
 		// the UUID that will be returned
 	    UUID id = null;
@@ -352,7 +352,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
                     // the new project schema
                     writeBasicProjectData(pojo, newProjectId);
 
-                    if (loadIntitialData) {
+                    if (loadInitialData) {
                         // copy the initial data from the system schema into the
                         // new project schema
                         mergeSystemData(newProjectId);
