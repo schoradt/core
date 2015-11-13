@@ -58,6 +58,25 @@ public abstract class OpenInfraValueValueDao<
 	}
 
 	/**
+	 * This method deletes an association entity from the database. Previously
+     * it checks if meta data exists for this entity and delete it as well.
+     *
+	 * @param uuid1 first uuid of the association
+	 * @param uuid2 second uuid of the association
+	 * @return the uuid of the association when the association was deleted,
+	 * otherwise null
+	 */
+	public UUID delete(UUID uuid1, UUID uuid2) {
+	    UUID deletedUuid = null;
+	    List<TypePojo> readResult = read(null, uuid1, uuid2, 0, 1);
+	    if(readResult != null && readResult.size() == 1) {
+	        deletedUuid = (delete(readResult.get(0).getUuid()) == true) ?
+	                readResult.get(0).getUuid() : null;
+	    }
+	    return deletedUuid;
+	}
+
+	/**
 	 * This is a generic method which reads a list of TypePojos defined by
      * two specific UUID values (e.g. get a list of objects which belong to a
      * combination of two specific objects). This method presumes a
