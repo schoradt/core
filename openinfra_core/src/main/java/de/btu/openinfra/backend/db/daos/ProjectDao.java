@@ -53,6 +53,11 @@ import de.btu.openinfra.backend.exception.OpenInfraWebException;
  */
 public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 
+    /*
+     * Contains the default database connection properties.
+     */
+    private Map<String, String> properties;
+
 	/**
 	 * This is the required constructor which calls the super constructor and in
 	 * turn creates the corresponding entity manager.
@@ -290,15 +295,22 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 	 * necessary to create a new database schema and write some data into the
 	 * meta data schema.
 	 *
-	 * @param project the project pojo
-	 * @param createEmpty creates an empty project schema when true
-	 * @return        the UUID of the new created project
+	 * @param project the      project pojo
+	 * @param createEmpty      Creates an empty project schema when true.
+	 * @param loadIntitialData Loads the initial data from the system schema
+	 *                         when true. This parameter will only have an
+	 *                         effect if createEmpty is false.
+	 * @return                 the UUID of the new created project
 	 * @throws OpenInfraWebException if something went wrong
 	 */
-	public UUID createProject(ProjectPojo pojo, boolean createEmpty) {
+	public UUID createProject(ProjectPojo pojo, boolean createEmpty,
+	        boolean loadIntitialData) {
 
 		// the UUID that will be returned
 	    UUID id = null;
+
+	    // set the default database properties
+	    properties = OpenInfraProperties.getConnectionProperties();
 
 	    // generate a UUID for the new project
         UUID newProjectId = UUID.randomUUID();
@@ -322,18 +334,30 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 	    } else {
 	        try {
     	        // create the database schema
-                createSchema(pojo, newProjectId);
+                createSchema();
+
+                if (!createEmpty) {
+                    // insert the static value lists
+                    loadStaticValueLists();
+                }
+
+                // rename the project schema
+                renameSchema(pojo, newProjectId);
 
                 // insert the necessary data into the meta data schema
                 writeMetaData(newProjectId, null);
 
-                // insert the basic project data into the project table in the
-                // new project schema
-                writeBasicProjectData(pojo, newProjectId);
+                if (!createEmpty) {
+                    // insert the basic project data into the project table in
+                    // the new project schema
+                    writeBasicProjectData(pojo, newProjectId);
 
-                // copy the initial data from the system schema into the new
-                // project schema
-                mergeSystemData(newProjectId);
+                    if (loadIntitialData) {
+                        // copy the initial data from the system schema into the
+                        // new project schema
+                        mergeSystemData(newProjectId);
+                    }
+                }
 
                 // save the new id for returning it to the client
                 id = newProjectId;
@@ -397,25 +421,32 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
     /**
      * This method creates a new project schema with the given project id. The
      * schema creation will be handled by JPA using a special persistence
-     * context. After schema creation a stored procedure is called that will
-     * rename the schema.
+     * context. At this point the locales will written as well.
      *
-     * @param pojo
-     * @param newProjectId
-     * @throws OpenInfraDatabaseException if the creation or renaming of the
-     *         schema failed.
+     * @throws OpenInfraDatabaseException if the creation of the schema failed.
      * @return
      */
-    private void createSchema(ProjectPojo pojo, UUID newProjectId) {
+    private void createSchema() {
         try {
-            // set the default database connection properties
-            Map<String, String> properties =
-                    OpenInfraProperties.getConnectionProperties();
-
             // create the new project schema with trigger and initial project
             // data
             Persistence.generateSchema("openinfra_schema_creation", properties);
+        } catch (PersistenceException pe) {
+            throw new OpenInfraDatabaseException(
+                    OpenInfraExceptionTypes.CREATE_SCHEMA);
+        }
+    }
 
+    /**
+     * This method renames a project schema by calling a stored procedure.
+     *
+     * @param pojo         The data POJO of the project.
+     * @param newProjectId The id of the created project.
+     * @throws OpenInfraDatabaseException if the renaming of the schema failed.
+     * @return
+     */
+    private void renameSchema(ProjectPojo pojo, UUID newProjectId) {
+        try {
             // rename the project schema
             if (!em.createStoredProcedureQuery(
                 "rename_project_schema", Boolean.class)
@@ -436,9 +467,27 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
                 throw new OpenInfraDatabaseException(
                         OpenInfraExceptionTypes.RENAME_SCHEMA);
             }
+        } catch (PersistenceException | IllegalArgumentException pe) {
+            // something went wrong while renaming the schema
+            throw new OpenInfraDatabaseException(
+                    OpenInfraExceptionTypes.RENAME_SCHEMA);
+        }
+    }
+
+    /**
+     * This method writes the static value lists into the schema.
+     *
+     * @throws OpenInfraDatabaseException if the writing the data failed.
+     * @return
+     */
+    private void loadStaticValueLists() {
+        try {
+            // insert the initial project data
+            Persistence.generateSchema(
+                    "openinfra_static_valuelist_creation", properties);
         } catch (PersistenceException pe) {
             throw new OpenInfraDatabaseException(
-                    OpenInfraExceptionTypes.CREATE_SCHEMA);
+                    OpenInfraExceptionTypes.INSERT_INITIAL_DATA);
         }
     }
 
@@ -448,7 +497,6 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
      * @param projectId
      */
     private void deleteSchema(UUID projectId) {
-
         try {
             // delete the project schema
             if(em.createStoredProcedureQuery(
@@ -519,8 +567,8 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 
                 // set all necessary data for the database connection
                 dbCPojo.setSchema(schemaDao.read(null, schemaId));
-                // create necessary DAOs for the credentials, ports, databases and
-                // servers
+                // create necessary DAOs for the credentials, ports, databases
+                // and servers
                 CredentialsDao credentialsDao =
                         new CredentialsDao(null, null);
                 PortsDao portsDao = new PortsDao(null, null);
