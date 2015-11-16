@@ -29,7 +29,7 @@ import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
     MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET})
 @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-public class AttributeTypesAttributeTypeGroupAassociations {
+public class AttributeTypeAttributeTypeGroupAssociation {
 
     @GET
     @Path("{associationId}")
