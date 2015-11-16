@@ -96,16 +96,6 @@ public class MultiplicityResource {
 						multiplicityId);
 	}
 
-	@GET
-    @Path("/new")
-    public MultiplicityPojo newMultiplicity(
-    		@Context UriInfo uriInfo,
-    		@Context HttpServletRequest request,
-            @PathParam("projectId") UUID projectId,
-            @PathParam("schema") String schema) {
-	    return new MultiplicityPojo();
-    }
-
 	@POST
 	public Response create(
 			@Context UriInfo uriInfo,
@@ -151,10 +141,11 @@ public class MultiplicityResource {
 			@PathParam("schema") String schema,
 			@PathParam("multiplicityId") UUID multiplicityId,
 			MultiplicityPojo pojo) {
-		return OpenInfraResponseBuilder.postResponse(
+		return OpenInfraResponseBuilder.putResponse(
 				new MultiplicityRbac(
 						projectId,
-						OpenInfraSchemas.PROJECTS).createOrUpdate(
+						OpenInfraSchemas.valueOf(schema.toUpperCase())
+						).createOrUpdate(
 								OpenInfraHttpMethod.valueOf(request.getMethod()),
 								uriInfo,
 								pojo,

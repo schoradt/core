@@ -58,12 +58,12 @@ CREATE TABLE "value_list_values" ("id" uuid NOT NULL PRIMARY KEY DEFAULT create_
 
 -- relation table for value lists, the direction of the relation is taken in
 -- reading direction: value_list_1 relationship value_list_2
-CREATE TABLE "value_list_x_value_list" ("id" uuid NOT NULL PRIMARY KEY DEFAULT create_uuid(), "value_list_1" uuid NOT NULL REFERENCES "value_list" ("id"), "value_list_2" uuid NOT NULL REFERENCES "value_list" ("id"), "relationship" uuid NOT NULL REFERENCES "value_list_values" ("id"), CONSTRAINT vl_x_vl_unique_key UNIQUE ("value_list_1", "value_list_2", "relationship"));
+CREATE TABLE "value_list_x_value_list" ("id" uuid NOT NULL PRIMARY KEY DEFAULT create_uuid(), "value_list_1" uuid NOT NULL REFERENCES "value_list" ("id"), "value_list_2" uuid NOT NULL REFERENCES "value_list" ("id"), "relationship" uuid NOT NULL REFERENCES "value_list_values" ("id"), CONSTRAINT vl_x_vl_unique_key UNIQUE ("value_list_1", "value_list_2"));
 
 
 -- relation table for value lists values, the direction of the relation is taken
 -- in reading direction: value_list_values_1 relationship value_list_values_2
-CREATE TABLE "value_list_values_x_value_list_values" ("id" uuid NOT NULL PRIMARY KEY DEFAULT create_uuid(), "value_list_values_1" uuid NOT NULL REFERENCES "value_list_values" ("id"), "value_list_values_2" uuid NOT NULL REFERENCES "value_list_values" ("id"), "relationship" uuid NOT NULL REFERENCES "value_list_values" ("id"), CONSTRAINT vlv_x_vlv_unique_key UNIQUE ("value_list_values_1", "value_list_values_2", "relationship"));
+CREATE TABLE "value_list_values_x_value_list_values" ("id" uuid NOT NULL PRIMARY KEY DEFAULT create_uuid(), "value_list_values_1" uuid NOT NULL REFERENCES "value_list_values" ("id"), "value_list_values_2" uuid NOT NULL REFERENCES "value_list_values" ("id"), "relationship" uuid NOT NULL REFERENCES "value_list_values" ("id"), CONSTRAINT vlv_x_vlv_unique_key UNIQUE ("value_list_values_1", "value_list_values_2"));
 
 
 -- contains the multiplicity
@@ -80,7 +80,7 @@ CREATE TABLE "relationship_type" ("id" uuid NOT NULL PRIMARY KEY DEFAULT create_
 
 -- relation table for attribute types, the direction of the relation is taken
 -- in reading direction: attribute_type_1 relationship attribute_type_2
-CREATE TABLE "attribute_type_x_attribute_type" ("id" uuid NOT NULL PRIMARY KEY DEFAULT create_uuid(), "attribute_type_1" uuid NOT NULL REFERENCES "attribute_type" ("id"), "attribute_type_2" uuid NOT NULL REFERENCES "attribute_type" ("id"), "relationship" uuid NOT NULL REFERENCES "value_list_values" ("id"), CONSTRAINT at_x_at_unique_key UNIQUE ("attribute_type_1", "attribute_type_2", "relationship"));
+CREATE TABLE "attribute_type_x_attribute_type" ("id" uuid NOT NULL PRIMARY KEY DEFAULT create_uuid(), "attribute_type_1" uuid NOT NULL REFERENCES "attribute_type" ("id"), "attribute_type_2" uuid NOT NULL REFERENCES "attribute_type" ("id"), "relationship" uuid NOT NULL REFERENCES "value_list_values" ("id"), CONSTRAINT at_x_at_unique_key UNIQUE ("attribute_type_1", "attribute_type_2"));
 
 
 -- contains attribute groups
@@ -100,15 +100,15 @@ CREATE TABLE "topic_instance" ("id" uuid NOT NULL PRIMARY KEY DEFAULT create_uui
 
 
 -- contains the mapping of attribute type groups to topic characteristics
-CREATE TABLE "attribute_type_group_to_topic_characteristic" ("id" uuid NOT NULL PRIMARY KEY DEFAULT create_uuid(), "attribute_type_group_id" uuid NOT NULL REFERENCES "attribute_type_group" ("id"), "topic_characteristic_id" uuid NOT NULL REFERENCES "topic_characteristic" ("id"), "multiplicity" uuid NOT NULL REFERENCES "multiplicity" ("id"), "order" integer);
+CREATE TABLE "attribute_type_group_to_topic_characteristic" ("id" uuid NOT NULL PRIMARY KEY DEFAULT create_uuid(), "attribute_type_group_id" uuid NOT NULL REFERENCES "attribute_type_group" ("id"), "topic_characteristic_id" uuid NOT NULL REFERENCES "topic_characteristic" ("id"), "multiplicity" uuid NOT NULL REFERENCES "multiplicity" ("id"), "order" integer, CONSTRAINT at_x_tc_unique_key UNIQUE ("attribute_type_group_id", "topic_characteristic_id"));
 
 
 -- contains the mapping of attribute types to attribute type groups.
-CREATE TABLE "attribute_type_to_attribute_type_group" ("id" uuid NOT NULL PRIMARY KEY DEFAULT create_uuid(), "attribute_type_id" uuid NOT NULL REFERENCES "attribute_type" ("id"), "attribute_type_group_id" uuid NOT NULL REFERENCES "attribute_type_group" ("id"), "attribute_type_group_to_topic_characteristic_id" uuid NOT NULL REFERENCES "attribute_type_group_to_topic_characteristic" ("id"), "multiplicity" uuid NOT NULL REFERENCES "multiplicity" ("id"), "default_value" uuid REFERENCES "value_list_values" ("id"), "order" integer);
+CREATE TABLE "attribute_type_to_attribute_type_group" ("id" uuid NOT NULL PRIMARY KEY DEFAULT create_uuid(), "attribute_type_id" uuid NOT NULL REFERENCES "attribute_type" ("id"), "attribute_type_group_id" uuid NOT NULL REFERENCES "attribute_type_group" ("id"), "attribute_type_group_to_topic_characteristic_id" uuid NOT NULL REFERENCES "attribute_type_group_to_topic_characteristic" ("id"), "multiplicity" uuid NOT NULL REFERENCES "multiplicity" ("id"), "default_value" uuid REFERENCES "value_list_values" ("id"), "order" integer, CONSTRAINT at_x_atg_unique_key UNIQUE ("attribute_type_id", "attribute_type_group_id", "attribute_type_group_to_topic_characteristic_id"));
 
 
 -- contains the mapping of relationship types to topic characteristics
-CREATE TABLE "relationship_type_to_topic_characteristic" ("id" uuid NOT NULL PRIMARY KEY DEFAULT create_uuid(), "topic_characteristic_id" uuid NOT NULL REFERENCES "topic_characteristic" ("id"), "relationship_type_id" uuid REFERENCES "relationship_type" ("id"), "multiplicity" uuid NOT NULL REFERENCES "multiplicity" ("id"));
+CREATE TABLE "relationship_type_to_topic_characteristic" ("id" uuid NOT NULL PRIMARY KEY DEFAULT create_uuid(), "topic_characteristic_id" uuid NOT NULL REFERENCES "topic_characteristic" ("id"), "relationship_type_id" uuid REFERENCES "relationship_type" ("id"), "multiplicity" uuid NOT NULL REFERENCES "multiplicity" ("id"), CONSTRAINT rt_x_tc_unique_key UNIQUE ("topic_characteristic_id", "relationship_type_id"));
 
 
 -- relation table for topic instances, the direction of the relation is taken

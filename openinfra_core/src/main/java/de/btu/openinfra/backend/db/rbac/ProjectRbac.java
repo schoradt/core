@@ -75,12 +75,13 @@ public class ProjectRbac extends
 	public UUID createProject(
 			ProjectPojo project,
 			boolean createEmpty,
+			boolean loadIntitialData,
 			OpenInfraHttpMethod httpMethod,
 			UriInfo uriInfo) {
 		checkPermission(httpMethod, uriInfo);
 		return new ProjectDao(
 		        null, OpenInfraSchemas.SYSTEM).createProject(
-		        		project, createEmpty);
+		        		project, createEmpty, loadIntitialData);
 	}
 
 	public boolean deleteProject(

@@ -168,15 +168,17 @@ public class ProjectResource {
 			@Context UriInfo uriInfo,
 			@Context HttpServletRequest request,
 			@QueryParam("createEmpty") boolean createEmpty,
+			@QueryParam("loadIntitialData") boolean loadIntitialData,
 			ProjectPojo project) {
 	    // create the project
-		System.out.println("--> " + createEmpty);
 		UUID id = new ProjectRbac(
 		        null, OpenInfraSchemas.PROJECTS).createProject(
 		                project,
 		                createEmpty,
+		                loadIntitialData,
 		                OpenInfraHttpMethod.valueOf(
 		                        request.getMethod()), uriInfo);
+
 		// TODO add informations to the meta data schema, this is necessary for
 		//      every REST end point this project should use
 		return OpenInfraResponseBuilder.postResponse(id);

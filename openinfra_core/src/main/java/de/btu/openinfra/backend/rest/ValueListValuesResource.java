@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -73,6 +74,31 @@ public class ValueListValuesResource {
 						size);
 	}
 
+	@POST
+	@Path("{valueListValueId}/associations")
+    public Response create(
+            @Context UriInfo uriInfo,
+            @Context HttpServletRequest request,
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            @PathParam("valueListValueId") UUID valueListValueId,
+            ValueListValueAssociationPojo pojo) {
+        return OpenInfraResponseBuilder.postResponse(
+                new ValueListValueAssociationRbac(
+                        projectId,
+                        OpenInfraSchemas.valueOf(schema.toUpperCase())
+                        ).createOrUpdate(
+                                OpenInfraHttpMethod.valueOf(
+                                        request.getMethod()),
+                                uriInfo,
+                                pojo,
+                                valueListValueId,
+                                pojo.getAssociationValueListValueId(),
+                                null,
+                                null,
+                                pojo.getMetaData()));
+    }
+
 	@GET
     @Path("{valueListValueId}/associations/count")
 	@Produces({MediaType.TEXT_PLAIN})
@@ -116,6 +142,54 @@ public class ValueListValuesResource {
 	}
 
 	@PUT
+	@Path("{valueListValueId}/associations/{associatedValueListValueId}")
+    public Response update(
+            @Context UriInfo uriInfo,
+            @Context HttpServletRequest request,
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            @PathParam("valueListValueId") UUID valueListValueId,
+            @PathParam("associatedValueListValueId")
+                UUID associatedValueListValueId,
+            ValueListValueAssociationPojo pojo) {
+        return OpenInfraResponseBuilder.putResponse(
+                new ValueListValueAssociationRbac(
+                        projectId,
+                        OpenInfraSchemas.valueOf(schema.toUpperCase())
+                        ).createOrUpdate(
+                                OpenInfraHttpMethod.valueOf(
+                                        request.getMethod()),
+                                uriInfo,
+                                pojo,
+                                valueListValueId,
+                                pojo.getAssociationValueListValueId(),
+                                associatedValueListValueId,
+                                pojo.getAssociatedValueListValue().getUuid(),
+                                pojo.getMetaData()));
+    }
+
+    @DELETE
+    @Path("{valueListValueId}/associations/{associatedValueListValueId}")
+    public Response delete(
+            @Context UriInfo uriInfo,
+            @Context HttpServletRequest request,
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            @PathParam("valueListValueId") UUID valueListValueId,
+            @PathParam("associatedValueListValueId")
+                UUID associatedValueListValueId) {
+        return OpenInfraResponseBuilder.deleteResponse(
+                new ValueListValueAssociationRbac(
+                        projectId,
+                        OpenInfraSchemas.valueOf(schema.toUpperCase())).delete(
+                                OpenInfraHttpMethod.valueOf(
+                                      request.getMethod()),
+                                uriInfo,
+                                valueListValueId,
+                                associatedValueListValueId));
+    }
+
+	@PUT
     @Path("{valueListValueId}")
     public Response update(
     		@Context UriInfo uriInfo,
@@ -131,7 +205,7 @@ public class ValueListValuesResource {
                 		OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
                         pojo, valueListValueId, pojo.getMetaData());
-        return OpenInfraResponseBuilder.postResponse(uuid);
+        return OpenInfraResponseBuilder.putResponse(uuid);
     }
 
 	@DELETE

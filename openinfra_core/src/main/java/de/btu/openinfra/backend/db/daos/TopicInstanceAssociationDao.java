@@ -66,9 +66,10 @@ public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
 				parents.add(
 						new TopicInstanceAssociationPojo(
 								parent.getId(),
+								parent.getTopicInstance1Bean().getId(),
 								ti.mapToPojo(
 										locale,
-										parent.getTopicInstance1Bean()),
+										parent.getTopicInstance2Bean()),
 								RelationshipTypeDao.mapToPojoStatically(
 										locale,
 										parent.getRelationshipType(),
@@ -174,7 +175,7 @@ public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
         if (txt != null) {
             TopicInstanceAssociationPojo pojo =
                     new TopicInstanceAssociationPojo(txt, mdDao);
-
+            pojo.setAssociationInstanceId(txt.getTopicInstance1Bean().getId());
             pojo.setRelationshipType(
                     RelationshipTypeDao.mapToPojoStatically(
                             locale,

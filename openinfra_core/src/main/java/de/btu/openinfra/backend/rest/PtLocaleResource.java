@@ -4,13 +4,16 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import de.btu.openinfra.backend.db.OpenInfraOrderBy;
@@ -57,6 +60,23 @@ public class PtLocaleResource {
 						size);
 	}
 
+	@POST
+    public Response create(
+            @Context UriInfo uriInfo,
+            @Context HttpServletRequest request,
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            PtLocalePojo pojo) {
+        UUID id = new PtLocaleRbac(
+                projectId,
+                OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
+                        OpenInfraHttpMethod.valueOf(request.getMethod()),
+                        uriInfo,
+                        null,
+                        pojo);
+        return OpenInfraResponseBuilder.postResponse(id);
+    }
+
 	@GET
 	@Path("count")
 	@Produces({MediaType.TEXT_PLAIN})
@@ -89,5 +109,24 @@ public class PtLocaleResource {
 						PtLocaleDao.forLanguageTag(language),
 						ptLocaleId);
 	}
+
+	@DELETE
+    @Path("{ptLocaleId}")
+    public Response delete(
+            @Context UriInfo uriInfo,
+            @Context HttpServletRequest request,
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            @PathParam("ptLocaleId") UUID ptLocaleId) {
+        return OpenInfraResponseBuilder.deleteResponse(
+                new PtLocaleRbac(
+                        projectId,
+                        OpenInfraSchemas.valueOf(schema.toUpperCase())).delete(
+                                OpenInfraHttpMethod.valueOf(
+                                        request.getMethod()),
+                                uriInfo,
+                                ptLocaleId),
+                ptLocaleId);
+    }
 
 }
