@@ -131,6 +131,31 @@ public class TopicCharacteristicResource {
 						size);
 	}
 
+	@POST
+	@Path("{topicCharacteristicId}/attributetypegroups")
+    public Response createRelationshipType(
+            @Context UriInfo uriInfo,
+            @Context HttpServletRequest request,
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            @PathParam("topicCharacteristicId") UUID topicCharacteristicId,
+            AttributeTypeGroupToTopicCharacteristicPojo pojo) {
+        return OpenInfraResponseBuilder.postResponse(
+                new AttributeTypeGroupToTopicCharacteristicRbac(
+                        projectId,
+                        OpenInfraSchemas.valueOf(schema.toUpperCase())
+                        ).createOrUpdate(
+                                OpenInfraHttpMethod.valueOf(
+                                        request.getMethod()),
+                                uriInfo,
+                                pojo,
+                                topicCharacteristicId,
+                                pojo.getTopicCharacteristicId(),
+                                null,
+                                null,
+                                pojo.getMetaData()));
+    }
+
 	@GET
     @Path("{topicCharacteristicId}/attributetypegroups/count")
     @Produces({MediaType.TEXT_PLAIN})
@@ -174,6 +199,54 @@ public class TopicCharacteristicResource {
 
 	}
 
+	@PUT
+	@Path("{topicCharacteristicId}/attributetypegroups/"
+            + "{attributeTypeGroupId}")
+    public Response update(
+            @Context UriInfo uriInfo,
+            @Context HttpServletRequest request,
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            @PathParam("topicCharacteristicId") UUID topicCharacteristicId,
+            @PathParam("attributeTypeGroupId") UUID attributeTypeGroupId,
+            AttributeTypeGroupToTopicCharacteristicPojo pojo) {
+        return OpenInfraResponseBuilder.putResponse(
+                new AttributeTypeGroupToTopicCharacteristicRbac(
+                        projectId,
+                        OpenInfraSchemas.valueOf(schema.toUpperCase())
+                        ).createOrUpdate(
+                                OpenInfraHttpMethod.valueOf(
+                                        request.getMethod()),
+                                uriInfo,
+                                pojo,
+                                topicCharacteristicId,
+                                pojo.getTopicCharacteristicId(),
+                                attributeTypeGroupId,
+                                pojo.getAttributeTypeGroup().getUuid(),
+                                pojo.getMetaData()));
+    }
+
+    @DELETE
+    @Path("{topicCharacteristicId}/attributetypegroups/"
+            + "{attributeTypeGroupId}")
+    public Response deleteAttributeTypeGroupToTopicCharacteristic(
+            @Context UriInfo uriInfo,
+            @Context HttpServletRequest request,
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            @PathParam("topicCharacteristicId") UUID topicCharacteristicId,
+            @PathParam("attributeTypeGroupId") UUID attributeTypeGroupId) {
+        return OpenInfraResponseBuilder.deleteResponse(
+                new AttributeTypeGroupToTopicCharacteristicRbac(
+                        projectId,
+                        OpenInfraSchemas.valueOf(schema.toUpperCase())).delete(
+                                OpenInfraHttpMethod.valueOf(
+                                      request.getMethod()),
+                                uriInfo,
+                                topicCharacteristicId,
+                                attributeTypeGroupId));
+    }
+
 	@GET
 	@Path("{topicCharacteristicId}/relationshiptypes")
 	public List<RelationshipTypeToTopicCharacteristicPojo> getRelationshipTypes(
@@ -196,8 +269,33 @@ public class TopicCharacteristicResource {
 						size);
 	}
 
+	@POST
+	@Path("{topicCharacteristicId}/relationshiptypes")
+    public Response createRelationshipType(
+            @Context UriInfo uriInfo,
+            @Context HttpServletRequest request,
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            @PathParam("topicCharacteristicId") UUID topicCharacteristicId,
+            RelationshipTypeToTopicCharacteristicPojo pojo) {
+        return OpenInfraResponseBuilder.postResponse(
+                new RelationshipTypeToTopicCharacteristicRbac(
+                        projectId,
+                        OpenInfraSchemas.valueOf(schema.toUpperCase())
+                        ).createOrUpdate(
+                                OpenInfraHttpMethod.valueOf(
+                                        request.getMethod()),
+                                uriInfo,
+                                pojo,
+                                topicCharacteristicId,
+                                pojo.getTopicCharacteristicId(),
+                                null,
+                                null,
+                                pojo.getMetaData()));
+    }
+
 	@GET
-	@Path("{topicCharacteristicId}/relationshiptypes/{relationShipTypeId}")
+	@Path("{topicCharacteristicId}/relationshiptypes/{relationshipTypeId}")
 	public List<RelationshipTypeToTopicCharacteristicPojo> getRelationshipTypes(
 			@Context UriInfo uriInfo,
 			@Context HttpServletRequest request,
@@ -205,7 +303,7 @@ public class TopicCharacteristicResource {
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@PathParam("topicCharacteristicId") UUID topicCharacteristicId,
-			@PathParam("relationShipTypeId") UUID relationShipTypeId,
+			@PathParam("relationshipTypeId") UUID relationshipTypeId,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new RelationshipTypeToTopicCharacteristicRbac(
@@ -215,9 +313,55 @@ public class TopicCharacteristicResource {
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						topicCharacteristicId,
-						relationShipTypeId,
+						relationshipTypeId,
 						offset,
 						size);
+	}
+
+	@PUT
+	@Path("{topicCharacteristicId}/relationshiptypes/{relationshipTypeId}")
+    public Response update(
+            @Context UriInfo uriInfo,
+            @Context HttpServletRequest request,
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            @PathParam("topicCharacteristicId") UUID topicCharacteristicId,
+            @PathParam("relationshipTypeId") UUID relationshipTypeId,
+            RelationshipTypeToTopicCharacteristicPojo pojo) {
+        return OpenInfraResponseBuilder.putResponse(
+                new RelationshipTypeToTopicCharacteristicRbac(
+                        projectId,
+                        OpenInfraSchemas.valueOf(schema.toUpperCase())
+                        ).createOrUpdate(
+                                OpenInfraHttpMethod.valueOf(
+                                        request.getMethod()),
+                                uriInfo,
+                                pojo,
+                                topicCharacteristicId,
+                                pojo.getTopicCharacteristicId(),
+                                relationshipTypeId,
+                                pojo.getRelationshipType().getUuid(),
+                                pojo.getMetaData()));
+    }
+
+	@DELETE
+    @Path("{topicCharacteristicId}/relationshiptypes/{relationshipTypeId}")
+    public Response delete(
+            @Context UriInfo uriInfo,
+            @Context HttpServletRequest request,
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            @PathParam("topicCharacteristicId") UUID topicCharacteristicId,
+            @PathParam("relationshipTypeId") UUID relationshipTypeId) {
+	    return OpenInfraResponseBuilder.deleteResponse(
+                new RelationshipTypeToTopicCharacteristicRbac(
+                        projectId,
+                        OpenInfraSchemas.valueOf(schema.toUpperCase())).delete(
+                                OpenInfraHttpMethod.valueOf(
+                                      request.getMethod()),
+                                uriInfo,
+                                topicCharacteristicId,
+                                relationshipTypeId));
 	}
 
 	@GET
@@ -264,7 +408,7 @@ public class TopicCharacteristicResource {
             @PathParam("schema") String schema,
             @PathParam("topicCharacteristicId") UUID topicCharacteristicId,
             TopicCharacteristicPojo pojo) {
-        return OpenInfraResponseBuilder.postResponse(
+        return OpenInfraResponseBuilder.putResponse(
                 new TopicCharacteristicRbac(
                         projectId,
                         OpenInfraSchemas.PROJECTS).createOrUpdate(
