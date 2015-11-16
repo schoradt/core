@@ -22,6 +22,19 @@
 			<input name="start" type="hidden" value="0"></input>
 			<input name="rows" type="hidden" value="20"></input>
 			<table class="table">
+				<thead>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td style="text-align: center;">Pflicht / Ausschluss</td>
+						<td></td>
+						<td></td>
+						<td style="text-align: center;">Gewichtung</td>
+						<td style="text-align: center;">Unschärfe</td>
+						<td></td>
+					</tr>
+				</thead>
 				<tbody id="fields">
 					
 				</tbody>
@@ -90,7 +103,7 @@
 			attributeTypeOptions += "</select></td>";
 		    $("#line_"+lines).append(attributeTypeOptions);
 		    */
-		    $("#line_"+lines).append("<td><input class=form-control name=at"+lines+" /></td>");
+		    $("#line_"+lines).append("<td><input class=form-control name=at"+lines+" placeholder=\"Attributtyp\"/></td>");
 			
 			// add the relational operator
 		    $("#line_"+lines).append(
@@ -105,15 +118,15 @@
 		    $("#line_"+lines).append(
 		            "<td><select class=form-control name=m"+lines+" size=1>"+
 			            "<option value=\"NEVER_MIND\"></option>"+
-			            "<option value=\"MUST\">+</option>"+
-			            "<option value=\"MUST_NOT\">-</option>"+
+			            "<option value=\"MUST\">enthält</option>"+
+			            "<option value=\"MUST_NOT\">enthält nicht</option>"+
 		            "</select></td>");
 			
 			// add the attribute value
-		    $("#line_"+lines).append("<td><input class=form-control required=\"required\" name=av"+lines+" type=text/></td>");
+		    $("#line_"+lines).append("<td><input class=form-control required=\"required\" name=av"+lines+" id=av"+lines+"_field placeholder=\"Attributwert\" type=text/></td>");
 			
 			// add the till attribute value
-		    $("#line_"+lines).append("<td><input class=form-control name=tav"+lines+" id=tav"+lines+"_field /></td>");
+		    $("#line_"+lines).append("<td><input class=form-control name=tav"+lines+" id=tav"+lines+"_field placeholder=\"bis\"/></td>");
 		    $("#tav"+lines+"_field").hide();
 		    
 			// add the relevance
@@ -145,9 +158,11 @@
 		        if (element.options[element.selectedIndex].value == "BETWEEN") {
 		            $("#tav"+id.split("_")[1]+"_field").show();
 		            $("#tav"+id.split("_")[1]+"_field").attr("required", "required");
+		            $("#av"+id.split("_")[1]+"_field").attr("placeholder", "von");
 		        } else {
 		            $("#tav"+id.split("_")[1]+"_field").hide();
 		            $("#tav"+id.split("_")[1]+"_field").removeAttr("required");
+		            $("#av"+id.split("_")[1]+"_field").attr("placeholder", "Attributwert");
 		        }
 		        
 		    }
