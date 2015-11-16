@@ -246,52 +246,6 @@ public class AttributeTypeResource {
 						size);
 	}
 
-	@PUT
-	@Path("{attributeTypeId}/attributetypegroups/{attributeTypeGroupId}")
-    public Response update(
-            @Context UriInfo uriInfo,
-            @Context HttpServletRequest request,
-            @PathParam("projectId") UUID projectId,
-            @PathParam("schema") String schema,
-            @PathParam("attributeTypeId") UUID attributeTypeId,
-            @PathParam("attributeTypeGroupId") UUID attributeTypeGroupId,
-            AttributeTypeGroupToAttributeTypePojo pojo) {
-        return OpenInfraResponseBuilder.putResponse(
-                new AttributeTypeGroupToAttributeTypeRbac(
-                        projectId,
-                        OpenInfraSchemas.valueOf(schema.toUpperCase())
-                        ).createOrUpdate(
-                                OpenInfraHttpMethod.valueOf(
-                                        request.getMethod()),
-                                uriInfo,
-                                pojo,
-                                attributeTypeId,
-                                pojo.getAttributeTypeId(),
-                                attributeTypeGroupId,
-                                pojo.getAttributeTypeGroup().getUuid(),
-                                pojo.getMetaData()));
-    }
-
-	@DELETE
-	@Path("{attributeTypeId}/attributetypegroups/{attributeTypeGroupId}")
-    public Response delete(
-            @Context UriInfo uriInfo,
-            @Context HttpServletRequest request,
-            @PathParam("projectId") UUID projectId,
-            @PathParam("schema") String schema,
-            @PathParam("attributeTypeId") UUID attributeTypeId,
-            @PathParam("attributeTypeGroupId") UUID attributeTypeGroupId) {
-        return OpenInfraResponseBuilder.deleteResponse(
-                new AttributeTypeGroupToAttributeTypeRbac(
-                        projectId,
-                        OpenInfraSchemas.valueOf(schema.toUpperCase())).delete(
-                                OpenInfraHttpMethod.valueOf(
-                                      request.getMethod()),
-                                uriInfo,
-                                attributeTypeId,
-                                attributeTypeGroupId));
-    }
-
     @POST
     public Response create(
     		@Context UriInfo uriInfo,
