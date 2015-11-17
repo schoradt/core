@@ -1,6 +1,5 @@
 /**
- * This package holds the main properties such as database credentials for the 
- * OpenInfRA application.
+ * This package holds the main properties for the Solr plugin.
  * 
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
