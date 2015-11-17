@@ -79,6 +79,7 @@ public class SolrSearcher {
 
         // if the rows variable is negative or zero, set it to the default
         if (rows <= 0) {
+            // TODO find a better way to retrieve the plugin name
             rows = Integer.parseInt(PluginProperties.getProperty(
                     SolrPropertyKeys.SOLR_DEFAULT_RESULTS_PER_PAGE.getKey(),
                     "Solr"));

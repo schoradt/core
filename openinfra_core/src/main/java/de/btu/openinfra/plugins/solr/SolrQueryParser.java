@@ -152,6 +152,7 @@ public class SolrQueryParser {
 
         // add fuzziness if required
         if (part.isFuzziness()) {
+            // TODO find a better way to retrieve the plugin name
             query += "~" + PluginProperties.getProperty(
                     SolrPropertyKeys.SOLR_DEFAULT_FUZZY.getKey(), "Solr");
         }
