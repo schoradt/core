@@ -168,14 +168,14 @@ public class ProjectResource {
 			@Context UriInfo uriInfo,
 			@Context HttpServletRequest request,
 			@QueryParam("createEmpty") boolean createEmpty,
-			@QueryParam("loadIntitialData") boolean loadIntitialData,
+			@QueryParam("loadInitialData") boolean loadInitialData,
 			ProjectPojo project) {
 	    // create the project
 		UUID id = new ProjectRbac(
 		        null, OpenInfraSchemas.PROJECTS).createProject(
 		                project,
 		                createEmpty,
-		                loadIntitialData,
+		                loadInitialData,
 		                OpenInfraHttpMethod.valueOf(
 		                        request.getMethod()), uriInfo);
 

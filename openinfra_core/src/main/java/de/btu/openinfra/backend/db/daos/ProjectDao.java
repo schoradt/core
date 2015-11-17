@@ -13,6 +13,9 @@ import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
 
 import jersey.repackaged.com.google.common.collect.Lists;
+
+import org.eclipse.persistence.exceptions.DatabaseException;
+
 import de.btu.openinfra.backend.OpenInfraProperties;
 import de.btu.openinfra.backend.OpenInfraPropertyKeys;
 import de.btu.openinfra.backend.db.MappingResult;
@@ -297,17 +300,23 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 	 *
 	 * @param project the      project pojo
 	 * @param createEmpty      Creates an empty project schema when true.
-	 * @param loadIntitialData Loads the initial data from the system schema
+	 * @param loadInitialData  Loads the initial data from the system schema
 	 *                         when true. This parameter will only have an
 	 *                         effect if createEmpty is false.
 	 * @return                 the UUID of the new created project
 	 * @throws OpenInfraWebException if something went wrong
 	 */
 	public UUID createProject(ProjectPojo pojo, boolean createEmpty,
-	        boolean loadIntitialData) {
+	        boolean loadInitialData) {
 
 		// the UUID that will be returned
 	    UUID id = null;
+
+	    // if the POJO is empty we will abort here
+	    if (pojo == null) {
+	        throw new OpenInfraEntityException(
+	                OpenInfraExceptionTypes.EMPTY_POJO);
+	    }
 
 	    // set the default database properties
 	    properties = OpenInfraProperties.getConnectionProperties();
@@ -352,7 +361,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
                     // the new project schema
                     writeBasicProjectData(pojo, newProjectId);
 
-                    if (loadIntitialData) {
+                    if (loadInitialData) {
                         // copy the initial data from the system schema into the
                         // new project schema
                         mergeSystemData(newProjectId);
@@ -448,26 +457,23 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
     private void renameSchema(ProjectPojo pojo, UUID newProjectId) {
         try {
             // rename the project schema
-            if (!em.createStoredProcedureQuery(
-                "rename_project_schema", Boolean.class)
-                    .registerStoredProcedureParameter(
+            em.createStoredProcedureQuery("rename_project_schema", Boolean.class)
+                .registerStoredProcedureParameter(
                         "name",
                         String.class,
                         ParameterMode.IN)
-                    .registerStoredProcedureParameter(
+                .registerStoredProcedureParameter(
                         "uuid",
                         UUID.class,
                         ParameterMode.IN)
-                    .setParameter(
+                .setParameter(
                         "name",
                         pojo.getNames().getLocalizedStrings().get(0)
                             .getCharacterString())
-                    .setParameter("uuid", newProjectId)
-                                .execute()) {
-                throw new OpenInfraDatabaseException(
-                        OpenInfraExceptionTypes.RENAME_SCHEMA);
-            }
-        } catch (PersistenceException | IllegalArgumentException pe) {
+                .setParameter("uuid", newProjectId)
+                                .execute();
+        } catch (PersistenceException | IllegalArgumentException |
+                DatabaseException pe) {
             // something went wrong while renaming the schema
             throw new OpenInfraDatabaseException(
                     OpenInfraExceptionTypes.RENAME_SCHEMA);
@@ -499,19 +505,31 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
     private void deleteSchema(UUID projectId) {
         try {
             // delete the project schema
-            if(em.createStoredProcedureQuery(
+            em.createStoredProcedureQuery(
+                "delete_project_schema", Boolean.class)
+                .registerStoredProcedureParameter(
+                        "project_id",
+                        UUID.class,
+                        ParameterMode.IN)
+                .setParameter("project_id", projectId)
+                .execute();
+
+        } catch (IllegalArgumentException | DatabaseException |
+                PersistenceException e ) {
+            try {
+                // if renaming failed we have a schema called "project" in the
+                // database that must be deleted
+                em.createStoredProcedureQuery(
                     "delete_project_schema", Boolean.class)
                     .registerStoredProcedureParameter(
                             "project_id",
                             UUID.class,
                             ParameterMode.IN)
-                    .setParameter("project_id", projectId)
-                    .execute()) {
-            } else {
-                // TODO: throw something if the delete process fails
+                    .setParameter("project_id", null)
+                    .execute();
+            } catch (IllegalArgumentException | DatabaseException ex) {
+                throw new OpenInfraWebException(ex);
             }
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
         }
     }
 
