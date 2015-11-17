@@ -66,7 +66,9 @@
 			
 			// determine from which document we come from and build the data 
 			// object with the information from the input field
-		    if (document.referrer.indexOf("search/extended") > 0) {
+		    if (document.referrer.indexOf("search/extended") > 0 ||
+		            (document.referrer.indexOf("search/result") > 0 &&
+		                    getUrlParameter("query") == null)) {
 		        // iterate over value of the counter parameter
 		        for(var i = 1; i <= getUrlParameter("hc"); i++) {
 		            dataPart = new Object();
@@ -92,9 +94,17 @@
 			    data["rawSolrQuery"] = getUrlParameter("query");
 		    }
 			
-		    if (data["rawSolrQuery"] != "" || data["complexQueryPart"] != null && data["complexQueryPart"][0]["attributeValue"] != "") {
+		    if (data["rawSolrQuery"] != "" || data["complexQueryPart"] != null && 
+		            data["complexQueryPart"][0]["attributeValue"] != "") {
+		        // get all parameters
+		        var param = decodeURIComponent(window.location.search.substring(1));
+		        
+		     	// append the parameters and replace the start and row parameter
+				param = param.replace(new RegExp("start=\\d+"), start);
+				param = param.replace(new RegExp("rows=\\d+"), rows);
+		     
 		     	// create the base path of the application
-				var searchPath = "${contextPath}/rest/v1/search?language=de-DE&start="+ start +"&rows="+ rows;
+				var searchPath = "${contextPath}/rest/v1/search?" + param;
 				
 				// set the new data
 				$.ajax({
