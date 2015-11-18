@@ -91,6 +91,8 @@ public class SolrQueryParser {
      */
     private String parsePart(SolrComplexQueryPartPojo part, boolean firstRun) {
         String query = "";
+        boolean fuzzyFlag = part.isFuzziness();
+
         // add the attribute type
         if (part.getAttributeType() != null) {
             query += SolrCharacterConverter.convert(part.getAttributeType());
@@ -130,6 +132,9 @@ public class SolrQueryParser {
                             part.getRelationalOperator().getString(),
                             part.getAttributeValue(),
                             part.getTillAttributeValue());
+                    // fuzzy search must not be used in combination with range
+                    // queries
+                    fuzzyFlag = false;
                     break;
                 default:
                     query += maskString(part.getAttributeValue());
@@ -151,7 +156,7 @@ public class SolrQueryParser {
         }
 
         // add fuzziness if required
-        if (part.isFuzziness()) {
+        if (fuzzyFlag) {
             // TODO find a better way to retrieve the plugin name
             query += "~" + PluginProperties.getProperty(
                     SolrPropertyKeys.SOLR_DEFAULT_FUZZY.getKey(), "Solr");
