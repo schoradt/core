@@ -55,7 +55,24 @@ public enum OpenInfraExceptionTypes {
 
 	MISSING_PARAMETER("This URI requires a parameter."),
 
-	NO_CLASS_IN_SCHEMA("The requested class is not part of the specified schema.");
+	NO_CLASS_IN_SCHEMA("The requested class is not part of the specified "
+	        + "schema."),
+
+	PLUGIN_NOT_FOUND("The requested plugin was not found."),
+
+	// TODO the exception handling must be reworked to support specific
+	//      exception type enums.
+	SOLR_INDEX_FAILED("Failed to create the Solr index."),
+
+	SOLR_SEARCH_POJO_EMPTY("The passed POJO for the search request is empty."),
+
+	SOLR_REQUEST_PARSE("An error has occured while parsing the request POJO."),
+
+	SOLR_REQUEST_NUMERIC_EXPECTED("A numeric value was expected but not "
+	        + "found."),
+
+	SOLR_SERVER_NOT_FOUND("The connection to the Solr server could not be "
+	        + "established.");
 
     private String msg;
 
