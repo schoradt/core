@@ -5,6 +5,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraMetaDataEnum;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
@@ -54,17 +58,24 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
 
             // set the topic characteristic POJO
             pojo.setTopicCharacteristic(TopicCharacteristicDao
-                    .mapToPojoStatically(
-                            locale, ti.getTopicCharacteristic(), null));
+            		.mapToPojoStatically(
+            				locale, ti.getTopicCharacteristic(), null));
 
             String metaData = null;
             // check if meta data exists for this topic instance
             if (pojo.getTopicCharacteristic().getMetaData() != null) {
-                if (pojo.getTopicCharacteristic().getMetaData()
-                        .containsKey(OpenInfraMetaDataEnum.LIST_VIEW_COLUMNS)) {
-                    metaData = pojo.getTopicCharacteristic().getMetaData()
-                                   .get(OpenInfraMetaDataEnum.LIST_VIEW_COLUMNS)
-                                   .toString();
+            	JSONObject jo = null;
+				try {
+					jo = (JSONObject)new JSONParser().parse(
+							pojo.getTopicCharacteristic().getMetaData());
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+                if (jo != null &&
+                		jo.containsKey(
+                				OpenInfraMetaDataEnum.LIST_VIEW_COLUMNS)) {
+                    metaData = jo.get(OpenInfraMetaDataEnum.LIST_VIEW_COLUMNS)
+                    		.toString();
                 }
             }
 
@@ -146,17 +157,24 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
 
             // set the topic characteristic POJO
             pojo.setTopicCharacteristic(TopicCharacteristicDao
-                    .mapToPojoStatically(
-                            locale, ti.getTopicCharacteristic(), null));
+            		.mapToPojoStatically(locale,
+            				ti.getTopicCharacteristic(), null));
 
             String metaData = null;
             // check if meta data exists for this topic instance
             if (pojo.getTopicCharacteristic().getMetaData() != null) {
-                if (pojo.getTopicCharacteristic().getMetaData()
-                        .containsKey(OpenInfraMetaDataEnum.LIST_VIEW_COLUMNS)) {
-                    metaData = pojo.getTopicCharacteristic().getMetaData()
-                                   .get(OpenInfraMetaDataEnum.LIST_VIEW_COLUMNS)
-                                   .toString();
+            	JSONObject jo = null;
+				try {
+					jo = (JSONObject)new JSONParser().parse(
+							pojo.getTopicCharacteristic().getMetaData());
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+                if (jo != null &&
+                		jo.containsKey(
+                				OpenInfraMetaDataEnum.LIST_VIEW_COLUMNS)) {
+                    metaData = jo.get(OpenInfraMetaDataEnum.LIST_VIEW_COLUMNS)
+                    		.toString();
                 }
             }
 

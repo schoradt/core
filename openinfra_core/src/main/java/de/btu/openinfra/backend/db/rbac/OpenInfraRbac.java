@@ -12,7 +12,6 @@ import javax.ws.rs.core.UriInfo;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
-import org.json.simple.JSONObject;
 
 import de.btu.openinfra.backend.db.OpenInfraOrderBy;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
@@ -272,7 +271,7 @@ public abstract class OpenInfraRbac<
 			UriInfo uriInfo,
 			TypePojo pojo,
 			UUID valueId,
-			JSONObject json) {
+			String json) {
     	checkPermission(httpMethod, uriInfo);
 		try {
 			return dao.getDeclaredConstructor(constructorTypes).newInstance(

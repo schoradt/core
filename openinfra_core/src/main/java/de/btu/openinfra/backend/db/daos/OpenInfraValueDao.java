@@ -8,7 +8,6 @@ import java.util.UUID;
 import javax.persistence.PersistenceException;
 
 import org.eclipse.persistence.jpa.JpaQuery;
-import org.json.simple.JSONObject;
 
 import de.btu.openinfra.backend.OpenInfraProperties;
 import de.btu.openinfra.backend.db.OpenInfraOrderBy;
@@ -119,7 +118,7 @@ public abstract class OpenInfraValueDao<
      * @throws RuntimeException
      */
     public UUID createOrUpdate(TypePojo pojo, UUID firstAssociationId,
-            UUID firstAssociationIdFromPojo, JSONObject metaData)
+            UUID firstAssociationIdFromPojo, String metaData)
             throws RuntimeException {
 
         // check if the value id of the URI map to the pojo uuid

@@ -76,10 +76,7 @@ public class TopicCharacteristicDao
 		for(TopicCharacteristic tc : tcs) {
 		    UUID id = tc.getId();
 		    if (!tcp.containsKey(id)) {
-		        tcp.put(id, TopicCharacteristicDao.mapToPojoStatically(
-	                    locale,
-	                    tc,
-	                    mdDao));
+		        tcp.put(id, mapToPojoStatically(locale, tc, mdDao));
 		    }
 
 		} // end for
@@ -110,6 +107,11 @@ public class TopicCharacteristicDao
 		    TopicCharacteristicPojo pojo =
 		            new TopicCharacteristicPojo(tc, mdDao);
 
+		    pojo.setTopicInstancesCount(
+		    		new TopicInstanceDao(
+		    				mdDao.currentProjectId, mdDao.schema)
+		    		.getCount(tc.getId()));
+
             // set the project if exists
             try {
                 pojo.setProjectId(tc.getProject().getId());
@@ -126,7 +128,6 @@ public class TopicCharacteristicDao
 		} else {
 		    return null;
 		}
-
 	}
 
 	@Override

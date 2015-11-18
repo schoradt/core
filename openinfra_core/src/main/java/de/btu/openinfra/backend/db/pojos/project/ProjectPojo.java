@@ -17,8 +17,7 @@ public class ProjectPojo extends OpenInfraMetaDataPojo {
     private PtFreeTextPojo descriptions;
 
     /* Default constructor */
-    public ProjectPojo() {
-    }
+    public ProjectPojo() {}
 
     /* Constructor that will set the id, trid and meta data automatically */
     public ProjectPojo(OpenInfraModelObject modelObject, MetaDataDao mdDao) {

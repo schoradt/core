@@ -7,8 +7,6 @@ import java.util.UUID;
 
 import javax.ws.rs.core.UriInfo;
 
-import org.json.simple.JSONObject;
-
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraValueValueDao;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
@@ -118,7 +116,7 @@ public class OpenInfraValueValueRbac<
             UUID firstAssociationIdFromPojo,
             UUID secondAssociationId,
             UUID secondAssociationIdFromPojo,
-            JSONObject json)
+            String json)
             throws RuntimeException {
         checkPermission(httpMethod, uriInfo);
         try {

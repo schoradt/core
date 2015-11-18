@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
-import org.json.simple.JSONObject;
-
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
@@ -146,7 +144,7 @@ public abstract class OpenInfraValueValueDao<
      */
     public UUID createOrUpdate(TypePojo pojo, UUID firstAssociationId,
             UUID firstAssociationIdFromPojo, UUID secondAssociationId,
-            UUID secondAssociationIdFromPojo, JSONObject metaData)
+            UUID secondAssociationIdFromPojo, String metaData)
             throws RuntimeException {
 
         // check if the value id of the URI map to the pojo uuid

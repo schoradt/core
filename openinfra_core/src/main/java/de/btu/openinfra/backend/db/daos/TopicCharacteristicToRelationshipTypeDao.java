@@ -82,9 +82,9 @@ public class TopicCharacteristicToRelationshipTypeDao
 					rtttc.getMultiplicityBean(), mdDao));
 			pojo.setTopicCharacteristic(
 				TopicCharacteristicDao.mapToPojoStatically(
-					locale,
-					rtttc.getTopicCharacteristic(),
-					mdDao));
+								locale,
+								rtttc.getTopicCharacteristic(),
+								mdDao));
 
 			return pojo;
 		} catch (NullPointerException npe) {
