@@ -121,3 +121,12 @@ table tr td {
 	height : 600px;
 	overflow: auto;
 }
+
+.urlImageContainer {
+	position: relative;
+    width: 400px; /*the image width*/
+    height: 300px; /*the image height*/
+    left: 50%;
+    top: 50%;
+    margin-left: -200px; /*half the image width*/
+}
