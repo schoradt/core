@@ -9,7 +9,7 @@ import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 public class WebappPojo extends OpenInfraPojo {
 
 	private String data;
-	private String name;
+	private String ident;
 	private String description;
 
 	public WebappPojo() {}
@@ -26,12 +26,12 @@ public class WebappPojo extends OpenInfraPojo {
 		this.data = data;
 	}
 
-	public String getName() {
-		return name;
+	public String getIdent() {
+		return ident;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setIdent(String ident) {
+		this.ident = ident;
 	}
 
 	public String getDescription() {

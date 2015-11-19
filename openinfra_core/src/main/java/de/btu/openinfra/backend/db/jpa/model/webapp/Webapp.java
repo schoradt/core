@@ -23,11 +23,19 @@ public class Webapp extends OpenInfraModelObject implements Serializable {
 
 	private String description;
 
-	private String name;
+	private String ident;
 
 	//bi-directional many-to-one association to WebappProject
 	@OneToMany(mappedBy="webapp")
 	private List<WebappProject> webappProjects;
+
+	//bi-directional many-to-one association to WebappSubject
+	@OneToMany(mappedBy="webapp")
+	private List<WebappSubject> webappSubjects;
+
+	//bi-directional many-to-one association to WebappSystem
+	@OneToMany(mappedBy="webapp")
+	private List<WebappSystem> webappSystems;
 
 	public Webapp() {}
 
@@ -47,12 +55,12 @@ public class Webapp extends OpenInfraModelObject implements Serializable {
 		this.description = description;
 	}
 
-	public String getName() {
-		return this.name;
+	public String getIdent() {
+		return this.ident;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setIdent(String ident) {
+		this.ident = ident;
 	}
 
 	public List<WebappProject> getWebappProjects() {

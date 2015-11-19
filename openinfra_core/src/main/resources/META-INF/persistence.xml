@@ -73,6 +73,8 @@
 		<!-- web-application data -->
 		<class>de.btu.openinfra.backend.db.jpa.model.webapp.Webapp</class>
 		<class>de.btu.openinfra.backend.db.jpa.model.webapp.WebappProject</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.webapp.WebappSubject</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.webapp.WebappSystem</class>
 		
 	</persistence-unit>
 	

@@ -19,7 +19,7 @@ public class WebappDao extends OpenInfraDao<WebappPojo, Webapp> {
 		WebappPojo pojo = new WebappPojo(modelObject);
 		pojo.setData(modelObject.getData());
 		pojo.setDescription(modelObject.getDescription());
-		pojo.setName(modelObject.getName());
+		pojo.setIdent(modelObject.getIdent());
 		return pojo;
 	}
 
@@ -28,7 +28,7 @@ public class WebappDao extends OpenInfraDao<WebappPojo, Webapp> {
 			Webapp modelObject) {
 		modelObject.setData(pojoObject.getData());
 		modelObject.setDescription(pojoObject.getDescription());
-		modelObject.setName(pojoObject.getName());
+		modelObject.setIdent(pojoObject.getIdent());
 		return new MappingResult<Webapp>(modelObject.getId(), modelObject);
 	}
 
