@@ -58,6 +58,8 @@ public enum OpenInfraExceptionTypes {
 	NO_CLASS_IN_SCHEMA("The requested class is not part of the specified "
 	        + "schema."),
 
+	INVALID_DATE_FORMAT("The specified date format is not supported."),
+
 	PLUGIN_NOT_FOUND("The requested plugin was not found."),
 
 	// TODO the exception handling must be reworked to support specific
