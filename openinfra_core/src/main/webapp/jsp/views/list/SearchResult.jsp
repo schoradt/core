@@ -97,7 +97,7 @@
 		    if (data["rawSolrQuery"] != "" || data["complexQueryPart"] != null && 
 		            data["complexQueryPart"][0]["attributeValue"] != "") {
 		        // get all parameters
-		        var param = decodeURIComponent(window.location.search.substring(1));
+		        var param = parseEncoding(window.location.search.substring(1));
 		        
 		     	// append the parameters and replace the start and row parameter
 				param = param.replace(new RegExp("start=\\d+"), start);
@@ -174,8 +174,19 @@
 		    
 		};
 		
+		function parseEncoding(input) {
+		    try {
+		        // If the string is UTF-8, this will work and not throw an error.
+		        return decodeURIComponent(window.location.search.substring(1));
+		    } catch(e) {
+		        // If it isn't, an error will be thrown, and we can asume that we have an ISO string.
+		        return unescape(window.location.search.substring(1));
+		    }
+		}
+		
 		function getUrlParameter(sParam) {
-		    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+		    
+		    var sPageURL = parseEncoding(window.location.search.substring(1)),
 		        sURLVariables = sPageURL.split('&'),
 		        sParameterName,
 		        i;
