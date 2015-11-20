@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.SolrInputDocument;
 
+import de.btu.openinfra.backend.OpenInfraTime;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.TopicInstanceDao;
 import de.btu.openinfra.backend.db.daos.meta.ProjectsDao;
@@ -20,6 +21,7 @@ import de.btu.openinfra.backend.db.jpa.model.meta.Projects;
 import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 import de.btu.openinfra.backend.exception.OpenInfraWebException;
 import de.btu.openinfra.plugins.solr.db.pojos.SolrIndexPojo;
+import de.btu.openinfra.plugins.solr.enums.DataTypeEnum;
 import de.btu.openinfra.plugins.solr.enums.SolrIndexEnum;
 import de.btu.openinfra.plugins.solr.exception.OpenInfraSolrException;
 
@@ -32,16 +34,14 @@ import de.btu.openinfra.plugins.solr.exception.OpenInfraSolrException;
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
  */
-public class SolrIndexer {
-
-    private SolrServer solrConnection = null;
+public class SolrIndexer extends SolrServer {
 
     /**
      * Default constructor
      */
     public SolrIndexer() {
         // connect to the Solr server
-        setSolrConnection(new SolrServer());
+        super();
     }
 
 
@@ -58,7 +58,7 @@ public class SolrIndexer {
 
         try {
             // TODO delete old index only for testing
-            //deleteAllDocuments();
+            deleteAllDocuments();
 
             List<Projects> projectIndexList = new ArrayList<Projects>();
 
@@ -94,6 +94,7 @@ public class SolrIndexer {
             }
             return true;
         } catch (Exception e) {
+            e.printStackTrace();
             // TODO replace with SolrExceptionType
             throw new OpenInfraSolrException(
                     OpenInfraExceptionTypes.SOLR_INDEX_FAILED);
@@ -121,9 +122,9 @@ public class SolrIndexer {
         // send the documents to the solr server
         try {
             // add the documents to solr
-            getSolrConnection().getSolr().add(docs);
+            getSolr().add(docs);
             // commit the changes to the server
-            getSolrConnection().getSolr().commit();
+            getSolr().commit();
         } catch (SolrServerException | IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -166,19 +167,16 @@ public class SolrIndexer {
 
         // run through all attribute values
         for (AttributeValueValue avv : ti.getAttributeValueValues()) {
-            // TODO get all data types from the specified value list and save
-            //      the values in fields that concurs to the data type
-            // get the id of the value list vl_data_type
-            //new ValueListDao(projectId, OpenInfraSchemas.PROJECTS).read
-            // get all value list values that are in the value list vl_data_type
-            //new ValueListValueDao(projectId,
-            //        OpenInfraSchemas.PROJECTS).read(null, valueId, offset, size)
             // add the current attribute value value to the doc
             addValuesToDoc(
                     avv.getAttributeTypeToAttributeTypeGroup()
                         .getAttributeType().getPtFreeText2()
                         .getLocalizedCharacterStrings(),
                     avv.getPtFreeText().getLocalizedCharacterStrings(),
+                    avv.getAttributeTypeToAttributeTypeGroup()
+                        .getAttributeType().getValueListValue1()
+                        .getPtFreeText2().getLocalizedCharacterStrings().get(0)
+                        .getFreeText(),
                     doc);
         }
 
@@ -191,6 +189,10 @@ public class SolrIndexer {
                         .getLocalizedCharacterStrings(),
                     avd.getValueListValue().getPtFreeText2()
                         .getLocalizedCharacterStrings(),
+                    avd.getAttributeTypeToAttributeTypeGroup()
+                        .getAttributeType().getValueListValue1()
+                        .getPtFreeText2().getLocalizedCharacterStrings().get(0)
+                        .getFreeText(),
                     doc);
         }
         return doc;
@@ -203,8 +205,8 @@ public class SolrIndexer {
      */
     public void deleteDocument(TopicInstance ti) {
         try {
-            getSolrConnection().getSolr().deleteById(ti.getId().toString());
-            getSolrConnection().getSolr().commit();
+            getSolr().deleteById(ti.getId().toString());
+            getSolr().commit();
         } catch (SolrServerException | IOException e) {
             throw new OpenInfraWebException(e);
         }
@@ -217,8 +219,8 @@ public class SolrIndexer {
      */
     public void deleteAllDocuments() {
         try {
-            getSolrConnection().getSolr().deleteByQuery("*:*");
-            getSolrConnection().getSolr().commit();
+            getSolr().deleteByQuery("*:*");
+            getSolr().commit();
         } catch (SolrServerException | IOException e) {
             throw new OpenInfraWebException(e);
         }
@@ -233,25 +235,39 @@ public class SolrIndexer {
      *
      * @param type
      * @param value
+     * @param dataType
      * @param doc
      */
     private void addValuesToDoc(
             List<LocalizedCharacterString> type,
             List<LocalizedCharacterString> value,
+            String dataType,
             SolrInputDocument doc
             ) {
 
         // check if the language of the attribute value is xx
         int x = containsAtPosition(value, "xx");
         if (x > -1) {
+            String typeSuffix = "";
+            Object specificValue = null;
+
+
+            if (dataType.equals(DataTypeEnum.DATE.getString())) {
+                typeSuffix = "_" + dataType;
+                specificValue = castPtFreeTextToDataType(value.get(x)
+                        .getFreeText(),
+                        dataType);
+            } else {
+                specificValue = value.get(x).getFreeText();
+            }
+
             // save the attribute value for every existing translation of the
             // attribute type
             for (int k = 0; k < type.size(); k++) {
                 doc.addField(
                         SolrCharacterConverter.convert(
-                                type.get(k)
-                                .getFreeText()),
-                        value.get(x).getFreeText());
+                                type.get(k).getFreeText()) + typeSuffix,
+                                specificValue);
             }
             // Abort here because the value should only exists in one language.
             return;
@@ -272,7 +288,7 @@ public class SolrIndexer {
                             SolrCharacterConverter.convert(
                                     type.get(z)
                                     .getFreeText()),
-                                    value.get(i).getFreeText());
+                            value.get(i).getFreeText());
                 } else {
                     // No translation for the attribute type was specified. To
                     // avoid information loss we will save all this values
@@ -283,8 +299,38 @@ public class SolrIndexer {
                 }
 
             } catch (ArrayIndexOutOfBoundsException e) {
-                throw new OpenInfraWebException(e);
+                e.printStackTrace();
+                // continue indexing if an error occurred
+                return;
             }
+        }
+    }
+
+    /**
+     * This method casts a specified string into a specified data type. If the
+     * casting fails the string will be returned untouched.
+     *
+     * @param text
+     * @param String
+     * @return
+     */
+    private Object castPtFreeTextToDataType(String text, String dataType) {
+        try {
+            switch (DataTypeEnum.valueOf(dataType.toUpperCase())) {
+                case DATE:
+                    return OpenInfraTime.parse(text);
+                case BOOLEAN:
+                    return Boolean.parseBoolean(text);
+                case INTEGER:
+                    return Integer.parseInt(text);
+                case NUMERIC:
+                    return Double.parseDouble(text);
+                default:
+                    return text;
+            }
+        } catch (NumberFormatException e) {
+            // return the string if something went wrong
+            return text;
         }
     }
 
@@ -307,13 +353,5 @@ public class SolrIndexer {
             }
         }
         return -1;
-    }
-
-    private SolrServer getSolrConnection() {
-        return this.solrConnection;
-    }
-
-    private void setSolrConnection(SolrServer solrConnection) {
-        this.solrConnection = solrConnection;
     }
 }

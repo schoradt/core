@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.impl.HttpSolrClient.RemoteSolrException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
 
@@ -27,9 +28,8 @@ import de.btu.openinfra.plugins.solr.enums.SolrIndexEnum;
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
  */
-public class SolrSearcher {
+public class SolrSearcher extends SolrServer {
 
-    private SolrServer solrConnection = null;
     /*
      * This variable defines the default start of the results and will be set if
      * no start variable was passed for the search method.
@@ -43,7 +43,7 @@ public class SolrSearcher {
      */
     public SolrSearcher() {
         // connect to the Solr server
-        solrConnection = new SolrServer();
+        super();
     }
 
     /**
@@ -63,8 +63,11 @@ public class SolrSearcher {
         // create a Solr query object
         SolrQuery query = new SolrQuery();
 
+        // create a Solr parser object
+        SolrQueryParser parser = new SolrQueryParser(getSolr());
+
         // parse the SolrSearchPojo to a Solr syntax query string
-        String queryStr = new SolrQueryParser().getSolrSyntaxQuery(searchPojo);
+        String queryStr = parser.getSolrSyntaxQuery(searchPojo);
 
         // add the query string to the query object.
         query.setQuery(queryStr);
@@ -94,7 +97,7 @@ public class SolrSearcher {
 
         String hlFields = "*";
 
-        List<String> lst = new SolrQueryParser().extractFields(queryStr);
+        List<String> lst = parser.extractFields(queryStr);
 
         // enable highlighting for every field that is requested in the query
         for (int i = 0; i < lst.size(); i++) {
@@ -113,7 +116,7 @@ public class SolrSearcher {
 
         try {
             // send the query to the Solr server
-            QueryResponse response = solrConnection.getSolr().query(query);
+            QueryResponse response = getSolr().query(query);
 
             // get the result list from the Solr server
             SolrDocumentList solrResults = response.getResults();
@@ -163,7 +166,7 @@ public class SolrSearcher {
             }
             result.setDatabaseResult(resultList);
             return result;
-        } catch (SolrServerException | IOException e) {
+        } catch (SolrServerException | IOException | RemoteSolrException e) {
             throw new OpenInfraWebException(e);
         }
     }

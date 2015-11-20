@@ -1,19 +1,45 @@
 package de.btu.openinfra.plugins.solr;
 
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.request.LukeRequest;
+import org.apache.solr.client.solrj.response.LukeResponse;
+import org.apache.solr.client.solrj.response.LukeResponse.FieldInfo;
 
 import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 import de.btu.openinfra.plugins.PluginProperties;
 import de.btu.openinfra.plugins.solr.db.pojos.SolrComplexQueryPartPojo;
 import de.btu.openinfra.plugins.solr.db.pojos.SolrSearchPojo;
+import de.btu.openinfra.plugins.solr.enums.DataTypeEnum;
 import de.btu.openinfra.plugins.solr.exception.OpenInfraSolrException;
 
+/**
+ * This class handles the parsing of the query. It would be better to implement
+ * an own queryParser and add it to the solrconfig.xml!
+ *
+ * @author <a href="http://www.b-tu.de">BTU</a> DBIS
+ *
+ */
 public class SolrQueryParser {
+
+    private SolrClient connection;
+    private Map<String, String> indexMap;
+    private boolean isDate;
+
+    public SolrQueryParser(SolrClient connection) {
+        this.connection = connection;
+    }
 
     /**
      * This method returns a search query in Solr syntax. It will parse the
@@ -37,6 +63,7 @@ public class SolrQueryParser {
             }
         } catch (Exception e) {
             // TODO replace with SolrExceptionType
+            e.printStackTrace();
             throw new OpenInfraSolrException(
                     OpenInfraExceptionTypes.SOLR_REQUEST_PARSE);
         }
@@ -58,7 +85,65 @@ public class SolrQueryParser {
             // convert the type name and replace it in the raw query
             rawQuery = rawQuery.replaceAll(
                     attributeTypeName,
-                    SolrCharacterConverter.convert(attributeTypeName));
+                    checkForDate(
+                            SolrCharacterConverter.convert(attributeTypeName)));
+
+        }
+
+        // convert all dates into a Solr formatted date
+        rawQuery = replaceDate(rawQuery);
+        return rawQuery;
+    }
+
+    /**
+     * This method will replace all dates in a raw query that stands behind the
+     * string "_date:" with the same date in Solr format.
+     *
+     * @param rawQuery The raw query where dates should be replaced.
+     * @return         The raw query with replaced dates.
+     */
+    private String replaceDate(String rawQuery) {
+        // regex pattern to retrieve everything behind "_date:" until the next
+        // whitespace
+        Pattern roughPattern = Pattern.compile(
+                "_" + DataTypeEnum.DATE.getString() +
+                ":\\[([^\\s]+)\\s+TO\\s+([^\\]]+)|_" +
+                DataTypeEnum.DATE.getString() +
+                ":([^\\s]+)");
+
+        // regex pattern to retrieve every date / time combination
+        Pattern exactPattern = Pattern.compile(
+                "(\\d+-?\\d+-?\\d+\\s?\\d+:?\\d+:?\\d+|\\d+-?\\d+-?\\d+)");
+
+        // search with the regex in the query
+        Matcher roughMatcher = roughPattern.matcher(rawQuery);
+
+        // match the first pattern and run through the results
+        while (roughMatcher.find()) {
+            // save the matches
+            String match = roughMatcher.group();
+            String result = match;
+
+            // apply the second pattern and run through the results
+            Matcher exactMatcher = exactPattern.matcher(roughMatcher.group());
+
+            while (exactMatcher.find()) {
+                // save the matches for further replacements
+                String replacement = exactMatcher.group();
+
+                // Replace the short date with the long date. Additionally it is
+                // necessary to add a lot backslashes before replacing. This
+                // will guarantee that at least one backslash survives.
+                result = match.replaceAll(
+                        Pattern.quote(replacement),
+                        convertToDate(replacement)
+                        .replaceAll("\\:", "\\\\\\\\\\\\\\\\:"));
+                match = result;
+            }
+
+            // replace the original date with the converted date in the query
+            rawQuery = rawQuery.replaceAll(
+                    Pattern.quote(roughMatcher.group()), result);
         }
         return rawQuery;
     }
@@ -91,9 +176,13 @@ public class SolrQueryParser {
      */
     private String parsePart(SolrComplexQueryPartPojo part, boolean firstRun) {
         String query = "";
+        boolean fuzzyFlag = part.isFuzziness();
+        isDate = false;
+
         // add the attribute type
         if (part.getAttributeType() != null) {
-            query += SolrCharacterConverter.convert(part.getAttributeType());
+            query += checkForDate(SolrCharacterConverter.convert(
+                    part.getAttributeType()));
         }
 
         // add the delimiter between attribute type and attribute value
@@ -106,15 +195,31 @@ public class SolrQueryParser {
             query = part.getMandatory().getString() + query;
         }
 
+
         // add the attribute value in different ways depending on the relational
         // operator
         if (part.getAttributeValue() != null) {
+            // convert the value to a date if the type is a date and escape the
+            // colons
+            if (isDate) {
+                part.setAttributeValue(
+                        convertToDate(part.getAttributeValue()));
+                // also convert the date for the till value if it exists
+                if (part.getTillAttributeValue() != null &&
+                        part.getTillAttributeValue() != "") {
+                    part.setTillAttributeValue(
+                            convertToDate(part.getTillAttributeValue()));
+                }
+            }
             if (part.getRelationalOperator() != null) {
                 switch (part.getRelationalOperator()) {
                 case GREATER_THAN:
                 case SMALLER_THAN:
-                    // only possible for numeric values
-                    if (NumberUtils.isNumber(part.getAttributeValue())) {
+                    // Only sensible for numeric and date values. The date check
+                    // will removes the last character that was added by
+                    // converting the date to a Solr date format.
+                    if (NumberUtils.isNumber(part.getAttributeValue()) ||
+                            isDate) {
                         query += String.format(
                                 part.getRelationalOperator().getString(),
                                 part.getAttributeValue());
@@ -130,6 +235,9 @@ public class SolrQueryParser {
                             part.getRelationalOperator().getString(),
                             part.getAttributeValue(),
                             part.getTillAttributeValue());
+                    // fuzzy search must not be used in combination with range
+                    // queries
+                    fuzzyFlag = false;
                     break;
                 default:
                     query += maskString(part.getAttributeValue());
@@ -151,7 +259,7 @@ public class SolrQueryParser {
         }
 
         // add fuzziness if required
-        if (part.isFuzziness()) {
+        if (fuzzyFlag) {
             // TODO find a better way to retrieve the plugin name
             query += "~" + PluginProperties.getProperty(
                     SolrPropertyKeys.SOLR_DEFAULT_FUZZY.getKey(), "Solr");
@@ -166,7 +274,7 @@ public class SolrQueryParser {
     }
 
     /**
-     * This method checks if a string contains whitespaces. If so a the string
+     * This method checks if a string contains whitespaces. If so the string
      * will be surrounded by quotation marks.
      *
      * @param str The input string that should be checked.
@@ -221,10 +329,88 @@ public class SolrQueryParser {
                     // add the attribute type name to the result list
                     lst.add(attributeTypeName);
                 }
-
             }
-
         }
         return lst;
+    }
+
+    /**
+     * This method checks the Solr index if the specified field name exists with
+     * the suffix _date. If it matches and the type is date it will append the
+     * suffix to the specified field and return it.
+     *
+     * @param field The field that should be checked for date.
+     * @return      The field name with the date suffix or in its original form.
+     */
+    private String checkForDate(String field) {
+        try {
+            if (field.equals("")) {
+                return field;
+            }
+
+            if (indexMap == null) {
+                // retrieve the Solr index
+                LukeRequest lukeRequest = new LukeRequest();
+                lukeRequest.setNumTerms(1);
+                LukeResponse lukeResponse = lukeRequest.process(connection);
+
+                // initialize the hash map
+                indexMap = new HashMap<String, String>();
+
+                // add the field names and types to the hash map
+                for (FieldInfo indexEntry : lukeResponse.getFieldInfo()
+                        .values()) {
+                    indexMap.put(indexEntry.getName(), indexEntry.getType());
+                }
+            }
+
+            // retrieve the field type from the hash map for the field name
+            String type = indexMap.get(
+                    field + "_" + DataTypeEnum.DATE.getString());
+
+            // check if the field name is part of the index and has the type
+            // date
+            if (type != null && type.equals(
+                    DataTypeEnum.DATE.getString())) {
+                isDate = true;
+                return field + "_" + DataTypeEnum.DATE.getString();
+            }
+        } catch (SolrServerException | IOException e) {
+            throw new OpenInfraSolrException(
+                    OpenInfraExceptionTypes.SOLR_SERVER_NOT_FOUND);
+        }
+        return field;
+    }
+
+    /**
+     * This method parses a date string into a Solr date string. This will only
+     * works for specified input date formats.
+     *
+     * @param date The string that should be formated.
+     * @return        The date string in the Solr date format.
+     */
+    private String convertToDate(String date) {
+        SimpleDateFormat out = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        /*
+         * The following date formats will be parsed. This is not part of the
+         * properties file because the date formats should be tested. The order
+         * of the dates is important. The fewer informations the date contains
+         * the further at the end the format must be placed.
+         */
+        String[] dateFormats = {
+                "yyyy-MM-dd hh:mm:ss", "dd.MM.yyyy hh:mm:ss",
+                "yyyy-MM-dd hh:mm", "dd.MM.yyyy hh:mm",
+                "yyyy-MM-dd", "dd.MM.yyyy",
+                "yyyy-MM", "MM.yyyy",
+                "yyyy"};
+        for (String dateFormat : dateFormats) {
+            try {
+                return out.format(
+                        new SimpleDateFormat(dateFormat).parse(date))
+                        .replaceAll("\\:", "\\\\:");
+            } catch (ParseException ignore) { }
+        }
+        throw new OpenInfraSolrException(
+                OpenInfraExceptionTypes.INVALID_DATE_FORMAT);
     }
 }
