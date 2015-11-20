@@ -46,6 +46,11 @@ public enum OpenInfraPropertyValues {
 	FILE_SEARCH_PATH("file"),
 
 	/**
+	 * The static search path of the web-application schema.
+	 */
+	WEBAPP_SEARCH_PATH("webapp"),
+
+	/**
 	 * The path for the project data.
 	 */
 	PROJECTDATA_PATH(OpenInfraProperties.FILE_PATH + "projectdata/"),

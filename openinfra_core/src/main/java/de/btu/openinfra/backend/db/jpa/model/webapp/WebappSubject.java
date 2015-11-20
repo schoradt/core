@@ -6,6 +6,7 @@ import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
@@ -18,7 +19,14 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
  */
 @Entity
 @Table(name="webapp_subject")
-@NamedQuery(name="WebappSubject.findAll", query="SELECT w FROM WebappSubject w")
+@NamedQueries({
+	@NamedQuery(name="WebappSubject.findAll",
+			query="SELECT w FROM WebappSubject w"),
+	@NamedQuery(name="WebappSubject.findByWebapp",
+			query="SELECT w "
+					+ "FROM WebappSubject w "
+					+ "WHERE w.webapp = :value")
+})
 public class WebappSubject extends OpenInfraModelObject
 	implements Serializable {
 	private static final long serialVersionUID = 1L;

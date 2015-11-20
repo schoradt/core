@@ -4,16 +4,16 @@ import java.util.Locale;
 
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
-import de.btu.openinfra.backend.db.daos.OpenInfraDao;
+import de.btu.openinfra.backend.db.daos.OpenInfraValueDao;
 import de.btu.openinfra.backend.db.jpa.model.webapp.Webapp;
 import de.btu.openinfra.backend.db.jpa.model.webapp.WebappSubject;
 import de.btu.openinfra.backend.db.pojos.webapp.WebappSubjectPojo;
 
-public class WebappSubjectDao extends
-	OpenInfraDao<WebappSubjectPojo, WebappSubject> {
+public class WebappSubjectDao
+	extends OpenInfraValueDao<WebappSubjectPojo, WebappSubject, Webapp> {
 
 	public WebappSubjectDao() {
-		super(null, OpenInfraSchemas.WEBAPP, WebappSubject.class);
+		super(null, OpenInfraSchemas.WEBAPP, WebappSubject.class, Webapp.class);
 	}
 
 	@Override
