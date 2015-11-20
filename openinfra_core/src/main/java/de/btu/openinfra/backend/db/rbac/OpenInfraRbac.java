@@ -431,6 +431,9 @@ public abstract class OpenInfraRbac<
 			}
 			break;
 
+		case WEBAPP:
+			return;
+
 		case FILE:
 			return;
 		}
