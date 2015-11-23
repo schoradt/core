@@ -1,10 +1,7 @@
 package de.btu.openinfra.backend.helper;
 
-import de.btu.openinfra.backend.db.OpenInfraOrderByEnum;
-import de.btu.openinfra.backend.db.OpenInfraSchemas;
-import de.btu.openinfra.backend.db.daos.OrderByDao;
-import de.btu.openinfra.backend.db.pojos.OrderByNamesPojo;
-import de.btu.openinfra.backend.db.pojos.OrderByPojo;
+import de.btu.openinfra.backend.OpenInfraTime;
+
 
 
 
@@ -61,15 +58,20 @@ public class TestClass {
 
 
 
-	    OrderByPojo p = OrderByDao.read(OpenInfraSchemas.PROJECTS, "TopicCharacteristic");
-	    for (OpenInfraOrderByEnum string : p.getOrderByTypes()) {
-            System.out.println(string.toString());
-        }
+//	    OrderByPojo p = OrderByDao.read(OpenInfraSchemas.PROJECTS, "TopicCharacteristic");
+//	    for (OpenInfraOrderByEnum string : p.getOrderByTypes()) {
+//            System.out.println(string.toString());
+//        }
+//
+//        OrderByNamesPojo np = OrderByDao.getNames(OpenInfraSchemas.SYSTEM);
+//        for (String string : np.getClassNames()) {
+//            System.out.println(string);
+//        }
 
-        OrderByNamesPojo np = OrderByDao.getNames(OpenInfraSchemas.SYSTEM);
-        for (String string : np.getClassNames()) {
-            System.out.println(string);
-        }
+	    System.out.println(OpenInfraTime.parse("2010-02-18T17:37:27"));
+	    System.out.println(OpenInfraTime.parse("2015-05-20 09:30:00+02"));
+
+
 	}
 
 
