@@ -12,7 +12,6 @@ import javax.persistence.PersistenceException;
 import javax.persistence.Table;
 
 import org.eclipse.persistence.jpa.JpaQuery;
-import org.json.simple.JSONObject;
 
 import de.btu.openinfra.backend.OpenInfraProperties;
 import de.btu.openinfra.backend.db.EntityManagerFactoryCache;
@@ -328,7 +327,7 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	 * @return
 	 */
 	public UUID createOrUpdate(
-			TypePojo pojo, UUID valueId, JSONObject metaData) {
+			TypePojo pojo, UUID valueId, String metaData) {
 
 	    UUID retId = null;
 

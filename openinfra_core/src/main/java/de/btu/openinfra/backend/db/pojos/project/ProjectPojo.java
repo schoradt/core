@@ -15,10 +15,11 @@ public class ProjectPojo extends OpenInfraMetaDataPojo {
     private UUID subprojectOf;
     private PtFreeTextPojo names;
     private PtFreeTextPojo descriptions;
+    private long topicCharacteristicsCount;
+    private long valueListsCount;
 
     /* Default constructor */
-    public ProjectPojo() {
-    }
+    public ProjectPojo() {}
 
     /* Constructor that will set the id, trid and meta data automatically */
     public ProjectPojo(OpenInfraModelObject modelObject, MetaDataDao mdDao) {
@@ -48,5 +49,21 @@ public class ProjectPojo extends OpenInfraMetaDataPojo {
     public void setDescriptions(PtFreeTextPojo descriptions) {
         this.descriptions = descriptions;
     }
+
+	public long getTopicCharacteristicsCount() {
+		return topicCharacteristicsCount;
+	}
+
+	public void setTopicCharacteristicsCount(long topicCharacteristicsCount) {
+		this.topicCharacteristicsCount = topicCharacteristicsCount;
+	}
+
+	public long getValueListsCount() {
+		return valueListsCount;
+	}
+
+	public void setValueListsCount(long valueListsCount) {
+		this.valueListsCount = valueListsCount;
+	}
 
 }

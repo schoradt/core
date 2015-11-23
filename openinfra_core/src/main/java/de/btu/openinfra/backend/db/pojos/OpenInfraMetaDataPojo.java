@@ -1,23 +1,23 @@
 package de.btu.openinfra.backend.db.pojos;
 
-import org.json.simple.JSONObject;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import de.btu.openinfra.backend.db.daos.MetaDataDao;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 
+@XmlRootElement
 public abstract class OpenInfraMetaDataPojo extends OpenInfraPojo {
 
     /**
      * This variable stands for the meta data of the data object stored in
      * PostgreSQL in the meta data table.
      */
-    private JSONObject metaData;
+    private String metaData;
 
     /**
      * The definition of the non-argument default constructor.
      */
-    protected OpenInfraMetaDataPojo() {
-    }
+    public OpenInfraMetaDataPojo() {}
 
     /**
      * This constructor is used to set the meta data of the POJO object and
@@ -29,20 +29,21 @@ public abstract class OpenInfraMetaDataPojo extends OpenInfraPojo {
      * @param MetaDataDao
      *            the meta data DAO
      */
-    protected OpenInfraMetaDataPojo(OpenInfraModelObject modelObject, MetaDataDao mdDao) {
+    public OpenInfraMetaDataPojo(
+    		OpenInfraModelObject modelObject, MetaDataDao mdDao) {
         super(modelObject);
         try {
-            metaData = mdDao.read(modelObject.getId()).getData();
+            metaData = mdDao.read(modelObject.getId()).getData().toJSONString();
         } catch (NullPointerException npe) {
             /* do nothing */ }
 
     }
 
-    public JSONObject getMetaData() {
+    public String getMetaData() {
         return metaData;
     }
 
-    public void setMetaData(JSONObject metaData) {
+    public void setMetaData(String metaData) {
         this.metaData = metaData;
     }
 

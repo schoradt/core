@@ -178,6 +178,14 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 		if(p != null) {
 			ProjectPojo pojo = new ProjectPojo(p, mdDao);
 
+			pojo.setValueListsCount(
+					new ValueListDao(mdDao.currentProjectId, mdDao.schema)
+					.getCount());
+
+			pojo.setTopicCharacteristicsCount(
+					new TopicCharacteristicDao(mdDao.currentProjectId,
+							mdDao.schema).getCount());
+
 			Project parent = p.getProject();
 
 			pojo.setNames(PtFreeTextDao.mapToPojoStatically(

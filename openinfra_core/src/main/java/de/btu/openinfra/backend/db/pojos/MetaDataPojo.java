@@ -4,8 +4,6 @@ import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.json.simple.JSONObject;
-
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 
 @XmlRootElement
@@ -14,7 +12,7 @@ public class MetaDataPojo extends OpenInfraPojo {
     private UUID objectId;
     private String tableName;
     private String pkColumn;
-    private JSONObject data;
+    private String data;
 
     /* Default constructor */
     public MetaDataPojo() {
@@ -49,11 +47,11 @@ public class MetaDataPojo extends OpenInfraPojo {
         this.pkColumn = pkColumn;
     }
 
-    public JSONObject getData() {
+    public String getData() {
         return data;
     }
 
-    public void setData(JSONObject data) {
+    public void setData(String data) {
         this.data = data;
     }
 

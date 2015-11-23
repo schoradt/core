@@ -75,19 +75,14 @@ public class TopicCharacteristicResource {
 									PtLocaleDao.forLanguageTag(
 											language), filter);
 		} else {
-			return new TopicCharacteristicRbac(
-					projectId,
-					OpenInfraSchemas.valueOf(
-							schema.toUpperCase())).read(
-									OpenInfraHttpMethod.valueOf(
-											request.getMethod()),
-									uriInfo,
-									PtLocaleDao.forLanguageTag(
-											language),
-										sortOrder,
-										orderBy,
-										offset,
-										size);
+			TopicCharacteristicRbac rbac = new TopicCharacteristicRbac(
+					projectId, OpenInfraSchemas.valueOf(schema.toUpperCase()));
+			List<TopicCharacteristicPojo> list = rbac.read(
+					OpenInfraHttpMethod.valueOf(request.getMethod()),
+					uriInfo,
+					PtLocaleDao.forLanguageTag(language),
+					sortOrder, orderBy,	offset,	size);
+			return list;
 		} // end if else
 	}
 
@@ -140,20 +135,20 @@ public class TopicCharacteristicResource {
             @PathParam("schema") String schema,
             @PathParam("topicCharacteristicId") UUID topicCharacteristicId,
             AttributeTypeGroupToTopicCharacteristicPojo pojo) {
-        return OpenInfraResponseBuilder.postResponse(
-                new AttributeTypeGroupToTopicCharacteristicRbac(
-                        projectId,
-                        OpenInfraSchemas.valueOf(schema.toUpperCase())
-                        ).createOrUpdate(
-                                OpenInfraHttpMethod.valueOf(
-                                        request.getMethod()),
-                                uriInfo,
-                                pojo,
-                                topicCharacteristicId,
-                                pojo.getTopicCharacteristicId(),
-                                null,
-                                null,
-                                pojo.getMetaData()));
+		return OpenInfraResponseBuilder.postResponse(
+			new AttributeTypeGroupToTopicCharacteristicRbac(
+			                projectId,
+			                OpenInfraSchemas.valueOf(schema.toUpperCase())
+			                ).createOrUpdate(
+			                        OpenInfraHttpMethod.valueOf(
+			                                request.getMethod()),
+			                        uriInfo,
+			                        pojo,
+			                        topicCharacteristicId,
+			                        pojo.getTopicCharacteristicId(),
+			                        null,
+			                        null,
+			                        pojo.getMetaData()));
     }
 
 	@GET
@@ -210,20 +205,20 @@ public class TopicCharacteristicResource {
             @PathParam("topicCharacteristicId") UUID topicCharacteristicId,
             @PathParam("attributeTypeGroupId") UUID attributeTypeGroupId,
             AttributeTypeGroupToTopicCharacteristicPojo pojo) {
-        return OpenInfraResponseBuilder.putResponse(
-                new AttributeTypeGroupToTopicCharacteristicRbac(
-                        projectId,
-                        OpenInfraSchemas.valueOf(schema.toUpperCase())
-                        ).createOrUpdate(
-                                OpenInfraHttpMethod.valueOf(
-                                        request.getMethod()),
-                                uriInfo,
-                                pojo,
-                                topicCharacteristicId,
-                                pojo.getTopicCharacteristicId(),
-                                attributeTypeGroupId,
-                                pojo.getAttributeTypeGroup().getUuid(),
-                                pojo.getMetaData()));
+			return OpenInfraResponseBuilder.putResponse(
+			        new AttributeTypeGroupToTopicCharacteristicRbac(
+			                projectId,
+			                OpenInfraSchemas.valueOf(schema.toUpperCase())
+			                ).createOrUpdate(
+			                        OpenInfraHttpMethod.valueOf(
+			                                request.getMethod()),
+			                        uriInfo,
+			                        pojo,
+			                        topicCharacteristicId,
+			                        pojo.getTopicCharacteristicId(),
+			                        attributeTypeGroupId,
+			                        pojo.getAttributeTypeGroup().getUuid(),
+			                        		pojo.getMetaData()));
     }
 
     @DELETE

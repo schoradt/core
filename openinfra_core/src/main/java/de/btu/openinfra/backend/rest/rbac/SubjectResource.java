@@ -189,9 +189,10 @@ public class SubjectResource {
 	 */
 	@GET
 	@Path("self/permissions")
+	@Produces(MediaType.APPLICATION_JSON)
 	public Set<String> permissions() {
 		return new OpenInfraRealm().getPermissions(
-				SecurityUtils.getSubject().getPrincipals());
+						SecurityUtils.getSubject().getPrincipals());
 	}
 
 

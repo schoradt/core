@@ -5,6 +5,10 @@ import java.util.UUID;
 
 import javax.persistence.NoResultException;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.MetaData;
@@ -69,7 +73,7 @@ public class MetaDataDao extends OpenInfraDao<MetaDataPojo, MetaData> {
             pojo.setObjectId(md.getObjectId());
             pojo.setTableName(md.getTableName());
             pojo.setPkColumn(md.getPkColumn());
-            pojo.setData(md.getData());
+            pojo.setData(md.getData().toJSONString());
             return pojo;
         } else {
             return null;
@@ -107,7 +111,12 @@ public class MetaDataDao extends OpenInfraDao<MetaDataPojo, MetaData> {
             // set the object id
             resultM.setObjectId(pojo.getObjectId());
             // set the data
-            resultM.setData(pojo.getData());
+            try {
+				resultM.setData(
+						(JSONObject)new JSONParser().parse(pojo.getData()));
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
             // set the primary key column
             resultM.setPkColumn(pojo.getPkColumn());
             // set the table name

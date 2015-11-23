@@ -13,13 +13,14 @@ public class TopicCharacteristicPojo extends OpenInfraMetaDataPojo {
     private PtFreeTextPojo descriptions;
     private ValueListValuePojo topic;
     private UUID projectId;
+    private long topicInstancesCount;
 
     /* Default constructor */
-    public TopicCharacteristicPojo() {
-    }
+    public TopicCharacteristicPojo() {}
 
     /* Constructor that will set the id, trid and meta data automatically */
-    public TopicCharacteristicPojo(OpenInfraModelObject modelObject, MetaDataDao mdDao) {
+    public TopicCharacteristicPojo(OpenInfraModelObject modelObject,
+    		MetaDataDao mdDao) {
         super(modelObject, mdDao);
     }
 
@@ -46,5 +47,13 @@ public class TopicCharacteristicPojo extends OpenInfraMetaDataPojo {
     public void setProjectId(UUID projectId) {
         this.projectId = projectId;
     }
+
+	public long getTopicInstancesCount() {
+		return topicInstancesCount;
+	}
+
+	public void setTopicInstancesCount(long topicInstancesCount) {
+		this.topicInstancesCount = topicInstancesCount;
+	}
 
 }

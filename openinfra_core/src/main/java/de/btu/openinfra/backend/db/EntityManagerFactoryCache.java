@@ -101,6 +101,16 @@ public class EntityManagerFactoryCache {
         		ee.printStackTrace();
         	}
         }
+        // Add Webapp entity manager factory
+        if(cacheSize - cache.size() > 0) {
+        	try {
+        		cache.get(new CacheTuple(
+        				OpenInfraApplication.PERSISTENCE_CONTEXT,
+        				createProperties(null, OpenInfraSchemas.WEBAPP)));
+        	} catch(ExecutionException ee) {
+        		ee.printStackTrace();
+        	}
+        }
         // Add project entity manager factories
         if(cacheSize - cache.size() > 0) {
             ProjectDao projectDao = new ProjectDao(null,
@@ -182,7 +192,7 @@ public class EntityManagerFactoryCache {
             if(p == null) {
                 break;
             }
-            
+
             // overwrite the properties from the properties file with content
             // from the database
             properties.put(
@@ -198,19 +208,24 @@ public class EntityManagerFactoryCache {
                         p.getDatabaseConnection().getServer().getServer(),
                         p.getDatabaseConnection().getPort().getPort(),
                         p.getDatabaseConnection().getDatabase().getDatabase()));
-                        
+
             currentSchema +=
                     p.getDatabaseConnection().getSchema().getSchema() + "," +
                     OpenInfraPropertyValues.SEARCH_PATH.getValue();
             break;
         case RBAC:
-        	currentSchema += OpenInfraPropertyValues.RBAC_SEARCH_PATH.getValue() 
+        	currentSchema += OpenInfraPropertyValues.RBAC_SEARCH_PATH.getValue()
         	+ "," + OpenInfraPropertyValues.SEARCH_PATH.getValue();
         	break;
         case FILE:
-        	currentSchema += 
-        		OpenInfraPropertyValues.FILE_SEARCH_PATH.getValue() + 
+        	currentSchema +=
+        		OpenInfraPropertyValues.FILE_SEARCH_PATH.getValue() +
         		"," + OpenInfraPropertyValues.SEARCH_PATH.getValue();
+        	break;
+        case WEBAPP:
+        	currentSchema +=
+    			OpenInfraPropertyValues.WEBAPP_SEARCH_PATH.getValue() +
+    				"," + OpenInfraPropertyValues.SEARCH_PATH.getValue();
         	break;
         case SYSTEM:
             // fall through

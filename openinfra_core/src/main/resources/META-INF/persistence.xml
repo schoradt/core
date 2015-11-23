@@ -69,6 +69,13 @@
 		<class>de.btu.openinfra.backend.db.jpa.model.file.File</class>
 		<class>de.btu.openinfra.backend.db.jpa.model.file.FilesProject</class>
 		<class>de.btu.openinfra.backend.db.jpa.model.file.SupportedMimeType</class>
+		
+		<!-- web-application data -->
+		<class>de.btu.openinfra.backend.db.jpa.model.webapp.Webapp</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.webapp.WebappProject</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.webapp.WebappSubject</class>
+		<class>de.btu.openinfra.backend.db.jpa.model.webapp.WebappSystem</class>
+		
 	</persistence-unit>
 	
 	<!-- This PU is necessary to create new project schemas -->

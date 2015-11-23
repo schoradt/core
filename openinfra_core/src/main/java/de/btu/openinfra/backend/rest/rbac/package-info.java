@@ -48,7 +48,7 @@
  * curl -i -b cookie.txt -X DELETE http://localhost:8080/openinfra_core/rest/v1/rbac/roles/93d94e22-17df-4743-b002-ca0ac5c769b0
  *
  * -- New Project
- * curl -i -b cookie.txt -X POST -H "Content-Type: application/json" -d @C:\Users\tino\git\core\openinfra_core\src\test\java\de\btu\openinfra\backend\rest\project\test\json\NewProject.json http://localhost:8080/openinfra_core/rest/v1/projects
+ * curl -i -b cookie.txt -X POST -H "Content-Type: application/json" -d @NewProject.json "http://localhost:8080/openinfra_core/rest/v1/projects?createEmpty=true&loadIntitialData=false"
  *
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
