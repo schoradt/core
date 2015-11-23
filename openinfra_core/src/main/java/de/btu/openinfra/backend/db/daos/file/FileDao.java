@@ -19,7 +19,7 @@ import de.btu.openinfra.backend.db.pojos.file.FilesProjectPojo;
 public class FileDao extends OpenInfraDao<FilePojo, File> {
 
 	public FileDao() {
-		super(null, OpenInfraSchemas.FILE, File.class);
+		super(null, OpenInfraSchemas.FILES, File.class);
 	}
 
 	public FileDao(UUID currentProject, OpenInfraSchemas schema) {

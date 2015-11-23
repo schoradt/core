@@ -26,8 +26,6 @@ import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.pojos.LocalizedString;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 import de.btu.openinfra.backend.db.pojos.PtLocalePojo;
-import de.btu.openinfra.backend.db.pojos.file.FilePojo;
-import de.btu.openinfra.backend.db.pojos.file.FilesProjectPojo;
 import de.btu.openinfra.backend.exception.OpenInfraWebException;
 
 /**
@@ -154,6 +152,14 @@ public class PojoPrimer {
                 Reflection.<OpenInfraPojo>findAllClasses(
                         "de.btu.openinfra.backend.db.pojos.project"));
 
+        // add file pojos
+        pojoClasses.put(
+                OpenInfraSchemas.FILES,
+                new HashMap<String, Class<? extends OpenInfraPojo>>());
+        addClassesForSchema(
+                OpenInfraSchemas.FILES,
+                Reflection.<OpenInfraPojo>findAllClasses(
+                        "de.btu.openinfra.backend.db.pojos.file"));
     }
 
     /**
@@ -363,18 +369,6 @@ public class PojoPrimer {
                 }
             }
         }
-
-        // add file pojos
-        pojoClasses.put(
-                OpenInfraSchemas.FILE,
-                new HashMap<String, Class<? extends OpenInfraPojo>>());
-        pojoClasses.get(OpenInfraSchemas.FILE).put(
-                "file",
-                FilePojo.class);
-        pojoClasses.get(OpenInfraSchemas.FILE).put(
-                "filesproject",
-                FilesProjectPojo.class);
-
     }
 
     /**

@@ -28,7 +28,7 @@ public enum OpenInfraSchemas {
 	/**
 	 * Schema for file service
 	 */
-	FILE,
+	FILES,
 	/**
 	 * Schema for web-applications
 	 */
