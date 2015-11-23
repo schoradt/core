@@ -5,6 +5,8 @@ import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
+
 /**
  * This POJO is a container for a index request from the client. It contains
  * a list of project UUIDs that should be indexed.
@@ -13,7 +15,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  */
 @XmlRootElement
-public class SolrIndexPojo {
+public class SolrIndexPojo extends OpenInfraPojo {
 
     private List<UUID> projects;
 

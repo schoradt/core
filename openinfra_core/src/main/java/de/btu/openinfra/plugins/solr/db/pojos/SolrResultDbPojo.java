@@ -4,12 +4,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
+
 /**
  * This POJO is a container for a database result of a Solr query.
  *
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  */
-public class SolrResultDbPojo {
+public class SolrResultDbPojo extends OpenInfraPojo {
 
     private UUID topicInstanceId;
     private UUID topicCharacteristicId;

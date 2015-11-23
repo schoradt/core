@@ -32,6 +32,11 @@ public enum OpenInfraSchemas {
 	/**
 	 * Schema for web-applications
 	 */
-	WEBAPP
+	WEBAPP,
+	/**
+	 * This is a special schema that does not represent a real database schema.
+	 * It will only be used to activate the primer resource for search Pojos.
+	 */
+	SEARCH
 
 }

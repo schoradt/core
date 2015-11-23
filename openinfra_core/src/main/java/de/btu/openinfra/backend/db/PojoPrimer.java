@@ -160,6 +160,16 @@ public class PojoPrimer {
                 OpenInfraSchemas.FILES,
                 Reflection.<OpenInfraPojo>findAllClasses(
                         "de.btu.openinfra.backend.db.pojos.file"));
+
+        // add search pojo classes
+        pojoClasses.put(
+                OpenInfraSchemas.SEARCH,
+                new HashMap<String, Class<? extends OpenInfraPojo>>());
+        addClassesForSchema(
+                OpenInfraSchemas.SEARCH,
+                Reflection.<OpenInfraPojo>findAllClasses(
+                        "de.btu.openinfra.plugins.solr.db.pojos"));
+
     }
 
     /**

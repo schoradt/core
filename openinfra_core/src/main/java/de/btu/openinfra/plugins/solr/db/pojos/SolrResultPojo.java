@@ -2,6 +2,8 @@ package de.btu.openinfra.plugins.solr.db.pojos;
 
 import java.util.List;
 
+import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
+
 
 /**
  * This POJO is a container for the result of a Solr query. It contains all Solr
@@ -9,7 +11,7 @@ import java.util.List;
  *
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  */
-public class SolrResultPojo {
+public class SolrResultPojo extends OpenInfraPojo {
 
     private long elapsedTime;
     private long resultCount;
