@@ -72,7 +72,8 @@
 												<tr>
 													<c:set var="settingCount" value="${fn:length(pojo.associatedInstance.topicCharacteristic.metaData)}"/>
 													<c:set var="metaData" value="${pojo.associatedInstance.topicCharacteristic.metaData}"/>
-													<c:set var="columns" value="${metaData.list_view_columns}"/>
+													<c:out value="${metaData}"/>
+													<!-- c:set var="columns" value="${metaData.list_view_columns}"/-->
 													<c:forEach items="${columns}" var="setting">
 														<th style="width: ${100/settingCount}%">
 														<%
