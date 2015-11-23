@@ -43,20 +43,28 @@ public class OpenInfraTime {
 	 */
 	public static Date parse(String string) {
 	    if(string != null) {
-	        try {
-                // TODO this must be placed somewhere in the properties
-                String format = "yyyy-MM-dd HH:mm:ssZ";
-                DateFormat df = new SimpleDateFormat(format);
-                // we must add two zeros because the time zone from the database
-                // can only have two digits
-                return df.parse(string+"00");
-            } catch (ParseException e) {
-                e.printStackTrace();
-                return null;
+	        /*
+	         * The following date formats will be parsed. This is not part of
+	         * the properties file because the date formats should be tested.
+	         * The order of the dates is important.
+	         */
+            String[] dateFormats = {
+                    "yyyy-MM-dd'T'HH:mm:ssZ", "yyyy-MM-dd HH:mm:ssZ"};
+
+            for (String dateFormat : dateFormats) {
+                try {
+                    if (string.contains("+")) {
+	                      string += "00";
+	                  } else {
+	                      string += "+0000";
+	                  }
+                    return new SimpleDateFormat(dateFormat).parse(string);
+                } catch (ParseException ignore) { }
             }
         } else {
             return null;
         }
+        return null;
 	}
 
 	/**
