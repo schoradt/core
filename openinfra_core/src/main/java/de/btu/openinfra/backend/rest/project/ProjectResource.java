@@ -159,8 +159,22 @@ public class ProjectResource {
 	 * curl.exe -X "POST" -H "Content-Type: application/xml"
 	 * -d &#64;path/to/file http://localhost:8080/openinfra_backend/projects
 	 *
+	 * Use the following command to crate an empty schema which is required by
+	 * the XML import/export interface:
+	 *
+	 * curl -i -b cookie.txt -X POST -H "Content-Type: application/json" -d
+	 * @NewProject.json "http://localhost:8080/openinfra_core/rest/v1/projects?
+	 * createEmpty=true&loadIntitialData=false"
+	 *
 	 * @param project a project object (JSON or XML representations are
 	 *                converted into real objects via the JAX-RS stack)
+	 * @param createEmpty The application creates an empty new schema when true.
+	 *                    This is necessary by the external XML interface
+	 *                    (XML import/export interface by HTW Dresden)
+	 * @param loadInitialData This parameter prerequisites 'createEmpty=true'.
+	 *                        There is no initial data stored in the new data
+	 *                        base when false. This is required by the
+	 *                        XML import/export interface.
 	 * @return        an UUID of the created project
 	 */
 	@POST
