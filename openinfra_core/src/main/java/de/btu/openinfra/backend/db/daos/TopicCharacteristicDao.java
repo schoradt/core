@@ -107,10 +107,14 @@ public class TopicCharacteristicDao
 		    TopicCharacteristicPojo pojo =
 		            new TopicCharacteristicPojo(tc, mdDao);
 
-		    pojo.setTopicInstancesCount(
-		    		new TopicInstanceDao(
-		    				mdDao.currentProjectId, mdDao.schema)
-		    		.getCount(tc.getId()));
+		    // TODO this will probably disable the count functionality but will
+		    // avoid a NullPointerException. This must be reworked!
+		    if (mdDao != null) {
+    		    pojo.setTopicInstancesCount(
+    		    		new TopicInstanceDao(
+    		    				mdDao.currentProjectId, mdDao.schema)
+    		    		.getCount(tc.getId()));
+		    }
 
             // set the project if exists
             try {

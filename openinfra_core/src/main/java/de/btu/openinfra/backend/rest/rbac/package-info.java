@@ -50,6 +50,9 @@
  * -- New Project
  * curl -i -b cookie.txt -X POST -H "Content-Type: application/json" -d @NewProject.json "http://localhost:8080/openinfra_core/rest/v1/projects?createEmpty=true&loadIntitialData=false"
  *
+ * -- Create Solr index
+ * curl -i -b cookie.txt -X POST -H "Content-Type: application/json" -d @Index.json "http://localhost:8080/openinfra_core/rest/v1/search/index"
+ *
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
  */
