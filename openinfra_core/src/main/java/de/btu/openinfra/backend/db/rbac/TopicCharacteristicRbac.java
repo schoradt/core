@@ -79,6 +79,26 @@ public class TopicCharacteristicRbac extends OpenInfraValueRbac<
 				schema).read(locale, filter));
 	}
 
+	public List<TopicCharacteristicPojo> readByTopicInstanceAssociationTo(
+			OpenInfraHttpMethod httpMethod,
+			UriInfo uriInfo,
+			Locale locale, UUID topicInstance) {
+		checkPermission(httpMethod, uriInfo);
+		return removeItems(new TopicCharacteristicDao(
+				currentProjectId, schema).readByTopicInstanceAssociationTo(
+						locale, topicInstance));
+	}
+
+	public List<TopicCharacteristicPojo> readByTopicInstanceAssociationFrom(
+			OpenInfraHttpMethod httpMethod,
+			UriInfo uriInfo,
+			Locale locale, UUID topicInstance) {
+		checkPermission(httpMethod, uriInfo);
+		return removeItems(new TopicCharacteristicDao(
+				currentProjectId, schema)
+		.readByTopicInstanceAssociationFrom(locale, topicInstance));
+	}
+
 	/**
 	 * This method is used to remove items the current subject doesn't has
 	 * access.

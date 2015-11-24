@@ -12,6 +12,7 @@ import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.Project;
 import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
+import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
 import de.btu.openinfra.backend.db.jpa.model.ValueListValue;
 import de.btu.openinfra.backend.db.pojos.TopicCharacteristicPojo;
 import de.btu.openinfra.backend.exception.OpenInfraEntityException;
@@ -81,6 +82,47 @@ public class TopicCharacteristicDao
 
 		} // end for
 		return new LinkedList<TopicCharacteristicPojo>(tcp.values());
+	}
+
+	public List<TopicCharacteristicPojo> readByTopicInstanceAssociationFrom(
+			Locale locale, UUID topicInstance) {
+		return readByTopicInstanceAssociation(locale, topicInstance,
+				"TopicCharacteristic.findByTopicInstanceAssociationFrom",
+				"TopicInstanceXTopicInstance"
+				+ ".countAssociationFromByTopicInstanceAndTopicCharacteristic");
+	}
+
+	public List<TopicCharacteristicPojo> readByTopicInstanceAssociationTo(
+			Locale locale, UUID topicInstance) {
+		return readByTopicInstanceAssociation(locale, topicInstance,
+				"TopicCharacteristic.findByTopicInstanceAssociationTo",
+				"TopicInstanceXTopicInstance"
+				+ ".countAssociationToByTopicInstanceAndTopicCharacteristic");
+	}
+
+	private List<TopicCharacteristicPojo> readByTopicInstanceAssociation(
+			Locale locale, UUID topicInstance,
+			String namedQuery, String countQuery) {
+		List<TopicCharacteristicPojo> pList =
+				new LinkedList<TopicCharacteristicPojo>();
+		List<TopicCharacteristic> tcList =
+				em.createNamedQuery(
+						namedQuery,
+						TopicCharacteristic.class).setParameter(
+								"value",
+								em.find(TopicInstance.class,
+										topicInstance)).getResultList();
+		for(TopicCharacteristic tc : tcList) {
+			TopicCharacteristicPojo p = mapToPojo(locale, tc);
+			p.setTopicInstancesCount(em.createNamedQuery(
+					countQuery,
+					Long.class).setParameter("topicInstance",
+							em.find(TopicInstance.class, topicInstance))
+							.setParameter("topicCharacteristic", tc)
+							.getSingleResult());
+			pList.add(p);
+		}
+		return pList;
 	}
 
 	@Override

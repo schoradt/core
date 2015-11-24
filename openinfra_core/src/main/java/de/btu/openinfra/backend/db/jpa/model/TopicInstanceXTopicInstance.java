@@ -12,18 +12,32 @@ import javax.persistence.Table;
 
 /**
  * The persistent class for the topic_instance_x_topic_instance database table.
- * 
+ *
  */
 @Entity
 @Table(name="topic_instance_x_topic_instance")
 @NamedQueries({
-	@NamedQuery(name="TopicInstanceXTopicInstance.count", 
+	@NamedQuery(name="TopicInstanceXTopicInstance.count",
 			query="SELECT COUNT(t) FROM TopicInstanceXTopicInstance t "),
-	@NamedQuery(name="TopicInstanceXTopicInstance.countByTopicInstance", 
+	@NamedQuery(name="TopicInstanceXTopicInstance.countByTopicInstance",
 			query="SELECT COUNT(t) "
 					+ "FROM TopicInstanceXTopicInstance t "
 					+ "WHERE t.topicInstance1Bean = :value"),
-	@NamedQuery(name="TopicInstanceXTopicInstance.findAll", 
+	@NamedQuery(name="TopicInstanceXTopicInstance"
+			+ ".countAssociationToByTopicInstanceAndTopicCharacteristic",
+					query="SELECT COUNT(t) "
+							+ "FROM TopicInstanceXTopicInstance t "
+							+ "WHERE t.topicInstance1Bean = :topicInstance "
+							+ "AND t.topicInstance2Bean.topicCharacteristic = "
+							+ ":topicCharacteristic"),
+	@NamedQuery(name="TopicInstanceXTopicInstance"
+			+ ".countAssociationFromByTopicInstanceAndTopicCharacteristic",
+					query="SELECT COUNT(t) "
+							+ "FROM TopicInstanceXTopicInstance t "
+							+ "WHERE t.topicInstance2Bean = :topicInstance "
+							+ "AND t.topicInstance1Bean.topicCharacteristic = "
+							+ ":topicCharacteristic"),
+	@NamedQuery(name="TopicInstanceXTopicInstance.findAll",
 			query="SELECT t FROM TopicInstanceXTopicInstance t"),
 	@NamedQuery(name="TopicInstanceXTopicInstance.findByTopicInstance",
 			query="SELECT t "
@@ -34,11 +48,7 @@ import javax.persistence.Table;
 		query="SELECT t "
 			+ "FROM TopicInstanceXTopicInstance t "
 			+ "WHERE t.topicInstance1Bean = :value AND "
-			+ "t.topicInstance2Bean = :value2"),
-	@NamedQuery(name="TopicInstanceXTopicInstance.findParent", 
-			query="SELECT t "
-					+ "FROM TopicInstanceXTopicInstance t "
-					+ "WHERE t.topicInstance2Bean = :self")
+			+ "t.topicInstance2Bean = :value2")
 })
 public class TopicInstanceXTopicInstance extends OpenInfraModelObject
     implements Serializable {

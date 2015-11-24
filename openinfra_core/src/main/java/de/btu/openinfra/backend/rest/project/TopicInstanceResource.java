@@ -20,12 +20,14 @@ import javax.ws.rs.core.UriInfo;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.AttributeValueGeomType;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
+import de.btu.openinfra.backend.db.pojos.TopicCharacteristicPojo;
 import de.btu.openinfra.backend.db.pojos.TopicPojo;
 import de.btu.openinfra.backend.db.pojos.project.AttributeValuePojo;
 import de.btu.openinfra.backend.db.pojos.project.TopicInstanceAssociationPojo;
 import de.btu.openinfra.backend.db.pojos.project.TopicInstancePojo;
 import de.btu.openinfra.backend.db.rbac.AttributeValueRbac;
 import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
+import de.btu.openinfra.backend.db.rbac.TopicCharacteristicRbac;
 import de.btu.openinfra.backend.db.rbac.TopicInstanceAssociationRbac;
 import de.btu.openinfra.backend.db.rbac.TopicInstanceRbac;
 import de.btu.openinfra.backend.db.rbac.TopicRbac;
@@ -112,7 +114,7 @@ public class TopicInstanceResource {
 	}
 
 	@GET
-	@Path("{topicInstanceId}/associations")
+	@Path("{topicInstanceId}/associationsto")
 	public List<TopicInstanceAssociationPojo> getAssociations(
 			@Context UriInfo uriInfo,
 			@Context HttpServletRequest request,
@@ -132,8 +134,38 @@ public class TopicInstanceResource {
 						size);
 	}
 
+	@GET
+	@Path("{topicInstanceId}/associationsto/topiccharacteristics")
+	public List<TopicCharacteristicPojo> getTopicCharacteristicsTo(
+			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
+			@QueryParam("language") String language,
+			@PathParam("projectId") UUID projectId,
+			@PathParam("topicInstanceId") UUID topicInstanceId) {
+		return new TopicCharacteristicRbac(
+				projectId, OpenInfraSchemas.PROJECTS)
+		.readByTopicInstanceAssociationTo(
+				OpenInfraHttpMethod.valueOf(request.getMethod()),
+				uriInfo, PtLocaleDao.forLanguageTag(language), topicInstanceId);
+	}
+
+	@GET
+	@Path("{topicInstanceId}/associationsfrom/topiccharacteristics")
+	public List<TopicCharacteristicPojo> getTopicCharacteristicsFrom(
+			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
+			@QueryParam("language") String language,
+			@PathParam("projectId") UUID projectId,
+			@PathParam("topicInstanceId") UUID topicInstanceId) {
+		return new TopicCharacteristicRbac(
+				projectId, OpenInfraSchemas.PROJECTS)
+		.readByTopicInstanceAssociationFrom(
+				OpenInfraHttpMethod.valueOf(request.getMethod()),
+				uriInfo, PtLocaleDao.forLanguageTag(language), topicInstanceId);
+	}
+
 	@POST
-    @Path("{topicInstanceId}/associations")
+    @Path("{topicInstanceId}/associationsto")
 	public Response create(
             @Context UriInfo uriInfo,
             @Context HttpServletRequest request,
@@ -156,7 +188,7 @@ public class TopicInstanceResource {
     }
 
 	@GET
-	@Path("{topicInstanceId}/associations/count")
+	@Path("{topicInstanceId}/associationsto/count")
 	@Produces({MediaType.TEXT_PLAIN})
 	public long getTopicInstanceAssociationCount(
 			@Context UriInfo uriInfo,
@@ -173,7 +205,7 @@ public class TopicInstanceResource {
 	}
 
 	@GET
-	@Path("{topicInstanceId}/associations/{associatedTopicInstanceId}")
+	@Path("{topicInstanceId}/associationsto/{associatedTopicInstanceId}")
 	public List<TopicInstanceAssociationPojo> getAssociations(
 			@Context UriInfo uriInfo,
 			@Context HttpServletRequest request,
@@ -195,7 +227,7 @@ public class TopicInstanceResource {
 	}
 
 	@PUT
-    @Path("{topicInstanceId}/associations/{associatedTopicInstanceId}")
+    @Path("{topicInstanceId}/associationsto/{associatedTopicInstanceId}")
 	public Response update(
             @Context UriInfo uriInfo,
             @Context HttpServletRequest request,
@@ -220,7 +252,7 @@ public class TopicInstanceResource {
     }
 
 	@DELETE
-    @Path("{topicInstanceId}/associations/{associatedTopicInstanceId}")
+    @Path("{topicInstanceId}/associationsto/{associatedTopicInstanceId}")
     public Response delete(
             @Context UriInfo uriInfo,
             @Context HttpServletRequest request,
