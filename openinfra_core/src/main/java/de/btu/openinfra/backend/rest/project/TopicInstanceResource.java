@@ -156,23 +156,6 @@ public class TopicInstanceResource {
     }
 
 	@GET
-	@Path("{topicInstanceId}/parents")
-	public List<TopicInstanceAssociationPojo> getParents(
-			@Context UriInfo uriInfo,
-			@Context HttpServletRequest request,
-			@QueryParam("language") String language,
-			@PathParam("projectId") UUID projectId,
-			@PathParam("topicInstanceId") UUID topicInstanceId) {
-		return new TopicInstanceAssociationRbac(
-				projectId,
-				OpenInfraSchemas.PROJECTS).readParents(
-						OpenInfraHttpMethod.valueOf(request.getMethod()),
-						uriInfo,
-						PtLocaleDao.forLanguageTag(language),
-						topicInstanceId);
-	}
-
-	@GET
 	@Path("{topicInstanceId}/associations/count")
 	@Produces({MediaType.TEXT_PLAIN})
 	public long getTopicInstanceAssociationCount(

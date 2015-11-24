@@ -1,11 +1,6 @@
 package de.btu.openinfra.backend.db.daos;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.UUID;
 
 import de.btu.openinfra.backend.db.MappingResult;
@@ -47,87 +42,6 @@ public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
 //	public List<TopicCharacteristicPojo> readTopicCharacteristics() {
 //
 //	}
-
-	/**
-	 * This method returns a list of parents relative to specified topic
-	 * instance object.
-	 *
-	 * @param locale the given locale
-	 * @param self   the specified topic instance object
-	 * @return       a list of parent topic instances
-	 */
-	@Deprecated
-	public List<TopicInstanceAssociationPojo> readParents(
-			Locale locale, UUID self) {
-
-		TopicInstanceDao ti =
-				new TopicInstanceDao(currentProjectId, schema);
-
-		Map<UUID, TopicInstanceAssociationPojo> parents =
-				new HashMap<UUID, TopicInstanceAssociationPojo>();
-
-		TopicInstanceXTopicInstance parent = readParent(locale, self);
-
-		while(true) {
-			if(parent != null) {
-
-				TopicInstanceAssociationPojo tiap =
-						new TopicInstanceAssociationPojo(
-								parent.getId(),
-								parent.getTopicInstance1Bean().getId(),
-								ti.mapToPojo(
-										locale,
-										parent.getTopicInstance2Bean()),
-								RelationshipTypeDao.mapToPojoStatically(
-										locale,
-										parent.getRelationshipType(),
-										new MetaDataDao(
-										        currentProjectId, schema)));
-				parents.put(tiap.getUuid(), tiap);
-				parent = readParent(
-						locale,
-						parent.getTopicInstance1Bean().getId());
-
-				if(parent != null && parents.containsKey(parent.getId())) {
-					System.out.println("BREAK!");
-					break;
-				}
-
-				if(parent != null) {
-					System.out.println("--> " + parent.getId());
-				} else {
-					System.out.println("_______");
-				}
-
-			} else {
-				break;
-			} // end if else
-
-		} // end while
-
-		List<TopicInstanceAssociationPojo> pList =
-				new LinkedList<TopicInstanceAssociationPojo>(parents.values());
-		Collections.reverse(pList);
-		return pList;
-	}
-
-	@Deprecated
-	private TopicInstanceXTopicInstance readParent(Locale locale, UUID self) {
-		List<TopicInstanceXTopicInstance> txt =
-				em.createNamedQuery(
-						"TopicInstanceXTopicInstance.findParent",
-						TopicInstanceXTopicInstance.class)
-						.setParameter(
-								"self",
-								em.find(TopicInstance.class, self))
-						.getResultList();
-		if(txt != null && txt.size() > 0) {
-			return txt.get(0);
-		} else {
-			return null;
-		}
-	}
-
 
 	@Override
 	public TopicInstanceAssociationPojo mapToPojo(

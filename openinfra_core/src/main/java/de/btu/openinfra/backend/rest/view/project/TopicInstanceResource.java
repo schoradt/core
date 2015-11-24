@@ -48,19 +48,6 @@ public class TopicInstanceResource {
 						size);
 	}
 
-	@GET
-	@Path("{topicInstanceId}/parents")
-	@Template(name="/views/list/TopicInstanceParents.jsp")
-	public List<TopicInstanceAssociationPojo> getParents(
-			@Context UriInfo uriInfo,
-			@Context HttpServletRequest request,
-			@QueryParam("language") String language,
-			@PathParam("projectId") UUID projectId,
-			@PathParam("topicInstanceId") UUID topicInstanceId) {
-		return new de.btu.openinfra.backend.rest.project.TopicInstanceResource()
-				.getParents(uriInfo, request, language, 
-						projectId, topicInstanceId);
-	}
 
 	@GET
     @Path("{topicInstanceId}/topic")
@@ -73,7 +60,7 @@ public class TopicInstanceResource {
             @PathParam("topicInstanceId") UUID topicInstanceId,
             @QueryParam("geomType") AttributeValueGeomType geomType) {
         return new de.btu.openinfra.backend.rest.project.TopicInstanceResource()
-                       .get(uriInfo, request, language, projectId, 
+                       .get(uriInfo, request, language, projectId,
                     		   topicInstanceId, geomType);
     }
 
