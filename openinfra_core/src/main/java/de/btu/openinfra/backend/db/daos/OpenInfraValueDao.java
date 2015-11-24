@@ -213,10 +213,6 @@ public abstract class OpenInfraValueDao<
                 }
 
             } else if (modelClass == TopicInstance.class) {
-                // Flag to determine if the query has to run again with a
-                // different locale
-                boolean runAgain = false;
-
                 // Handle topic instances separately
                 String nativeQueryName = "";
                 // Get the attribute value types from the object with the passed
@@ -242,6 +238,12 @@ public abstract class OpenInfraValueDao<
                     return read(locale, valueId, offset, size);
                 }
 
+                // Retrieve the uuid of the xx locale
+                UUID localeXXId = em.createNamedQuery(
+                "PtLocale.xx",
+                PtLocale.class)
+                .getSingleResult().getId();
+
                 // Construct origin SQL-based named query and append sort order
                 String sqlString = em.createNamedQuery(
                         modelClass.getSimpleName() + "." + nativeQueryName)
@@ -255,78 +257,12 @@ public abstract class OpenInfraValueDao<
                                 modelClass)
                             .setParameter(1, column.getContent())
                             .setParameter(2, localeId)
-                            .setParameter(3, valueId)
+                            .setParameter(3, localeXXId)
+                            .setParameter(4, valueId)
                             .setFirstResult(offset)
                             .setMaxResults(size)
                             .getResultList();
 
-                // Get the first result as topic instance model
-                TopicInstance tim = (TopicInstance)models.get(0);
-
-                // TODO The condition checks are not tested for values with a
-                //      language != xx, real 0 value and a topic characteristic
-                //      that only contains 1 entry!
-                // Test if the request returns no sufficient result
-                switch (atType) {
-                case ATTRIBUTE_VALUE_VALUE:
-                    // Check if only one result was returned and if this is
-                    // equals 0. JPA returns the string 0 if the free text is
-                    // NULL.
-                    if (tim.getAttributeValueValues().get(0)
-                            .getPtFreeText()
-                            .getLocalizedCharacterStrings().get(0)
-                            .getFreeText().equals("0") &&
-                        tim.getAttributeValueValues().get(0)
-                            .getPtFreeText()
-                            .getLocalizedCharacterStrings().get(0)
-                            .getFreeText().length() == 1) {
-                        // Set flag to run the query again with the xx locale
-                        runAgain = true;
-                    }
-                    break;
-                case ATTRIBUTE_VALUE_DOMAIN:
-                    // Check if only one result was returned and if this is
-                    // equals 0. JPA returns the string 0 if the free text is
-                    // NULL.
-                    if (tim.getAttributeValueDomains().get(0)
-                            .getValueListValue().getPtFreeText2()
-                            .getLocalizedCharacterStrings().get(0)
-                            .getFreeText().equals("0") &&
-                        tim.getAttributeValueDomains().get(0)
-                            .getValueListValue().getPtFreeText2()
-                            .getLocalizedCharacterStrings().get(0)
-                            .getFreeText().length() == 1) {
-                        // Set flag to run the query again with the xx locale
-                        runAgain = true;
-                    }
-                    break;
-                default:
-                    // This part is unreachable because of the previously
-                    // executed switch case statement
-                    break;
-                }
-
-                // Run the query again with the xx locale instead of the passed
-                // locale
-                if (runAgain) {
-                    // Retrieve the uuid of the xx locale
-                    localeId = em.createNamedQuery(
-                                    "PtLocale.xx",
-                                    PtLocale.class)
-                                    .getSingleResult().getId();
-
-                    // Retrieve the informations from the database with the new
-                    // locale
-                    models = em.createNativeQuery(
-                            sqlString,
-                            modelClass)
-                        .setParameter(1, column.getContent())
-                        .setParameter(2, localeId)
-                        .setParameter(3, valueId)
-                        .setFirstResult(offset)
-                        .setMaxResults(size)
-                        .getResultList();
-                }
             } else {
                 throw new OpenInfraEntityException(
                         OpenInfraExceptionTypes.WRONG_SORT_TYPE);
