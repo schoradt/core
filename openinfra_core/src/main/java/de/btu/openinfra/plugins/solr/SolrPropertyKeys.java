@@ -20,6 +20,12 @@ public enum SolrPropertyKeys {
 	SOLR_CORE("de.btu.openinfra.plugins.solr.core"),
 
 	/*
+     * This variable defines the index window size for indexing projects.
+     */
+    SOLR_INDEX_WINDOW(
+            "de.btu.openinfra.plugins.solr.indexWindow"),
+
+	/*
 	 * This variable defines the default fuzzy parameter.
 	 */
 	SOLR_DEFAULT_FUZZY("de.btu.openinfra.plugins.solr.defaultFuzzy"),

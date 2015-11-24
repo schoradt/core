@@ -20,6 +20,7 @@ import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
 import de.btu.openinfra.backend.db.jpa.model.meta.Projects;
 import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 import de.btu.openinfra.backend.exception.OpenInfraWebException;
+import de.btu.openinfra.plugins.PluginProperties;
 import de.btu.openinfra.plugins.solr.db.pojos.SolrIndexPojo;
 import de.btu.openinfra.plugins.solr.enums.DataTypeEnum;
 import de.btu.openinfra.plugins.solr.enums.SolrIndexEnum;
@@ -36,6 +37,7 @@ import de.btu.openinfra.plugins.solr.exception.OpenInfraSolrException;
  */
 public class SolrIndexer extends SolrServer {
 
+    private final int DEFAULT_WINDOW_SIZE = 1000;
     /**
      * Default constructor
      */
@@ -64,7 +66,8 @@ public class SolrIndexer extends SolrServer {
 
             // get all projects from the meta database
             List<Projects> metaProjects = new ProjectsDao(
-                    null, OpenInfraSchemas.META_DATA).read();
+                    null, OpenInfraSchemas.META_DATA).read(
+                            0, Integer.MAX_VALUE);
 
             // check if the specified list contain entries
             if (projectsPojo != null && projectsPojo.getProjects().size() > 0) {
@@ -89,7 +92,9 @@ public class SolrIndexer extends SolrServer {
             for (Projects project : projectIndexList) {
                 // filter for main projects
                 if (!project.getIsSubproject()) {
+                    System.out.println("starting indexing of project " + project.getProjectId() + " ... ");
                     indexProject(project.getProjectId());
+                    System.out.println("finished indexing of project " + project.getProjectId());
                 }
             }
             return true;
@@ -108,26 +113,68 @@ public class SolrIndexer extends SolrServer {
      */
     private void indexProject(UUID projectId) {
 
-        // get all topic instances
-        List<TopicInstance> tiList = new TopicInstanceDao(
-                projectId, OpenInfraSchemas.PROJECTS).read();
+        TopicInstanceDao tiDao = new TopicInstanceDao(
+                projectId, OpenInfraSchemas.PROJECTS);
 
-        Collection<SolrInputDocument> docs = new ArrayList<SolrInputDocument>();
-        // run through all topic instances
-        for (TopicInstance ti : tiList) {
-            // create a new document
-            docs.add(createOrUpdateDocument(ti));
+        // TODO if the the topic instances of a project exceed 2.147.483.647 we
+        // will get a problem here.
+        double amount = tiDao.getCount();
+        int start = 0;
+        int windowSize = Integer.parseInt(PluginProperties.getProperty(
+                SolrPropertyKeys.SOLR_INDEX_WINDOW.getKey(),
+                "Solr"));
+
+        // set a default size if the configured window size is zero or negative
+        if (windowSize < 1) {
+            windowSize = DEFAULT_WINDOW_SIZE;
         }
 
-        // send the documents to the solr server
-        try {
-            // add the documents to solr
-            getSolr().add(docs);
-            // commit the changes to the server
-            getSolr().commit();
-        } catch (SolrServerException | IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        // set the first window size
+        int size = windowSize;
+
+        // set the amount of runs we need to index all documents
+        double indexRuns = Math.ceil(amount/windowSize);
+
+        System.out.println(amount + " TopicInstances found in project " +
+                projectId);
+
+        for (int i = 1; i <= (indexRuns); i++) {
+
+            System.out.println("start: " + start);
+            System.out.println("size: " + windowSize);
+            System.out.println("retrieving " + windowSize + " TopicInstances");
+
+            // get the defined amount of topic instances
+            List<TopicInstance> tiList = tiDao.read(start, windowSize);
+
+            Collection<SolrInputDocument> docs =
+                    new ArrayList<SolrInputDocument>();
+
+            System.out.println("adding TopicInstaces to Solr documents");
+
+            // run through all topic instances
+            for (TopicInstance ti : tiList) {
+                // create a new document
+                docs.add(createOrUpdateDocument(ti));
+            }
+
+            System.out.println("sending Solr documents to Solr server");
+
+            // send the documents to the solr server
+            try {
+                // add the documents to solr
+                getSolr().add(docs);
+                // commit the changes to the server
+                getSolr().commit();
+            } catch (SolrServerException | IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            // set the amount variable for the next run
+            size = windowSize * i;
+            start = size;
+            System.out.println("------------------");
         }
     }
 
