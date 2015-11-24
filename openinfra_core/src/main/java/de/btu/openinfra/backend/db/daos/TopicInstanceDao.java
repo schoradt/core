@@ -48,6 +48,11 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
 	}
 
 	// TODO add named query in order to retrieve attribute values
+	/**
+	 * This method selects all configured meta data information (attribute type)
+	 * and combines them with related attribute values.
+	 *
+	 */
 	@Override
 	public TopicInstancePojo mapToPojo(Locale locale, TopicInstance ti) {
 	    if (ti != null) {
@@ -59,8 +64,7 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
             // set the topic characteristic POJO
             pojo.setTopicCharacteristic(TopicCharacteristicDao
             		.mapToPojoStatically(
-            				locale, ti.getTopicCharacteristic(),
-            				new MetaDataDao(currentProjectId, schema)));
+            				locale, ti.getTopicCharacteristic(), mdDao));
 
             String metaData = null;
             // check if meta data exists for this topic instance
@@ -80,8 +84,8 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
                 }
             }
 
-            // 2. Associate only attribute values to the topic instance which are
-            //    mentioned in the meta data.
+            // 2. Associate only attribute values to the topic instance which
+            //    are mentioned in the meta data.
             List<AttributeValuePojo> values =
                     new LinkedList<AttributeValuePojo>();
 
@@ -159,7 +163,7 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
             // set the topic characteristic POJO
             pojo.setTopicCharacteristic(TopicCharacteristicDao
             		.mapToPojoStatically(locale,
-            				ti.getTopicCharacteristic(), null));
+            				ti.getTopicCharacteristic(), mdDao));
 
             String metaData = null;
             // check if meta data exists for this topic instance

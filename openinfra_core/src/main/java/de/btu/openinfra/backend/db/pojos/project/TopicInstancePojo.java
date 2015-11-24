@@ -28,7 +28,8 @@ public class TopicInstancePojo extends OpenInfraMetaDataPojo {
     }
 
     /* Constructor that will set the id, trid and meta data automatically */
-    public TopicInstancePojo(OpenInfraModelObject modelObject, MetaDataDao mdDao) {
+    public TopicInstancePojo(
+    		OpenInfraModelObject modelObject, MetaDataDao mdDao) {
         super(modelObject, mdDao);
     }
 
@@ -36,7 +37,8 @@ public class TopicInstancePojo extends OpenInfraMetaDataPojo {
         return topicCharacteristic;
     }
 
-    public void setTopicCharacteristic(TopicCharacteristicPojo topicCharacteristic) {
+    public void setTopicCharacteristic(
+    		TopicCharacteristicPojo topicCharacteristic) {
         this.topicCharacteristic = topicCharacteristic;
     }
 

@@ -72,11 +72,11 @@ public class TopicCharacteristicDao
 		// 3. Map the model objects to POJOs
 		Map<UUID, TopicCharacteristicPojo> tcp =
 				new HashMap<UUID, TopicCharacteristicPojo>();
-		MetaDataDao mdDao = new MetaDataDao(currentProjectId, schema);
 		for(TopicCharacteristic tc : tcs) {
 		    UUID id = tc.getId();
 		    if (!tcp.containsKey(id)) {
-		        tcp.put(id, mapToPojoStatically(locale, tc, mdDao));
+		        tcp.put(id, mapToPojoStatically(locale, tc,
+		        		new MetaDataDao(currentProjectId, schema)));
 		    }
 
 		} // end for
@@ -96,25 +96,25 @@ public class TopicCharacteristicDao
 	 *
 	 * @param locale the requested language as Java.util locale
 	 * @param tc     the model object
-	 * @param mdDao  the meta data DAO
+	 * @param mdDao  The meta data DAO. Must not be null!
 	 * @return       the POJO object when the model object is not null else null
 	 */
 	public static TopicCharacteristicPojo mapToPojoStatically(
 			Locale locale,
 			TopicCharacteristic tc,
-			MetaDataDao mdDao) {
+			MetaDataDao mdDao) throws NullPointerException {
 		if (tc != null) {
 		    TopicCharacteristicPojo pojo =
 		            new TopicCharacteristicPojo(tc, mdDao);
-
-		    // TODO this will probably disable the count functionality but will
-		    // avoid a NullPointerException. This must be reworked!
-		    if (mdDao != null) {
-    		    pojo.setTopicInstancesCount(
-    		    		new TopicInstanceDao(
-    		    				mdDao.currentProjectId, mdDao.schema)
-    		    		.getCount(tc.getId()));
+		    if(mdDao == null) {
+		    	throw new NullPointerException(
+		    			"The Metadatapojo must not be null!");
 		    }
+
+		    pojo.setTopicInstancesCount(
+		    		new TopicInstanceDao(
+		    				mdDao.currentProjectId, mdDao.schema)
+		    		.getCount(tc.getId()));
 
             // set the project if exists
             try {

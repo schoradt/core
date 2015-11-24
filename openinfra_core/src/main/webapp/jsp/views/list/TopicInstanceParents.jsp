@@ -1,3 +1,4 @@
+<%@page import="org.json.simple.parser.JSONParser"%>
 <%@page import="de.btu.openinfra.backend.helper.ImgSize"%>
 <%@page import="de.btu.openinfra.backend.helper.ImgUrlHelper"%>
 <%@page import="java.util.UUID"%>
@@ -48,8 +49,13 @@
 				<tr>
 					<c:set var="columnName" value=""/>
 					<c:set var="metaData" value="${pojo.associatedInstance.topicCharacteristic.metaData}"/>
-					<c:out value="${metaData}"/>
-					<!--  c:set var="columns" value="${metaData.list_view_columns}"/-->
+	<%
+		Object jsonStr = pageContext.getAttribute("metaData");
+		if(jsonStr != null) {
+			pageContext.setAttribute("mdObject", new JSONParser().parse(jsonStr.toString()));
+		}
+	%>
+	<c:set var="columns" value="${mdObject.list_view_columns}"/>
 					<c:forEach items="${columns}" var="setting">
 						<th style="width: ${100/settingCount}%">
 						<%
@@ -88,7 +94,7 @@
 			</thead>
 
 				<tr>
-					<c:forEach items="${pojo.associatedInstance.topicCharacteristic.metaData}" var="setting">
+					<c:forEach items="${mdObject.list_view_columns}" var="setting">
 						<c:set var="found" value="false"/>
 						<c:forEach items="${pojo.associatedInstance.values}" var="value">
 							<c:if test="${setting == value.attributeTypeId}">

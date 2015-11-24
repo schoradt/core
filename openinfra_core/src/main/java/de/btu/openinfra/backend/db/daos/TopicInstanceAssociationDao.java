@@ -1,9 +1,11 @@
 package de.btu.openinfra.backend.db.daos;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.UUID;
 
 import de.btu.openinfra.backend.db.MappingResult;
@@ -42,6 +44,10 @@ public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
 				TopicInstance.class, TopicInstance.class);
 	}
 
+//	public List<TopicCharacteristicPojo> readTopicCharacteristics() {
+//
+//	}
+
 	/**
 	 * This method returns a list of parents relative to specified topic
 	 * instance object.
@@ -50,20 +56,22 @@ public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
 	 * @param self   the specified topic instance object
 	 * @return       a list of parent topic instances
 	 */
+	@Deprecated
 	public List<TopicInstanceAssociationPojo> readParents(
 			Locale locale, UUID self) {
 
 		TopicInstanceDao ti =
 				new TopicInstanceDao(currentProjectId, schema);
 
-		List<TopicInstanceAssociationPojo> parents =
-				new LinkedList<TopicInstanceAssociationPojo>();
+		Map<UUID, TopicInstanceAssociationPojo> parents =
+				new HashMap<UUID, TopicInstanceAssociationPojo>();
 
 		TopicInstanceXTopicInstance parent = readParent(locale, self);
 
 		while(true) {
 			if(parent != null) {
-				parents.add(
+
+				TopicInstanceAssociationPojo tiap =
 						new TopicInstanceAssociationPojo(
 								parent.getId(),
 								parent.getTopicInstance1Bean().getId(),
@@ -74,47 +82,36 @@ public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
 										locale,
 										parent.getRelationshipType(),
 										new MetaDataDao(
-										        currentProjectId, schema))));
+										        currentProjectId, schema)));
+				parents.put(tiap.getUuid(), tiap);
 				parent = readParent(
 						locale,
 						parent.getTopicInstance1Bean().getId());
+
+				if(parent != null && parents.containsKey(parent.getId())) {
+					System.out.println("BREAK!");
+					break;
+				}
+
+				if(parent != null) {
+					System.out.println("--> " + parent.getId());
+				} else {
+					System.out.println("_______");
+				}
+
 			} else {
 				break;
 			} // end if else
 
-			// ++++++++++ Dirty hack!!! +++++++++
-			// TODO Obviously, there is a bug in the test data. Cycles can occur
-			// and a parent is a child of it's child. This must be discussed.
-			// Workaround: in order to provide the functionality, the loop will
-			// terminate in the third step.
-
-			int count = 0;
-			if(parents.size() > 0) {
-				for(TopicInstanceAssociationPojo help : parents) {
-					for(TopicInstanceAssociationPojo p : parents) {
-						if(help.getUuid().equals(p.getUuid())) {
-							count++;
-						}
-					}
-					if(count > 3) {
-						break;
-					}
-				}
-			}
-
-			if(count == 4) {
-				System.out.println("Big Problem in "
-						+ "TopicInstanceAssotionationDao --> readParents"
-						+ " This should be discussed and fixed!");
-				break;
-			}
-
 		} // end while
 
-		Collections.reverse(parents);
-		return parents;
+		List<TopicInstanceAssociationPojo> pList =
+				new LinkedList<TopicInstanceAssociationPojo>(parents.values());
+		Collections.reverse(pList);
+		return pList;
 	}
 
+	@Deprecated
 	private TopicInstanceXTopicInstance readParent(Locale locale, UUID self) {
 		List<TopicInstanceXTopicInstance> txt =
 				em.createNamedQuery(
@@ -165,7 +162,7 @@ public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
      *
      * @param locale the requested language as Java.util locale
      * @param txt    the model object
-     * @param mdDao  the meta data DAO
+     * @param mdDao  The meta data DAO must not be null.
      * @return       the POJO object when the model object is not null else null
      */
     public static TopicInstanceAssociationPojo mapToPojoStatically(
