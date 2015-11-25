@@ -28,6 +28,52 @@
 					<skipTests>true</skipTests>
 				</configuration>
 		    </plugin>
+            <!-- Generate JavaDoc-enriched extended WADL
+              https://irfannagoo.wordpress.com/2012/12/20/jersey-extended-wadl-support/
+              http://razvancaraghin.blogspot.de/2014/01/html-documentation-for-your-rest.html
+              http://biemond.blogspot.de/2013/08/custom-jersey-wadl-generation.html -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.4</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>javadoc</goal>
+                        </goals>
+                        <phase>compile</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <verbose>false</verbose>
+                    <show>public</show>
+                    <doclet>com.sun.jersey.wadl.resourcedoc.ResourceDoclet</doclet>
+                        <docletPath>${path.separator}${project.build.outputDirectory}</docletPath>
+                        <docletArtifacts>
+                        <docletArtifact>
+                            <groupId>com.sun.jersey.contribs</groupId>
+                            <artifactId>wadl-resourcedoc-doclet</artifactId>
+                            <version>1.17.1</version>
+                        </docletArtifact>
+                        <docletArtifact>
+                            <groupId>com.sun.jersey</groupId>
+                            <artifactId>jersey-server</artifactId>
+                            <version>1.17.1</version>
+                        </docletArtifact>
+                        <docletArtifact>
+                            <groupId>xerces</groupId>
+                            <artifactId>xercesImpl</artifactId>
+                            <version>2.6.1</version>
+                        </docletArtifact>
+                    </docletArtifacts>
+                    <!-- the following option is required as a work around for
+                         version 2.5 of the javadoc plugin which will be used
+                         by a maven version > 2.0.9 -->
+                    <useStandardDocletOptions>false</useStandardDocletOptions>
+                    <additionalparam>-output ${basedir}/src/main/resources/resourcedoc.xml</additionalparam>
+                </configuration>
+            </plugin>
             
             <!-- needed to build jar file when building war file, necessary for
            		 using backend classes in other maven projects (e.g. plugins)
@@ -41,6 +87,41 @@
       			</configuration>
     		</plugin> -->
         </plugins>
+        <pluginManagement>
+        	<plugins>
+        		<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+        		<plugin>
+        			<groupId>org.eclipse.m2e</groupId>
+        			<artifactId>lifecycle-mapping</artifactId>
+        			<version>1.0.0</version>
+        			<configuration>
+        				<lifecycleMappingMetadata>
+        					<pluginExecutions>
+        						<pluginExecution>
+        							<pluginExecutionFilter>
+        								<groupId>
+        									org.apache.maven.plugins
+        								</groupId>
+        								<artifactId>
+        									maven-javadoc-plugin
+        								</artifactId>
+        								<versionRange>
+        									[2.4,)
+        								</versionRange>
+        								<goals>
+        									<goal>javadoc</goal>
+        								</goals>
+        							</pluginExecutionFilter>
+        							<action>
+        								<ignore></ignore>
+        							</action>
+        						</pluginExecution>
+        					</pluginExecutions>
+        				</lifecycleMappingMetadata>
+        			</configuration>
+        		</plugin>
+        	</plugins>
+        </pluginManagement>
     </build>
 
     <dependencyManagement>
