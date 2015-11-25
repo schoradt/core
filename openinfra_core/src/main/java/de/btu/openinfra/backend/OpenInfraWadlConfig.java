@@ -8,6 +8,17 @@ import org.glassfish.jersey.server.wadl.internal.generators.WadlGeneratorApplica
 import org.glassfish.jersey.server.wadl.internal.generators.WadlGeneratorGrammarsSupport;
 import org.glassfish.jersey.server.wadl.internal.generators.resourcedoc.WadlGeneratorResourceDocSupport;
 
+/**
+ * This class is used to extend the build-in generation of the WADL by Java-DOC
+ * enriched information.
+ *
+ * This class is intrinsingly part of the REST API. But it is also configured
+ * by the {@see OpenInfraApplication} class. We decided to place it in this
+ * package next to where it is registered.
+ *
+ * @author <a href="http://www.b-tu.de">BTU</a> DBIS
+ *
+ */
 public class OpenInfraWadlConfig extends WadlGeneratorConfig {
 
 	@Override

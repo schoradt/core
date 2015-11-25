@@ -8,7 +8,7 @@ import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 
 /**
- * OpenInfRA properties implemented as singleton.
+ * OpenInfRA properties implemented as singletons.
  *
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
