@@ -4,7 +4,7 @@ This folder contains the core Java and Maven based implementation of OpenInfRA. 
 # Installation
 
 To run OpenInfRA different prerequisites must be complied. At this point we will give a broad overview about the necessary components and their configuration.
-OpenInfRA consists of three parts. The application itself, the database and the Solr enterprise search platform.
+OpenInfRA consists of the following parts:
 
 ## Application
 The application is written in Java and must be compiled with Java 7. It must be packed into a _war_ file and run on a server e.g. Apache Tomcat. There are only a few handles necessary to configure the application. The main [configuration file](openinfra_core/src/main/resources/de/btu/openinfra/backend/properties/OpenInfRA.properties) must be adapted to the current needs. The different configuration parameters are commented and should need no further explanations. The prime configurations are the database connection and file path properties. These must be set correctly to run the application.
