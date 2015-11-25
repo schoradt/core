@@ -15,7 +15,7 @@ The OpenInfRA application includes the following software stack:
 - Security: [Apache Shiro](http://shiro.apache.org/)
 - JAX-RS: [Jersey](https://jersey.java.net/)
 
-![OpenInfRA Softwarestack]( "OpenInfRA Softwarestack")
+![OpenInfRA Softwarestack](https://github.com/OpenInfRA/core/blob/master/sw-stack.JPG "OpenInfRA Softwarestack")
 
 ## Database
 The [database](https://github.com/OpenInfRA/database) is necessary to provide a data storage for OpenInfRA. Further instructions can be found in the appropriated repositoriy.
