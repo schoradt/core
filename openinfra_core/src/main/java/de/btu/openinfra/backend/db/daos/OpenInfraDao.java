@@ -9,7 +9,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
-import javax.persistence.Table;
 
 import org.eclipse.persistence.jpa.JpaQuery;
 
@@ -23,7 +22,6 @@ import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.jpa.model.MetaData;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 import de.btu.openinfra.backend.db.jpa.model.PtLocale;
-import de.btu.openinfra.backend.db.pojos.MetaDataPojo;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 import de.btu.openinfra.backend.exception.OpenInfraEntityException;
 import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
@@ -313,64 +311,6 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 			throw new OpenInfraWebException(ex);
 		} // end try catch
     }
-
-	/**
-	 * This method will first execute a createOrUpdate for the TypePojo and
-	 * second execute a createOrUpdate for the meta data. This is necessary for
-	 * project and system databases where tables can store meta data inside the
-	 * table meta_data.
-	 *
-	 * @param pojo     the POJO object which should be stored in the database
-	 * @param valueId  the value id from the URI
-	 * @param metaData the JSON data that should be stored in the meta data
-	 *                 associated to the POJO
-	 * @return
-	 */
-	public UUID createOrUpdate(
-			TypePojo pojo, UUID valueId, String metaData) {
-
-	    UUID retId = null;
-
-	    if (pojo != null) {
-	        // first createOrUpdate the TypePojo
-	        retId = createOrUpdate(pojo, valueId);
-	        if (metaData != null) {
-    	        // only check for meta data in project and system schema
-    	        switch (schema) {
-    	            case PROJECTS:
-    	            case SYSTEM:
-    	                // if the TypePojo was created successfully
-    	                if (retId != null) {
-    	                    // create a raw POJO for meta data
-    	                    MetaDataPojo mdPojo = new MetaDataPojo();
-
-    	                    // set the object id from the previously created
-    	                    // TypePojo
-    	                    mdPojo.setObjectId(retId);
-    	                    // TODO find a way to avoid hard coded id
-    	                    // define the primary key column
-    	                    mdPojo.setPkColumn("id");
-    	                    // define the table name for the object
-    	                    mdPojo.setTableName(modelClass
-    	                            .getAnnotation(Table.class).name());
-    	                    // set the meta data
-    	                    mdPojo.setData(metaData);
-    	                    // write the meta data
-    	                    UUID metaId = new MetaDataDao(
-    	                            currentProjectId, schema)
-    	                        .createOrUpdate(mdPojo, valueId);
-    	                    if (metaId == null) {
-    	                        // TODO give feedback about meta data creation?
-    	                    }
-    	                }
-    	                break;
-    	            default:
-    	                break;
-    	        }
-	        }
-	    }
-	    return retId;
-	}
 
 	/**
 	 * This is a generic method which reads a specific pojo object. We decided

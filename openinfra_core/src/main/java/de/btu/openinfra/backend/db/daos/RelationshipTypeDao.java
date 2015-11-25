@@ -46,8 +46,7 @@ public class RelationshipTypeDao extends
 	public RelationshipTypePojo mapToPojo(
 			Locale locale,
 			RelationshipType rt) {
-		return mapToPojoStatically(locale, rt,
-		        new MetaDataDao(currentProjectId, schema));
+		return mapToPojoStatically(locale, rt);
 	}
 
 	/**
@@ -55,26 +54,22 @@ public class RelationshipTypeDao extends
 	 *
 	 * @param locale the requested language as Java.util locale
 	 * @param rt     the model object
-	 * @param mdDao  the meta data DAO
 	 * @return       the POJO object
 	 */
 	public static RelationshipTypePojo mapToPojoStatically(
 			Locale locale,
-			RelationshipType rt,
-			MetaDataDao mdDao) {
+			RelationshipType rt) {
 	    if (rt != null) {
-    		RelationshipTypePojo pojo = new RelationshipTypePojo(rt, mdDao);
+    		RelationshipTypePojo pojo = new RelationshipTypePojo(rt);
 
     		pojo.setRelationshipType(
     				ValueListValueDao.mapToPojoStatically(
     						locale,
-    						rt.getValueListValue2(),
-    						mdDao));
+    						rt.getValueListValue2()));
     		pojo.setDescription(
     				ValueListValueDao.mapToPojoStatically(
     						locale,
-    						rt.getValueListValue1(),
-    						mdDao));
+    						rt.getValueListValue1()));
     		return pojo;
 	    } else {
 	        return null;

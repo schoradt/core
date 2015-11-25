@@ -43,8 +43,7 @@ public class AttributeTypeGroupToAttributeTypeDao extends
 	public AttributeTypeGroupToAttributeTypePojo mapToPojo(
 			Locale locale,
 			AttributeTypeToAttributeTypeGroup atgtat) {
-        return mapToPojoStatically(locale, atgtat,
-                new MetaDataDao(currentProjectId, schema));
+        return mapToPojoStatically(locale, atgtat);
 	}
 
 	/**
@@ -52,30 +51,25 @@ public class AttributeTypeGroupToAttributeTypeDao extends
      *
      * @param locale the requested language as Java.util locale
      * @param atgtat the model object
-     * @param mdDao  the meta data DAO
      * @return       the POJO object when the model object is not null else null
      */
     public static AttributeTypeGroupToAttributeTypePojo mapToPojoStatically(
             Locale locale,
-            AttributeTypeToAttributeTypeGroup atgtat,
-            MetaDataDao mdDao) {
+            AttributeTypeToAttributeTypeGroup atgtat) {
         if(atgtat != null) {
             AttributeTypeGroupToAttributeTypePojo pojo =
-                    new AttributeTypeGroupToAttributeTypePojo(atgtat, mdDao);
+                    new AttributeTypeGroupToAttributeTypePojo(atgtat);
 
             pojo.setAttributeTypeId(atgtat.getAttributeType().getId());
             pojo.setAttributeTypeGroup(
                     AttributeTypeGroupDao.mapToPojoStatically(
                             locale,
-                            atgtat.getAttributeTypeGroup(),
-                            null));
+                            atgtat.getAttributeTypeGroup()));
             pojo.setDefaultValue(ValueListValueDao.mapToPojoStatically(
                     locale,
-                    atgtat.getValueListValue(),
-                    null));
+                    atgtat.getValueListValue()));
             pojo.setMultiplicity(MultiplicityDao.mapToPojoStatically(
-                    atgtat.getMultiplicityBean(),
-                    null));
+                    atgtat.getMultiplicityBean()));
             pojo.setOrder(atgtat.getOrder());
             return pojo;
         } else {

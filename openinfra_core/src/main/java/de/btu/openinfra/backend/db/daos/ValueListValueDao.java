@@ -35,8 +35,7 @@ public class ValueListValueDao
 
 	@Override
 	public ValueListValuePojo mapToPojo(Locale locale, ValueListValue vlv) {
-		return mapToPojoStatically(locale, vlv,
-		        new MetaDataDao(currentProjectId, schema));
+		return mapToPojoStatically(locale, vlv);
 	}
 
 	/**
@@ -45,15 +44,13 @@ public class ValueListValueDao
 	 *
 	 * @param locale the requested language as Java.util locale
      * @param vlv    the model object
-     * @param mdDao  the meta data DAO
 	 * @return       the referring POJO object
 	 */
 	public static ValueListValuePojo mapToPojoStatically(
 			Locale locale,
-			ValueListValue vlv,
-			MetaDataDao mdDao) {
+			ValueListValue vlv) {
 		if(vlv != null) {
-		    ValueListValuePojo pojo = new ValueListValuePojo(vlv, mdDao);
+		    ValueListValuePojo pojo = new ValueListValuePojo(vlv);
 
 			pojo.setVisibility(vlv.getVisibility());
 			pojo.setDescriptions(PtFreeTextDao.mapToPojoStatically(

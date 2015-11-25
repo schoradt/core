@@ -41,8 +41,7 @@ public class AttributeValueDomainDao extends
 	public AttributeValueDomainPojo mapToPojo(
 			Locale locale,
 			AttributeValueDomain avd) {
-		return mapToPojoStatically(locale, avd,
-		        new MetaDataDao(currentProjectId, schema));
+		return mapToPojoStatically(locale, avd);
 	}
 
 	/**
@@ -50,24 +49,21 @@ public class AttributeValueDomainDao extends
 	 *
 	 * @param locale the requested language as Java.util locale
 	 * @param avd    the model object
-	 * @param mdDao  the meta data DAO
 	 * @return       the POJO object when the model object is not null else null
 	 */
 	public static AttributeValueDomainPojo mapToPojoStatically(
 			Locale locale,
-			AttributeValueDomain avd,
-			MetaDataDao mdDao) {
+			AttributeValueDomain avd) {
 	    if (avd != null) {
     		AttributeValueDomainPojo pojo =
-    				new AttributeValueDomainPojo(avd, mdDao);
+    				new AttributeValueDomainPojo(avd);
 
     		// set the topic instance id
             pojo.setTopicInstanceId(avd.getTopicInstance().getId());
             // set the value list value of the object
     		pojo.setDomain(ValueListValueDao.mapToPojoStatically(
     				locale,
-    				avd.getValueListValue(),
-    				mdDao));
+    				avd.getValueListValue()));
     		// set the attribute type to attribute type id group of the value
             pojo.setAttributeTypeToAttributeTypeGroupId(
                     avd.getAttributeTypeToAttributeTypeGroup().getId());

@@ -33,8 +33,7 @@ public class ValueListDao extends OpenInfraDao<ValueListPojo, ValueList> {
 
 	@Override
 	public ValueListPojo mapToPojo(Locale locale, ValueList vl) {
-		return mapToPojoStatically(locale, vl,
-		        new MetaDataDao(currentProjectId, schema));
+		return mapToPojoStatically(locale, vl);
 	}
 
 	/**
@@ -42,15 +41,13 @@ public class ValueListDao extends OpenInfraDao<ValueListPojo, ValueList> {
      *
      * @param locale the requested language as Java.util locale
      * @param vl     the model object
-     * @param mdDao  the meta data DAO
      * @return       the POJO object when the model object is not null else null
      */
 	public static ValueListPojo mapToPojoStatically(
 			Locale locale,
-			ValueList vl,
-			MetaDataDao mdDao) {
+			ValueList vl) {
 		if(vl != null) {
-		    ValueListPojo pojo = new ValueListPojo(vl, mdDao);
+		    ValueListPojo pojo = new ValueListPojo(vl);
 
 			pojo.setNames(PtFreeTextDao.mapToPojoStatically(
 					locale,

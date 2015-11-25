@@ -41,8 +41,7 @@ public class ValueListAssociationDao
 	public ValueListAssociationPojo mapToPojo(
 			Locale locale,
 			ValueListXValueList vlxvl) {
-		return mapToPojoStatically(locale, vlxvl,
-		        new MetaDataDao(currentProjectId, schema));
+		return mapToPojoStatically(locale, vlxvl);
 	}
 
 	@Override
@@ -60,22 +59,20 @@ public class ValueListAssociationDao
      *
      * @param locale the requested language as Java.util locale
      * @param vlxvl  the model object
-     * @param mdDao  the meta data DAO
      * @return       the POJO object when the model object is not null else null
      */
 	public static ValueListAssociationPojo mapToPojoStatically(
 			Locale locale,
-			ValueListXValueList vlxvl,
-			MetaDataDao mdDao) {
+			ValueListXValueList vlxvl) {
 
 		try {
 			ValueListAssociationPojo pojo =
-					new ValueListAssociationPojo(vlxvl, mdDao);
+					new ValueListAssociationPojo(vlxvl);
 			pojo.setAssociationValueListId(vlxvl.getValueList1Bean().getId());
 			pojo.setRelationship(ValueListValueDao.mapToPojoStatically(locale,
-					vlxvl.getValueListValue(), null));
+					vlxvl.getValueListValue()));
 			pojo.setAssociatedValueList(ValueListDao.mapToPojoStatically(locale,
-					vlxvl.getValueList2Bean(), null));
+					vlxvl.getValueList2Bean()));
 
 			return pojo;
 		} catch (NullPointerException npe) {

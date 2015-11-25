@@ -4,11 +4,10 @@ import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import de.btu.openinfra.backend.db.daos.MetaDataDao;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 
 @XmlRootElement
-public class TopicCharacteristicToAttributeTypeGroupPojo extends OpenInfraMetaDataPojo {
+public class TopicCharacteristicToAttributeTypeGroupPojo extends OpenInfraPojo {
 
     private TopicCharacteristicPojo topicCharacteristic;
     private UUID attributTypeGroupId;
@@ -19,9 +18,9 @@ public class TopicCharacteristicToAttributeTypeGroupPojo extends OpenInfraMetaDa
     public TopicCharacteristicToAttributeTypeGroupPojo() {
     }
 
-    /* Constructor that will set the id, trid and meta data automatically */
-    public TopicCharacteristicToAttributeTypeGroupPojo(OpenInfraModelObject modelObject, MetaDataDao mdDao) {
-        super(modelObject, mdDao);
+    /* Constructor that will set the id and trid automatically */
+    public TopicCharacteristicToAttributeTypeGroupPojo(OpenInfraModelObject modelObject) {
+        super(modelObject);
     }
 
     public TopicCharacteristicPojo getTopicCharacteristic() {

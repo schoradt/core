@@ -43,8 +43,7 @@ public class AttributeTypeToAttributeTypeGroupDao extends
 	public AttributeTypeToAttributeTypeGroupPojo mapToPojo(
 			Locale locale,
 			AttributeTypeToAttributeTypeGroup attatg) {
-		return mapToPojoStatically(locale, attatg,
-		        new MetaDataDao(currentProjectId, schema));
+		return mapToPojoStatically(locale, attatg);
 	}
 
 	/**
@@ -52,28 +51,23 @@ public class AttributeTypeToAttributeTypeGroupDao extends
 	 *
 	 * @param locale the requested language as Java.util locale
 	 * @param attatg the model object
-	 * @param mdDao  the meta data DAO
 	 * @return       the POJO object when the model object is not null else null
 	 */
 	public static AttributeTypeToAttributeTypeGroupPojo mapToPojoStatically(
 			Locale locale,
-			AttributeTypeToAttributeTypeGroup attatg,
-			MetaDataDao mdDao) {
+			AttributeTypeToAttributeTypeGroup attatg) {
 		AttributeTypeToAttributeTypeGroupPojo pojo =
-				new AttributeTypeToAttributeTypeGroupPojo(attatg, mdDao);
+				new AttributeTypeToAttributeTypeGroupPojo(attatg);
 
 		pojo.setAttributeType(AttributeTypeDao.mapToPojoStatically(
 				locale,
-				attatg.getAttributeType(),
-				mdDao));
+				attatg.getAttributeType()));
 		pojo.setAttributeTypeGroupId(attatg.getId());
 		pojo.setDefaultValue(ValueListValueDao.mapToPojoStatically(
 				locale,
-				attatg.getValueListValue(),
-				mdDao));
+				attatg.getValueListValue()));
 		pojo.setMultiplicity(MultiplicityDao.mapToPojoStatically(
-				attatg.getMultiplicityBean(),
-				mdDao));
+				attatg.getMultiplicityBean()));
 		pojo.setOrder(attatg.getOrder());
 		return pojo;
 	}

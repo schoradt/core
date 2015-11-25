@@ -4,13 +4,12 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import de.btu.openinfra.backend.db.daos.MetaDataDao;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
-import de.btu.openinfra.backend.db.pojos.OpenInfraMetaDataPojo;
+import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 import de.btu.openinfra.backend.db.pojos.TopicCharacteristicPojo;
 
 @XmlRootElement
-public class TopicInstancePojo extends OpenInfraMetaDataPojo {
+public class TopicInstancePojo extends OpenInfraPojo {
 
     /**
      * This variable defines the corresponding topic characteristic this topic
@@ -27,9 +26,9 @@ public class TopicInstancePojo extends OpenInfraMetaDataPojo {
     public TopicInstancePojo() {
     }
 
-    /* Constructor that will set the id, trid and meta data automatically */
-    public TopicInstancePojo(OpenInfraModelObject modelObject, MetaDataDao mdDao) {
-        super(modelObject, mdDao);
+    /* Constructor that will set the id and trid automatically */
+    public TopicInstancePojo(OpenInfraModelObject modelObject) {
+        super(modelObject);
     }
 
     public TopicCharacteristicPojo getTopicCharacteristic() {

@@ -90,7 +90,7 @@ public class MetaDataResource {
                         ).createOrUpdate(
                         		OpenInfraHttpMethod.valueOf(
                         				request.getMethod()),
-                        				uriInfo, pojo, metadataId, null));
+                        				uriInfo, metadataId, pojo));
     }
 
     @DELETE

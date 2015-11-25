@@ -2,11 +2,10 @@ package de.btu.openinfra.backend.db.pojos;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import de.btu.openinfra.backend.db.daos.MetaDataDao;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 
 @XmlRootElement
-public class RelationshipTypePojo extends OpenInfraMetaDataPojo {
+public class RelationshipTypePojo extends OpenInfraPojo {
 
     private ValueListValuePojo description;
     private ValueListValuePojo RelationshipType;
@@ -15,9 +14,9 @@ public class RelationshipTypePojo extends OpenInfraMetaDataPojo {
     public RelationshipTypePojo() {
     }
 
-    /* Constructor that will set the id, trid and meta data automatically */
-    public RelationshipTypePojo(OpenInfraModelObject modelObject, MetaDataDao mdDao) {
-        super(modelObject, mdDao);
+    /* Constructor that will set the id and trid automatically */
+    public RelationshipTypePojo(OpenInfraModelObject modelObject) {
+        super(modelObject);
     }
 
     public ValueListValuePojo getDescription() {

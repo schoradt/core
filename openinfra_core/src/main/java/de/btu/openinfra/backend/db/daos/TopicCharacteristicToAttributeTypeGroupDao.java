@@ -43,8 +43,7 @@ public class TopicCharacteristicToAttributeTypeGroupDao extends
 	public TopicCharacteristicToAttributeTypeGroupPojo mapToPojo(
 			Locale locale,
 			AttributeTypeGroupToTopicCharacteristic atgttc) {
-        return mapToPojoStatically(locale, atgttc,
-                new MetaDataDao(currentProjectId, schema));
+        return mapToPojoStatically(locale, atgttc, currentProjectId, schema);
 	}
 
 	/**
@@ -52,28 +51,30 @@ public class TopicCharacteristicToAttributeTypeGroupDao extends
      *
      * @param locale the requested language as Java.util locale
      * @param atgttc the model object
-     * @param mdDao  the meta data DAO
+     * @param currentProjectId The identifier of the current project.
+     * @param schema           This parameter defines the schema.
      * @return       the POJO object when the model object is not null else null
      */
     public static TopicCharacteristicToAttributeTypeGroupPojo
         mapToPojoStatically(
                 Locale locale,
                 AttributeTypeGroupToTopicCharacteristic atgttc,
-                MetaDataDao mdDao) {
+                UUID currentProjectId,
+                OpenInfraSchemas schema) {
         if (atgttc != null) {
             TopicCharacteristicToAttributeTypeGroupPojo pojo =
-                    new TopicCharacteristicToAttributeTypeGroupPojo(
-                            atgttc, mdDao);
+                    new TopicCharacteristicToAttributeTypeGroupPojo(atgttc);
 
             pojo.setTopicCharacteristic(
                     TopicCharacteristicDao.mapToPojoStatically(
                     				locale,
                     				atgttc.getTopicCharacteristic(),
-                    				mdDao));
+                    				currentProjectId,
+                    				schema));
             pojo.setAttributTypeGroupId(
                     atgttc.getAttributeTypeGroup().getId());
             pojo.setMultiplicity(MultiplicityDao.mapToPojoStatically(
-                    atgttc.getMultiplicityBean(), mdDao));
+                    atgttc.getMultiplicityBean()));
 
             if(atgttc.getOrder() != null) {
                 pojo.setOrder(atgttc.getOrder());

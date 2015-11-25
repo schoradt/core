@@ -115,8 +115,7 @@ public class OpenInfraValueValueRbac<
             UUID firstAssociationId,
             UUID firstAssociationIdFromPojo,
             UUID secondAssociationId,
-            UUID secondAssociationIdFromPojo,
-            String json)
+            UUID secondAssociationIdFromPojo)
             throws RuntimeException {
         checkPermission(httpMethod, uriInfo);
         try {
@@ -127,8 +126,7 @@ public class OpenInfraValueValueRbac<
                             firstAssociationId,
                             firstAssociationIdFromPojo,
                             secondAssociationId,
-                            secondAssociationIdFromPojo,
-                            json);
+                            secondAssociationIdFromPojo);
 		} catch (InstantiationException   | IllegalAccessException |
 				 IllegalArgumentException | InvocationTargetException |
 				 NoSuchMethodException    | SecurityException ex) {

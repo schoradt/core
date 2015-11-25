@@ -39,8 +39,7 @@ public class ValueListValueAssociationDao
 	public ValueListValueAssociationPojo mapToPojo(
 			Locale locale,
 			ValueListValuesXValueListValue vlvxvlv) {
-		return mapToPojoStatically(locale, vlvxvlv,
-		        new MetaDataDao(currentProjectId, schema));
+		return mapToPojoStatically(locale, vlvxvlv);
 	}
 
 	@Override
@@ -60,26 +59,24 @@ public class ValueListValueAssociationDao
      *
      * @param locale  the requested language as Java.util locale
      * @param vlvxvlv the model object
-     * @param mdDao   the meta data DAO
      * @return        the POJO object when the model object is not null else
      *                null
      */
 	public static ValueListValueAssociationPojo mapToPojoStatically(
 			Locale locale,
-			ValueListValuesXValueListValue vlvxvlv,
-			MetaDataDao mdDao) {
+			ValueListValuesXValueListValue vlvxvlv) {
 
 		if(vlvxvlv != null) {
 			ValueListValueAssociationPojo pojo =
-					new ValueListValueAssociationPojo(vlvxvlv, mdDao);
+					new ValueListValueAssociationPojo(vlvxvlv);
 
 			pojo.setAssociationValueListValueId(
 			        vlvxvlv.getValueListValue2().getId());
 			pojo.setRelationship(ValueListValueDao.mapToPojoStatically(locale,
-					vlvxvlv.getValueListValue1(), null));
+					vlvxvlv.getValueListValue1()));
 			pojo.setAssociatedValueListValue(
 					ValueListValueDao.mapToPojoStatically(
-							locale, vlvxvlv.getValueListValue3(), null));
+							locale, vlvxvlv.getValueListValue3()));
 
 			return pojo;
 		}

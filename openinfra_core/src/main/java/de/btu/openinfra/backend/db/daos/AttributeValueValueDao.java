@@ -39,8 +39,7 @@ public class AttributeValueValueDao
 	public AttributeValueValuePojo mapToPojo(
 			Locale locale,
 			AttributeValueValue avv) {
-		return mapToPojoStatically(locale, avv,
-		        new MetaDataDao(currentProjectId, schema));
+		return mapToPojoStatically(locale, avv);
 	}
 
 	/**
@@ -48,16 +47,13 @@ public class AttributeValueValueDao
 	 *
 	 * @param locale the requested language as Java.util locale
 	 * @param avv    the model object
-	 * @param mdDao  the meta data DAO
 	 * @return       the POJO object when the model object is not null else null
 	 */
 	public static AttributeValueValuePojo mapToPojoStatically(
 			Locale locale,
-			AttributeValueValue avv,
-			MetaDataDao mdDao) {
+			AttributeValueValue avv) {
 	    if (avv != null) {
-    		AttributeValueValuePojo pojo =
-    		        new AttributeValueValuePojo(avv, mdDao);
+    		AttributeValueValuePojo pojo = new AttributeValueValuePojo(avv);
 
     		// set the topic instance id
     		pojo.setTopicInstanceId(avv.getTopicInstance().getId());

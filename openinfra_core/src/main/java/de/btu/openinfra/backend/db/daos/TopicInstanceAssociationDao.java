@@ -72,9 +72,7 @@ public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
 										parent.getTopicInstance2Bean()),
 								RelationshipTypeDao.mapToPojoStatically(
 										locale,
-										parent.getRelationshipType(),
-										new MetaDataDao(
-										        currentProjectId, schema))));
+										parent.getRelationshipType())));
 				parent = readParent(
 						locale,
 						parent.getTopicInstance1Bean().getId());
@@ -137,15 +135,13 @@ public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
 			Locale locale,
 			TopicInstanceXTopicInstance txt) {
 	    if (txt != null) {
-	        MetaDataDao mdDao = new MetaDataDao(currentProjectId, schema);
 	        TopicInstanceAssociationPojo pojo =
-	                new TopicInstanceAssociationPojo(txt, mdDao);
+                new TopicInstanceAssociationPojo(txt);
 
 	        pojo.setRelationshipType(
 	                RelationshipTypeDao.mapToPojoStatically(
 	                        locale,
-	                        txt.getRelationshipType(),
-	                        mdDao));
+	                        txt.getRelationshipType()));
 	        pojo.setAssociatedInstance(
 	                new TopicInstanceDao(currentProjectId, schema).mapToPojo(
 	                        locale,
@@ -165,27 +161,29 @@ public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
      *
      * @param locale the requested language as Java.util locale
      * @param txt    the model object
-     * @param mdDao  the meta data DAO
+     * @param currentProjectId The identifier of the current project.
+     * @param schema           This parameter defines the schema.
      * @return       the POJO object when the model object is not null else null
      */
     public static TopicInstanceAssociationPojo mapToPojoStatically(
             Locale locale,
             TopicInstanceXTopicInstance txt,
-            MetaDataDao mdDao) {
+            UUID currentProjectId,
+            OpenInfraSchemas schema) {
         if (txt != null) {
             TopicInstanceAssociationPojo pojo =
-                    new TopicInstanceAssociationPojo(txt, mdDao);
+                    new TopicInstanceAssociationPojo(txt);
             pojo.setAssociationInstanceId(txt.getTopicInstance1Bean().getId());
             pojo.setRelationshipType(
                     RelationshipTypeDao.mapToPojoStatically(
                             locale,
-                            txt.getRelationshipType(),
-                            mdDao));
+                            txt.getRelationshipType()));
             pojo.setAssociatedInstance(
                     TopicInstanceDao.mapToPojoStatically(
                             locale,
                             txt.getTopicInstance2Bean(),
-                            mdDao));
+                            currentProjectId,
+                            schema));
             return pojo;
         } else {
             return null;

@@ -12,8 +12,6 @@ import javax.persistence.ParameterMode;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
 
-import jersey.repackaged.com.google.common.collect.Lists;
-
 import org.eclipse.persistence.exceptions.DatabaseException;
 
 import de.btu.openinfra.backend.OpenInfraProperties;
@@ -46,6 +44,7 @@ import de.btu.openinfra.backend.exception.OpenInfraDatabaseException;
 import de.btu.openinfra.backend.exception.OpenInfraEntityException;
 import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 import de.btu.openinfra.backend.exception.OpenInfraWebException;
+import jersey.repackaged.com.google.common.collect.Lists;
 
 /**
  * This class represents the Project and is used to access the underlying layer
@@ -161,8 +160,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 
 	@Override
 	public ProjectPojo mapToPojo(Locale locale, Project p) {
-		return mapToPojoStatically(locale, p,
-		        new MetaDataDao(currentProjectId, schema));
+		return mapToPojoStatically(locale, p, currentProjectId, schema);
 	}
 
 	/**
@@ -170,21 +168,25 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
      *
      * @param locale the requested language as Java.util locale
      * @param p      the model object
-     * @param mdDao  the meta data DAO
+     * @param currentProjectId The identifier of the current project.
+     * @param schema           This parameter defines the schema.
      * @return       the POJO object when the model object is not null else null
      */
-	public static ProjectPojo mapToPojoStatically(Locale locale, Project p,
-	        MetaDataDao mdDao) {
+	public static ProjectPojo mapToPojoStatically(
+	        Locale locale,
+	        Project p,
+	        UUID currentProjectId,
+	        OpenInfraSchemas schema) {
 		if(p != null) {
-			ProjectPojo pojo = new ProjectPojo(p, mdDao);
+			ProjectPojo pojo = new ProjectPojo(p);
 
 			pojo.setValueListsCount(
-					new ValueListDao(mdDao.currentProjectId, mdDao.schema)
+					new ValueListDao(currentProjectId, schema)
 					.getCount());
 
 			pojo.setTopicCharacteristicsCount(
-					new TopicCharacteristicDao(mdDao.currentProjectId,
-							mdDao.schema).getCount());
+					new TopicCharacteristicDao(currentProjectId,
+							schema).getCount());
 
 			Project parent = p.getProject();
 
@@ -254,12 +256,19 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 	public List<ProjectPojo> readParents(Locale locale) {
 		Project self = em.find(Project.class, currentProjectId);
 		List<ProjectPojo> parents = new LinkedList<ProjectPojo>();
-		MetaDataDao mdDao = new MetaDataDao(currentProjectId, schema);
-		parents.add(mapToPojoStatically(locale, self, mdDao));
+		parents.add(mapToPojoStatically(
+		        locale,
+		        self,
+		        currentProjectId,
+		        schema));
 
 		while(self.getProject() != null) {
 			self = self.getProject();
-			parents.add(mapToPojoStatically(locale, self, mdDao));
+			parents.add(mapToPojoStatically(
+			        locale,
+			        self,
+			        currentProjectId,
+			        schema));
 		} // end while
 		return Lists.reverse(parents);
 	}

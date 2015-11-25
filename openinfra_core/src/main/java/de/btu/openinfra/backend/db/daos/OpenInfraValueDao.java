@@ -111,14 +111,12 @@ public abstract class OpenInfraValueDao<
      *                                    in the database
      * @param firstAssociationId          the first association id from the URI
      * @param firstAssociationIdFromPojo  the first association id from the POJO
-     * @param metaData                    the JSON data that should be stored in
-     *                                    the meta data associated to the POJO
      * @return                            the UUID of the newly created or
      *                                    replaced object or null
      * @throws RuntimeException
      */
     public UUID createOrUpdate(TypePojo pojo, UUID firstAssociationId,
-            UUID firstAssociationIdFromPojo, String metaData)
+            UUID firstAssociationIdFromPojo)
             throws RuntimeException {
 
         // check if the value id of the URI map to the pojo uuid
@@ -128,14 +126,8 @@ public abstract class OpenInfraValueDao<
             		OpenInfraExceptionTypes.INCOMPATIBLE_UUIDS);
         }
 
-        if (metaData != null) {
-            // update the meta data as well if it exists
-            return createOrUpdate(pojo,
-                    firstAssociationId, metaData);
-        } else {
-            // pass the pojo UUID because this uuid is not part of the URI
-            return createOrUpdate(pojo, pojo.getUuid());
-        }
+        // pass the pojo UUID because this uuid is not part of the URI
+        return createOrUpdate(pojo, pojo.getUuid());
     }
 
 	/**

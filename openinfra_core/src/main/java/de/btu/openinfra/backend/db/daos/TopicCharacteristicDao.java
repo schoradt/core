@@ -72,11 +72,12 @@ public class TopicCharacteristicDao
 		// 3. Map the model objects to POJOs
 		Map<UUID, TopicCharacteristicPojo> tcp =
 				new HashMap<UUID, TopicCharacteristicPojo>();
-		MetaDataDao mdDao = new MetaDataDao(currentProjectId, schema);
 		for(TopicCharacteristic tc : tcs) {
 		    UUID id = tc.getId();
 		    if (!tcp.containsKey(id)) {
-		        tcp.put(id, mapToPojoStatically(locale, tc, mdDao));
+		        tcp.put(
+	                id,
+	                mapToPojoStatically(locale, tc, currentProjectId, schema));
 		    }
 
 		} // end for
@@ -87,8 +88,7 @@ public class TopicCharacteristicDao
 	public TopicCharacteristicPojo mapToPojo(
 			Locale locale,
 			TopicCharacteristic tc) {
-		return mapToPojoStatically(locale, tc,
-		        new MetaDataDao(currentProjectId, schema));
+		return mapToPojoStatically(locale, tc, currentProjectId, schema);
 	}
 
 	/**
@@ -96,23 +96,24 @@ public class TopicCharacteristicDao
 	 *
 	 * @param locale the requested language as Java.util locale
 	 * @param tc     the model object
-	 * @param mdDao  the meta data DAO
+	 * @param currentProjectId The identifier of the current project.
+     * @param schema           This parameter defines the schema.
 	 * @return       the POJO object when the model object is not null else null
 	 */
 	public static TopicCharacteristicPojo mapToPojoStatically(
 			Locale locale,
 			TopicCharacteristic tc,
-			MetaDataDao mdDao) {
+			UUID currentProjectId,
+            OpenInfraSchemas schema) {
 		if (tc != null) {
-		    TopicCharacteristicPojo pojo =
-		            new TopicCharacteristicPojo(tc, mdDao);
+		    TopicCharacteristicPojo pojo = new TopicCharacteristicPojo(tc);
 
 		    // TODO this will probably disable the count functionality but will
 		    // avoid a NullPointerException. This must be reworked!
-		    if (mdDao != null) {
+		    if (currentProjectId != null && schema != null) {
     		    pojo.setTopicInstancesCount(
     		    		new TopicInstanceDao(
-    		    				mdDao.currentProjectId, mdDao.schema)
+    		    				currentProjectId, schema)
     		    		.getCount(tc.getId()));
 		    }
 
@@ -122,8 +123,7 @@ public class TopicCharacteristicDao
             } catch (NullPointerException npe) { /* do nothing */ }
     		pojo.setTopic(ValueListValueDao.mapToPojoStatically(
     				locale,
-    				tc.getValueListValue(),
-    				null));
+    				tc.getValueListValue()));
     		pojo.setDescriptions(PtFreeTextDao.mapToPojoStatically(
     				locale,
     				tc.getPtFreeText()));

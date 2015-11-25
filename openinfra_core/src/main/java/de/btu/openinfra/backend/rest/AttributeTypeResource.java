@@ -201,8 +201,7 @@ public class AttributeTypeResource {
                                 attributeTypeId,
                                 pojo.getAttributeTypeId(),
                                 null,
-                                null,
-                                pojo.getMetaData()));
+                                null));
     }
 
 	@GET
@@ -258,9 +257,8 @@ public class AttributeTypeResource {
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
 						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
-						pojo,
 						null,
-                        pojo.getMetaData());
+						pojo);
         return OpenInfraResponseBuilder.postResponse(id);
     }
 
@@ -299,9 +297,8 @@ public class AttributeTypeResource {
         						OpenInfraHttpMethod.valueOf(
         								request.getMethod()),
         						uriInfo,
-        						pojo,
                                 attributeTypeId,
-                                pojo.getMetaData()));
+                                pojo));
     }
 
     @POST
@@ -322,8 +319,7 @@ public class AttributeTypeResource {
                         attributeTypeId,
                         pojo.getAssociationAttributeTypeId(),
                         null,
-                        null,
-                        pojo.getMetaData());
+                        null);
         return OpenInfraResponseBuilder.postResponse(id);
     }
 
@@ -371,7 +367,7 @@ public class AttributeTypeResource {
                                     attributeTypeId,
                                     pojo.getAssociationAttributeTypeId(),
                                     associatedAttributeTypeId,
-                                    pojo.getAssociatedAttributeType().getUuid(),
-                                    pojo.getMetaData()));
+                                    pojo.getAssociatedAttributeType().getUuid()
+                                    ));
     }
 }

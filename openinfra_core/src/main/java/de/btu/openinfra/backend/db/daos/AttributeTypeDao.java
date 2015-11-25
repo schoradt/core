@@ -43,8 +43,7 @@ public class AttributeTypeDao
 
 	@Override
 	public AttributeTypePojo mapToPojo(Locale locale, AttributeType at) {
-		return mapToPojoStatically(locale, at,
-		        new MetaDataDao(currentProjectId, schema));
+		return mapToPojoStatically(locale, at);
 	}
 
 	/**
@@ -52,28 +51,23 @@ public class AttributeTypeDao
 	 *
 	 * @param locale the requested language as Java.util locale
 	 * @param at     the model object
-	 * @param mdDao  the meta data DAO
 	 * @return       the POJO object when the model object is not null else null
 	 */
 	public static AttributeTypePojo mapToPojoStatically(
 			Locale locale,
-			AttributeType at,
-			MetaDataDao mdDao) {
+			AttributeType at) {
 		if(at != null) {
-		    AttributeTypePojo pojo = new AttributeTypePojo(at, mdDao);
+		    AttributeTypePojo pojo = new AttributeTypePojo(at);
 
 			pojo.setDomain(ValueListDao.mapToPojoStatically(
 					locale,
-					at.getValueList(),
-					mdDao));
+					at.getValueList()));
 			pojo.setUnit(ValueListValueDao.mapToPojoStatically(
 					locale,
-					at.getValueListValue2(),
-					mdDao));
+					at.getValueListValue2()));
 			pojo.setDataType(ValueListValueDao.mapToPojoStatically(
 					locale,
-					at.getValueListValue1(),
-					mdDao));
+					at.getValueListValue1()));
 			pojo.setDescriptions(PtFreeTextDao.mapToPojoStatically(
 					locale,
 					at.getPtFreeText1()));
@@ -124,8 +118,7 @@ public class AttributeTypeDao
                 .getSingleResult();
 	    return AttributeTypeDao.mapToPojoStatically(
 	            locale,
-	            at,
-	            new MetaDataDao(currentProjectId, schema));
+	            at);
 	}
 
 	@Override

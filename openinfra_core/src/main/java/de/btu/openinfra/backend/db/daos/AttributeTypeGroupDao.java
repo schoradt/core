@@ -57,8 +57,7 @@ public class AttributeTypeGroupDao
 
 		if(atg != null) {
 			for(AttributeTypeGroup g : atg.getAttributeTypeGroups()) {
-				pojos.add(mapToPojoStatically(locale, g,
-				        new MetaDataDao(currentProjectId, schema)));
+				pojos.add(mapToPojoStatically(locale, g));
 			} // end for
 		} // end if
 		return pojos;
@@ -68,8 +67,7 @@ public class AttributeTypeGroupDao
 	public AttributeTypeGroupPojo mapToPojo(
 			Locale locale,
 			AttributeTypeGroup atg) {
-		return mapToPojoStatically(locale, atg,
-		        new MetaDataDao(currentProjectId, schema));
+		return mapToPojoStatically(locale, atg);
 	}
 
 	/**
@@ -77,16 +75,14 @@ public class AttributeTypeGroupDao
 	 *
 	 * @param locale the requested language as Java.util locale
 	 * @param atg    the model object
-	 * @param mdDao  the meta data DAO
 	 * @return       the POJO object when the model object is not null else null
 	 */
 	public static AttributeTypeGroupPojo mapToPojoStatically(
 			Locale locale,
-			AttributeTypeGroup atg,
-			MetaDataDao mdDao) {
+			AttributeTypeGroup atg) {
 		if(atg != null) {
 		    AttributeTypeGroupPojo pojo =
-		            new AttributeTypeGroupPojo(atg, mdDao);
+		            new AttributeTypeGroupPojo(atg);
 
 			AttributeTypeGroup subgroupOf = atg.getAttributeTypeGroup();
 			if(subgroupOf != null) {

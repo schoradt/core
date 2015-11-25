@@ -42,8 +42,7 @@ public class AttributeTypeAssociationDao
 	public AttributeTypeAssociationPojo mapToPojo(
 			Locale locale,
 			AttributeTypeXAttributeType atxat) {
-		return mapToPojoStatically(locale, atxat,
-		        new MetaDataDao(currentProjectId, schema));
+		return mapToPojoStatically(locale, atxat);
 	}
 
 	@Override
@@ -78,21 +77,19 @@ public class AttributeTypeAssociationDao
 	 *
 	 * @param locale the requested language as Java.util locale
 	 * @param atxat  the model object
-	 * @param mdDao  the meta data DAO
 	 * @return       the POJO object when the model object is not null else null
 	 */
 	public static AttributeTypeAssociationPojo mapToPojoStatically(
 			Locale locale,
-			AttributeTypeXAttributeType atxat,
-			MetaDataDao mdDao) {
+			AttributeTypeXAttributeType atxat) {
 
 		if(atxat != null) {
 			AttributeTypeAssociationPojo pojo =
-					new AttributeTypeAssociationPojo(atxat, mdDao);
+					new AttributeTypeAssociationPojo(atxat);
 
 			// set the relationship type object
 			pojo.setRelationship(ValueListValueDao.mapToPojoStatically(locale,
-			        atxat.getValueListValue(), mdDao));
+			        atxat.getValueListValue()));
 
 			// set the association attribute type id
 			pojo.setAssociationAttributeTypeId(atxat.getAttributeType1Bean()
@@ -101,7 +98,7 @@ public class AttributeTypeAssociationDao
 			// set the associated attribute type object
 			pojo.setAssociatedAttributeType(
 				AttributeTypeDao.mapToPojoStatically(locale,
-				        atxat.getAttributeType2Bean(), mdDao));
+				        atxat.getAttributeType2Bean()));
 
 			return pojo;
 		} else {

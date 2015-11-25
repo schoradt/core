@@ -17,6 +17,7 @@ import de.btu.openinfra.backend.db.jpa.model.AttributeValueValue;
 import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
+import de.btu.openinfra.backend.db.pojos.MetaDataPojo;
 import de.btu.openinfra.backend.db.pojos.project.AttributeValuePojo;
 import de.btu.openinfra.backend.db.pojos.project.TopicInstancePojo;
 
@@ -50,93 +51,7 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
 	// TODO add named query in order to retrieve attribute values
 	@Override
 	public TopicInstancePojo mapToPojo(Locale locale, TopicInstance ti) {
-	    if (ti != null) {
-	        MetaDataDao mdDao = new MetaDataDao(currentProjectId, schema);
-
-            // 1. Create new POJO object and set necessary stuff
-            TopicInstancePojo pojo = new TopicInstancePojo(ti, mdDao);
-
-            // set the topic characteristic POJO
-            pojo.setTopicCharacteristic(TopicCharacteristicDao
-            		.mapToPojoStatically(
-            				locale, ti.getTopicCharacteristic(), null));
-
-            String metaData = null;
-            // check if meta data exists for this topic instance
-            if (pojo.getTopicCharacteristic().getMetaData() != null) {
-            	JSONObject jo = null;
-				try {
-					jo = (JSONObject)new JSONParser().parse(
-							pojo.getTopicCharacteristic().getMetaData());
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
-                if (jo != null &&
-                		jo.containsKey(
-                				OpenInfraMetaDataEnum.LIST_VIEW_COLUMNS)) {
-                    metaData = jo.get(OpenInfraMetaDataEnum.LIST_VIEW_COLUMNS)
-                    		.toString();
-                }
-            }
-
-            // 2. Associate only attribute values to the topic instance which are
-            //    mentioned in the meta data.
-            List<AttributeValuePojo> values =
-                    new LinkedList<AttributeValuePojo>();
-
-            // 3. This is for all attribute value domains
-            for(AttributeValueDomain avd : ti.getAttributeValueDomains()) {
-                // 3.a Check if the current id is mentioned in the meta data
-                if( metaData != null && metaData.contains(
-                        avd.getAttributeTypeToAttributeTypeGroup()
-                            .getAttributeType().getId().toString()) ||
-                        metaData == null ) {
-                    AttributeValuePojo avPojo = new AttributeValuePojo(avd);
-                    avPojo.setAttributeTypeId(
-                            avd.getAttributeTypeToAttributeTypeGroup()
-                            .getAttributeType().getId());
-                    avPojo.setAttributeValueType(
-                            AttributeValueTypes.ATTRIBUTE_VALUE_DOMAIN);
-                    avPojo.setAttributeValueDomain(
-                            AttributeValueDomainDao.mapToPojoStatically(
-                                    locale,
-                                    avd,
-                                    mdDao));
-                    values.add(avPojo);
-                } // end if
-            } // end for
-
-            // 4. This is for all attribute value values
-            for(AttributeValueValue avv : ti.getAttributeValueValues()) {
-                // 4.a Check if the current id is mentioned in the settings
-                if( metaData != null && metaData.contains(
-                        avv.getAttributeTypeToAttributeTypeGroup()
-                            .getAttributeType().getId().toString()) ||
-                        metaData == null ) {
-                    AttributeValuePojo avPojo = new AttributeValuePojo(avv);
-                    avPojo.setAttributeTypeId(
-                            avv.getAttributeTypeToAttributeTypeGroup()
-                            .getAttributeType().getId());
-                    avPojo.setAttributeValueType(
-                            AttributeValueTypes.ATTRIBUTE_VALUE_VALUE);
-                    avPojo.setAttributeValueValue(
-                            AttributeValueValueDao.mapToPojoStatically(
-                                    locale,
-                                    avv,
-                                    mdDao));
-                    values.add(avPojo);
-                } // end if
-            } // end for
-
-            pojo.setValues(values);
-            return pojo;
-        } else {
-            return null;
-        }
-	    /*
-        return mapToPojoStatically(locale, ti,
-                new MetaDataDao(currentProjectId, schema));
-                */
+        return mapToPojoStatically(locale, ti, currentProjectId, schema);
 	}
 
 	/**
@@ -144,29 +59,37 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
      *
      * @param locale the requested language as Java.util locale
      * @param ti     the model object
-     * @param mdDao  the meta data DAO
+     * @param currentProjectId The identifier of the current project.
+     * @param schema           This parameter defines the schema.
      * @return       the POJO object when the model object is not null else null
      */
     public static TopicInstancePojo mapToPojoStatically(
             Locale locale,
             TopicInstance ti,
-            MetaDataDao mdDao) {
+            UUID currentProjectId,
+            OpenInfraSchemas schema) {
         if (ti != null) {
+
+            MetaDataDao mdDao = new MetaDataDao(currentProjectId, schema);
+            MetaDataPojo metaDataPojo = mdDao.mapToPojo(
+                    locale,
+                    mdDao.read(ti.getTopicCharacteristic().getId()));
+
             // 1. Create new POJO object and set necessary stuff
-            TopicInstancePojo pojo = new TopicInstancePojo(ti, mdDao);
+            TopicInstancePojo pojo = new TopicInstancePojo(ti);
 
             // set the topic characteristic POJO
             pojo.setTopicCharacteristic(TopicCharacteristicDao
             		.mapToPojoStatically(locale,
-            				ti.getTopicCharacteristic(), null));
+            				ti.getTopicCharacteristic(), null, null));
 
             String metaData = null;
             // check if meta data exists for this topic instance
-            if (pojo.getTopicCharacteristic().getMetaData() != null) {
+            if (metaDataPojo.getData() != null) {
             	JSONObject jo = null;
 				try {
 					jo = (JSONObject)new JSONParser().parse(
-							pojo.getTopicCharacteristic().getMetaData());
+					        metaDataPojo.getData());
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}
@@ -199,8 +122,7 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
                     avPojo.setAttributeValueDomain(
                             AttributeValueDomainDao.mapToPojoStatically(
                                     locale,
-                                    avd,
-                                    mdDao));
+                                    avd));
                     values.add(avPojo);
                 } // end if
             } // end for
@@ -221,8 +143,7 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
                     avPojo.setAttributeValueValue(
                             AttributeValueValueDao.mapToPojoStatically(
                                     locale,
-                                    avv,
-                                    mdDao));
+                                    avv));
                     values.add(avPojo);
                 } // end if
             } // end for

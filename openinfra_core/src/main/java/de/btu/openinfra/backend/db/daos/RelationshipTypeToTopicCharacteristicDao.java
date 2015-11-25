@@ -44,8 +44,7 @@ public class RelationshipTypeToTopicCharacteristicDao
 	public RelationshipTypeToTopicCharacteristicPojo mapToPojo(
 			Locale locale,
 			RelationshipTypeToTopicCharacteristic rtt) {
-		return mapToPojoStatically(locale, rtt,
-		        new MetaDataDao(currentProjectId, schema));
+		return mapToPojoStatically(locale, rtt);
 	}
 
 	@Override
@@ -65,27 +64,24 @@ public class RelationshipTypeToTopicCharacteristicDao
      *
      * @param locale the requested language as Java.util locale
      * @param rtt    the model object
-     * @param mdDao  the meta data DAO
      * @return       the POJO object when the model object is not null else null
      */
 	public static RelationshipTypeToTopicCharacteristicPojo mapToPojoStatically(
 			Locale locale,
-			RelationshipTypeToTopicCharacteristic rtt,
-			MetaDataDao mdDao) {
+			RelationshipTypeToTopicCharacteristic rtt) {
 
 	    RelationshipTypeToTopicCharacteristicPojo pojo =
-                new RelationshipTypeToTopicCharacteristicPojo(rtt, mdDao);
+                new RelationshipTypeToTopicCharacteristicPojo(rtt);
 
 		try {
 			pojo.setTopicCharacteristicId(
 			        rtt.getTopicCharacteristic().getId());
 			pojo.setMultiplicity(MultiplicityDao.mapToPojoStatically(
-			        rtt.getMultiplicityBean(), null));
+			        rtt.getMultiplicityBean()));
 			pojo.setRelationshipType(
 				RelationshipTypeDao.mapToPojoStatically(
 					locale,
-					rtt.getRelationshipType(),
-					null));
+					rtt.getRelationshipType()));
 
 			return pojo;
 		} catch (NullPointerException npe) {

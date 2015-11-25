@@ -43,8 +43,7 @@ public class AttributeTypeGroupToTopicCharacteristicDao extends
 	public AttributeTypeGroupToTopicCharacteristicPojo mapToPojo(
 			Locale locale,
 			AttributeTypeGroupToTopicCharacteristic atg) {
-		return mapToPojoStatically(locale, atg,
-		        new MetaDataDao(currentProjectId, schema));
+		return mapToPojoStatically(locale, atg);
 	}
 
 	/**
@@ -52,27 +51,22 @@ public class AttributeTypeGroupToTopicCharacteristicDao extends
 	 *
 	 * @param locale the requested language as Java.util locale
 	 * @param atgttc    the model object
-	 * @param mdDao  the meta data DAO
 	 * @return       the POJO object when the model object is not null else null
 	 */
 	public static AttributeTypeGroupToTopicCharacteristicPojo
 		mapToPojoStatically(
 				Locale locale,
-				AttributeTypeGroupToTopicCharacteristic atgttc,
-				MetaDataDao mdDao) {
+				AttributeTypeGroupToTopicCharacteristic atgttc) {
 	    if (atgttc != null) {
     		AttributeTypeGroupToTopicCharacteristicPojo pojo =
-    				new AttributeTypeGroupToTopicCharacteristicPojo(
-    				        atgttc, mdDao);
+    				new AttributeTypeGroupToTopicCharacteristicPojo(atgttc);
 
     		pojo.setAttributeTypeGroup(
     		        AttributeTypeGroupDao.mapToPojoStatically(
     		                locale,
-    		                atgttc.getAttributeTypeGroup(),
-    		                null));
+    		                atgttc.getAttributeTypeGroup()));
     		pojo.setMultiplicity(MultiplicityDao.mapToPojoStatically(
-    				atgttc.getMultiplicityBean(),
-    				null));
+    				atgttc.getMultiplicityBean()));
     		pojo.setTopicCharacteristicId(atgttc.getTopicCharacteristic().getId());
 
     		if(atgttc.getOrder() != null) {
