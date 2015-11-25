@@ -16,7 +16,7 @@ The [database](https://github.com/OpenInfRA/database) is necessary to provide a 
 To make use of Solr in OpenInfRA two prerequisites must be complied. First the [server](https://github.com/OpenInfRA/solr_server) itself must be installed. Second the [core definition](https://github.com/OpenInfRA/solr_core) must be installed in the specified file path. Further instructions can be found in the appropriated repositories.
 
 ## WebGis/GeoServer
-A detailed description is provided in the specific folder [GXC](https://github.com/OpenInfRA/GXC)
+A detailed description is provided in the specific folder: [GXC](https://github.com/OpenInfRA/GXC).
 
 ## ImageMagick
 OpenInfRA provides a file upload. This upload requires [ImageMagick](http://www.imagemagick.org) to generate and produce different image representations.
