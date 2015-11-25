@@ -7,7 +7,7 @@ To run OpenInfRA different prerequisites must be complied. At this point we will
 OpenInfRA consists of the following parts:
 
 ## Application
-The application is written in Java and must be compiled with Java 7. It must be packed into a _war_ file and run on a server e.g. Apache Tomcat. There are only a few handles necessary to configure the application. The main [configuration file](openinfra_core/src/main/resources/de/btu/openinfra/backend/properties/OpenInfRA.properties) must be adapted to the current needs. The different configuration parameters are commented and should need no further explanations. The prime configurations are the database connection and file path properties. These must be set correctly to run the application.
+The application is written in Java and must be compiled with Java 7. It must be packed into a _war_ file and run on a server. Currently, the application is optimezed for Apache Tomcat. There are only a few handles necessary to configure the application. The main [configuration file](openinfra_core/src/main/resources/de/btu/openinfra/backend/properties/OpenInfRA.properties) must be adapted to the current needs. The different configuration parameters are commented and need no further explanations. The prime configurations are the database connection and file path properties. These must be set correctly to run the application.
 
 ## Database
 The [database](https://github.com/OpenInfRA/database) is necessary to provide a data storage for OpenInfRA. Further instructions can be found in the appropriated repositoriy.
