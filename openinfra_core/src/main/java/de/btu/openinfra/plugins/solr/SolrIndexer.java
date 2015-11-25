@@ -285,6 +285,11 @@ public class SolrIndexer extends SolrServer {
                                 specificValue);
             }
 
+            // save the value in a specific field that is used for lookup
+            doc.addField(SolrCharacterConverter.convert(
+                    SolrIndexEnum.LOOKUP_FIELD.getString()),
+                    value.get(x).getFreeText());
+
             // save the value in a default search field
             addDefaultSearchField(SolrCharacterConverter.convert(
                     SolrIndexEnum.DEFAULT_SEARCH_FIELD.getString()),
@@ -323,10 +328,9 @@ public class SolrIndexer extends SolrServer {
                             value.get(i).getFreeText());
                 }
 
-                // save the value in a language specific field that is used for
-                // lookup
+                // save the value in a specific field that is used for lookup
                 doc.addField(SolrCharacterConverter.convert(
-                        SolrIndexEnum.LOOKUP_FIELD.getString() + languageCode),
+                        SolrIndexEnum.LOOKUP_FIELD.getString()),
                         value.get(i).getFreeText());
 
                 // save all values in a default search field

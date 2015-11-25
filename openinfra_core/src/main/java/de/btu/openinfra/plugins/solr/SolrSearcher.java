@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -53,8 +51,8 @@ public class SolrSearcher extends SolrServer {
      * result. Before returning the result it will be prepared in a special way.
      * To avoid doublet the properties of
      * {@link SolrIndexEnum#DEFAULT_SEARCH_FIELD} and
-     * {@link SolrIndexEnum#LOOKUP_FIELD} for all languages will be removed from
-     * the highlight map.
+     * {@link SolrIndexEnum#LOOKUP_FIELD} will be removed from the highlight
+     * map.
      *
      * @param searchPojo The SolrSearchPojo that contains the query.
      */
@@ -139,10 +137,6 @@ public class SolrSearcher extends SolrServer {
             Map<String, Map<String, List<String>>> hl =
                     response.getHighlighting();
 
-            // regex pattern to retrieve the lookup fields
-            Pattern lookupP = Pattern.compile(
-                    "(" + SolrIndexEnum.LOOKUP_FIELD.getString() + "[a-z]{2})");
-
             // run through the results and add them to a list
             for (int i = 0; i < solrResults.size(); ++i) {
                 SolrResultDbPojo rP = new SolrResultDbPojo();
@@ -177,16 +171,10 @@ public class SolrSearcher extends SolrServer {
                             SolrIndexEnum.DEFAULT_SEARCH_FIELD.getString());
                 }
 
-                // search in the string representation of the hl map for a
-                // specified lookup field
-                Matcher m = lookupP.matcher(hl.get(rP.getTopicInstanceId()
-                        .toString()).toString());
-
-                while (m.find()) {
-                    //  remove the matching fields to avoid double entries
-                    hl.get(rP.getTopicInstanceId().toString()).remove(
-                            m.group());
-                }
+                // remove the default_search field from the highlighting map to
+                // avoid double entries
+                hl.get(rP.getTopicInstanceId().toString()).remove(
+                        SolrIndexEnum.LOOKUP_FIELD.getString());
 
                 // add the highlighted fields
                 rP.setHighlight(hl.get(rP.getTopicInstanceId().toString()));

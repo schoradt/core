@@ -39,11 +39,10 @@ public enum SolrIndexEnum {
     NO_TRANSLATION_FIELD("_notranslation_"),
 
     /*
-     * This variable represents the Solr field for lookups. A language tag will
-     * be added at the end of the string while indexing. UUIDs will not be added
-     * to this field.
+     * This variable represents the Solr field for lookups.UUIDs will not be
+     * added to this field.
      */
-    LOOKUP_FIELD("language_based_lookup_field_");
+    LOOKUP_FIELD("lookup_field");
 
     private String value;
 
