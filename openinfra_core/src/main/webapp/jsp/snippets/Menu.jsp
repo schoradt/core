@@ -7,12 +7,16 @@
 <%@page import="de.btu.openinfra.backend.db.daos.PtLocaleDao"%>
 <%@page import="java.awt.event.ItemEvent"%>
 <%@page import="de.btu.openinfra.backend.db.pojos.LocalizedString"%>
-<%@page import="de.btu.openinfra.backend.db.pojos.ProjectPojo"%>
+<%@page import="de.btu.openinfra.backend.db.pojos.project.ProjectPojo"%>
 <%@page import="de.btu.openinfra.backend.db.daos.ProjectDao"%>
 <%@page import="de.btu.openinfra.backend.OpenInfraApplication"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<c:set var="currentProject" value=""/>
+<% pageContext.setAttribute("currentProject", ProjectDao.getCurrentProject(
+		request.getAttribute("javax.servlet.forward.request_uri").toString())); %>
 
 <header class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container" style="width: 100%;">
@@ -150,6 +154,11 @@
 			</a>
         </li>
         <li>
+        	<a style="color:green;" href="${contextPath}/rest/v1/files">
+        		Dateien (Benutzer)
+        	</a>
+        </li>
+        <li>
         	<a style="color:red;" href="${contextPath}/logout">
         		<fmt:message key="logout.label"></fmt:message>
         	</a>
@@ -191,21 +200,27 @@
 		    	</c:if>
       		</c:forEach>
 		</form>
-      <form class="navbar-form navbar-right" method="get" action="/openinfra_backend/rest/v1/search" role="search">
+      <form class="navbar-form navbar-right" method="get" onsubmit="return validateForm()" action="${contextPath}/rest/v1/search/result" role="search">
         <div class="form-group">
+        	<input name="start" type="hidden" value="0"></input>
+			<input name="rows" type="hidden" value="20"></input>
         <!-- Check the query parameter and create an input field with the query
         	 as value or an input field a placeholder -->
 		  <c:choose>
             <c:when test="${fn:length(param.query) > 0}">
-              <input type="text" class="form-control" name="query" value="${param.query}">
+              <input type="text" class="form-control" id="query" name="query" value="${param.query}">
             </c:when>
             <c:otherwise>
-              <input type="text" class="form-control" name="query" placeholder="<fmt:message key="searchplaceholder.label"/>">
+              <input type="text" class="form-control" id="query" name="query" placeholder="<fmt:message key="searchplaceholder.label"/>">
             </c:otherwise>
           </c:choose>
         </div>
 
         <button type="submit" class="btn btn-default"><fmt:message key="searchbutton.label"/></button>
+        <br />
+        <a href="${contextPath}/rest/v1/search/extended">
+        	<span style="font-size:10pt;"><fmt:message key="search.extended.label"/></span>
+       	</a>
       </form>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->  
@@ -258,29 +273,37 @@
 <%@ include file="ConfirmDialog.jsp" %>
 
 <script>
-$(window).scroll(function() {
-	if($(window).scrollTop() > 30) {
-		$('#header').slideUp();
-	} else {
-		$('#header').slideDown(150);
+	$(window).scroll(function() {
+		if($(window).scrollTop() > 30) {
+			$('#header').slideUp();
+		} else {
+			$('#header').slideDown(150);
+		}
+	});
+	
+	$("#xml").click(function() {
+		getMediaType("xml");
+	});
+	
+	$("#json").click(function() {
+		getMediaType("json");
+	});
+	
+	function getMediaType(type) {
+		$.ajax({
+			url: window.location.href,
+	        dataType: type,
+			type: "GET",
+			cache: false
+		}).done(function(data,status,jqXHR) {
+			alert(jqXHR.responseText);
+		})}; 
+		
+	function validateForm() {
+	    if ($("#query").val() == "") {
+	        return false;
+	    } else {
+	        return true;
+	    }
 	}
-});
-
-$("#xml").click(function() {
-	getMediaType("xml");
-});
-
-$("#json").click(function() {
-	getMediaType("json");
-});
-
-function getMediaType(type) {
-	$.ajax({
-		url: window.location.href,
-        dataType: type,
-		type: "GET",
-		cache: false
-	}).done(function(data,status,jqXHR) {
-		alert(jqXHR.responseText);
-	})}; 
 </script>

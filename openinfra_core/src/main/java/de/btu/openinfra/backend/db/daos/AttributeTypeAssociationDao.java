@@ -109,20 +109,4 @@ public class AttributeTypeAssociationDao
 		}
 	}
 
-	/**
-     * This method creates a AttributeTypeAssociationPojo shell that contains
-     * informations about the attribute type the association starts from.
-     *
-     * @param attributeTypeId the attribute type id the association starts from
-     * @return                the AttributeTypePojo
-     */
-    public AttributeTypeAssociationPojo newAttributeTypeAssociation(
-            UUID attributeTypeId) {
-        // create the return pojo
-        AttributeTypeAssociationPojo pojo = new AttributeTypeAssociationPojo();
-
-        //pojo.set
-
-        return pojo;
-    }
 }

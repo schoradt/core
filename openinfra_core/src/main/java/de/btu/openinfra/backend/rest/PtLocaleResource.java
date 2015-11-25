@@ -4,16 +4,19 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import de.btu.openinfra.backend.db.OpenInfraOrderByEnum;
+import de.btu.openinfra.backend.db.OpenInfraOrderBy;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
@@ -42,13 +45,13 @@ public class PtLocaleResource {
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
-			@QueryParam("orderBy") OpenInfraOrderByEnum orderBy,
+			@QueryParam("orderBy") OpenInfraOrderBy orderBy,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new PtLocaleRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						sortOrder,
@@ -56,6 +59,23 @@ public class PtLocaleResource {
 						offset,
 						size);
 	}
+
+	@POST
+    public Response create(
+            @Context UriInfo uriInfo,
+            @Context HttpServletRequest request,
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            PtLocalePojo pojo) {
+        UUID id = new PtLocaleRbac(
+                projectId,
+                OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
+                        OpenInfraHttpMethod.valueOf(request.getMethod()),
+                        uriInfo,
+                        null,
+                        pojo);
+        return OpenInfraResponseBuilder.postResponse(id);
+    }
 
 	@GET
 	@Path("count")
@@ -68,7 +88,7 @@ public class PtLocaleResource {
 		return new PtLocaleRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).getCount(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo);
 	}
 
@@ -84,10 +104,29 @@ public class PtLocaleResource {
 		return new PtLocaleRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						ptLocaleId);
 	}
+
+	@DELETE
+    @Path("{ptLocaleId}")
+    public Response delete(
+            @Context UriInfo uriInfo,
+            @Context HttpServletRequest request,
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            @PathParam("ptLocaleId") UUID ptLocaleId) {
+        return OpenInfraResponseBuilder.deleteResponse(
+                new PtLocaleRbac(
+                        projectId,
+                        OpenInfraSchemas.valueOf(schema.toUpperCase())).delete(
+                                OpenInfraHttpMethod.valueOf(
+                                        request.getMethod()),
+                                uriInfo,
+                                ptLocaleId),
+                ptLocaleId);
+    }
 
 }

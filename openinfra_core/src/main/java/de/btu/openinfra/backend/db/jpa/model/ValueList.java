@@ -29,7 +29,7 @@ import javax.persistence.Table;
 })
 @NamedNativeQueries({
 	@NamedNativeQuery(name="ValueList.findAllByLocaleAndOrder",
-			query="select * "
+			query="select vl.*, vl.xmin "
 				  + "from value_list as vl "
 			      + "LEFT OUTER JOIN ( "
 			      	+ "select * "

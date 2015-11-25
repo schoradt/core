@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -22,10 +24,19 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
     @NamedQuery(
             name="Credentials.findAll",
             query="SELECT c FROM Credentials c"),
+    @NamedQuery(name="Credentials.count",
+            query="SELECT COUNT(c) FROM Credentials c"),
     @NamedQuery(
             name="Credentials.findByUsernameAndPassword",
             query="SELECT c FROM Credentials c WHERE c.username = :username "
                     + "AND c.password = :password")
+})
+@NamedNativeQueries({
+    @NamedNativeQuery(name="Credentials.findAllByLocaleAndOrder",
+            query="SELECT *, xmin "
+                    + "FROM credentials "
+                    + "ORDER BY %s ",
+                resultClass=Credentials.class)
 })
 public class Credentials extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;

@@ -1,5 +1,7 @@
 package de.btu.openinfra.backend.db.pojos;
 
+import de.btu.openinfra.backend.db.pojos.project.AttributeValuePojo;
+
 public class AttributeTypeToValue {
 	
 	private AttributeTypePojo attributeType;

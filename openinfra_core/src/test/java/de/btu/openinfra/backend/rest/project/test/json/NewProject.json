@@ -1,0 +1,38 @@
+{
+    "uuid":null,
+    "subprojectOf":null,
+    "names":
+    {
+        "uuid":null,
+        "localizedStrings":
+        [
+            {
+                "characterString":"Import-Projekt",
+                "locale":
+                {
+                    "uuid":"c0d76ff3-a711-42af-920d-09132a287015",
+                    "languageCode":"de",
+                    "countryCode":"DE",
+                    "characterCode":"UTF8"
+                }
+            }
+        ]
+    },
+    "descriptions":
+    {
+        "uuid":null,
+        "localizedStrings":
+        [
+            {
+                "characterString":"tollste Beschreibung der Welt",
+                "locale":
+                {
+                    "uuid":"c0d76ff3-a711-42af-920d-09132a287015",
+                    "languageCode":"de",
+                    "countryCode":"DE",
+                    "characterCode":"UTF8"
+                }
+            }
+        ]
+    }
+}

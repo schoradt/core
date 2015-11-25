@@ -13,6 +13,9 @@ import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
 
 import jersey.repackaged.com.google.common.collect.Lists;
+
+import org.eclipse.persistence.exceptions.DatabaseException;
+
 import de.btu.openinfra.backend.OpenInfraProperties;
 import de.btu.openinfra.backend.OpenInfraPropertyKeys;
 import de.btu.openinfra.backend.db.MappingResult;
@@ -31,9 +34,6 @@ import de.btu.openinfra.backend.db.jpa.model.meta.Databases;
 import de.btu.openinfra.backend.db.jpa.model.meta.Ports;
 import de.btu.openinfra.backend.db.jpa.model.meta.Projects;
 import de.btu.openinfra.backend.db.jpa.model.meta.Servers;
-import de.btu.openinfra.backend.db.pojos.LocalizedString;
-import de.btu.openinfra.backend.db.pojos.ProjectPojo;
-import de.btu.openinfra.backend.db.pojos.PtFreeTextPojo;
 import de.btu.openinfra.backend.db.pojos.meta.CredentialsPojo;
 import de.btu.openinfra.backend.db.pojos.meta.DatabaseConnectionPojo;
 import de.btu.openinfra.backend.db.pojos.meta.DatabasesPojo;
@@ -41,6 +41,7 @@ import de.btu.openinfra.backend.db.pojos.meta.PortsPojo;
 import de.btu.openinfra.backend.db.pojos.meta.ProjectsPojo;
 import de.btu.openinfra.backend.db.pojos.meta.SchemasPojo;
 import de.btu.openinfra.backend.db.pojos.meta.ServersPojo;
+import de.btu.openinfra.backend.db.pojos.project.ProjectPojo;
 import de.btu.openinfra.backend.exception.OpenInfraDatabaseException;
 import de.btu.openinfra.backend.exception.OpenInfraEntityException;
 import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
@@ -54,6 +55,11 @@ import de.btu.openinfra.backend.exception.OpenInfraWebException;
  *
  */
 public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
+
+    /*
+     * Contains the default database connection properties.
+     */
+    private Map<String, String> properties;
 
 	/**
 	 * This is the required constructor which calls the super constructor and in
@@ -118,7 +124,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 	public List<ProjectPojo> readMainProjects(Locale locale) {
 		// 1. We need to deliver each main Project from meta data database
 		List<ProjectsPojo> metaProjects = new ProjectsDao(
-				OpenInfraSchemas.META_DATA).read(
+				null, null).read(
 						locale,
 						0,
 						Integer.MAX_VALUE);
@@ -171,6 +177,14 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 	        MetaDataDao mdDao) {
 		if(p != null) {
 			ProjectPojo pojo = new ProjectPojo(p, mdDao);
+
+			pojo.setValueListsCount(
+					new ValueListDao(mdDao.currentProjectId, mdDao.schema)
+					.getCount());
+
+			pojo.setTopicCharacteristicsCount(
+					new TopicCharacteristicDao(mdDao.currentProjectId,
+							mdDao.schema).getCount());
 
 			Project parent = p.getProject();
 
@@ -292,14 +306,28 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 	 * necessary to create a new database schema and write some data into the
 	 * meta data schema.
 	 *
-	 * @param project the project pojo
-	 * @return        the UUID of the new created project
+	 * @param project the      project pojo
+	 * @param createEmpty      Creates an empty project schema when true.
+	 * @param loadInitialData  Loads the initial data from the system schema
+	 *                         when true. This parameter will only have an
+	 *                         effect if createEmpty is false.
+	 * @return                 the UUID of the new created project
 	 * @throws OpenInfraWebException if something went wrong
 	 */
-	public UUID createProject(ProjectPojo pojo) {
+	public UUID createProject(ProjectPojo pojo, boolean createEmpty,
+	        boolean loadInitialData) {
 
 		// the UUID that will be returned
 	    UUID id = null;
+
+	    // if the POJO is empty we will abort here
+	    if (pojo == null) {
+	        throw new OpenInfraEntityException(
+	                OpenInfraExceptionTypes.EMPTY_POJO);
+	    }
+
+	    // set the default database properties
+	    properties = OpenInfraProperties.getConnectionProperties();
 
 	    // generate a UUID for the new project
         UUID newProjectId = UUID.randomUUID();
@@ -323,18 +351,30 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 	    } else {
 	        try {
     	        // create the database schema
-                createSchema(pojo, newProjectId);
+                createSchema();
+
+                if (!createEmpty) {
+                    // insert the static value lists
+                    loadStaticValueLists();
+                }
+
+                // rename the project schema
+                renameSchema(pojo, newProjectId);
 
                 // insert the necessary data into the meta data schema
                 writeMetaData(newProjectId, null);
 
-                // insert the basic project data into the project table in the
-                // new project schema
-                writeBasicProjectData(pojo, newProjectId);
+                if (!createEmpty) {
+                    // insert the basic project data into the project table in
+                    // the new project schema
+                    writeBasicProjectData(pojo, newProjectId);
 
-                // copy the initial data from the system schema into the new
-                // project schema
-                mergeSystemData(newProjectId);
+                    if (loadInitialData) {
+                        // copy the initial data from the system schema into the
+                        // new project schema
+                        mergeSystemData(newProjectId);
+                    }
+                }
 
                 // save the new id for returning it to the client
                 id = newProjectId;
@@ -396,86 +436,72 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 	}
 
     /**
-     * This method creates a ProjectPojo shell that contains informations about
-     * the name, the description and the parent project.
-     *
-     * @param locale the locale the informations should be saved at
-     * @return       the ProjectPojo
-     */
-    public ProjectPojo newSubProject(Locale locale) {
-        // create the return pojo
-        ProjectPojo pojo = new ProjectPojo();
-
-        PtLocaleDao ptl = new PtLocaleDao(currentProjectId, schema);
-        List<LocalizedString> lcs = new LinkedList<LocalizedString>();
-        LocalizedString ls = new LocalizedString();
-
-        // set an empty character string
-        ls.setCharacterString("");
-
-        // set the locale of the character string
-        ls.setLocale(PtLocaleDao.mapToPojoStatically(
-                locale,
-                ptl.read(locale)));
-        lcs.add(ls);
-
-        // add the localized string for the name
-        pojo.setNames(new PtFreeTextPojo(lcs, null));
-
-        // add the localized string for the description
-        pojo.setDescriptions(new PtFreeTextPojo(lcs, null));
-
-        // set the id of the main project to the current project
-        pojo.setSubprojectOf(currentProjectId);
-
-        return pojo;
-    }
-
-    /**
      * This method creates a new project schema with the given project id. The
      * schema creation will be handled by JPA using a special persistence
-     * context. After schema creation a stored procedure is called that will
-     * rename the schema.
+     * context. At this point the locales will written as well.
      *
-     * @param pojo
-     * @param newProjectId
-     * @throws OpenInfraDatabaseException if the creation or renaming of the
-     *         schema failed.
+     * @throws OpenInfraDatabaseException if the creation of the schema failed.
      * @return
      */
-    private void createSchema(ProjectPojo pojo, UUID newProjectId) {
+    private void createSchema() {
         try {
-            // set the default database connection properties
-            Map<String, String> properties =
-                    OpenInfraProperties.getConnectionProperties();
-
             // create the new project schema with trigger and initial project
             // data
             Persistence.generateSchema("openinfra_schema_creation", properties);
-
-            // rename the project schema
-            if (!em.createStoredProcedureQuery(
-                "rename_project_schema", Boolean.class)
-                    .registerStoredProcedureParameter(
-                        "name",
-                        String.class,
-                        ParameterMode.IN)
-                    .registerStoredProcedureParameter(
-                        "uuid",
-                        UUID.class,
-                        ParameterMode.IN)
-                    .setParameter(
-                        "name",
-                        pojo.getNames().getLocalizedStrings().get(0)
-                            .getCharacterString())
-                    .setParameter("uuid", newProjectId)
-                                .execute()) {
-                throw new OpenInfraDatabaseException(
-                        OpenInfraExceptionTypes.RENAME_SCHEMA);
-            }
         } catch (PersistenceException pe) {
             throw new OpenInfraDatabaseException(
                     OpenInfraExceptionTypes.CREATE_SCHEMA);
+        }
+    }
+
+    /**
+     * This method renames a project schema by calling a stored procedure.
+     *
+     * @param pojo         The data POJO of the project.
+     * @param newProjectId The id of the created project.
+     * @throws OpenInfraDatabaseException if the renaming of the schema failed.
+     * @return
+     */
+    private void renameSchema(ProjectPojo pojo, UUID newProjectId) {
+        try {
+            // rename the project schema
+            em.createStoredProcedureQuery("rename_project_schema", Boolean.class)
+                .registerStoredProcedureParameter(
+                        "name",
+                        String.class,
+                        ParameterMode.IN)
+                .registerStoredProcedureParameter(
+                        "uuid",
+                        UUID.class,
+                        ParameterMode.IN)
+                .setParameter(
+                        "name",
+                        pojo.getNames().getLocalizedStrings().get(0)
+                            .getCharacterString())
+                .setParameter("uuid", newProjectId)
+                                .execute();
+        } catch (PersistenceException | IllegalArgumentException |
+                DatabaseException pe) {
+            // something went wrong while renaming the schema
+            throw new OpenInfraDatabaseException(
+                    OpenInfraExceptionTypes.RENAME_SCHEMA);
+        }
+    }
+
+    /**
+     * This method writes the static value lists into the schema.
+     *
+     * @throws OpenInfraDatabaseException if the writing the data failed.
+     * @return
+     */
+    private void loadStaticValueLists() {
+        try {
+            // insert the initial project data
+            Persistence.generateSchema(
+                    "openinfra_static_valuelist_creation", properties);
+        } catch (PersistenceException pe) {
+            throw new OpenInfraDatabaseException(
+                    OpenInfraExceptionTypes.INSERT_INITIAL_DATA);
         }
     }
 
@@ -485,22 +511,33 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
      * @param projectId
      */
     private void deleteSchema(UUID projectId) {
-
         try {
             // delete the project schema
-            if(em.createStoredProcedureQuery(
+            em.createStoredProcedureQuery(
+                "delete_project_schema", Boolean.class)
+                .registerStoredProcedureParameter(
+                        "project_id",
+                        UUID.class,
+                        ParameterMode.IN)
+                .setParameter("project_id", projectId)
+                .execute();
+
+        } catch (IllegalArgumentException | DatabaseException |
+                PersistenceException e ) {
+            try {
+                // if renaming failed we have a schema called "project" in the
+                // database that must be deleted
+                em.createStoredProcedureQuery(
                     "delete_project_schema", Boolean.class)
                     .registerStoredProcedureParameter(
                             "project_id",
                             UUID.class,
                             ParameterMode.IN)
-                    .setParameter("project_id", projectId)
-                    .execute()) {
-            } else {
-                // TODO: throw something if the delete process fails
+                    .setParameter("project_id", null)
+                    .execute();
+            } catch (IllegalArgumentException | DatabaseException ex) {
+                throw new OpenInfraWebException(ex);
             }
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
         }
     }
 
@@ -521,7 +558,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
             UUID dbCId = null;
             // create the DAO for the database connection
             DatabaseConnectionDao dbCDao =
-                    new DatabaseConnectionDao(OpenInfraSchemas.META_DATA);
+                    new DatabaseConnectionDao(null, null);
 
             boolean isSubProject = false;
 
@@ -545,8 +582,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
                 // set all necessary data for the schema
                 metaSchemasPojo.setSchema("project_" + newProjectId);
                 // create the DAO for the schema
-                SchemasDao schemaDao = new SchemasDao(
-                        OpenInfraSchemas.META_DATA);
+                SchemasDao schemaDao = new SchemasDao(null, null);
                 // insert the data
                 // TODO: createOrUpdate can throw an exception!
                 UUID schemaId = schemaDao.createOrUpdate(metaSchemasPojo, null);
@@ -557,15 +593,13 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 
                 // set all necessary data for the database connection
                 dbCPojo.setSchema(schemaDao.read(null, schemaId));
-                // create necessary DAOs for the credentials, ports, databases and
-                // servers
+                // create necessary DAOs for the credentials, ports, databases
+                // and servers
                 CredentialsDao credentialsDao =
-                        new CredentialsDao(OpenInfraSchemas.META_DATA);
-                PortsDao portsDao = new PortsDao(OpenInfraSchemas.META_DATA);
-                DatabasesDao dbDao = new DatabasesDao(
-                        OpenInfraSchemas.META_DATA);
-                ServersDao serversDao = new ServersDao(
-                        OpenInfraSchemas.META_DATA);
+                        new CredentialsDao(null, null);
+                PortsDao portsDao = new PortsDao(null, null);
+                DatabasesDao dbDao = new DatabasesDao(null, null);
+                ServersDao serversDao = new ServersDao(null, null);
 
                 // Use the default values from the properties file for the new
                 // connection.
@@ -574,9 +608,9 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
                 // retrieve the default credentials
                 CredentialsPojo credentialsPojo = new CredentialsPojo();
                 credentialsPojo.setPassword(OpenInfraProperties.getProperty(
-                        OpenInfraPropertyKeys.PASSWORD.toString()));
+                        OpenInfraPropertyKeys.PASSWORD.getKey()));
                 credentialsPojo.setUsername(OpenInfraProperties.getProperty(
-                        OpenInfraPropertyKeys.USER.toString()));
+                        OpenInfraPropertyKeys.USER.getKey()));
                 // check if credentials for the default user and password exists
                 // and save the id into the credentials POJO
                 try {
@@ -590,12 +624,12 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
                                           "username",
                                           OpenInfraProperties.getProperty(
                                                   OpenInfraPropertyKeys.USER
-                                                  .toString()))
+                                                  .getKey()))
                                   .setParameter(
                                           "password",
                                           OpenInfraProperties.getProperty(
                                                   OpenInfraPropertyKeys.PASSWORD
-                                                  .toString()))
+                                                  .getKey()))
                                   .getSingleResult()).getUuid());
                 } catch(NoResultException nre){
                     // their is no entry in the database, create a new one
@@ -607,7 +641,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
                 // retrieve the default port
                 PortsPojo portsPojo = new PortsPojo();
                 portsPojo.setPort(new Integer(OpenInfraProperties.getProperty(
-                        OpenInfraPropertyKeys.PORT.toString())));
+                        OpenInfraPropertyKeys.PORT.getKey())));
                 // check if ports for the default port exists and save the id
                 // into the port POJO
                 try {
@@ -624,7 +658,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
                                                   .getProperty(
                                                           OpenInfraPropertyKeys
                                                           .PORT
-                                                          .toString())))
+                                                          .getKey())))
                                   .getSingleResult()).getUuid());
                 } catch (NoResultException nre) {
                     // their is no entry in the database, create a new one
@@ -635,7 +669,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
                 // retrieve the default database
                 DatabasesPojo databasesPojo = new DatabasesPojo();
                 databasesPojo.setDatabase(OpenInfraProperties.getProperty(
-                        OpenInfraPropertyKeys.DB_NAME.toString()));
+                        OpenInfraPropertyKeys.DB_NAME.getKey()));
                 // check if databases for the default database exists and save
                 // the id into the database POJO
                 try {
@@ -649,7 +683,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
                                           "database",
                                           OpenInfraProperties.getProperty(
                                                   OpenInfraPropertyKeys.DB_NAME
-                                                  .toString()))
+                                                  .getKey()))
                                   .getSingleResult()).getUuid());
                 } catch (NoResultException nre) {
                     // their is no entry in the database, create a new one
@@ -660,7 +694,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
                 // retrieve the default server
                 ServersPojo serversPojo = new ServersPojo();
                 serversPojo.setServer(OpenInfraProperties.getProperty(
-                        OpenInfraPropertyKeys.SERVER.toString()));
+                        OpenInfraPropertyKeys.SERVER.getKey()));
                 // check if servers for the default server exists and save the
                 // id into the server POJO
                 try {
@@ -674,7 +708,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
                                           "server",
                                           OpenInfraProperties.getProperty(
                                                   OpenInfraPropertyKeys.SERVER
-                                                  .toString()))
+                                                  .getKey()))
                                   .getSingleResult()).getUuid());
                 } catch (NoResultException nre) {
                     // their is no entry in the database, create a new one
@@ -706,7 +740,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
             // set the database connection information
             metaProjectsPojo.setDatabaseConnection(dbCDao.read(null, dbCId));
             // insert the informations into the meta_data schema
-            new ProjectsDao(OpenInfraSchemas.META_DATA)
+            new ProjectsDao(null, null)
                 .createOrUpdate(metaProjectsPojo, null);
 
         } catch (RuntimeException re) {
@@ -739,7 +773,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 
             try {
                 Projects subP = null;
-                ProjectsDao pDao = new ProjectsDao(OpenInfraSchemas.META_DATA);
+                ProjectsDao pDao = new ProjectsDao(null, null);
                 // if we want to delete a main project we must also delete the
                 // subprojects from the meta data
                 if (!pMeta.getIsSubproject()) {
@@ -781,33 +815,33 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 
             try {
                 // delete the entry from database connection
-                new DatabaseConnectionDao(OpenInfraSchemas.META_DATA).delete(
+                new DatabaseConnectionDao(null, null).delete(
                         dbConnId);
             } catch (RuntimeException ex) { /* do nothing */ }
 
             try {
                 // delete the entry from server if possible
-                new ServersDao(OpenInfraSchemas.META_DATA).delete(serverId);
+                new ServersDao(null, null).delete(serverId);
             } catch (RuntimeException ex) { /* do nothing */ }
 
             try {
                 // delete the entry from port if possible
-                new PortsDao(OpenInfraSchemas.META_DATA).delete(portId);
+                new PortsDao(null, null).delete(portId);
             } catch (RuntimeException ex) { /* do nothing */ }
 
             try {
                 // delete the entry from database if possible
-                new DatabasesDao(OpenInfraSchemas.META_DATA).delete(databaseId);
+                new DatabasesDao(null, null).delete(databaseId);
             } catch (RuntimeException ex) { /* do nothing */ }
 
             try {
                 // delete the entry from schema if possible
-                new SchemasDao(OpenInfraSchemas.META_DATA).delete(schemaId);
+                new SchemasDao(null, null).delete(schemaId);
             } catch (RuntimeException ex) { /* do nothing */ }
 
             try {
                 // delete the entry from credentials if possible
-                new CredentialsDao(OpenInfraSchemas.META_DATA).delete(
+                new CredentialsDao(null, null).delete(
                     credentialsId);
             } catch (RuntimeException ex) { /* do nothing */ }
 

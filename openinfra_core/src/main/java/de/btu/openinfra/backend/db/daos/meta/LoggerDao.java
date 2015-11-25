@@ -1,6 +1,7 @@
 package de.btu.openinfra.backend.db.daos.meta;
 
 import java.util.Locale;
+import java.util.UUID;
 
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
@@ -23,11 +24,11 @@ public class LoggerDao
     /**
      * This is the required constructor which calls the super constructor and in
      * turn creates the corresponding entity manager.
-     *
+     * @param currentProjectId The identifier of the current project.
      * @param schema           the required schema
      */
-    public LoggerDao(OpenInfraSchemas schema) {
-        super(null, schema, Logger.class);
+    public LoggerDao(UUID currentProjectId, OpenInfraSchemas schema) {
+        super(null, OpenInfraSchemas.META_DATA, Logger.class);
     }
 
     @Override
@@ -85,19 +86,4 @@ public class LoggerDao
         return resultLogger;
     }
 
-    /**
-     * Creates an empty logger pojo.
-     * @return an empty logger pojo
-     */
-    public LoggerPojo newLogger() {
-        return newPojoStatically();
-    }
-
-    /**
-     * This method implements the method newLogger in a static way.
-     * @return an empty level pojo
-     */
-    public static LoggerPojo newPojoStatically() {
-        return new LoggerPojo();
-    }
 }

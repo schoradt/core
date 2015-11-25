@@ -72,14 +72,11 @@ public class TopicCharacteristicDao
 		// 3. Map the model objects to POJOs
 		Map<UUID, TopicCharacteristicPojo> tcp =
 				new HashMap<UUID, TopicCharacteristicPojo>();
-//		MetaDataDao mdDao = new MetaDataDao(currentProjectId, schema);
+		MetaDataDao mdDao = new MetaDataDao(currentProjectId, schema);
 		for(TopicCharacteristic tc : tcs) {
 		    UUID id = tc.getId();
 		    if (!tcp.containsKey(id)) {
-		        tcp.put(id, TopicCharacteristicDao.mapToPojoStatically(
-	                    locale,
-	                    tc));//,
-//	                    mdDao));
+		        tcp.put(id, mapToPojoStatically(locale, tc, mdDao));
 		    }
 
 		} // end for
@@ -90,8 +87,8 @@ public class TopicCharacteristicDao
 	public TopicCharacteristicPojo mapToPojo(
 			Locale locale,
 			TopicCharacteristic tc) {
-		return mapToPojoStatically(locale, tc);//,
-//		        new MetaDataDao(currentProjectId, schema));
+		return mapToPojoStatically(locale, tc,
+		        new MetaDataDao(currentProjectId, schema));
 	}
 
 	/**
@@ -104,13 +101,20 @@ public class TopicCharacteristicDao
 	 */
 	public static TopicCharacteristicPojo mapToPojoStatically(
 			Locale locale,
-			TopicCharacteristic tc) {//,
-//			MetaDataDao mdDao) {
+			TopicCharacteristic tc,
+			MetaDataDao mdDao) {
 		if (tc != null) {
 		    TopicCharacteristicPojo pojo =
-		            new TopicCharacteristicPojo(tc);//, mdDao);
+		            new TopicCharacteristicPojo(tc, mdDao);
 
-		    pojo.setMetaData(MetaDataDao.mapPojoStatically(tc.getMetaData()));
+		    // TODO this will probably disable the count functionality but will
+		    // avoid a NullPointerException. This must be reworked!
+		    if (mdDao != null) {
+    		    pojo.setTopicInstancesCount(
+    		    		new TopicInstanceDao(
+    		    				mdDao.currentProjectId, mdDao.schema)
+    		    		.getCount(tc.getId()));
+		    }
 
             // set the project if exists
             try {
@@ -128,7 +132,6 @@ public class TopicCharacteristicDao
 		} else {
 		    return null;
 		}
-
 	}
 
 	@Override
@@ -170,8 +173,6 @@ public class TopicCharacteristicDao
             throw new OpenInfraEntityException(
                     OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
         }
-
-        tc.setMetaData(MetaDataDao.mapToModelStatically(pojo.getMetaData(), null));
 
         // return the model as mapping result
         return new MappingResult<TopicCharacteristic>(tc.getId(), tc);

@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
-import org.json.simple.JSONObject;
-
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
@@ -55,6 +53,25 @@ public abstract class OpenInfraValueValueDao<
 		super(currentProjectId, schema, modelClass, valueClass);
 
 		this.valueClass2 = valueClass2;
+	}
+
+	/**
+	 * This method deletes an association entity from the database. Previously
+     * it checks if meta data exists for this entity and delete it as well.
+     *
+	 * @param uuid1 first uuid of the association
+	 * @param uuid2 second uuid of the association
+	 * @return the uuid of the association when the association was deleted,
+	 * otherwise null
+	 */
+	public UUID delete(UUID uuid1, UUID uuid2) {
+	    UUID deletedUuid = null;
+	    List<TypePojo> readResult = read(null, uuid1, uuid2, 0, 1);
+	    if(readResult != null && readResult.size() == 1) {
+	        deletedUuid = (delete(readResult.get(0).getUuid()) == true) ?
+	                readResult.get(0).getUuid() : null;
+	    }
+	    return deletedUuid;
 	}
 
 	/**
@@ -127,7 +144,7 @@ public abstract class OpenInfraValueValueDao<
      */
     public UUID createOrUpdate(TypePojo pojo, UUID firstAssociationId,
             UUID firstAssociationIdFromPojo, UUID secondAssociationId,
-            UUID secondAssociationIdFromPojo, JSONObject metaData)
+            UUID secondAssociationIdFromPojo, String metaData)
             throws RuntimeException {
 
         // check if the value id of the URI map to the pojo uuid

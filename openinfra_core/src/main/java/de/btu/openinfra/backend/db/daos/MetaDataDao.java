@@ -5,6 +5,10 @@ import java.util.UUID;
 
 import javax.persistence.NoResultException;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.MetaData;
@@ -71,7 +75,7 @@ public class MetaDataDao extends OpenInfraDao<MetaDataPojo, MetaData> {
             pojo.setObjectId(md.getObject().getId());
             pojo.setTableName(md.getTableName());
             pojo.setPkColumn(md.getPkColumn());
-            pojo.setData(md.getData());
+            pojo.setData(md.getData().toJSONString());
             return pojo;
         } else {
             return null;
@@ -112,7 +116,12 @@ public class MetaDataDao extends OpenInfraDao<MetaDataPojo, MetaData> {
             resultM.getObject().setId(pojo.getObjectId());
             resultM.getObject().setMetaData(resultM);
             // set the data
-            resultM.setData(pojo.getData());
+            try {
+				resultM.setData(
+						(JSONObject)new JSONParser().parse(pojo.getData()));
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
             // set the primary key column
             resultM.setPkColumn(pojo.getPkColumn());
             // set the table name
@@ -122,14 +131,6 @@ public class MetaDataDao extends OpenInfraDao<MetaDataPojo, MetaData> {
                     OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
         }
         return resultM;
-    }
-
-    /**
-     * Creates an empty MetaDataPojo.
-     * @return an empty MetaDataPojo
-     */
-    public MetaDataPojo newMetaData() {
-       return new MetaDataPojo();
     }
 
 }

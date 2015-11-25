@@ -18,7 +18,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import de.btu.openinfra.backend.db.OpenInfraOrderBy;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.MultiplicityPojo;
 import de.btu.openinfra.backend.db.rbac.MultiplicityRbac;
@@ -45,6 +47,8 @@ public class MultiplicityResource {
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
+			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
+            @QueryParam("orderBy") OpenInfraOrderBy orderBy,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new MultiplicityRbac(
@@ -53,6 +57,8 @@ public class MultiplicityResource {
 						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
+						sortOrder,
+						orderBy,
 						offset,
 						size);
 	}
@@ -89,16 +95,6 @@ public class MultiplicityResource {
 						PtLocaleDao.forLanguageTag(language),
 						multiplicityId);
 	}
-
-	@GET
-    @Path("/new")
-    public MultiplicityPojo newMultiplicity(
-    		@Context UriInfo uriInfo,
-    		@Context HttpServletRequest request,
-            @PathParam("projectId") UUID projectId,
-            @PathParam("schema") String schema) {
-	    return new MultiplicityPojo();
-    }
 
 	@POST
 	public Response create(
@@ -145,10 +141,11 @@ public class MultiplicityResource {
 			@PathParam("schema") String schema,
 			@PathParam("multiplicityId") UUID multiplicityId,
 			MultiplicityPojo pojo) {
-		return OpenInfraResponseBuilder.postResponse(
+		return OpenInfraResponseBuilder.putResponse(
 				new MultiplicityRbac(
 						projectId,
-						OpenInfraSchemas.PROJECTS).createOrUpdate(
+						OpenInfraSchemas.valueOf(schema.toUpperCase())
+						).createOrUpdate(
 								OpenInfraHttpMethod.valueOf(request.getMethod()),
 								uriInfo,
 								pojo,

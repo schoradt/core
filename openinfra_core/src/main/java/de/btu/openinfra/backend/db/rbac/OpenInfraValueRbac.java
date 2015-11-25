@@ -7,8 +7,6 @@ import java.util.UUID;
 
 import javax.ws.rs.core.UriInfo;
 
-import org.json.simple.JSONObject;
-
 import de.btu.openinfra.backend.db.OpenInfraOrderBy;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.OpenInfraSortOrder;
@@ -63,8 +61,8 @@ public abstract class OpenInfraValueRbac<
 					constructorTypesValue).newInstance(
 							currentProjectId,
 							schema).read(locale, valueId, offset, size);
-		} catch (InstantiationException   | IllegalAccessException | 
-				 IllegalArgumentException | InvocationTargetException | 
+		} catch (InstantiationException   | IllegalAccessException |
+				 IllegalArgumentException | InvocationTargetException |
 				 NoSuchMethodException    | SecurityException ex) {
 			throw new OpenInfraWebException(ex);
 		}
@@ -85,7 +83,7 @@ public abstract class OpenInfraValueRbac<
             TypePojo pojo,
             UUID firstAssociationId,
             UUID firstAssociationIdFromPojo,
-            JSONObject json)
+            String json)
             throws RuntimeException {
         checkPermission(httpMethod, uriInfo);
         try {
@@ -96,8 +94,8 @@ public abstract class OpenInfraValueRbac<
                             firstAssociationId,
                             firstAssociationIdFromPojo,
                             json);
-		} catch (InstantiationException   | IllegalAccessException | 
-				 IllegalArgumentException | InvocationTargetException | 
+		} catch (InstantiationException   | IllegalAccessException |
+				 IllegalArgumentException | InvocationTargetException |
 				 NoSuchMethodException    | SecurityException ex) {
 			throw new OpenInfraWebException(ex);
 		}
@@ -124,8 +122,8 @@ public abstract class OpenInfraValueRbac<
 									column,
 									offset,
 									size);
-		} catch (InstantiationException   | IllegalAccessException | 
-				 IllegalArgumentException | InvocationTargetException | 
+		} catch (InstantiationException   | IllegalAccessException |
+				 IllegalArgumentException | InvocationTargetException |
 				 NoSuchMethodException    | SecurityException ex) {
 			throw new OpenInfraWebException(ex);
 		}
@@ -140,8 +138,8 @@ public abstract class OpenInfraValueRbac<
 					constructorTypesValue).newInstance(
 							currentProjectId,
 							schema).getCount(valueId);
-		} catch (InstantiationException   | IllegalAccessException | 
-				 IllegalArgumentException | InvocationTargetException | 
+		} catch (InstantiationException   | IllegalAccessException |
+				 IllegalArgumentException | InvocationTargetException |
 				 NoSuchMethodException    | SecurityException ex) {
 			throw new OpenInfraWebException(ex);
 		}

@@ -18,8 +18,8 @@ import de.btu.openinfra.backend.OpenInfraProperties;
 import de.btu.openinfra.backend.OpenInfraPropertyKeys;
 import de.btu.openinfra.backend.OpenInfraPropertyValues;
 import de.btu.openinfra.backend.db.daos.ProjectDao;
-import de.btu.openinfra.backend.db.pojos.ProjectPojo;
 import de.btu.openinfra.backend.db.pojos.meta.ProjectsPojo;
+import de.btu.openinfra.backend.db.pojos.project.ProjectPojo;
 
 /**
  * This class is a container to cache objects from the class
@@ -87,6 +87,26 @@ public class EntityManagerFactoryCache {
         		cache.get(new CacheTuple(
         				OpenInfraApplication.PERSISTENCE_CONTEXT,
         				createProperties(null, OpenInfraSchemas.RBAC)));
+        	} catch(ExecutionException ee) {
+        		ee.printStackTrace();
+        	}
+        }
+        // Add File entity manager factory
+        if(cacheSize - cache.size() > 0) {
+        	try {
+        		cache.get(new CacheTuple(
+        				OpenInfraApplication.PERSISTENCE_CONTEXT,
+        				createProperties(null, OpenInfraSchemas.FILE)));
+        	} catch(ExecutionException ee) {
+        		ee.printStackTrace();
+        	}
+        }
+        // Add Webapp entity manager factory
+        if(cacheSize - cache.size() > 0) {
+        	try {
+        		cache.get(new CacheTuple(
+        				OpenInfraApplication.PERSISTENCE_CONTEXT,
+        				createProperties(null, OpenInfraSchemas.WEBAPP)));
         	} catch(ExecutionException ee) {
         		ee.printStackTrace();
         	}
@@ -172,7 +192,7 @@ public class EntityManagerFactoryCache {
             if(p == null) {
                 break;
             }
-            
+
             // overwrite the properties from the properties file with content
             // from the database
             properties.put(
@@ -188,14 +208,24 @@ public class EntityManagerFactoryCache {
                         p.getDatabaseConnection().getServer().getServer(),
                         p.getDatabaseConnection().getPort().getPort(),
                         p.getDatabaseConnection().getDatabase().getDatabase()));
-                        
+
             currentSchema +=
                     p.getDatabaseConnection().getSchema().getSchema() + "," +
                     OpenInfraPropertyValues.SEARCH_PATH.getValue();
             break;
         case RBAC:
-        	currentSchema += OpenInfraPropertyValues.RBAC_SEARCH_PATH.getValue() 
+        	currentSchema += OpenInfraPropertyValues.RBAC_SEARCH_PATH.getValue()
         	+ "," + OpenInfraPropertyValues.SEARCH_PATH.getValue();
+        	break;
+        case FILE:
+        	currentSchema +=
+        		OpenInfraPropertyValues.FILE_SEARCH_PATH.getValue() +
+        		"," + OpenInfraPropertyValues.SEARCH_PATH.getValue();
+        	break;
+        case WEBAPP:
+        	currentSchema +=
+    			OpenInfraPropertyValues.WEBAPP_SEARCH_PATH.getValue() +
+    				"," + OpenInfraPropertyValues.SEARCH_PATH.getValue();
         	break;
         case SYSTEM:
             // fall through

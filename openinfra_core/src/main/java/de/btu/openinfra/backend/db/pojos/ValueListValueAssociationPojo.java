@@ -1,14 +1,16 @@
 package de.btu.openinfra.backend.db.pojos;
 
+import java.util.UUID;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 import de.btu.openinfra.backend.db.daos.MetaDataDao;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
-import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 
 @XmlRootElement
 public class ValueListValueAssociationPojo extends OpenInfraMetaDataPojo {
 
+    private UUID associationValueListValueId;
     private ValueListValuePojo associatedValueListValue;
     private ValueListValuePojo relationship;
 
@@ -19,6 +21,14 @@ public class ValueListValueAssociationPojo extends OpenInfraMetaDataPojo {
     /* Constructor that will set the id, trid and meta data automatically */
     public ValueListValueAssociationPojo(OpenInfraModelObject modelObject, MetaDataDao mdDao) {
         super(modelObject, mdDao);
+    }
+
+    public UUID getAssociationValueListValueId() {
+        return associationValueListValueId;
+    }
+
+    public void setAssociationValueListValueId(UUID associationValueListValueId) {
+        this.associationValueListValueId = associationValueListValueId;
     }
 
     public ValueListValuePojo getAssociatedValueListValue() {
@@ -35,14 +45,6 @@ public class ValueListValueAssociationPojo extends OpenInfraMetaDataPojo {
 
     public void setRelationship(ValueListValuePojo relationship) {
         this.relationship = relationship;
-    }
-
-    @Override
-    protected void makePrimerHelper(PtLocale locale) {
-        associatedValueListValue = new ValueListValuePojo();
-        associatedValueListValue.makePrimer(locale);
-        relationship = new ValueListValuePojo();
-        relationship.makePrimer(locale);
     }
 
 }

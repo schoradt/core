@@ -18,12 +18,12 @@ import de.btu.openinfra.backend.db.jpa.model.AttributeValueValue;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
 import de.btu.openinfra.backend.db.pojos.AttributeTypePojo;
 import de.btu.openinfra.backend.db.pojos.AttributeValueDomainPojo;
-import de.btu.openinfra.backend.db.pojos.AttributeValueGeomPojo;
 import de.btu.openinfra.backend.db.pojos.AttributeValueGeomzPojo;
-import de.btu.openinfra.backend.db.pojos.AttributeValuePojo;
 import de.btu.openinfra.backend.db.pojos.AttributeValueValuePojo;
 import de.btu.openinfra.backend.db.pojos.LocalizedString;
 import de.btu.openinfra.backend.db.pojos.PtFreeTextPojo;
+import de.btu.openinfra.backend.db.pojos.project.AttributeValueGeomPojo;
+import de.btu.openinfra.backend.db.pojos.project.AttributeValuePojo;
 
 /**
  * This class represents the AttributeValue and is used to access the underlying
@@ -403,12 +403,13 @@ public class AttributeValueDao extends
 
             // execute createOrUpdate if the preconditions match
             if (checked) {
-                id = new AttributeValueDomainDao(
-                        projectId,
-                        OpenInfraSchemas.PROJECTS).createOrUpdate(
-                                pojo.getAttributeValueDomain(),
-                                attributeValueId,
-                                pojo.getAttributeValueDomain().getMetaData());
+					id = new AttributeValueDomainDao(
+					        projectId,
+					        OpenInfraSchemas.PROJECTS).createOrUpdate(
+					                pojo.getAttributeValueDomain(),
+					                attributeValueId,
+					                		pojo.getAttributeValueDomain()
+					                		.getMetaData());
             } else {
                 // return null if the ids doesn't match
                 return null;
@@ -435,12 +436,13 @@ public class AttributeValueDao extends
 
             // execute createOrUpdate if the preconditions match
             if (checked) {
-                id = new AttributeValueGeomDao(
-                        projectId,
-                        OpenInfraSchemas.PROJECTS).createOrUpdate(
-                                pojo.getAttributeValueGeom(),
-                                attributeValueId,
-                                pojo.getAttributeValueGeom().getMetaData());
+					id = new AttributeValueGeomDao(
+					        projectId,
+					        OpenInfraSchemas.PROJECTS).createOrUpdate(
+					                pojo.getAttributeValueGeom(),
+					                attributeValueId,
+					                		pojo.getAttributeValueGeom()
+					                		.getMetaData());
             }
             break;
         case ATTRIBUTE_VALUE_GEOMZ:
@@ -464,12 +466,13 @@ public class AttributeValueDao extends
 
             // execute createOrUpdate if the preconditions match
             if (checked) {
-                id = new AttributeValueGeomzDao(
-                        projectId,
-                        OpenInfraSchemas.PROJECTS).createOrUpdate(
-                                pojo.getAttributeValueGeomz(),
-                                attributeValueId,
-                                pojo.getAttributeValueGeomz().getMetaData());
+					id = new AttributeValueGeomzDao(
+					        projectId,
+					        OpenInfraSchemas.PROJECTS).createOrUpdate(
+					                pojo.getAttributeValueGeomz(),
+					                attributeValueId,
+					                		pojo.getAttributeValueGeomz()
+					                		.getMetaData());
             }
             break;
         case ATTRIBUTE_VALUE_VALUE:
@@ -488,12 +491,13 @@ public class AttributeValueDao extends
 
             // execute createOrUpdate if the preconditions match
             if (checked) {
-                id = new AttributeValueValueDao(
-                        projectId,
-                        OpenInfraSchemas.PROJECTS).createOrUpdate(
-                                pojo.getAttributeValueValue(),
-                                attributeValueId,
-                                pojo.getAttributeValueValue().getMetaData());
+					id = new AttributeValueValueDao(
+					        projectId,
+					        OpenInfraSchemas.PROJECTS).createOrUpdate(
+					                pojo.getAttributeValueValue(),
+					                attributeValueId,
+					                		pojo.getAttributeValueValue()
+					                		.getMetaData());
             } else {
                 // return null if the ids doesn't match
                 return null;

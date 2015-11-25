@@ -1,7 +1,5 @@
 package de.btu.openinfra.plugins.solr.rest.view;
 
-import java.util.List;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -11,7 +9,6 @@ import javax.ws.rs.core.MediaType;
 import org.glassfish.jersey.server.mvc.Template;
 
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
-import de.btu.openinfra.plugins.solr.Result;
 
 
 
@@ -30,12 +27,21 @@ import de.btu.openinfra.plugins.solr.Result;
 public class SearchResource {
 
     @GET
-    @Template(name="/views/SearchResult.jsp")
-    public List<Result> get(
-            @QueryParam("query") String query,
-            @QueryParam("language") String locale) {
-        return new de.btu.openinfra.plugins.solr.rest.SearchResource()
-            .get(query, locale);
+    @Path("/result")
+    @Template(name="/views/list/SearchResult.jsp")
+    public boolean getView(
+            @QueryParam("language") String locale,
+            @QueryParam("query") String query) {
+        return true;
+    }
+
+    @GET
+    @Path("/extended")
+    @Template(name="/views/ExtendedSearch.jsp")
+    public boolean getExtSearchView(
+            @QueryParam("language") String locale,
+            @QueryParam("query") String query) {
+        return true;
     }
 }
 

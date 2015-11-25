@@ -31,6 +31,7 @@ public class OpenInfraResponseBuilder {
 	public static final String REST_URI_RBAC = "/v1/rbac";
 	public static final String REST_URI_SYSTEM = "/v1/system";
 	public static final String REST_URI_SEARCH = "/v1/search";
+	public static final String REST_URI_ORDERBY = "v1/orderby";
 
 	/**
 	 * This variable defines the REST URI for primer requests. It contains the
@@ -38,7 +39,7 @@ public class OpenInfraResponseBuilder {
 	 * not supported. For the schema projects use REST_URI_PROJECTS instead.
 	 */
 	public static final String REST_URI_PRIMER =
-            "/v1/{schema:(system|rbac|metadata)}";
+            "/v1/{schema:(system|rbac|metadata|files)}";
 
 
 	/**
@@ -114,6 +115,22 @@ public class OpenInfraResponseBuilder {
 		} else {
 			return Response.status(Response.Status.NOT_FOUND).build();
 		} // end if else
+	}
+
+	/**
+	 * This method builds a response for delete requests.
+	 *
+	 * @param id the id of the deleted object
+	 * @return a specific and pre-build response
+	 */
+	public static Response deleteResponse(UUID id) {
+	    if(id != null) {
+	        return Response.ok().entity(
+	                new OpenInfraResultMessage("Entity deleted", id)).build();
+	    }
+	    else {
+	        return Response.status(Response.Status.NOT_FOUND).build();
+	    }
 	}
 
 	/**

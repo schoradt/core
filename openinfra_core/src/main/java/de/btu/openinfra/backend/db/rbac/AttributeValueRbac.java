@@ -11,7 +11,7 @@ import de.btu.openinfra.backend.db.daos.AttributeValueGeomType;
 import de.btu.openinfra.backend.db.jpa.model.AttributeType;
 import de.btu.openinfra.backend.db.jpa.model.AttributeValue;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
-import de.btu.openinfra.backend.db.pojos.AttributeValuePojo;
+import de.btu.openinfra.backend.db.pojos.project.AttributeValuePojo;
 
 public class AttributeValueRbac extends
 	OpenInfraValueValueRbac<AttributeValuePojo, AttributeValue, TopicInstance,

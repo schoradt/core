@@ -1,6 +1,7 @@
 package de.btu.openinfra.backend.db.daos.meta;
 
 import java.util.Locale;
+import java.util.UUID;
 
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
@@ -23,11 +24,11 @@ public class LevelDao
     /**
      * This is the required constructor which calls the super constructor and in
      * turn creates the corresponding entity manager.
-     *
+     * @param currentProjectId The identifier of the current project.
      * @param schema           the required schema
      */
-    public LevelDao(OpenInfraSchemas schema) {
-        super(null, schema, Level.class);
+    public LevelDao(UUID currentProjectId, OpenInfraSchemas schema) {
+        super(null, OpenInfraSchemas.META_DATA, Level.class);
     }
 
     @Override
@@ -83,22 +84,6 @@ public class LevelDao
                     OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
         }
         return resultLevel;
-    }
-
-    /**
-     * Creates an empty level pojo.
-     * @return an empty level pojo
-     */
-    public LevelPojo newLevel() {
-        return newPojoStatically();
-    }
-
-    /**
-     * This method implements the method newLevel in a static way.
-     * @return an empty level pojo
-     */
-    public static LevelPojo newPojoStatically() {
-        return new LevelPojo();
     }
 
 }

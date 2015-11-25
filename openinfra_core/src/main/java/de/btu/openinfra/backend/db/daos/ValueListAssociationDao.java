@@ -71,7 +71,7 @@ public class ValueListAssociationDao
 		try {
 			ValueListAssociationPojo pojo =
 					new ValueListAssociationPojo(vlxvl, mdDao);
-
+			pojo.setAssociationValueListId(vlxvl.getValueList1Bean().getId());
 			pojo.setRelationship(ValueListValueDao.mapToPojoStatically(locale,
 					vlxvl.getValueListValue(), null));
 			pojo.setAssociatedValueList(ValueListDao.mapToPojoStatically(locale,

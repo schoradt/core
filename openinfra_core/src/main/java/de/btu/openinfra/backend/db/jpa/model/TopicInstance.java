@@ -75,7 +75,8 @@ import javax.persistence.Table;
                             + "ON lcs.pt_free_text_id = avv.value "
                     + "WHERE "
                         + "at.id = cast(? AS uuid) AND "
-                        + "lcs.pt_locale_id = cast(? AS uuid)) AS b "
+                        + "(lcs.pt_locale_id = cast(? AS uuid) OR "
+                        + "lcs.pt_locale_id = cast(? AS uuid))) AS b "
                         + "ON b.id = ti1.id "
                 + "WHERE ti1.topic_characteristic_id = cast(? AS uuid) "
                 + "ORDER BY b.free_text ",
@@ -101,7 +102,8 @@ import javax.persistence.Table;
                             + "ON lcs.pt_free_text_id = vlv.name "
                     + "WHERE "
                         + "at.id = cast(? AS uuid) AND "
-                        + "lcs.pt_locale_id = cast(? AS uuid)) AS b "
+                        + "(lcs.pt_locale_id = cast(? AS uuid) OR "
+                        + "lcs.pt_locale_id = cast(? AS uuid))) AS b "
                         + "ON b.id = ti1.id "
                 + "WHERE ti1.topic_characteristic_id = cast(? AS uuid) "
                 + "ORDER BY b.free_text ",

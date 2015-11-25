@@ -19,10 +19,15 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.daos.OrderByDao;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
-import de.btu.openinfra.backend.db.pojos.ProjectPojo;
+import de.btu.openinfra.backend.db.pojos.OrderByNamesPojo;
+import de.btu.openinfra.backend.db.pojos.OrderByPojo;
+import de.btu.openinfra.backend.db.pojos.file.FilePojo;
+import de.btu.openinfra.backend.db.pojos.project.ProjectPojo;
 import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
 import de.btu.openinfra.backend.db.rbac.ProjectRbac;
+import de.btu.openinfra.backend.db.rbac.file.FileRbac;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
 /**
@@ -145,22 +150,6 @@ public class ProjectResource {
 						uriInfo);
 	}
 
-	@GET
-	@Path("{projectId}/new")
-    public ProjectPojo newSubProject(
-    		@Context UriInfo uriInfo,
-    		@Context HttpServletRequest request,
-            @QueryParam("language") String language,
-            @PathParam("projectId") UUID projectId) {
-        return new ProjectRbac(
-                        projectId,
-                        OpenInfraSchemas.PROJECTS)
-                    .newSubProject(
-                    		OpenInfraHttpMethod.valueOf(request.getMethod()),
-    						uriInfo,
-    						PtLocaleDao.forLanguageTag(language));
-    }
-
 	/**
 	 * This method creates a new project.
 	 *
@@ -170,21 +159,40 @@ public class ProjectResource {
 	 * curl.exe -X "POST" -H "Content-Type: application/xml"
 	 * -d &#64;path/to/file http://localhost:8080/openinfra_backend/projects
 	 *
+	 * Use the following command to crate an empty schema which is required by
+	 * the XML import/export interface:
+	 *
+	 * curl -i -b cookie.txt -X POST -H "Content-Type: application/json" -d
+	 * @NewProject.json "http://localhost:8080/openinfra_core/rest/v1/projects?
+	 * createEmpty=true&loadIntitialData=false"
+	 *
 	 * @param project a project object (JSON or XML representations are
 	 *                converted into real objects via the JAX-RS stack)
+	 * @param createEmpty The application creates an empty new schema when true.
+	 *                    This is necessary by the external XML interface
+	 *                    (XML import/export interface by HTW Dresden)
+	 * @param loadInitialData This parameter prerequisites 'createEmpty=true'.
+	 *                        There is no initial data stored in the new data
+	 *                        base when false. This is required by the
+	 *                        XML import/export interface.
 	 * @return        an UUID of the created project
 	 */
 	@POST
 	public Response createProject(
 			@Context UriInfo uriInfo,
 			@Context HttpServletRequest request,
+			@QueryParam("createEmpty") boolean createEmpty,
+			@QueryParam("loadInitialData") boolean loadInitialData,
 			ProjectPojo project) {
 	    // create the project
 		UUID id = new ProjectRbac(
 		        null, OpenInfraSchemas.PROJECTS).createProject(
 		                project,
+		                createEmpty,
+		                loadInitialData,
 		                OpenInfraHttpMethod.valueOf(
 		                        request.getMethod()), uriInfo);
+
 		// TODO add informations to the meta data schema, this is necessary for
 		//      every REST end point this project should use
 		return OpenInfraResponseBuilder.postResponse(id);
@@ -265,4 +273,29 @@ public class ProjectResource {
 						PtLocaleDao.forLanguageTag(language));
 	}
 
+    @GET
+	@Path("{projectId}/files")
+	public List<FilePojo> readFilesByProject(
+			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
+			@PathParam("projectId") UUID projectId) {
+		return new FileRbac().readByProject(
+				OpenInfraHttpMethod.valueOf(request.getMethod()),
+				uriInfo, projectId);
+	}
+
+	@GET
+    @Path("/orderby")
+    public OrderByPojo getP(
+            @PathParam("schema") OpenInfraSchemas schema,
+            @QueryParam("class") String classObject) {
+        return OrderByDao.read(OpenInfraSchemas.PROJECTS, classObject);
+    }
+
+    @GET
+    @Path("/orderby/names")
+    public OrderByNamesPojo getNamesP(
+            @PathParam("schema") OpenInfraSchemas schema) {
+        return OrderByDao.getNames(OpenInfraSchemas.PROJECTS);
+    }
 }

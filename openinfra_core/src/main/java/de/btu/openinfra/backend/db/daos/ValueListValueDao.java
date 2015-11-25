@@ -1,7 +1,5 @@
 package de.btu.openinfra.backend.db.daos;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -9,8 +7,6 @@ import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.ValueList;
 import de.btu.openinfra.backend.db.jpa.model.ValueListValue;
-import de.btu.openinfra.backend.db.pojos.LocalizedString;
-import de.btu.openinfra.backend.db.pojos.PtFreeTextPojo;
 import de.btu.openinfra.backend.db.pojos.ValueListValuePojo;
 import de.btu.openinfra.backend.exception.OpenInfraEntityException;
 import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
@@ -116,48 +112,5 @@ public class ValueListValueDao
         // return the model as mapping result
         return new MappingResult<ValueListValue>(vlv.getId(), vlv);
 	}
-
-	/**
-     * This method creates a ValueListValuePojo shell that contains some
-     * informations about the name, the description and the locale, the
-     * visibility and the value list the value belongs to.
-     *
-     * TODO this method is identically implemented in other dao classes
-     * and should be moved abstractly to the OpenInfraDao class
-     *
-     * @param locale the locale the informations should be saved at
-     * @return       the ValueListValuePojo
-     */
-    public ValueListValuePojo newAttributeValueValues(Locale locale) {
-        // create the return pojo
-        ValueListValuePojo pojo = new ValueListValuePojo();
-
-        PtLocaleDao ptl = new PtLocaleDao(currentProjectId, schema);
-        List<LocalizedString> lcs = new LinkedList<LocalizedString>();
-        LocalizedString ls = new LocalizedString();
-
-        // set an empty character string
-        ls.setCharacterString("");
-
-        // set the locale of the character string
-        ls.setLocale(PtLocaleDao.mapToPojoStatically(
-                locale,
-                ptl.read(locale)));
-        lcs.add(ls);
-
-        // add the localized string for the name
-        pojo.setNames(new PtFreeTextPojo(lcs, null));
-
-        // add the localized string for the description
-        pojo.setDescriptions(new PtFreeTextPojo(lcs, null));
-
-        // set the initial visibility
-        pojo.setVisibility(true);
-
-        // set the value list the value belongs to
-        pojo.setBelongsToValueList(null);
-
-        return pojo;
-    }
 
 }

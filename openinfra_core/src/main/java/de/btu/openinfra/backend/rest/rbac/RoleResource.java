@@ -18,6 +18,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import de.btu.openinfra.backend.db.OpenInfraOrderBy;
+import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.rbac.RolePojo;
 import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
@@ -31,22 +33,26 @@ import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 	+ OpenInfraResponseBuilder.UTF8_CHARSET})
 @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class RoleResource {
-	
+
 	@GET
 	public List<RolePojo> get(
 			@Context UriInfo uriInfo,
 			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
+			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
+            @QueryParam("orderBy") OpenInfraOrderBy orderBy,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new RoleRbac().read(
-				OpenInfraHttpMethod.valueOf(request.getMethod()), 
+				OpenInfraHttpMethod.valueOf(request.getMethod()),
 				uriInfo,
 				PtLocaleDao.forLanguageTag(language),
+				sortOrder,
+				orderBy,
 				offset,
 				size);
 	}
-	
+
 	@GET
 	@Path("{id}")
 	public RolePojo get(
@@ -55,23 +61,23 @@ public class RoleResource {
 			@QueryParam("language") String language,
 			@PathParam("id") UUID uuid) {
 		return new RoleRbac().read(
-				OpenInfraHttpMethod.valueOf(request.getMethod()), 
+				OpenInfraHttpMethod.valueOf(request.getMethod()),
 				uriInfo,
 				PtLocaleDao.forLanguageTag(language),
 				uuid);
 	}
-	
+
 	@POST
 	public Response create(
 			@Context UriInfo uriInfo,
     		@Context HttpServletRequest request,
-    		RolePojo pojo) {	
+    		RolePojo pojo) {
 		return OpenInfraResponseBuilder.postResponse(
 				new RoleRbac().createOrUpdate(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
-						uriInfo, null, pojo));		
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
+						uriInfo, null, pojo));
 	}
-	
+
 	@PUT
 	@Path("{id}")
 	public Response put(
@@ -81,10 +87,10 @@ public class RoleResource {
 			RolePojo pojo) {
 		return OpenInfraResponseBuilder.putResponse(
 				new RoleRbac().createOrUpdate(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
-						uriInfo, uuid, pojo));		
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
+						uriInfo, uuid, pojo));
 	}
-	
+
 	@DELETE
 	@Path("{id}")
 	public Response delete(
@@ -93,10 +99,10 @@ public class RoleResource {
 			@PathParam("id") UUID uuid) {
 		return OpenInfraResponseBuilder.deleteResponse(
 				new RoleRbac().delete(
-						OpenInfraHttpMethod.valueOf(request.getMethod()), 
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo, uuid), uuid);
 	}
-	
+
 	@GET
 	@Path("count")
 	@Produces({MediaType.TEXT_PLAIN})

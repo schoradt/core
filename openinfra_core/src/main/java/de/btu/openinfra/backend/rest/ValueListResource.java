@@ -18,7 +18,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import de.btu.openinfra.backend.db.OpenInfraOrderByEnum;
+import de.btu.openinfra.backend.db.OpenInfraOrderBy;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
@@ -61,7 +61,7 @@ public class ValueListResource {
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
-			@QueryParam("orderBy") OpenInfraOrderByEnum orderBy,
+			@QueryParam("orderBy") OpenInfraOrderBy orderBy,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new ValueListRbac(
@@ -96,6 +96,31 @@ public class ValueListResource {
 						valueListId,
 						offset,
 						size);
+	}
+
+	@POST
+    @Path("{valueListId}/associations")
+    public Response create(
+            @Context UriInfo uriInfo,
+            @Context HttpServletRequest request,
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            @PathParam("valueListId") UUID valueListId,
+            ValueListAssociationPojo pojo) {
+        return OpenInfraResponseBuilder.postResponse(
+                new ValueListAssociationRbac(
+                        projectId,
+                        OpenInfraSchemas.valueOf(schema.toUpperCase())
+                        ).createOrUpdate(
+                                OpenInfraHttpMethod.valueOf(
+                                        request.getMethod()),
+                                uriInfo,
+                                pojo,
+                                valueListId,
+                                pojo.getAssociationValueListId(),
+                                null,
+                                null,
+                                pojo.getMetaData()));
 	}
 
 	@GET
@@ -138,6 +163,52 @@ public class ValueListResource {
 						offset,
 						size);
 	}
+
+	@PUT
+	@Path("{valueListId}/associations/{associatedValueListId}")
+    public Response update(
+            @Context UriInfo uriInfo,
+            @Context HttpServletRequest request,
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            @PathParam("valueListId") UUID valueListId,
+            @PathParam("associatedValueListId") UUID associatedValueListId,
+            ValueListAssociationPojo pojo) {
+        return OpenInfraResponseBuilder.putResponse(
+                new ValueListAssociationRbac(
+                        projectId,
+                        OpenInfraSchemas.valueOf(schema.toUpperCase())
+                        ).createOrUpdate(
+                                OpenInfraHttpMethod.valueOf(
+                                        request.getMethod()),
+                                uriInfo,
+                                pojo,
+                                valueListId,
+                                pojo.getAssociationValueListId(),
+                                associatedValueListId,
+                                pojo.getAssociatedValueList().getUuid(),
+                                pojo.getMetaData()));
+    }
+
+    @DELETE
+    @Path("{valueListId}/associations/{associatedValueListId}")
+    public Response delete(
+            @Context UriInfo uriInfo,
+            @Context HttpServletRequest request,
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            @PathParam("valueListId") UUID valueListId,
+            @PathParam("associatedValueListId") UUID associatedValueListId) {
+        return OpenInfraResponseBuilder.deleteResponse(
+                new ValueListAssociationRbac(
+                        projectId,
+                        OpenInfraSchemas.valueOf(schema.toUpperCase())).delete(
+                                OpenInfraHttpMethod.valueOf(
+                                      request.getMethod()),
+                                uriInfo,
+                                valueListId,
+                                associatedValueListId));
+    }
 
 	@POST
 	public Response createValueList(
@@ -196,23 +267,6 @@ public class ValueListResource {
 	                valueListId);
 	}
 
-	@GET
-    @Path("/new")
-    public ValueListPojo newValueList(
-    		@Context UriInfo uriInfo,
-    		@Context HttpServletRequest request,
-            @QueryParam("language") String language,
-            @PathParam("projectId") UUID projectId,
-            @PathParam("schema") String schema) {
-        return new ValueListRbac(
-                        projectId,
-                        OpenInfraSchemas.valueOf(schema.toUpperCase()))
-                    .newValueList(
-                    		OpenInfraHttpMethod.valueOf(request.getMethod()),
-    						uriInfo,
-    						PtLocaleDao.forLanguageTag(language));
-    }
-
 	@PUT
     @Path("{valueListId}")
     public Response update(
@@ -229,7 +283,7 @@ public class ValueListResource {
                 		OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
                         pojo, valueListId, pojo.getMetaData());
-        return OpenInfraResponseBuilder.postResponse(uuid);
+        return OpenInfraResponseBuilder.putResponse(uuid);
     }
 
 	@GET
@@ -241,6 +295,8 @@ public class ValueListResource {
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
 			@PathParam("valueListId") UUID valueListId,
+			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
+            @QueryParam("orderBy") OpenInfraOrderBy orderBy,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new ValueListValueRbac(
@@ -250,6 +306,8 @@ public class ValueListResource {
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
 						valueListId,
+						sortOrder,
+						orderBy,
 						offset,
 						size);
 	}

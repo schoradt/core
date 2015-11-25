@@ -3,7 +3,6 @@ package de.btu.openinfra.backend.db.pojos;
 import java.util.UUID;
 
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
-import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 
 public abstract class OpenInfraPojo {
 
@@ -48,28 +47,4 @@ public abstract class OpenInfraPojo {
         this.trid = trid;
     }
 
-    /**
-     * This method converts the pojo object into a primer object.
-     * A primer object is an empty but structured pojo object. The primer
-     * object represents the structure of the pojo object without content.
-     * This method and the method 'makePrimerHelper' implement the
-     * template pattern.
-     * @param locale a PtLocale object
-     */
-    public void makePrimer(PtLocale locale) {
-        uuid = null;
-        trid = -1;
-        // call primer method of the subclass
-        makePrimerHelper(locale);
-    }
-
-    /**
-     * This method converts the subclass pojo object into a primer object.
-     * A primer object is an empty but structured pojo object. The primer
-     * object represents the structure of the pojo object without content.
-     * This method and the method 'makePrimer' implement the
-     * template pattern.
-     * @param locale a PtLocale object
-     */
-    protected abstract void makePrimerHelper(PtLocale locale);
 }

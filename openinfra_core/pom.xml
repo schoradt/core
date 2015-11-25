@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.btu.openinfra.core</groupId>
   <artifactId>openinfra_core</artifactId>
-  <version>1.2.3</version>
+  <version>1.4.1</version>
   <packaging>war</packaging>
   <name>openinfra_core</name>
   
@@ -41,6 +41,41 @@
       			</configuration>
     		</plugin> -->
         </plugins>
+        <pluginManagement>
+        	<plugins>
+        		<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+        		<plugin>
+        			<groupId>org.eclipse.m2e</groupId>
+        			<artifactId>lifecycle-mapping</artifactId>
+        			<version>1.0.0</version>
+        			<configuration>
+        				<lifecycleMappingMetadata>
+        					<pluginExecutions>
+        						<pluginExecution>
+        							<pluginExecutionFilter>
+        								<groupId>
+        									org.apache.maven.plugins
+        								</groupId>
+        								<artifactId>
+        									maven-javadoc-plugin
+        								</artifactId>
+        								<versionRange>
+        									[2.9,)
+        								</versionRange>
+        								<goals>
+        									<goal>javadoc</goal>
+        								</goals>
+        							</pluginExecutionFilter>
+        							<action>
+        								<execute/>
+        							</action>
+        						</pluginExecution>
+        					</pluginExecutions>
+        				</lifecycleMappingMetadata>
+        			</configuration>
+        		</plugin>
+        	</plugins>
+        </pluginManagement>
     </build>
 
     <dependencyManagement>
@@ -62,6 +97,13 @@
     		<artifactId>guava</artifactId>
     		<version>19.0-rc1</version>
 		</dependency>
+		
+		<!-- Reflections is used to get the classes of a given package. -->
+		<dependency>
+         	<groupId>org.reflections</groupId>
+         	<artifactId>reflections</artifactId>
+         	<version>0.9.9-RC1</version>
+     	</dependency>
 		
 	    <!-- EclipseLink is used as persistence API and for object relational 
 	         mapping.  -->
@@ -129,14 +171,13 @@
 		</dependency>
 		
 		<!-- simple json string to object converter -->
-		<!-- TODO test if it is really necessary to use this lib instead of 
-			 jackson ObjectMapper -->
 		<dependency>
 		    <groupId>com.googlecode.json-simple</groupId>
     		<artifactId>json-simple</artifactId>
 		    <version>1.1.1</version>
 		</dependency>
 		
+		<!-- Taglibs for easy JSP scripting -->
 		<dependency>
 		    <groupId>jstl</groupId>
 		    <artifactId>jstl</artifactId>
@@ -198,7 +239,7 @@
         <dependency>
     		<groupId>org.apache.solr</groupId>
     		<artifactId>solr-solrj</artifactId>
-    		<version>${solr.version}</version>
+    		<version>${solr-solrj.version}</version>
 		</dependency>
 		
 		<!-- provides string escape used to prevent XSS -->
@@ -219,11 +260,33 @@
 		    <artifactId>shiro-web</artifactId>
 		    <version>${shiro.version}</version>
 		</dependency>
+		
+		<!-- Image processing -->
+		<dependency>
+		    <groupId>org.im4java</groupId>
+		    <artifactId>im4java</artifactId>
+		    <version>1.4.0</version>
+		</dependency>
+		
+		<!-- Improved mime type detection -->
+		<dependency>
+		    <groupId>org.apache.tika</groupId>
+		    <artifactId>tika-core</artifactId>
+		    <version>1.11</version>
+		</dependency>
+		
+		<!-- Read exif data -->
+		<dependency>
+		    <groupId>com.drewnoakes</groupId>
+		    <artifactId>metadata-extractor</artifactId>
+		    <version>2.8.1</version>
+		</dependency>
+		
     </dependencies>
     <properties>
         <jersey.version>2.22.1</jersey.version>
         <slf4j.version>1.7.12</slf4j.version>
-        <solr.version>4.10.4</solr.version>
+        <solr-solrj.version>5.3.1</solr-solrj.version>
         <shiro.version>1.2.4</shiro.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>

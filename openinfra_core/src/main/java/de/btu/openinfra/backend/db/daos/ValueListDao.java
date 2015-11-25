@@ -1,15 +1,11 @@
 package de.btu.openinfra.backend.db.daos;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.ValueList;
-import de.btu.openinfra.backend.db.pojos.LocalizedString;
-import de.btu.openinfra.backend.db.pojos.PtFreeTextPojo;
 import de.btu.openinfra.backend.db.pojos.ValueListPojo;
 import de.btu.openinfra.backend.exception.OpenInfraEntityException;
 import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
@@ -101,36 +97,4 @@ public class ValueListDao extends OpenInfraDao<ValueListPojo, ValueList> {
 
 	}
 
-	/**
-     * This method creates a ValueListPojo shell that contains some
-     * informations about the name, the description and the locale.
-     *
-     * @param locale the locale the informations should be saved at
-     * @return       the ValueListPojo
-     */
-	public ValueListPojo newValueList(Locale locale) {
-	    // create the return pojo
-        ValueListPojo pojo = new ValueListPojo();
-
-        PtLocaleDao ptl = new PtLocaleDao(currentProjectId, schema);
-        List<LocalizedString> lcs = new LinkedList<LocalizedString>();
-        LocalizedString ls = new LocalizedString();
-
-        // set an empty character string
-        ls.setCharacterString("");
-
-        // set the locale of the character string
-        ls.setLocale(PtLocaleDao.mapToPojoStatically(
-                locale,
-                ptl.read(locale)));
-        lcs.add(ls);
-
-        // add the localized string for the name
-        pojo.setNames(new PtFreeTextPojo(lcs, null));
-
-        // add the localized string for the description
-        pojo.setDescriptions(new PtFreeTextPojo(lcs, null));
-
-        return pojo;
-	}
 }

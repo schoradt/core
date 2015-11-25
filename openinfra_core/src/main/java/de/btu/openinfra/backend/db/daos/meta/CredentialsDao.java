@@ -1,6 +1,7 @@
 package de.btu.openinfra.backend.db.daos.meta;
 
 import java.util.Locale;
+import java.util.UUID;
 
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
@@ -23,11 +24,11 @@ public class CredentialsDao
     /**
      * This is the required constructor which calls the super constructor and in
      * turn creates the corresponding entity manager.
-     *
-     * @param schema           the required schema
+     * @param currentProjectId The identifier of the current project.
+     * @param schema           This parameter defines the schema.
      */
-    public CredentialsDao(OpenInfraSchemas schema) {
-        super(null, schema, Credentials.class);
+    public CredentialsDao(UUID currentProjectId, OpenInfraSchemas schema) {
+        super(null, OpenInfraSchemas.META_DATA, Credentials.class);
     }
 
     @Override
@@ -89,22 +90,6 @@ public class CredentialsDao
                     OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
         }
         return resultCredentials;
-    }
-
-    /**
-     * Creates an empty credentials pojo.
-     * @return an empty credentials pojo
-     */
-    public CredentialsPojo newCredentials() {
-       return newPojoStatically();
-    }
-
-    /**
-     * This method implements the method newCredentials in a static way.
-     * @return an empty credentials pojo
-     */
-    public static CredentialsPojo newPojoStatically() {
-        return new CredentialsPojo();
     }
 
 }
