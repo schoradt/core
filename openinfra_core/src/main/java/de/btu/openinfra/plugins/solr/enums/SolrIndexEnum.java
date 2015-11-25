@@ -27,7 +27,8 @@ public enum SolrIndexEnum {
 
     /*
      * This variable represents the Solr field that defines the default search
-     * field.
+     * field. In this field all possible values of all other fields will be
+     * added.
      */
     DEFAULT_SEARCH_FIELD("default_search"),
 
@@ -35,7 +36,14 @@ public enum SolrIndexEnum {
      * This variable represents the Solr field that holds all attribute values
      * that have no translated attribute type names.
      */
-    NO_TRANSLATION_FIELD("_notranslation_");
+    NO_TRANSLATION_FIELD("_notranslation_"),
+
+    /*
+     * This variable represents the Solr field for lookups. A language tag will
+     * be added at the end of the string while indexing. UUIDs will not be added
+     * to this field.
+     */
+    LOOKUP_FIELD("language_based_lookup_field_");
 
     private String value;
 
