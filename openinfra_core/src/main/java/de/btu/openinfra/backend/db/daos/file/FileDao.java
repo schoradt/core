@@ -39,7 +39,8 @@ public class FileDao extends OpenInfraDao<FilePojo, File> {
 		if(pojo.getSubject().equals(subject)) {
 			return delete(file);
 		} else {
-			// TODO Better make use of OpenInfraWebException to lead all exceptions through one class.
+			// TODO Better make use of OpenInfraWebException to lead all
+			// exceptions through one class.
 			throw new WebApplicationException(Status.FORBIDDEN);
 		}
 	}

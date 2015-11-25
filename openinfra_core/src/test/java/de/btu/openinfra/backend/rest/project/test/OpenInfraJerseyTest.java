@@ -1,28 +1,29 @@
 package de.btu.openinfra.backend.rest.project.test;
 
+import java.util.Map;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.Application;
-import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
-import org.glassfish.jersey.test.JerseyTest;
-import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
-import de.btu.openinfra.backend.OpenInfraApplication;
+public class OpenInfraJerseyTest {
 
-public class OpenInfraJerseyTest extends JerseyTest {
+	private Map<String, NewCookie> cookies = null;
+	private WebTarget target = null;
+	private final String BASE_URI = "http://localhost:8080/";
 
-	Cookie cookie = null;
-
-	@Override
-	public Application configure() {
-		//login("root", "root");
-		return new OpenInfraApplication();
+	@Before
+	public void setUp() {
+		Client client = ClientBuilder.newClient();
+		target = client.target(BASE_URI);
 	}
 
 	public void login(String username, String password) {
@@ -30,20 +31,30 @@ public class OpenInfraJerseyTest extends JerseyTest {
 		form.param("username", username);
 		form.param("password", password);
 
-		final WebTarget targetRes01 = target("login.jsp");
-		Response res01 = targetRes01.request().get();
-		System.out.println("--> " + res01);
+		//Response res = target("openinfra_core/login.jsp").request(MediaType.APPLICATION_JSON_TYPE)
+		//		    .post(Entity.entity(form,MediaType.APPLICATION_FORM_URLENCODED_TYPE));
 
-
-		Response res = target("openinfra_core/login.jsp").request(MediaType.APPLICATION_JSON_TYPE)
-				    .post(Entity.entity(form,MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+		Response res = target.path("openinfra_core/login.jsp").request()
+				.post(Entity.entity(
+						form, MediaType.MULTIPART_FORM_DATA));
 
 		System.out.println(res);
 
-		Response res2 = target("v1/projects").request(MediaType.APPLICATION_JSON).get();
+		cookies = res.getCookies();
+
+		for(String s : cookies.keySet()) {
+			System.out.println(s);
+		}
+
+		for(NewCookie c : cookies.values()) {
+			System.out.println(c);
+		}
+
+		Response res2 = target.path("openinfra_core/rest/v1/projects").request(
+				MediaType.APPLICATION_JSON).get();
 		System.out.println(res2);
 
-		Assert.assertNotEquals(Status.NOT_FOUND, res.getStatus());
+		//Assert.assertNotEquals(Status.NOT_FOUND, res.getStatus());
 
 		//return target("http://localhost:8080/openinfra_core/login.jsp").request().post(Entity.entity(
 		//		form, MediaType.APPLICATION_FORM_URLENCODED_TYPE)).getCookies();
@@ -93,7 +104,7 @@ public class OpenInfraJerseyTest extends JerseyTest {
 
 	@Test
 	public void testTheWest() {
-		Assert.assertNotNull(target("projects").request().get());
+		//Assert.assertNotNull(target("projects").request().get());
 	}
 
 }
