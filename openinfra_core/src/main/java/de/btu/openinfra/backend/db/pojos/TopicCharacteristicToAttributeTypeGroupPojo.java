@@ -20,7 +20,8 @@ public class TopicCharacteristicToAttributeTypeGroupPojo extends OpenInfraMetaDa
     }
 
     /* Constructor that will set the id, trid and meta data automatically */
-    public TopicCharacteristicToAttributeTypeGroupPojo(OpenInfraModelObject modelObject, MetaDataDao mdDao) {
+    public TopicCharacteristicToAttributeTypeGroupPojo(
+    		OpenInfraModelObject modelObject, MetaDataDao mdDao) {
         super(modelObject, mdDao);
     }
 

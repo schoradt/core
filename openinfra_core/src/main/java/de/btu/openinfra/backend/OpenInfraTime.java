@@ -10,7 +10,7 @@ import java.util.TimeZone;
 
 /**
  * This class is a simple implementation for retrieving the current time
- * as a timestamp.
+ * as a timestamp. This implementation should be used application wide.
  *
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *

@@ -1,3 +1,4 @@
+<%@page import="org.json.simple.parser.JSONParser"%>
 <%@page import="de.btu.openinfra.backend.OpenInfraProperties"%>
 <%@page import="de.btu.openinfra.backend.db.daos.TopicInstanceDao"%>
 <%@page import="java.net.URLEncoder"%>
@@ -21,7 +22,14 @@
 	<%@ include file="../../snippets/Menu.jsp" %>
 	
 	<c:set var="metaData" value="${it[0].topicCharacteristic.metaData}"/>
-	<c:set var="columns" value="${metaData.list_view_columns}"/>
+	<%
+		Object jsonStr = pageContext.getAttribute("metaData");
+		if(jsonStr != null) {
+			pageContext.setAttribute("mdObject", new JSONParser().parse(jsonStr.toString()));
+		}
+	%>
+	<c:set var="columns" value="${mdObject.list_view_columns}"/>
+	
 	
 	<div id="orderAndFilterRow" class="row">
 		<%@ include file="../../snippets/Filter.jsp" %>

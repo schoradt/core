@@ -12,6 +12,7 @@ import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.Project;
 import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
+import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
 import de.btu.openinfra.backend.db.jpa.model.ValueListValue;
 import de.btu.openinfra.backend.db.pojos.TopicCharacteristicPojo;
 import de.btu.openinfra.backend.exception.OpenInfraEntityException;
@@ -72,15 +73,59 @@ public class TopicCharacteristicDao
 		// 3. Map the model objects to POJOs
 		Map<UUID, TopicCharacteristicPojo> tcp =
 				new HashMap<UUID, TopicCharacteristicPojo>();
-		MetaDataDao mdDao = new MetaDataDao(currentProjectId, schema);
 		for(TopicCharacteristic tc : tcs) {
 		    UUID id = tc.getId();
 		    if (!tcp.containsKey(id)) {
-		        tcp.put(id, mapToPojoStatically(locale, tc, mdDao));
+		        tcp.put(id, mapToPojoStatically(locale, tc,
+		        		new MetaDataDao(currentProjectId, schema)));
 		    }
 
 		} // end for
 		return new LinkedList<TopicCharacteristicPojo>(tcp.values());
+	}
+
+	public List<TopicCharacteristicPojo> readByTopicInstanceAssociationFrom(
+			Locale locale, UUID topicInstance, int offset, int size) {
+		return readByTopicInstanceAssociation(locale, topicInstance,
+				"TopicCharacteristic.findByTopicInstanceAssociationFrom",
+				"TopicInstanceXTopicInstance"
+				+ ".countAssociationFromByTopicInstanceAndTopicCharacteristic",
+				offset, size);
+	}
+
+	public List<TopicCharacteristicPojo> readByTopicInstanceAssociationTo(
+			Locale locale, UUID topicInstance, int offset, int size) {
+		return readByTopicInstanceAssociation(locale, topicInstance,
+				"TopicCharacteristic.findByTopicInstanceAssociationTo",
+				"TopicInstanceXTopicInstance"
+				+ ".countAssociationToByTopicInstanceAndTopicCharacteristic",
+				offset, size);
+	}
+
+	private List<TopicCharacteristicPojo> readByTopicInstanceAssociation(
+			Locale locale, UUID topicInstance,
+			String namedQuery, String countQuery, int offset, int size) {
+		List<TopicCharacteristicPojo> pList =
+				new LinkedList<TopicCharacteristicPojo>();
+		List<TopicCharacteristic> tcList =
+				em.createNamedQuery(
+						namedQuery,
+						TopicCharacteristic.class).setParameter(
+								"value",
+								em.find(TopicInstance.class,
+										topicInstance)).setFirstResult(offset)
+										.setMaxResults(size).getResultList();
+		for(TopicCharacteristic tc : tcList) {
+			TopicCharacteristicPojo p = mapToPojo(locale, tc);
+			p.setTopicInstancesCount(em.createNamedQuery(
+					countQuery,
+					Long.class).setParameter("topicInstance",
+							em.find(TopicInstance.class, topicInstance))
+							.setParameter("topicCharacteristic", tc)
+							.getSingleResult());
+			pList.add(p);
+		}
+		return pList;
 	}
 
 	@Override
@@ -96,25 +141,25 @@ public class TopicCharacteristicDao
 	 *
 	 * @param locale the requested language as Java.util locale
 	 * @param tc     the model object
-	 * @param mdDao  the meta data DAO
+	 * @param mdDao  The meta data DAO. Must not be null!
 	 * @return       the POJO object when the model object is not null else null
 	 */
 	public static TopicCharacteristicPojo mapToPojoStatically(
 			Locale locale,
 			TopicCharacteristic tc,
-			MetaDataDao mdDao) {
+			MetaDataDao mdDao) throws NullPointerException {
 		if (tc != null) {
 		    TopicCharacteristicPojo pojo =
 		            new TopicCharacteristicPojo(tc, mdDao);
-
-		    // TODO this will probably disable the count functionality but will
-		    // avoid a NullPointerException. This must be reworked!
-		    if (mdDao != null) {
-    		    pojo.setTopicInstancesCount(
-    		    		new TopicInstanceDao(
-    		    				mdDao.currentProjectId, mdDao.schema)
-    		    		.getCount(tc.getId()));
+		    if(mdDao == null) {
+		    	throw new NullPointerException(
+		    			"The Metadatapojo must not be null!");
 		    }
+
+		    pojo.setTopicInstancesCount(
+		    		new TopicInstanceDao(
+		    				mdDao.currentProjectId, mdDao.schema)
+		    		.getCount(tc.getId()));
 
             // set the project if exists
             try {
