@@ -12,6 +12,7 @@ import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.Project;
 import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
+import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
 import de.btu.openinfra.backend.db.jpa.model.ValueListValue;
 import de.btu.openinfra.backend.db.pojos.TopicCharacteristicPojo;
 import de.btu.openinfra.backend.exception.OpenInfraEntityException;
@@ -84,6 +85,50 @@ public class TopicCharacteristicDao
 		return new LinkedList<TopicCharacteristicPojo>(tcp.values());
 	}
 
+	public List<TopicCharacteristicPojo> readByTopicInstanceAssociationFrom(
+			Locale locale, UUID topicInstance, int offset, int size) {
+		return readByTopicInstanceAssociation(locale, topicInstance,
+				"TopicCharacteristic.findByTopicInstanceAssociationFrom",
+				"TopicInstanceXTopicInstance"
+				+ ".countAssociationFromByTopicInstanceAndTopicCharacteristic",
+				offset, size);
+	}
+
+	public List<TopicCharacteristicPojo> readByTopicInstanceAssociationTo(
+			Locale locale, UUID topicInstance, int offset, int size) {
+		return readByTopicInstanceAssociation(locale, topicInstance,
+				"TopicCharacteristic.findByTopicInstanceAssociationTo",
+				"TopicInstanceXTopicInstance"
+				+ ".countAssociationToByTopicInstanceAndTopicCharacteristic",
+				offset, size);
+	}
+
+	private List<TopicCharacteristicPojo> readByTopicInstanceAssociation(
+			Locale locale, UUID topicInstance,
+			String namedQuery, String countQuery, int offset, int size) {
+		List<TopicCharacteristicPojo> pList =
+				new LinkedList<TopicCharacteristicPojo>();
+		List<TopicCharacteristic> tcList =
+				em.createNamedQuery(
+						namedQuery,
+						TopicCharacteristic.class).setParameter(
+								"value",
+								em.find(TopicInstance.class,
+										topicInstance)).setFirstResult(offset)
+										.setMaxResults(size).getResultList();
+		for(TopicCharacteristic tc : tcList) {
+			TopicCharacteristicPojo p = mapToPojo(locale, tc);
+			p.setTopicInstancesCount(em.createNamedQuery(
+					countQuery,
+					Long.class).setParameter("topicInstance",
+							em.find(TopicInstance.class, topicInstance))
+							.setParameter("topicCharacteristic", tc)
+							.getSingleResult());
+			pList.add(p);
+		}
+		return pList;
+	}
+
 	@Override
 	public TopicCharacteristicPojo mapToPojo(
 			Locale locale,
@@ -104,18 +149,19 @@ public class TopicCharacteristicDao
 			Locale locale,
 			TopicCharacteristic tc,
 			UUID currentProjectId,
-            OpenInfraSchemas schema) {
+            OpenInfraSchemas schema) throws NullPointerException {
 		if (tc != null) {
 		    TopicCharacteristicPojo pojo = new TopicCharacteristicPojo(tc);
 
-		    // TODO this will probably disable the count functionality but will
-		    // avoid a NullPointerException. This must be reworked!
-		    if (currentProjectId != null && schema != null) {
-    		    pojo.setTopicInstancesCount(
-    		    		new TopicInstanceDao(
-    		    				currentProjectId, schema)
-    		    		.getCount(tc.getId()));
+		    if (currentProjectId == null || schema == null) {
+    		    throw new NullPointerException(
+		    			"The project id and the schema must not be null!");
 		    }
+		    
+		    pojo.setTopicInstancesCount(
+    				new TopicInstanceDao(
+    		    			currentProjectId, schema)
+    		    	.getCount(tc.getId()));
 
             // set the project if exists
             try {

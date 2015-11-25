@@ -35,7 +35,8 @@ public class TopicInstancePojo extends OpenInfraPojo {
         return topicCharacteristic;
     }
 
-    public void setTopicCharacteristic(TopicCharacteristicPojo topicCharacteristic) {
+    public void setTopicCharacteristic(
+    		TopicCharacteristicPojo topicCharacteristic) {
         this.topicCharacteristic = topicCharacteristic;
     }
 

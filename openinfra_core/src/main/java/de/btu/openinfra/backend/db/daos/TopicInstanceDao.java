@@ -49,6 +49,11 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
 	}
 
 	// TODO add named query in order to retrieve attribute values
+	/**
+	 * This method selects all configured meta data information (attribute type)
+	 * and combines them with related attribute values.
+	 *
+	 */
 	@Override
 	public TopicInstancePojo mapToPojo(Locale locale, TopicInstance ti) {
         return mapToPojoStatically(locale, ti, currentProjectId, schema);
