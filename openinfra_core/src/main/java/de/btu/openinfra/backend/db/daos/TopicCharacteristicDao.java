@@ -85,24 +85,26 @@ public class TopicCharacteristicDao
 	}
 
 	public List<TopicCharacteristicPojo> readByTopicInstanceAssociationFrom(
-			Locale locale, UUID topicInstance) {
+			Locale locale, UUID topicInstance, int offset, int size) {
 		return readByTopicInstanceAssociation(locale, topicInstance,
 				"TopicCharacteristic.findByTopicInstanceAssociationFrom",
 				"TopicInstanceXTopicInstance"
-				+ ".countAssociationFromByTopicInstanceAndTopicCharacteristic");
+				+ ".countAssociationFromByTopicInstanceAndTopicCharacteristic",
+				offset, size);
 	}
 
 	public List<TopicCharacteristicPojo> readByTopicInstanceAssociationTo(
-			Locale locale, UUID topicInstance) {
+			Locale locale, UUID topicInstance, int offset, int size) {
 		return readByTopicInstanceAssociation(locale, topicInstance,
 				"TopicCharacteristic.findByTopicInstanceAssociationTo",
 				"TopicInstanceXTopicInstance"
-				+ ".countAssociationToByTopicInstanceAndTopicCharacteristic");
+				+ ".countAssociationToByTopicInstanceAndTopicCharacteristic",
+				offset, size);
 	}
 
 	private List<TopicCharacteristicPojo> readByTopicInstanceAssociation(
 			Locale locale, UUID topicInstance,
-			String namedQuery, String countQuery) {
+			String namedQuery, String countQuery, int offset, int size) {
 		List<TopicCharacteristicPojo> pList =
 				new LinkedList<TopicCharacteristicPojo>();
 		List<TopicCharacteristic> tcList =
@@ -111,7 +113,8 @@ public class TopicCharacteristicDao
 						TopicCharacteristic.class).setParameter(
 								"value",
 								em.find(TopicInstance.class,
-										topicInstance)).getResultList();
+										topicInstance)).setFirstResult(offset)
+										.setMaxResults(size).getResultList();
 		for(TopicCharacteristic tc : tcList) {
 			TopicCharacteristicPojo p = mapToPojo(locale, tc);
 			p.setTopicInstancesCount(em.createNamedQuery(

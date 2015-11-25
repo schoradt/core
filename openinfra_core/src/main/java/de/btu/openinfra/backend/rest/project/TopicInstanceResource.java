@@ -121,8 +121,8 @@ public class TopicInstanceResource {
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("topicInstanceId") UUID topicInstanceId,
-			@PathParam("offset") int offset,
-			@PathParam("size") int size) {
+			@QueryParam("offset") int offset,
+			@QueryParam("size") int size) {
 		return new TopicInstanceAssociationRbac(
 				projectId,
 				OpenInfraSchemas.PROJECTS).read(
@@ -132,36 +132,6 @@ public class TopicInstanceResource {
 						topicInstanceId,
 						offset,
 						size);
-	}
-
-	@GET
-	@Path("{topicInstanceId}/associationsto/topiccharacteristics")
-	public List<TopicCharacteristicPojo> getTopicCharacteristicsTo(
-			@Context UriInfo uriInfo,
-			@Context HttpServletRequest request,
-			@QueryParam("language") String language,
-			@PathParam("projectId") UUID projectId,
-			@PathParam("topicInstanceId") UUID topicInstanceId) {
-		return new TopicCharacteristicRbac(
-				projectId, OpenInfraSchemas.PROJECTS)
-		.readByTopicInstanceAssociationTo(
-				OpenInfraHttpMethod.valueOf(request.getMethod()),
-				uriInfo, PtLocaleDao.forLanguageTag(language), topicInstanceId);
-	}
-
-	@GET
-	@Path("{topicInstanceId}/associationsfrom/topiccharacteristics")
-	public List<TopicCharacteristicPojo> getTopicCharacteristicsFrom(
-			@Context UriInfo uriInfo,
-			@Context HttpServletRequest request,
-			@QueryParam("language") String language,
-			@PathParam("projectId") UUID projectId,
-			@PathParam("topicInstanceId") UUID topicInstanceId) {
-		return new TopicCharacteristicRbac(
-				projectId, OpenInfraSchemas.PROJECTS)
-		.readByTopicInstanceAssociationFrom(
-				OpenInfraHttpMethod.valueOf(request.getMethod()),
-				uriInfo, PtLocaleDao.forLanguageTag(language), topicInstanceId);
 	}
 
 	@POST
@@ -186,6 +156,81 @@ public class TopicInstanceResource {
                                 null,
                                 pojo.getMetaData()));
     }
+
+	@GET
+	@Path("{topicInstanceId}/associationsto/topiccharacteristics")
+	public List<TopicCharacteristicPojo> getTopicCharacteristicsTo(
+			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
+			@QueryParam("language") String language,
+			@PathParam("projectId") UUID projectId,
+			@PathParam("topicInstanceId") UUID topicInstanceId,
+			@QueryParam("offset") int offset,
+			@QueryParam("size") int size) {
+		return new TopicCharacteristicRbac(
+				projectId, OpenInfraSchemas.PROJECTS)
+		.readByTopicInstanceAssociationTo(
+				OpenInfraHttpMethod.valueOf(request.getMethod()),
+				uriInfo, PtLocaleDao.forLanguageTag(language), topicInstanceId,
+				offset, size);
+	}
+
+	@GET
+	@Path("{topicInstanceId}/associationsto/topiccharacteristics/{topCharId}")
+	public List<TopicInstanceAssociationPojo> getAssociationsToByTopchar(
+			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
+			@QueryParam("language") String language,
+			@PathParam("projectId") UUID projectId,
+			@PathParam("topicInstanceId") UUID topicInstanceId,
+			@PathParam("topCharId") UUID topCharId,
+			@QueryParam("offset") int offset,
+			@QueryParam("size") int size) {
+		return new TopicInstanceAssociationRbac(
+				projectId, OpenInfraSchemas.PROJECTS)
+			.readAssociationToByTopchar(OpenInfraHttpMethod.valueOf(
+					request.getMethod()), uriInfo,
+					PtLocaleDao.forLanguageTag(language),
+					topicInstanceId, topCharId, offset, size);
+	}
+
+	@GET
+	@Path("{topicInstanceId}/associationsfrom/topiccharacteristics/{topCharId}")
+	public List<TopicInstanceAssociationPojo> getAssociationsFromByTopchar(
+			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
+			@QueryParam("language") String language,
+			@PathParam("projectId") UUID projectId,
+			@PathParam("topicInstanceId") UUID topicInstanceId,
+			@PathParam("topCharId") UUID topCharId,
+			@QueryParam("offset") int offset,
+			@QueryParam("size") int size) {
+		return new TopicInstanceAssociationRbac(
+				projectId, OpenInfraSchemas.PROJECTS)
+			.readAssociationFromByTopchar(OpenInfraHttpMethod.valueOf(
+					request.getMethod()), uriInfo,
+					PtLocaleDao.forLanguageTag(language),
+					topicInstanceId, topCharId, offset, size);
+	}
+
+	@GET
+	@Path("{topicInstanceId}/associationsfrom/topiccharacteristics")
+	public List<TopicCharacteristicPojo> getTopicCharacteristicsFrom(
+			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
+			@QueryParam("language") String language,
+			@PathParam("projectId") UUID projectId,
+			@PathParam("topicInstanceId") UUID topicInstanceId,
+			@QueryParam("offset") int offset,
+			@QueryParam("size") int size) {
+		return new TopicCharacteristicRbac(
+				projectId, OpenInfraSchemas.PROJECTS)
+		.readByTopicInstanceAssociationFrom(
+				OpenInfraHttpMethod.valueOf(request.getMethod()),
+				uriInfo, PtLocaleDao.forLanguageTag(language), topicInstanceId,
+				offset, size);
+	}
+
 
 	@GET
 	@Path("{topicInstanceId}/associationsto/count")
@@ -214,8 +259,8 @@ public class TopicInstanceResource {
 			@PathParam("topicInstanceId") UUID topicInstanceId,
 			@PathParam("associatedTopicInstanceId")
 				UUID associatedTopicInstanceId,
-			@PathParam("offset") int offset,
-			@PathParam("size") int size) {
+			@QueryParam("offset") int offset,
+			@QueryParam("size") int size) {
 		return new TopicInstanceAssociationRbac(
 				projectId,
 				OpenInfraSchemas.PROJECTS).read(

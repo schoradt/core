@@ -82,21 +82,22 @@ public class TopicCharacteristicRbac extends OpenInfraValueRbac<
 	public List<TopicCharacteristicPojo> readByTopicInstanceAssociationTo(
 			OpenInfraHttpMethod httpMethod,
 			UriInfo uriInfo,
-			Locale locale, UUID topicInstance) {
+			Locale locale, UUID topicInstance, int offset, int size) {
 		checkPermission(httpMethod, uriInfo);
 		return removeItems(new TopicCharacteristicDao(
 				currentProjectId, schema).readByTopicInstanceAssociationTo(
-						locale, topicInstance));
+						locale, topicInstance, offset, size));
 	}
 
 	public List<TopicCharacteristicPojo> readByTopicInstanceAssociationFrom(
 			OpenInfraHttpMethod httpMethod,
 			UriInfo uriInfo,
-			Locale locale, UUID topicInstance) {
+			Locale locale, UUID topicInstance, int offset, int size) {
 		checkPermission(httpMethod, uriInfo);
 		return removeItems(new TopicCharacteristicDao(
 				currentProjectId, schema)
-		.readByTopicInstanceAssociationFrom(locale, topicInstance));
+		.readByTopicInstanceAssociationFrom(locale, topicInstance,
+				offset, size));
 	}
 
 	/**

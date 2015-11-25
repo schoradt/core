@@ -1,10 +1,13 @@
 package de.btu.openinfra.backend.db.daos;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstanceXTopicInstance;
 import de.btu.openinfra.backend.db.pojos.project.TopicInstanceAssociationPojo;
@@ -77,6 +80,42 @@ public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
         } else {
             return null;
         }
+    }
+
+    public List<TopicInstanceAssociationPojo> readAssociationToByTopchar(
+    		Locale locale, UUID topicInstance, UUID topChar,
+    		int offset, int size) {
+    	return readAssociation(locale, topicInstance, topChar,
+    			"TopicInstanceXTopicInstance"
+    			+ ".findAssociationToByTopicInstanceAndTopicCharacteristic",
+    			offset, size);
+    }
+
+    public List<TopicInstanceAssociationPojo> readAssociationFromByTopchar(
+    		Locale locale, UUID topicInstance, UUID topChar,
+    		int offset, int size) {
+    	return readAssociation(locale, topicInstance, topChar,
+    			"TopicInstanceXTopicInstance"
+    			+ ".findAssociationFromByTopicInstanceAndTopicCharacteristic",
+    			offset, size);
+    }
+
+    public List<TopicInstanceAssociationPojo> readAssociation(
+    		Locale locale, UUID topicInstance, UUID topChar, String queryName,
+    		int offset, int size) {
+    	List<TopicInstanceXTopicInstance> tixtiList = em.createNamedQuery(
+    			queryName, TopicInstanceXTopicInstance.class)
+    			.setParameter("topicInstance",
+    					em.find(TopicInstance.class, topicInstance))
+    			.setParameter("topicCharacteristic",
+    					em.find(TopicCharacteristic.class, topChar))
+    			.setFirstResult(offset).setMaxResults(size).getResultList();
+    	List<TopicInstanceAssociationPojo> pojoList =
+    			new LinkedList<TopicInstanceAssociationPojo>();
+    	for(TopicInstanceXTopicInstance tixti : tixtiList) {
+    		pojoList.add(mapToPojo(locale, tixti));
+    	}
+    	return pojoList;
     }
 
 	@Override

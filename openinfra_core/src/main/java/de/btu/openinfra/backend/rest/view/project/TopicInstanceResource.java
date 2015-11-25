@@ -27,7 +27,7 @@ import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 public class TopicInstanceResource {
 
 	@GET
-	@Path("{topicInstanceId}/associations")
+	@Path("{topicInstanceId}/associationsto")
 	@Template(name="/views/list/TopicInstancesAssociations.jsp")
 	public List<TopicInstanceAssociationPojo> getAssociations(
 			@Context UriInfo uriInfo,

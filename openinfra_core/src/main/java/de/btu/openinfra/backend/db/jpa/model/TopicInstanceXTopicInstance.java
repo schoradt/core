@@ -37,6 +37,20 @@ import javax.persistence.Table;
 							+ "WHERE t.topicInstance2Bean = :topicInstance "
 							+ "AND t.topicInstance1Bean.topicCharacteristic = "
 							+ ":topicCharacteristic"),
+	@NamedQuery(name="TopicInstanceXTopicInstance"
+			+ ".findAssociationToByTopicInstanceAndTopicCharacteristic",
+					query="SELECT t "
+							+ "FROM TopicInstanceXTopicInstance t "
+							+ "WHERE t.topicInstance1Bean = :topicInstance "
+							+ "AND t.topicInstance2Bean.topicCharacteristic = "
+							+ ":topicCharacteristic"),
+	@NamedQuery(name="TopicInstanceXTopicInstance"
+			+ ".findAssociationFromByTopicInstanceAndTopicCharacteristic",
+					query="SELECT t "
+							+ "FROM TopicInstanceXTopicInstance t "
+							+ "WHERE t.topicInstance2Bean = :topicInstance "
+							+ "AND t.topicInstance1Bean.topicCharacteristic = "
+							+ ":topicCharacteristic"),
 	@NamedQuery(name="TopicInstanceXTopicInstance.findAll",
 			query="SELECT t FROM TopicInstanceXTopicInstance t"),
 	@NamedQuery(name="TopicInstanceXTopicInstance.findByTopicInstance",
