@@ -21,8 +21,8 @@ import org.glassfish.jersey.server.wadl.WadlApplicationContext;
 
 /**
  * This class is used to generate a HTML view out of the XML-based rest API
- * documentation.
- * 
+ * documentation (WADL).
+ *
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
  */
@@ -30,53 +30,55 @@ import org.glassfish.jersey.server.wadl.WadlApplicationContext;
 @Singleton
 @Produces({MediaType.TEXT_HTML})
 public class OpenInfraRestApi {
-	
+
 	/**
 	 * This variable defines the path to the XSL file.
 	 */
-	private static final String XSL_FILE = 
+	private static final String XSL_FILE =
 			"de/btu/openinfra/backend/xsl/wadl.xsl";
-	
+
 	private WadlApplicationContext wadlContext;
-	
+
 	/**
 	 * This constructor is used to inject the WADL application context which
 	 * is used to instantiate the JAXB marshaller.
-	 * 
+	 *
 	 * @param wadlContext the application context
 	 */
 	public OpenInfraRestApi(@Context WadlApplicationContext wadlContext) {
         this.wadlContext = wadlContext;
     }
-	
+
 	/**
-	 * This method is used to transform the WADL to HTML output. Therefore, the
-	 * injected URI info is used to retrieve the application. The application is
-	 * used to generate the entire WADL as XML. Afterwards, a specific XSTL file 
-	 * is loaded which is subsequently used to transform the WADL into HTML.
-	 * 
+	 * The HTML page you're seeing is the result of this method. <br/>
+	 * This method is used to transform the WADL into HTML output. Therefore,
+	 * the injected URI info is used to retrieve the application. The
+	 * application is used to generate the entire WADL as XML. Afterwards, a
+	 * specific XSTL file is loaded which is subsequently used to transform the
+	 * WADL into HTML.
+	 *
 	 * @param uriInfo
 	 * @return
 	 */
 	@GET
 	public Response getRestApi(@Context UriInfo uriInfo) {
-		
+
 		String wadlXmlRepresentation = "";
 		try {
-			final Marshaller marshaller = 
+			final Marshaller marshaller =
 					wadlContext.getJAXBContext().createMarshaller();
 	        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 	        final ByteArrayOutputStream os = new ByteArrayOutputStream();
 	        // use the entire application as resource
 	        marshaller.marshal(wadlContext.getApplication(
-	        		uriInfo, 
+	        		uriInfo,
 	        		false).getApplication(), os);
 	        wadlXmlRepresentation = os.toString();
-	        os.close();			
+	        os.close();
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}
-		
+
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		TransformerFactory tf = TransformerFactory.newInstance();
 		StreamSource xslt = new StreamSource(
@@ -84,7 +86,7 @@ public class OpenInfraRestApi {
 					.getResourceAsStream(XSL_FILE));
 		StreamResult result = new StreamResult(stream);
 		Transformer tr;
-		
+
 		try {
 			tr = tf.newTransformer(xslt);
 			tr.transform(new StreamSource(new StringReader(
@@ -92,8 +94,8 @@ public class OpenInfraRestApi {
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}
-		
-		return Response.ok().entity(stream.toByteArray()).build();	
+
+		return Response.ok().entity(stream.toByteArray()).build();
 	}
 
 }
