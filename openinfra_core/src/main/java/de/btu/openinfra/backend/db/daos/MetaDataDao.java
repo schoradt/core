@@ -44,9 +44,9 @@ public class MetaDataDao extends OpenInfraDao<MetaDataPojo, MetaData> {
      * database to a corresponding object id.
      *
      * @param objectId the object id
-     * @return         the meta data model for the object id
+     * @return         the meta data pojo for the object id
      */
-    public MetaData read(UUID objectId) {
+    public MetaDataPojo read(UUID objectId) {
         MetaData md = null;
         try {
             md = em.createNamedQuery(
@@ -54,7 +54,8 @@ public class MetaDataDao extends OpenInfraDao<MetaDataPojo, MetaData> {
                     .setParameter("oId", objectId)
                     .getSingleResult();
         } catch (NoResultException nre) { /* do nothing */ }
-        return md;
+
+        return mapToPojo(null, md);
     }
 
     @Override

@@ -76,9 +76,8 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
         if (ti != null) {
 
             MetaDataDao mdDao = new MetaDataDao(currentProjectId, schema);
-            MetaDataPojo metaDataPojo = mdDao.mapToPojo(
-                    locale,
-                    mdDao.read(ti.getTopicCharacteristic().getId()));
+            MetaDataPojo metaDataPojo =
+                mdDao.read(ti.getTopicCharacteristic().getId());
 
             // 1. Create new POJO object and set necessary stuff
             TopicInstancePojo pojo = new TopicInstancePojo(ti);
