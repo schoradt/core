@@ -34,23 +34,17 @@ public class LogDao
 
     @Override
     public LogPojo mapToPojo(Locale locale, Log l) {
-        return mapToPojoStatically(l);
-    }
-
-    /**
-     * This method implements the method mapToPojo in a static way.
-     *
-     * @param at     the model object
-     * @return       the POJO object when the model object is not null else null
-     */
-    public static LogPojo mapToPojoStatically(Log l) {
         if(l != null) {
             LogPojo pojo = new LogPojo(l);
             pojo.setUserId(l.getUserId());
             pojo.setUserName(l.getUserName());
             pojo.setCreatedOn(OpenInfraTime.format(l.getCreatedOn()));
-            pojo.setLogger(LoggerDao.mapToPojoStatically(l.getLoggerBean()));
-            pojo.setLevel(LevelDao.mapToPojoStatically(l.getLevelBean()));
+            pojo.setLogger(new LoggerDao(
+                    currentProjectId,
+                    schema).mapToPojo(null,l.getLoggerBean()));
+            pojo.setLevel(new LevelDao(
+                    currentProjectId,
+                    schema).mapToPojo(null, l.getLevelBean()));
             pojo.setMessage(l.getMessage());
             return pojo;
         } else {
@@ -61,7 +55,31 @@ public class LogDao
     @Override
     public MappingResult<Log> mapToModel(LogPojo pojo, Log log) {
         if(pojo != null) {
-            mapToModelStatically(pojo, log);
+            Log resultLog = null;
+            try {
+                resultLog = log;
+                if(resultLog == null) {
+                    resultLog = new Log();
+                    resultLog.setId(pojo.getUuid());
+                }
+                resultLog.setCreatedOn(OpenInfraTime.now());
+                resultLog.setMessage(pojo.getMessage());
+                resultLog.setUserId(pojo.getUserId());
+                resultLog.setUserName(pojo.getUserName());
+                resultLog.setLevelBean(new LevelDao(
+                        currentProjectId,
+                        schema).mapToModel(
+                                pojo.getLevel(),
+                                null).getModelObject());
+                resultLog.setLoggerBean(new LoggerDao(
+                        currentProjectId,
+                        schema).mapToModel(
+                                pojo.getLogger(),
+                                null).getModelObject());
+            } catch (NullPointerException npe) {
+                throw new OpenInfraEntityException(
+                        OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
+            }
             return new MappingResult<Log>(log.getId(), log);
         }
         else {
@@ -69,35 +87,4 @@ public class LogDao
         }
     }
 
-    /**
-     * This method implements the method mapToModel in a static way.
-     * @param pojo the POJO object
-     * @param log the pre initialized model object
-     * @return return a corresponding JPA model object
-     * @throws OpenInfraEntityException
-     */
-    public Log mapToModelStatically(LogPojo pojo, Log log) {
-        Log resultLog = null;
-        try {
-            resultLog = log;
-            if(resultLog == null) {
-                resultLog = new Log();
-                resultLog.setId(pojo.getUuid());
-            }
-            resultLog.setCreatedOn(OpenInfraTime.now());
-            resultLog.setMessage(pojo.getMessage());
-            resultLog.setUserId(pojo.getUserId());
-            resultLog.setUserName(pojo.getUserName());
-            resultLog.setLevelBean(LevelDao.mapToModelStatically(
-                    pojo.getLevel(),
-                    null));
-            resultLog.setLoggerBean(LoggerDao.mapToModelStatically(
-                    pojo.getLogger(),
-                    null));
-        } catch (NullPointerException npe) {
-            throw new OpenInfraEntityException(
-                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
-        }
-        return resultLog;
-    }
 }

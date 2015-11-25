@@ -36,26 +36,23 @@ public class DatabaseConnectionDao
     @Override
     public DatabaseConnectionPojo mapToPojo(Locale locale,
             DatabaseConnection dc) {
-        return mapToPojoStatically(dc);
-    }
-
-    /**
-     * This method implements the method mapToPojo in a static way.
-     *
-     * @param at     the model object
-     * @return       the POJO object when the model object is not null else null
-     */
-    public static DatabaseConnectionPojo mapToPojoStatically(
-            DatabaseConnection dc) {
         if (dc != null) {
             DatabaseConnectionPojo pojo = new DatabaseConnectionPojo(dc);
-            pojo.setServer(ServersDao.mapToPojoStatically(dc.getServerBean()));
-            pojo.setPort(PortsDao.mapToPojoStatically(dc.getPortBean()));
-            pojo.setDatabase(DatabasesDao.mapToPojoStatically(
-                    dc.getDatabaseBean()));
-            pojo.setSchema(SchemasDao.mapToPojoStatically(dc.getSchemaBean()));
-            pojo.setCredentials(CredentialsDao.mapToPojoStatically(
-                    dc.getCredential()));
+            pojo.setServer(new ServersDao(
+                    currentProjectId,
+                    schema).mapToPojo(null, dc.getServerBean()));
+            pojo.setPort(new PortsDao(
+                    currentProjectId,
+                    schema).mapToPojo(null, dc.getPortBean()));
+            pojo.setDatabase(new DatabasesDao(
+                    currentProjectId,
+                    schema).mapToPojo(null, dc.getDatabaseBean()));
+            pojo.setSchema(new SchemasDao(
+                    currentProjectId,
+                    schema).mapToPojo(null, dc.getSchemaBean()));
+            pojo.setCredentials(new CredentialsDao(
+                    currentProjectId,
+                    schema).mapToPojo(null, dc.getCredential()));
             return pojo;
         } else {
             return null;
@@ -67,51 +64,53 @@ public class DatabaseConnectionDao
             DatabaseConnectionPojo pojo,
             DatabaseConnection dbc) {
         if(pojo != null) {
-            mapToModelStatically(pojo, dbc);
+            DatabaseConnection resultDatabaseConnection = null;
+
+            try {
+                resultDatabaseConnection = dbc;
+                if(resultDatabaseConnection == null) {
+                    resultDatabaseConnection = new DatabaseConnection();
+                    resultDatabaseConnection.setId(pojo.getUuid());
+                }
+                resultDatabaseConnection.setCredential(
+                        new CredentialsDao(
+                                currentProjectId,
+                                schema).mapToModel(
+                                        pojo.getCredentials(),
+                                        null).getModelObject());
+                resultDatabaseConnection.setDatabaseBean(
+                        new DatabasesDao(
+                                currentProjectId,
+                                schema).mapToModel(
+                                        pojo.getDatabase(),
+                                        null).getModelObject());
+                resultDatabaseConnection.setPortBean(
+                        new PortsDao(
+                                currentProjectId,
+                                schema).mapToModel(
+                                        pojo.getPort(),
+                                        null).getModelObject());
+                resultDatabaseConnection.setSchemaBean(
+                        new SchemasDao(
+                                currentProjectId,
+                                schema).mapToModel(
+                                        pojo.getSchema(),
+                                        null).getModelObject());
+                resultDatabaseConnection.setServerBean(
+                        new ServersDao(
+                                currentProjectId,
+                                schema).mapToModel(
+                                        pojo.getServer(),
+                                        null).getModelObject());
+            } catch (NullPointerException npe) {
+                throw new OpenInfraEntityException(
+                        OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
+            }
             return new MappingResult<DatabaseConnection>(dbc.getId(), dbc);
         }
         else {
             return null;
         }
-    }
-
-    /**
-     * This method implements the method mapToModel in a static way.
-     * @param pojo the POJO object
-     * @param dbc the pre initialized model object
-     * @return return a corresponding JPA model object
-     * @throws OpenInfraEntityException
-     */
-    public static DatabaseConnection mapToModelStatically(
-            DatabaseConnectionPojo pojo,
-            DatabaseConnection dbc) {
-        DatabaseConnection resultDatabaseConnection = null;
-
-        try {
-            resultDatabaseConnection = dbc;
-            if(resultDatabaseConnection == null) {
-                resultDatabaseConnection = new DatabaseConnection();
-                resultDatabaseConnection.setId(pojo.getUuid());
-            }
-            resultDatabaseConnection.setCredential(
-                    CredentialsDao.mapToModelStatically(
-                            pojo.getCredentials(),
-                            null));
-            resultDatabaseConnection.setDatabaseBean(
-                    DatabasesDao.mapToModelStatically(
-                            pojo.getDatabase(),
-                            null));
-            resultDatabaseConnection.setPortBean(
-                    PortsDao.mapToModelStatically(pojo.getPort(), null));
-            resultDatabaseConnection.setSchemaBean(
-                    SchemasDao.mapToModelStatically(pojo.getSchema(), null));
-            resultDatabaseConnection.setServerBean(
-                    ServersDao.mapToModelStatically(pojo.getServer(), null));
-        } catch (NullPointerException npe) {
-            throw new OpenInfraEntityException(
-                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
-        }
-        return resultDatabaseConnection;
     }
 
 }

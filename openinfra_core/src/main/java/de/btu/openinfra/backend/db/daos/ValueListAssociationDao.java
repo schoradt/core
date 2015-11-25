@@ -41,7 +41,24 @@ public class ValueListAssociationDao
 	public ValueListAssociationPojo mapToPojo(
 			Locale locale,
 			ValueListXValueList vlxvl) {
-		return mapToPojoStatically(locale, vlxvl);
+	    try {
+            ValueListAssociationPojo pojo =
+                    new ValueListAssociationPojo(vlxvl);
+            pojo.setAssociationValueListId(vlxvl.getValueList1Bean().getId());
+            pojo.setRelationship(
+                    new ValueListValueDao(currentProjectId, schema).mapToPojo(
+                            locale,
+                            vlxvl.getValueListValue()));
+            pojo.setAssociatedValueList(
+                    new ValueListDao(currentProjectId, schema).mapToPojo(
+                            locale,
+                            vlxvl.getValueList2Bean()));
+
+            return pojo;
+        } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
+        }
 	}
 
 	@Override
@@ -54,30 +71,4 @@ public class ValueListAssociationDao
         return new MappingResult<ValueListXValueList>(vlxvl.getId(), vlxvl);
 	}
 
-	/**
-     * This method implements the method mapToPojo in a static way.
-     *
-     * @param locale the requested language as Java.util locale
-     * @param vlxvl  the model object
-     * @return       the POJO object when the model object is not null else null
-     */
-	public static ValueListAssociationPojo mapToPojoStatically(
-			Locale locale,
-			ValueListXValueList vlxvl) {
-
-		try {
-			ValueListAssociationPojo pojo =
-					new ValueListAssociationPojo(vlxvl);
-			pojo.setAssociationValueListId(vlxvl.getValueList1Bean().getId());
-			pojo.setRelationship(ValueListValueDao.mapToPojoStatically(locale,
-					vlxvl.getValueListValue()));
-			pojo.setAssociatedValueList(ValueListDao.mapToPojoStatically(locale,
-					vlxvl.getValueList2Bean()));
-
-			return pojo;
-		} catch (NullPointerException npe) {
-            throw new OpenInfraEntityException(
-                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
-        }
-	}
 }

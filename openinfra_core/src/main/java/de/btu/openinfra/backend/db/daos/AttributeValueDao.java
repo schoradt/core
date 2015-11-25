@@ -119,18 +119,22 @@ public class AttributeValueDao extends
 			//     way.
 			case ATTRIBUTE_VALUE_VALUE:
 				pojo.setAttributeValueValue(
-						AttributeValueValueDao.mapToPojoStatically(
-								locale,
-								em.find(AttributeValueValue.class, id)));
+						new AttributeValueValueDao(
+						        currentProjectId,
+						        schema).mapToPojo(
+					                locale,
+					                em.find(AttributeValueValue.class, id)));
 				break;
 
 			// 4.b This is a standard query which can be implemented in a static
 			//     way.
 			case ATTRIBUTE_VALUE_DOMAIN:
 				pojo.setAttributeValueDomain(
-						AttributeValueDomainDao.mapToPojoStatically(
-								locale,
-								em.find(AttributeValueDomain.class, id)));
+						new AttributeValueDomainDao(
+						        currentProjectId,
+						        schema).mapToPojo(
+					                locale,
+					                em.find(AttributeValueDomain.class, id)));
 				break;
 
 			// 4.c This is a specific query which must be implemented
@@ -241,9 +245,11 @@ public class AttributeValueDao extends
 	    AttributeValuePojo pojo = new AttributeValuePojo();
 
 	    // get the attribute type pojo from the passed attribute type id
-	    AttributeTypePojo atP = AttributeTypeDao.mapToPojoStatically(
-	            locale,
-	            em.find(AttributeType.class, attributeTypeId));
+	    AttributeTypePojo atP = new AttributeTypeDao(
+	            currentProjectId,
+	            schema).mapToPojo(
+	                    locale,
+	                    em.find(AttributeType.class, attributeTypeId));
 
 	    // get the actual data type
 	    String dataType = atP.getDataType().getNames()
@@ -261,13 +267,13 @@ public class AttributeValueDao extends
         if(isXX) {
             // set a xx locale
             ls.setLocale(
-                    PtLocaleDao.mapToPojoStatically(
+                    new PtLocaleDao(currentProjectId, schema).mapToPojo(
                             locale,
                             ptl.read(new Locale(
                                     PtFreeTextDao.NON_LINGUISTIC_CONTENT))));
         } else {
             // or the locale that was passed by the resource
-            ls.setLocale(PtLocaleDao.mapToPojoStatically(
+            ls.setLocale(new PtLocaleDao(currentProjectId, schema).mapToPojo(
                     locale,
                     ptl.read(locale)));
         }

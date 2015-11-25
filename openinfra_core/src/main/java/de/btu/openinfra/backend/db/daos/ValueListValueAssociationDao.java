@@ -39,7 +39,24 @@ public class ValueListValueAssociationDao
 	public ValueListValueAssociationPojo mapToPojo(
 			Locale locale,
 			ValueListValuesXValueListValue vlvxvlv) {
-		return mapToPojoStatically(locale, vlvxvlv);
+	    if(vlvxvlv != null) {
+            ValueListValueAssociationPojo pojo =
+                    new ValueListValueAssociationPojo(vlvxvlv);
+            ValueListValueDao vlvDao =
+                new ValueListValueDao(currentProjectId, schema);
+
+            pojo.setAssociationValueListValueId(
+                    vlvxvlv.getValueListValue2().getId());
+            pojo.setRelationship(
+                    vlvDao.mapToPojo(locale, vlvxvlv.getValueListValue1()));
+            pojo.setAssociatedValueListValue(
+                    vlvDao.mapToPojo(locale, vlvxvlv.getValueListValue3()));
+
+            return pojo;
+        }
+        else {
+            return null;
+        }
 	}
 
 	@Override
@@ -54,34 +71,4 @@ public class ValueListValueAssociationDao
                 vlvxvlv.getId(), vlvxvlv);
 	}
 
-	/**
-     * This method implements the method mapToPojo in a static way.
-     *
-     * @param locale  the requested language as Java.util locale
-     * @param vlvxvlv the model object
-     * @return        the POJO object when the model object is not null else
-     *                null
-     */
-	public static ValueListValueAssociationPojo mapToPojoStatically(
-			Locale locale,
-			ValueListValuesXValueListValue vlvxvlv) {
-
-		if(vlvxvlv != null) {
-			ValueListValueAssociationPojo pojo =
-					new ValueListValueAssociationPojo(vlvxvlv);
-
-			pojo.setAssociationValueListValueId(
-			        vlvxvlv.getValueListValue2().getId());
-			pojo.setRelationship(ValueListValueDao.mapToPojoStatically(locale,
-					vlvxvlv.getValueListValue1()));
-			pojo.setAssociatedValueListValue(
-					ValueListValueDao.mapToPojoStatically(
-							locale, vlvxvlv.getValueListValue3()));
-
-			return pojo;
-		}
-		else {
-			return null;
-		}
-	}
 }

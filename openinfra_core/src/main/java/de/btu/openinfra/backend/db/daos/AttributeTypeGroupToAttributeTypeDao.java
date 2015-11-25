@@ -43,33 +43,26 @@ public class AttributeTypeGroupToAttributeTypeDao extends
 	public AttributeTypeGroupToAttributeTypePojo mapToPojo(
 			Locale locale,
 			AttributeTypeToAttributeTypeGroup atgtat) {
-        return mapToPojoStatically(locale, atgtat);
-	}
-
-	/**
-     * This method implements the method mapToPojo in a static way.
-     *
-     * @param locale the requested language as Java.util locale
-     * @param atgtat the model object
-     * @return       the POJO object when the model object is not null else null
-     */
-    public static AttributeTypeGroupToAttributeTypePojo mapToPojoStatically(
-            Locale locale,
-            AttributeTypeToAttributeTypeGroup atgtat) {
         if(atgtat != null) {
             AttributeTypeGroupToAttributeTypePojo pojo =
                     new AttributeTypeGroupToAttributeTypePojo(atgtat);
 
             pojo.setAttributeTypeId(atgtat.getAttributeType().getId());
-            pojo.setAttributeTypeGroup(
-                    AttributeTypeGroupDao.mapToPojoStatically(
+            pojo.setAttributeTypeGroup(new AttributeTypeGroupDao(
+                    currentProjectId,
+                    schema).mapToPojo(
                             locale,
                             atgtat.getAttributeTypeGroup()));
-            pojo.setDefaultValue(ValueListValueDao.mapToPojoStatically(
-                    locale,
-                    atgtat.getValueListValue()));
-            pojo.setMultiplicity(MultiplicityDao.mapToPojoStatically(
-                    atgtat.getMultiplicityBean()));
+            pojo.setDefaultValue(new ValueListValueDao(
+                    currentProjectId,
+                    schema).mapToPojo(
+                            locale,
+                            atgtat.getValueListValue()));
+            pojo.setMultiplicity(new MultiplicityDao(
+                    currentProjectId,
+                    schema).mapToPojo(
+                            null,
+                            atgtat.getMultiplicityBean()));
             pojo.setOrder(atgtat.getOrder());
             return pojo;
         } else {

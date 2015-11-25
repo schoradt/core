@@ -33,16 +33,6 @@ public class SchemasDao
 
     @Override
     public SchemasPojo mapToPojo(Locale locale, Schemas s) {
-        return mapToPojoStatically(s);
-    }
-
-    /**
-     * This method implements the method mapToPojo in a static way.
-     *
-     * @param at     the model object
-     * @return       the POJO object when the model object is not null else null
-     */
-    public static SchemasPojo mapToPojoStatically(Schemas s) {
         if (s != null) {
             SchemasPojo pojo = new SchemasPojo(s);
             pojo.setSchema(s.getSchema());
@@ -55,35 +45,25 @@ public class SchemasDao
     @Override
     public MappingResult<Schemas> mapToModel(SchemasPojo pojo, Schemas s) {
         if(pojo != null) {
-            mapToModelStatically(pojo, s);
-            return new MappingResult<Schemas>(s.getId(), s);
+            Schemas resultSchemas = null;
+            try {
+                resultSchemas = s;
+                if(resultSchemas == null) {
+                    resultSchemas = new Schemas();
+                    resultSchemas.setId(pojo.getUuid());
+                }
+                resultSchemas.setSchema(pojo.getSchema());
+            } catch (NullPointerException npe) {
+                throw new OpenInfraEntityException(
+                        OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
+            }
+            return new MappingResult<Schemas>(
+                    resultSchemas.getId(),
+                    resultSchemas);
         }
         else {
             return null;
         }
-    }
-
-    /**
-     * This method implements the method mapToModel in a static way.
-     * @param pojo the POJO object
-     * @param s the pre initialized model object
-     * @return return a corresponding JPA model object
-     * @throws OpenInfraEntityException
-     */
-    public static Schemas mapToModelStatically(SchemasPojo pojo, Schemas s) {
-        Schemas resultSchemas = null;
-        try {
-            resultSchemas = s;
-            if(resultSchemas == null) {
-                resultSchemas = new Schemas();
-                resultSchemas.setId(pojo.getUuid());
-            }
-            resultSchemas.setSchema(pojo.getSchema());
-        } catch (NullPointerException npe) {
-            throw new OpenInfraEntityException(
-                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
-        }
-        return resultSchemas;
     }
 
 }

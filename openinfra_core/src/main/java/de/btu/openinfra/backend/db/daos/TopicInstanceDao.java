@@ -56,23 +56,6 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
 	 */
 	@Override
 	public TopicInstancePojo mapToPojo(Locale locale, TopicInstance ti) {
-        return mapToPojoStatically(locale, ti, currentProjectId, schema);
-	}
-
-	/**
-     * This method implements the method mapToPojo in a static way.
-     *
-     * @param locale the requested language as Java.util locale
-     * @param ti     the model object
-     * @param currentProjectId The identifier of the current project.
-     * @param schema           This parameter defines the schema.
-     * @return       the POJO object when the model object is not null else null
-     */
-    public static TopicInstancePojo mapToPojoStatically(
-            Locale locale,
-            TopicInstance ti,
-            UUID currentProjectId,
-            OpenInfraSchemas schema) {
         if (ti != null) {
 
             MetaDataDao mdDao = new MetaDataDao(currentProjectId, schema);
@@ -83,9 +66,12 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
             TopicInstancePojo pojo = new TopicInstancePojo(ti);
 
             // set the topic characteristic POJO
-            pojo.setTopicCharacteristic(TopicCharacteristicDao
-            		.mapToPojoStatically(locale,
-            				ti.getTopicCharacteristic(), null, null));
+            pojo.setTopicCharacteristic(
+                    new TopicCharacteristicDao(
+                            currentProjectId,
+                            schema).mapToPojo(
+                                    locale,
+                                    ti.getTopicCharacteristic()));
 
             String metaData = null;
             // check if meta data exists for this topic instance
@@ -110,6 +96,8 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
             List<AttributeValuePojo> values =
                     new LinkedList<AttributeValuePojo>();
 
+            AttributeValueDomainDao avdDao =
+                    new AttributeValueDomainDao(currentProjectId, schema);
             // 3. This is for all attribute value domains
             for(AttributeValueDomain avd : ti.getAttributeValueDomains()) {
                 // 3.a Check if the current id is mentioned in the meta data
@@ -124,13 +112,15 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
                     avPojo.setAttributeValueType(
                             AttributeValueTypes.ATTRIBUTE_VALUE_DOMAIN);
                     avPojo.setAttributeValueDomain(
-                            AttributeValueDomainDao.mapToPojoStatically(
+                            avdDao.mapToPojo(
                                     locale,
                                     avd));
                     values.add(avPojo);
                 } // end if
             } // end for
 
+            AttributeValueValueDao avvDao =
+                    new AttributeValueValueDao(currentProjectId, schema);
             // 4. This is for all attribute value values
             for(AttributeValueValue avv : ti.getAttributeValueValues()) {
                 // 4.a Check if the current id is mentioned in the settings
@@ -145,7 +135,7 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
                     avPojo.setAttributeValueType(
                             AttributeValueTypes.ATTRIBUTE_VALUE_VALUE);
                     avPojo.setAttributeValueValue(
-                            AttributeValueValueDao.mapToPojoStatically(
+                            avvDao.mapToPojo(
                                     locale,
                                     avv));
                     values.add(avPojo);

@@ -43,31 +43,25 @@ public class AttributeTypeToAttributeTypeGroupDao extends
 	public AttributeTypeToAttributeTypeGroupPojo mapToPojo(
 			Locale locale,
 			AttributeTypeToAttributeTypeGroup attatg) {
-		return mapToPojoStatically(locale, attatg);
-	}
-
-	/**
-	 * This method implements the method mapToPojo in a static way.
-	 *
-	 * @param locale the requested language as Java.util locale
-	 * @param attatg the model object
-	 * @return       the POJO object when the model object is not null else null
-	 */
-	public static AttributeTypeToAttributeTypeGroupPojo mapToPojoStatically(
-			Locale locale,
-			AttributeTypeToAttributeTypeGroup attatg) {
 		AttributeTypeToAttributeTypeGroupPojo pojo =
 				new AttributeTypeToAttributeTypeGroupPojo(attatg);
 
-		pojo.setAttributeType(AttributeTypeDao.mapToPojoStatically(
-				locale,
-				attatg.getAttributeType()));
+		pojo.setAttributeType(new AttributeTypeDao(
+		        currentProjectId,
+		        schema).mapToPojo(
+		                locale,
+		                attatg.getAttributeType()));
 		pojo.setAttributeTypeGroupId(attatg.getId());
-		pojo.setDefaultValue(ValueListValueDao.mapToPojoStatically(
-				locale,
-				attatg.getValueListValue()));
-		pojo.setMultiplicity(MultiplicityDao.mapToPojoStatically(
-				attatg.getMultiplicityBean()));
+		pojo.setDefaultValue(new ValueListValueDao(
+		        currentProjectId,
+		        schema).mapToPojo(
+		                locale,
+		                attatg.getValueListValue()));
+		pojo.setMultiplicity(new MultiplicityDao(
+		        currentProjectId,
+		        schema).mapToPojo(
+		                null,
+		                attatg.getMultiplicityBean()));
 		pojo.setOrder(attatg.getOrder());
 		return pojo;
 	}

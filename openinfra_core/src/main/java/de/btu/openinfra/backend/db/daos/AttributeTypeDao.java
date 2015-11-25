@@ -43,35 +43,27 @@ public class AttributeTypeDao
 
 	@Override
 	public AttributeTypePojo mapToPojo(Locale locale, AttributeType at) {
-		return mapToPojoStatically(locale, at);
-	}
-
-	/**
-	 * This method implements the method mapToPojo in a static way.
-	 *
-	 * @param locale the requested language as Java.util locale
-	 * @param at     the model object
-	 * @return       the POJO object when the model object is not null else null
-	 */
-	public static AttributeTypePojo mapToPojoStatically(
-			Locale locale,
-			AttributeType at) {
 		if(at != null) {
 		    AttributeTypePojo pojo = new AttributeTypePojo(at);
+		    ValueListValueDao vlvDao =
+		            new ValueListValueDao(currentProjectId, schema);
+		    PtFreeTextDao pftDao = new PtFreeTextDao(currentProjectId, schema);
 
-			pojo.setDomain(ValueListDao.mapToPojoStatically(
-					locale,
-					at.getValueList()));
-			pojo.setUnit(ValueListValueDao.mapToPojoStatically(
+			pojo.setDomain(new ValueListDao(
+			        currentProjectId,
+			        schema).mapToPojo(
+			                locale,
+			                at.getValueList()));
+			pojo.setUnit(vlvDao.mapToPojo(
 					locale,
 					at.getValueListValue2()));
-			pojo.setDataType(ValueListValueDao.mapToPojoStatically(
+			pojo.setDataType(vlvDao.mapToPojo(
 					locale,
 					at.getValueListValue1()));
-			pojo.setDescriptions(PtFreeTextDao.mapToPojoStatically(
+			pojo.setDescriptions(pftDao.mapToPojo(
 					locale,
 					at.getPtFreeText1()));
-			pojo.setNames(PtFreeTextDao.mapToPojoStatically(
+			pojo.setNames(pftDao.mapToPojo(
 					locale,
 					at.getPtFreeText2()));
 
@@ -116,9 +108,7 @@ public class AttributeTypeDao
                 .setParameter("ptl", pl)
                 .setParameter("dataType", dataType)
                 .getSingleResult();
-	    return AttributeTypeDao.mapToPojoStatically(
-	            locale,
-	            at);
+	    return mapToPojo(locale, at);
 	}
 
 	@Override

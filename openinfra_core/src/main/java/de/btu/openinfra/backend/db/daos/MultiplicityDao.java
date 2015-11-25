@@ -32,17 +32,6 @@ public class MultiplicityDao extends
 
 	@Override
 	public MultiplicityPojo mapToPojo(Locale locale, Multiplicity mp) {
-		return mapToPojoStatically(mp);
-	}
-
-	/**
-	 * This is a static representation of the mapToPojo method and maps a JPA
-	 * model object into the referring POJO object.
-	 *
-	 * @param mp    the JPA model object
-	 * @return      the POJO object when the model object is not null else null
-	 */
-	public static MultiplicityPojo mapToPojoStatically(Multiplicity mp) {
 		if(mp != null) {
 			MultiplicityPojo pojo = new MultiplicityPojo(mp);
 

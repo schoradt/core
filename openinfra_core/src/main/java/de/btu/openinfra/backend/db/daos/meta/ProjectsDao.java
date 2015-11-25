@@ -33,22 +33,15 @@ public class ProjectsDao
 
     @Override
     public ProjectsPojo mapToPojo(Locale locale, Projects p) {
-        return mapToPojoStatically(p);
-    }
-
-    /**
-     * This method implements the method mapToPojo in a static way.
-     *
-     * @param p      the model object
-     * @return       the POJO object when the model object is not null else null
-     */
-    public static ProjectsPojo mapToPojoStatically(Projects p) {
         if (p != null) {
             ProjectsPojo pojo = new ProjectsPojo(p);
             pojo.setProjectId(p.getProjectId());
             pojo.setDatabaseConnection(
-                    DatabaseConnectionDao.mapToPojoStatically(
-                            p.getDatabaseConnection()));
+                    new DatabaseConnectionDao(
+                            currentProjectId,
+                            schema).mapToPojo(
+                                    null,
+                                    p.getDatabaseConnection()));
             pojo.setIsSubproject(p.getIsSubproject());
             return pojo;
         } else {
@@ -59,41 +52,32 @@ public class ProjectsDao
     @Override
     public MappingResult<Projects> mapToModel(ProjectsPojo pojo, Projects ps) {
         if(pojo != null) {
-            mapToModelStatically(pojo, ps);
-            return new MappingResult<Projects>(ps.getId(), ps);
+            Projects resultProjects = null;
+            try {
+                resultProjects = ps;
+                if(resultProjects == null) {
+                    resultProjects = new Projects();
+                    resultProjects.setId(pojo.getUuid());
+                }
+                resultProjects.setProjectId(pojo.getProjectId());
+                resultProjects.setIsSubproject(pojo.getIsSubproject());
+                resultProjects.setDatabaseConnection(
+                        new DatabaseConnectionDao(
+                                currentProjectId,
+                                schema).mapToModel(
+                                        pojo.getDatabaseConnection(),
+                                        null).getModelObject());
+            } catch (NullPointerException npe) {
+                throw new OpenInfraEntityException(
+                        OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
+            }
+            return new MappingResult<Projects>(
+                    resultProjects.getId(),
+                    resultProjects);
         }
         else {
             return null;
         }
-    }
-
-    /**
-     * This method implements the method mapToModel in a static way.
-     * @param pojo the POJO object
-     * @param projects the pre initialized model object
-     * @return return a corresponding JPA model object
-     * @throws OpenInfraEntityException
-     */
-    public static Projects mapToModelStatically(
-            ProjectsPojo pojo, Projects projects) {
-        Projects resultProjects = null;
-        try {
-            resultProjects = projects;
-            if(resultProjects == null) {
-                resultProjects = new Projects();
-                resultProjects.setId(pojo.getUuid());
-            }
-            resultProjects.setProjectId(pojo.getProjectId());
-            resultProjects.setIsSubproject(pojo.getIsSubproject());
-            resultProjects.setDatabaseConnection(
-                    DatabaseConnectionDao.mapToModelStatically(
-                            pojo.getDatabaseConnection(),
-                            null));
-        } catch (NullPointerException npe) {
-            throw new OpenInfraEntityException(
-                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
-        }
-        return resultProjects;
     }
 
 }

@@ -45,29 +45,16 @@ public class PtFreeTextDao extends OpenInfraDao<PtFreeTextPojo, PtFreeText> {
 
 	@Override
 	public PtFreeTextPojo mapToPojo(Locale locale, PtFreeText ptf) {
-		// 1. Create a list of the specified object type
-		List<LocalizedString> lsList = new LinkedList<LocalizedString>();
-
-		// 2. Extract the information from the given PtFreeText object
-		if(ptf != null) {
-			for(LocalizedCharacterString lcs :
-				ptf.getLocalizedCharacterStrings()) {
-				LocalizedString ls = new LocalizedString();
-				// 2.a Get the free text
-				ls.setCharacterString(lcs.getFreeText());
-				// 2.b Create a PtLocalePojo, map the text representation
-				//     and insert it to the list of objects
-				//     Use the static method in order to save response time!
-				ls.setLocale(PtLocaleDao.mapToPojoStatically(
-						locale,
-						lcs.getPtLocale()));
-				lsList.add(ls);
-			} // end for
-		} // end if
-
-		// 3. Finaly, create a new instance of TypeString and add the list
-		// of LocalizedStrings
-		return new PtFreeTextPojo(lsList, ptf.getId(), ptf.getXmin());
+	    UUID id = null;
+        int trid = -1;
+        if(ptf != null) {
+            id = ptf.getId();
+            trid = ptf.getXmin();
+        } // end if
+        return new PtFreeTextPojo(
+                mapToLocalizedStringStatically(locale, ptf),
+                id,
+                trid);
 	}
 
 	/**
@@ -81,7 +68,7 @@ public class PtFreeTextDao extends OpenInfraDao<PtFreeTextPojo, PtFreeText> {
 	 * @param ptf    the PtFreeText object
 	 * @return       a list of LocalizedStrings
 	 */
-	private static List<LocalizedString> mapToLocalizedStringStatically(
+	private List<LocalizedString> mapToLocalizedStringStatically(
 			Locale locale,
 			PtFreeText ptf) {
 		// 1. Create a list of LocalizedStrings
@@ -128,7 +115,7 @@ public class PtFreeTextDao extends OpenInfraDao<PtFreeTextPojo, PtFreeText> {
 	 * @param lcs the LocalizedCharacterString object
 	 * @return    the LocalizedString object
 	 */
-	private static LocalizedString mapLocalizedString(
+	private LocalizedString mapLocalizedString(
 			LocalizedCharacterString lcs) {
 		LocalizedString ls = new LocalizedString();
 		// 2.a Get the free text
@@ -136,7 +123,7 @@ public class PtFreeTextDao extends OpenInfraDao<PtFreeTextPojo, PtFreeText> {
 		// 2.b Create a PtLocalePojo, map the text representation
 		//     and insert it to the list of objects
 		//     Use the static method in order to save response time!
-		ls.setLocale(PtLocaleDao.mapToPojoStatically(
+		ls.setLocale(new PtLocaleDao(currentProjectId, schema).mapToPojo(
 				null,
 				lcs.getPtLocale()));
 		return ls;
@@ -248,18 +235,4 @@ public class PtFreeTextDao extends OpenInfraDao<PtFreeTextPojo, PtFreeText> {
         return null;
     }
 
-	public static PtFreeTextPojo mapToPojoStatically(
-			Locale locale,
-			PtFreeText ptf) {
-		UUID id = null;
-		int trid = -1;
-		if(ptf != null) {
-			id = ptf.getId();
-			trid = ptf.getXmin();
-		} // end if
-		return new PtFreeTextPojo(
-				mapToLocalizedStringStatically(locale, ptf),
-				id,
-				trid);
-	}
 }

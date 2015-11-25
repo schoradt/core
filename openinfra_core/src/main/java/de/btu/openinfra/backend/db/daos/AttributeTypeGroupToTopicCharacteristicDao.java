@@ -42,32 +42,23 @@ public class AttributeTypeGroupToTopicCharacteristicDao extends
 	@Override
 	public AttributeTypeGroupToTopicCharacteristicPojo mapToPojo(
 			Locale locale,
-			AttributeTypeGroupToTopicCharacteristic atg) {
-		return mapToPojoStatically(locale, atg);
-	}
-
-	/**
-	 * This method implements the method mapToPojo in a static way.
-	 *
-	 * @param locale the requested language as Java.util locale
-	 * @param atgttc    the model object
-	 * @return       the POJO object when the model object is not null else null
-	 */
-	public static AttributeTypeGroupToTopicCharacteristicPojo
-		mapToPojoStatically(
-				Locale locale,
-				AttributeTypeGroupToTopicCharacteristic atgttc) {
+			AttributeTypeGroupToTopicCharacteristic atgttc) {
 	    if (atgttc != null) {
     		AttributeTypeGroupToTopicCharacteristicPojo pojo =
     				new AttributeTypeGroupToTopicCharacteristicPojo(atgttc);
 
-    		pojo.setAttributeTypeGroup(
-    		        AttributeTypeGroupDao.mapToPojoStatically(
+    		pojo.setAttributeTypeGroup(new AttributeTypeGroupDao(
+    		        currentProjectId,
+    		        schema).mapToPojo(
     		                locale,
     		                atgttc.getAttributeTypeGroup()));
-    		pojo.setMultiplicity(MultiplicityDao.mapToPojoStatically(
-    				atgttc.getMultiplicityBean()));
-    		pojo.setTopicCharacteristicId(atgttc.getTopicCharacteristic().getId());
+    		pojo.setMultiplicity(new MultiplicityDao(
+    		        currentProjectId,
+    		        schema).mapToPojo(
+    		                null,
+    		                atgttc.getMultiplicityBean()));
+    		pojo.setTopicCharacteristicId(
+    		        atgttc.getTopicCharacteristic().getId());
 
     		if(atgttc.getOrder() != null) {
     			pojo.setOrder(atgttc.getOrder());

@@ -34,22 +34,16 @@ public class SettingsDao
 
     @Override
     public SettingsPojo mapToPojo(Locale locale, Settings s) {
-        return mapToPojoStatically(s);
-    }
-
-    /**
-     * This method implements the method mapToPojo in a static way.
-     *
-     * @param s     the model object
-     * @return       the POJO object when the model object is not null else null
-     */
-    public static SettingsPojo mapToPojoStatically(Settings s) {
         if (s != null) {
             SettingsPojo pojo = new SettingsPojo(s);
-            pojo.setKey(SettingKeysDao.mapToPojoStatically(s.getSettingKey()));
+            pojo.setKey(new SettingKeysDao(
+                    currentProjectId,
+                    schema).mapToPojo(null, s.getSettingKey()));
             pojo.setUpdatedOn(OpenInfraTime.format(s.getUpdatedOn()));
             pojo.setValue(s.getValue());
-            pojo.setProject(ProjectsDao.mapToPojoStatically(s.getProject()));
+            pojo.setProject(new ProjectsDao(
+                    currentProjectId,
+                    schema).mapToPojo(null, s.getProject()));
             return pojo;
         } else {
             return null;
@@ -59,48 +53,44 @@ public class SettingsDao
     @Override
     public MappingResult<Settings> mapToModel(SettingsPojo pojo, Settings s) {
         if(pojo != null) {
-            mapToModelStatically(pojo, s);
-            return new MappingResult<Settings>(s.getId(), s);
+            Settings resultSettings = null;
+            try {
+                resultSettings = s;
+                if(resultSettings == null) {
+                    resultSettings = new Settings();
+                    resultSettings.setId(pojo.getUuid());
+                }
+                resultSettings.setSettingKey(
+                        new SettingKeysDao(
+                                currentProjectId,
+                                schema).mapToModel(
+                                        pojo.getKey(),
+                                        null).getModelObject());
+                resultSettings.setValue(pojo.getValue());
+                // Set a new timestamp in any case since the probability is
+                // extremely high that the model object is stored in the database.
+                // It's recommended to use POJO objects for internal usage. In any
+                // case, it should be avoided to retrieve a POJO object from
+                // database and to transform it into model object afterwards for
+                // internal processing.
+                resultSettings.setUpdatedOn(OpenInfraTime.now());
+                resultSettings.setProject(
+                        new ProjectsDao(
+                                currentProjectId,
+                                schema).mapToModel(
+                                        pojo.getProject(),
+                                        null).getModelObject());
+            } catch (NullPointerException npe) {
+                throw new OpenInfraEntityException(
+                        OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
+            }
+            return new MappingResult<Settings>(
+                    resultSettings.getId(),
+                    resultSettings);
         }
         else {
             return null;
         }
-    }
-
-    /**
-     * This method implements the method mapToModel in a static way.
-     * @param pojo the POJO object
-     * @param s the pre initialized model object
-     * @return return a corresponding JPA model object
-     * @throws OpenInfraEntityException
-     */
-    public static Settings mapToModelStatically(
-            SettingsPojo pojo,
-            Settings s) {
-        Settings resultSettings = null;
-        try {
-            resultSettings = s;
-            if(resultSettings == null) {
-                resultSettings = new Settings();
-                resultSettings.setId(pojo.getUuid());
-            }
-            resultSettings.setSettingKey(
-                    SettingKeysDao.mapToModelStatically(pojo.getKey(), null));
-            resultSettings.setValue(pojo.getValue());
-            // Set a new timestamp in any case since the probability is
-            // extremely high that the model object is stored in the database.
-            // It's recommended to use POJO objects for internal usage. In any
-            // case, it should be avoided to retrieve a POJO object from
-            // database and to transform it into model object afterwards for
-            // internal processing.
-            resultSettings.setUpdatedOn(OpenInfraTime.now());
-            resultSettings.setProject(
-                    ProjectsDao.mapToModelStatically(pojo.getProject(), null));
-        } catch (NullPointerException npe) {
-            throw new OpenInfraEntityException(
-                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
-        }
-        return resultSettings;
     }
 
 }

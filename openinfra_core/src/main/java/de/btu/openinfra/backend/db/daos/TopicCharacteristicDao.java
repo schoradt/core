@@ -76,9 +76,7 @@ public class TopicCharacteristicDao
 		for(TopicCharacteristic tc : tcs) {
 		    UUID id = tc.getId();
 		    if (!tcp.containsKey(id)) {
-		        tcp.put(
-	                id,
-	                mapToPojoStatically(locale, tc, currentProjectId, schema));
+		        tcp.put(id, mapToPojo(locale, tc));
 		    }
 
 		} // end for
@@ -133,23 +131,6 @@ public class TopicCharacteristicDao
 	public TopicCharacteristicPojo mapToPojo(
 			Locale locale,
 			TopicCharacteristic tc) {
-		return mapToPojoStatically(locale, tc, currentProjectId, schema);
-	}
-
-	/**
-	 * This method implements the method mapToPojo in a static way.
-	 *
-	 * @param locale the requested language as Java.util locale
-	 * @param tc     the model object
-	 * @param currentProjectId The identifier of the current project.
-     * @param schema           This parameter defines the schema.
-	 * @return       the POJO object when the model object is not null else null
-	 */
-	public static TopicCharacteristicPojo mapToPojoStatically(
-			Locale locale,
-			TopicCharacteristic tc,
-			UUID currentProjectId,
-            OpenInfraSchemas schema) throws NullPointerException {
 		if (tc != null) {
 		    TopicCharacteristicPojo pojo = new TopicCharacteristicPojo(tc);
 
@@ -157,7 +138,7 @@ public class TopicCharacteristicDao
     		    throw new NullPointerException(
 		    			"The project id and the schema must not be null!");
 		    }
-		    
+
 		    pojo.setTopicInstancesCount(
     				new TopicInstanceDao(
     		    			currentProjectId, schema)
@@ -167,12 +148,16 @@ public class TopicCharacteristicDao
             try {
                 pojo.setProjectId(tc.getProject().getId());
             } catch (NullPointerException npe) { /* do nothing */ }
-    		pojo.setTopic(ValueListValueDao.mapToPojoStatically(
-    				locale,
-    				tc.getValueListValue()));
-    		pojo.setDescriptions(PtFreeTextDao.mapToPojoStatically(
-    				locale,
-    				tc.getPtFreeText()));
+    		pojo.setTopic(new ValueListValueDao(
+    		        currentProjectId,
+    		        schema).mapToPojo(
+    		                locale,
+    		                tc.getValueListValue()));
+    		pojo.setDescriptions(new PtFreeTextDao(
+    		        currentProjectId,
+    		        schema).mapToPojo(
+    		                locale,
+    		                tc.getPtFreeText()));
 
     		return pojo;
 		} else {

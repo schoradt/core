@@ -160,25 +160,9 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 
 	@Override
 	public ProjectPojo mapToPojo(Locale locale, Project p) {
-		return mapToPojoStatically(locale, p, currentProjectId, schema);
-	}
-
-	/**
-     * This method implements the method mapToPojo in a static way.
-     *
-     * @param locale the requested language as Java.util locale
-     * @param p      the model object
-     * @param currentProjectId The identifier of the current project.
-     * @param schema           This parameter defines the schema.
-     * @return       the POJO object when the model object is not null else null
-     */
-	public static ProjectPojo mapToPojoStatically(
-	        Locale locale,
-	        Project p,
-	        UUID currentProjectId,
-	        OpenInfraSchemas schema) {
 		if(p != null) {
 			ProjectPojo pojo = new ProjectPojo(p);
+			PtFreeTextDao pftDao = new PtFreeTextDao(currentProjectId, schema);
 
 			pojo.setValueListsCount(
 					new ValueListDao(currentProjectId, schema)
@@ -190,10 +174,10 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 
 			Project parent = p.getProject();
 
-			pojo.setNames(PtFreeTextDao.mapToPojoStatically(
+			pojo.setNames(pftDao.mapToPojo(
 					locale,
 					p.getPtFreeText2()));
-			pojo.setDescriptions(PtFreeTextDao.mapToPojoStatically(
+			pojo.setDescriptions(pftDao.mapToPojo(
 					locale,
 					p.getPtFreeText1()));
 			if(parent != null) {
@@ -256,19 +240,11 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 	public List<ProjectPojo> readParents(Locale locale) {
 		Project self = em.find(Project.class, currentProjectId);
 		List<ProjectPojo> parents = new LinkedList<ProjectPojo>();
-		parents.add(mapToPojoStatically(
-		        locale,
-		        self,
-		        currentProjectId,
-		        schema));
+		parents.add(mapToPojo(locale, self));
 
 		while(self.getProject() != null) {
 			self = self.getProject();
-			parents.add(mapToPojoStatically(
-			        locale,
-			        self,
-			        currentProjectId,
-			        schema));
+			parents.add(mapToPojo(locale, self));
 		} // end while
 		return Lists.reverse(parents);
 	}

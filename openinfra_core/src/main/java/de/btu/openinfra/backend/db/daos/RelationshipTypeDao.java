@@ -46,28 +46,17 @@ public class RelationshipTypeDao extends
 	public RelationshipTypePojo mapToPojo(
 			Locale locale,
 			RelationshipType rt) {
-		return mapToPojoStatically(locale, rt);
-	}
-
-	/**
-	 * This method implements the method mapToPojo in a static way.
-	 *
-	 * @param locale the requested language as Java.util locale
-	 * @param rt     the model object
-	 * @return       the POJO object
-	 */
-	public static RelationshipTypePojo mapToPojoStatically(
-			Locale locale,
-			RelationshipType rt) {
 	    if (rt != null) {
     		RelationshipTypePojo pojo = new RelationshipTypePojo(rt);
+    		ValueListValueDao vlvDao =
+    		        new ValueListValueDao(currentProjectId, schema);
 
     		pojo.setRelationshipType(
-    				ValueListValueDao.mapToPojoStatically(
+    		        vlvDao.mapToPojo(
     						locale,
     						rt.getValueListValue2()));
     		pojo.setDescription(
-    				ValueListValueDao.mapToPojoStatically(
+    		        vlvDao.mapToPojo(
     						locale,
     						rt.getValueListValue1()));
     		return pojo;
