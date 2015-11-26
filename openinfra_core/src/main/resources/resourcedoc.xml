@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <resourceDoc><classDocs><classDoc><className>de.btu.openinfra.backend.db.converter.PostgresUuidConverter</className><commentText><![CDATA[Since the UUID type isn't part of the SQL standard, it is required to provide
  an specific mapping or converter, respectively. This implementation is taken
  from <a href="http://blog-ungarida.rhcloud.com/persisting-uuid-in-postgresql-using-jpa-eclipselink">
@@ -335,7 +336,11 @@
  http://localhost:8080/openinfra_backend/rest/projects</a>]]></commentText><methodDocs><methodDoc><methodName>get</methodName><commentText><![CDATA[This method provides a list of all projects. The provided parameters are
  used for paging.]]></commentText><responseDoc><returnDoc>a list of projects &amp;lt;= size (window within offset
                and size)</returnDoc></responseDoc></methodDoc><methodDoc><methodName>getMainProjectsCount</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>get</methodName><commentText><![CDATA[This method provides a specific project.]]></commentText><responseDoc><returnDoc>the requested project</returnDoc></responseDoc></methodDoc><methodDoc><methodName>getSubProjects</methodName><commentText><![CDATA[This method delivers a list of sub projects specified by the current
- project id in only one hierarchy level.]]></commentText><responseDoc><returnDoc>a list of sub projects</returnDoc></responseDoc></methodDoc><methodDoc><methodName>getSubProjectsCount</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>createProject</methodName><commentText><![CDATA[This method creates a new project.
+ project id in only one hierarchy level.]]></commentText><responseDoc><returnDoc>a list of sub projects</returnDoc><representations><representation
+                                status="503"
+                                mediaType="text/plain"><example>You'll get some explanation why this service is not available</example><doc>You'll get some explanation why this service is not available - return</doc></representation><representation
+                                element="ns2:item" status="200"
+                                mediaType="application/xml" xmlns:ns2="http://www.example.com"><doc>This is the representation returned by default (if we have an even number of millis since 1970...:)</doc></representation></representations></responseDoc></methodDoc><methodDoc><methodName>getSubProjectsCount</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>createProject</methodName><commentText><![CDATA[This method creates a new project.
 
  You can access this method via curl. An example of the command line could
  be as follows:
