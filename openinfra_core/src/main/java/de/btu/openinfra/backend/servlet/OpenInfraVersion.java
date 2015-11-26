@@ -1,10 +1,8 @@
 package de.btu.openinfra.backend.servlet;
 
 import java.io.IOException;
-import java.util.Enumeration;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,19 +33,6 @@ public class OpenInfraVersion extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		for(Cookie c : req.getCookies()) {
-			System.out.println(c.getName() + " " + c.getValue() + " " + c.getPath() );
-		}
-		Enumeration<String> hn = req.getHeaderNames();
-		while(hn.hasMoreElements()) {
-			String name = hn.nextElement();
-			Enumeration<String> contents = req.getHeaders(name);
-			System.out.println("--> " + name);
-			while(contents.hasMoreElements()) {
-				System.out.println("   --> " + contents.nextElement());
-			}
-		}
-
 		resp.setContentType(MediaType.TEXT_PLAIN);
 		resp.getWriter().write(
 				OpenInfraApplication.getOpenInfraVersion(getServletContext()));
