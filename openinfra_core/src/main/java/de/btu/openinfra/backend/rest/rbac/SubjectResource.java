@@ -50,7 +50,6 @@ public class SubjectResource {
 	public List<SubjectPojo> get(
 			@Context UriInfo uriInfo,
 			@Context HttpServletRequest request,
-			@QueryParam("language") String language,
 			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
             @QueryParam("orderBy") OpenInfraOrderBy orderBy,
 			@QueryParam("offset") int offset,
@@ -58,7 +57,7 @@ public class SubjectResource {
 		return new SubjectRbac().read(
 				OpenInfraHttpMethod.valueOf(request.getMethod()),
 				uriInfo,
-				PtLocaleDao.forLanguageTag(language),
+				null,
 				sortOrder,
 				orderBy,
 				offset,
