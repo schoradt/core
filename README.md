@@ -30,5 +30,5 @@ A detailed description is provided in the specific folder: [GXC](https://github.
 OpenInfRA provides a file upload. This upload requires [ImageMagick](http://www.imagemagick.org) to generate and produce different image representations.
 
 ## TODO
-- There is currently no Test-Framework available. The implementation of a sufficient Test-Framework (e.g. [JUnit](http://junit.org/)) becomes highly necessary!
+- The JUnit tests have to be extended.
 - There is currently no Loggin-Framework available.
