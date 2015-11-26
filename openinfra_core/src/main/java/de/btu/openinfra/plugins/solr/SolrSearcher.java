@@ -162,7 +162,7 @@ public class SolrSearcher extends SolrServer {
                 // only remove the default_search field if it is not the only
                 // entry in the highlight field
                 if (hl.get(rP.getTopicInstanceId().toString()).size() > 1 &&
-                        !hl.get(rP.getTopicInstanceId().toString())
+                        hl.get(rP.getTopicInstanceId().toString())
                         .containsKey(SolrIndexEnum.DEFAULT_SEARCH_FIELD
                                 .getString())) {
                     // remove the default_search field from the highlighting map
