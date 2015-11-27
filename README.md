@@ -29,6 +29,9 @@ A detailed description is provided in the specific folder: [GXC](https://github.
 ## ImageMagick
 OpenInfRA provides a file upload. This upload requires [ImageMagick](http://www.imagemagick.org) to generate and produce different image representations.
 
+- PDF conversion requires [ghostscript](http://www.ghostscript.com/)
+- Conversio of raw file formats (such as DNG) require [ufrwa](http://ufraw.sourceforge.net/) under Linux-based systems.
+
 ## TODO
 - The JUnit tests have to be extended.
 - There is currently no Loggin-Framework available.
