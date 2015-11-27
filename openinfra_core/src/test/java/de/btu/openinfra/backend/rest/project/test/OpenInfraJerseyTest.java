@@ -1,5 +1,6 @@
 package de.btu.openinfra.backend.rest.project.test;
 
+import java.net.URLEncoder;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -46,9 +47,10 @@ public class OpenInfraJerseyTest {
 	public static void main(String[] args) throws Exception {
 		OpenInfraJerseyTest test = new OpenInfraJerseyTest();
 		test.setUp();
-		test.test1addProject();
-		test.test100webappProject();
-		test.test1000deleteProject();
+		//test.test1addProject();
+		test.test2urlFileUpload();
+		//test.test100webappProject();
+		//test.test1000deleteProject();
 	}
 
 	@Before
@@ -61,6 +63,13 @@ public class OpenInfraJerseyTest {
 
 	public Builder build(String path, String mediaType) {
 		return target.path(REST_PATH + path).request(mediaType).cookie(cookie);
+	}
+
+	public Builder build(String path, String mediaType,
+			String qParamName, String qParamValue) {
+		return target.path(REST_PATH + path)
+				.queryParam(qParamName, qParamValue)
+				.request(mediaType).cookie(cookie);
 	}
 
 	public void login(String username, String password) {
@@ -165,6 +174,17 @@ public class OpenInfraJerseyTest {
 				MediaType.APPLICATION_JSON).post(Entity.json(wpp))
 				.readEntity(String.class);
 		System.out.println("Webapp data written: " + result);
+	}
+
+	@Test
+	public void test2urlFileUpload() throws Exception {
+		Response res = build("files/urlupload",
+				MediaType.APPLICATION_JSON, "fileurl",
+				URLEncoder.encode("http://www.newyorker.com/wp-content/uploads"
+						+ "/2014/12/Batuman-Biggest-Stone-Block-1200.jpg",
+						"UTF-8"))
+				.post(null);
+		System.out.println("--> " + res);
 	}
 
 }
