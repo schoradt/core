@@ -239,17 +239,33 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 		return pojos;
 	}
 
+	/**
+     * A special method which returns model objects. This method is primarily
+     * used to create a search index.
+     *
+     * @return a list of all model objects
+     */
+    public List<TypeModel> read() {
+        return read(0, Integer.MAX_VALUE);
+    }
+
     /**
 	 * A special method which returns model objects. This method is primarily
-	 * used to create a search index.
+	 * used to create a search index. Window functionality is provided to avoid
+	 * out of memory exceptions.
 	 *
+	 * @param offset This will determine the offset
+	 * @param size
 	 * @return a list of all model objects
 	 */
-	public List<TypeModel> read() {
+	public List<TypeModel> read(int offset, int size) {
 		String namedQuery = modelClass.getSimpleName() + ".findAll";
 		return em.createNamedQuery(
 				namedQuery,
-				modelClass).getResultList();
+				modelClass)
+				.setFirstResult(offset)
+                .setMaxResults(size)
+                .getResultList();
 	}
 
 	/**

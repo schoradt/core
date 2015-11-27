@@ -5,6 +5,8 @@ import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
+
 /**
  * This POJO is a container for the search request from the client. It contains
  * either a simple query in Solr syntax (input from simple search) or a list of
@@ -15,7 +17,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  */
 @XmlRootElement
-public class SolrSearchPojo {
+public class SolrSearchPojo extends OpenInfraPojo {
 
     /*
      * Contains a raw Solr query in Solr syntax.

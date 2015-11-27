@@ -7,6 +7,8 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 
+import de.btu.openinfra.backend.exception.OpenInfraWebException;
+
 
 /**
  * This class provides suggestions from the Solr index.
@@ -52,9 +54,7 @@ public class SolrSuggester extends SolrServer {
             return response.getSuggesterResponse().getSuggestedTerms()
                     .get("OpenInfRASuggester");
         } catch (SolrServerException | IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new OpenInfraWebException(e);
         }
-        return null;
     }
 }

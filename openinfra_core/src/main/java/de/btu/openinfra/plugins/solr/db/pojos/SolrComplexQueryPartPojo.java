@@ -2,6 +2,7 @@ package de.btu.openinfra.plugins.solr.db.pojos;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 import de.btu.openinfra.plugins.solr.enums.LogicOperatorEnum;
 import de.btu.openinfra.plugins.solr.enums.MandatoryEnum;
 import de.btu.openinfra.plugins.solr.enums.RelationalOperatorEnum;
@@ -14,7 +15,7 @@ import de.btu.openinfra.plugins.solr.enums.RelationalOperatorEnum;
  *
  */
 @XmlRootElement
-public class SolrComplexQueryPartPojo {
+public class SolrComplexQueryPartPojo extends OpenInfraPojo {
 
     /*
      * Mandatory defines if the part must be part of the result or not. This
