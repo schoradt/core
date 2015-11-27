@@ -70,6 +70,11 @@ public enum OpenInfraPropertyKeys {
     DEFAULT_ORDER("de.btu.openinfra.backend.order"),
 
     /**
+     * This variable defines the maximum number of results for suggestion.
+     */
+    MAX_SUGGESTION("de.btu.openinfra.backend.suggestion.maxResults"),
+
+    /**
      * This variable defines the default file path for unix key.
      */
     UNIX_FILE_PATH("de.btu.openinfra.backend.unix.file.path"),
