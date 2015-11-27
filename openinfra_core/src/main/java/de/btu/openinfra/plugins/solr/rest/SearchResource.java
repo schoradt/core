@@ -46,6 +46,10 @@ public class SearchResource {
      * @response.representation.200.qname SolrResultPojo
      * @response.representation.200.doc   This is the representation returned by
      *                                    default.
+     *
+     * @response.representation.500.qname OpenInfraWebException
+     * @response.representation.500.doc   An internal error occurs while
+     *                                    processing the requested query.
      */
     @POST
     public SolrResultPojo get(
@@ -82,6 +86,18 @@ public class SearchResource {
         return indexer.indexProjects(projects);
     }
 
+    /**
+     * This resource provides a suggestion on the Solr index for a specified
+     * query string.
+     *
+     * @response.representation.200.qname A list of strings
+     * @response.representation.200.doc   This is the representation returned by
+     *                                    default.
+     *
+     * @response.representation.500.qname OpenInfraWebException
+     * @response.representation.500.doc   An internal error occurs while
+     *                                    processing the suggestion query.
+     */
     @GET
     @Path("/suggest")
     public List<String> getSuggestion(
