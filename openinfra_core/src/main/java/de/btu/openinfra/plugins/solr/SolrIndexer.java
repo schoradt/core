@@ -195,13 +195,25 @@ public class SolrIndexer extends SolrServer {
 
         // add the topic instance id as document id
         doc.addField(SolrIndexEnum.TOPIC_INSTANCE_ID.getString(), ti.getId());
+        addDefaultSearchField(
+                SolrIndexEnum.DEFAULT_SEARCH_FIELD.getString(),
+                ti.getId().toString(),
+                doc);
 
         // add the project id
         doc.addField(SolrIndexEnum.PROJECT_ID.getString(), projectId);
+        addDefaultSearchField(
+                SolrIndexEnum.DEFAULT_SEARCH_FIELD.getString(),
+                projectId.toString(),
+                doc);
 
         // add the topic characteristic id
         doc.addField(SolrIndexEnum.TOPIC_CHARACTERISTIC_ID.getString(),
                      ti.getTopicCharacteristic().getId());
+        addDefaultSearchField(
+                SolrIndexEnum.DEFAULT_SEARCH_FIELD.getString(),
+                ti.getTopicCharacteristic().getId().toString(),
+                doc);
 
         // run through all attribute values
         for (AttributeValueValue avv : ti.getAttributeValueValues()) {
@@ -233,6 +245,9 @@ public class SolrIndexer extends SolrServer {
                         .getFreeText(),
                     doc);
         }
+
+
+
         return doc;
     }
 
@@ -307,6 +322,18 @@ public class SolrIndexer extends SolrServer {
                                 type.get(k).getFreeText()) + typeSuffix,
                                 specificValue);
             }
+
+            // save the value in a specific field that is used for lookup
+            doc.addField(SolrCharacterConverter.convert(
+                    SolrIndexEnum.LOOKUP_FIELD.getString()),
+                    value.get(x).getFreeText());
+
+            // save the value in a default search field
+            addDefaultSearchField(SolrCharacterConverter.convert(
+                    SolrIndexEnum.DEFAULT_SEARCH_FIELD.getString()),
+                    value.get(x).getFreeText(),
+                    doc);
+
             // Abort here because the value should only exists in one language.
             return;
         }
@@ -315,10 +342,13 @@ public class SolrIndexer extends SolrServer {
         for (int i = 0; i < value.size(); i++) {
             try {
 
+                // saves the language code
+                String languageCode = value.get(i).getPtLocale()
+                        .getLanguageCode().getLanguageCode();
+
                 // Retrieve the position of the attribute type with the language
                 // of the attribute value.
-                int z = containsAtPosition(type, value.get(i).getPtLocale()
-                        .getLanguageCode().getLanguageCode());
+                int z = containsAtPosition(type, languageCode);
 
                 if (z > -1) {
                     // Add the type and the value with the same language.
@@ -332,9 +362,20 @@ public class SolrIndexer extends SolrServer {
                     // avoid information loss we will save all this values
                     // together in a special field.
                     doc.addField(SolrCharacterConverter.convert(
-                            SolrIndexEnum.NO_TRANSLATION_FIELD.toString()),
+                            SolrIndexEnum.NO_TRANSLATION_FIELD.getString()),
                             value.get(i).getFreeText());
                 }
+
+                // save the value in a specific field that is used for lookup
+                doc.addField(SolrCharacterConverter.convert(
+                        SolrIndexEnum.LOOKUP_FIELD.getString()),
+                        value.get(i).getFreeText());
+
+                // save all values in a default search field
+                addDefaultSearchField(SolrCharacterConverter.convert(
+                        SolrIndexEnum.DEFAULT_SEARCH_FIELD.getString()),
+                        value.get(i).getFreeText(),
+                        doc);
 
             } catch (ArrayIndexOutOfBoundsException e) {
                 e.printStackTrace();
@@ -342,6 +383,22 @@ public class SolrIndexer extends SolrServer {
                 return;
             }
         }
+    }
+
+    /**
+     * This method adds all values to a default search field that will be used
+     * for global queries. We will filter the list to avoid doublet.
+     *
+     * @param convert
+     * @param freeText
+     * @param doc
+     */
+    private void addDefaultSearchField(String field, String value,
+            SolrInputDocument doc) {
+        if (!doc.containsValue(value)) {
+            doc.addField(field, value);
+        }
+
     }
 
     /**

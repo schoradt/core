@@ -47,7 +47,12 @@ public class SolrSearcher extends SolrServer {
     }
 
     /**
-     * This will start the search with the passed search term.
+     * This will start the search with the passed search term and return the
+     * result. Before returning the result it will be prepared in a special way.
+     * To avoid doublet the properties of
+     * {@link SolrIndexEnum#DEFAULT_SEARCH_FIELD} and
+     * {@link SolrIndexEnum#LOOKUP_FIELD} will be removed from the highlight
+     * map.
      *
      * @param searchPojo The SolrSearchPojo that contains the query.
      */
@@ -107,6 +112,7 @@ public class SolrSearcher extends SolrServer {
                 hlFields += "," + lst.get(i);
             }
         }
+
         query.set("hl.fl", hlFields);
 
         // set the enclosing highlight tags
@@ -153,10 +159,22 @@ public class SolrSearcher extends SolrServer {
                                 SolrIndexEnum.PROJECT_ID.getString())
                                 .toString()));
 
+                // only remove the default_search field if it is not the only
+                // entry in the highlight field
+                if (hl.get(rP.getTopicInstanceId().toString()).size() > 1 &&
+                        hl.get(rP.getTopicInstanceId().toString())
+                        .containsKey(SolrIndexEnum.DEFAULT_SEARCH_FIELD
+                                .getString())) {
+                    // remove the default_search field from the highlighting map
+                    // to avoid double entries
+                    hl.get(rP.getTopicInstanceId().toString()).remove(
+                            SolrIndexEnum.DEFAULT_SEARCH_FIELD.getString());
+                }
+
                 // remove the default_search field from the highlighting map to
                 // avoid double entries
                 hl.get(rP.getTopicInstanceId().toString()).remove(
-                        SolrIndexEnum.DEFAULT_SEARCH_FIELD.getString());
+                        SolrIndexEnum.LOOKUP_FIELD.getString());
 
                 // add the highlighted fields
                 rP.setHighlight(hl.get(rP.getTopicInstanceId().toString()));
