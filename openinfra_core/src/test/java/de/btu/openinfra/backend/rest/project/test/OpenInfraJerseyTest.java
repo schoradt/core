@@ -31,6 +31,7 @@ import de.btu.openinfra.backend.db.pojos.PtFreeTextPojo;
 import de.btu.openinfra.backend.db.pojos.PtLocalePojo;
 import de.btu.openinfra.backend.db.pojos.project.ProjectPojo;
 import de.btu.openinfra.backend.db.pojos.rbac.SubjectPojo;
+import de.btu.openinfra.backend.db.pojos.webapp.WebappProjectPojo;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class OpenInfraJerseyTest {
@@ -46,7 +47,8 @@ public class OpenInfraJerseyTest {
 		OpenInfraJerseyTest test = new OpenInfraJerseyTest();
 		test.setUp();
 		test.test1addProject();
-		test.test2deleteProject();
+		test.test100webappProject();
+		test.test1000deleteProject();
 	}
 
 	@Before
@@ -123,13 +125,14 @@ public class OpenInfraJerseyTest {
 				Entity.json(p)).readEntity(String.class);
 		JSONObject jRes = (JSONObject)new JSONParser().parse(result);
 		pId = UUID.fromString(jRes.get("uuid").toString());
+		System.out.println("Project created: " + result);
 	}
 
 	@Test
-	public void test2deleteProject() {
+	public void test1000deleteProject() {
 		String result = build("projects/" + pId, MediaType.APPLICATION_JSON)
 				.delete().readEntity(String.class);
-		System.out.println(result);
+		System.out.println("Project deleted: " + result);
 	}
 
 	@Test
@@ -147,6 +150,21 @@ public class OpenInfraJerseyTest {
 				.readEntity(ProjectPojo.class);
 		System.out.println(pojo);
 		Assert.assertNotNull(pojo);
+	}
+
+	@Test
+	public void test100webappProject() {
+		UUID webappId =
+				UUID.fromString("911fee71-efb8-4194-b383-a1e54b02e806");
+		WebappProjectPojo wpp = new WebappProjectPojo();
+		wpp.setData("hallo data");
+		wpp.setProject(pId);
+		wpp.setWebapp(webappId);
+
+		String result = build("webapp/" + webappId.toString() + "/projects",
+				MediaType.APPLICATION_JSON).post(Entity.json(wpp))
+				.readEntity(String.class);
+		System.out.println("Webapp data written: " + result);
 	}
 
 }
