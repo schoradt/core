@@ -59,8 +59,6 @@ public class SolrIndexer extends SolrServer {
     public boolean indexProjects(SolrIndexPojo projectsPojo) {
 
         try {
-            // TODO delete old index only for testing
-            deleteAllDocuments();
 
             List<Projects> projectIndexList = new ArrayList<Projects>();
 
