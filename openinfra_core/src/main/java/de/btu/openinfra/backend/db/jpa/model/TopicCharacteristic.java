@@ -43,7 +43,23 @@ import javax.persistence.Table;
 						+ "FROM LocalizedCharacterString l "
 						+ "WHERE l.ptLocale = :value "
 						+ "AND l.freeText LIKE :filter)) "
-				+ "ORDER BY lcs.freeText")
+				+ "ORDER BY lcs.freeText"),
+	@NamedQuery(name="TopicCharacteristic.findByTopicInstanceAssociationTo",
+		query="SELECT DISTINCT t "
+				+ "FROM TopicCharacteristic t "
+				+ "JOIN t.topicInstances tis "
+				+ "WHERE tis.id = ANY ("
+					+ "SELECT tixti.topicInstance2Bean.id "
+					+ "FROM TopicInstanceXTopicInstance tixti "
+					+ "WHERE tixti.topicInstance1Bean = :value )"),
+	@NamedQuery(name="TopicCharacteristic.findByTopicInstanceAssociationFrom",
+		query="SELECT DISTINCT t "
+				+ "FROM TopicCharacteristic t "
+				+ "JOIN t.topicInstances tis "
+				+ "WHERE tis.id = ANY ("
+					+ "SELECT tixti.topicInstance1Bean.id "
+					+ "FROM TopicInstanceXTopicInstance tixti "
+					+ "WHERE tixti.topicInstance2Bean = :value )")
 })
 @NamedNativeQueries({
 	@NamedNativeQuery(name="TopicCharacteristic.findAllByLocaleAndOrder",

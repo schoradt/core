@@ -13,24 +13,40 @@ import de.btu.openinfra.backend.db.jpa.model.TopicInstanceXTopicInstance;
 import de.btu.openinfra.backend.db.pojos.project.TopicInstanceAssociationPojo;
 
 public class TopicInstanceAssociationRbac extends OpenInfraValueValueRbac<
-	TopicInstanceAssociationPojo, TopicInstanceXTopicInstance, 
+	TopicInstanceAssociationPojo, TopicInstanceXTopicInstance,
 	TopicInstance, TopicInstance, TopicInstanceAssociationDao> {
 
 	public TopicInstanceAssociationRbac(
 			UUID currentProjectId,
 			OpenInfraSchemas schema) {
-		super(currentProjectId, schema, TopicInstance.class, 
+		super(currentProjectId, schema, TopicInstance.class,
 				TopicInstance.class, TopicInstanceAssociationDao.class);
 	}
-	
-	public List<TopicInstanceAssociationPojo> readParents(
-			OpenInfraHttpMethod httpMethod, 
-			UriInfo uriInfo, 
-			Locale locale, UUID self) {
+
+	public List<TopicInstanceAssociationPojo> readAssociationToByTopchar(
+					OpenInfraHttpMethod httpMethod,
+					UriInfo uriInfo,
+					Locale locale,
+					UUID topicInstance,
+					UUID topChar,
+					int offset, int size) {
 		checkPermission(httpMethod, uriInfo);
-		return new TopicInstanceAssociationDao(
-				currentProjectId,
-				schema).readParents(locale, self);
+		return new TopicInstanceAssociationDao(currentProjectId, schema)
+			.readAssociationToByTopchar(locale, topicInstance, topChar,
+					offset, size);
+	}
+
+	public List<TopicInstanceAssociationPojo> readAssociationFromByTopchar(
+			OpenInfraHttpMethod httpMethod,
+			UriInfo uriInfo,
+			Locale locale,
+			UUID topicInstance,
+			UUID topChar,
+			int offset, int size) {
+		checkPermission(httpMethod, uriInfo);
+		return new TopicInstanceAssociationDao(currentProjectId, schema)
+			.readAssociationFromByTopchar(locale, topicInstance, topChar,
+					offset, size);
 	}
 
 }
