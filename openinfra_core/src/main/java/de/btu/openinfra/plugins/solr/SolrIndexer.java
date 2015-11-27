@@ -92,9 +92,11 @@ public class SolrIndexer extends SolrServer {
             for (Projects project : projectIndexList) {
                 // filter for main projects
                 if (!project.getIsSubproject()) {
-                    System.out.println("starting indexing of project " + project.getProjectId() + " ... ");
+                    System.out.println("starting indexing of project "
+                            + project.getProjectId() + " ... ");
                     indexProject(project.getProjectId());
-                    System.out.println("finished indexing of project " + project.getProjectId());
+                    System.out.println("finished indexing of project "
+                            + project.getProjectId());
                 }
             }
             return true;
@@ -135,22 +137,14 @@ public class SolrIndexer extends SolrServer {
         // set the amount of runs we need to index all documents
         double indexRuns = Math.ceil(amount/windowSize);
 
-        System.out.println(amount + " TopicInstances found in project " +
-                projectId);
-
         for (int i = 1; i <= (indexRuns); i++) {
-
-            System.out.println("start: " + start);
-            System.out.println("size: " + windowSize);
-            System.out.println("retrieving " + windowSize + " TopicInstances");
-
             // get the defined amount of topic instances
             List<TopicInstance> tiList = tiDao.read(start, windowSize);
 
             Collection<SolrInputDocument> docs =
                     new ArrayList<SolrInputDocument>();
 
-            System.out.println("adding TopicInstaces to Solr documents");
+            System.out.println("adding TopicInstances to Solr documents");
 
             // run through all topic instances
             for (TopicInstance ti : tiList) {
@@ -174,7 +168,6 @@ public class SolrIndexer extends SolrServer {
             // set the amount variable for the next run
             size = windowSize * i;
             start = size;
-            System.out.println("------------------");
         }
     }
 
