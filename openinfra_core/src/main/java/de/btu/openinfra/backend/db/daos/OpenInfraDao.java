@@ -153,6 +153,8 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
      * characteristic objects it is necessary to handle this request separately.
      *
      * The meta data schema is also handled separately.
+     *
+     * Don't use this method while using RBAC, FILE or WEBAPP schemas!
 	 *
 	 *
      * @param locale     A Java.util locale objects.

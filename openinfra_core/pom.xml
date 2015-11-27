@@ -28,6 +28,52 @@
 					<skipTests>true</skipTests>
 				</configuration>
 		    </plugin>
+            <!-- Generate JavaDoc-enriched extended WADL
+              https://irfannagoo.wordpress.com/2012/12/20/jersey-extended-wadl-support/
+              http://razvancaraghin.blogspot.de/2014/01/html-documentation-for-your-rest.html
+              http://biemond.blogspot.de/2013/08/custom-jersey-wadl-generation.html -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.4</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>javadoc</goal>
+                        </goals>
+                        <phase>compile</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <verbose>false</verbose>
+                    <show>public</show>
+                    <doclet>com.sun.jersey.wadl.resourcedoc.ResourceDoclet</doclet>
+                        <docletPath>${path.separator}${project.build.outputDirectory}</docletPath>
+                        <docletArtifacts>
+                        <docletArtifact>
+                            <groupId>com.sun.jersey.contribs</groupId>
+                            <artifactId>wadl-resourcedoc-doclet</artifactId>
+                            <version>1.17.1</version>
+                        </docletArtifact>
+                        <docletArtifact>
+                            <groupId>com.sun.jersey</groupId>
+                            <artifactId>jersey-server</artifactId>
+                            <version>1.17.1</version>
+                        </docletArtifact>
+                        <docletArtifact>
+                            <groupId>xerces</groupId>
+                            <artifactId>xercesImpl</artifactId>
+                            <version>2.6.1</version>
+                        </docletArtifact>
+                    </docletArtifacts>
+                    <!-- the following option is required as a work around for
+                         version 2.5 of the javadoc plugin which will be used
+                         by a maven version > 2.0.9 -->
+                    <useStandardDocletOptions>false</useStandardDocletOptions>
+                    <additionalparam>-output ${basedir}/src/main/resources/resourcedoc.xml</additionalparam>
+                </configuration>
+            </plugin>
             
             <!-- needed to build jar file when building war file, necessary for
            		 using backend classes in other maven projects (e.g. plugins)
@@ -53,21 +99,17 @@
         					<pluginExecutions>
         						<pluginExecution>
         							<pluginExecutionFilter>
-        								<groupId>
-        									org.apache.maven.plugins
-        								</groupId>
-        								<artifactId>
-        									maven-javadoc-plugin
-        								</artifactId>
+        								<groupId>org.apache.maven.plugins</groupId>
+        								<artifactId>maven-javadoc-plugin</artifactId>
         								<versionRange>
-        									[2.9,)
+        									[2.4,)
         								</versionRange>
         								<goals>
         									<goal>javadoc</goal>
         								</goals>
         							</pluginExecutionFilter>
         							<action>
-        								<execute/>
+        								<ignore></ignore>
         							</action>
         						</pluginExecution>
         					</pluginExecutions>
@@ -160,14 +202,6 @@
 		<dependency>
 		    <groupId>org.glassfish.jersey.media</groupId>
 		    <artifactId>jersey-media-multipart</artifactId>
-		</dependency>
-		
-		<!-- For testing the application it is recommended to use
-		     the Jersey integrated test framework. It'll automatically start a 
-		     lightweight HTTP server called grizzly. -->
-		<dependency>
-		    <groupId>org.glassfish.jersey.test-framework.providers</groupId>
-		    <artifactId>jersey-test-framework-provider-grizzly2</artifactId>
 		</dependency>
 		
 		<!-- simple json string to object converter -->
@@ -280,6 +314,13 @@
 		    <groupId>com.drewnoakes</groupId>
 		    <artifactId>metadata-extractor</artifactId>
 		    <version>2.8.1</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
 		</dependency>
 		
     </dependencies>

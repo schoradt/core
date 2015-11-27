@@ -19,7 +19,12 @@ import org.im4java.process.ProcessStarter;
  * This class is represents the main class of the OpenInfRA application. It is
  * used to configure application specific stuff such as the Jersey JAX-RS and
  * HTML template engines. This class is referenced in the web.xml file and will
- * be called during application start up.
+ * be called during application start.
+ *
+ * Moreover, this class creates the necessary directory structure and tests
+ * if the external packages such as ImageMagick are available. An exception is
+ * thrown when something goes wrong. This exception should be written to tomcat
+ * log files (e.g. catalina.out).
  *
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *

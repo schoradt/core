@@ -1,0 +1,12 @@
+<applicationDocs targetNamespace="http://wadl.dev.java.net/2009/02">
+
+    <doc xml:lang="en" title="OpenInfRA REST API Description">
+        The OpenInfRA application description documents all available REST 
+        resources plus corresponding methods. 
+    </doc>
+
+    <!-- Don't use the German description -->
+    <!-- doc xml:lang="de" title="Die Dokumentation fuer Ihre API">
+        Dies in ein Abschnitt, der dem Beginn der generierte application.wadl hinzugefugt wird - in deutscher Sprache.
+    </doc-->
+</applicationDocs>
