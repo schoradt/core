@@ -33,16 +33,6 @@ public class CredentialsDao
 
     @Override
     public CredentialsPojo mapToPojo(Locale locale, Credentials c) {
-        return mapToPojoStatically(c);
-    }
-
-    /**
-     * This method implements the method mapToPojo in a static way.
-     *
-     * @param at     the model object
-     * @return       the POJO object when the model object is not null else null
-     */
-   public static CredentialsPojo mapToPojoStatically(Credentials c) {
         if (c != null) {
             CredentialsPojo pojo = new CredentialsPojo(c);
             pojo.setUsername(c.getUsername());
@@ -58,38 +48,26 @@ public class CredentialsDao
     		CredentialsPojo pojo,
     		Credentials cd) {
         if(pojo != null) {
-            mapToModelStatically(pojo, cd);
-            return new MappingResult<Credentials>(cd.getId(), cd);
+            Credentials resultCredentials = null;
+            try {
+                resultCredentials = cd;
+                if(resultCredentials == null) {
+                    resultCredentials = new Credentials();
+                    resultCredentials.setId(pojo.getUuid());
+                }
+                resultCredentials.setPassword(pojo.getPassword());
+                resultCredentials.setUsername(pojo.getUsername());
+            } catch (NullPointerException npe) {
+                throw new OpenInfraEntityException(
+                        OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
+            }
+            return new MappingResult<Credentials>(
+                    resultCredentials.getId(),
+                    resultCredentials);
         }
         else {
             return null;
         }
-    }
-
-    /**
-     * This method implements the method mapToModel in a static way.
-     * @param pojo the POJO object
-     * @param cd the pre initialized model object
-     * @return return a corresponding JPA model object
-     * @throws OpenInfraEntityException
-     */
-    public static Credentials mapToModelStatically(
-            CredentialsPojo pojo,
-            Credentials cd) {
-        Credentials resultCredentials = null;
-        try {
-            resultCredentials = cd;
-            if(resultCredentials == null) {
-                resultCredentials = new Credentials();
-                resultCredentials.setId(pojo.getUuid());
-            }
-            resultCredentials.setPassword(pojo.getPassword());
-            resultCredentials.setUsername(pojo.getUsername());
-        } catch (NullPointerException npe) {
-            throw new OpenInfraEntityException(
-                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
-        }
-        return resultCredentials;
     }
 
 }

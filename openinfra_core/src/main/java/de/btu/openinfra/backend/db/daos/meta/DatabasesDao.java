@@ -33,16 +33,6 @@ public class DatabasesDao
 
     @Override
     public DatabasesPojo mapToPojo(Locale locale, Databases d) {
-        return mapToPojoStatically(d);
-    }
-
-    /**
-     * This method implements the method mapToPojo in a static way.
-     *
-     * @param at     the model object
-     * @return       the POJO object when the model object is not null else null
-     */
-    public static DatabasesPojo mapToPojoStatically(Databases d) {
         if (d != null) {
             DatabasesPojo pojo = new DatabasesPojo(d);
             pojo.setDatabase(d.getDatabase());
@@ -57,37 +47,25 @@ public class DatabasesDao
     		DatabasesPojo pojo,
     		Databases dbs) {
         if(pojo != null) {
-            mapToModelStatically(pojo, dbs);
-            return new MappingResult<Databases>(dbs.getId(), dbs);
+            Databases resultDatabases = null;
+            try {
+                resultDatabases = dbs;
+                if(resultDatabases == null) {
+                    resultDatabases = new Databases();
+                    resultDatabases.setId(pojo.getUuid());
+                }
+                resultDatabases.setDatabase(pojo.getDatabase());
+            } catch (NullPointerException npe) {
+                throw new OpenInfraEntityException(
+                        OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
+            }
+            return new MappingResult<Databases>(
+                    resultDatabases.getId(),
+                    resultDatabases);
         }
         else {
             return null;
         }
-    }
-
-    /**
-     * This method implements the method mapToModel in a static way.
-     * @param pojo the POJO object
-     * @param dbs the pre initialized model object
-     * @return return a corresponding JPA model object
-     * @throws OpenInfraEntityException
-     */
-    public static Databases mapToModelStatically(
-            DatabasesPojo pojo,
-            Databases dbs) {
-        Databases resultDatabases = null;
-        try {
-            resultDatabases = dbs;
-            if(resultDatabases == null) {
-                resultDatabases = new Databases();
-                resultDatabases.setId(pojo.getUuid());
-            }
-            resultDatabases.setDatabase(pojo.getDatabase());
-        } catch (NullPointerException npe) {
-            throw new OpenInfraEntityException(
-                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
-        }
-        return resultDatabases;
     }
 
 }

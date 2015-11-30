@@ -5,12 +5,11 @@ import java.util.UUID;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import de.btu.openinfra.backend.db.daos.AttributeValueGeomType;
-import de.btu.openinfra.backend.db.daos.MetaDataDao;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
-import de.btu.openinfra.backend.db.pojos.OpenInfraMetaDataPojo;
+import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 
 @XmlRootElement
-public class AttributeValueGeomPojo extends OpenInfraMetaDataPojo {
+public class AttributeValueGeomPojo extends OpenInfraPojo {
 
     private UUID topicInstanceId;
     private String geom;
@@ -21,9 +20,9 @@ public class AttributeValueGeomPojo extends OpenInfraMetaDataPojo {
     public AttributeValueGeomPojo() {
     }
 
-    /* Constructor that will set the id, trid and meta data automatically */
-    public AttributeValueGeomPojo(OpenInfraModelObject modelObject, MetaDataDao mdDao) {
-        super(modelObject, mdDao);
+    /* Constructor that will set the id and trid automatically */
+    public AttributeValueGeomPojo(OpenInfraModelObject modelObject) {
+        super(modelObject);
     }
 
     public UUID getTopicInstanceId() {

@@ -82,8 +82,7 @@ public abstract class OpenInfraValueRbac<
             UriInfo uriInfo,
             TypePojo pojo,
             UUID firstAssociationId,
-            UUID firstAssociationIdFromPojo,
-            String json)
+            UUID firstAssociationIdFromPojo)
             throws RuntimeException {
         checkPermission(httpMethod, uriInfo);
         try {
@@ -92,8 +91,7 @@ public abstract class OpenInfraValueRbac<
                     schema).createOrUpdate(
                             pojo,
                             firstAssociationId,
-                            firstAssociationIdFromPojo,
-                            json);
+                            firstAssociationIdFromPojo);
 		} catch (InstantiationException   | IllegalAccessException |
 				 IllegalArgumentException | InvocationTargetException |
 				 NoSuchMethodException    | SecurityException ex) {

@@ -32,16 +32,6 @@ public class CountryCodeDao
 
 	@Override
 	public CountryCodePojo mapToPojo(Locale locale, CountryCode cc) {
-		return mapToPojoStatically(cc);
-	}
-
-	/**
-	 * This method implements the method mapToPojo in a static way.
-	 *
-	 * @param cc     the model object
-	 * @return       the POJO object when the model object is not null else null
-	 */
-	public static CountryCodePojo mapToPojoStatically(CountryCode cc) {
 		CountryCodePojo pojo = new CountryCodePojo(cc);
 		pojo.setCountryCode(cc.getCountryCode());
 		return pojo;

@@ -46,36 +46,18 @@ public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
 	public TopicInstanceAssociationPojo mapToPojo(
 			Locale locale,
 			TopicInstanceXTopicInstance txt) {
-	    return mapToPojoStatically(locale, txt,
-                new MetaDataDao(currentProjectId, schema));
-	}
-
-	/**
-     * This method implements the method mapToPojo in a static way.
-     *
-     * @param locale the requested language as Java.util locale
-     * @param txt    the model object
-     * @param mdDao  The meta data DAO must not be null.
-     * @return       the POJO object when the model object is not null else null
-     */
-    public static TopicInstanceAssociationPojo mapToPojoStatically(
-            Locale locale,
-            TopicInstanceXTopicInstance txt,
-            MetaDataDao mdDao) {
         if (txt != null) {
             TopicInstanceAssociationPojo pojo =
-                    new TopicInstanceAssociationPojo(txt, mdDao);
+                    new TopicInstanceAssociationPojo(txt);
             pojo.setAssociationInstanceId(txt.getTopicInstance1Bean().getId());
             pojo.setRelationshipType(
-                    RelationshipTypeDao.mapToPojoStatically(
+                    new RelationshipTypeDao(currentProjectId, schema).mapToPojo(
                             locale,
-                            txt.getRelationshipType(),
-                            mdDao));
+                            txt.getRelationshipType()));
             pojo.setAssociatedInstance(
-                    TopicInstanceDao.mapToPojoStatically(
+                    new TopicInstanceDao(currentProjectId, schema).mapToPojo(
                             locale,
-                            txt.getTopicInstance2Bean(),
-                            mdDao));
+                            txt.getTopicInstance2Bean()));
             return pojo;
         } else {
             return null;

@@ -147,8 +147,7 @@ public class TopicCharacteristicResource {
 			                        topicCharacteristicId,
 			                        pojo.getTopicCharacteristicId(),
 			                        null,
-			                        null,
-			                        pojo.getMetaData()));
+			                        null));
     }
 
 	@GET
@@ -217,8 +216,7 @@ public class TopicCharacteristicResource {
 			                        topicCharacteristicId,
 			                        pojo.getTopicCharacteristicId(),
 			                        attributeTypeGroupId,
-			                        pojo.getAttributeTypeGroup().getUuid(),
-			                        		pojo.getMetaData()));
+			                        pojo.getAttributeTypeGroup().getUuid()));
     }
 
     @DELETE
@@ -285,8 +283,7 @@ public class TopicCharacteristicResource {
                                 topicCharacteristicId,
                                 pojo.getTopicCharacteristicId(),
                                 null,
-                                null,
-                                pojo.getMetaData()));
+                                null));
     }
 
 	@GET
@@ -335,8 +332,7 @@ public class TopicCharacteristicResource {
                                 topicCharacteristicId,
                                 pojo.getTopicCharacteristicId(),
                                 relationshipTypeId,
-                                pojo.getRelationshipType().getUuid(),
-                                pojo.getMetaData()));
+                                pojo.getRelationshipType().getUuid()));
     }
 
 	@DELETE
@@ -388,9 +384,8 @@ public class TopicCharacteristicResource {
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
                 		OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
-                        pojo,
                         null,
-                        pojo.getMetaData());
+                        pojo);
         return OpenInfraResponseBuilder.postResponse(id);
     }
 
@@ -410,9 +405,8 @@ public class TopicCharacteristicResource {
                         		OpenInfraHttpMethod.valueOf(
                         				request.getMethod()),
         						uriInfo,
-        						pojo,
                                 topicCharacteristicId,
-                                pojo.getMetaData()));
+                                pojo));
     }
 
     @DELETE

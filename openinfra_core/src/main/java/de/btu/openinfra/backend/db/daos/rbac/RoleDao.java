@@ -18,7 +18,7 @@ public class RoleDao extends OpenInfraDao<RolePojo, Role> {
 	public RoleDao() {
 		super(null, OpenInfraSchemas.RBAC, Role.class);
 	}
-	
+
 	public RoleDao(UUID currentProjectId, OpenInfraSchemas schema) {
 		super(currentProjectId, schema, Role.class);
 	}
@@ -29,7 +29,7 @@ public class RoleDao extends OpenInfraDao<RolePojo, Role> {
 		List<PermissionPojo> permissions = new LinkedList<PermissionPojo>();
 		for(RolePermission rp : modelObject.getRolePermissions()) {
 			permissions.add(new PermissionDao().mapToPojo(
-					null, 
+			        locale,
 					rp.getPermissionBean()));
 		}
 		pojo.setPermissions(permissions);

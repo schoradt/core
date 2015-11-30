@@ -64,11 +64,6 @@ public class SubjectDao extends OpenInfraDao<SubjectPojo, Subject> {
 
 	@Override
 	public SubjectPojo mapToPojo(Locale locale, Subject modelObject) {
-		return mapToPojoStatically(locale, modelObject);
-	}
-
-	public static SubjectPojo mapToPojoStatically(
-			Locale locale, Subject modelObject) {
 		SubjectPojo pojo = new SubjectPojo(modelObject);
 		pojo.setCreatedOn(OpenInfraTime.format(modelObject.getCreatedOn()));
 		pojo.setDefaultLanguage(modelObject.getDefaultLanguage());

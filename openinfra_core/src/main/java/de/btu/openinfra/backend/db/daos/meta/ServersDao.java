@@ -33,16 +33,6 @@ public class ServersDao
 
     @Override
     public ServersPojo mapToPojo(Locale locale, Servers s) {
-        return mapToPojoStatically(s);
-    }
-
-    /**
-     * This method implements the method mapToPojo in a static way.
-     *
-     * @param at     the model object
-     * @return       the POJO object when the model object is not null else null
-     */
-    public static ServersPojo mapToPojoStatically(Servers s) {
         if (s != null) {
             ServersPojo pojo = new ServersPojo(s);
             pojo.setServer(s.getServer());
@@ -55,35 +45,25 @@ public class ServersDao
     @Override
     public MappingResult<Servers> mapToModel(ServersPojo pojo, Servers s) {
         if(pojo != null) {
-            mapToModelStatically(pojo, s);
-            return new MappingResult<Servers>(s.getId(), s);
+            Servers resultServers = null;
+            try {
+                resultServers = s;
+                if(resultServers == null) {
+                    resultServers = new Servers();
+                    resultServers.setId(pojo.getUuid());
+                }
+                resultServers.setServer(pojo.getServer());
+            } catch (NullPointerException npe) {
+                throw new OpenInfraEntityException(
+                        OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
+            }
+            return new MappingResult<Servers>(
+                    resultServers.getId(),
+                    resultServers);
         }
         else {
             return null;
         }
-    }
-
-    /**
-     * This method implements the method mapToModel in a static way.
-     * @param pojo the POJO object
-     * @param s the pre initialized model object
-     * @return return a corresponding JPA model object
-     * @throws OpenInfraEntityException
-     */
-    public static Servers mapToModelStatically(ServersPojo pojo, Servers s) {
-        Servers resultServers = null;
-        try {
-            resultServers = s;
-            if(resultServers == null) {
-                resultServers = new Servers();
-                resultServers.setId(pojo.getUuid());
-            }
-            resultServers.setServer(pojo.getServer());
-        } catch (NullPointerException npe) {
-            throw new OpenInfraEntityException(
-                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
-        }
-        return resultServers;
     }
 
 }

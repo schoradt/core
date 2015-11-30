@@ -136,8 +136,7 @@ public class RelationshipTypeResource {
                                 relationshipTypeId,
                                 pojo.getRelationshipe(),
                                 null,
-                                null,
-                                pojo.getMetaData()));
+                                null));
     }
 
     @GET
@@ -203,8 +202,7 @@ public class RelationshipTypeResource {
                                 relationshipTypeId,
                                 pojo.getRelationshipe(),
                                 topicCharacteristicId,
-                                pojo.getTopicCharacteristic().getUuid(),
-                                pojo.getMetaData()));
+                                pojo.getTopicCharacteristic().getUuid()));
     }
 
     @DELETE
@@ -243,9 +241,8 @@ public class RelationshipTypeResource {
                             		OpenInfraHttpMethod.valueOf(
                             				request.getMethod()),
             						uriInfo,
-            						pojo,
             						null,
-            						pojo.getMetaData()));
+            						pojo));
     }
 
 	@PUT
@@ -263,7 +260,8 @@ public class RelationshipTypeResource {
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
                 		OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
-                        pojo, relationshipTypeId, pojo.getMetaData());
+                        relationshipTypeId,
+                        pojo);
         return OpenInfraResponseBuilder.putResponse(uuid);
 	}
 

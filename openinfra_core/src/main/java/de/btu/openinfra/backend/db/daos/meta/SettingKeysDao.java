@@ -25,16 +25,6 @@ public class SettingKeysDao extends OpenInfraDao<SettingKeysPojo, SettingKeys> {
 
     @Override
     public SettingKeysPojo mapToPojo(Locale locale, SettingKeys sk) {
-        return mapToPojoStatically(sk);
-    }
-
-    /**
-     * This method implements the method mapToPojo in a static way.
-     *
-     * @param sk     the model object
-     * @return       the POJO object when the model object is not null else null
-     */
-    public static SettingKeysPojo mapToPojoStatically(SettingKeys sk) {
         if (sk != null) {
             SettingKeysPojo pojo = new SettingKeysPojo(sk);
             pojo.setKey(sk.getKey());
@@ -49,37 +39,25 @@ public class SettingKeysDao extends OpenInfraDao<SettingKeysPojo, SettingKeys> {
             SettingKeysPojo pojo,
             SettingKeys sk) {
         if(pojo != null) {
-            mapToModelStatically(pojo, sk);
-            return new MappingResult<SettingKeys>(sk.getId(), sk);
+            SettingKeys resultSettingKeys = null;
+            try {
+                resultSettingKeys = sk;
+                if(resultSettingKeys == null) {
+                    resultSettingKeys = new SettingKeys();
+                    resultSettingKeys.setId(pojo.getUuid());
+                }
+                resultSettingKeys.setKey(pojo.getKey());
+            } catch (NullPointerException npe) {
+                throw new OpenInfraEntityException(
+                        OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
+            }
+            return new MappingResult<SettingKeys>(
+                    resultSettingKeys.getId(),
+                    resultSettingKeys);
         }
         else {
             return null;
         }
-    }
-
-    /**
-     * This method implements the method mapToModel in a static way.
-     * @param pojo the POJO object
-     * @param sk the pre initialized model object
-     * @return return a corresponding JPA model object
-     * @throws OpenInfraEntityException
-     */
-    public static SettingKeys mapToModelStatically(
-            SettingKeysPojo pojo,
-            SettingKeys sk) {
-        SettingKeys resultSettingKeys = null;
-        try {
-            resultSettingKeys = sk;
-            if(resultSettingKeys == null) {
-                resultSettingKeys = new SettingKeys();
-                resultSettingKeys.setId(pojo.getUuid());
-            }
-            resultSettingKeys.setKey(pojo.getKey());
-        } catch (NullPointerException npe) {
-            throw new OpenInfraEntityException(
-                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
-        }
-        return resultSettingKeys;
     }
 
 }

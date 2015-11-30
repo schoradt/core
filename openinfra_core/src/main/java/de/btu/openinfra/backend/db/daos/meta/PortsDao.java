@@ -33,16 +33,6 @@ public class PortsDao
 
     @Override
     public PortsPojo mapToPojo(Locale locale, Ports p) {
-        return mapToPojoStatically(p);
-    }
-
-    /**
-     * This method implements the method mapToPojo in a static way.
-     *
-     * @param at     the model object
-     * @return       the POJO object when the model object is not null else null
-     */
-    public static PortsPojo mapToPojoStatically(Ports p) {
         if (p != null) {
             PortsPojo pojo = new PortsPojo(p);
             pojo.setPort(p.getPort());
@@ -55,34 +45,23 @@ public class PortsDao
     @Override
     public MappingResult<Ports> mapToModel(PortsPojo pojo, Ports ports) {
         if(pojo != null) {
-            mapToModelStatically(pojo, ports);
-            return new MappingResult<Ports>(ports.getId(), ports);
+            Ports resultPorts = null;
+            try {
+                resultPorts = ports;
+                if(resultPorts == null) {
+                    resultPorts = new Ports();
+                    resultPorts.setId(pojo.getUuid());
+                }
+                resultPorts.setPort(pojo.getPort());
+            } catch (NullPointerException npe) {
+                throw new OpenInfraEntityException(
+                        OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
+            }
+            return new MappingResult<Ports>(resultPorts.getId(), resultPorts);
         }
         else {
             return null;
         }
     }
 
-    /**
-     * This method implements the method mapToModel in a static way.
-     * @param pojo the POJO object
-     * @param ports the pre initialized model object
-     * @return return a corresponding JPA model object
-     * @throws OpenInfraEntityException
-     */
-    public static Ports mapToModelStatically(PortsPojo pojo, Ports ports) {
-        Ports resultPorts = null;
-        try {
-            resultPorts = ports;
-            if(resultPorts == null) {
-                resultPorts = new Ports();
-                resultPorts.setId(pojo.getUuid());
-            }
-            resultPorts.setPort(pojo.getPort());
-        } catch (NullPointerException npe) {
-            throw new OpenInfraEntityException(
-                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
-        }
-        return resultPorts;
-    }
 }

@@ -4,13 +4,12 @@ import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import de.btu.openinfra.backend.db.daos.MetaDataDao;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
-import de.btu.openinfra.backend.db.pojos.OpenInfraMetaDataPojo;
+import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 import de.btu.openinfra.backend.db.pojos.RelationshipTypePojo;
 
 @XmlRootElement
-public class TopicInstanceAssociationPojo extends OpenInfraMetaDataPojo {
+public class TopicInstanceAssociationPojo extends OpenInfraPojo {
 
     private UUID associationInstanceId;
     private TopicInstancePojo associatedInstance;
@@ -20,11 +19,9 @@ public class TopicInstanceAssociationPojo extends OpenInfraMetaDataPojo {
     public TopicInstanceAssociationPojo() {
     }
 
-    /* Constructor that will set the id, trid and meta data automatically */
-    public TopicInstanceAssociationPojo(
-            OpenInfraModelObject modelObject,
-            MetaDataDao mdDao) {
-        super(modelObject, mdDao);
+    /* Constructor that will set the id and trid automatically */
+    public TopicInstanceAssociationPojo(OpenInfraModelObject modelObject) {
+        super(modelObject);
     }
 
     // TODO check what happens with the meta data?

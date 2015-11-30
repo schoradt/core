@@ -33,7 +33,21 @@ public class PtLocaleDao extends OpenInfraDao<PtLocalePojo, PtLocale> {
 
 	@Override
 	public PtLocalePojo mapToPojo(Locale locale, PtLocale ptLocale) {
-		return mapToPojoStatically(locale, ptLocale);
+	    if(ptLocale != null) {
+            PtLocalePojo ptLocalePojo = new PtLocalePojo(ptLocale);
+            ptLocalePojo.setCharacterCode(
+                    ptLocale.getCharacterCode().getCharacterCode());
+            ptLocalePojo.setLanguageCode(
+                    ptLocale.getLanguageCode().getLanguageCode());
+            // Null values are allowed for column: country code
+            if(ptLocale.getCountryCode() != null) {
+                ptLocalePojo.setCountryCode(
+                        ptLocale.getCountryCode().getCountryCode());
+            }
+            return ptLocalePojo;
+        } else {
+            return null;
+        } // end if else
 	}
 
 	/**
@@ -75,33 +89,6 @@ public class PtLocaleDao extends OpenInfraDao<PtLocalePojo, PtLocale> {
 	                .getSingleResult();
 		}
 		return ptl;
-	}
-
-	/**
-	 * This method implements the method mapToPojo in a static way.
-	 *
-	 * @param locale the requested language as Java.util locale
-	 * @param avv    the model object
-	 * @return       the POJO object
-	 */
-	public static PtLocalePojo mapToPojoStatically(
-			Locale locale,
-			PtLocale ptLocale) {
-		if(ptLocale != null) {
-			PtLocalePojo ptLocalePojo = new PtLocalePojo(ptLocale);
-			ptLocalePojo.setCharacterCode(
-					ptLocale.getCharacterCode().getCharacterCode());
-			ptLocalePojo.setLanguageCode(
-					ptLocale.getLanguageCode().getLanguageCode());
-			// Null values are allowed for column: country code
-			if(ptLocale.getCountryCode() != null) {
-				ptLocalePojo.setCountryCode(
-						ptLocale.getCountryCode().getCountryCode());
-			}
-			return ptLocalePojo;
-		} else {
-			return null;
-		} // end if else
 	}
 
 	@Override

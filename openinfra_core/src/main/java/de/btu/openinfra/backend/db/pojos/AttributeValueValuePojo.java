@@ -2,10 +2,9 @@ package de.btu.openinfra.backend.db.pojos;
 
 import java.util.UUID;
 
-import de.btu.openinfra.backend.db.daos.MetaDataDao;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 
-public class AttributeValueValuePojo extends OpenInfraMetaDataPojo {
+public class AttributeValueValuePojo extends OpenInfraPojo {
 
     private UUID topicInstanceId;
     private PtFreeTextPojo value;
@@ -15,9 +14,9 @@ public class AttributeValueValuePojo extends OpenInfraMetaDataPojo {
     public AttributeValueValuePojo() {
     }
 
-    /* Constructor that will set the id, trid and meta data automatically */
-    public AttributeValueValuePojo(OpenInfraModelObject modelObject, MetaDataDao mdDao) {
-        super(modelObject, mdDao);
+    /* Constructor that will set the id and trid automatically */
+    public AttributeValueValuePojo(OpenInfraModelObject modelObject) {
+        super(modelObject);
     }
 
     public UUID getTopicInstanceId() {

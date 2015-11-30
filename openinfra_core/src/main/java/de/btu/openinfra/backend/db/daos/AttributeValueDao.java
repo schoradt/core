@@ -113,28 +113,28 @@ public class AttributeValueDao extends
 					AttributeValueTypes.valueOf(
 							getAttributeValueTypeAsString(id));
 
-			MetaDataDao mdDao = new MetaDataDao(currentProjectId, schema);
-
 			// 4. Define the attribute by the retrieved attribute value type
 			switch (type) {
 			// 4.a This is a standard query which can be implemented in a static
 			//     way.
 			case ATTRIBUTE_VALUE_VALUE:
 				pojo.setAttributeValueValue(
-						AttributeValueValueDao.mapToPojoStatically(
-								locale,
-								em.find(AttributeValueValue.class, id),
-								mdDao));
+						new AttributeValueValueDao(
+						        currentProjectId,
+						        schema).mapToPojo(
+					                locale,
+					                em.find(AttributeValueValue.class, id)));
 				break;
 
 			// 4.b This is a standard query which can be implemented in a static
 			//     way.
 			case ATTRIBUTE_VALUE_DOMAIN:
 				pojo.setAttributeValueDomain(
-						AttributeValueDomainDao.mapToPojoStatically(
-								locale,
-								em.find(AttributeValueDomain.class, id),
-								mdDao));
+						new AttributeValueDomainDao(
+						        currentProjectId,
+						        schema).mapToPojo(
+					                locale,
+					                em.find(AttributeValueDomain.class, id)));
 				break;
 
 			// 4.c This is a specific query which must be implemented
@@ -245,10 +245,11 @@ public class AttributeValueDao extends
 	    AttributeValuePojo pojo = new AttributeValuePojo();
 
 	    // get the attribute type pojo from the passed attribute type id
-	    AttributeTypePojo atP = AttributeTypeDao.mapToPojoStatically(
-	            locale,
-	            em.find(AttributeType.class, attributeTypeId),
-	            null);
+	    AttributeTypePojo atP = new AttributeTypeDao(
+	            currentProjectId,
+	            schema).mapToPojo(
+	                    locale,
+	                    em.find(AttributeType.class, attributeTypeId));
 
 	    // get the actual data type
 	    String dataType = atP.getDataType().getNames()
@@ -266,13 +267,13 @@ public class AttributeValueDao extends
         if(isXX) {
             // set a xx locale
             ls.setLocale(
-                    PtLocaleDao.mapToPojoStatically(
+                    new PtLocaleDao(currentProjectId, schema).mapToPojo(
                             locale,
                             ptl.read(new Locale(
                                     PtFreeTextDao.NON_LINGUISTIC_CONTENT))));
         } else {
             // or the locale that was passed by the resource
-            ls.setLocale(PtLocaleDao.mapToPojoStatically(
+            ls.setLocale(new PtLocaleDao(currentProjectId, schema).mapToPojo(
                     locale,
                     ptl.read(locale)));
         }
@@ -407,9 +408,7 @@ public class AttributeValueDao extends
 					        projectId,
 					        OpenInfraSchemas.PROJECTS).createOrUpdate(
 					                pojo.getAttributeValueDomain(),
-					                attributeValueId,
-					                		pojo.getAttributeValueDomain()
-					                		.getMetaData());
+					                attributeValueId);
             } else {
                 // return null if the ids doesn't match
                 return null;
@@ -440,9 +439,7 @@ public class AttributeValueDao extends
 					        projectId,
 					        OpenInfraSchemas.PROJECTS).createOrUpdate(
 					                pojo.getAttributeValueGeom(),
-					                attributeValueId,
-					                		pojo.getAttributeValueGeom()
-					                		.getMetaData());
+					                attributeValueId);
             }
             break;
         case ATTRIBUTE_VALUE_GEOMZ:
@@ -470,9 +467,7 @@ public class AttributeValueDao extends
 					        projectId,
 					        OpenInfraSchemas.PROJECTS).createOrUpdate(
 					                pojo.getAttributeValueGeomz(),
-					                attributeValueId,
-					                		pojo.getAttributeValueGeomz()
-					                		.getMetaData());
+					                attributeValueId);
             }
             break;
         case ATTRIBUTE_VALUE_VALUE:
@@ -495,9 +490,7 @@ public class AttributeValueDao extends
 					        projectId,
 					        OpenInfraSchemas.PROJECTS).createOrUpdate(
 					                pojo.getAttributeValueValue(),
-					                attributeValueId,
-					                		pojo.getAttributeValueValue()
-					                		.getMetaData());
+					                attributeValueId);
             } else {
                 // return null if the ids doesn't match
                 return null;

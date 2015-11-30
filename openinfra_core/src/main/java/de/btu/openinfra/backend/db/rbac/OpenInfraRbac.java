@@ -258,32 +258,6 @@ public abstract class OpenInfraRbac<
 		}
 	}
 
-	/**
-	 * This is a generic method which is provided by all RBAC classes.
-	 *
-	 * @param pojo
-	 * @param valueId
-	 * @return
-	 * @throws RuntimeException
-	 */
-    public UUID createOrUpdate(
-    		OpenInfraHttpMethod httpMethod,
-			UriInfo uriInfo,
-			TypePojo pojo,
-			UUID valueId,
-			String json) {
-    	checkPermission(httpMethod, uriInfo);
-		try {
-			return dao.getDeclaredConstructor(constructorTypes).newInstance(
-					currentProjectId,
-					schema).createOrUpdate(pojo, valueId, json);
-		} catch (InstantiationException   | IllegalAccessException |
-				 IllegalArgumentException | InvocationTargetException |
-				 NoSuchMethodException    | SecurityException ex) {
-			throw new OpenInfraWebException(ex);
-		}
-    }
-
     /**
      * This is a generic method which is provided by all RBAC classes.
      *

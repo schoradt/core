@@ -4,11 +4,10 @@ import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import de.btu.openinfra.backend.db.daos.MetaDataDao;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 
 @XmlRootElement
-public class AttributeTypeAssociationPojo extends OpenInfraMetaDataPojo {
+public class AttributeTypeAssociationPojo extends OpenInfraPojo {
 
     private UUID associationAttributeTypeId;
     private AttributeTypePojo associatedAttributeType;
@@ -18,9 +17,9 @@ public class AttributeTypeAssociationPojo extends OpenInfraMetaDataPojo {
     public AttributeTypeAssociationPojo() {
     }
 
-    /* Constructor that will set the id, trid and meta data automatically */
-    public AttributeTypeAssociationPojo(OpenInfraModelObject modelObject, MetaDataDao mdDao) {
-        super(modelObject, mdDao);
+    /* Constructor that will set the id and trid automatically */
+    public AttributeTypeAssociationPojo(OpenInfraModelObject modelObject) {
+        super(modelObject);
     }
 
     public UUID getAssociationAttributeTypeId() {

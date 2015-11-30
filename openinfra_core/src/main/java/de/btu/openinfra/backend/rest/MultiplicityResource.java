@@ -108,9 +108,8 @@ public class MultiplicityResource {
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
 						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
-						pojo,
 						null,
-						pojo.getMetaData());
+						pojo);
 		return OpenInfraResponseBuilder.postResponse(id);
 	}
 
@@ -148,8 +147,8 @@ public class MultiplicityResource {
 						).createOrUpdate(
 								OpenInfraHttpMethod.valueOf(request.getMethod()),
 								uriInfo,
-								pojo,
-						        multiplicityId, pojo.getMetaData()));
+						        multiplicityId,
+						        pojo));
 	}
 
 }

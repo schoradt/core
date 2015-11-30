@@ -146,8 +146,7 @@ public class AttributeTypeGroupResource {
                                 attributeTypeGroupId,
                                 pojo.getAttributeTypeGroupId(),
                                 null,
-                                null,
-                                pojo.getMetaData()));
+                                null));
     }
 
 	@GET
@@ -237,8 +236,7 @@ public class AttributeTypeGroupResource {
                                 attributeTypeGroupId,
                                 pojo.getAttributTypeGroupId(),
                                 null,
-                                null,
-                                pojo.getMetaData()));
+                                null));
     }
 
 	@GET
@@ -305,8 +303,7 @@ public class AttributeTypeGroupResource {
                                 attributeTypeGroupId,
                                 pojo.getAttributTypeGroupId(),
                                 topicCharacteristicId,
-                                pojo.getTopicCharacteristic().getUuid(),
-                                pojo.getMetaData()));
+                                pojo.getTopicCharacteristic().getUuid()));
 	}
 
 	@DELETE
@@ -367,9 +364,8 @@ public class AttributeTypeGroupResource {
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
                 		OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
-						pojo,
 						null,
-						pojo.getMetaData());
+						pojo);
         return OpenInfraResponseBuilder.postResponse(id);
     }
 
@@ -387,9 +383,8 @@ public class AttributeTypeGroupResource {
 	            OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
 	            		OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
-						pojo,
 						attributeTypeGroupId,
-						pojo.getMetaData());
+						pojo);
 	    return OpenInfraResponseBuilder.putResponse(id);
 	}
 

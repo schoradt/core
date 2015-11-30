@@ -43,9 +43,9 @@ public class MetaDataDao extends OpenInfraDao<MetaDataPojo, MetaData> {
      * database to a corresponding object id.
      *
      * @param objectId the object id
-     * @return         the meta data model for the object id
+     * @return         the meta data pojo for the object id
      */
-    public MetaData read(UUID objectId) {
+    public MetaDataPojo read(UUID objectId) {
         MetaData md = null;
         try {
             md = em.createNamedQuery(
@@ -53,21 +53,12 @@ public class MetaDataDao extends OpenInfraDao<MetaDataPojo, MetaData> {
                     .setParameter("oId", objectId)
                     .getSingleResult();
         } catch (NoResultException nre) { /* do nothing */ }
-        return md;
+
+        return mapToPojo(null, md);
     }
 
     @Override
     public MetaDataPojo mapToPojo(Locale locale, MetaData md) {
-        return mapPojoStatically(md);
-    }
-
-    /**
-     * This method implements the method mapToPojo in a static way.
-     *
-     * @param at     the model object
-     * @return       the POJO object when the model object is not null else null
-     */
-    public static MetaDataPojo mapPojoStatically(MetaData md) {
         if(md != null) {
             MetaDataPojo pojo = new MetaDataPojo(md);
             pojo.setObjectId(md.getObjectId());
@@ -82,21 +73,6 @@ public class MetaDataDao extends OpenInfraDao<MetaDataPojo, MetaData> {
 
     @Override
     public MappingResult<MetaData> mapToModel(MetaDataPojo pojo, MetaData md) {
-        mapToModelStatically(pojo, md);
-        // return the model as mapping result
-        return new MappingResult<MetaData>(md.getId(), md);
-    }
-
-    /**
-     * This method implements the method mapToModel in a static way.
-     * @param pojo the POJO object
-     * @param md   the pre initialized model object
-     * @return     return a corresponding JPA model object
-     * @throws     OpenInfraEntityException
-     */
-    public static MetaData mapToModelStatically(
-            MetaDataPojo pojo,
-            MetaData md) {
         // create the return object
         MetaData resultM = null;
 
@@ -108,15 +84,15 @@ public class MetaDataDao extends OpenInfraDao<MetaDataPojo, MetaData> {
                 resultM = new MetaData();
                 resultM.setId(pojo.getUuid());
             }
-            // set the object id
+         // set the object id
             resultM.setObjectId(pojo.getObjectId());
             // set the data
             try {
-				resultM.setData(
-						(JSONObject)new JSONParser().parse(pojo.getData()));
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
+                resultM.setData(
+                        (JSONObject)new JSONParser().parse(pojo.getData()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             // set the primary key column
             resultM.setPkColumn(pojo.getPkColumn());
             // set the table name
@@ -125,7 +101,9 @@ public class MetaDataDao extends OpenInfraDao<MetaDataPojo, MetaData> {
             throw new OpenInfraEntityException(
                     OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
         }
-        return resultM;
+
+        // return the model as mapping result
+        return new MappingResult<MetaData>(resultM.getId(), resultM);
     }
 
 }

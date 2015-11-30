@@ -32,16 +32,6 @@ public class CharacterCodeDao
 
 	@Override
 	public CharacterCodePojo mapToPojo(Locale locale, CharacterCode cc) {
-		return mapToPojoStatically(cc);
-	}
-
-	/**
-	 * This method implements the method mapToPojo in a static way.
-	 *
-	 * @param cc     the model object
-	 * @return       the POJO object when the model object is not null else null
-	 */
-	public CharacterCodePojo mapToPojoStatically(CharacterCode cc) {
 		CharacterCodePojo pojo = new CharacterCodePojo(cc);
 		pojo.setCharacterCode(cc.getCharacterCode());
 		return pojo;

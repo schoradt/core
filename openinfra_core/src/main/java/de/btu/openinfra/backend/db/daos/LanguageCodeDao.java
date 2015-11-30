@@ -32,16 +32,6 @@ public class LanguageCodeDao
 
 	@Override
 	public LanguageCodePojo mapToPojo(Locale locale, LanguageCode lc) {
-		return mapToPojoStatically(lc);
-	}
-
-	/**
-	 * This method implements the method mapToPojo in a static way.
-	 *
-	 * @param lc     the model object
-	 * @return       the POJO object when the model object is not null else null
-	 */
-	public static LanguageCodePojo mapToPojoStatically(LanguageCode lc) {
 		LanguageCodePojo pojo = new LanguageCodePojo(lc);
 		pojo.setLanguageCode(lc.getLanguageCode());
 		return pojo;

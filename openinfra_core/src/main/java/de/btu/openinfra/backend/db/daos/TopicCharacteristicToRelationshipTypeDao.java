@@ -44,8 +44,28 @@ public class TopicCharacteristicToRelationshipTypeDao
 	public TopicCharacteristicToRelationshipTypePojo mapToPojo(
 			Locale locale,
 			RelationshipTypeToTopicCharacteristic rtttc) {
-		return mapToPojoStatically(locale, rtttc,
-		        new MetaDataDao(currentProjectId, schema));
+	    try {
+            TopicCharacteristicToRelationshipTypePojo pojo =
+                    new TopicCharacteristicToRelationshipTypePojo(rtttc);
+
+            pojo.setRelationshipe(rtttc.getRelationshipType().getId());
+            pojo.setMultiplicity(new MultiplicityDao(
+                    currentProjectId,
+                    schema).mapToPojo(
+                            locale,
+                            rtttc.getMultiplicityBean()));
+            pojo.setTopicCharacteristic(
+                new TopicCharacteristicDao(
+                        currentProjectId,
+                        schema).mapToPojo(
+                                locale,
+                                rtttc.getTopicCharacteristic()));
+
+            return pojo;
+        } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
+        }
 	}
 
 	@Override
@@ -58,39 +78,6 @@ public class TopicCharacteristicToRelationshipTypeDao
         // return the model as mapping result
         return new MappingResult<RelationshipTypeToTopicCharacteristic>(
                 rtt.getId(), rtt);
-	}
-
-	/**
-	 * This method implements the method mapToPojo in a static way.
-	 *
-	 * @param locale the requested language as Java.util locale
-	 * @param rtttc  the model object
-	 * @param mdDao  the meta data DAO
-	 * @return       the POJO object when the model object is not null else null
-	 */
-	public static TopicCharacteristicToRelationshipTypePojo mapToPojoStatically(
-			Locale locale,
-			RelationshipTypeToTopicCharacteristic rtttc,
-			MetaDataDao mdDao) {
-
-		try {
-			TopicCharacteristicToRelationshipTypePojo pojo =
-					new TopicCharacteristicToRelationshipTypePojo(rtttc, mdDao);
-
-			pojo.setRelationshipe(rtttc.getRelationshipType().getId());
-			pojo.setMultiplicity(MultiplicityDao.mapToPojoStatically(
-					rtttc.getMultiplicityBean(), mdDao));
-			pojo.setTopicCharacteristic(
-				TopicCharacteristicDao.mapToPojoStatically(
-								locale,
-								rtttc.getTopicCharacteristic(),
-								mdDao));
-
-			return pojo;
-		} catch (NullPointerException npe) {
-            throw new OpenInfraEntityException(
-                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
-        }
 	}
 
 }
