@@ -46,9 +46,14 @@ The following picture shows the 'Project' and the 'TopicCharacteristic' as _POJO
 ![OpenInfRA POJOI](https://github.com/OpenInfRA/core/blob/master/img/pojo.png "OpenInfRA POJO")
 
 ## DAO
-Database access is utilized by means of a _DAO_ _pattern_. There exists a DAO class for each _model_ _object_. DAO classes are used to transform 'model objects' into 'POJO object' and vice versa. This is a litle bit implementation intensive but leads to a maximum of data control. Thus, it is possible to hide data in the REST API and to enrich the REST API with additional information without invoking side effects to the persistence layer.
+Database access is utilized by means of a _DAO_ _pattern_. There exists a DAO class for each _model_ _object_. DAO classes are used to transform 'model objects' into 'POJO objects' and vice versa. This is a litle bit implementation intensive but leads to a maximum of data control. Thus, it is possible to hide data in the REST API and to enrich the REST API with additional information without invoking side effects to the persistence layer.
 
 ![OpenInfRA DAO](https://github.com/OpenInfRA/core/blob/master/img/dao.png "OpenInfRA DAO")
+
+## Entity Manager
+The _entity_ _manager_ is very impartant for the DAO classes and the reaction time of the application since it utilizes the database access. Thus, each DAO class uses its own 'entity manager'. In order to provide fast access it exists an _EntityManagerFactoryCache_ which provides administation of 'entity manager' objects for DAO classes.
+
+![OpenInfRA EM](https://github.com/OpenInfRA/core/blob/master/img/em.png "OpenInfRA EM")
 
 # TODO
 - The JUnit tests have to be extended.
