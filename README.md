@@ -43,10 +43,12 @@ The following picture shows the 'Project' and the 'TopicCharacteristic' as _mode
 ## POJO
 The following picture shows the 'Project' and the 'TopicCharacteristic' as _POJO_ _objects_. 'POJO objects' are data containers. These containers are used to transfer data from the application core to the REST API.
 
+![OpenInfRA POJOI](https://github.com/OpenInfRA/core/blob/master/img/pojo.png "OpenInfRA POJO")
+
 ## DAO
 Database access is utilized by means of a _DAO_ _pattern_. There exists a DAO class for each _model_ _object_. DAO classes are used to transform 'model objects' into 'POJO object' and vice versa. This is a litle bit implementation intensive but leads to a maximum of data control. Thus, it is possible to hide data in the REST API and to enrich the REST API with additional information without invoking side effects to the persistence layer.
 
-![OpenInfRA DAO](https://github.com/OpenInfRA/core/blob/master/dao.png "OpenInfRA DAO")
+![OpenInfRA DAO](https://github.com/OpenInfRA/core/blob/master/img/dao.png "OpenInfRA DAO")
 
 # TODO
 - The JUnit tests have to be extended.
