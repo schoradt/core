@@ -17,8 +17,8 @@ import de.btu.openinfra.backend.OpenInfraPropertyKeys;
 import de.btu.openinfra.backend.db.pojos.solr.SolrResultDbPojo;
 import de.btu.openinfra.backend.db.pojos.solr.SolrResultPojo;
 import de.btu.openinfra.backend.db.pojos.solr.SolrSearchPojo;
-import de.btu.openinfra.backend.enums.SolrIndexEnum;
 import de.btu.openinfra.backend.exception.OpenInfraWebException;
+import de.btu.openinfra.backend.solr.enums.SolrIndexEnum;
 
 
 /**

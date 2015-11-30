@@ -1,18 +1,18 @@
-package de.btu.openinfra.backend.enums;
+package de.btu.openinfra.backend.solr.enums;
 
 /**
  * This enum maps the possible logic operators to the Solr syntax.
  *
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  */
-public enum LogicOperatorEnum {
+public enum SolrLogicOperatorEnum {
 
     OR("OR"),
     AND("AND");
 
     private String value;
 
-    private LogicOperatorEnum(String value) {
+    private SolrLogicOperatorEnum(String value) {
         this.value = value;
     }
 

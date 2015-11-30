@@ -21,9 +21,9 @@ import de.btu.openinfra.backend.OpenInfraProperties;
 import de.btu.openinfra.backend.OpenInfraPropertyKeys;
 import de.btu.openinfra.backend.db.pojos.solr.SolrComplexQueryPartPojo;
 import de.btu.openinfra.backend.db.pojos.solr.SolrSearchPojo;
-import de.btu.openinfra.backend.enums.DataTypeEnum;
 import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 import de.btu.openinfra.backend.exception.OpenInfraSolrException;
+import de.btu.openinfra.backend.solr.enums.SolrDataTypeEnum;
 
 /**
  * This class handles the parsing of the query. It would be better to implement
@@ -107,9 +107,9 @@ public class SolrQueryParser {
         // regex pattern to retrieve everything behind "_date:" until the next
         // whitespace
         Pattern roughPattern = Pattern.compile(
-                "_" + DataTypeEnum.DATE.getString() +
+                "_" + SolrDataTypeEnum.DATE.getString() +
                 ":\\[([^\\s]+)\\s+TO\\s+([^\\]]+)|_" +
-                DataTypeEnum.DATE.getString() +
+                SolrDataTypeEnum.DATE.getString() +
                 ":([^\\s]+)");
 
         // regex pattern to retrieve every date / time combination
@@ -367,14 +367,14 @@ public class SolrQueryParser {
 
             // retrieve the field type from the hash map for the field name
             String type = indexMap.get(
-                    field + "_" + DataTypeEnum.DATE.getString());
+                    field + "_" + SolrDataTypeEnum.DATE.getString());
 
             // check if the field name is part of the index and has the type
             // date
             if (type != null && type.equals(
-                    DataTypeEnum.DATE.getString())) {
+                    SolrDataTypeEnum.DATE.getString())) {
                 isDate = true;
-                return field + "_" + DataTypeEnum.DATE.getString();
+                return field + "_" + SolrDataTypeEnum.DATE.getString();
             }
         } catch (SolrServerException | IOException e) {
             throw new OpenInfraSolrException(

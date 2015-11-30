@@ -4,4 +4,4 @@
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
  */
-package de.btu.openinfra.backend.enums;
+package de.btu.openinfra.backend.solr.enums;

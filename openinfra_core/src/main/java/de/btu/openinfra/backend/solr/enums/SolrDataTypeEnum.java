@@ -1,11 +1,11 @@
-package de.btu.openinfra.backend.enums;
+package de.btu.openinfra.backend.solr.enums;
 
 /**
  * This enum maps the possible data types that are required for indexing.
  *
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  */
-public enum DataTypeEnum {
+public enum SolrDataTypeEnum {
 
     BOOLEAN("boolean"),
     DATE("date"),
@@ -23,7 +23,7 @@ public enum DataTypeEnum {
 
     private String value;
 
-    private DataTypeEnum(String value) {
+    private SolrDataTypeEnum(String value) {
         this.value = value;
     }
 

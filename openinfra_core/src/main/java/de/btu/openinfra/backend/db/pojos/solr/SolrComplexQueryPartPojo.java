@@ -3,9 +3,9 @@ package de.btu.openinfra.backend.db.pojos.solr;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
-import de.btu.openinfra.backend.enums.LogicOperatorEnum;
-import de.btu.openinfra.backend.enums.MandatoryEnum;
-import de.btu.openinfra.backend.enums.RelationalOperatorEnum;
+import de.btu.openinfra.backend.solr.enums.SolrLogicOperatorEnum;
+import de.btu.openinfra.backend.solr.enums.SolrMandatoryEnum;
+import de.btu.openinfra.backend.solr.enums.SolrRelationalOperatorEnum;
 
 /**
  * This POJO is a container for a part of the complex search query that is
@@ -25,7 +25,7 @@ public class SolrComplexQueryPartPojo extends OpenInfraPojo {
      * Mandatory defines if the part must be part of the result or not. This
      * property is optional.
      */
-    private MandatoryEnum mandatory;
+    private SolrMandatoryEnum mandatory;
 
     /*
      * The attribute type will be used as the field name in the Solr index. This
@@ -37,7 +37,7 @@ public class SolrComplexQueryPartPojo extends OpenInfraPojo {
      * The relational operator defines the relation between the attribute type
      * and the attribute value. This property is optional. Default is EQUAL.
      */
-    private RelationalOperatorEnum relationalOperator;
+    private SolrRelationalOperatorEnum relationalOperator;
 
     /*
      * The attribute value is the value of the field in the Solr index. This
@@ -59,7 +59,7 @@ public class SolrComplexQueryPartPojo extends OpenInfraPojo {
      * previous query part. It will be ignored for the first part. This property
      * is optional. Default is a whitespace that has the same meaning as OR.
      */
-    private LogicOperatorEnum logicOperator;
+    private SolrLogicOperatorEnum logicOperator;
 
     /*
      * The relevance defines the relevance of the query part in the whole query.
@@ -75,11 +75,11 @@ public class SolrComplexQueryPartPojo extends OpenInfraPojo {
     private boolean fuzziness;
 
 
-    public MandatoryEnum getMandatory() {
+    public SolrMandatoryEnum getMandatory() {
         return mandatory;
     }
 
-    public void setMandatory(MandatoryEnum mandatory) {
+    public void setMandatory(SolrMandatoryEnum mandatory) {
         this.mandatory = mandatory;
     }
 
@@ -91,11 +91,11 @@ public class SolrComplexQueryPartPojo extends OpenInfraPojo {
         this.attributeType = attributeType;
     }
 
-    public RelationalOperatorEnum getRelationalOperator() {
+    public SolrRelationalOperatorEnum getRelationalOperator() {
         return relationalOperator;
     }
 
-    public void setRelationalOperator(RelationalOperatorEnum relationalOperator) {
+    public void setRelationalOperator(SolrRelationalOperatorEnum relationalOperator) {
         this.relationalOperator = relationalOperator;
     }
 
@@ -115,11 +115,11 @@ public class SolrComplexQueryPartPojo extends OpenInfraPojo {
         this.tillAttributeValue = tillAttributeValue;
     }
 
-    public LogicOperatorEnum getLogicOperator() {
+    public SolrLogicOperatorEnum getLogicOperator() {
         return logicOperator;
     }
 
-    public void setLogicOperator(LogicOperatorEnum logicOperator) {
+    public void setLogicOperator(SolrLogicOperatorEnum logicOperator) {
         this.logicOperator = logicOperator;
     }
 

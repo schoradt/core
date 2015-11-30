@@ -1,11 +1,11 @@
-package de.btu.openinfra.backend.enums;
+package de.btu.openinfra.backend.solr.enums;
 
 /**
  * This enum maps the possible relational operators to the Solr syntax.
  *
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  */
-public enum RelationalOperatorEnum {
+public enum SolrRelationalOperatorEnum {
 
     EQUAL(""),
     GREATER_THAN("[%s TO *]"),
@@ -14,7 +14,7 @@ public enum RelationalOperatorEnum {
 
     private String value;
 
-    private RelationalOperatorEnum(String value) {
+    private SolrRelationalOperatorEnum(String value) {
         this.value = value;
     }
 

@@ -21,11 +21,11 @@ import de.btu.openinfra.backend.db.jpa.model.LocalizedCharacterString;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
 import de.btu.openinfra.backend.db.jpa.model.meta.Projects;
 import de.btu.openinfra.backend.db.pojos.solr.SolrIndexPojo;
-import de.btu.openinfra.backend.enums.DataTypeEnum;
-import de.btu.openinfra.backend.enums.SolrIndexEnum;
 import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 import de.btu.openinfra.backend.exception.OpenInfraSolrException;
 import de.btu.openinfra.backend.exception.OpenInfraWebException;
+import de.btu.openinfra.backend.solr.enums.SolrDataTypeEnum;
+import de.btu.openinfra.backend.solr.enums.SolrIndexEnum;
 
 
 /**
@@ -305,7 +305,7 @@ public class SolrIndexer extends SolrServer {
             Object specificValue = null;
 
 
-            if (dataType.equals(DataTypeEnum.DATE.getString())) {
+            if (dataType.equals(SolrDataTypeEnum.DATE.getString())) {
                 typeSuffix = "_" + dataType;
                 specificValue = castPtFreeTextToDataType(value.get(x)
                         .getFreeText(),
@@ -411,7 +411,7 @@ public class SolrIndexer extends SolrServer {
      */
     private Object castPtFreeTextToDataType(String text, String dataType) {
         try {
-            switch (DataTypeEnum.valueOf(dataType.toUpperCase())) {
+            switch (SolrDataTypeEnum.valueOf(dataType.toUpperCase())) {
                 case DATE:
                     return OpenInfraTime.parse(text);
                 case BOOLEAN:

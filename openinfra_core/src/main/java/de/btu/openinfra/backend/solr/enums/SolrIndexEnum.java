@@ -1,4 +1,4 @@
-package de.btu.openinfra.backend.enums;
+package de.btu.openinfra.backend.solr.enums;
 
 import de.btu.openinfra.backend.solr.SolrCharacterConverter;
 
