@@ -30,7 +30,7 @@ A detailed description is provided in the specific folder: [GXC](https://github.
 OpenInfRA provides a file upload. This upload requires [ImageMagick](http://www.imagemagick.org) to generate and produce different image representations.
 
 - PDF conversion requires [ghostscript](http://www.ghostscript.com/)
-- Conversio of raw file formats (such as DNG) require [UFRaw](http://ufraw.sourceforge.net/) under Linux-based systems.
+- Conversion of raw file formats (such as DNG) require [UFRaw](http://ufraw.sourceforge.net/) under Linux-based systems.
 
 # Some Internals
 This section shows some starting points and describes a few details. _Project_ and _TopicCharacteristic_ are used as running examples. As the name states, 'Project' refers to an OpenInfRA project. A 'TopicCharacteristic' is an abstract container which groups a set of objects by the description and consolidation of specific attributes. The set of objects is called _TopicInstances_ which define values of consolidated attributes.
