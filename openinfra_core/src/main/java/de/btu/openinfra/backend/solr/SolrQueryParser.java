@@ -63,12 +63,10 @@ public class SolrQueryParser {
                 }
             }
         } catch (Exception e) {
-            // TODO replace with SolrExceptionType
             e.printStackTrace();
             throw new OpenInfraSolrException(
                     OpenInfraExceptionTypes.SOLR_REQUEST_PARSE);
         }
-        // TODO replace with SolrExceptionType
         throw new OpenInfraSolrException(
                 OpenInfraExceptionTypes.SOLR_SEARCH_POJO_EMPTY);
     }
@@ -225,7 +223,6 @@ public class SolrQueryParser {
                                 part.getRelationalOperator().getString(),
                                 part.getAttributeValue());
                     } else {
-                        // TODO replace with SolrExceptionType
                         throw new OpenInfraSolrException(
                                 OpenInfraExceptionTypes
                                 .SOLR_REQUEST_NUMERIC_EXPECTED);
@@ -261,7 +258,6 @@ public class SolrQueryParser {
 
         // add fuzziness if required
         if (fuzzyFlag) {
-            // TODO find a better way to retrieve the plugin name
             query += "~" + OpenInfraProperties.getProperty(
                     OpenInfraPropertyKeys.SOLR_DEFAULT_FUZZY.getKey());
         }

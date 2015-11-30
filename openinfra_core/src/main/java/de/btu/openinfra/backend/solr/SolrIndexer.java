@@ -101,7 +101,6 @@ public class SolrIndexer extends SolrServer {
             return true;
         } catch (Exception e) {
             e.printStackTrace();
-            // TODO replace with SolrExceptionType
             throw new OpenInfraSolrException(
                     OpenInfraExceptionTypes.SOLR_INDEX_FAILED);
         }
@@ -159,8 +158,7 @@ public class SolrIndexer extends SolrServer {
                 // commit the changes to the server
                 getSolr().commit();
             } catch (SolrServerException | IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                throw new OpenInfraWebException(e);
             }
 
             // set the amount variable for the next run

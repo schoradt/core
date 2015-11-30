@@ -29,7 +29,6 @@ public class SolrServer {
      *  OpenInfra.properties file
      */
     public SolrServer() {
-        // TODO find a better way to retrieve the plugin name
         this(OpenInfraProperties.getProperty(
                 OpenInfraPropertyKeys.SOLR_URL.getKey())
                + "/" +
