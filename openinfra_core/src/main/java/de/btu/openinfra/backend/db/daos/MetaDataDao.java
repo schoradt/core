@@ -12,7 +12,6 @@ import org.json.simple.parser.ParseException;
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.MetaData;
-import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObjectMetaData;
 import de.btu.openinfra.backend.db.pojos.MetaDataPojo;
 import de.btu.openinfra.backend.exception.OpenInfraEntityException;
 import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
@@ -62,7 +61,7 @@ public class MetaDataDao extends OpenInfraDao<MetaDataPojo, MetaData> {
     public MetaDataPojo mapToPojo(Locale locale, MetaData md) {
         if(md != null) {
             MetaDataPojo pojo = new MetaDataPojo(md);
-            pojo.setObjectId(md.getObject().getId());
+            pojo.setObjectId(md.getObjectId());
             pojo.setTableName(md.getTableName());
             pojo.setPkColumn(md.getPkColumn());
             pojo.setData(md.getData().toJSONString());
@@ -85,9 +84,8 @@ public class MetaDataDao extends OpenInfraDao<MetaDataPojo, MetaData> {
                 resultM = new MetaData();
                 resultM.setId(pojo.getUuid());
             }
-            resultM.setObject(new OpenInfraModelObjectMetaData());
-            resultM.getObject().setId(pojo.getObjectId());
-            resultM.getObject().setMetaData(resultM);
+         // set the object id
+            resultM.setObjectId(pojo.getObjectId());
             // set the data
             try {
                 resultM.setData(
