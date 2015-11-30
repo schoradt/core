@@ -15,7 +15,7 @@ The OpenInfRA application is based on the following software stack:
 - JPA: [EclipseLink](http://www.eclipse.org/eclipselink/)
 - Database: [PostgreSQL](http://www.postgresql.org/) + [PostGis](http://postgis.net/)
 
-![OpenInfRA Softwarestack](https://github.com/OpenInfRA/core/blob/master/sw-stack.JPG "OpenInfRA Softwarestack")
+![OpenInfRA Softwarestack](https://github.com/OpenInfRA/core/blob/master/img/sw-stack.JPG "OpenInfRA Softwarestack")
 
 ## Database
 The [database](https://github.com/OpenInfRA/database) is necessary to provide a data storage for OpenInfRA. Further instructions can be found in the appropriated repositoriy.
@@ -33,7 +33,11 @@ OpenInfRA provides a file upload. This upload requires [ImageMagick](http://www.
 - Conversio of raw file formats (such as DNG) require [UFRaw](http://ufraw.sourceforge.net/) under Linux-based systems.
 
 # Some Internals
-This section shows some starting points and describes a few details.
+This section shows some starting points and describes a few details. _Project_ and _TopicCharacteristic_ are used as running examples. As the name states, 'Project' refers to an OpenInfRA project. A 'TopicCharacteristic' is an abstract container which groups a set of objects by the description and consolidation of specific attributes. The set of objects is called _TopicInstances_ which define values of consolidated attributes.
+
+## Model
+
+
 
 ## DAO
 Database access is utilized by means of a DAO pattern.
