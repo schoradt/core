@@ -61,7 +61,7 @@ public class AttributeTypeGroupToAttributeTypeDao extends
             pojo.setMultiplicity(new MultiplicityDao(
                     currentProjectId,
                     schema).mapToPojo(
-                            null,
+                            locale,
                             atgtat.getMultiplicityBean()));
             pojo.setOrder(atgtat.getOrder());
             return pojo;

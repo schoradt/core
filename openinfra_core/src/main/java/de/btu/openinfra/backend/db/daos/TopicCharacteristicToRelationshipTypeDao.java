@@ -52,7 +52,7 @@ public class TopicCharacteristicToRelationshipTypeDao
             pojo.setMultiplicity(new MultiplicityDao(
                     currentProjectId,
                     schema).mapToPojo(
-                            null,
+                            locale,
                             rtttc.getMultiplicityBean()));
             pojo.setTopicCharacteristic(
                 new TopicCharacteristicDao(
