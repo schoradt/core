@@ -436,7 +436,13 @@ public abstract class OpenInfraRbac<
 
 		case FILES:
 			return;
+
+		case SEARCH:
+            return;
 		}
+
+
+
 
 		throw new WebApplicationException(Response.Status.FORBIDDEN);
 
