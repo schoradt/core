@@ -56,6 +56,12 @@ The _entity_ _manager_ is very impartant for the DAO classes and the reaction ti
 ![OpenInfRA EM](https://github.com/OpenInfRA/core/blob/master/img/em.png "OpenInfRA EM")
 
 ## Database Schemas
+OpenInfRA provides different _database_ _schemas_. Each 'database schema' is optimized for specific needs:
+- _project_: A project schema contains only project specific data without meta data. There are several project schemas. Each project schema provides its own UUID.
+- _system_: The system schema contains abstract data and information which is used to derive project schemas.
+- _meta___data_:
+
+![OpenInfRA Database Schemas](https://github.com/OpenInfRA/core/blob/master/img/schemas.png "OpenInfRA Database Schemas")
 
 # TODO
 - The JUnit tests have to be extended.
