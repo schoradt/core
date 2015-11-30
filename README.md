@@ -17,6 +17,11 @@ The OpenInfRA application is based on the following software stack:
 
 ![OpenInfRA Softwarestack](https://github.com/OpenInfRA/core/blob/master/sw-stack.JPG "OpenInfRA Softwarestack")
 
+### DAO
+
+Database access is utilized by means of a DAO pattern.
+![OpenInfRA DAO](https://github.com/OpenInfRA/core/blob/master/dao.png "OpenInfRA DAO")
+
 ## Database
 The [database](https://github.com/OpenInfRA/database) is necessary to provide a data storage for OpenInfRA. Further instructions can be found in the appropriated repositoriy.
 
