@@ -168,7 +168,7 @@ public class PojoPrimer {
         addClassesForSchema(
                 OpenInfraSchemas.SEARCH,
                 Reflection.<OpenInfraPojo>findAllClasses(
-                        "de.btu.openinfra.plugins.solr.db.pojos"));
+                        "de.btu.openinfra.backend.db.pojos.solr"));
 
     }
 
