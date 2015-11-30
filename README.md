@@ -32,10 +32,10 @@ OpenInfRA provides a file upload. This upload requires [ImageMagick](http://www.
 - PDF conversion requires [ghostscript](http://www.ghostscript.com/)
 - Conversio of raw file formats (such as DNG) require [UFRaw](http://ufraw.sourceforge.net/) under Linux-based systems.
 
-## Some Internals
+# Some Internals
 This section shows some starting points and describes a few details.
 
-### DAO
+## DAO
 Database access is utilized by means of a DAO pattern.
 ![OpenInfRA DAO](https://github.com/OpenInfRA/core/blob/master/dao.png "OpenInfRA DAO")
 
