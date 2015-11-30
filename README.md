@@ -51,9 +51,11 @@ Database access is utilized by means of a _DAO_ _pattern_. There exists a DAO cl
 ![OpenInfRA DAO](https://github.com/OpenInfRA/core/blob/master/img/dao.png "OpenInfRA DAO")
 
 ## Entity Manager
-The _entity_ _manager_ is very impartant for the DAO classes and the reaction time of the application since it utilizes the database access. Thus, each DAO class uses its own 'entity manager'. In order to provide fast access it exists an _EntityManagerFactoryCache_ which provides administation of 'entity manager' objects for DAO classes.
+The _entity_ _manager_ is very impartant for the DAO classes and the reaction time of the application since it utilizes the database access. Each DAO class uses its own 'entity manager'. In order to provide fast access it exists an _EntityManagerFactoryCache_ which provides the administation of 'entity manager' objects for DAO classes.
 
 ![OpenInfRA EM](https://github.com/OpenInfRA/core/blob/master/img/em.png "OpenInfRA EM")
+
+## Database Schemas
 
 # TODO
 - The JUnit tests have to be extended.
