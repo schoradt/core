@@ -39,6 +39,6 @@ This section shows some starting points and describes a few details.
 Database access is utilized by means of a DAO pattern.
 ![OpenInfRA DAO](https://github.com/OpenInfRA/core/blob/master/dao.png "OpenInfRA DAO")
 
-## TODO
+# TODO
 - The JUnit tests have to be extended.
 - There is currently no Loggin-Framework available.
