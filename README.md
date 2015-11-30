@@ -33,10 +33,12 @@ OpenInfRA provides a file upload. This upload requires [ImageMagick](http://www.
 - Conversion of raw file formats (such as DNG) require [UFRaw](http://ufraw.sourceforge.net/) under Linux-based systems.
 
 # Some Internals
-This section shows some starting points and describes a few details. _Project_ and _TopicCharacteristic_ are used as running examples. As the name states, 'Project' refers to an OpenInfRA project. A 'TopicCharacteristic' is an abstract container which groups a set of objects by the description and consolidation of specific attributes. The set of objects is called _TopicInstances_ which define values of consolidated attributes.
+This section shows some starting points and describes a few details. _Project_ and _TopicCharacteristic_ are used as running examples. As the name states, 'Project' refers to an OpenInfRA project. A 'TopicCharacteristic' is an abstract container which groups a set of objects by the description and consolidation of specific attributes. An object is called _TopicInstance_ and it defines attribute values consolidated by a 'TopicCharacteristic'. This leads to the following correlation: a set of TopicInstances are type of a specific TopicCharacteristic.
 
 ## Model
+The following picture shows the 'Project' and the 'TopicCharacteristic' as model objects.
 
+![OpenInfRA Model](https://github.com/OpenInfRA/core/blob/master/img/model.png "OpenInfRA Model")
 
 
 ## DAO
