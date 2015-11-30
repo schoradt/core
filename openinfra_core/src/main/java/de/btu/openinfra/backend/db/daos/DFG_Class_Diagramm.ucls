@@ -24,8 +24,8 @@
   <class id="3" language="java" name="de.btu.openinfra.backend.db.daos.OpenInfraValueDao" project="openinfra_core" 
     file="/openinfra_core/src/main/java/de/btu/openinfra/backend/db/daos/OpenInfraValueDao.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1014" y="557"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    <position height="171" width="483" x="781" y="554"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
@@ -34,23 +34,48 @@
   <class id="4" language="java" name="de.btu.openinfra.backend.db.daos.TopicCharacteristicDao" project="openinfra_core" 
     file="/openinfra_core/src/main/java/de/btu/openinfra/backend/db/daos/TopicCharacteristicDao.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1024" y="780"/>    
+    <position height="-1" width="-1" x="1023" y="866"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <generalization id="5">    
-    <end type="SOURCE" refId="3"/>    
+  <class id="5" language="java" name="de.btu.openinfra.backend.db.EntityManagerFactoryCache.CacheTuple" 
+    project="openinfra_core" 
+    file="/openinfra_core/src/main/java/de/btu/openinfra/backend/db/EntityManagerFactoryCache.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="340" y="398"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="de.btu.openinfra.backend.db.EntityManagerFactoryCache" project="openinfra_core" 
+    file="/openinfra_core/src/main/java/de/btu/openinfra/backend/db/EntityManagerFactoryCache.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="337" y="153"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <generalization id="7">    
+    <end type="SOURCE" refId="2"/>    
     <end type="TARGET" refId="1"/>  
   </generalization>  
-  <generalization id="6">    
+  <nesting id="8">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="5"/>  
+  </nesting>  
+  <generalization id="9">    
     <end type="SOURCE" refId="4"/>    
     <end type="TARGET" refId="3"/>  
   </generalization>  
-  <generalization id="7">    
-    <end type="SOURCE" refId="2"/>    
+  <generalization id="10">    
+    <end type="SOURCE" refId="3"/>    
     <end type="TARGET" refId="1"/>  
   </generalization>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
