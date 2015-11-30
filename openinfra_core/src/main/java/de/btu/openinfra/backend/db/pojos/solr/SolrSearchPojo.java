@@ -13,6 +13,10 @@ import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
  * complex query parts (input from extended search). The lists of projects and
  * topic characteristics will be used to filter the results.
  *
+ * TODO The POJOs must extend OpenInfraPojo to be accessible for the primer
+ *      class. The UUID and TRID that is provided by the OpenInfraPojo will
+ *      never be used.
+ *
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
  */

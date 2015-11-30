@@ -34,7 +34,8 @@ public class SearchResource {
 
     /**
      * This resource awaits a SolrSearchPojo that will be the base for a search
-     * request on the Solr index.
+     * request on the Solr index. The parameter UUID and TRID of the
+     * SolrSearchPojo must not be set.
      *
      * @param locale     The language of the search request as string.
      * @param start      The offset parameter for the results.
@@ -64,6 +65,7 @@ public class SearchResource {
      * This resource starts the process that generates the Solr index. The
      * specified SolrIndexPojo can contain a list of project ids the index
      * should created for. If the list is empty all projects will be indexed.
+     * The parameter UUID and TRID of the SolrSearchPojo must not be set.
      *
      * @param projects The SolrIndexPojo that contains the list of project ids
      *                 that should be indexed.
