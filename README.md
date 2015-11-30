@@ -1,4 +1,4 @@
-# core
+# Core
 This folder contains the core Java and Maven based implementation of OpenInfRA. The project page can be found [here](http://www.b-tu.de/openinfra/).
 
 # Installation
@@ -32,6 +32,13 @@ OpenInfRA provides a file upload. This upload requires [ImageMagick](http://www.
 - PDF conversion requires [ghostscript](http://www.ghostscript.com/)
 - Conversio of raw file formats (such as DNG) require [UFRaw](http://ufraw.sourceforge.net/) under Linux-based systems.
 
-## TODO
+# Some Internals
+This section shows some starting points and describes a few details.
+
+## DAO
+Database access is utilized by means of a DAO pattern.
+![OpenInfRA DAO](https://github.com/OpenInfRA/core/blob/master/dao.png "OpenInfRA DAO")
+
+# TODO
 - The JUnit tests have to be extended.
 - There is currently no Loggin-Framework available.
