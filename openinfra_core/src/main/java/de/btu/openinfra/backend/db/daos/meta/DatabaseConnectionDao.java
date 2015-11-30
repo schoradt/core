@@ -40,19 +40,19 @@ public class DatabaseConnectionDao
             DatabaseConnectionPojo pojo = new DatabaseConnectionPojo(dc);
             pojo.setServer(new ServersDao(
                     currentProjectId,
-                    schema).mapToPojo(null, dc.getServerBean()));
+                    schema).mapToPojo(locale, dc.getServerBean()));
             pojo.setPort(new PortsDao(
                     currentProjectId,
-                    schema).mapToPojo(null, dc.getPortBean()));
+                    schema).mapToPojo(locale, dc.getPortBean()));
             pojo.setDatabase(new DatabasesDao(
                     currentProjectId,
-                    schema).mapToPojo(null, dc.getDatabaseBean()));
+                    schema).mapToPojo(locale, dc.getDatabaseBean()));
             pojo.setSchema(new SchemasDao(
                     currentProjectId,
-                    schema).mapToPojo(null, dc.getSchemaBean()));
+                    schema).mapToPojo(locale, dc.getSchemaBean()));
             pojo.setCredentials(new CredentialsDao(
                     currentProjectId,
-                    schema).mapToPojo(null, dc.getCredential()));
+                    schema).mapToPojo(locale, dc.getCredential()));
             return pojo;
         } else {
             return null;

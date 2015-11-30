@@ -40,7 +40,7 @@ public class ProjectsDao
                     new DatabaseConnectionDao(
                             currentProjectId,
                             schema).mapToPojo(
-                                    null,
+                                    locale,
                                     p.getDatabaseConnection()));
             pojo.setIsSubproject(p.getIsSubproject());
             return pojo;

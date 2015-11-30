@@ -41,10 +41,10 @@ public class LogDao
             pojo.setCreatedOn(OpenInfraTime.format(l.getCreatedOn()));
             pojo.setLogger(new LoggerDao(
                     currentProjectId,
-                    schema).mapToPojo(null,l.getLoggerBean()));
+                    schema).mapToPojo(locale,l.getLoggerBean()));
             pojo.setLevel(new LevelDao(
                     currentProjectId,
-                    schema).mapToPojo(null, l.getLevelBean()));
+                    schema).mapToPojo(locale, l.getLevelBean()));
             pojo.setMessage(l.getMessage());
             return pojo;
         } else {

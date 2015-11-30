@@ -38,12 +38,12 @@ public class SettingsDao
             SettingsPojo pojo = new SettingsPojo(s);
             pojo.setKey(new SettingKeysDao(
                     currentProjectId,
-                    schema).mapToPojo(null, s.getSettingKey()));
+                    schema).mapToPojo(locale, s.getSettingKey()));
             pojo.setUpdatedOn(OpenInfraTime.format(s.getUpdatedOn()));
             pojo.setValue(s.getValue());
             pojo.setProject(new ProjectsDao(
                     currentProjectId,
-                    schema).mapToPojo(null, s.getProject()));
+                    schema).mapToPojo(locale, s.getProject()));
             return pojo;
         } else {
             return null;
