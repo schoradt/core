@@ -36,13 +36,16 @@ OpenInfRA provides a file upload. This upload requires [ImageMagick](http://www.
 This section shows some starting points and describes a few details. _Project_ and _TopicCharacteristic_ are used as running examples. As the name states, 'Project' refers to an OpenInfRA project. A 'TopicCharacteristic' is an abstract container which groups a set of objects by the description and consolidation of specific attributes. An object is called _TopicInstance_ and it defines attribute values consolidated by a 'TopicCharacteristic'. This leads to the following correlation: a set of TopicInstances are type of a specific TopicCharacteristic.
 
 ## Model
-The following picture shows the 'Project' and the 'TopicCharacteristic' as model objects.
+The following picture shows the 'Project' and the 'TopicCharacteristic' as _model_ _objects_. 'Model objects' refer to the persistence layer.
 
 ![OpenInfRA Model](https://github.com/OpenInfRA/core/blob/master/img/model.png "OpenInfRA Model")
 
+## POJO
+The following picture shows the 'Project' and the 'TopicCharacteristic' as _POJO_ _objects_. 'POJO objects' are data containers. These containers are used to transfer data from the application core to the REST API.
 
 ## DAO
-Database access is utilized by means of a DAO pattern.
+Database access is utilized by means of a _DAO_ _pattern_. There exists a DAO class for each _model_ _object_. DAO classes are used to transform 'model objects' into 'POJO object' and vice versa. This is a litle bit implementation intensive but leads to a maximum of data control. Thus, it is possible to hide data in the REST API and to enrich the REST API with additional information without invoking side effects to the persistence layer.
+
 ![OpenInfRA DAO](https://github.com/OpenInfRA/core/blob/master/dao.png "OpenInfRA DAO")
 
 # TODO
