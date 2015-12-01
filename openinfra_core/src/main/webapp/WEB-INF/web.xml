@@ -26,6 +26,10 @@
         <filter-name>ShiroFilter</filter-name>
         <filter-class>org.apache.shiro.web.servlet.ShiroFilter</filter-class>
     </filter>
+	 <context-param>
+	     <param-name>shiroConfigLocations</param-name>
+	     <param-value>/WEB-INF/classes/de/btu/openinfra/backend/shiro/shiro.ini</param-value>
+	 </context-param>
 	<filter-mapping>
 		<filter-name>ShiroFilter</filter-name>
 		<url-pattern>/*</url-pattern>
