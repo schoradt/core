@@ -19,18 +19,18 @@ import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
 /**
  * The web-application schema is used to provide a persistent storage for
- * applications (mostly web-applications) which work with the OpenInfRA REST
+ * applications (mostly web-applications) which consume the OpenInfRA REST
  * API. The current resource only provides a READ and a PUT method.
- *
+ * <br/>
  * POST isn't provided since the web-application owner is obliged to register
  * the application by the OpenInfRA owner.
- *
+ * <br/>
  * DELETE isn't provided since the OpenInfRA owner is obliged to delete
  * unnecessary web-application registrations.
- *
+ * <br/>
  * There is no GET method which provides a list of all available
- * web-applications. Thus every web-application must be aware of it's own id.
- * Thus, it becomes more difficult (but it's not impossible) to catch the id of
+ * web-applications. Thus, every web-application must be aware of it's own id.
+ * and it becomes more difficult (but it's not impossible) to catch the id of
  * a different web-application.
  *
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
@@ -43,6 +43,15 @@ import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
     + OpenInfraResponseBuilder.UTF8_CHARSET})
 public class WebappResource {
 
+	/**
+	 * Reads a registered web-application from database. The id should be known
+	 * by the owner of the web-application.
+	 *
+	 * @param uriInfo
+	 * @param request
+	 * @param id UUID known by the web-application owner.
+	 * @return A web-application POJO of the requested web-application.
+	 */
 	@GET
 	@Path("/{id}")
 	public WebappPojo read(
@@ -52,6 +61,15 @@ public class WebappResource {
 		return new WebappDao().read(null, id);
 	}
 
+	/**
+	 * Changes an already registered web-application.
+	 *
+	 * @param uriInfo
+	 * @param request
+	 * @param id The id of the web-application data which should be changed.
+	 * @param pojo The content to change.
+	 * @return A response if the resource has changed.
+	 */
 	@PUT
 	public Response put(
 			@Context UriInfo uriInfo,
