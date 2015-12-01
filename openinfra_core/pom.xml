@@ -38,12 +38,6 @@
                 <version>2.10.3</version>
                 <executions>
                     <execution>
-						<id>attach-javadocs</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-                    <execution>
                     	<id>generate-extended-wadl</id>
 		                <configuration>
 		                    <encoding>UTF-8</encoding>
@@ -79,6 +73,15 @@
                         </goals>
                         <phase>compile</phase>
                     </execution>
+                    <execution>
+						<id>attach-javadocs</id>
+						<configuration>
+          					<destDir>${basedir}/../apidoc</destDir>
+        				</configuration>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
                 </executions>
             </plugin>
             
