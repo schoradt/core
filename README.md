@@ -63,7 +63,7 @@ OpenInfRA provides different _database_ _schemas_. Each 'database schema' is opt
 - _rbac_: The 'rbac schema' contains information for the role-based access control system. This includes user information, roles and permissions.
 - _webapp_: The 'webapp schema' provides additional information for GUI applications.
 - _files_: The 'files schema' provides data of the file upload system.
-- _search_: The 'search schema' provides data of the search engine.
+- _search_: The 'search schema' is not a real database schema, it only provides an access point for the search engine.
 
 ![OpenInfRA Database Schemas](https://github.com/OpenInfRA/core/blob/master/img/schemas.png "OpenInfRA Database Schemas")
 
