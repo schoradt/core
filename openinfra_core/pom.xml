@@ -75,9 +75,6 @@
                     </execution>
                     <execution>
 						<id>attach-javadocs</id>
-						<configuration>
-          					<destDir>${basedir}/../apidoc</destDir>
-        				</configuration>
 						<goals>
 							<goal>jar</goal>
 						</goals>
