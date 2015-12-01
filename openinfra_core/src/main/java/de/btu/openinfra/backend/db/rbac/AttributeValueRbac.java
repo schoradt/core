@@ -40,13 +40,15 @@ public class AttributeValueRbac extends
 	public UUID distributeTypes(
 			OpenInfraHttpMethod httpMethod,
 			UriInfo uriInfo,
+			Locale locale,
 			AttributeValuePojo pojo,
 			UUID projectId,
 	        UUID attributeValueId) {
 		checkPermission(httpMethod, uriInfo);
 		return new AttributeValueDao(
 				currentProjectId,
-				schema).distributeTypes(pojo, projectId, attributeValueId);
+				schema).distributeTypes(locale, pojo, projectId,
+				        attributeValueId);
 	}
 
 	public AttributeValuePojo newAttributeValue(

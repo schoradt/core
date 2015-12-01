@@ -20,6 +20,8 @@ import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
 import de.btu.openinfra.backend.db.pojos.MetaDataPojo;
 import de.btu.openinfra.backend.db.pojos.project.AttributeValuePojo;
 import de.btu.openinfra.backend.db.pojos.project.TopicInstancePojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 /**
  * This class represents the TopicInstance and is used to access the underlying
@@ -189,6 +191,16 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
 		return tip;
 	}
 
+   /**
+    * This method returns a topic instance model object for the specified id.
+    *
+    * @param id The id of the topic instance.
+    * @return   The model object or null if the topic instance does not exists.
+    */
+    public TopicInstance read(UUID id) {
+        return em.find(modelClass, id);
+    }
+
 	/**
      * This method retrieves a list of TopicInstance objects belonging to a
      * specified topic characteristic and where the attribute value has a 3D
@@ -246,7 +258,14 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
 			TopicInstancePojo pojo,
 			TopicInstance ti) {
 
-        // TODO set the model values
+	    try {
+	        // set the topic characteristic the topic instance belongs to
+	        ti.setTopicCharacteristic(em.find(
+	                TopicCharacteristic.class, pojo.getTopicCharacteristic()));
+	    } catch (NullPointerException npe) {
+	        throw new OpenInfraEntityException(
+	                OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
+	    }
 
         // return the model as mapping result
         return new MappingResult<TopicInstance>(ti.getId(), ti);

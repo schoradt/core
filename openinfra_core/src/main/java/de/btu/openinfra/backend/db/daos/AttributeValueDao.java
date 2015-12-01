@@ -24,6 +24,7 @@ import de.btu.openinfra.backend.db.pojos.LocalizedString;
 import de.btu.openinfra.backend.db.pojos.PtFreeTextPojo;
 import de.btu.openinfra.backend.db.pojos.project.AttributeValueGeomPojo;
 import de.btu.openinfra.backend.db.pojos.project.AttributeValuePojo;
+import de.btu.openinfra.backend.solr.SolrIndexer;
 
 /**
  * This class represents the AttributeValue and is used to access the underlying
@@ -374,13 +375,15 @@ public class AttributeValueDao extends
      * constraint. The appropriated AttributeValuePojo must be extracted
      * and distributed separately to their respective createOrUpdate methods.
      *
+     * @param locale
 	 * @param pojo
 	 * @param projectId the id of the project
+	 * @param attributeValueId
 	 * @return          the UUID of the created or updated object or null if an
 	 *                  error occurs or the geomType is unlike GeoJSON
 	 */
-	public UUID distributeTypes(AttributeValuePojo pojo, UUID projectId,
-	        UUID attributeValueId) {
+	public UUID distributeTypes(Locale locale, AttributeValuePojo pojo,
+	        UUID projectId, UUID attributeValueId) {
 
 	    UUID id = null;
 	    boolean checked = false;
@@ -409,6 +412,15 @@ public class AttributeValueDao extends
 					        OpenInfraSchemas.PROJECTS).createOrUpdate(
 					                pojo.getAttributeValueDomain(),
 					                attributeValueId);
+				id = new AttributeValueDomainDao(
+				        projectId,
+				        OpenInfraSchemas.PROJECTS).createOrUpdate(
+				                pojo.getAttributeValueDomain(),
+				                attributeValueId);
+				// now we must update the Solr index
+				new SolrIndexer().createOrUpdateDocument(
+				        projectId,
+				        pojo.getAttributeValueDomain().getTopicInstanceId());
             } else {
                 // return null if the ids doesn't match
                 return null;
