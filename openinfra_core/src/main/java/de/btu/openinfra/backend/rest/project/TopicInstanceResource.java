@@ -24,7 +24,7 @@ import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.TopicCharacteristicPojo;
 import de.btu.openinfra.backend.db.pojos.TopicPojo;
 import de.btu.openinfra.backend.db.pojos.project.AttributeValuePojo;
-import de.btu.openinfra.backend.db.pojos.project.TopicInstanceAssociationPojo;
+import de.btu.openinfra.backend.db.pojos.project.TopicInstanceAssociationToPojo;
 import de.btu.openinfra.backend.db.pojos.project.TopicInstancePojo;
 import de.btu.openinfra.backend.db.rbac.AttributeValueRbac;
 import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
@@ -116,7 +116,7 @@ public class TopicInstanceResource {
 
 	@GET
 	@Path("{topicInstanceId}/associationsto")
-	public List<TopicInstanceAssociationPojo> getAssociations(
+	public List<TopicInstanceAssociationToPojo> getAssociations(
 			@Context UriInfo uriInfo,
 			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
@@ -148,7 +148,7 @@ public class TopicInstanceResource {
             @Context HttpServletRequest request,
             @PathParam("projectId") UUID projectId,
             @PathParam("topicInstanceId") UUID topicInstanceId,
-            TopicInstanceAssociationPojo pojo) {
+            TopicInstanceAssociationToPojo pojo) {
 	    return OpenInfraResponseBuilder.postResponse(
                 new TopicInstanceAssociationRbac(
                         projectId,
@@ -158,7 +158,7 @@ public class TopicInstanceResource {
                                 uriInfo,
                                 pojo,
                                 topicInstanceId,
-                                pojo.getAssociationInstanceId(),
+                                pojo.getAssociationInstance().getUuid(),
                                 null,
                                 null,
                                 pojo.getMetaData()));
@@ -190,7 +190,7 @@ public class TopicInstanceResource {
 
 	@GET
 	@Path("{topicInstanceId}/associationsto/topiccharacteristics/{topCharId}")
-	public List<TopicInstanceAssociationPojo> getAssociationsToByTopchar(
+	public List<TopicInstanceAssociationToPojo> getAssociationsToByTopchar(
 			@Context UriInfo uriInfo,
 			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
@@ -215,7 +215,7 @@ public class TopicInstanceResource {
 
 	@GET
 	@Path("{topicInstanceId}/associationsfrom/topiccharacteristics/{topCharId}")
-	public List<TopicInstanceAssociationPojo> getAssociationsFromByTopchar(
+	public List<TopicInstanceAssociationToPojo> getAssociationsFromByTopchar(
 			@Context UriInfo uriInfo,
 			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
@@ -282,7 +282,7 @@ public class TopicInstanceResource {
 
 	@GET
 	@Path("{topicInstanceId}/associationsto/{associatedTopicInstanceId}")
-	public List<TopicInstanceAssociationPojo> getAssociations(
+	public List<TopicInstanceAssociationToPojo> getAssociations(
 			@Context UriInfo uriInfo,
 			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
@@ -317,7 +317,7 @@ public class TopicInstanceResource {
             @PathParam("topicInstanceId") UUID topicInstanceId,
             @PathParam("associatedTopicInstanceId")
                 UUID associatedTopicInstanceId,
-            TopicInstanceAssociationPojo pojo) {
+            TopicInstanceAssociationToPojo pojo) {
 	    return OpenInfraResponseBuilder.putResponse(
                 new TopicInstanceAssociationRbac(
                         projectId,
@@ -327,7 +327,7 @@ public class TopicInstanceResource {
                                 uriInfo,
                                 pojo,
                                 topicInstanceId,
-                                pojo.getAssociationInstanceId(),
+                                pojo.getAssociationInstance().getUuid(),
                                 associatedTopicInstanceId,
                                 pojo.getAssociatedInstance().getUuid(),
                                 pojo.getMetaData()));

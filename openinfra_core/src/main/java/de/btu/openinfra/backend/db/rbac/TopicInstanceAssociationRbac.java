@@ -10,10 +10,10 @@ import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.TopicInstanceAssociationDao;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstanceXTopicInstance;
-import de.btu.openinfra.backend.db.pojos.project.TopicInstanceAssociationPojo;
+import de.btu.openinfra.backend.db.pojos.project.TopicInstanceAssociationToPojo;
 
 public class TopicInstanceAssociationRbac extends OpenInfraValueValueRbac<
-	TopicInstanceAssociationPojo, TopicInstanceXTopicInstance,
+	TopicInstanceAssociationToPojo, TopicInstanceXTopicInstance,
 	TopicInstance, TopicInstance, TopicInstanceAssociationDao> {
 
 	public TopicInstanceAssociationRbac(
@@ -23,7 +23,7 @@ public class TopicInstanceAssociationRbac extends OpenInfraValueValueRbac<
 				TopicInstance.class, TopicInstanceAssociationDao.class);
 	}
 
-	public List<TopicInstanceAssociationPojo> readAssociationToByTopchar(
+	public List<TopicInstanceAssociationToPojo> readAssociationToByTopchar(
 					OpenInfraHttpMethod httpMethod,
 					UriInfo uriInfo,
 					Locale locale,
@@ -36,7 +36,7 @@ public class TopicInstanceAssociationRbac extends OpenInfraValueValueRbac<
 					offset, size);
 	}
 
-	public List<TopicInstanceAssociationPojo> readAssociationFromByTopchar(
+	public List<TopicInstanceAssociationToPojo> readAssociationFromByTopchar(
 			OpenInfraHttpMethod httpMethod,
 			UriInfo uriInfo,
 			Locale locale,

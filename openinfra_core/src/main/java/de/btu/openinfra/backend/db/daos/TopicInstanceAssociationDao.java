@@ -10,7 +10,7 @@ import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstanceXTopicInstance;
-import de.btu.openinfra.backend.db.pojos.project.TopicInstanceAssociationPojo;
+import de.btu.openinfra.backend.db.pojos.project.TopicInstanceAssociationToPojo;
 
 /**
  * This class represents the TopicInstanceAssociation and is used to access the
@@ -20,7 +20,7 @@ import de.btu.openinfra.backend.db.pojos.project.TopicInstanceAssociationPojo;
  *
  */
 public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
-	TopicInstanceAssociationPojo,
+	TopicInstanceAssociationToPojo,
 	TopicInstanceXTopicInstance,
 	TopicInstance, TopicInstance> {
 
@@ -43,7 +43,7 @@ public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
 	}
 
 	@Override
-	public TopicInstanceAssociationPojo mapToPojo(
+	public TopicInstanceAssociationToPojo mapToPojo(
 			Locale locale,
 			TopicInstanceXTopicInstance txt) {
 	    return mapToPojoStatically(locale, txt,
@@ -58,14 +58,18 @@ public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
      * @param mdDao  The meta data DAO must not be null.
      * @return       the POJO object when the model object is not null else null
      */
-    public static TopicInstanceAssociationPojo mapToPojoStatically(
+    public static TopicInstanceAssociationToPojo mapToPojoStatically(
             Locale locale,
             TopicInstanceXTopicInstance txt,
             MetaDataDao mdDao) {
         if (txt != null) {
-            TopicInstanceAssociationPojo pojo =
-                    new TopicInstanceAssociationPojo(txt, mdDao);
-            pojo.setAssociationInstanceId(txt.getTopicInstance1Bean().getId());
+            TopicInstanceAssociationToPojo pojo =
+                    new TopicInstanceAssociationToPojo(txt, mdDao);
+            pojo.setAssociationInstance(
+                    TopicInstanceDao.mapToPojoStatically(
+                    		locale,
+                    		txt.getTopicInstance1Bean(),
+                    		mdDao));
             pojo.setRelationshipType(
                     RelationshipTypeDao.mapToPojoStatically(
                             locale,
@@ -82,7 +86,7 @@ public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
         }
     }
 
-    public List<TopicInstanceAssociationPojo> readAssociationToByTopchar(
+    public List<TopicInstanceAssociationToPojo> readAssociationToByTopchar(
     		Locale locale, UUID topicInstance, UUID topChar,
     		int offset, int size) {
     	return readAssociation(locale, topicInstance, topChar,
@@ -91,7 +95,7 @@ public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
     			offset, size);
     }
 
-    public List<TopicInstanceAssociationPojo> readAssociationFromByTopchar(
+    public List<TopicInstanceAssociationToPojo> readAssociationFromByTopchar(
     		Locale locale, UUID topicInstance, UUID topChar,
     		int offset, int size) {
     	return readAssociation(locale, topicInstance, topChar,
@@ -100,7 +104,7 @@ public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
     			offset, size);
     }
 
-    public List<TopicInstanceAssociationPojo> readAssociation(
+    public List<TopicInstanceAssociationToPojo> readAssociation(
     		Locale locale, UUID topicInstance, UUID topChar, String queryName,
     		int offset, int size) {
     	List<TopicInstanceXTopicInstance> tixtiList = em.createNamedQuery(
@@ -110,8 +114,8 @@ public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
     			.setParameter("topicCharacteristic",
     					em.find(TopicCharacteristic.class, topChar))
     			.setFirstResult(offset).setMaxResults(size).getResultList();
-    	List<TopicInstanceAssociationPojo> pojoList =
-    			new LinkedList<TopicInstanceAssociationPojo>();
+    	List<TopicInstanceAssociationToPojo> pojoList =
+    			new LinkedList<TopicInstanceAssociationToPojo>();
     	for(TopicInstanceXTopicInstance tixti : tixtiList) {
     		pojoList.add(mapToPojo(locale, tixti));
     	}
@@ -120,7 +124,7 @@ public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
 
 	@Override
 	public MappingResult<TopicInstanceXTopicInstance> mapToModel(
-			TopicInstanceAssociationPojo pojo,
+			TopicInstanceAssociationToPojo pojo,
 			TopicInstanceXTopicInstance txt) {
 
         // TODO set the model values
