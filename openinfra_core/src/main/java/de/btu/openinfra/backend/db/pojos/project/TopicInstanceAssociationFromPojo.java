@@ -12,7 +12,7 @@ import de.btu.openinfra.backend.db.pojos.RelationshipTypePojo;
 public class TopicInstanceAssociationFromPojo extends OpenInfraPojo {
 
     private TopicInstancePojo associationInstance;
-    private TopicInstancePojo associatedInstance;
+    private UUID associatedInstanceId;
     private RelationshipTypePojo relationshipType;
 
     /* Default constructor */
@@ -28,11 +28,11 @@ public class TopicInstanceAssociationFromPojo extends OpenInfraPojo {
     public TopicInstanceAssociationFromPojo(
             UUID uuid,
             TopicInstancePojo assoTip,
-            TopicInstancePojo tip,
+            UUID tipId,
             RelationshipTypePojo rtp) {
         setUuid(uuid);
         associationInstance = assoTip;
-        associatedInstance = tip;
+        associatedInstanceId = tipId;
         relationshipType = rtp;
     }
 
@@ -52,12 +52,12 @@ public class TopicInstanceAssociationFromPojo extends OpenInfraPojo {
         this.relationshipType = relationshipType;
     }
 
-    public TopicInstancePojo getAssociatedInstance() {
-        return associatedInstance;
+    public UUID getAssociatedInstanceId() {
+        return associatedInstanceId;
     }
 
-    public void setAssociatedInstance(TopicInstancePojo associatedInstance) {
-        this.associatedInstance = associatedInstance;
+    public void setAssociatedInstanceId(UUID associatedInstanceId) {
+        this.associatedInstanceId = associatedInstanceId;
     }
 
 }

@@ -1,7 +1,7 @@
 <%@page import="de.btu.openinfra.backend.db.daos.ValueListValueDao"%>
 <%@page import="de.btu.openinfra.backend.helper.ImgUrlHelper"%>
 <%@page import="de.btu.openinfra.backend.helper.ImgSize"%>
-<%@page import="de.btu.openinfra.backend.db.daos.TopicInstanceAssociationDao"%>
+<%@page import="de.btu.openinfra.backend.db.daos.TopicInstanceAssociationToDao"%>
 <%@page import="java.util.UUID"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
@@ -149,13 +149,13 @@
 										<c:set var="currentDomain" value="${atv.attributeType.domain.uuid}"/>
 										<%
 											pageContext.setAttribute("values", new ValueListValueDao(
-																				UUID.fromString(ProjectDao.getCurrentProject(
-																						request.getAttribute("javax.servlet.forward.request_uri").toString())),
-																				OpenInfraSchemas.PROJECTS).read(
-																						PtLocaleDao.forLanguageTag(session.getAttribute("language").toString()), 
-																						UUID.fromString(pageContext.getAttribute("currentDomain").toString()), 
-																						0, 
-																						Integer.MAX_VALUE));
+																												UUID.fromString(ProjectDao.getCurrentProject(
+																														request.getAttribute("javax.servlet.forward.request_uri").toString())),
+																												OpenInfraSchemas.PROJECTS).read(
+																														PtLocaleDao.forLanguageTag(session.getAttribute("language").toString()), 
+																														UUID.fromString(pageContext.getAttribute("currentDomain").toString()), 
+																														0, 
+																														Integer.MAX_VALUE));
 										%>
 										<select id="${typeId}_${valueId}_${atv_loop.index}_${expliciteType}" name="${atv.attributeType.type}" class="form-control">
 											<c:forEach items="${values}" var="option">
@@ -270,7 +270,7 @@
 		<p>
 			<c:set var="currentInstance" value="${it.topicInstance.uuid}"/>
 			<fmt:message key="please.wait.label"/>:
-			<%=new TopicInstanceAssociationDao(
+			<%=new TopicInstanceAssociationToDao(
 					UUID.fromString(ProjectDao.getCurrentProject(
 							request.getAttribute("javax.servlet.forward.request_uri").toString())),
 					OpenInfraSchemas.PROJECTS).getCount(
