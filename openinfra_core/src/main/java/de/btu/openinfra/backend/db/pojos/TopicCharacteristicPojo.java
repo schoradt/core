@@ -4,11 +4,10 @@ import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import de.btu.openinfra.backend.db.daos.MetaDataDao;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 
 @XmlRootElement
-public class TopicCharacteristicPojo extends OpenInfraMetaDataPojo {
+public class TopicCharacteristicPojo extends OpenInfraPojo {
 
     private PtFreeTextPojo descriptions;
     private ValueListValuePojo topic;
@@ -18,10 +17,9 @@ public class TopicCharacteristicPojo extends OpenInfraMetaDataPojo {
     /* Default constructor */
     public TopicCharacteristicPojo() {}
 
-    /* Constructor that will set the id, trid and meta data automatically */
-    public TopicCharacteristicPojo(OpenInfraModelObject modelObject,
-    		MetaDataDao mdDao) {
-        super(modelObject, mdDao);
+    /* Constructor that will set the id and trid automatically */
+    public TopicCharacteristicPojo(OpenInfraModelObject modelObject) {
+        super(modelObject);
     }
 
     public PtFreeTextPojo getDescriptions() {

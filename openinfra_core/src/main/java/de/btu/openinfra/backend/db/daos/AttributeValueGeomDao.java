@@ -90,8 +90,7 @@ public class AttributeValueGeomDao
         Query qGeom = em.createNativeQuery(queryString);
         qGeom.setParameter(1, avg.getId());
 
-        AttributeValueGeomPojo pojo = new AttributeValueGeomPojo(
-                avg, new MetaDataDao(currentProjectId, schema));
+        AttributeValueGeomPojo pojo = new AttributeValueGeomPojo(avg);
 
         // set the topic instance id
         pojo.setTopicInstanceId(avg.getTopicInstance().getId());

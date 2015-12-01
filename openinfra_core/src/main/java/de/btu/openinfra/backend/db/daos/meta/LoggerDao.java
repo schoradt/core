@@ -33,16 +33,6 @@ public class LoggerDao
 
     @Override
     public LoggerPojo mapToPojo(Locale locale, Logger l) {
-        return mapToPojoStatically(l);
-    }
-
-    /**
-     * This method implements the method mapToPojo in a static way.
-     *
-     * @param at     the model object
-     * @return       the POJO object when the model object is not null else null
-     */
-    public static LoggerPojo mapToPojoStatically(Logger l) {
         if (l != null) {
             LoggerPojo pojo = new LoggerPojo(l);
             pojo.setLogger(l.getLogger());
@@ -55,35 +45,25 @@ public class LoggerDao
     @Override
     public MappingResult<Logger> mapToModel(LoggerPojo pojo, Logger logger) {
         if(pojo != null) {
-            mapToModelStatically(pojo, logger);
-            return new MappingResult<Logger>(logger.getId(), logger);
+            Logger resultLogger = null;
+            try {
+                resultLogger = logger;
+                if(resultLogger == null) {
+                    resultLogger = new Logger();
+                    resultLogger.setId(pojo.getUuid());
+                }
+                resultLogger.setLogger(pojo.getLogger());
+            } catch (NullPointerException npe) {
+                throw new OpenInfraEntityException(
+                        OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
+            }
+            return new MappingResult<Logger>(
+                    resultLogger.getId(),
+                    resultLogger);
         }
         else {
             return null;
         }
-    }
-
-    /**
-     * This method implements the method mapToModel in a static way.
-     * @param pojo the POJO object
-     * @param logger the pre initialized model object
-     * @return return a corresponding JPA model object
-     * @throws OpenInfraEntityException
-     */
-    public static Logger mapToModelStatically(LoggerPojo pojo, Logger logger) {
-        Logger resultLogger = null;
-        try {
-            resultLogger = logger;
-            if(resultLogger == null) {
-                resultLogger = new Logger();
-                resultLogger.setId(pojo.getUuid());
-            }
-            resultLogger.setLogger(pojo.getLogger());
-        } catch (NullPointerException npe) {
-            throw new OpenInfraEntityException(
-                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
-        }
-        return resultLogger;
     }
 
 }

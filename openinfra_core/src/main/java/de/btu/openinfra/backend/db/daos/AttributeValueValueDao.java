@@ -39,32 +39,17 @@ public class AttributeValueValueDao
 	public AttributeValueValuePojo mapToPojo(
 			Locale locale,
 			AttributeValueValue avv) {
-		return mapToPojoStatically(locale, avv,
-		        new MetaDataDao(currentProjectId, schema));
-	}
-
-	/**
-	 * This method implements the method mapToPojo in a static way.
-	 *
-	 * @param locale the requested language as Java.util locale
-	 * @param avv    the model object
-	 * @param mdDao  the meta data DAO
-	 * @return       the POJO object when the model object is not null else null
-	 */
-	public static AttributeValueValuePojo mapToPojoStatically(
-			Locale locale,
-			AttributeValueValue avv,
-			MetaDataDao mdDao) {
 	    if (avv != null) {
-    		AttributeValueValuePojo pojo =
-    		        new AttributeValueValuePojo(avv, mdDao);
+    		AttributeValueValuePojo pojo = new AttributeValueValuePojo(avv);
 
     		// set the topic instance id
     		pojo.setTopicInstanceId(avv.getTopicInstance().getId());
     		// set the value of the object
-    		pojo.setValue(PtFreeTextDao.mapToPojoStatically(
-    				locale,
-    				avv.getPtFreeText()));
+    		pojo.setValue(new PtFreeTextDao(
+    		        currentProjectId,
+    		        schema).mapToPojo(
+    		                locale,
+    		                avv.getPtFreeText()));
     		// set the attribute type to attribute type group id of the value
     		pojo.setAttributeTypeToAttributeTypeGroupId(
     		        avv.getAttributeTypeToAttributeTypeGroup().getId());

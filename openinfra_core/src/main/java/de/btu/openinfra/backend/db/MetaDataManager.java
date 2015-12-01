@@ -45,7 +45,9 @@ public class MetaDataManager {
                   Projects.class)
                   .setParameter("value", projectId)
                   .getSingleResult();
-    		return ProjectsDao.mapToPojoStatically(p);
+    		return new ProjectsDao(
+    		        projectId,
+    		        OpenInfraSchemas.META_DATA).mapToPojo(null, p);
 		} catch (NoResultException e) {
             return null;
         }

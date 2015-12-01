@@ -3,11 +3,10 @@ package de.btu.openinfra.backend.db.pojos;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import de.btu.openinfra.backend.db.daos.AttributeValueTypes;
-import de.btu.openinfra.backend.db.daos.MetaDataDao;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 
 @XmlRootElement
-public class AttributeTypePojo extends OpenInfraMetaDataPojo {
+public class AttributeTypePojo extends OpenInfraPojo {
 
     private PtFreeTextPojo names;
     private PtFreeTextPojo descriptions;
@@ -20,9 +19,9 @@ public class AttributeTypePojo extends OpenInfraMetaDataPojo {
     public AttributeTypePojo() {
     }
 
-    /* Constructor that will set the id, trid and meta data automatically */
-    public AttributeTypePojo(OpenInfraModelObject modelObject, MetaDataDao mdDao) {
-        super(modelObject, mdDao);
+    /* Constructor that will set the id and trid automatically */
+    public AttributeTypePojo(OpenInfraModelObject modelObject) {
+        super(modelObject);
     }
 
     public AttributeValueTypes getType() {

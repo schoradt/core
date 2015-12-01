@@ -4,15 +4,14 @@ import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import de.btu.openinfra.backend.db.daos.MetaDataDao;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
-import de.btu.openinfra.backend.db.pojos.OpenInfraMetaDataPojo;
+import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 import de.btu.openinfra.backend.db.pojos.RelationshipTypePojo;
 
 @XmlRootElement
-public class TopicInstanceAssociationToPojo extends OpenInfraMetaDataPojo {
+public class TopicInstanceAssociationToPojo extends OpenInfraPojo {
 
-    private TopicInstancePojo associationInstance;
+    private UUID associationInstanceId;
     private TopicInstancePojo associatedInstance;
     private RelationshipTypePojo relationshipType;
 
@@ -21,30 +20,28 @@ public class TopicInstanceAssociationToPojo extends OpenInfraMetaDataPojo {
     }
 
     /* Constructor that will set the id, trid and meta data automatically */
-    public TopicInstanceAssociationToPojo(
-            OpenInfraModelObject modelObject,
-            MetaDataDao mdDao) {
-        super(modelObject, mdDao);
+    public TopicInstanceAssociationToPojo(OpenInfraModelObject modelObject) {
+        super(modelObject);
     }
 
     // TODO check what happens with the meta data?
     public TopicInstanceAssociationToPojo(
             UUID uuid,
-            TopicInstancePojo assoTip,
+            UUID assoId,
             TopicInstancePojo tip,
             RelationshipTypePojo rtp) {
         setUuid(uuid);
-        associationInstance = assoTip;
+        associationInstanceId = assoId;
         associatedInstance = tip;
         relationshipType = rtp;
     }
 
-    public TopicInstancePojo getAssociationInstance() {
-        return associationInstance;
+    public UUID getAssociationInstanceId() {
+        return associationInstanceId;
     }
 
-    public void setAssociationInstance(TopicInstancePojo associationInstance) {
-        this.associationInstance = associationInstance;
+    public void setAssociationInstanceId(UUID associationInstanceId) {
+        this.associationInstanceId = associationInstanceId;
     }
 
     public RelationshipTypePojo getRelationshipType() {

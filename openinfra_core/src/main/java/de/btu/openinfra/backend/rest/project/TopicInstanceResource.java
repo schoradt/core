@@ -88,9 +88,8 @@ public class TopicInstanceResource {
 	                            OpenInfraHttpMethod.valueOf(
                                         request.getMethod()),
 	                            uriInfo,
-	                            pojo,
 	                            topicInstanceId,
-	                            pojo.getMetaData()));
+	                            pojo));
     }
 
 	@DELETE
@@ -158,10 +157,9 @@ public class TopicInstanceResource {
                                 uriInfo,
                                 pojo,
                                 topicInstanceId,
-                                pojo.getAssociationInstance().getUuid(),
+                                pojo.getAssociationInstanceId(),
                                 null,
-                                null,
-                                pojo.getMetaData()));
+                                null));
     }
 
 	@GET
@@ -327,10 +325,9 @@ public class TopicInstanceResource {
                                 uriInfo,
                                 pojo,
                                 topicInstanceId,
-                                pojo.getAssociationInstance().getUuid(),
+                                pojo.getAssociationInstanceId(),
                                 associatedTopicInstanceId,
-                                pojo.getAssociatedInstance().getUuid(),
-                                pojo.getMetaData()));
+                                pojo.getAssociatedInstance().getUuid()));
     }
 
 	@DELETE

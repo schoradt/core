@@ -68,8 +68,7 @@ public class AttributeTypeAttributeTypeGroupAssociation {
                                 uriInfo,
                                 pojo,
                                 associationId,
-                                pojo.getUuid(),
-                                pojo.getMetaData()));
+                                pojo.getUuid()));
     }
 
     @DELETE

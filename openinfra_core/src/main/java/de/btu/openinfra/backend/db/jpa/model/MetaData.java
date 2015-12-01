@@ -61,7 +61,7 @@ public class MetaData extends OpenInfraModelObject implements Serializable {
 		this.objectId = objectId;
 	}
 
-	public JSONObject getData() {
+    public JSONObject getData() {
 		return this.data;
 	}
 

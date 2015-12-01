@@ -4,11 +4,10 @@ import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import de.btu.openinfra.backend.db.daos.MetaDataDao;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 
 @XmlRootElement
-public class AttributeTypeGroupPojo extends OpenInfraMetaDataPojo {
+public class AttributeTypeGroupPojo extends OpenInfraPojo {
 
     // Fields of the object AttributeTypeGroup
     private PtFreeTextPojo names;
@@ -19,9 +18,9 @@ public class AttributeTypeGroupPojo extends OpenInfraMetaDataPojo {
     public AttributeTypeGroupPojo() {
     }
 
-    /* Constructor that will set the id, trid and meta data automatically */
-    public AttributeTypeGroupPojo(OpenInfraModelObject modelObject, MetaDataDao mdDao) {
-        super(modelObject, mdDao);
+    /* Constructor that will set the id and trid automatically */
+    public AttributeTypeGroupPojo(OpenInfraModelObject modelObject) {
+        super(modelObject);
     }
 
     public PtFreeTextPojo getNames() {

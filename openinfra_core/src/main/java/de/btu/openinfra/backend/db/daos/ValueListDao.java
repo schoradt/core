@@ -33,35 +33,20 @@ public class ValueListDao extends OpenInfraDao<ValueListPojo, ValueList> {
 
 	@Override
 	public ValueListPojo mapToPojo(Locale locale, ValueList vl) {
-		return mapToPojoStatically(locale, vl,
-		        new MetaDataDao(currentProjectId, schema));
-	}
+	    if(vl != null) {
+            ValueListPojo pojo = new ValueListPojo(vl);
+            PtFreeTextDao pftDao = new PtFreeTextDao(currentProjectId, schema);
 
-	/**
-     * This method implements the method mapToPojo in a static way.
-     *
-     * @param locale the requested language as Java.util locale
-     * @param vl     the model object
-     * @param mdDao  the meta data DAO
-     * @return       the POJO object when the model object is not null else null
-     */
-	public static ValueListPojo mapToPojoStatically(
-			Locale locale,
-			ValueList vl,
-			MetaDataDao mdDao) {
-		if(vl != null) {
-		    ValueListPojo pojo = new ValueListPojo(vl, mdDao);
-
-			pojo.setNames(PtFreeTextDao.mapToPojoStatically(
-					locale,
-					vl.getPtFreeText2()));
-			pojo.setDescriptions(PtFreeTextDao.mapToPojoStatically(
-					locale,
-					vl.getPtFreeText1()));
-			return pojo;
-		} else {
-			return null;
-		} // end if else
+            pojo.setNames(pftDao.mapToPojo(
+                    locale,
+                    vl.getPtFreeText2()));
+            pojo.setDescriptions(pftDao.mapToPojo(
+                    locale,
+                    vl.getPtFreeText1()));
+            return pojo;
+        } else {
+            return null;
+        } // end if else
 	}
 
 	@Override

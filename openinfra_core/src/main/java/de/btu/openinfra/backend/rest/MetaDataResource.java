@@ -90,7 +90,7 @@ public class MetaDataResource {
                         ).createOrUpdate(
                         		OpenInfraHttpMethod.valueOf(
                         				request.getMethod()),
-                        				uriInfo, pojo, metadataId, null));
+                        				uriInfo, metadataId, pojo));
     }
 
     @DELETE
@@ -142,6 +142,22 @@ public class MetaDataResource {
 						uriInfo,
                         PtLocaleDao.forLanguageTag(language),
                         metaDataId);
+    }
+
+    @GET
+    @Path("object/{objectId}")
+    public MetaDataPojo getByObjectId(
+            @Context UriInfo uriInfo,
+            @Context HttpServletRequest request,
+            @PathParam("projectId") UUID projectId,
+            @PathParam("schema") String schema,
+            @PathParam("objectId") UUID objectId) {
+        return new MetaDataRbac(
+                projectId,
+                OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
+                        OpenInfraHttpMethod.valueOf(request.getMethod()),
+                        uriInfo,
+                        objectId);
     }
 
 }

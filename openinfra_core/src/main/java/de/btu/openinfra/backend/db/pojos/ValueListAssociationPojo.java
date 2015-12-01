@@ -4,11 +4,10 @@ import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import de.btu.openinfra.backend.db.daos.MetaDataDao;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 
 @XmlRootElement
-public class ValueListAssociationPojo extends OpenInfraMetaDataPojo {
+public class ValueListAssociationPojo extends OpenInfraPojo {
 
     private UUID associationValueListId;
     private ValueListPojo associatedValueList;
@@ -18,9 +17,9 @@ public class ValueListAssociationPojo extends OpenInfraMetaDataPojo {
     public ValueListAssociationPojo() {
     }
 
-    /* Constructor that will set the id, trid and meta data automatically */
-    public ValueListAssociationPojo(OpenInfraModelObject modelObject, MetaDataDao mdDao) {
-        super(modelObject, mdDao);
+    /* Constructor that will set the id and trid automatically */
+    public ValueListAssociationPojo(OpenInfraModelObject modelObject) {
+        super(modelObject);
     }
 
     public UUID getAssociationValueListId() {

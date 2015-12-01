@@ -12,8 +12,6 @@ import javax.persistence.ParameterMode;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
 
-import jersey.repackaged.com.google.common.collect.Lists;
-
 import org.eclipse.persistence.exceptions.DatabaseException;
 
 import de.btu.openinfra.backend.OpenInfraProperties;
@@ -46,6 +44,7 @@ import de.btu.openinfra.backend.exception.OpenInfraDatabaseException;
 import de.btu.openinfra.backend.exception.OpenInfraEntityException;
 import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 import de.btu.openinfra.backend.exception.OpenInfraWebException;
+import jersey.repackaged.com.google.common.collect.Lists;
 
 /**
  * This class represents the Project and is used to access the underlying layer
@@ -161,37 +160,24 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 
 	@Override
 	public ProjectPojo mapToPojo(Locale locale, Project p) {
-		return mapToPojoStatically(locale, p,
-		        new MetaDataDao(currentProjectId, schema));
-	}
-
-	/**
-     * This method implements the method mapToPojo in a static way.
-     *
-     * @param locale the requested language as Java.util locale
-     * @param p      the model object
-     * @param mdDao  the meta data DAO
-     * @return       the POJO object when the model object is not null else null
-     */
-	public static ProjectPojo mapToPojoStatically(Locale locale, Project p,
-	        MetaDataDao mdDao) {
 		if(p != null) {
-			ProjectPojo pojo = new ProjectPojo(p, mdDao);
+			ProjectPojo pojo = new ProjectPojo(p);
+			PtFreeTextDao pftDao = new PtFreeTextDao(currentProjectId, schema);
 
 			pojo.setValueListsCount(
-					new ValueListDao(mdDao.currentProjectId, mdDao.schema)
+					new ValueListDao(currentProjectId, schema)
 					.getCount());
 
 			pojo.setTopicCharacteristicsCount(
-					new TopicCharacteristicDao(mdDao.currentProjectId,
-							mdDao.schema).getCount());
+					new TopicCharacteristicDao(currentProjectId,
+							schema).getCount());
 
 			Project parent = p.getProject();
 
-			pojo.setNames(PtFreeTextDao.mapToPojoStatically(
+			pojo.setNames(pftDao.mapToPojo(
 					locale,
 					p.getPtFreeText2()));
-			pojo.setDescriptions(PtFreeTextDao.mapToPojoStatically(
+			pojo.setDescriptions(pftDao.mapToPojo(
 					locale,
 					p.getPtFreeText1()));
 			if(parent != null) {
@@ -254,12 +240,11 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 	public List<ProjectPojo> readParents(Locale locale) {
 		Project self = em.find(Project.class, currentProjectId);
 		List<ProjectPojo> parents = new LinkedList<ProjectPojo>();
-		MetaDataDao mdDao = new MetaDataDao(currentProjectId, schema);
-		parents.add(mapToPojoStatically(locale, self, mdDao));
+		parents.add(mapToPojo(locale, self));
 
 		while(self.getProject() != null) {
 			self = self.getProject();
-			parents.add(mapToPojoStatically(locale, self, mdDao));
+			parents.add(mapToPojo(locale, self));
 		} // end while
 		return Lists.reverse(parents);
 	}

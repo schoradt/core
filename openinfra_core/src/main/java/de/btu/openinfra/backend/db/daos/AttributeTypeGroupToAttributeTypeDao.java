@@ -43,39 +43,26 @@ public class AttributeTypeGroupToAttributeTypeDao extends
 	public AttributeTypeGroupToAttributeTypePojo mapToPojo(
 			Locale locale,
 			AttributeTypeToAttributeTypeGroup atgtat) {
-        return mapToPojoStatically(locale, atgtat,
-                new MetaDataDao(currentProjectId, schema));
-	}
-
-	/**
-     * This method implements the method mapToPojo in a static way.
-     *
-     * @param locale the requested language as Java.util locale
-     * @param atgtat the model object
-     * @param mdDao  the meta data DAO
-     * @return       the POJO object when the model object is not null else null
-     */
-    public static AttributeTypeGroupToAttributeTypePojo mapToPojoStatically(
-            Locale locale,
-            AttributeTypeToAttributeTypeGroup atgtat,
-            MetaDataDao mdDao) {
         if(atgtat != null) {
             AttributeTypeGroupToAttributeTypePojo pojo =
-                    new AttributeTypeGroupToAttributeTypePojo(atgtat, mdDao);
+                    new AttributeTypeGroupToAttributeTypePojo(atgtat);
 
             pojo.setAttributeTypeId(atgtat.getAttributeType().getId());
-            pojo.setAttributeTypeGroup(
-                    AttributeTypeGroupDao.mapToPojoStatically(
+            pojo.setAttributeTypeGroup(new AttributeTypeGroupDao(
+                    currentProjectId,
+                    schema).mapToPojo(
                             locale,
-                            atgtat.getAttributeTypeGroup(),
-                            null));
-            pojo.setDefaultValue(ValueListValueDao.mapToPojoStatically(
-                    locale,
-                    atgtat.getValueListValue(),
-                    null));
-            pojo.setMultiplicity(MultiplicityDao.mapToPojoStatically(
-                    atgtat.getMultiplicityBean(),
-                    null));
+                            atgtat.getAttributeTypeGroup()));
+            pojo.setDefaultValue(new ValueListValueDao(
+                    currentProjectId,
+                    schema).mapToPojo(
+                            locale,
+                            atgtat.getValueListValue()));
+            pojo.setMultiplicity(new MultiplicityDao(
+                    currentProjectId,
+                    schema).mapToPojo(
+                            locale,
+                            atgtat.getMultiplicityBean()));
             pojo.setOrder(atgtat.getOrder());
             return pojo;
         } else {

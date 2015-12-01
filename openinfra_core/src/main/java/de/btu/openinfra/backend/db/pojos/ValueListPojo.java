@@ -2,11 +2,10 @@ package de.btu.openinfra.backend.db.pojos;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import de.btu.openinfra.backend.db.daos.MetaDataDao;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 
 @XmlRootElement
-public class ValueListPojo extends OpenInfraMetaDataPojo {
+public class ValueListPojo extends OpenInfraPojo {
 
     private PtFreeTextPojo names;
     private PtFreeTextPojo descriptions;
@@ -15,9 +14,9 @@ public class ValueListPojo extends OpenInfraMetaDataPojo {
     public ValueListPojo() {
     }
 
-    /* Constructor that will set the id, trid and meta data automatically */
-    public ValueListPojo(OpenInfraModelObject modelObject, MetaDataDao mdDao) {
-        super(modelObject, mdDao);
+    /* Constructor that will set the id and trid automatically */
+    public ValueListPojo(OpenInfraModelObject modelObject) {
+        super(modelObject);
     }
 
     public PtFreeTextPojo getNames() {

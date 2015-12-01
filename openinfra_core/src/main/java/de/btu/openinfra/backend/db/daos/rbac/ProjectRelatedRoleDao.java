@@ -15,7 +15,7 @@ public class ProjectRelatedRoleDao extends
 	public ProjectRelatedRoleDao() {
 		super(null, OpenInfraSchemas.RBAC, ProjectRelatedRole.class);
 	}
-	
+
 	public ProjectRelatedRoleDao(
 			UUID currentProjectId, OpenInfraSchemas schema) {
 		super(currentProjectId, schema, ProjectRelatedRole.class);
@@ -23,11 +23,6 @@ public class ProjectRelatedRoleDao extends
 
 	@Override
 	public ProjectRelatedRolePojo mapToPojo(Locale locale,
-			ProjectRelatedRole modelObject) {
-		return mapToPojoStatically(locale, modelObject);
-	}
-	
-	public static ProjectRelatedRolePojo mapToPojoStatically(Locale locale,
 			ProjectRelatedRole modelObject) {
 		ProjectRelatedRolePojo pojo = new ProjectRelatedRolePojo(modelObject);
 		pojo.setDescription(modelObject.getDescription());

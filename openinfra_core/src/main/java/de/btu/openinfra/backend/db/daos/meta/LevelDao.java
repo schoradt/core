@@ -33,16 +33,6 @@ public class LevelDao
 
     @Override
     public LevelPojo mapToPojo(Locale locale, Level l) {
-        return mapToPojoStatically(l);
-    }
-
-    /**
-     * This method implements the method mapToPojo in a static way.
-     *
-     * @param at     the model object
-     * @return       the POJO object when the model object is not null else null
-     */
-    public static LevelPojo mapToPojoStatically(Level l) {
         if(l != null) {
             LevelPojo pojo = new LevelPojo(l);
             pojo.setLevel(l.getLevel());
@@ -55,35 +45,23 @@ public class LevelDao
     @Override
     public MappingResult<Level> mapToModel(LevelPojo pojo, Level lv) {
         if(pojo != null) {
-            mapToModelStatically(pojo, lv);
-            return new MappingResult<Level>(lv.getId(), lv);
+            Level resultLevel = null;
+            try {
+                resultLevel = lv;
+                if(resultLevel == null) {
+                    resultLevel = new Level();
+                    resultLevel.setId(pojo.getUuid());
+                }
+                resultLevel.setLevel(pojo.getLevel());
+            } catch (NullPointerException npe) {
+                throw new OpenInfraEntityException(
+                        OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
+            }
+            return new MappingResult<Level>(resultLevel.getId(), resultLevel);
         }
         else {
             return null;
         }
-    }
-
-    /**
-     * This method implements the method mapToModel in a static way.
-     * @param pojo the POJO object
-     * @param level the pre initialized model object
-     * @return return a corresponding JPA model object
-     * @throws OpenInfraEntityException
-     */
-    public static Level mapToModelStatically(LevelPojo pojo, Level level) {
-        Level resultLevel = null;
-        try {
-            resultLevel = level;
-            if(resultLevel == null) {
-                resultLevel = new Level();
-                resultLevel.setId(pojo.getUuid());
-            }
-            resultLevel.setLevel(pojo.getLevel());
-        } catch (NullPointerException npe) {
-            throw new OpenInfraEntityException(
-                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
-        }
-        return resultLevel;
     }
 
 }

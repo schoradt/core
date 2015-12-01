@@ -95,8 +95,7 @@ public class ValueListValuesResource {
                                 valueListValueId,
                                 pojo.getAssociationValueListValueId(),
                                 null,
-                                null,
-                                pojo.getMetaData()));
+                                null));
     }
 
 	@GET
@@ -164,8 +163,7 @@ public class ValueListValuesResource {
                                 valueListValueId,
                                 pojo.getAssociationValueListValueId(),
                                 associatedValueListValueId,
-                                pojo.getAssociatedValueListValue().getUuid(),
-                                pojo.getMetaData()));
+                                pojo.getAssociatedValueListValue().getUuid()));
     }
 
     @DELETE
@@ -204,7 +202,8 @@ public class ValueListValuesResource {
                 OpenInfraSchemas.valueOf(schema.toUpperCase())).createOrUpdate(
                 		OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
-                        pojo, valueListValueId, pojo.getMetaData());
+                        valueListValueId,
+                        pojo);
         return OpenInfraResponseBuilder.putResponse(uuid);
     }
 

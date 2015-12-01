@@ -4,11 +4,10 @@ import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import de.btu.openinfra.backend.db.daos.MetaDataDao;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 
 @XmlRootElement
-public class ValueListValuePojo extends OpenInfraMetaDataPojo {
+public class ValueListValuePojo extends OpenInfraPojo {
 
     private boolean visibility;
     private UUID belongsToValueList;
@@ -19,9 +18,9 @@ public class ValueListValuePojo extends OpenInfraMetaDataPojo {
     public ValueListValuePojo() {
     }
 
-    /* Constructor that will set the id, trid and meta data automatically */
-    public ValueListValuePojo(OpenInfraModelObject modelObject, MetaDataDao mdDao) {
-        super(modelObject, mdDao);
+    /* Constructor that will set the id and trid automatically */
+    public ValueListValuePojo(OpenInfraModelObject modelObject) {
+        super(modelObject);
     }
 
     public boolean getVisibility() {
