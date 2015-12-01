@@ -75,7 +75,7 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
 
             String metaData = null;
             // check if meta data exists for this topic instance
-            if (metaDataPojo.getData() != null) {
+            if (metaDataPojo != null && metaDataPojo.getData() != null) {
             	JSONObject jo = null;
 				try {
 					jo = (JSONObject)new JSONParser().parse(
@@ -85,9 +85,10 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
 				}
                 if (jo != null &&
                 		jo.containsKey(
-                				OpenInfraMetaDataEnum.LIST_VIEW_COLUMNS)) {
-                    metaData = jo.get(OpenInfraMetaDataEnum.LIST_VIEW_COLUMNS)
-                    		.toString();
+                				OpenInfraMetaDataEnum.LIST_VIEW_COLUMNS
+                				.getmetaDataDescriptor())) {
+                    metaData = jo.get(OpenInfraMetaDataEnum.LIST_VIEW_COLUMNS
+                            .getmetaDataDescriptor()).toString();
                 }
             }
 
@@ -103,8 +104,7 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
                 // 3.a Check if the current id is mentioned in the meta data
                 if( metaData != null && metaData.contains(
                         avd.getAttributeTypeToAttributeTypeGroup()
-                            .getAttributeType().getId().toString()) ||
-                        metaData == null ) {
+                            .getAttributeType().getId().toString()) ) {
                     AttributeValuePojo avPojo = new AttributeValuePojo(avd);
                     avPojo.setAttributeTypeId(
                             avd.getAttributeTypeToAttributeTypeGroup()
@@ -126,8 +126,7 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
                 // 4.a Check if the current id is mentioned in the settings
                 if( metaData != null && metaData.contains(
                         avv.getAttributeTypeToAttributeTypeGroup()
-                            .getAttributeType().getId().toString()) ||
-                        metaData == null ) {
+                            .getAttributeType().getId().toString()) ) {
                     AttributeValuePojo avPojo = new AttributeValuePojo(avv);
                     avPojo.setAttributeTypeId(
                             avv.getAttributeTypeToAttributeTypeGroup()
