@@ -49,8 +49,10 @@ public class SearchResource {
      *                                    default.
      *
      * @response.representation.500.qname OpenInfraWebException
-     * @response.representation.500.doc   An internal error occurs while
-     *                                    processing the requested query.
+     * @response.representation.500.doc   An internal error occurs if the
+     *                                    connection to the Solr server is
+     *                                    interrupted or the specified POJO is
+     *                                    empty or faulty.
      */
     @POST
     public SolrResultPojo get(
@@ -77,8 +79,10 @@ public class SearchResource {
      *
      * @response.representation.500.qname OpenInfraSolrException
      * @response.representation.500.doc   An internal error occurs while
-     *                                    indexing the database.
-     *
+     *                                    indexing the database. This error can
+     *                                    not be specified because every server
+     *                                    side error will lead to this
+     *                                    exception.
      */
     @POST
     @Path("/index")
@@ -92,13 +96,14 @@ public class SearchResource {
      * This resource provides a suggestion on the Solr index for a specified
      * query string.
      *
-     * @response.representation.200.qname A list of strings
+     * @response.representation.200.qname A list of strings.
      * @response.representation.200.doc   This is the representation returned by
      *                                    default.
      *
      * @response.representation.500.qname OpenInfraWebException
-     * @response.representation.500.doc   An internal error occurs while
-     *                                    processing the suggestion query.
+     * @response.representation.500.doc   An internal error occurs if the
+     *                                    connection to the Solr server is
+     *                                    interrupted.
      */
     @GET
     @Path("/suggest")
