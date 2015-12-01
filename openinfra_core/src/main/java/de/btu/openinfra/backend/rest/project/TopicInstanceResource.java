@@ -17,6 +17,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import de.btu.openinfra.backend.OpenInfraProperties;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.AttributeValueGeomType;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
@@ -123,6 +124,12 @@ public class TopicInstanceResource {
 			@PathParam("topicInstanceId") UUID topicInstanceId,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
+		// Define the specific parameters when not specified correctly
+		if(size == 0) {
+			offset = OpenInfraProperties.DEFAULT_OFFSET;
+			size = OpenInfraProperties.DEFAULT_SIZE;
+		} // end if
+
 		return new TopicInstanceAssociationRbac(
 				projectId,
 				OpenInfraSchemas.PROJECTS).read(
@@ -167,6 +174,12 @@ public class TopicInstanceResource {
 			@PathParam("topicInstanceId") UUID topicInstanceId,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
+		// Define the specific parameters when not specified correctly
+		if(size == 0) {
+			offset = OpenInfraProperties.DEFAULT_OFFSET;
+			size = OpenInfraProperties.DEFAULT_SIZE;
+		} // end if
+
 		return new TopicCharacteristicRbac(
 				projectId, OpenInfraSchemas.PROJECTS)
 		.readByTopicInstanceAssociationTo(
@@ -186,6 +199,12 @@ public class TopicInstanceResource {
 			@PathParam("topCharId") UUID topCharId,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
+		// Define the specific parameters when not specified correctly
+		if(size == 0) {
+			offset = OpenInfraProperties.DEFAULT_OFFSET;
+			size = OpenInfraProperties.DEFAULT_SIZE;
+		} // end if
+
 		return new TopicInstanceAssociationRbac(
 				projectId, OpenInfraSchemas.PROJECTS)
 			.readAssociationToByTopchar(OpenInfraHttpMethod.valueOf(
@@ -205,6 +224,12 @@ public class TopicInstanceResource {
 			@PathParam("topCharId") UUID topCharId,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
+		// Define the specific parameters when not specified correctly
+		if(size == 0) {
+			offset = OpenInfraProperties.DEFAULT_OFFSET;
+			size = OpenInfraProperties.DEFAULT_SIZE;
+		} // end if
+
 		return new TopicInstanceAssociationRbac(
 				projectId, OpenInfraSchemas.PROJECTS)
 			.readAssociationFromByTopchar(OpenInfraHttpMethod.valueOf(
@@ -223,6 +248,12 @@ public class TopicInstanceResource {
 			@PathParam("topicInstanceId") UUID topicInstanceId,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
+		// Define the specific parameters when not specified correctly
+		if(size == 0) {
+			offset = OpenInfraProperties.DEFAULT_OFFSET;
+			size = OpenInfraProperties.DEFAULT_SIZE;
+		} // end if
+
 		return new TopicCharacteristicRbac(
 				projectId, OpenInfraSchemas.PROJECTS)
 		.readByTopicInstanceAssociationFrom(
@@ -261,6 +292,12 @@ public class TopicInstanceResource {
 				UUID associatedTopicInstanceId,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
+		// Define the specific parameters when not specified correctly
+		if(size == 0) {
+			offset = OpenInfraProperties.DEFAULT_OFFSET;
+			size = OpenInfraProperties.DEFAULT_SIZE;
+		} // end if
+
 		return new TopicInstanceAssociationRbac(
 				projectId,
 				OpenInfraSchemas.PROJECTS).read(
@@ -348,6 +385,12 @@ public class TopicInstanceResource {
             @PathParam("attributeTypeId") UUID attributeTypeId,
             @QueryParam("offset") int offset,
             @QueryParam("size") int size) {
+		// Define the specific parameters when not specified correctly
+		if(size == 0) {
+			offset = OpenInfraProperties.DEFAULT_OFFSET;
+			size = OpenInfraProperties.DEFAULT_SIZE;
+		} // end if
+
         return new AttributeValueRbac(
                 projectId,
                 OpenInfraSchemas.PROJECTS).read(

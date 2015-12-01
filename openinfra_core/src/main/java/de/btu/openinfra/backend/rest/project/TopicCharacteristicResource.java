@@ -39,7 +39,10 @@ public class TopicCharacteristicResource {
 	 * This method will read a list of topic instances for a specific topic
 	 * characteristic id. Additional to the standard query parameter it will
 	 * accept a filter parameter and orderBy parameter. It is possible to set
-	 * both orderBy parameter simultaneously but the
+	 * both orderBy parameter simultaneously.
+	 * <br/>
+	 * In order to avoid heavy load, there exists default size and offset values
+	 * when not specified.
 	 *
 	 * @param language
 	 * @param projectId
@@ -50,7 +53,7 @@ public class TopicCharacteristicResource {
 	 * @param orderByUuid
 	 * @param offset
 	 * @param size
-	 * @return
+	 * @return A list of topic instances.
 	 */
 	@GET
 	@Path("topicinstances")
