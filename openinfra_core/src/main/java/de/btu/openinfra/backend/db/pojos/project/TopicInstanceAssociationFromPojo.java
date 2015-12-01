@@ -19,12 +19,10 @@ public class TopicInstanceAssociationFromPojo extends OpenInfraPojo {
     public TopicInstanceAssociationFromPojo() {
     }
 
-    /* Constructor that will set the id, trid and meta data automatically */
     public TopicInstanceAssociationFromPojo(OpenInfraModelObject modelObject) {
         super(modelObject);
     }
 
-    // TODO check what happens with the meta data?
     public TopicInstanceAssociationFromPojo(
             UUID uuid,
             TopicInstancePojo assoTip,
