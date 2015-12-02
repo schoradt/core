@@ -187,13 +187,12 @@ public class CredentialsResource {
     /**
      * This resource updates the Credential object with the specified UUID. The
      * specified CredentialsPojo must contain a user name and a password as
-     * string. The parameter UUID and TRID of the CredentialsPojo must not be
-     * set.
+     * string.
      *
      * @param credentialsId The UUID of the CredentialsPojo that should be
      *                      updated.
-     * @return A Response with the status code 200 for a successful update or
-     *         204 if the object could not be updated.
+     * @return              A Response with the status code 200 for a successful
+     *                      update or 204 if the object could not be updated.
      *
      * @response.representation.200.qname Response
      * @response.representation.200.doc   This is the representation returned by
@@ -236,8 +235,8 @@ public class CredentialsResource {
      *
      * @param credentialsId The UUID of the Credential object that should be
      *                      deleted.
-     * @return A Response with the status code 200 for a successful deletion or
-     *         404 if the object was not found.
+     * @return              A Response with the status code 200 for a successful
+     *                      deletion or 404 if the object was not found.
      *
      * @response.representation.200.qname Response
      * @response.representation.200.doc   This is the representation returned by
