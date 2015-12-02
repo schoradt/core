@@ -55,7 +55,8 @@ public class SolrIndexer extends SolrServer {
      * can be found in the meta database will be indexed.
      *
      * @param projects A list of project UUIDs that should be indexed.
-     * @return
+     * @return True if indexing was successful.
+     * @throws OpenInfraSolrException if something goes wrong
      */
     public boolean indexProjects(SolrIndexPojo projectsPojo) {
 
@@ -194,14 +195,12 @@ public class SolrIndexer extends SolrServer {
         // add the topic instance id as document id
         doc.addField(SolrIndexEnum.TOPIC_INSTANCE_ID.getString(), ti.getId());
         addDefaultSearchField(
-                SolrIndexEnum.DEFAULT_SEARCH_FIELD.getString(),
                 ti.getId().toString(),
                 doc);
 
         // add the project id
         doc.addField(SolrIndexEnum.PROJECT_ID.getString(), projectId);
         addDefaultSearchField(
-                SolrIndexEnum.DEFAULT_SEARCH_FIELD.getString(),
                 projectId.toString(),
                 doc);
 
@@ -209,7 +208,6 @@ public class SolrIndexer extends SolrServer {
         doc.addField(SolrIndexEnum.TOPIC_CHARACTERISTIC_ID.getString(),
                      ti.getTopicCharacteristic().getId());
         addDefaultSearchField(
-                SolrIndexEnum.DEFAULT_SEARCH_FIELD.getString(),
                 ti.getTopicCharacteristic().getId().toString(),
                 doc);
 
@@ -243,9 +241,6 @@ public class SolrIndexer extends SolrServer {
                         .getFreeText(),
                     doc);
         }
-
-
-
         return doc;
     }
 
@@ -284,10 +279,10 @@ public class SolrIndexer extends SolrServer {
      * Values that has an undefined locale (xx) will be saved into different
      * fields, depending on the type translation.
      *
-     * @param type
-     * @param value
-     * @param dataType
-     * @param doc
+     * @param type     A list of attribute types as LocalizedCharacterString.
+     * @param value    A list of values as LocalizedCharacterString.
+     * @param dataType The data type of the value as string.
+     * @param doc      The document the fields should be added to.
      */
     private void addValuesToDoc(
             List<LocalizedCharacterString> type,
@@ -327,8 +322,7 @@ public class SolrIndexer extends SolrServer {
                     value.get(x).getFreeText());
 
             // save the value in a default search field
-            addDefaultSearchField(SolrCharacterConverter.convert(
-                    SolrIndexEnum.DEFAULT_SEARCH_FIELD.getString()),
+            addDefaultSearchField(
                     value.get(x).getFreeText(),
                     doc);
 
@@ -370,8 +364,7 @@ public class SolrIndexer extends SolrServer {
                         value.get(i).getFreeText());
 
                 // save all values in a default search field
-                addDefaultSearchField(SolrCharacterConverter.convert(
-                        SolrIndexEnum.DEFAULT_SEARCH_FIELD.getString()),
+                addDefaultSearchField(
                         value.get(i).getFreeText(),
                         doc);
 
@@ -387,14 +380,14 @@ public class SolrIndexer extends SolrServer {
      * This method adds all values to a default search field that will be used
      * for global queries. We will filter the list to avoid doublet.
      *
-     * @param convert
-     * @param freeText
-     * @param doc
+     * @param value The value of the default field as string.
+     * @param doc   The document the fields should be added to.
      */
-    private void addDefaultSearchField(String field, String value,
-            SolrInputDocument doc) {
+    private void addDefaultSearchField(String value, SolrInputDocument doc) {
         if (!doc.containsValue(value)) {
-            doc.addField(field, value);
+            doc.addField(SolrCharacterConverter.convert(
+                    SolrIndexEnum.DEFAULT_SEARCH_FIELD.getString()),
+                    value);
         }
 
     }
@@ -403,9 +396,10 @@ public class SolrIndexer extends SolrServer {
      * This method casts a specified string into a specified data type. If the
      * casting fails the string will be returned untouched.
      *
-     * @param text
-     * @param String
-     * @return
+     * @param text     The text that should be casted as data type.
+     * @param dataType The data type the text should be casted at.
+     * @return         The casted data type or the input string if the casting
+     *                 fails.
      */
     private Object castPtFreeTextToDataType(String text, String dataType) {
         try {
