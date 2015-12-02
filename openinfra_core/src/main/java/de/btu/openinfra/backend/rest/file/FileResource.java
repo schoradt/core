@@ -61,6 +61,15 @@ import de.btu.openinfra.backend.db.rbac.rbac.SubjectRbac;
 import de.btu.openinfra.backend.exception.OpenInfraWebException;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
+/**
+ * This class represents the main component of the file service. It is used to
+ * view/manage files.
+ * <br/>
+ * File type of thumbnails is PNG. This is currently not configurable.
+ *
+ * @author <a href="http://www.b-tu.de">BTU</a> DBIS
+ *
+ */
 //TODO Move the logic from the resource file to the DAO layer.
 @Path("/v1/files")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
@@ -72,6 +81,13 @@ public class FileResource {
 	private static final String THUMB_TYPE = "png";
 	private static final String EXTENSION = "." + THUMB_TYPE;
 
+	/**
+	 * Delivers the count of uploaded files of the current user.
+	 *
+	 * @param uriInfo
+	 * @param request
+	 * @return user-specific count of uploaded files
+	 */
 	@GET
     @Path("count")
 	@Produces({MediaType.TEXT_PLAIN})
@@ -82,6 +98,16 @@ public class FileResource {
 				OpenInfraHttpMethod.valueOf(request.getMethod()), uriInfo);
 	}
 
+	/**
+	 * Delivers a list of file information uploaded by the current user. The
+	 * content of the file is not transmitted. This resource is paging enabled.
+	 *
+	 * @param uriInfo
+	 * @param request
+	 * @param offset the number where to start
+	 * @param size the max. length of the list
+	 * @return A user-specific list of file information.
+	 */
 	@GET
 	public List<FilePojo> readFilesBySubject(
 			@Context UriInfo uriInfo,
@@ -93,6 +119,14 @@ public class FileResource {
 				uriInfo, offset, size);
 	}
 
+	/**
+	 * Delivers a specific file information.
+	 *
+	 * @param uriInfo
+	 * @param request
+	 * @param fileId the id of the requested file
+	 * @return a specific file information
+	 */
 	@GET
 	@Path("{fileId:([0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12})}")
 	public FilePojo getFile(
@@ -120,6 +154,17 @@ public class FileResource {
 		throw new WebApplicationException(Status.FORBIDDEN);
 	}
 
+	/**
+	 * This method deletes an existing file (including the thumbnails). First,
+	 * the file reference is deleted from the users space. If there still exists
+	 * a reference to another user, the file isn't deleted physically. It is
+	 * still available. If there is no other reference it is deleted from disk.
+	 *
+	 * @param uriInfo
+	 * @param request
+	 * @param fileId the id of the file
+	 * @return the uuid of the deleted file
+	 */
 	@DELETE
 	@Path("{fileId:([0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12})}")
 	public Response delete(
@@ -142,6 +187,25 @@ public class FileResource {
 		return OpenInfraResponseBuilder.deleteResponse(del, fileId);
 	}
 
+	/**
+	 * This resource delivers the content of a file when the current user has
+	 * read access to the project where this file is related to.
+	 * <br/>
+	 * Possible dimensions (dim) are currently:
+	 * <ul>
+	 * 	<li>thumbnail</li>
+	 *  <li>middle</li>
+	 *  <li>popup</li>
+	 * </ul>
+	 * The size of these dimensions can be configured in the
+	 * OpenInfRA.properties file.
+	 *
+	 * @param uriInfo
+	 * @param request
+	 * @param fileId the id of the requested file
+	 * @param dim the size of the file
+	 * @return the file content
+	 */
 	@GET
 	@Path("{fileId:([0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12})}/{dim}")
 	public Response getFileContent(
@@ -166,7 +230,7 @@ public class FileResource {
 		String fileName = filePath + pojo.getSignature() + fileExtension;
 		// Send not found status code when file desn't exists
 		if(!new File(fileName).exists()) {
-			Response.status(404).build();
+			Response.status(Status.NOT_FOUND).build();
 		}
 		java.nio.file.Path p = Paths.get(fileName);
 		byte[] document = null;
@@ -185,17 +249,35 @@ public class FileResource {
 	}
 
 	/**
+	 * This resource uploads a file to the server. Only configured mime types
+	 * are supported. The server checks the mime type by its own routine. The
+	 * file extension isn't used to identify the file's mime type.
+	 * <br/>
+	 * The file is processed as follows:
+	 * <ol>
+	 * 	<li>Mime type check (unsupported mime types are rejected)</li>
+	 *  <li>Signature creation in order to detect duplicate entries</li>
+	 *  <li>Thumbnail generation</li>
+	 *  <li>Export of EXIF data</li>
+	 *  <li>Creation of a reference to the user</li>
+	 * </ol>
+	 * <br/>
+	 * If duplicate is detected this method returns the related POJO in any
+	 * case. However, the generation of thumbnails, the export of EXIF data and
+	 * the creation of a reference to the user are left out when a duplicate
+	 * was detected.
+	 * <br/>
 	 * You'll need to install ufraw under Linux-based OS when you want to
 	 * support DNG images.
-	 *
+	 * <br/>
 	 * You'll need to install ghostview in order to support PDF thumbnail
 	 * generation.
 	 *
 	 * @param uriInfo
 	 * @param request
-	 * @param originFileName
-	 * @param is
-	 * @return
+	 * @param originFileName the current file name
+	 * @param is the file content
+	 * @return the file POJO of the newly created file
 	 */
 	@POST
 	@Path("/upload/{originFileName}")
@@ -223,6 +305,7 @@ public class FileResource {
     	String fileName = "";
     	File currentFile = null;
     	java.nio.file.Path filePath = null;
+    	FilePojo returnPojo = null;
 		boolean acceptedMimeType = false;
 		// Handle file stream
 		try {
@@ -290,22 +373,33 @@ public class FileResource {
     	pojo.setOriginFileName(originFileName);
     	pojo.setSubject(subject);
     	FileRbac rbac = new FileRbac();
-    	UUID result = rbac.createOrUpdate(
-    			OpenInfraHttpMethod.valueOf(request.getMethod()),
-    			uriInfo, null, pojo);
-    	FilePojo fp = rbac.read(
-    			OpenInfraHttpMethod.valueOf(request.getMethod()),
-    			uriInfo, null, result);
-		return fp;
+    	UUID result = null;
+    	try {
+        	result = rbac.createOrUpdate(
+        			OpenInfraHttpMethod.valueOf(request.getMethod()),
+        			uriInfo, null, pojo);
+    	} catch(OpenInfraWebException ex) {
+    		System.err.println("FileResource: Probably duplicate file key "
+    				+ "detected!");
+    		returnPojo = rbac.readBySubjectAndSignature(
+    				OpenInfraHttpMethod.valueOf(request.getMethod()),
+    				uriInfo, subject, signature);
+    	}
+    	if(returnPojo == null) {
+    		returnPojo = rbac.read(
+     			OpenInfraHttpMethod.valueOf(request.getMethod()),
+     			uriInfo, null, result);
+    	}
+		return returnPojo;
 	}
 
 
 	/**
-	 * A resource to support url-based file upload. The URL should be URL
+	 * A resource to support URL-based file upload. The URL should be URL
 	 * encoded!
 	 *
 	 * @param fileurl the URL of the file URL encoded
-	 * @return a file pojo
+	 * @return a file POJO
 	 */
 	@POST
 	@Path("/urlupload")
@@ -332,9 +426,9 @@ public class FileResource {
 	 * extension. A UUID is generated in order to store the file into the file
 	 * system.
 	 *
-	 * @param fileStream
-	 * @param fileName
-	 * @return
+	 * @param fileStream the file content as stream
+	 * @param fileName the file name
+	 * @return the path of the file
 	 */
 	private String saveFile(InputStream fileStream, String fileName)
 			throws IOException {
@@ -360,9 +454,10 @@ public class FileResource {
 	}
 
 	/**
-	 * This method deletes all files concerning the pojo.
+	 * This method deletes all files (including the thumbnails) concerning the
+	 * POJO.
 	 *
-	 * @param pojo the corresponding pojo object
+	 * @param pojo the corresponding POJO object
 	 */
 	private void deleteFile(FilePojo pojo) {
 		File origin = new File(
@@ -399,12 +494,12 @@ public class FileResource {
 	 * This method is used to create a set of resized images of the uploaded
 	 * file. Therefore, ImageMagick is used. It will create the corresponding
 	 * resized images when it is possible.
-	 *
+	 * <br/>
 	 * In order to provide DNG images you need to install ufraw under linux.
 	 *
 	 * @param file the path to the file
 	 * @param pojo the corresponding pojo object
-	 * @return
+	 * @return the file pojo
 	 */
 	private FilePojo resizeDimensions(String file, FilePojo pojo) {
 
@@ -487,7 +582,7 @@ public class FileResource {
 	 * @param mimeType
 	 * @param destination
 	 * @param isThumbnail
-	 * @return
+	 * @return the ImageMagick operation
 	 */
 	private IMOperation opBuilder(
 			String[] dimensions, String filePath,
@@ -513,6 +608,13 @@ public class FileResource {
 		return op;
 	}
 
+	/**
+	 * This method extracts the metadat of a file when present.
+	 *
+	 * @param file the file from which the data has to be extracted
+	 * @return the meta data as JSON string
+	 * @throws Exception
+	 */
 	@SuppressWarnings("unchecked")
 	private String extractMetadata(File file) throws Exception {
 		Metadata md = null;

@@ -1,35 +1,37 @@
 package de.btu.openinfra.backend.db.pojos;
 
+import java.util.List;
+
 import de.btu.openinfra.backend.db.pojos.project.AttributeValuePojo;
 
 public class AttributeTypeToValue {
-	
+
 	private AttributeTypePojo attributeType;
-	private AttributeValuePojo attributeValue;
-	
+	private List<AttributeValuePojo> attributeValues;
+
 	public AttributeTypeToValue() {}
-	
+
 	public AttributeTypeToValue(
-			AttributeTypePojo attributeType, 
-			AttributeValuePojo attributeValue) {
+			AttributeTypePojo attributeType,
+			List<AttributeValuePojo> attributeValues) {
 		this.attributeType = attributeType;
-		this.attributeValue = attributeValue;
+		this.attributeValues = attributeValues;
 	}
-	
+
 	public AttributeTypePojo getAttributeType() {
 		return attributeType;
 	}
-	
+
 	public void setAttributeType(AttributeTypePojo attributeType) {
 		this.attributeType = attributeType;
 	}
-	
-	public AttributeValuePojo getAttributeValue() {
-		return attributeValue;
+
+	public List<AttributeValuePojo> getAttributeValues() {
+		return attributeValues;
 	}
-	
-	public void setAttributeValue(AttributeValuePojo attributeValue) {
-		this.attributeValue = attributeValue;
+
+	public void setAttributeValues(List<AttributeValuePojo> attributeValues) {
+		this.attributeValues = attributeValues;
 	}
 
 }

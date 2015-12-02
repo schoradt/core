@@ -70,6 +70,7 @@ if(status != null && status.equalsIgnoreCase("logout")) {
 <tr><td>siehstnix</td><td>siehstnix</td><td>Nutzer ohne rechte (Verhalten aus Verison 1.2.0)</td></tr>
 <tr class="top"><td rowspan=8>OpenInfRA</td><td>katja</td><td>katja</td><td>root-Recht</td></tr>
 <tr><td>hanna</td><td>hanna</td><td>root-Recht</td></tr>
+<tr><td>dörthe</td><td>dörthe</td><td>root-Recht</td></tr>
 <tr><td>franks</td><td>franks</td><td>root-Recht</td></tr>
 <tr><td>frankh</td><td>frankh</td><td>root-Recht</td></tr>
 <tr><td>cornell</td><td>cornell</td><td>root-Recht</td></tr>

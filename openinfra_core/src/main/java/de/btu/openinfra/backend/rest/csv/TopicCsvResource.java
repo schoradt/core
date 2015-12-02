@@ -21,8 +21,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import de.btu.openinfra.backend.db.daos.AttributeValueGeomType;
-import de.btu.openinfra.backend.db.pojos.TopicPojo;
+import de.btu.openinfra.backend.db.daos.project.AttributeValueGeomType;
+import de.btu.openinfra.backend.db.pojos.project.TopicPojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 import de.btu.openinfra.backend.rest.pdf.TopicPdfResource;
 import de.btu.openinfra.backend.rest.project.TopicInstanceResource;

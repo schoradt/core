@@ -26,8 +26,8 @@ import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
 
-import de.btu.openinfra.backend.db.daos.AttributeValueGeomType;
-import de.btu.openinfra.backend.db.pojos.TopicPojo;
+import de.btu.openinfra.backend.db.daos.project.AttributeValueGeomType;
+import de.btu.openinfra.backend.db.pojos.project.TopicPojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 import de.btu.openinfra.backend.rest.project.TopicInstanceResource;
 

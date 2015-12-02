@@ -37,6 +37,15 @@ public class FileRbac extends OpenInfraRbac<FilePojo, File, FileDao> {
 				null, self().getUuid(), offset, size);
 	}
 
+	public FilePojo readBySubjectAndSignature(
+			OpenInfraHttpMethod httpMethod,
+			UriInfo uriInfo,
+			UUID subject,
+			String signature) {
+		checkPermission(httpMethod, uriInfo);
+		return new FileDao().readBySubjectAndSignature(subject, signature);
+	}
+
 	public List<FilePojo> readByProject(
 			OpenInfraHttpMethod httpMethod,
 			UriInfo uriInfo,

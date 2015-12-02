@@ -23,6 +23,15 @@ import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 		OpenInfraResponseBuilder.HTML_PRIORITY)
 public class FileResource {
 
+	/**
+	 * Technical GUI. List files: Files.jsp
+	 *
+	 * @param uriInfo
+	 * @param request
+	 * @param offset
+	 * @param size
+	 * @return HTML
+	 */
 	@GET
 	@Template(name="/views/list/Files.jsp")
     public List<FilePojo> filesByUser(
@@ -34,6 +43,10 @@ public class FileResource {
         .readFilesBySubject(uriInfo, request, offset, size);
     }
 
+	/**
+	 * Technical GUI. JSP view in order to upload a file: Upload.jsp
+	 * @return HTML
+	 */
 	@GET
 	@Path("upload")
 	@Template(name="/views/Upload.jsp")
