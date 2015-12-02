@@ -1,4 +1,4 @@
-package de.btu.openinfra.backend.db.daos;
+package de.btu.openinfra.backend.db.daos.project;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -12,6 +12,13 @@ import org.json.simple.parser.ParseException;
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraMetaDataEnum;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.daos.AttributeValueDomainDao;
+import de.btu.openinfra.backend.db.daos.AttributeValueTypes;
+import de.btu.openinfra.backend.db.daos.AttributeValueValueDao;
+import de.btu.openinfra.backend.db.daos.MetaDataDao;
+import de.btu.openinfra.backend.db.daos.OpenInfraValueDao;
+import de.btu.openinfra.backend.db.daos.PtLocaleDao;
+import de.btu.openinfra.backend.db.daos.TopicCharacteristicDao;
 import de.btu.openinfra.backend.db.jpa.model.AttributeValueDomain;
 import de.btu.openinfra.backend.db.jpa.model.AttributeValueValue;
 import de.btu.openinfra.backend.db.jpa.model.PtLocale;

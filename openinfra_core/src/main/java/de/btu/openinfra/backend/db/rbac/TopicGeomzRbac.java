@@ -8,7 +8,7 @@ import javax.ws.rs.core.UriInfo;
 
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.AttributeValueGeomType;
-import de.btu.openinfra.backend.db.daos.TopicGeomzDao;
+import de.btu.openinfra.backend.db.daos.project.TopicGeomzDao;
 import de.btu.openinfra.backend.db.pojos.TopicGeomzPojo;
 
 public class TopicGeomzRbac {

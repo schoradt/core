@@ -7,7 +7,7 @@ import javax.ws.rs.core.UriInfo;
 
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.AttributeValueGeomType;
-import de.btu.openinfra.backend.db.daos.TopicDao;
+import de.btu.openinfra.backend.db.daos.project.TopicDao;
 import de.btu.openinfra.backend.db.pojos.TopicPojo;
 
 public class TopicRbac {

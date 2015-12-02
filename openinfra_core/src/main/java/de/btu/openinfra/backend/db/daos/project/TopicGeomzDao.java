@@ -1,4 +1,4 @@
-package de.btu.openinfra.backend.db.daos;
+package de.btu.openinfra.backend.db.daos.project;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -7,6 +7,8 @@ import java.util.UUID;
 
 import de.btu.openinfra.backend.OpenInfraProperties;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.daos.AttributeValueGeomType;
+import de.btu.openinfra.backend.db.daos.AttributeValueGeomzDao;
 import de.btu.openinfra.backend.db.pojos.TopicGeomzPojo;
 import de.btu.openinfra.backend.db.pojos.project.TopicInstancePojo;
 

@@ -17,7 +17,7 @@ import de.btu.openinfra.backend.db.OpenInfraOrderBy;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
-import de.btu.openinfra.backend.db.daos.TopicInstanceDao;
+import de.btu.openinfra.backend.db.daos.project.TopicInstanceDao;
 import de.btu.openinfra.backend.db.daos.rbac.SubjectDao;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;

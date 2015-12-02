@@ -1,7 +1,7 @@
 <%@page import="de.btu.openinfra.backend.db.daos.ValueListValueDao"%>
 <%@page import="de.btu.openinfra.backend.helper.ImgUrlHelper"%>
 <%@page import="de.btu.openinfra.backend.helper.ImgSize"%>
-<%@page import="de.btu.openinfra.backend.db.daos.TopicInstanceAssociationToDao"%>
+<%@page import="de.btu.openinfra.backend.db.daos.project.TopicInstanceAssociationToDao"%>
 <%@page import="java.util.UUID"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>

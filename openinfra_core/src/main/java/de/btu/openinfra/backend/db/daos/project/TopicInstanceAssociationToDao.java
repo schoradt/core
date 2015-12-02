@@ -1,4 +1,4 @@
-package de.btu.openinfra.backend.db.daos;
+package de.btu.openinfra.backend.db.daos.project;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -7,6 +7,8 @@ import java.util.UUID;
 
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.daos.OpenInfraValueValueDao;
+import de.btu.openinfra.backend.db.daos.RelationshipTypeDao;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstanceXTopicInstance;
