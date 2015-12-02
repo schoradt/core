@@ -51,6 +51,7 @@ public class OpenInfraWebException extends WebApplicationException {
 						OpenInfraExceptionTypes
 							.INTERNAL_SERVER_EXCEPTION.name(),
 						ex.getMessage())).build());
+		// This is an already known exception which should not be handled.
 		if(!ex.getMessage().contains("files_subject_signature_key")) {
 			ex.printStackTrace();
 		}
