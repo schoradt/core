@@ -64,7 +64,6 @@
     <h2>Summary</h2>
     <table>
         <tr>
-            <th>Resource</th>
             <th>Method</th>
             <th>Description</th>
         </tr>
@@ -121,7 +120,7 @@
     <xsl:if test="wadl:method">
         <tr>
             <!-- Resource -->
-            <td class="summary">
+            <td class="summary" colspan="2" style="padding-top: 10px; padding-bottom:10px;background-color:#F0F8FF;">
                 <xsl:variable name="id"><xsl:call-template name="getId"/></xsl:variable>
                 <a href="#{$id}">
                     <xsl:call-template name="getFullResourcePath">
@@ -130,6 +129,8 @@
                     </xsl:call-template>
                 </a>
             </td>
+       </tr>
+       <tr>
             <!-- Method -->
             <td class="summary">
                 <xsl:for-each select="wadl:method">

@@ -7,7 +7,7 @@ import java.util.UUID;
 import javax.ws.rs.core.UriInfo;
 
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
-import de.btu.openinfra.backend.db.daos.TopicInstanceAssociationToDao;
+import de.btu.openinfra.backend.db.daos.project.TopicInstanceAssociationToDao;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstanceXTopicInstance;
 import de.btu.openinfra.backend.db.pojos.project.TopicInstanceAssociationToPojo;

@@ -11,8 +11,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="2" language="java" name="de.btu.openinfra.backend.db.daos.ProjectDao" project="openinfra_core" 
-    file="/openinfra_core/src/main/java/de/btu/openinfra/backend/db/daos/ProjectDao.java" binary="false" 
+  <class id="2" language="java" name="de.btu.openinfra.backend.db.daos.project.ProjectDao" project="openinfra_core" 
+    file="/openinfra_core/src/main/java/de/btu/openinfra/backend/db/daos/project/ProjectDao.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="613" y="793"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 

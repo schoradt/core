@@ -1,4 +1,4 @@
-package de.btu.openinfra.backend.db.daos;
+package de.btu.openinfra.backend.db.daos.project;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -18,6 +18,10 @@ import de.btu.openinfra.backend.OpenInfraProperties;
 import de.btu.openinfra.backend.OpenInfraPropertyKeys;
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.daos.OpenInfraDao;
+import de.btu.openinfra.backend.db.daos.PtFreeTextDao;
+import de.btu.openinfra.backend.db.daos.TopicCharacteristicDao;
+import de.btu.openinfra.backend.db.daos.ValueListDao;
 import de.btu.openinfra.backend.db.daos.meta.CredentialsDao;
 import de.btu.openinfra.backend.db.daos.meta.DatabaseConnectionDao;
 import de.btu.openinfra.backend.db.daos.meta.DatabasesDao;

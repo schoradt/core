@@ -17,7 +17,7 @@ import de.btu.openinfra.backend.OpenInfraApplication;
 import de.btu.openinfra.backend.OpenInfraProperties;
 import de.btu.openinfra.backend.OpenInfraPropertyKeys;
 import de.btu.openinfra.backend.OpenInfraPropertyValues;
-import de.btu.openinfra.backend.db.daos.ProjectDao;
+import de.btu.openinfra.backend.db.daos.project.ProjectDao;
 import de.btu.openinfra.backend.db.pojos.meta.ProjectsPojo;
 import de.btu.openinfra.backend.db.pojos.project.ProjectPojo;
 

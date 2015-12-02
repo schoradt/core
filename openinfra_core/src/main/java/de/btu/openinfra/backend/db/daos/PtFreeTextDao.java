@@ -39,7 +39,7 @@ public class PtFreeTextDao extends OpenInfraDao<PtFreeTextPojo, PtFreeText> {
 	 *                         the system schema is selected)
 	 * @param schema           the required schema
 	 */
-	protected PtFreeTextDao(UUID currentProjectId, OpenInfraSchemas schema) {
+	public PtFreeTextDao(UUID currentProjectId, OpenInfraSchemas schema) {
 		super(currentProjectId, schema, PtFreeText.class);
 	}
 
@@ -225,7 +225,7 @@ public class PtFreeTextDao extends OpenInfraDao<PtFreeTextPojo, PtFreeText> {
 	 * @param text the PtFreeText pojo
 	 * @return     the PtFreeText or null if it not exists
 	 */
-	protected PtFreeText getPtFreeTextModel(PtFreeTextPojo text) {
+	public PtFreeText getPtFreeTextModel(PtFreeTextPojo text) {
 	    // check if the given PtFreeTextDao exists and its text is not null
 	    if(text != null && text.getLocalizedStrings() != null) {
 	        // return the jpa model of the PtFreeText

@@ -64,7 +64,9 @@ public class MetaDataDao extends OpenInfraDao<MetaDataPojo, MetaData> {
             pojo.setObjectId(md.getObjectId());
             pojo.setTableName(md.getTableName());
             pojo.setPkColumn(md.getPkColumn());
-            pojo.setData(md.getData().toJSONString());
+            if(md.getData() != null) {
+            	pojo.setData(md.getData().toJSONString());
+            }
             return pojo;
         } else {
             return null;

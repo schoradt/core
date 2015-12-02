@@ -19,14 +19,14 @@ import javax.ws.rs.core.UriInfo;
 
 import de.btu.openinfra.backend.OpenInfraProperties;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
-import de.btu.openinfra.backend.db.daos.AttributeValueGeomType;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
+import de.btu.openinfra.backend.db.daos.project.AttributeValueGeomType;
 import de.btu.openinfra.backend.db.pojos.TopicCharacteristicPojo;
-import de.btu.openinfra.backend.db.pojos.TopicPojo;
 import de.btu.openinfra.backend.db.pojos.project.AttributeValuePojo;
 import de.btu.openinfra.backend.db.pojos.project.TopicInstanceAssociationFromPojo;
 import de.btu.openinfra.backend.db.pojos.project.TopicInstanceAssociationToPojo;
 import de.btu.openinfra.backend.db.pojos.project.TopicInstancePojo;
+import de.btu.openinfra.backend.db.pojos.project.TopicPojo;
 import de.btu.openinfra.backend.db.rbac.AttributeValueRbac;
 import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
 import de.btu.openinfra.backend.db.rbac.TopicCharacteristicRbac;

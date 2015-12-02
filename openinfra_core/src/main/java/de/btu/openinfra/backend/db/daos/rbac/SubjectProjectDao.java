@@ -6,7 +6,7 @@ import java.util.UUID;
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraDao;
-import de.btu.openinfra.backend.db.daos.ProjectDao;
+import de.btu.openinfra.backend.db.daos.project.ProjectDao;
 import de.btu.openinfra.backend.db.jpa.model.rbac.ProjectRelatedRole;
 import de.btu.openinfra.backend.db.jpa.model.rbac.Subject;
 import de.btu.openinfra.backend.db.jpa.model.rbac.SubjectProject;

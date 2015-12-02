@@ -1,21 +1,23 @@
-package de.btu.openinfra.backend.db.pojos;
+package de.btu.openinfra.backend.db.pojos.project;
 
 import java.util.UUID;
 
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
+import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
+import de.btu.openinfra.backend.db.pojos.ValueListValuePojo;
 
-public class AttributeValueValuePojo extends OpenInfraPojo {
+public class AttributeValueDomainPojo extends OpenInfraPojo {
 
     private UUID topicInstanceId;
-    private PtFreeTextPojo value;
+    private ValueListValuePojo domain;
     private UUID attributeTypeToAttributeTypeGroupId;
 
     /* Default constructor */
-    public AttributeValueValuePojo() {
+    public AttributeValueDomainPojo() {
     }
 
     /* Constructor that will set the id and trid automatically */
-    public AttributeValueValuePojo(OpenInfraModelObject modelObject) {
+    public AttributeValueDomainPojo(OpenInfraModelObject modelObject) {
         super(modelObject);
     }
 
@@ -27,12 +29,12 @@ public class AttributeValueValuePojo extends OpenInfraPojo {
         this.topicInstanceId = topicInstanceId;
     }
 
-    public PtFreeTextPojo getValue() {
-        return value;
+    public ValueListValuePojo getDomain() {
+        return domain;
     }
 
-    public void setValue(PtFreeTextPojo value) {
-        this.value = value;
+    public void setDomain(ValueListValuePojo domain) {
+        this.domain = domain;
     }
 
     public UUID getAttributeTypeToAttributeTypeGroupId() {
