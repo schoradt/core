@@ -25,7 +25,7 @@ import de.btu.openinfra.backend.db.rbac.meta.CredentialsRbac;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
 /**
- * This class represents and implements the resource for credentials of the
+ * This class represents and implements the resource for credentials in the
  * meta data schema.
  *
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
