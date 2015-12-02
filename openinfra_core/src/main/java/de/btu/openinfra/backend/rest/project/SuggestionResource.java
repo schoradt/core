@@ -19,6 +19,13 @@ import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
 import de.btu.openinfra.backend.db.rbac.TopicCharacteristicRbac;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
+/**
+ * This class represents and implements the resource for suggestions in the
+ * meta data schema.
+ *
+ * @author <a href="http://www.b-tu.de">BTU</a> DBIS
+ *
+ */
 @Path(OpenInfraResponseBuilder.REST_URI_PROJECTS + "/topiccharacteristics/"
 		+ "{topicCharacteristicId}/attributetypes/{attributeTypeId}/suggest")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
@@ -26,11 +33,15 @@ import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
     MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET})
 public class SuggestionResource {
+
     /**
      * This resource will return a list of attribute values for a given query
      * string. The list will only contain values that belong to a specified
      * topic characteristic and a specified attribute type. The localization of
      * the string will depend on the requested language.
+     * <br><br>
+     * <b>Example:</b>
+     * {@code rest/v1/projects/[uuid]/topiccharacteristics/[uuid]/attributetypes/[uuid]/suggest?q=BAL}
      *
      * @param uriInfo
      * @param request
