@@ -7,15 +7,15 @@ import de.btu.openinfra.backend.db.pojos.project.AttributeValuePojo;
 public class AttributeTypeToValue {
 
 	private AttributeTypePojo attributeType;
-	private List<AttributeValuePojo> attributeValue;
+	private List<AttributeValuePojo> attributeValues;
 
 	public AttributeTypeToValue() {}
 
 	public AttributeTypeToValue(
 			AttributeTypePojo attributeType,
-			List<AttributeValuePojo> attributeValue) {
+			List<AttributeValuePojo> attributeValues) {
 		this.attributeType = attributeType;
-		this.attributeValue = attributeValue;
+		this.attributeValues = attributeValues;
 	}
 
 	public AttributeTypePojo getAttributeType() {
@@ -27,11 +27,11 @@ public class AttributeTypeToValue {
 	}
 
 	public List<AttributeValuePojo> getAttributeValues() {
-		return attributeValue;
+		return attributeValues;
 	}
 
 	public void setAttributeValues(List<AttributeValuePojo> attributeValues) {
-		this.attributeValue = attributeValue;
+		this.attributeValues = attributeValues;
 	}
 
 }
