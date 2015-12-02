@@ -48,6 +48,10 @@ public class SearchResource {
      * @response.representation.200.doc   This is the representation returned by
      *                                    default.
      *
+     * @response.representation.409.qname OpenInfraEntityException
+     * @response.representation.409.doc   This is the representation returned by
+     *                                    default.
+     *
      * @response.representation.500.qname OpenInfraWebException
      * @response.representation.500.doc   An internal error occurs if the
      *                                    connection to the Solr server is
