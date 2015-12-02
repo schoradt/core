@@ -22,6 +22,15 @@ import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
 import de.btu.openinfra.backend.db.rbac.file.SupportedMimeTypeRbac;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
+/**
+ * This class contains methods to view/manage mime types supported by the file
+ * service.
+ * <br/>
+ * Only configured mime types are accepted for upload by the service.
+ *
+ * @author <a href="http://www.b-tu.de">BTU</a> DBIS
+ *
+ */
 @Path("/v1/files/mimetypes")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET,
@@ -29,6 +38,13 @@ import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
     + OpenInfraResponseBuilder.UTF8_CHARSET})
 public class SupportetMimeTypesResource {
 
+	/**
+	 * Delivers the number of configured mime types.
+	 *
+	 * @param uriInfo
+	 * @param request
+	 * @return a number of configured mime types
+	 */
 	@GET
     @Path("count")
 	@Produces({MediaType.TEXT_PLAIN})
@@ -39,6 +55,16 @@ public class SupportetMimeTypesResource {
 				OpenInfraHttpMethod.valueOf(request.getMethod()), uriInfo);
 	}
 
+	/**
+	 * Delivers a list of configured mime types. This resource is paging
+	 * enabled.
+	 *
+	 * @param uriInfo
+	 * @param request
+	 * @param offset The offset where to start.
+	 * @param size The max. number of result elements.
+	 * @return A list of configured mime types.
+	 */
 	@GET
 	public List<SupportedMimeTypePojo> get(
 			@Context UriInfo uriInfo,
@@ -50,6 +76,22 @@ public class SupportetMimeTypesResource {
 				uriInfo, null, offset, size);
 	}
 
+	/**
+	 * Configures a new mime type. The API allows both explicit and top level
+	 * wild card naming.
+	 * <ul>
+	 * 	<li>Explicit naming e.g. 'application/pdf'</li>
+	 * 	<li>Top level wild card naming e.g. 'image/*'</li>
+	 * </ul>
+	 * The term 'top level wild card naming' is used to describe that the
+	 * slash is directly followed by the asterics '*'. Wild card naming such as
+	 * 'application/vnd.*' is unsupported.
+	 *
+	 * @param uriInfo
+	 * @param request
+	 * @param pojo the new mime type which schould be regiestered
+	 * @return the UUID of the newly registered mime type
+	 */
 	@POST
 	public Response post(
 			@Context UriInfo uriInfo,
@@ -61,6 +103,16 @@ public class SupportetMimeTypesResource {
 						uriInfo, null, pojo));
 	}
 
+	/**
+	 * Changes an existing mime type. Please consider POST method for supported
+	 * mime type notations.
+	 *
+	 * @param uriInfo
+	 * @param request
+	 * @param mimeTypeId the id of the mime type
+	 * @param pojo the changed mime type
+	 * @return the UUID of the changed mime type
+	 */
 	@PUT
 	@Path("{mimeTypeId:([0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12})}")
 	public Response put(
@@ -74,6 +126,16 @@ public class SupportetMimeTypesResource {
 						uriInfo, mimeTypeId, pojo));
 	}
 
+	/**
+	 * Deletes a configured mime type. It'll not delete already uploaded files.
+	 * Present files with unconfigured mime type are still accessible. The
+	 * deletion of mime types only restricts the upload behavior.
+	 *
+	 * @param uriInfo
+	 * @param request
+	 * @param mimeTypeId the mime type which should be deleted
+	 * @return the UUID of the deleted mime type
+	 */
 	@DELETE
 	@Path("{mimeTypeId:([0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12})}")
 	public Response delete(
