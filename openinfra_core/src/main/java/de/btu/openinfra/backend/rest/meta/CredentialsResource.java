@@ -198,8 +198,8 @@ public class CredentialsResource {
     /**
      * This resource updates the Credential object with the specified UUID. The
      * specified CredentialsPojo must contain the UUID of the object that should
-     * be updated, the TRID, the user name and the password as string.<br>
-     * <br>
+     * be updated, the TRID, the user name and the password as string.<br/>
+     * <br/>
      * <b>The object id in the CredentialsPojo and in the URI that identifies
      * the credential must concur.</b>
      *

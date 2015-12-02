@@ -48,7 +48,7 @@ public class ValueListResource {
     /**
      * This resource provides the count of ValueListPojos's in the specified
      * project or system schema.
-     * <br><br>
+     * <br/><br/>
      * <b>Example:</b>
      * <ul>
      *   <li>{@code rest/v1/projects/[uuid]/valuelists/count}</li>
@@ -95,7 +95,7 @@ public class ValueListResource {
      * This resource provides a list of all ValueListPojo's in the specified
      * project or system schema. This resource supports sorting and pagination
      * of the list.
-     * <br><br>
+     * <br/><br/>
      * <b>Example:</b>
      * <ul>
      *   <li>{@code rest/v1/projects/[uuid]/valuelists/[uuid]?language=de-DE&orderBy=NAME&sortOrder=ASC&offset=0&size=10}</li>
@@ -156,11 +156,11 @@ public class ValueListResource {
 
 	/**
 	 * This resource provides a list of ValueListAssociationPojo's in the
-	 * specified project or system schema for the specified value list id. The
-	 * ValueListAssociationPojo contains id of the requesting value list, the
+	 * specified project or system schema for the specified value list UUID. The
+	 * ValueListAssociationPojo contains UUID of the requesting value list, the
 	 * associated ValueListPojo and the relationship to the requesting
 	 * ValueListPojo. This resource supports pagination of the list.
-	 * <br><br>
+	 * <br/><br/>
      * <b>Example:</b>
      * <ul>
      *   <li>{@code rest/v1/projects/[uuid]/valuelists/[uuid]/associations?language=de-DE&offset=0&size=10}</li>
@@ -223,7 +223,7 @@ public class ValueListResource {
      * ValueListAssociationPojo must contain the UUID of the requesting value
      * list, the associated ValueListPojo and the relationship. The
      * parameter UUID and TRID of the ValueListAssociationPojo must not be set.
-     * <br><br>
+     * <br/><br/>
      * <b>Example:</b>
      * <ul>
      *   <li>{@code rest/v1/projects/[uuid]/valuelists/[uuid]/associations}</li>
@@ -284,6 +284,12 @@ public class ValueListResource {
 	/**
 	 * This resource provides the count of ValueListAssociationPojo's in the
 	 * specified project or system schema.
+	 * <br/><br/>
+     * <b>Example:</b>
+     * <ul>
+     *   <li>{@code rest/v1/projects/[uuid]/valuelists/[uuid]/associations/count}</li>
+     *   <li>{@code rest/v1/system/valuelists/[uuid]/associations/count}</li>
+     * </ul>
      *
 	 * @param uriInfo
 	 * @param request
@@ -325,6 +331,31 @@ public class ValueListResource {
                         valueListId);
     }
 
+	/**
+	 * This resource provides a list of ValueListAssociationPojo in the
+	 * specified project or system schema for the specified value list UUID and
+	 * for the specified association UUID. The ValueListAssociationPojo contains
+	 * the UUID of the requesting value list, the associated ValueListPojo and
+	 * the relationship to the requesting ValueListPojo. This resource supports
+	 * pagination of the list.
+	 * <br/><br/>
+     * <b>Example:</b>
+     * <ul>
+     *   <li>{@code rest/v1/projects/[uuid]/valuelists/[uuid]/associations[uuid]?language=de-DE&offset=0&size=10}</li>
+     *   <li>{@code rest/v1/system/valuelists/[uuid]/associations/[uuid]?language=de-DE&offset=0&size=10}</li>
+     * </ul>
+	 * @param uriInfo
+	 * @param request
+	 * @param language    The language the localized content of the object.
+	 * @param projectId   The id of the project. Can be null for system schema.
+     * @param schema      The schema name the request should be processed at.
+     * @param valueListId The id of the requesting value list.
+	 * @param associatedValueListId The id of the associated value list.
+	 * @param offset      The offset parameter for the elements of the list.
+     * @param size        The count of elements the list should contain.
+	 * @return            A list of ValueListAssociationPojo's for the requested
+     *                    schema.
+	 */
 	@GET
 	@Path("{valueListId}/associations/{associatedValueListId}")
 	public List<ValueListAssociationPojo> getAssociations(

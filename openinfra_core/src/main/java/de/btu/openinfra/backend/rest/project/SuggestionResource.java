@@ -39,9 +39,11 @@ public class SuggestionResource {
      * string. The list will only contain values that belong to a specified
      * topic characteristic and a specified attribute type. The localization of
      * the string will depend on the requested language.
-     * <br><br>
-     * <b>Example:</b>
-     * {@code rest/v1/projects/[uuid]/topiccharacteristics/[uuid]/attributetypes/[uuid]/suggest?q=BAL}
+     * <br/>
+     * Example:
+     * <ol>
+     *   <li>rest/v1/projects/[uuid]/topiccharacteristics/[uuid]/attributetypes/[uuid]/suggest?q=BAL</li>
+     * </ol>
      *
      * @param uriInfo
      * @param request
