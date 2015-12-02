@@ -155,10 +155,10 @@ public class FileResource {
 	}
 
 	/**
-	 * This method deletes an existing file. First, the file reference is
-	 * deleted from the users space. If there still exists a reference to
-	 * another user, the file isn't deleted physically. It is still available.
-	 * If there is no other reference it is deleted from disk.
+	 * This method deletes an existing file (including the thumbnails). First,
+	 * the file reference is deleted from the users space. If there still exists
+	 * a reference to another user, the file isn't deleted physically. It is
+	 * still available. If there is no other reference it is deleted from disk.
 	 *
 	 * @param uriInfo
 	 * @param request
@@ -257,9 +257,15 @@ public class FileResource {
 	 * <ol>
 	 * 	<li>Mime type check (unsupported mime types are rejected)</li>
 	 *  <li>Signature creation in order to detect duplicate entries</li>
+	 *  <li>Thumbnail generation</li>
 	 *  <li>Export of EXIF data</li>
 	 *  <li>Creation of a reference to the user</li>
 	 * </ol>
+	 * <br/>
+	 * If duplicate is detected this method returns the related POJO in any
+	 * case. However, the generation of thumbnails, the export of EXIF data and
+	 * the creation of a reference to the user are left out when a duplicate
+	 * was detected.
 	 * <br/>
 	 * You'll need to install ufraw under Linux-based OS when you want to
 	 * support DNG images.
@@ -299,6 +305,7 @@ public class FileResource {
     	String fileName = "";
     	File currentFile = null;
     	java.nio.file.Path filePath = null;
+    	FilePojo returnPojo = null;
 		boolean acceptedMimeType = false;
 		// Handle file stream
 		try {
@@ -366,13 +373,24 @@ public class FileResource {
     	pojo.setOriginFileName(originFileName);
     	pojo.setSubject(subject);
     	FileRbac rbac = new FileRbac();
-    	UUID result = rbac.createOrUpdate(
-    			OpenInfraHttpMethod.valueOf(request.getMethod()),
-    			uriInfo, null, pojo);
-    	FilePojo fp = rbac.read(
-    			OpenInfraHttpMethod.valueOf(request.getMethod()),
-    			uriInfo, null, result);
-		return fp;
+    	UUID result = null;
+    	try {
+        	result = rbac.createOrUpdate(
+        			OpenInfraHttpMethod.valueOf(request.getMethod()),
+        			uriInfo, null, pojo);
+    	} catch(OpenInfraWebException ex) {
+    		System.err.println("FileResource: Probably duplicate file key "
+    				+ "detected!");
+    		returnPojo = rbac.readBySubjectAndSignature(
+    				OpenInfraHttpMethod.valueOf(request.getMethod()),
+    				uriInfo, subject, signature);
+    	}
+    	if(returnPojo == null) {
+    		returnPojo = rbac.read(
+     			OpenInfraHttpMethod.valueOf(request.getMethod()),
+     			uriInfo, null, result);
+    	}
+		return returnPojo;
 	}
 
 
@@ -436,9 +454,10 @@ public class FileResource {
 	}
 
 	/**
-	 * This method deletes all files concerning the pojo.
+	 * This method deletes all files (including the thumbnails) concerning the
+	 * POJO.
 	 *
-	 * @param pojo the corresponding pojo object
+	 * @param pojo the corresponding POJO object
 	 */
 	private void deleteFile(FilePojo pojo) {
 		File origin = new File(

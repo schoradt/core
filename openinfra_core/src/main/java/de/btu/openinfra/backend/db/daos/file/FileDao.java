@@ -63,6 +63,15 @@ public class FileDao extends OpenInfraDao<FilePojo, File> {
 		return res;
 	}
 
+	public FilePojo readBySubjectAndSignature(UUID subject, String signature) {
+		File f = em.createNamedQuery("File.findBySubjectAndSignature",
+				File.class)
+				.setParameter("subject", subject)
+				.setParameter("signature", signature)
+				.getSingleResult();
+		return mapToPojo(null, f);
+	}
+
 	/**
 	 * This method retrieves a list of FilesProject POJOs and uses this list
 	 * to retrieve the real File POJOs.

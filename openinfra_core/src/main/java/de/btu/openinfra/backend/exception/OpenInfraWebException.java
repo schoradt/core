@@ -51,7 +51,9 @@ public class OpenInfraWebException extends WebApplicationException {
 						OpenInfraExceptionTypes
 							.INTERNAL_SERVER_EXCEPTION.name(),
 						ex.getMessage())).build());
-		ex.printStackTrace();
+		if(!ex.getMessage().contains("files_subject_signature_key")) {
+			ex.printStackTrace();
+		}
 	}
 
 	public OpenInfraExceptionTypes getType() {
