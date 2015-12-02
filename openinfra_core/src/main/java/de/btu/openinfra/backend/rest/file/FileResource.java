@@ -120,12 +120,12 @@ public class FileResource {
 	}
 
 	/**
-
+	 * Delivers a specific file information.
 	 *
 	 * @param uriInfo
 	 * @param request
 	 * @param fileId the id of the requested file
-	 * @return the content of the requested file
+	 * @return a specific file information
 	 */
 	@GET
 	@Path("{fileId:([0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12})}")
