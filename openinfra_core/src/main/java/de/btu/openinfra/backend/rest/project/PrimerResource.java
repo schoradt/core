@@ -56,6 +56,7 @@ public class PrimerResource {
      *                                    exception.
      *
      * @param schema    The schema name the request should be processed at.
+     * @param projectId The id of the project.
      * @param pojoClass The name of the class a Pojo should be created for.
      * @param language  The language of the localized objects.
      * @return

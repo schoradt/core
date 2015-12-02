@@ -39,8 +39,11 @@ import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 public class CredentialsResource {
 
     /**
-     * This resource provides a list of all CredentialsPojo's.
+     * This resource provides a list of all CredentialsPojo's. This resource
+     * supports sorting and pagination of the list.
      *
+     * @param uriInfo
+     * @param request
      * @param sortOrder The sort order for the list.
      * @param orderBy   The element the list should be ordered by.
      * @param offset    The offset parameter for the elements of the list.
@@ -85,6 +88,8 @@ public class CredentialsResource {
     /**
      * This resource provides a CredentialsPojo for the specified UUID.
      *
+     * @param uriInfo
+     * @param request
      * @param credentialsId The UUID of the CredentialsPojo that should be
      *                      retrieved.
      * @return              The specified CredentialsPojo
@@ -119,6 +124,8 @@ public class CredentialsResource {
     /**
      * This resource provides the count of CredentialPojo's in the whole system.
      *
+     * @param uriInfo
+     * @param request
      * @return The count of CredentialsPojo's.
      *
      * @response.representation.200.qname The count of CredentialsPojo's as
@@ -152,7 +159,11 @@ public class CredentialsResource {
      * CredentialsPojo must contain a user name and a password as string. The
      * parameter UUID and TRID of the CredentialsPojo must not be set.
      *
-     * @return A Response with the UUID of the new created object.
+     * @param uriInfo
+     * @param request
+     * @param pojo    The CredentialsPojo that represents the new object.
+     * @return        A Response with the UUID of the new created object or the
+     *                status code 204.
      *
      * @response.representation.200.qname Response
      * @response.representation.200.doc   This is the representation returned by
@@ -186,11 +197,17 @@ public class CredentialsResource {
 
     /**
      * This resource updates the Credential object with the specified UUID. The
-     * specified CredentialsPojo must contain a user name and a password as
-     * string.
+     * specified CredentialsPojo must contain the UUID of the object that should
+     * be updated, the TRID, the user name and the password as string.<br>
+     * <br>
+     * <b>The object id in the CredentialsPojo and in the URI that identifies
+     * the credential must concur.</b>
      *
+     * @param uriInfo
+     * @param request
      * @param credentialsId The UUID of the CredentialsPojo that should be
      *                      updated.
+     * @param pojo          The DatabasesPojo that represents the updated object.
      * @return              A Response with the status code 200 for a successful
      *                      update or 204 if the object could not be updated.
      *
@@ -233,6 +250,8 @@ public class CredentialsResource {
     /**
      * This resource deletes the Credential object with the specified UUID.
      *
+     * @param uriInfo
+     * @param request
      * @param credentialsId The UUID of the Credential object that should be
      *                      deleted.
      * @return              A Response with the status code 200 for a successful

@@ -21,7 +21,7 @@ import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
 /**
  * This class represents and implements the resource for suggestions in the
- * meta data schema.
+ * project schema.
  *
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *

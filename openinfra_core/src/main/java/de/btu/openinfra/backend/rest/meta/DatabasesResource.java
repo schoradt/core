@@ -39,8 +39,11 @@ import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 public class DatabasesResource {
 
     /**
-     * This resource provides a list of all DatabasesPojo's.
+     * This resource provides a list of all DatabasesPojo's. This resource
+     * supports sorting and pagination of the list.
      *
+     * @param uriInfo
+     * @param request
      * @param sortOrder The sort order for the list.
      * @param orderBy   The element the list should be ordered by.
      * @param offset    The offset parameter for the elements of the list.
@@ -85,6 +88,8 @@ public class DatabasesResource {
     /**
      * This resource provides a DatabasesPojo for the specified UUID.
      *
+     * @param uriInfo
+     * @param request
      * @param databasesId The UUID of the DatabasesPojo that should be
      *                    retrieved.
      * @return            The specified DatabasesPojo
@@ -119,6 +124,8 @@ public class DatabasesResource {
     /**
      * This resource provides the count of DatabasesPojo's in the whole system.
      *
+     * @param uriInfo
+     * @param request
      * @return The count of DatabasesPojo's.
      *
      * @response.representation.200.qname The count of DatabasesPojo's as
@@ -152,7 +159,11 @@ public class DatabasesResource {
      * DatabasesPojo must contain the name of the database as string. The
      * parameter UUID and TRID of the DatabasesPojo must not be set.
      *
-     * @return A Response with the UUID of the new created object.
+     * @param uriInfo
+     * @param request
+     * @param pojo    The DatabasesPojo that represents the new object.
+     * @return        A Response with the UUID of the new created object or the
+     *                status code 204.
      *
      * @response.representation.200.qname Response
      * @response.representation.200.doc   This is the representation returned by
@@ -186,9 +197,16 @@ public class DatabasesResource {
 
     /**
      * This resource updates the Database object with the specified UUID. The
-     * specified DatabasesPojo must contain the name of the database as string.
+     * specified DatabasesPojo must contain the UUID of the object that should
+     * be updated, the TRID and the name of the database as string.<br>
+     * <br>
+     * <b>The object id in the CredentialsPojo and in the URI that identifies
+     * the credential must concur.</b>
      *
+     * @param uriInfo
+     * @param request
      * @param databasesId The UUID of the DatabasesPojo that should be updated.
+     * @param pojo        The DatabasesPojo that represents the updated object.
      * @return            A Response with the status code 200 for a successful
      *                    update or 204 if the object could not be updated.
      *
@@ -231,6 +249,8 @@ public class DatabasesResource {
     /**
      * This resource deletes the Database object with the specified UUID.
      *
+     * @param uriInfo
+     * @param request
      * @param databasesId The UUID of the Database object that should be
      *                    deleted.
      * @return            A Response with the status code 200 for a successful
