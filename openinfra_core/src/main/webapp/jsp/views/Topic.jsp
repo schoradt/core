@@ -62,8 +62,8 @@
 						<c:set var="expliciteType" value="${atv.attributeType.dataType.names.localizedStrings[0].characterString}"/>
 						<!-- Store the current value id if present -->
 						<c:set var="valueId" value=""/>
-						<c:if test="${atv.attributeValue != null}">
-							<c:set var="valueId" value="${atv.attributeValue.uuid}"/>
+						<c:if test="${atv.attributeValues != null}">
+							<c:set var="valueId" value="${atv.attributeValues.uuid}"/>
 						</c:if>
 						
 		    			<tr>
@@ -81,22 +81,22 @@
 								<c:set var="currentValue" value=""/>
 								
 								<c:choose>
-									<c:when test="${atv.attributeValue != null}">
+									<c:when test="${atv.attributeValues != null}">
 			   							<c:choose>
-			   								<c:when test="${atv.attributeValue.attributeValueGeom != null || atv.attributeValue.attributeValueGeomz != null}">
+			   								<c:when test="${atv.attributeValues.attributeValueGeom != null || atv.attributeValues.attributeValueGeomz != null}">
 			   								
 			   									<div id="map"></div>
 			   								
 			   									<span id="span_${typeId}_${valueId}_${atv_loop.index}_${it.topicInstance.uuid}">
 			   										<small>
 			   											<c:choose>
-		   													<c:when test="${atv.attributeValue.attributeValueGeom != null}">
-		   														${fn:escapeXml(atv.attributeValue.attributeValueGeom.geom)}
-		   														<c:set var="currentValue" value="${atv.attributeValue.attributeValueGeom.geom}"/>   														   			   													
+		   													<c:when test="${atv.attributeValues.attributeValueGeom != null}">
+		   														${fn:escapeXml(atv.attributeValues.attributeValueGeom.geom)}
+		   														<c:set var="currentValue" value="${atv.attributeValues.attributeValueGeom.geom}"/>   														   			   													
 		   													</c:when>
 		   													<c:otherwise>
-		   														${fn:escapeXml(atv.attributeValue.attributeValueGeomz.geom)}
-		   														<c:set var="currentValue" value="${atv.attributeValue.attributeValueGeomz.geom}"/>
+		   														${fn:escapeXml(atv.attributeValues.attributeValueGeomz.geom)}
+		   														<c:set var="currentValue" value="${atv.attributeValues.attributeValueGeomz.geom}"/>
 		   													</c:otherwise>
 		   												</c:choose>
 			   										</small>			   										
@@ -104,13 +104,13 @@
 			   									<c:set var="selectGeomType" value="true"/>
 			   								</c:when>
 			   								
-			   								<c:when test="${atv.attributeValue.attributeValueDomain != null}">
+			   								<c:when test="${atv.attributeValues.attributeValueDomain != null}">
 			   									<c:set var="domDesc" value=""/>
-										   		<c:forEach items="${atv.attributeValue.attributeValueDomain.domain.descriptions.localizedStrings}" var="item">
+										   		<c:forEach items="${atv.attributeValues.attributeValueDomain.domain.descriptions.localizedStrings}" var="item">
 								 					<c:set var="domDesc" value="${domDesc} ${item.characterString}"/>
 												</c:forEach>			   									
-									  			<a title="${domDesc}" href="../../attributevalues/${atv.attributeValue.uuid}">
-								    				<c:forEach items="${atv.attributeValue.attributeValueDomain.domain.names.localizedStrings}" var="item" varStatus="loop">
+									  			<a title="${domDesc}" href="../../attributevalues/${atv.attributeValues.uuid}">
+								    				<c:forEach items="${atv.attributeValues.attributeValueDomain.domain.names.localizedStrings}" var="item" varStatus="loop">
 														<c:set var="currentValue" value="${item.characterString}"/>
 													 	<c:if test="${!loop.last}">
 													 		<c:set var="currentValue" value="${currentValue}"/>
@@ -120,8 +120,8 @@
 									    		</a>
 			   								</c:when>
 			   								
-			   								<c:when test="${atv.attributeValue.attributeValueValue != null}">
-							    				<c:forEach items="${atv.attributeValue.attributeValueValue.value.localizedStrings}" var="item">
+			   								<c:when test="${atv.attributeValues.attributeValueValue != null}">
+							    				<c:forEach items="${atv.attributeValues.attributeValueValue.value.localizedStrings}" var="item">
 													<c:set var="currentValue" value="${item.characterString}"/>
 												 	<c:if test="${!loop.last}">
 												 		<c:set var="currentValue" value="${currentValue}"/>
@@ -369,7 +369,7 @@ $(document).ready(function() {
 	}).done(function(data,status,jqXHR) {		
 		data.attributeTypeGroupsToValues.forEach(function(group) {
 			group.attributeTypesToValues.forEach(function(entry) {
-				var attributeValue = entry.attributeValue,
+				var attributeValue = entry.attributeValues,
 					uuid, geojson;
 					
 				if (attributeValue) {

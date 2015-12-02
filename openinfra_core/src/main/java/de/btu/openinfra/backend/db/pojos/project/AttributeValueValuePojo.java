@@ -1,23 +1,23 @@
-package de.btu.openinfra.backend.db.pojos;
+package de.btu.openinfra.backend.db.pojos.project;
 
 import java.util.UUID;
 
-import de.btu.openinfra.backend.db.daos.AttributeValueGeomType;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
+import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
+import de.btu.openinfra.backend.db.pojos.PtFreeTextPojo;
 
-public class AttributeValueGeomzPojo extends OpenInfraPojo {
+public class AttributeValueValuePojo extends OpenInfraPojo {
 
     private UUID topicInstanceId;
-    private String geom;
-    private AttributeValueGeomType geomType;
+    private PtFreeTextPojo value;
     private UUID attributeTypeToAttributeTypeGroupId;
 
     /* Default constructor */
-    public AttributeValueGeomzPojo() {
+    public AttributeValueValuePojo() {
     }
 
     /* Constructor that will set the id and trid automatically */
-    public AttributeValueGeomzPojo(OpenInfraModelObject modelObject) {
+    public AttributeValueValuePojo(OpenInfraModelObject modelObject) {
         super(modelObject);
     }
 
@@ -29,20 +29,12 @@ public class AttributeValueGeomzPojo extends OpenInfraPojo {
         this.topicInstanceId = topicInstanceId;
     }
 
-    public String getGeom() {
-        return geom;
+    public PtFreeTextPojo getValue() {
+        return value;
     }
 
-    public void setGeom(String geom) {
-        this.geom = geom;
-    }
-
-    public AttributeValueGeomType getGeomType() {
-        return geomType;
-    }
-
-    public void setGeomType(AttributeValueGeomType geomType) {
-        this.geomType = geomType;
+    public void setValue(PtFreeTextPojo value) {
+        this.value = value;
     }
 
     public UUID getAttributeTypeToAttributeTypeGroupId() {

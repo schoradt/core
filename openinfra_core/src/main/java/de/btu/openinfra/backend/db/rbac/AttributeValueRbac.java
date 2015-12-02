@@ -6,8 +6,8 @@ import java.util.UUID;
 import javax.ws.rs.core.UriInfo;
 
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
-import de.btu.openinfra.backend.db.daos.AttributeValueDao;
-import de.btu.openinfra.backend.db.daos.AttributeValueGeomType;
+import de.btu.openinfra.backend.db.daos.project.AttributeValueDao;
+import de.btu.openinfra.backend.db.daos.project.AttributeValueGeomType;
 import de.btu.openinfra.backend.db.jpa.model.AttributeType;
 import de.btu.openinfra.backend.db.jpa.model.AttributeValue;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstance;

@@ -1,4 +1,4 @@
-package de.btu.openinfra.backend.db.daos;
+package de.btu.openinfra.backend.db.daos.project;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -9,6 +9,11 @@ import javax.persistence.Query;
 
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.daos.AttributeTypeDao;
+import de.btu.openinfra.backend.db.daos.AttributeValueTypes;
+import de.btu.openinfra.backend.db.daos.OpenInfraValueValueDao;
+import de.btu.openinfra.backend.db.daos.PtFreeTextDao;
+import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.jpa.model.AttributeType;
 import de.btu.openinfra.backend.db.jpa.model.AttributeValue;
 import de.btu.openinfra.backend.db.jpa.model.AttributeValueDomain;
@@ -17,13 +22,13 @@ import de.btu.openinfra.backend.db.jpa.model.AttributeValueGeomz;
 import de.btu.openinfra.backend.db.jpa.model.AttributeValueValue;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
 import de.btu.openinfra.backend.db.pojos.AttributeTypePojo;
-import de.btu.openinfra.backend.db.pojos.AttributeValueDomainPojo;
-import de.btu.openinfra.backend.db.pojos.AttributeValueGeomzPojo;
-import de.btu.openinfra.backend.db.pojos.AttributeValueValuePojo;
 import de.btu.openinfra.backend.db.pojos.LocalizedString;
 import de.btu.openinfra.backend.db.pojos.PtFreeTextPojo;
+import de.btu.openinfra.backend.db.pojos.project.AttributeValueDomainPojo;
 import de.btu.openinfra.backend.db.pojos.project.AttributeValueGeomPojo;
+import de.btu.openinfra.backend.db.pojos.project.AttributeValueGeomzPojo;
 import de.btu.openinfra.backend.db.pojos.project.AttributeValuePojo;
+import de.btu.openinfra.backend.db.pojos.project.AttributeValueValuePojo;
 
 /**
  * This class represents the AttributeValue and is used to access the underlying

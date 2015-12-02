@@ -61,6 +61,15 @@ import de.btu.openinfra.backend.db.rbac.rbac.SubjectRbac;
 import de.btu.openinfra.backend.exception.OpenInfraWebException;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
+/**
+ * This class represents the main component of the file service. It is used to
+ * view/manage files.
+ * <br/>
+ * File type of thumbnail files is PNG.
+ *
+ * @author <a href="http://www.b-tu.de">BTU</a> DBIS
+ *
+ */
 //TODO Move the logic from the resource file to the DAO layer.
 @Path("/v1/files")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
@@ -72,6 +81,13 @@ public class FileResource {
 	private static final String THUMB_TYPE = "png";
 	private static final String EXTENSION = "." + THUMB_TYPE;
 
+	/**
+	 * Delivers the count of uploaded files of the current user.
+	 *
+	 * @param uriInfo
+	 * @param request
+	 * @return user-specific count of uploaded files
+	 */
 	@GET
     @Path("count")
 	@Produces({MediaType.TEXT_PLAIN})
@@ -82,6 +98,16 @@ public class FileResource {
 				OpenInfraHttpMethod.valueOf(request.getMethod()), uriInfo);
 	}
 
+	/**
+	 * Delivers a list of file information uploaded by the current user. The
+	 * content of the file is not transmitted. This resource is paging enabled.
+	 *
+	 * @param uriInfo
+	 * @param request
+	 * @param offset the number where to start
+	 * @param size the max. length of the list
+	 * @return A user-specific list of file information.
+	 */
 	@GET
 	public List<FilePojo> readFilesBySubject(
 			@Context UriInfo uriInfo,

@@ -15,9 +15,9 @@ import javax.ws.rs.core.UriInfo;
 
 import org.glassfish.jersey.server.mvc.Template;
 
-import de.btu.openinfra.backend.db.daos.AttributeValueGeomType;
-import de.btu.openinfra.backend.db.pojos.TopicPojo;
+import de.btu.openinfra.backend.db.daos.project.AttributeValueGeomType;
 import de.btu.openinfra.backend.db.pojos.project.TopicInstanceAssociationToPojo;
+import de.btu.openinfra.backend.db.pojos.project.TopicPojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
 @Path(OpenInfraResponseBuilder.REST_URI_PROJECTS + "/topicinstances")
