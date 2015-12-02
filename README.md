@@ -1,6 +1,8 @@
 # Core
 This folder contains the core Java and Maven-based implementation of OpenInfRA. The project page can be found [here](http://www.b-tu.de/openinfra/).
 
+LOC (version 1.4.2): approx 25.000
+
 # Installation
 
 To run OpenInfRA different prerequisites must be complied. At this point we will give a broad overview about the necessary components and their configuration.
