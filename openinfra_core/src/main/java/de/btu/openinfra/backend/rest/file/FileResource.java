@@ -146,6 +146,7 @@ public class FileResource {
 		List<FilesProjectPojo> fpPojos =
 				new FilesProjectDao().read(null, fileId, 0, Integer.MAX_VALUE);
 		for(FilesProjectPojo fpp : fpPojos) {
+			// Return the file when the subject is permitted
 			if(SecurityUtils.getSubject().isPermitted(
 					requiredPermission + fpp.getProject())) {
 				return pojo;
@@ -374,6 +375,8 @@ public class FileResource {
     	pojo.setSubject(subject);
     	FileRbac rbac = new FileRbac();
     	UUID result = null;
+    	// Try to insert the uploaded file into the database. If the uploaded
+    	// file is a duplicate return the POJO by selecting by signature.
     	try {
         	result = rbac.createOrUpdate(
         			OpenInfraHttpMethod.valueOf(request.getMethod()),

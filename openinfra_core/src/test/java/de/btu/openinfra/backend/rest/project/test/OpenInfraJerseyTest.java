@@ -59,8 +59,8 @@ public class OpenInfraJerseyTest {
 		//test.test100webappProject();
 		//test.test1000deleteProject();
 
-		//test.test1010postAttTypeToGroup();
-		test.deleteTopChar();
+		test.test1010postAttTypeToGroup();
+		//test.deleteTopChar();
 	}
 
 	private String projectPath(String project) {

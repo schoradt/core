@@ -159,7 +159,7 @@
 		<dependency>
 		    <groupId>org.eclipse.persistence</groupId>
 		    <artifactId>eclipselink</artifactId>
-		    <version>2.6.1</version>
+		    <version>2.6.0</version>
 		</dependency>
     
 	    <!-- The PostgreSQL JDBC driver (the PostGIS driver is currently not 
