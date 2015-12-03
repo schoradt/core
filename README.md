@@ -72,8 +72,10 @@ OpenInfRA provides different _database_ _schemas_. Each 'database schema' is opt
 Adding a new schema can be done very easy by the following steps:
 - 1. Create schema on the database level.
 - 2. Generate necessary model objects.
-- 3. Create POJO, DAO and RBAC classes.
-- 4. Register resources and URLs in the REST API.
+- 3. Register the new schema in the _OpenInfraSchemas_ enumeration
+- 4. Create POJO, DAO and RBAC classes.
+- 5. Register the new schema in the _EntityManagerFactoryCache_.
+- 6. Register resources and URLs in the REST API.
 
 # TODO
 - The JUnit tests have to be extended.
