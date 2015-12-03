@@ -7,7 +7,10 @@ import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.AttributeType;
 import de.btu.openinfra.backend.db.jpa.model.AttributeTypeGroup;
+import de.btu.openinfra.backend.db.jpa.model.AttributeTypeGroupToTopicCharacteristic;
 import de.btu.openinfra.backend.db.jpa.model.AttributeTypeToAttributeTypeGroup;
+import de.btu.openinfra.backend.db.jpa.model.Multiplicity;
+import de.btu.openinfra.backend.db.jpa.model.ValueListValue;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupToAttributeTypePojo;
 
 /**
@@ -48,6 +51,9 @@ public class AttributeTypeGroupToAttributeTypeDao extends
                     new AttributeTypeGroupToAttributeTypePojo(atgtat);
 
             pojo.setAttributeTypeId(atgtat.getAttributeType().getId());
+            pojo.setAttributeTypeGroupToTopicCharacteristic(
+            		atgtat.getAttributeTypeGroupToTopicCharacteristic()
+            		.getId());
             pojo.setAttributeTypeGroup(new AttributeTypeGroupDao(
                     currentProjectId,
                     schema).mapToPojo(
@@ -69,12 +75,28 @@ public class AttributeTypeGroupToAttributeTypeDao extends
             return null;
         } // end if else
     }
+
 	@Override
 	public MappingResult<AttributeTypeToAttributeTypeGroup> mapToModel(
 			AttributeTypeGroupToAttributeTypePojo pojo,
 			AttributeTypeToAttributeTypeGroup atg) {
 
-	    // TODO set the model values
+		atg.setAttributeType(em.find(
+				AttributeType.class, pojo.getAttributeTypeId()));
+		atg.setAttributeTypeGroupToTopicCharacteristic(em.find(
+				AttributeTypeGroupToTopicCharacteristic.class,
+				pojo.getAttributeTypeGroupToTopicCharacteristic()));
+		if(pojo.getAttributeTypeGroup() != null) {
+			atg.setAttributeTypeGroup(em.find(AttributeTypeGroup.class,
+					pojo.getAttributeTypeGroup().getUuid()));
+		}
+		atg.setMultiplicityBean(em.find(Multiplicity.class,
+				pojo.getMultiplicity().getUuid()));
+		if(pojo.getDefaultValue() != null) {
+			atg.setValueListValue(em.find(ValueListValue.class,
+					pojo.getDefaultValue().getUuid()));
+		}
+		atg.setOrder(pojo.getOrder());
 
         // return the model as mapping result
         return new MappingResult<AttributeTypeToAttributeTypeGroup>(

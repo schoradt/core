@@ -11,6 +11,7 @@ public class AttributeTypeGroupToAttributeTypePojo extends OpenInfraPojo {
 
     private AttributeTypeGroupPojo attributeTypeGroup;
     private UUID attributeTypeId;
+    private UUID attributeTypeGroupToTopicCharacteristic;
     private MultiplicityPojo multiplicity;
     private ValueListValuePojo defaultValue;
     private Integer order;
@@ -63,5 +64,16 @@ public class AttributeTypeGroupToAttributeTypePojo extends OpenInfraPojo {
     public void setOrder(Integer order) {
         this.order = order;
     }
+
+	public UUID getAttributeTypeGroupToTopicCharacteristic() {
+		return attributeTypeGroupToTopicCharacteristic;
+	}
+
+	public void setAttributeTypeGroupToTopicCharacteristic(
+			UUID attributeTypeGroupToTopicCharacteristic) {
+		this.attributeTypeGroupToTopicCharacteristic = attributeTypeGroupToTopicCharacteristic;
+	}
+
+
 
 }

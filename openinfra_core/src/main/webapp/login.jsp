@@ -68,7 +68,7 @@ if(status != null && status.equalsIgnoreCase("logout")) {
 <tr><td>lieschen</td><td>lieschen</td><td>Projektbearbeiter (lesen + schreiben) auf das Baalbek-Projekt (Zugriff nur auf Foto, Areal und &Ouml;ffnung)</td></tr>
 <tr><td>anonymous</td><td>anonymous</td><td>Zugriff auf Baalbek und Palatin (nur lesen) jeweils nur Foto</td></tr>
 <tr><td>siehstnix</td><td>siehstnix</td><td>Nutzer ohne rechte (Verhalten aus Verison 1.2.0)</td></tr>
-<tr class="top"><td rowspan=8>OpenInfRA</td><td>katja</td><td>katja</td><td>root-Recht</td></tr>
+<tr class="top"><td rowspan=9>OpenInfRA</td><td>katja</td><td>katja</td><td>root-Recht</td></tr>
 <tr><td>hanna</td><td>hanna</td><td>root-Recht</td></tr>
 <tr><td>dörthe</td><td>dörthe</td><td>root-Recht</td></tr>
 <tr><td>franks</td><td>franks</td><td>root-Recht</td></tr>
