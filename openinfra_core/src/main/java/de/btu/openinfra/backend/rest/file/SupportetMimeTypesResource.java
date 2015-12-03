@@ -89,7 +89,7 @@ public class SupportetMimeTypesResource {
 	 *
 	 * @param uriInfo
 	 * @param request
-	 * @param pojo the new mime type which schould be regiestered
+	 * @param pojo the new mime type which should be registered
 	 * @return the UUID of the newly registered mime type
 	 */
 	@POST
