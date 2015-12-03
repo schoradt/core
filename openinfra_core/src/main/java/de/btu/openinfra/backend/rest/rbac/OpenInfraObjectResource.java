@@ -28,6 +28,9 @@ import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
  * must be manually defined with a related adaption of the RBAC implementation.
  * Thus, this class only provides GET methods. PUT, POST or DELETE are not
  * provided here!
+ * <br/>
+ * The initial idea was to introduce a security level for topic characteristics.
+ *
  *
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
@@ -40,6 +43,19 @@ import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class OpenInfraObjectResource {
 
+	/**
+	 * Delivers a list of OpenInfRA objects which can be secured by the RBAC
+	 * system. This resource is paging enabled.
+	 *
+	 * @param uriInfo
+	 * @param request
+	 * @param language
+	 * @param sortOrder
+	 * @param orderBy
+	 * @param offset
+	 * @param size
+	 * @return a list of OpenInfRA objects
+	 */
 	@GET
 	public List<OpenInfraObjectPojo> get(
 			@Context UriInfo uriInfo,
@@ -59,6 +75,15 @@ public class OpenInfraObjectResource {
 				size);
 	}
 
+	/**
+	 * Delivers an OpenInfRA object which can be secured by the RBAC system.
+	 *
+	 * @param uriInfo
+	 * @param request
+	 * @param language
+	 * @param uuid the id of the OpenInfRA object
+	 * @return an OpenInfRA object
+	 */
 	@GET
 	@Path("{id}")
 	public OpenInfraObjectPojo get(
@@ -73,6 +98,13 @@ public class OpenInfraObjectResource {
 				uuid);
 	}
 
+	/**
+	 * Delivers the number of OpenInfRA objects which can be secured by the RBAC
+	 * system.
+	 * @param uriInfo
+	 * @param request
+	 * @return the number of OpenInfRA objects
+	 */
 	@GET
 	@Path("count")
 	@Produces({MediaType.TEXT_PLAIN})

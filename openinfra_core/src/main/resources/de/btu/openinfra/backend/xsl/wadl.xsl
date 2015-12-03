@@ -130,29 +130,23 @@
                 </a>
             </td>
        </tr>
-       <tr>
-            <!-- Method -->
-            <td class="summary">
-                <xsl:for-each select="wadl:method">
-                    <xsl:variable name="name" select="@name"/>
-                    <xsl:variable name="id2"><xsl:call-template name="getId"/></xsl:variable>
-                    <a href="#{$id2}"><xsl:value-of select="$name"/></a>
-                    <xsl:for-each select="wadl:doc"><br/></xsl:for-each>
-                    <xsl:if test="position() != last()"><br/></xsl:if>  <!-- Add a spacer -->
-                </xsl:for-each>
-                <br/>
-            </td>
+       <xsl:for-each select="wadl:method">
+       	<tr>
+       		<!-- Method -->
+       		<td>
+	            <xsl:variable name="name" select="@name"/>
+	            <xsl:variable name="id2"><xsl:call-template name="getId"/></xsl:variable>
+	            <a href="#{$id2}"><xsl:value-of select="$name"/></a>
+	            <xsl:for-each select="wadl:doc"><br/></xsl:for-each>
+       		</td>
             <!-- Description -->
-            <td class="summary">
-                <xsl:for-each select="wadl:method">
-                    <xsl:call-template name="getDoc">
-                        <xsl:with-param name="base" select="$resourceBase"/>
-                    </xsl:call-template>
-                    <br/>
-                    <xsl:if test="position() != last()"><br/></xsl:if>  <!-- Add a spacer -->
-                </xsl:for-each>
-            </td>
-        </tr>
+            <td>
+                <xsl:call-template name="getDoc">
+                	<xsl:with-param name="base" select="$resourceBase"/>
+                </xsl:call-template>
+            </td>                           		
+       	</tr>
+       </xsl:for-each>
         <!-- Add separator if not the last resource -->
         <xsl:if test="wadl:method and not($lastResource)">
             <tr><td class="summarySeparator"></td><td class="summarySeparator"/><td class="summarySeparator"/></tr>
