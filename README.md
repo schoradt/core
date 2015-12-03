@@ -79,4 +79,4 @@ Adding a new schema can be done very easy by the following steps:
 
 # TODO
 - The JUnit tests have to be extended.
-- There is currently no Logging-Framework available.
+- Logging isn't implemented appropriately.
