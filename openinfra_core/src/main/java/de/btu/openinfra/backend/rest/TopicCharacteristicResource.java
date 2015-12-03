@@ -12,9 +12,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
 import de.btu.openinfra.backend.db.OpenInfraOrderBy;
@@ -279,16 +281,22 @@ public class TopicCharacteristicResource {
 		// The used read method returns a list of objects. In this special
 		// case, there should be only one list entry. Thus, we only take the
 		// first list element.
-		return new AttributeTypeGroupToTopicCharacteristicRbac(
-				projectId,
-				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						OpenInfraHttpMethod.valueOf(request.getMethod()),
-						uriInfo,
-						PtLocaleDao.forLanguageTag(language),
-						topicCharacteristicId,
-						attributeTypeGroupId,
-						0,
-						1).get(0);
+		List<AttributeTypeGroupToTopicCharacteristicPojo> pojos =
+				new AttributeTypeGroupToTopicCharacteristicRbac(
+						projectId,
+						OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
+								OpenInfraHttpMethod.valueOf(request.getMethod()),
+								uriInfo,
+								PtLocaleDao.forLanguageTag(language),
+								topicCharacteristicId,
+								attributeTypeGroupId,
+								0,
+								1);
+		if(pojos.size() > 0) {
+			return pojos.get(0);
+		} else {
+			throw new WebApplicationException(Status.NOT_FOUND);
+		}
 	}
 
 	/**
@@ -456,16 +464,23 @@ public class TopicCharacteristicResource {
 		// The used read method returns a list of objects. In this special
 		// case, there should be only one list entry. Thus, we only take the
 		// first list element.
-		return new RelationshipTypeToTopicCharacteristicRbac(
-				projectId,
-				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
-						OpenInfraHttpMethod.valueOf(request.getMethod()),
-						uriInfo,
-						PtLocaleDao.forLanguageTag(language),
-						topicCharacteristicId,
-						relationshipTypeId,
-						0,
-						1).get(0);
+		List<RelationshipTypeToTopicCharacteristicPojo> pojos =
+				new RelationshipTypeToTopicCharacteristicRbac(
+						projectId,
+						OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
+								OpenInfraHttpMethod.valueOf(request.getMethod()),
+								uriInfo,
+								PtLocaleDao.forLanguageTag(language),
+								topicCharacteristicId,
+								relationshipTypeId,
+								0,
+								1);
+		if(pojos.size() > 0) {
+			return pojos.get(0);
+		} else {
+			throw new WebApplicationException(Status.NOT_FOUND);
+		}
+
 	}
 
 	/**
