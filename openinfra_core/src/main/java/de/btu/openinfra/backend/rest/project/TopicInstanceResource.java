@@ -74,6 +74,22 @@ public class TopicInstanceResource {
 						topicInstanceId);
 	}
 
+	@POST
+    public Response create(
+            @Context UriInfo uriInfo,
+            @Context HttpServletRequest request,
+            @QueryParam("language") String language,
+            @PathParam("projectId") UUID projectId,
+            TopicInstancePojo pojo) {
+        UUID id = new TopicInstanceRbac(projectId,
+                OpenInfraSchemas.PROJECTS).createOrUpdate(
+                OpenInfraHttpMethod.valueOf(request.getMethod()),
+                uriInfo,
+                null,
+                pojo);
+        return OpenInfraResponseBuilder.postResponse(id);
+    }
+
 	@PUT
     @Path("{topicInstanceId}")
     public Response update(

@@ -41,6 +41,9 @@ public class DatabasesResource {
     /**
      * This resource provides a list of all DatabasesPojo's. This resource
      * supports sorting and pagination of the list.
+     * <ul>
+     *   <li>rest/v1/metadata/databases?orderBy=DATABASE&sortOrder=ASC&offset=0&size=10</li>
+     * </ul>
      *
      * @param uriInfo
      * @param request
@@ -87,6 +90,9 @@ public class DatabasesResource {
 
     /**
      * This resource provides a DatabasesPojo for the specified UUID.
+     * <ul>
+     *   <li>rest/v1/metadata/databases/[uuid]</li>
+     * </ul>
      *
      * @param uriInfo
      * @param request
@@ -123,6 +129,9 @@ public class DatabasesResource {
 
     /**
      * This resource provides the count of DatabasesPojo's in the whole system.
+     * <ul>
+     *   <li>rest/v1/metadata/databases/count</li>
+     * </ul>
      *
      * @param uriInfo
      * @param request
@@ -158,6 +167,9 @@ public class DatabasesResource {
      * This resource creates a new Database object. The specified
      * DatabasesPojo must contain the name of the database as string. The
      * parameter UUID and TRID of the DatabasesPojo must not be set.
+     * <ul>
+     *   <li>rest/v1/metadata/databases</li>
+     * </ul>
      *
      * @param uriInfo
      * @param request
@@ -199,9 +211,11 @@ public class DatabasesResource {
      * This resource updates the Database object with the specified UUID. The
      * specified DatabasesPojo must contain the UUID of the object that should
      * be updated, the TRID and the name of the database as string.<br>
-     * <br>
-     * <b>The object id in the CredentialsPojo and in the URI that identifies
-     * the credential must concur.</b>
+     * <ul>
+     *   <li>rest/v1/metadata/databases/[uuid]</li>
+     * </ul>
+     * <b>The object id in the DatabasessPojo and in the URI that identifies
+     * the Database must concur.</b>
      *
      * @param uriInfo
      * @param request
@@ -248,6 +262,9 @@ public class DatabasesResource {
 
     /**
      * This resource deletes the Database object with the specified UUID.
+     * <ul>
+     *   <li>rest/v1/metadata/databases/[uuid]</li>
+     * </ul>
      *
      * @param uriInfo
      * @param request
