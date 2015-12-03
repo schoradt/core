@@ -333,14 +333,14 @@ public class TopicCharacteristicResource {
 	 */
     @DELETE
     @Path("{topicCharacteristicId}/attributetypegroups/"
-            + "{attributeTypeGroupToTopicCharacteristicId}")
+            + "{attributeTypeGroupId}")
     public Response deleteAttributeTypeGroupToTopicCharacteristic(
             @Context UriInfo uriInfo,
             @Context HttpServletRequest request,
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema,
-            @PathParam("attributeTypeGroupToTopicCharacteristicId")
-            	UUID attributeTypeGroupToTopicCharacteristicId) {
+            @PathParam("topicCharacteristicId") UUID topicCharacteristicId,
+            @PathParam("attributeTypeGroupId") UUID attributeTypeGroupId) {
         return OpenInfraResponseBuilder.deleteResponse(
                 new AttributeTypeGroupToTopicCharacteristicRbac(
                         projectId,
@@ -348,8 +348,8 @@ public class TopicCharacteristicResource {
                                 OpenInfraHttpMethod.valueOf(
                                       request.getMethod()),
                                 uriInfo,
-                                attributeTypeGroupToTopicCharacteristicId),
-                                attributeTypeGroupToTopicCharacteristicId);
+                                topicCharacteristicId),
+                                attributeTypeGroupId);
     }
 
     /**
