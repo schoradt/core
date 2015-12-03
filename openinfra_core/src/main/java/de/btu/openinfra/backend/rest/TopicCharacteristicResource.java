@@ -357,8 +357,8 @@ public class TopicCharacteristicResource {
                                 OpenInfraHttpMethod.valueOf(
                                       request.getMethod()),
                                 uriInfo,
-                                topicCharacteristicId),
-                                attributeTypeGroupId);
+                                topicCharacteristicId,
+                                attributeTypeGroupId));
     }
 
     /**
@@ -451,14 +451,21 @@ public class TopicCharacteristicResource {
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
+			@PathParam("topicCharacteristicId") UUID topicCharacteristicId,
 			@PathParam("relationshipTypeId") UUID relationshipTypeId) {
+		// The used read method returns a list of objects. In this special
+		// case, there should be only one list entry. Thus, we only take the
+		// first list element.
 		return new RelationshipTypeToTopicCharacteristicRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
 						PtLocaleDao.forLanguageTag(language),
-						relationshipTypeId);
+						topicCharacteristicId,
+						relationshipTypeId,
+						0,
+						1).get(0);
 	}
 
 	/**
