@@ -180,6 +180,41 @@ public class AttributeTypeResource {
 						size);
 	}
 
+	/**
+	 * Adds an existing attribute type to an existing attribute type group.
+	 * <br/>
+	 *{ <br/>
+  	 *&nbsp;"uuid":null, <br/>
+  	 *&nbsp;"trid":0, <br/>
+  	 *&nbsp;"attributeTypeGroup":<br/>
+  	 *&nbsp;{<br/>
+     *&nbsp;&nbsp;"uuid":"24e81d76-b7ea-4adf-bb46-4ee81b5b83ec",<br/>
+     *&nbsp;&nbsp;"trid":0,<br/>
+	 *&nbsp;&nbsp;"names":null,<br/>
+	 *&nbsp;&nbsp;"descriptions":null,<br/>
+     *&nbsp;&nbsp;"subgroupOf":null<br/>
+	 *&nbsp;},<br/>
+  	 *&nbsp;"attributeTypeId":"1d6f37c8-cdb7-4b0a-9a76-c3ae2513a013",<br/>
+  	 *&nbsp;"attributeTypeGroupToTopicCharacteristic":"b92c8ce1-278b-4926-8490-24918ac1799a",<br/>
+  	 *&nbsp;"multiplicity":<br/>
+   	 *&nbsp;{<br/>
+   	 *&nbsp;&nbsp;"uuid":"dd051168-b938-4b2f-9361-cfbc7fc5dce4",<br/>
+   	 *&nbsp;&nbsp;"trid":0,<br/>
+   	 *&nbsp;&nbsp;"min":null,<br/>
+   	 *&nbsp;&nbsp;"max":null<br/>
+   	 *&nbsp;},<br/>
+   	 *&nbsp;"defaultValue":null,<br/>
+   	 *&nbsp;"order":0<br/>
+	 *&nbsp;}<br/>
+	 *
+	 * @param uriInfo
+	 * @param request
+	 * @param projectId
+	 * @param schema
+	 * @param attributeTypeId the attribute type id
+	 * @param pojo the content to change
+	 * @return the UUID of the newly created relation
+	 */
 	@POST
 	@Path("{attributeTypeId}/attributetypegroups")
     public Response create(
