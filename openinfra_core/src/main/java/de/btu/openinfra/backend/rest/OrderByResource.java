@@ -26,8 +26,9 @@ import de.btu.openinfra.backend.db.pojos.OrderByPojo;
 	+ OpenInfraResponseBuilder.UTF8_CHARSET})
 @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class OrderByResource {
-    @Path("/system/orderby")
+
 	@GET
+    @Path("/system/orderby")
 	public OrderByPojo getS(
 	        @PathParam("schema") OpenInfraSchemas schema,
             @QueryParam("class") String classObject) {

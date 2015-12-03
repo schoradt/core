@@ -27,7 +27,13 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupPojo;
+import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupToAttributeTypePojo;
 import de.btu.openinfra.backend.db.pojos.LocalizedString;
+import de.btu.openinfra.backend.db.pojos.MultiplicityPojo;
 import de.btu.openinfra.backend.db.pojos.PtFreeTextPojo;
 import de.btu.openinfra.backend.db.pojos.PtLocalePojo;
 import de.btu.openinfra.backend.db.pojos.project.ProjectPojo;
@@ -43,14 +49,22 @@ public class OpenInfraJerseyTest {
 	private final String BASE_URI = "http://localhost:8080/";
 	private final String REST_PATH = "openinfra_core/rest/v1/";
 	private final String BAALBEK = "fd27a347-4e33-4ed7-aebc-eeff6dbf1054";
+	private final String TEST = "e7d42bff-4e40-4f43-9d1b-1dc5a190cd75";
 
 	public static void main(String[] args) throws Exception {
 		OpenInfraJerseyTest test = new OpenInfraJerseyTest();
 		test.setUp();
 		//test.test1addProject();
-		test.test2urlFileUpload();
+		//test.test2urlFileUpload();
 		//test.test100webappProject();
 		//test.test1000deleteProject();
+
+		//test.test1010postAttTypeToGroup();
+		test.deleteTopChar();
+	}
+
+	private String projectPath(String project) {
+		return "projects/" + project;
 	}
 
 	@Before
@@ -135,6 +149,48 @@ public class OpenInfraJerseyTest {
 		JSONObject jRes = (JSONObject)new JSONParser().parse(result);
 		pId = UUID.fromString(jRes.get("uuid").toString());
 		System.out.println("Project created: " + result);
+	}
+
+	/**
+	 * Baalbek related test case
+	 */
+	public void test1010postAttTypeToGroup() {
+		AttributeTypeGroupPojo atg = new AttributeTypeGroupPojo();
+		atg.setUuid(UUID.fromString("24e81d76-b7ea-4adf-bb46-4ee81b5b83ec"));
+		MultiplicityPojo m = new MultiplicityPojo();
+		m.setUuid(UUID.fromString("dd051168-b938-4b2f-9361-cfbc7fc5dce4"));
+
+		AttributeTypeGroupToAttributeTypePojo atgtat =
+				new AttributeTypeGroupToAttributeTypePojo();
+		atgtat.setAttributeTypeGroup(atg);
+		atgtat.setAttributeTypeId(
+				UUID.fromString("1d6f37c8-cdb7-4b0a-9a76-c3ae2513a013"));
+		atgtat.setOrder(0);
+		atgtat.setMultiplicity(m);
+		atgtat.setAttributeTypeGroupToTopicCharacteristic(
+				UUID.fromString("b92c8ce1-278b-4926-8490-24918ac1799a"));
+
+		ObjectMapper om = new ObjectMapper();
+		try {
+			System.out.println(om.writeValueAsString(atgtat));
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+//		Response res = build(projectPath(TEST) + "/attributetypes"
+//				+ "/1d6f37c8-cdb7-4b0a-9a76-c3ae2513a013/"
+//				+ "attributetypegroups", MediaType.APPLICATION_JSON).post(
+//				Entity.json(atgtat));
+//
+//		System.out.println(res);
+	}
+
+	public void deleteTopChar() {
+		Response res = build(projectPath(TEST) + "/topiccharacteristics/"
+				+ "3aac556e-0ca7-4d0f-8f6a-1886174b00c7",
+				MediaType.APPLICATION_JSON).delete();
+		 System.out.println(res);
 	}
 
 	@Test
