@@ -41,6 +41,9 @@ public class CredentialsResource {
     /**
      * This resource provides a list of all CredentialsPojo's. This resource
      * supports sorting and pagination of the list.
+     * <ul>
+     *   <li>rest/v1/metadata/credentials?orderBy=&sortOrder=ASC&offset=0&size=10</li>
+     * </ul>
      *
      * @param uriInfo
      * @param request
