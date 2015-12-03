@@ -42,9 +42,9 @@ public class PrimerResource {
      * is an empty image of the requested class Pojo. This can be used as a base
      * for POST requests. Further the resource awaits a language definition to
      * fill in the correct language informations whenever they are required.
-     * <br><br>
-     * <b>Example:</b>
-     * {@code rest/v1/projects/[uuid]/primer?language=de-DE&pojoClass=attributeType}
+     * <ul>
+     *   <li>rest/v1/projects/[uuid]/primer?language=de-DE&pojoClass=attributeType</li>
+     * </ul>
      *
      * @response.representation.200.qname The specified Pojo class.
      * @response.representation.200.doc   This is the representation returned by
@@ -79,9 +79,9 @@ public class PrimerResource {
     /**
      * This resource provides a list of class names that can be used as value
      * for the <i>pojoClass</i> parameter at the primer resource.
-     * <br><br>
-     * <b>Example:</b>
-     * {@code rest/v1/projects/[uuid]/primer?language=de-DE&pojoClass=attributeType}
+     * <ul>
+     *   <li>rest/v1/projects/[uuid]/primer?language=de-DE&pojoClass=attributeType</li>
+     * </ul>
      *
      * @param schema The schema name the request should be processed at.
      * @return       A list of class names as string.

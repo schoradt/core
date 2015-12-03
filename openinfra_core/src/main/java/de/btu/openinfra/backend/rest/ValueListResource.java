@@ -49,8 +49,8 @@ public class ValueListResource {
      * This resource provides the count of ValueListPojos's in the specified
      * project or system schema.
      * <ul>
-     *   <li>{@code rest/v1/projects/[uuid]/valuelists/count}</li>
-     *   <li>{@code rest/v1/system/valuelists/count}</li>
+     *   <li>rest/v1/projects/[uuid]/valuelists/count</li>
+     *   <li>rest/v1/system/valuelists/count</li>
      * </ul>
      *
      * @param uriInfo
@@ -94,8 +94,8 @@ public class ValueListResource {
      * project or system schema. This resource supports sorting and pagination
      * of the list.
      * <ul>
-     *   <li>{@code rest/v1/projects/[uuid]/valuelists/[uuid]?language=de-DE&orderBy=NAME&sortOrder=ASC&offset=0&size=10}</li>
-     *   <li>{@code rest/v1/system/valuelists/[uuid]?language=de-DE&orderBy=NAME&sortOrder=ASC&offset=0&size=10}</li>
+     *   <li>rest/v1/projects/[uuid]/valuelists/[uuid]?language=de-DE&orderBy=NAME&sortOrder=ASC&offset=0&size=10</li>
+     *   <li>rest/v1/system/valuelists/[uuid]?language=de-DE&orderBy=NAME&sortOrder=ASC&offset=0&size=10</li>
      * </ul>
      *
      * @param uriInfo
@@ -157,8 +157,8 @@ public class ValueListResource {
 	 * associated ValueListPojo and the relationship to the requesting
 	 * ValueListPojo. This resource supports pagination of the list.
      * <ul>
-     *   <li>{@code rest/v1/projects/[uuid]/valuelists/[uuid]/associations?language=de-DE&offset=0&size=10}</li>
-     *   <li>{@code rest/v1/system/valuelists/[uuid]/associations?language=de-DE&offset=0&size=10}</li>
+     *   <li>rest/v1/projects/[uuid]/valuelists/[uuid]/associations?language=de-DE&offset=0&size=10</li>
+     *   <li>rest/v1/system/valuelists/[uuid]/associations?language=de-DE&offset=0&size=10</li>
      * </ul>
 	 *
 	 * @param uriInfo
@@ -218,8 +218,8 @@ public class ValueListResource {
      * list, the associated ValueListPojo and the relationship. The
      * parameter UUID and TRID of the ValueListAssociationPojo must not be set.
      * <ul>
-     *   <li>{@code rest/v1/projects/[uuid]/valuelists/[uuid]/associations}</li>
-     *   <li>{@code rest/v1/system/valuelists/[uuid]/associations}</li>
+     *   <li>rest/v1/projects/[uuid]/valuelists/[uuid]/associations</li>
+     *   <li>rest/v1/system/valuelists/[uuid]/associations</li>
      * </ul>
      *
 	 * @param uriInfo
@@ -277,8 +277,8 @@ public class ValueListResource {
 	 * This resource provides the count of ValueListAssociationPojo's in the
 	 * specified project or system schema.
      * <ul>
-     *   <li>{@code rest/v1/projects/[uuid]/valuelists/[uuid]/associations/count}</li>
-     *   <li>{@code rest/v1/system/valuelists/[uuid]/associations/count}</li>
+     *   <li>rest/v1/projects/[uuid]/valuelists/[uuid]/associations/count</li>
+     *   <li>rest/v1/system/valuelists/[uuid]/associations/count</li>
      * </ul>
      *
 	 * @param uriInfo
@@ -329,8 +329,8 @@ public class ValueListResource {
 	 * the relationship to the requesting ValueListPojo. This resource supports
 	 * pagination of the list.
      * <ul>
-     *   <li>{@code rest/v1/projects/[uuid]/valuelists/[uuid]/associations[uuid]?language=de-DE&offset=0&size=10}</li>
-     *   <li>{@code rest/v1/system/valuelists/[uuid]/associations/[uuid]?language=de-DE&offset=0&size=10}</li>
+     *   <li>rest/v1/projects/[uuid]/valuelists/[uuid]/associations[uuid]?language=de-DE&offset=0&size=10</li>
+     *   <li>rest/v1/system/valuelists/[uuid]/associations/[uuid]?language=de-DE&offset=0&size=10</li>
      * </ul>
 	 * @param uriInfo
 	 * @param request

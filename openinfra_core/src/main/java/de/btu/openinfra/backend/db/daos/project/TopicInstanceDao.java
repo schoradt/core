@@ -25,6 +25,8 @@ import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
 import de.btu.openinfra.backend.db.pojos.MetaDataPojo;
 import de.btu.openinfra.backend.db.pojos.project.AttributeValuePojo;
 import de.btu.openinfra.backend.db.pojos.project.TopicInstancePojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 /**
  * This class represents the TopicInstance and is used to access the underlying
@@ -250,7 +252,14 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
 			TopicInstancePojo pojo,
 			TopicInstance ti) {
 
-        // TODO set the model values
+	    try {
+	        // set the topic characteristic
+	        ti.setTopicCharacteristic(em.find(
+	                TopicCharacteristic.class, pojo.getTopicCharacteristic().getUuid()));
+	    } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
+        }
 
         // return the model as mapping result
         return new MappingResult<TopicInstance>(ti.getId(), ti);
