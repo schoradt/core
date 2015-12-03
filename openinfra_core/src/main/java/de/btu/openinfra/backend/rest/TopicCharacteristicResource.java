@@ -267,22 +267,25 @@ public class TopicCharacteristicResource {
 	 */
 	@GET
 	@Path("{topicCharacteristicId}/attributetypegroups/"
-			+ "{attributeTypeGroupToTopicCharacteristicId}")
-	public AttributeTypeGroupToTopicCharacteristicPojo
-		getAttributeTypeGroupToTopicCharacteristic(
+			+ "{attributeTypeGroupId}")
+	public AttributeTypeGroupToTopicCharacteristicPojo get(
 			@Context UriInfo uriInfo,
 			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
 			@PathParam("projectId") UUID projectId,
 			@PathParam("schema") String schema,
-			@PathParam("attributeTypeGroupToTopicCharacteristicId")
-				UUID attributeTypeGroupToTopicCharacteristicId) {
+			@PathParam("topicCharacteristicId") UUID topicCharacteristicId,
+			@PathParam("attributeTypeGroupId") UUID attributeTypeGroupId) {
 		return new AttributeTypeGroupToTopicCharacteristicRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						OpenInfraHttpMethod.valueOf(request.getMethod()),
-						uriInfo, PtLocaleDao.forLanguageTag(language),
-						attributeTypeGroupToTopicCharacteristicId);
+						uriInfo,
+						PtLocaleDao.forLanguageTag(language),
+						topicCharacteristicId,
+						attributeTypeGroupId,
+						0,
+						Integer.MAX_VALUE).get(0);
 	}
 
 	/**
@@ -300,14 +303,14 @@ public class TopicCharacteristicResource {
 	 */
 	@PUT
 	@Path("{topicCharacteristicId}/attributetypegroups/"
-            + "{attributeTypeGroupToTopicCharacteristicId}")
+            + "{attributeTypeGroupId}")
     public Response update(
             @Context UriInfo uriInfo,
             @Context HttpServletRequest request,
             @PathParam("projectId") UUID projectId,
             @PathParam("schema") String schema,
-            @PathParam("attributeTypeGroupToTopicCharacteristicId")
-            	UUID attributeTypeGroupToTopicCharacteristicId,
+            @PathParam("topicCharacteristicId") UUID topicCharacteristicId,
+            @PathParam("attributeTypeGroupId") UUID attributeTypeGroupId,
             AttributeTypeGroupToTopicCharacteristicPojo pojo) {
 			return OpenInfraResponseBuilder.putResponse(
 			        new AttributeTypeGroupToTopicCharacteristicRbac(
@@ -315,8 +318,11 @@ public class TopicCharacteristicResource {
 			                OpenInfraSchemas.valueOf(schema.toUpperCase())
 			                ).createOrUpdate(OpenInfraHttpMethod.valueOf(
 			                		request.getMethod()), uriInfo,
-			                		attributeTypeGroupToTopicCharacteristicId,
-			                		pojo));
+			                		pojo,
+			                		topicCharacteristicId,
+			                		pojo.getTopicCharacteristicId(),
+			                		attributeTypeGroupId,
+			                		pojo.getAttributeTypeGroup().getUuid()));
     }
 
 	/**
