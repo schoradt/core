@@ -276,6 +276,9 @@ public class TopicCharacteristicResource {
 			@PathParam("schema") String schema,
 			@PathParam("topicCharacteristicId") UUID topicCharacteristicId,
 			@PathParam("attributeTypeGroupId") UUID attributeTypeGroupId) {
+		// The used read method returns a list of objects. In this special
+		// case, there should be only one list entry. Thus, we only take the
+		// first list element.
 		return new AttributeTypeGroupToTopicCharacteristicRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
@@ -285,7 +288,7 @@ public class TopicCharacteristicResource {
 						topicCharacteristicId,
 						attributeTypeGroupId,
 						0,
-						Integer.MAX_VALUE).get(0);
+						1).get(0);
 	}
 
 	/**
