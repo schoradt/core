@@ -25,8 +25,9 @@ import de.btu.openinfra.backend.db.rbac.meta.DatabasesRbac;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
 /**
- * This class represents and implements the resource for databases in the
- * meta data schema.
+ * This class represents and implements the resource for databases in the meta
+ * data schema. They are used to determine the name of the database for a
+ * database connection.
  *
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
@@ -135,7 +136,7 @@ public class DatabasesResource {
      *
      * @param uriInfo
      * @param request
-     * @return The count of DatabasesPojo's.
+     * @return        The count of DatabasesPojo's.
      *
      * @response.representation.200.qname The count of DatabasesPojo's as
      *                                    long.

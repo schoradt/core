@@ -1,0 +1,25 @@
+{
+"uuid":null,
+"localizedStrings":[
+	{
+    "characterString":"bla",
+	"locale":{
+		"uuid":"b36320a4-0c74-484e-8c5b-402693deee0f",
+        "countryCode":"GB",
+       	"trid":10997,
+		"languageCode":"en",
+		"characterCode":"UTF8"
+	}
+	},
+    {
+    	"characterString":"Schlagwort",
+		"locale":{
+			"uuid":"c0d76ff3-a711-42af-920d-09132a287015",
+			"countryCode":"DE",
+			"trid":10997,
+			"characterCode":"UTF8",
+			"languageCode":"de"
+		}
+	}
+]
+}

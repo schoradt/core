@@ -24,6 +24,14 @@ import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
 import de.btu.openinfra.backend.db.rbac.meta.DatabaseConnectionRbac;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
+/**
+ * This class represents and implements the resource for database connections in
+ * the meta data schema. They are used to determine a database connection that
+ * contains the server, the port, the database, the schema and the credentials.
+ *
+ * @author <a href="http://www.b-tu.de">BTU</a> DBIS
+ *
+ */
 @Path(OpenInfraResponseBuilder.REST_URI_METADATA + "/dbconnections")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET,
@@ -31,6 +39,39 @@ import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
     + OpenInfraResponseBuilder.UTF8_CHARSET})
 public class DatabaseConnectionResource {
 
+    /**
+     * This resource provides a list of all DatabaseConnectionPojo's. This
+     * resource supports sorting and pagination of the list.
+     * <ul>
+     *   <li>rest/v1/metadata/dbconnections?orderBy=DATABASE&sortOrder=ASC&offset=0&size=10</li>
+     * </ul>
+     *
+     * @param uriInfo
+     * @param request
+     * @param sortOrder The sort order for the list.
+     * @param orderBy   The element the list should be ordered by.
+     * @param offset    The offset parameter for the elements of the list.
+     * @param size      The count of elements the list should contain.
+     * @return          A list of DatabaseConnectionPojo's
+     *
+     * @response.representation.200.qname A list of DatabaseConnectionPojo's.
+     * @response.representation.200.doc   This is the representation returned by
+     *                                    default.
+     *
+     * @response.representation.403.qname WebApplicationException
+     * @response.representation.403.doc   This error occurs if you do not have
+     *                                    the permission to access this
+     *                                    resource.
+     *
+     * @response.representation.409.qname OpenInfraEntityException
+     * @response.representation.409.doc   This error occurs if the parameters
+     *                                    are not configured as expected.
+     *
+     * @response.representation.500.qname OpenInfraWebException
+     * @response.representation.500.doc   An internal error occurs if the
+     *                                    backend runs into an unexpected
+     *                                    exception.
+     */
     @GET
     public List<DatabaseConnectionPojo> get(
             @Context UriInfo uriInfo,

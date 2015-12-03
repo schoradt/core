@@ -25,8 +25,9 @@ import de.btu.openinfra.backend.db.rbac.meta.CredentialsRbac;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
 /**
- * This class represents and implements the resource for credentials in the
- * meta data schema.
+ * This class represents and implements the resource for credentials in the meta
+ * data schema. They are used to determine the user name and password for a
+ * database connection.
  *
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
@@ -135,7 +136,7 @@ public class CredentialsResource {
      *
      * @param uriInfo
      * @param request
-     * @return The count of CredentialsPojo's.
+     * @return        The count of CredentialsPojo's.
      *
      * @response.representation.200.qname The count of CredentialsPojo's as
      *                                    long.
@@ -221,7 +222,8 @@ public class CredentialsResource {
      * @param request
      * @param credentialsId The UUID of the CredentialsPojo that should be
      *                      updated.
-     * @param pojo          The DatabasesPojo that represents the updated object.
+     * @param pojo          The CredentialsPojo that represents the updated
+     *                      object.
      * @return              A Response with the status code 200 for a successful
      *                      update or 204 if the object could not be updated.
      *
