@@ -42,7 +42,7 @@ public class CredentialsResource {
      * This resource provides a list of all CredentialsPojo's. This resource
      * supports sorting and pagination of the list.
      * <ul>
-     *   <li>rest/v1/metadata/credentials?orderBy=&sortOrder=ASC&offset=0&size=10</li>
+     *   <li>rest/v1/metadata/credentials?orderBy=USERNAME&sortOrder=ASC&offset=0&size=10</li>
      * </ul>
      *
      * @param uriInfo
@@ -90,6 +90,9 @@ public class CredentialsResource {
 
     /**
      * This resource provides a CredentialsPojo for the specified UUID.
+     * <ul>
+     *   <li>rest/v1/metadata/credentials/[uuid]</li>
+     * </ul>
      *
      * @param uriInfo
      * @param request
@@ -126,6 +129,9 @@ public class CredentialsResource {
 
     /**
      * This resource provides the count of CredentialPojo's in the whole system.
+     * <ul>
+     *   <li>rest/v1/metadata/credentials/count</li>
+     * </ul>
      *
      * @param uriInfo
      * @param request
@@ -161,6 +167,9 @@ public class CredentialsResource {
      * This resource creates a new Credential object. The specified
      * CredentialsPojo must contain a user name and a password as string. The
      * parameter UUID and TRID of the CredentialsPojo must not be set.
+     * <ul>
+     *   <li>rest/v1/metadata/credentials</li>
+     * </ul>
      *
      * @param uriInfo
      * @param request
@@ -202,7 +211,9 @@ public class CredentialsResource {
      * This resource updates the Credential object with the specified UUID. The
      * specified CredentialsPojo must contain the UUID of the object that should
      * be updated, the TRID, the user name and the password as string.<br/>
-     * <br/>
+     * <ul>
+     *   <li>rest/v1/metadata/credentials/[uuid]</li>
+     * </ul>
      * <b>The object id in the CredentialsPojo and in the URI that identifies
      * the credential must concur.</b>
      *
@@ -252,6 +263,9 @@ public class CredentialsResource {
 
     /**
      * This resource deletes the Credential object with the specified UUID.
+     * <ul>
+     *   <li>rest/v1/metadata/credentials/[uuid]</li>
+     * </ul>
      *
      * @param uriInfo
      * @param request
