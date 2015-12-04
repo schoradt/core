@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.jpa.model.Multiplicity;
 import de.btu.openinfra.backend.db.jpa.model.RelationshipType;
 import de.btu.openinfra.backend.db.jpa.model.RelationshipTypeToTopicCharacteristic;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
@@ -74,7 +75,25 @@ public class RelationshipTypeToTopicCharacteristicDao
 			RelationshipTypeToTopicCharacteristicPojo pojo,
 			RelationshipTypeToTopicCharacteristic rtt) {
 
-        // TODO set the model values
+	    try {
+	        // set the topic characteristic
+    	    rtt.setTopicCharacteristic(em.find(
+    	            TopicCharacteristic.class,
+    	            pojo.getTopicCharacteristicId()));
+
+    	    // set the relationship type
+    	    rtt.setRelationshipType(em.find(
+    	            RelationshipType.class,
+    	            pojo.getRelationshipType().getUuid()));
+
+    	    // set the multiplicity
+    	    rtt.setMultiplicityBean(em.find(
+    	            Multiplicity.class,
+    	            pojo.getMultiplicity().getUuid()));
+	    } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
+        }
 
         // return the model as mapping result
         return new MappingResult<RelationshipTypeToTopicCharacteristic>(

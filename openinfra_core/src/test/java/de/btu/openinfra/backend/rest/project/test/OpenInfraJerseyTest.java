@@ -167,7 +167,7 @@ public class OpenInfraJerseyTest {
 				UUID.fromString("1d6f37c8-cdb7-4b0a-9a76-c3ae2513a013"));
 		atgtat.setOrder(0);
 		atgtat.setMultiplicity(m);
-		atgtat.setAttributeTypeGroupToTopicCharacteristic(
+		atgtat.setAttributeTypeGroupToTopicCharacteristicId(
 				UUID.fromString("b92c8ce1-278b-4926-8490-24918ac1799a"));
 
 		ObjectMapper om = new ObjectMapper();

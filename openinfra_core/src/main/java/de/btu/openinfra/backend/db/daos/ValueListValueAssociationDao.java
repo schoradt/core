@@ -8,6 +8,8 @@ import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.ValueListValue;
 import de.btu.openinfra.backend.db.jpa.model.ValueListValuesXValueListValue;
 import de.btu.openinfra.backend.db.pojos.ValueListValueAssociationPojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 /**
  * This class represents the ValueListValueAssociation and is used to access the
@@ -64,7 +66,26 @@ public class ValueListValueAssociationDao
 			ValueListValueAssociationPojo pojo,
 			ValueListValuesXValueListValue vlvxvlv) {
 
-        // TODO set the model values
+	    try {
+            // set value list value 1
+	        vlvxvlv.setValueListValue2(em.find(
+	                ValueListValue.class,
+	                pojo.getAssociationValueListValueId()));
+
+            // set value list value 2
+	        vlvxvlv.setValueListValue3(em.find(
+	                ValueListValue.class,
+	                pojo.getAssociatedValueListValue().getUuid()));
+
+            // set the relationship
+	        vlvxvlv.setValueListValue1(em.find(
+                    ValueListValue.class,
+                    pojo.getRelationship().getUuid()));
+
+        } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_NAME_IN_POJO);
+        }
 
         // return the model as mapping result
         return new MappingResult<ValueListValuesXValueListValue>(
