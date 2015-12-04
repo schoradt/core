@@ -1,7 +1,6 @@
 package de.btu.openinfra.backend.db.pojos;
 
 import java.util.List;
-import java.util.UUID;
 
 import de.btu.openinfra.backend.db.pojos.project.AttributeValuePojo;
 
@@ -15,7 +14,7 @@ import de.btu.openinfra.backend.db.pojos.project.AttributeValuePojo;
  */
 public class AttributeTypeToValue {
 
-	private UUID attributeTypeToAttributeTypeGroupId;
+	private AttributeTypeGroupToAttributeTypePojo attributeTypeToAttributeTypeGroup;
 	private AttributeTypePojo attributeType;
 	private List<AttributeValuePojo> attributeValues;
 
@@ -24,11 +23,11 @@ public class AttributeTypeToValue {
 	public AttributeTypeToValue(
 			AttributeTypePojo attributeType,
 			List<AttributeValuePojo> attributeValues,
-			UUID attributeTypeToAttributeTypeGroupId) {
+			AttributeTypeGroupToAttributeTypePojo attributeTypeToAttributeTypeGroup) {
 		this.attributeType = attributeType;
 		this.attributeValues = attributeValues;
-		this.attributeTypeToAttributeTypeGroupId =
-				attributeTypeToAttributeTypeGroupId;
+		this.attributeTypeToAttributeTypeGroup =
+				attributeTypeToAttributeTypeGroup;
 	}
 
 	public AttributeTypePojo getAttributeType() {
@@ -47,13 +46,13 @@ public class AttributeTypeToValue {
 		this.attributeValues = attributeValues;
 	}
 
-	public UUID getAttributeTypeToAttributeTypeGroupId() {
-		return attributeTypeToAttributeTypeGroupId;
+	public AttributeTypeGroupToAttributeTypePojo getAttributeTypeToAttributeTypeGroup() {
+		return attributeTypeToAttributeTypeGroup;
 	}
 
-	public void setAttributeTypeToAttributeTypeGroupId(
-			UUID attributeTypeToAttributeTypeGroupId) {
-		this.attributeTypeToAttributeTypeGroupId = attributeTypeToAttributeTypeGroupId;
+	public void setAttributeTypeToAttributeTypeGroup(
+			AttributeTypeGroupToAttributeTypePojo attributeTypeToAttributeTypeGroup) {
+		this.attributeTypeToAttributeTypeGroup = attributeTypeToAttributeTypeGroup;
 	}
 
 }

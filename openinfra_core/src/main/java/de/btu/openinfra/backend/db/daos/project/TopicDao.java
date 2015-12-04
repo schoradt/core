@@ -119,7 +119,7 @@ public class TopicDao {
 			for(AttributeTypeToAttributeTypeGroupPojo at : atList) {
 				List<AttributeValuePojo> hValues =
 						new LinkedList<AttributeValuePojo>();
-				UUID atgtat = null;
+				AttributeTypeGroupToAttributeTypePojo atgtat = null;
 				for(AttributeValuePojo value : values) {
 					// add the value to the list of attribute types when the
 					// ids of both are equal
@@ -137,7 +137,7 @@ public class TopicDao {
 										0,
 										1);
 						if(atgtatList.size() > 0) {
-							atgtat = atgtatList.get(0).getUuid();
+							atgtat = atgtatList.get(0);
 						}
 					}
 				} // end for
