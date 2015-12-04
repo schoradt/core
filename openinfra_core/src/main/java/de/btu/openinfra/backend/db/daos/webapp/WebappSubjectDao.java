@@ -1,6 +1,9 @@
 package de.btu.openinfra.backend.db.daos.webapp;
 
 import java.util.Locale;
+import java.util.UUID;
+
+import javax.persistence.NoResultException;
 
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
@@ -14,6 +17,20 @@ public class WebappSubjectDao
 
 	public WebappSubjectDao() {
 		super(null, OpenInfraSchemas.WEBAPP, WebappSubject.class, Webapp.class);
+	}
+
+	public WebappSubjectPojo read(UUID webappId, UUID subjectId) {
+		try {
+			System.out.println("--> versuche");
+			return mapToPojo(null, em.createNamedQuery(
+					"WebappSubject.findByWebappAndSubject", WebappSubject.class)
+					.setParameter("webapp", em.find(Webapp.class, webappId))
+					.setParameter("subjectId", subjectId)
+					.getSingleResult());
+		} catch(NoResultException ex) {
+			System.out.println("--> not found");
+			return null;
+		}
 	}
 
 	@Override
