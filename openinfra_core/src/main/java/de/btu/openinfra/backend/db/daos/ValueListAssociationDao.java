@@ -6,6 +6,7 @@ import java.util.UUID;
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.ValueList;
+import de.btu.openinfra.backend.db.jpa.model.ValueListValue;
 import de.btu.openinfra.backend.db.jpa.model.ValueListXValueList;
 import de.btu.openinfra.backend.db.pojos.ValueListAssociationPojo;
 import de.btu.openinfra.backend.exception.OpenInfraEntityException;
@@ -65,7 +66,27 @@ public class ValueListAssociationDao
 	public MappingResult<ValueListXValueList> mapToModel(
 			ValueListAssociationPojo pojo,
 			ValueListXValueList vlxvl) {
-        // TODO set the model values
+
+	    try {
+	        // set value list 1
+	        vlxvl.setValueList1Bean(em.find(
+	                ValueList.class,
+	                pojo.getAssociationValueListId()));
+
+	        // set value list 2
+            vlxvl.setValueList2Bean(em.find(
+                    ValueList.class,
+                    pojo.getAssociatedValueList().getUuid()));
+
+            // set the relationship
+            vlxvl.setValueListValue(em.find(
+                    ValueListValue.class,
+                    pojo.getRelationship().getUuid()));
+
+	    } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_NAME_IN_POJO);
+        }
 
         // return the model as mapping result
         return new MappingResult<ValueListXValueList>(vlxvl.getId(), vlxvl);

@@ -6,8 +6,10 @@ import java.util.Locale;
 import java.util.UUID;
 
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.daos.AttributeTypeGroupToAttributeTypeDao;
 import de.btu.openinfra.backend.db.daos.AttributeTypeGroupToTopicCharacteristicDao;
 import de.btu.openinfra.backend.db.daos.AttributeTypeToAttributeTypeGroupDao;
+import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupToAttributeTypePojo;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupToTopicCharacteristicPojo;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupToValues;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeToAttributeTypeGroupPojo;
@@ -117,17 +119,32 @@ public class TopicDao {
 			for(AttributeTypeToAttributeTypeGroupPojo at : atList) {
 				List<AttributeValuePojo> hValues =
 						new LinkedList<AttributeValuePojo>();
+				AttributeTypeGroupToAttributeTypePojo atgtat = null;
 				for(AttributeValuePojo value : values) {
 					// add the value to the list of attribute types when the
 					// ids of both are equal
 					if(value.getAttributeTypeId().equals(
 							at.getAttributeType().getUuid())) {
 						hValues.add(value);
+						// Additionally add the association id between the
+						// attribute type to the attribute type group.
+						List<AttributeTypeGroupToAttributeTypePojo> atgtatList =
+								new AttributeTypeGroupToAttributeTypeDao(
+										currentProjectId, schema).read(
+										locale,
+										at.getAttributeType().getUuid(),
+										atg.getAttributeTypeGroup().getUuid(),
+										0,
+										1);
+						if(atgtatList.size() > 0) {
+							atgtat = atgtatList.get(0);
+						}
 					}
 				} // end for
 				map.add(new AttributeTypeToValue(
 						at.getAttributeType(),
-						hValues));
+						hValues,
+						atgtat));
 			} // end for
 			atgValue.setAttributeTypesToValues(map);
 			atgValueList.add(atgValue);

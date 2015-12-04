@@ -7,8 +7,11 @@ import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.AttributeTypeGroup;
 import de.btu.openinfra.backend.db.jpa.model.AttributeTypeGroupToTopicCharacteristic;
+import de.btu.openinfra.backend.db.jpa.model.Multiplicity;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupToTopicCharacteristicPojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 /**
  * This class represents the AttributeTypeGroupToTopicCharacteristic and is used
@@ -75,7 +78,28 @@ public class AttributeTypeGroupToTopicCharacteristicDao extends
 			AttributeTypeGroupToTopicCharacteristicPojo pojo,
 			AttributeTypeGroupToTopicCharacteristic atg) {
 
-        // TODO set the model values
+	    try {
+            // set the attribute type group
+	        atg.setAttributeTypeGroup(em.find(
+                    AttributeTypeGroup.class,
+                    pojo.getAttributeTypeGroup().getUuid()));
+
+            // set the topic characteristic
+            atg.setTopicCharacteristic(em.find(
+                    TopicCharacteristic.class,
+                    pojo.getTopicCharacteristicId()));
+
+            // set the multiplicity
+            atg.setMultiplicityBean(em.find(
+                    Multiplicity.class,
+                    pojo.getMultiplicity().getUuid()));
+        } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
+        }
+
+        // set the order (optional)
+        atg.setOrder(pojo.getOrder());
 
         // return the model as mapping result
         return new MappingResult<AttributeTypeGroupToTopicCharacteristic>(

@@ -464,7 +464,31 @@
  to a topic characteristic.]]></commentText><responseDoc><returnDoc>the id of the changed object</returnDoc></responseDoc></methodDoc><methodDoc><methodName>deleteAttributeTypeGroupToTopicCharacteristic</methodName><commentText><![CDATA[This method deletes an existing association of an attribute type group
  to a topic characteristic.]]></commentText><responseDoc><returnDoc>the id of the deleted object</returnDoc></responseDoc></methodDoc><methodDoc><methodName>getRelationshipTypes</methodName><commentText><![CDATA[Delivers a list of relationship types of a specific topic characteristic.]]></commentText><responseDoc><returnDoc>a list of relationship types</returnDoc></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>language</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.QueryParam</annotationTypeName><attributes><attribute><name>value</name><value>language</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>projectId</paramName><commentText><![CDATA[the project id]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>projectId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>schema</paramName><commentText><![CDATA[the schema]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>schema</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>topicCharacteristicId</paramName><commentText><![CDATA[the id of the related topic characteristic]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>topicCharacteristicId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>offset</paramName><commentText><![CDATA[the number where to start]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.QueryParam</annotationTypeName><attributes><attribute><name>value</name><value>offset</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>size</paramName><commentText><![CDATA[the max. number of list entries]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.QueryParam</annotationTypeName><attributes><attribute><name>value</name><value>size</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc></paramDocs></methodDoc><methodDoc><methodName>createRelationshipType</methodName><commentText><![CDATA[Creates an association between two topic characteristics.]]></commentText><responseDoc><returnDoc>the UUID of the newly created object</returnDoc></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>projectId</paramName><commentText><![CDATA[the project id]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>projectId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>schema</paramName><commentText><![CDATA[the schema]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>schema</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>topicCharacteristicId</paramName><commentText><![CDATA[the topic characteristic id]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>topicCharacteristicId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>pojo</paramName><commentText><![CDATA[the content to add]]></commentText></paramDoc></paramDocs></methodDoc><methodDoc><methodName>getRelationshipTypes</methodName><commentText><![CDATA[Delivers a specific relation between two topic characteristics.
  This resource is paging enabled.]]></commentText><responseDoc><returnDoc>the UUID of the relation ship</returnDoc></responseDoc></methodDoc><methodDoc><methodName>update</methodName><commentText><![CDATA[Changes an existing relation ship type.]]></commentText><responseDoc><returnDoc>the uuid of the changed object</returnDoc></responseDoc></methodDoc><methodDoc><methodName>delete</methodName><commentText><![CDATA[Deletes an existing relation.]]></commentText><responseDoc><returnDoc>the UUID of the deleted object</returnDoc></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>projectId</paramName><commentText><![CDATA[the project id]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>projectId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>schema</paramName><commentText><![CDATA[the schema]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>schema</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>topicCharacteristicId</paramName><commentText><![CDATA[the topic characteristic id]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>topicCharacteristicId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>relationshipTypeId</paramName><commentText><![CDATA[the relation]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>relationshipTypeId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc></paramDocs></methodDoc><methodDoc><methodName>getRelationshipTypeCount</methodName><commentText><![CDATA[Delivers the number of relation ship types related to a specific topic
- characteristic.]]></commentText><responseDoc><returnDoc>the number of relation ship types</returnDoc></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>projectId</paramName><commentText><![CDATA[the project id]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>projectId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>schema</paramName><commentText><![CDATA[the schema]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>schema</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>topicCharacteristicId</paramName><commentText><![CDATA[the topic characteristic id]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>topicCharacteristicId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc></paramDocs></methodDoc><methodDoc><methodName>create</methodName><commentText><![CDATA[Crates a new topic characteristic.]]></commentText><responseDoc><returnDoc>the UUID of the newly created object</returnDoc></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>projectId</paramName><commentText><![CDATA[project id]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>projectId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>schema</paramName><commentText><![CDATA[the schema]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>schema</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>pojo</paramName><commentText><![CDATA[the content to create]]></commentText></paramDoc></paramDocs></methodDoc><methodDoc><methodName>update</methodName><commentText><![CDATA[Changes an existing topic characteristic.]]></commentText><responseDoc><returnDoc>the UUID of the changed object</returnDoc></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>projectId</paramName><commentText><![CDATA[the project id]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>projectId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>schema</paramName><commentText><![CDATA[the schema]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>schema</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>topicCharacteristicId</paramName><commentText><![CDATA[the topic characteristic id]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>topicCharacteristicId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>pojo</paramName><commentText><![CDATA[the content to change]]></commentText></paramDoc></paramDocs></methodDoc><methodDoc><methodName>delete</methodName><commentText><![CDATA[This method deletes a topic characteristic.]]></commentText><responseDoc><returnDoc>the UUID of the deleted object</returnDoc></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>projectId</paramName><commentText><![CDATA[the project id]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>projectId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>schema</paramName><commentText><![CDATA[the schema]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>schema</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>topicCharacteristicId</paramName><commentText><![CDATA[the id of the requested topic characteristic]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>topicCharacteristicId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc></paramDocs></methodDoc></methodDocs></classDoc><classDoc><className>de.btu.openinfra.backend.rest.RelationshipTypeResource</className><commentText><![CDATA[]]></commentText><methodDocs><methodDoc><methodName>get</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>getAttributeTypeGroupCount</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>get</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>getTopicCharacteristics</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>create</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>getTopicCharacteristicsCount</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>getTopicCharacteristics</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>update</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>delete</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>createRelationshipType</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>update</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>delete</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc></methodDocs></classDoc><classDoc><className>de.btu.openinfra.backend.rest.PtLocaleResource</className><commentText><![CDATA[This class represents the PtLocal resource of the REST API.]]></commentText><methodDocs><methodDoc><methodName>get</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>create</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>getCount</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>get</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>delete</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc></methodDocs></classDoc><classDoc><className>de.btu.openinfra.backend.rest.PrimerResource</className><commentText><![CDATA[This class provides Pojo primer objects. It does not supports the schema
+ characteristic.]]></commentText><responseDoc><returnDoc>the number of relation ship types</returnDoc></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>projectId</paramName><commentText><![CDATA[the project id]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>projectId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>schema</paramName><commentText><![CDATA[the schema]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>schema</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>topicCharacteristicId</paramName><commentText><![CDATA[the topic characteristic id]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>topicCharacteristicId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc></paramDocs></methodDoc><methodDoc><methodName>create</methodName><commentText><![CDATA[Crates a new topic characteristic.]]></commentText><responseDoc><returnDoc>the UUID of the newly created object</returnDoc></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>projectId</paramName><commentText><![CDATA[project id]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>projectId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>schema</paramName><commentText><![CDATA[the schema]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>schema</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>pojo</paramName><commentText><![CDATA[the content to create]]></commentText></paramDoc></paramDocs></methodDoc><methodDoc><methodName>update</methodName><commentText><![CDATA[Changes an existing topic characteristic.]]></commentText><responseDoc><returnDoc>the UUID of the changed object</returnDoc></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>projectId</paramName><commentText><![CDATA[the project id]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>projectId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>schema</paramName><commentText><![CDATA[the schema]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>schema</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>topicCharacteristicId</paramName><commentText><![CDATA[the topic characteristic id]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>topicCharacteristicId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>pojo</paramName><commentText><![CDATA[the content to change]]></commentText></paramDoc></paramDocs></methodDoc><methodDoc><methodName>delete</methodName><commentText><![CDATA[This method deletes a topic characteristic.]]></commentText><responseDoc><returnDoc>the UUID of the deleted object</returnDoc></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>projectId</paramName><commentText><![CDATA[the project id]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>projectId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>schema</paramName><commentText><![CDATA[the schema]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>schema</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>topicCharacteristicId</paramName><commentText><![CDATA[the id of the requested topic characteristic]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>topicCharacteristicId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc></paramDocs></methodDoc></methodDocs></classDoc><classDoc><className>de.btu.openinfra.backend.rest.RelationshipTypeResource</className><commentText><![CDATA[]]></commentText><methodDocs><methodDoc><methodName>get</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>getAttributeTypeGroupCount</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>get</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>getTopicCharacteristics</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>create</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>getTopicCharacteristicsCount</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>getTopicCharacteristics</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>update</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>delete</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>createRelationshipType</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>update</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>delete</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc></methodDocs></classDoc><classDoc><className>de.btu.openinfra.backend.rest.PtLocaleResource</className><commentText><![CDATA[This class represents the PtLocal resource of the REST API.]]></commentText><methodDocs><methodDoc><methodName>get</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>create</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>getCount</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>get</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>delete</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc></methodDocs></classDoc><classDoc><className>de.btu.openinfra.backend.rest.PtFreeTextResource</className><commentText><![CDATA[This class represents and implements the resource for PtFreeText in the
+ project and system schema.]]></commentText><methodDocs><methodDoc><methodName>create</methodName><commentText><![CDATA[This resource creates a new PtFreeText object. The parameter UUID and
+ TRID of the ValueListAssociationPojo must not be set. In the normal case
+ the PtFreeText will be generated automatically. But there are some cases
+ where the database constraint checks fail if the PtFreeText is not in the
+ database before JPA persists the object itself. So the client must first
+ create the PtFreeText.
+ <ul>
+   <li>rest/v1/projects/[uuid]/ptfreetext</li>
+   <li>rest/v1/system/ptfreetext</li>
+ </ul>]]></commentText><responseDoc><returnDoc>A Response with the UUID of the new created object or
+                    the status code 204.</returnDoc><representations><representation
+                                element="Response"
+                                status="204"><doc>If the object could not be created.</doc></representation><representation
+                                element="Response"
+                                status="200"><doc>This is the representation returned by
+                                    default.</doc></representation><representation
+                                element="WebApplicationException"
+                                status="403"><doc>This error occurs if you do not have
+                                    the permission to access this
+                                    resource.</doc></representation><representation
+                                element="OpenInfraWebException"
+                                status="500"><doc>An internal error occurs if the
+                                    backend runs into an unexpected
+                                    exception.</doc></representation></representations></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>projectId</paramName><commentText><![CDATA[The id of the project. Can be null for system schema.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>projectId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>schema</paramName><commentText><![CDATA[The schema name the request should be processed at.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>schema</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>pojo</paramName><commentText><![CDATA[The PtFreeTextPojo that represents the new object.]]></commentText></paramDoc></paramDocs></methodDoc></methodDocs></classDoc><classDoc><className>de.btu.openinfra.backend.rest.PrimerResource</className><commentText><![CDATA[This class provides Pojo primer objects. It does not supports the schema
  project. For the schema projects use the class
  'de.btu.openinfra.backend.rest.project/PrimerResource' instead. The
  reason therefore lay in the fact that the regex expression
@@ -589,8 +613,636 @@
  <br/>
  You'll need to install ghostview in order to support PDF thumbnail
  generation.]]></commentText><responseDoc><returnDoc>the file POJO of the newly created file</returnDoc></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>originFileName</paramName><commentText><![CDATA[the current file name]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>originFileName</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>is</paramName><commentText><![CDATA[the file content]]></commentText></paramDoc></paramDocs></methodDoc><methodDoc><methodName>uploadUrlFile</methodName><commentText><![CDATA[A resource to support URL-based file upload. The URL should be URL
- encoded!]]></commentText><responseDoc><returnDoc>a file POJO</returnDoc></responseDoc></methodDoc></methodDocs></classDoc><classDoc><className>de.btu.openinfra.backend.rest.meta.SettingsResource</className><commentText><![CDATA[]]></commentText><methodDocs><methodDoc><methodName>get</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>get</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>getCount</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>create</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>update</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>delete</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc></methodDocs></classDoc><classDoc><className>de.btu.openinfra.backend.rest.meta.SettingKeysResource</className><commentText><![CDATA[]]></commentText><methodDocs><methodDoc><methodName>get</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>get</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>getCount</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>create</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>update</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>delete</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc></methodDocs></classDoc><classDoc><className>de.btu.openinfra.backend.rest.meta.ServersResource</className><commentText><![CDATA[]]></commentText><methodDocs><methodDoc><methodName>get</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>get</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>getCount</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>create</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>update</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>delete</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc></methodDocs></classDoc><classDoc><className>de.btu.openinfra.backend.rest.meta.SchemasResource</className><commentText><![CDATA[]]></commentText><methodDocs><methodDoc><methodName>get</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>get</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>getCount</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>create</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>update</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>delete</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc></methodDocs></classDoc><classDoc><className>de.btu.openinfra.backend.rest.meta.ProjectsResource</className><commentText><![CDATA[]]></commentText><methodDocs><methodDoc><methodName>get</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>get</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>getCount</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>create</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>update</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>delete</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc></methodDocs></classDoc><classDoc><className>de.btu.openinfra.backend.rest.meta.PortsResource</className><commentText><![CDATA[]]></commentText><methodDocs><methodDoc><methodName>get</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>get</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>getCount</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>create</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>update</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>delete</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc></methodDocs></classDoc><classDoc><className>de.btu.openinfra.backend.rest.meta.LogResource</className><commentText><![CDATA[]]></commentText><methodDocs><methodDoc><methodName>get</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>get</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>getCount</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>create</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>delete</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc></methodDocs></classDoc><classDoc><className>de.btu.openinfra.backend.rest.meta.LoggerResource</className><commentText><![CDATA[]]></commentText><methodDocs><methodDoc><methodName>get</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>get</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>getCount</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>create</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>update</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>delete</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc></methodDocs></classDoc><classDoc><className>de.btu.openinfra.backend.rest.meta.LevelResource</className><commentText><![CDATA[]]></commentText><methodDocs><methodDoc><methodName>get</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>get</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>getCount</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>create</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>update</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>delete</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc></methodDocs></classDoc><classDoc><className>de.btu.openinfra.backend.rest.meta.DatabasesResource</className><commentText><![CDATA[This class represents and implements the resource for databases in the
- meta data schema.]]></commentText><methodDocs><methodDoc><methodName>get</methodName><commentText><![CDATA[This resource provides a list of all DatabasesPojo's. This resource
+ encoded!]]></commentText><responseDoc><returnDoc>a file POJO</returnDoc></responseDoc></methodDoc></methodDocs></classDoc><classDoc><className>de.btu.openinfra.backend.rest.meta.SettingsResource</className><commentText><![CDATA[]]></commentText><methodDocs><methodDoc><methodName>get</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>get</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>getCount</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>create</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>update</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>delete</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc></methodDocs></classDoc><classDoc><className>de.btu.openinfra.backend.rest.meta.SettingKeysResource</className><commentText><![CDATA[]]></commentText><methodDocs><methodDoc><methodName>get</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>get</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>getCount</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>create</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>update</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>delete</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc></methodDocs></classDoc><classDoc><className>de.btu.openinfra.backend.rest.meta.ServersResource</className><commentText><![CDATA[This class represents and implements the resource for servers in the meta
+ data schema. They are used to determine the server for a database connection.]]></commentText><methodDocs><methodDoc><methodName>get</methodName><commentText><![CDATA[This resource provides a list of all ServersPojo's. This resource
+ supports sorting and pagination of the list.
+ <ul>
+   <li>rest/v1/metadata/servers?orderBy=SERVER&sortOrder=ASC&offset=0&size=10</li>
+ </ul>]]></commentText><responseDoc><returnDoc>A list of ServersPojo's</returnDoc><representations><representation
+                                element="OpenInfraEntityException"
+                                status="409"><doc>This error occurs if the parameters
+                                    are not configured as expected.</doc></representation><representation
+                                element="A list of ServersPojo's."
+                                status="200"><doc>This is the representation returned by
+                                    default.</doc></representation><representation
+                                element="WebApplicationException"
+                                status="403"><doc>This error occurs if you do not have
+                                    the permission to access this
+                                    resource.</doc></representation><representation
+                                element="OpenInfraWebException"
+                                status="500"><doc>An internal error occurs if the
+                                    backend runs into an unexpected
+                                    exception.</doc></representation></representations></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>sortOrder</paramName><commentText><![CDATA[The sort order for the list.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.QueryParam</annotationTypeName><attributes><attribute><name>value</name><value>sortOrder</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>orderBy</paramName><commentText><![CDATA[The element the list should be ordered by.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.QueryParam</annotationTypeName><attributes><attribute><name>value</name><value>orderBy</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>offset</paramName><commentText><![CDATA[The offset parameter for the elements of the list.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.QueryParam</annotationTypeName><attributes><attribute><name>value</name><value>offset</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>size</paramName><commentText><![CDATA[The count of elements the list should contain.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.QueryParam</annotationTypeName><attributes><attribute><name>value</name><value>size</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc></paramDocs></methodDoc><methodDoc><methodName>get</methodName><commentText><![CDATA[This resource provides a ServersPojo for the specified UUID.
+ <ul>
+   <li>rest/v1/metadata/servers/[uuid]</li>
+ </ul>]]></commentText><responseDoc><returnDoc>The specified ServersPojo.</returnDoc><representations><representation
+                                element="A specified ServersPojo."
+                                status="200"><doc>This is the representation returned by
+                                    default.</doc></representation><representation
+                                element="WebApplicationException"
+                                status="403"><doc>This error occurs if you do not have
+                                    the permission to access this
+                                    resource.</doc></representation><representation
+                                element="OpenInfraWebException"
+                                status="500"><doc>An internal error occurs if the
+                                    backend runs into an unexpected
+                                    exception.</doc></representation></representations></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>serversId</paramName><commentText><![CDATA[The UUID of the ServersPojo that should be retrieved.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>serversId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc></paramDocs></methodDoc><methodDoc><methodName>getCount</methodName><commentText><![CDATA[This resource provides the count of ServersPojo's in the whole system.
+ <ul>
+   <li>rest/v1/metadata/servers/count</li>
+ </ul>]]></commentText><responseDoc><returnDoc>The count of ServersPojo's.</returnDoc><representations><representation
+                                element="The count of ServersPojo's as long."
+                                status="200"><doc>This is the representation returned by
+                                    default.</doc></representation><representation
+                                element="WebApplicationException"
+                                status="403"><doc>This error occurs if you do not have
+                                    the permission to access this
+                                    resource.</doc></representation><representation
+                                element="OpenInfraWebException"
+                                status="500"><doc>An internal error occurs if the
+                                    backend runs into an unexpected
+                                    exception.</doc></representation></representations></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc></paramDocs></methodDoc><methodDoc><methodName>create</methodName><commentText><![CDATA[This resource creates a new Servers object. The specified ServersPojo
+ must contain the server name as string. The parameter UUID and TRID of
+ the ServersPojo must not be set.
+ <ul>
+   <li>rest/v1/metadata/servers</li>
+ </ul>]]></commentText><responseDoc><returnDoc>A Response with the UUID of the new created object or the
+                status code 204.</returnDoc><representations><representation
+                                element="Response"
+                                status="204"><doc>If the object could not be created.</doc></representation><representation
+                                element="Response"
+                                status="200"><doc>This is the representation returned by
+                                    default.</doc></representation><representation
+                                element="WebApplicationException"
+                                status="403"><doc>This error occurs if you do not have
+                                    the permission to access this
+                                    resource.</doc></representation><representation
+                                element="OpenInfraWebException"
+                                status="500"><doc>An internal error occurs if the
+                                    backend runs into an unexpected
+                                    exception.</doc></representation></representations></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>pojo</paramName><commentText><![CDATA[The ServersPojo that represents the new object.]]></commentText></paramDoc></paramDocs></methodDoc><methodDoc><methodName>update</methodName><commentText><![CDATA[This resource updates the Servers object with the specified UUID. The
+ specified ServersPojo must contain the UUID of the object that should be
+ updated, the TRID and the server name as string.<br/>
+ <ul>
+   <li>rest/v1/metadata/servers/[uuid]</li>
+ </ul>
+ <b>The object id in the ServersPojo and in the URI that identifies the
+ server must concur.</b>]]></commentText><responseDoc><returnDoc>A Response with the status code 200 for a successful
+                  update or 204 if the object could not be updated.</returnDoc><representations><representation
+                                element="OpenInfraEntityException"
+                                status="409"><doc>This error occurs if the parameters
+                                    are not configured as expected.</doc></representation><representation
+                                element="Response"
+                                status="204"><doc>If the object could not be updated.</doc></representation><representation
+                                element="Response"
+                                status="200"><doc>This is the representation returned by
+                                    default.</doc></representation><representation
+                                element="WebApplicationException"
+                                status="403"><doc>This error occurs if you do not have
+                                    the permission to access this
+                                    resource.</doc></representation><representation
+                                element="OpenInfraWebException"
+                                status="500"><doc>An internal error occurs if the
+                                    backend runs into an unexpected
+                                    exception.</doc></representation></representations></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>serversId</paramName><commentText><![CDATA[The UUID of the ServersPojo that should be updated.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>serversId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>pojo</paramName><commentText><![CDATA[The ServersPojo that represents the updated object.]]></commentText></paramDoc></paramDocs></methodDoc><methodDoc><methodName>delete</methodName><commentText><![CDATA[This resource deletes the Servers object with the specified UUID.
+ <ul>
+   <li>rest/v1/metadata/servers/[uuid]</li>
+ </ul>]]></commentText><responseDoc><returnDoc>A Response with the status code 200 for a successful
+                  deletion or 404 if the object was not found.</returnDoc><representations><representation
+                                element="Response"
+                                status="404"><doc>If the object could not be deleted
+                                    because it was not found.</doc></representation><representation
+                                element="Response"
+                                status="200"><doc>This is the representation returned by
+                                    default.</doc></representation><representation
+                                element="WebApplicationException"
+                                status="403"><doc>This error occurs if you do not have
+                                    the permission to access this
+                                    resource.</doc></representation><representation
+                                element="OpenInfraWebException"
+                                status="500"><doc>An internal error occurs if the
+                                    backend runs into an unexpected
+                                    exception.</doc></representation></representations></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>serversId</paramName><commentText><![CDATA[The UUID of the Servers object that should be deleted.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>serversId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc></paramDocs></methodDoc></methodDocs></classDoc><classDoc><className>de.btu.openinfra.backend.rest.meta.SchemasResource</className><commentText><![CDATA[This class represents and implements the resource for schemas in the meta
+ data schema. They are used to determine the schema for a database connection.]]></commentText><methodDocs><methodDoc><methodName>get</methodName><commentText><![CDATA[This resource provides a list of all SchemasPojo's. This resource
+ supports sorting and pagination of the list.
+ <ul>
+   <li>rest/v1/metadata/schemas?orderBy=SCHEMA&sortOrder=ASC&offset=0&size=10</li>
+ </ul>]]></commentText><responseDoc><returnDoc>A list of SchemasPojo's</returnDoc><representations><representation
+                                element="OpenInfraEntityException"
+                                status="409"><doc>This error occurs if the parameters
+                                    are not configured as expected.</doc></representation><representation
+                                element="A list of SchemasPojo's."
+                                status="200"><doc>This is the representation returned by
+                                    default.</doc></representation><representation
+                                element="WebApplicationException"
+                                status="403"><doc>This error occurs if you do not have
+                                    the permission to access this
+                                    resource.</doc></representation><representation
+                                element="OpenInfraWebException"
+                                status="500"><doc>An internal error occurs if the
+                                    backend runs into an unexpected
+                                    exception.</doc></representation></representations></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>sortOrder</paramName><commentText><![CDATA[The sort order for the list.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.QueryParam</annotationTypeName><attributes><attribute><name>value</name><value>sortOrder</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>orderBy</paramName><commentText><![CDATA[The element the list should be ordered by.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.QueryParam</annotationTypeName><attributes><attribute><name>value</name><value>orderBy</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>offset</paramName><commentText><![CDATA[The offset parameter for the elements of the list.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.QueryParam</annotationTypeName><attributes><attribute><name>value</name><value>offset</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>size</paramName><commentText><![CDATA[The count of elements the list should contain.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.QueryParam</annotationTypeName><attributes><attribute><name>value</name><value>size</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc></paramDocs></methodDoc><methodDoc><methodName>get</methodName><commentText><![CDATA[This resource provides a SchemasPojo for the specified UUID.
+ <ul>
+   <li>rest/v1/metadata/schemas/[uuid]</li>
+ </ul>]]></commentText><responseDoc><returnDoc>The specified SchemasPojo.</returnDoc><representations><representation
+                                element="A specified SchemasPojo."
+                                status="200"><doc>This is the representation returned by
+                                    default.</doc></representation><representation
+                                element="WebApplicationException"
+                                status="403"><doc>This error occurs if you do not have
+                                    the permission to access this
+                                    resource.</doc></representation><representation
+                                element="OpenInfraWebException"
+                                status="500"><doc>An internal error occurs if the
+                                    backend runs into an unexpected
+                                    exception.</doc></representation></representations></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>schemasId</paramName><commentText><![CDATA[The UUID of the SchemasPojo that should be retrieved.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>schemasId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc></paramDocs></methodDoc><methodDoc><methodName>getCount</methodName><commentText><![CDATA[This resource provides the count of SchemasPojo's in the whole system.
+ <ul>
+   <li>rest/v1/metadata/schemas/count</li>
+ </ul>]]></commentText><responseDoc><returnDoc>The count of SchemasPojo's.</returnDoc><representations><representation
+                                element="The count of SchemasPojo's as long."
+                                status="200"><doc>This is the representation returned by
+                                    default.</doc></representation><representation
+                                element="WebApplicationException"
+                                status="403"><doc>This error occurs if you do not have
+                                    the permission to access this
+                                    resource.</doc></representation><representation
+                                element="OpenInfraWebException"
+                                status="500"><doc>An internal error occurs if the
+                                    backend runs into an unexpected
+                                    exception.</doc></representation></representations></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc></paramDocs></methodDoc><methodDoc><methodName>create</methodName><commentText><![CDATA[This resource creates a new Schemas object. The specified SchemasPojo
+ must contain the schema name as string. The parameter UUID and TRID of
+ the SchemasPojo must not be set.
+ <ul>
+   <li>rest/v1/metadata/schemas</li>
+ </ul>]]></commentText><responseDoc><returnDoc>A Response with the UUID of the new created object or the
+                status code 204.</returnDoc><representations><representation
+                                element="Response"
+                                status="204"><doc>If the object could not be created.</doc></representation><representation
+                                element="Response"
+                                status="200"><doc>This is the representation returned by
+                                    default.</doc></representation><representation
+                                element="WebApplicationException"
+                                status="403"><doc>This error occurs if you do not have
+                                    the permission to access this
+                                    resource.</doc></representation><representation
+                                element="OpenInfraWebException"
+                                status="500"><doc>An internal error occurs if the
+                                    backend runs into an unexpected
+                                    exception.</doc></representation></representations></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>pojo</paramName><commentText><![CDATA[The SchemasPojo that represents the new object.]]></commentText></paramDoc></paramDocs></methodDoc><methodDoc><methodName>update</methodName><commentText><![CDATA[This resource updates the Schemas object with the specified UUID. The
+ specified SchemasPojo must contain the UUID of the object that should be
+ updated, the TRID and the schema name as string.<br/>
+ <ul>
+   <li>rest/v1/metadata/schemas/[uuid]</li>
+ </ul>
+ <b>The object id in the SchemasPojo and in the URI that identifies the
+ schema must concur.</b>]]></commentText><responseDoc><returnDoc>A Response with the status code 200 for a successful
+                  update or 204 if the object could not be updated.</returnDoc><representations><representation
+                                element="OpenInfraEntityException"
+                                status="409"><doc>This error occurs if the parameters
+                                    are not configured as expected.</doc></representation><representation
+                                element="Response"
+                                status="204"><doc>If the object could not be updated.</doc></representation><representation
+                                element="Response"
+                                status="200"><doc>This is the representation returned by
+                                    default.</doc></representation><representation
+                                element="WebApplicationException"
+                                status="403"><doc>This error occurs if you do not have
+                                    the permission to access this
+                                    resource.</doc></representation><representation
+                                element="OpenInfraWebException"
+                                status="500"><doc>An internal error occurs if the
+                                    backend runs into an unexpected
+                                    exception.</doc></representation></representations></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>schemasId</paramName><commentText><![CDATA[The UUID of the SchemasPojo that should be updated.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>schemasId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>pojo</paramName><commentText><![CDATA[The SchemasPojo that represents the updated object.]]></commentText></paramDoc></paramDocs></methodDoc><methodDoc><methodName>delete</methodName><commentText><![CDATA[This resource deletes the Schemas object with the specified UUID.
+ <ul>
+   <li>rest/v1/metadata/schemas/[uuid]</li>
+ </ul>]]></commentText><responseDoc><returnDoc>A Response with the status code 200 for a successful
+                  deletion or 404 if the object was not found.</returnDoc><representations><representation
+                                element="Response"
+                                status="404"><doc>If the object could not be deleted
+                                    because it was not found.</doc></representation><representation
+                                element="Response"
+                                status="200"><doc>This is the representation returned by
+                                    default.</doc></representation><representation
+                                element="WebApplicationException"
+                                status="403"><doc>This error occurs if you do not have
+                                    the permission to access this
+                                    resource.</doc></representation><representation
+                                element="OpenInfraWebException"
+                                status="500"><doc>An internal error occurs if the
+                                    backend runs into an unexpected
+                                    exception.</doc></representation></representations></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>schemasId</paramName><commentText><![CDATA[The UUID of the Schemas object that should be deleted.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>schemasId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc></paramDocs></methodDoc></methodDocs></classDoc><classDoc><className>de.btu.openinfra.backend.rest.meta.ProjectsResource</className><commentText><![CDATA[]]></commentText><methodDocs><methodDoc><methodName>get</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>get</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>getCount</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>create</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>update</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>delete</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc></methodDocs></classDoc><classDoc><className>de.btu.openinfra.backend.rest.meta.PortsResource</className><commentText><![CDATA[This class represents and implements the resource for ports in the meta data
+ schema. They are used to determine the port for a database connection.]]></commentText><methodDocs><methodDoc><methodName>get</methodName><commentText><![CDATA[This resource provides a list of all PortsPojo's. This resource supports
+ sorting and pagination of the list.
+ <ul>
+   <li>rest/v1/metadata/ports?orderBy=PORT&sortOrder=ASC&offset=0&size=10</li>
+ </ul>]]></commentText><responseDoc><returnDoc>A list of PortsPojo's</returnDoc><representations><representation
+                                element="OpenInfraEntityException"
+                                status="409"><doc>This error occurs if the parameters
+                                    are not configured as expected.</doc></representation><representation
+                                element="A list of PortsPojo's."
+                                status="200"><doc>This is the representation returned by
+                                    default.</doc></representation><representation
+                                element="WebApplicationException"
+                                status="403"><doc>This error occurs if you do not have
+                                    the permission to access this
+                                    resource.</doc></representation><representation
+                                element="OpenInfraWebException"
+                                status="500"><doc>An internal error occurs if the
+                                    backend runs into an unexpected
+                                    exception.</doc></representation></representations></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>sortOrder</paramName><commentText><![CDATA[The sort order for the list.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.QueryParam</annotationTypeName><attributes><attribute><name>value</name><value>sortOrder</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>orderBy</paramName><commentText><![CDATA[The element the list should be ordered by.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.QueryParam</annotationTypeName><attributes><attribute><name>value</name><value>orderBy</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>offset</paramName><commentText><![CDATA[The offset parameter for the elements of the list.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.QueryParam</annotationTypeName><attributes><attribute><name>value</name><value>offset</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>size</paramName><commentText><![CDATA[The count of elements the list should contain.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.QueryParam</annotationTypeName><attributes><attribute><name>value</name><value>size</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc></paramDocs></methodDoc><methodDoc><methodName>get</methodName><commentText><![CDATA[This resource provides a PortsPojo for the specified UUID.
+ <ul>
+   <li>rest/v1/metadata/ports/[uuid]</li>
+ </ul>]]></commentText><responseDoc><returnDoc>The specified PortsPojo.</returnDoc><representations><representation
+                                element="A specified PortsPojo."
+                                status="200"><doc>This is the representation returned by
+                                    default.</doc></representation><representation
+                                element="WebApplicationException"
+                                status="403"><doc>This error occurs if you do not have
+                                    the permission to access this
+                                    resource.</doc></representation><representation
+                                element="OpenInfraWebException"
+                                status="500"><doc>An internal error occurs if the
+                                    backend runs into an unexpected
+                                    exception.</doc></representation></representations></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>portsId</paramName><commentText><![CDATA[The UUID of the PortsPojo that should be retrieved.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>portsId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc></paramDocs></methodDoc><methodDoc><methodName>getCount</methodName><commentText><![CDATA[This resource provides the count of PortsPojo's in the whole system.
+ <ul>
+   <li>rest/v1/metadata/ports/count</li>
+ </ul>]]></commentText><responseDoc><returnDoc>The count of PortsPojo's.</returnDoc><representations><representation
+                                element="The count of PortsPojo's as long."
+                                status="200"><doc>This is the representation returned by
+                                    default.</doc></representation><representation
+                                element="WebApplicationException"
+                                status="403"><doc>This error occurs if you do not have
+                                    the permission to access this
+                                    resource.</doc></representation><representation
+                                element="OpenInfraWebException"
+                                status="500"><doc>An internal error occurs if the
+                                    backend runs into an unexpected
+                                    exception.</doc></representation></representations></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc></paramDocs></methodDoc><methodDoc><methodName>create</methodName><commentText><![CDATA[This resource creates a new Ports object. The specified PortsPojo must
+ contain the port as integer. The parameter UUID and TRID of the PortsPojo
+ must not be set.
+ <ul>
+   <li>rest/v1/metadata/ports</li>
+ </ul>]]></commentText><responseDoc><returnDoc>A Response with the UUID of the new created object or the
+                status code 204.</returnDoc><representations><representation
+                                element="Response"
+                                status="204"><doc>If the object could not be created.</doc></representation><representation
+                                element="Response"
+                                status="200"><doc>This is the representation returned by
+                                    default.</doc></representation><representation
+                                element="WebApplicationException"
+                                status="403"><doc>This error occurs if you do not have
+                                    the permission to access this
+                                    resource.</doc></representation><representation
+                                element="OpenInfraWebException"
+                                status="500"><doc>An internal error occurs if the
+                                    backend runs into an unexpected
+                                    exception.</doc></representation></representations></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>pojo</paramName><commentText><![CDATA[The PortsPojo that represents the new object.]]></commentText></paramDoc></paramDocs></methodDoc><methodDoc><methodName>update</methodName><commentText><![CDATA[This resource updates the Ports object with the specified UUID. The
+ specified PortsPojo must contain the UUID of the object that should be
+ updated, the TRID and the port as integer.<br/>
+ <ul>
+   <li>rest/v1/metadata/ports/[uuid]</li>
+ </ul>
+ <b>The object id in the PortsPojo and in the URI that identifies the
+ port must concur.</b>]]></commentText><responseDoc><returnDoc>A Response with the status code 200 for a successful
+                update or 204 if the object could not be updated.</returnDoc><representations><representation
+                                element="OpenInfraEntityException"
+                                status="409"><doc>This error occurs if the parameters
+                                    are not configured as expected.</doc></representation><representation
+                                element="Response"
+                                status="204"><doc>If the object could not be updated.</doc></representation><representation
+                                element="Response"
+                                status="200"><doc>This is the representation returned by
+                                    default.</doc></representation><representation
+                                element="WebApplicationException"
+                                status="403"><doc>This error occurs if you do not have
+                                    the permission to access this
+                                    resource.</doc></representation><representation
+                                element="OpenInfraWebException"
+                                status="500"><doc>An internal error occurs if the
+                                    backend runs into an unexpected
+                                    exception.</doc></representation></representations></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>portsId</paramName><commentText><![CDATA[The UUID of the PortsPojo that should be updated.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>portsId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>pojo</paramName><commentText><![CDATA[The PortsPojo that represents the updated object.]]></commentText></paramDoc></paramDocs></methodDoc><methodDoc><methodName>delete</methodName><commentText><![CDATA[This resource deletes the Ports object with the specified UUID.
+ <ul>
+   <li>rest/v1/metadata/ports/[uuid]</li>
+ </ul>]]></commentText><responseDoc><returnDoc>A Response with the status code 200 for a successful
+                deletion or 404 if the object was not found.</returnDoc><representations><representation
+                                element="Response"
+                                status="404"><doc>If the object could not be deleted
+                                    because it was not found.</doc></representation><representation
+                                element="Response"
+                                status="200"><doc>This is the representation returned by
+                                    default.</doc></representation><representation
+                                element="WebApplicationException"
+                                status="403"><doc>This error occurs if you do not have
+                                    the permission to access this
+                                    resource.</doc></representation><representation
+                                element="OpenInfraWebException"
+                                status="500"><doc>An internal error occurs if the
+                                    backend runs into an unexpected
+                                    exception.</doc></representation></representations></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>portsId</paramName><commentText><![CDATA[The UUID of the Ports object that should be deleted.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>portsId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc></paramDocs></methodDoc></methodDocs></classDoc><classDoc><className>de.btu.openinfra.backend.rest.meta.LogResource</className><commentText><![CDATA[This class represents and implements the resource for log in the meta data
+ schema. They are used to determine a log event that contains the user id and
+ the user name of the user that triggered the log event. Further it contains
+ the timestamp, the logger, the level and the message of the log event.]]></commentText><methodDocs><methodDoc><methodName>get</methodName><commentText><![CDATA[This resource provides a list of all LogPojo's. This resource supports
+ sorting and pagination of the list.
+ <ul>
+   <li>rest/v1/metadata/logs?orderBy=MESSAGE&sortOrder=ASC&offset=0&size=10</li>
+ </ul>]]></commentText><responseDoc><returnDoc>A list of LogPojo's</returnDoc><representations><representation
+                                element="OpenInfraEntityException"
+                                status="409"><doc>This error occurs if the parameters
+                                    are not configured as expected.</doc></representation><representation
+                                element="A list of LogPojo's."
+                                status="200"><doc>This is the representation returned by
+                                    default.</doc></representation><representation
+                                element="WebApplicationException"
+                                status="403"><doc>This error occurs if you do not have
+                                    the permission to access this
+                                    resource.</doc></representation><representation
+                                element="OpenInfraWebException"
+                                status="500"><doc>An internal error occurs if the
+                                    backend runs into an unexpected
+                                    exception.</doc></representation></representations></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>sortOrder</paramName><commentText><![CDATA[The sort order for the list.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.QueryParam</annotationTypeName><attributes><attribute><name>value</name><value>sortOrder</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>orderBy</paramName><commentText><![CDATA[The element the list should be ordered by.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.QueryParam</annotationTypeName><attributes><attribute><name>value</name><value>orderBy</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>offset</paramName><commentText><![CDATA[The offset parameter for the elements of the list.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.QueryParam</annotationTypeName><attributes><attribute><name>value</name><value>offset</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>size</paramName><commentText><![CDATA[The count of elements the list should contain.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.QueryParam</annotationTypeName><attributes><attribute><name>value</name><value>size</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc></paramDocs></methodDoc><methodDoc><methodName>get</methodName><commentText><![CDATA[This resource provides a LogPojo for the specified UUID.
+ <ul>
+   <li>rest/v1/metadata/logs/[uuid]</li>
+ </ul>]]></commentText><responseDoc><returnDoc>The specified LogPojo.</returnDoc><representations><representation
+                                element="A specified LogPojo."
+                                status="200"><doc>This is the representation returned by
+                                    default.</doc></representation><representation
+                                element="WebApplicationException"
+                                status="403"><doc>This error occurs if you do not have
+                                    the permission to access this
+                                    resource.</doc></representation><representation
+                                element="OpenInfraWebException"
+                                status="500"><doc>An internal error occurs if the
+                                    backend runs into an unexpected
+                                    exception.</doc></representation></representations></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>logId</paramName><commentText><![CDATA[The UUID of the LogPojo that should be retrieved.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>logId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc></paramDocs></methodDoc><methodDoc><methodName>getCount</methodName><commentText><![CDATA[This resource provides the count of LogPojo's in the whole system.
+ <ul>
+   <li>rest/v1/metadata/logs/count</li>
+ </ul>]]></commentText><responseDoc><returnDoc>The count of LogPojo's.</returnDoc><representations><representation
+                                element="The count of LogPojo's as long."
+                                status="200"><doc>This is the representation returned by
+                                    default.</doc></representation><representation
+                                element="WebApplicationException"
+                                status="403"><doc>This error occurs if you do not have
+                                    the permission to access this
+                                    resource.</doc></representation><representation
+                                element="OpenInfraWebException"
+                                status="500"><doc>An internal error occurs if the
+                                    backend runs into an unexpected
+                                    exception.</doc></representation></representations></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc></paramDocs></methodDoc><methodDoc><methodName>create</methodName><commentText><![CDATA[This resource creates a new log object. The specified LogPojo must
+ contain the user id as UUID, the user name as string, the timestamp as
+ string, a LoggerPojo, a LevelPojo and the message as string. The
+ parameter UUID and TRID of the LogPojo must not be set.
+ <ul>
+   <li>rest/v1/metadata/log</li>
+ </ul>]]></commentText><responseDoc><returnDoc>A Response with the UUID of the new created object or the
+                status code 204.</returnDoc><representations><representation
+                                element="Response"
+                                status="204"><doc>If the object could not be created.</doc></representation><representation
+                                element="Response"
+                                status="200"><doc>This is the representation returned by
+                                    default.</doc></representation><representation
+                                element="WebApplicationException"
+                                status="403"><doc>This error occurs if you do not have
+                                    the permission to access this
+                                    resource.</doc></representation><representation
+                                element="OpenInfraWebException"
+                                status="500"><doc>An internal error occurs if the
+                                    backend runs into an unexpected
+                                    exception.</doc></representation></representations></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>pojo</paramName><commentText><![CDATA[The LogPojo that represents the new object.]]></commentText></paramDoc></paramDocs></methodDoc><methodDoc><methodName>delete</methodName><commentText><![CDATA[This resource deletes the log object with the specified UUID.
+ <ul>
+   <li>rest/v1/metadata/log/[uuid]</li>
+ </ul>]]></commentText><responseDoc><returnDoc>A Response with the status code 200 for a successful
+                deletion or 404 if the object was not found.</returnDoc><representations><representation
+                                element="Response"
+                                status="404"><doc>If the object could not be deleted
+                                    because it was not found.</doc></representation><representation
+                                element="Response"
+                                status="200"><doc>This is the representation returned by
+                                    default.</doc></representation><representation
+                                element="WebApplicationException"
+                                status="403"><doc>This error occurs if you do not have
+                                    the permission to access this
+                                    resource.</doc></representation><representation
+                                element="OpenInfraWebException"
+                                status="500"><doc>An internal error occurs if the
+                                    backend runs into an unexpected
+                                    exception.</doc></representation></representations></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>logId</paramName><commentText><![CDATA[The UUID of the Log object that should be deleted.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>logId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc></paramDocs></methodDoc></methodDocs></classDoc><classDoc><className>de.btu.openinfra.backend.rest.meta.LoggerResource</className><commentText><![CDATA[This class represents and implements the resource for logger in the meta data
+ schema. They are used to determine the logger that initiated the log event.]]></commentText><methodDocs><methodDoc><methodName>get</methodName><commentText><![CDATA[This resource provides a list of all LoggerPojo's. This resource supports
+ sorting and pagination of the list.
+ <ul>
+   <li>rest/v1/metadata/logger?orderBy=LOGGER&sortOrder=ASC&offset=0&size=10</li>
+ </ul>]]></commentText><responseDoc><returnDoc>A list of LoggerPojo's</returnDoc><representations><representation
+                                element="OpenInfraEntityException"
+                                status="409"><doc>This error occurs if the parameters
+                                    are not configured as expected.</doc></representation><representation
+                                element="A list of LoggerPojo's."
+                                status="200"><doc>This is the representation returned by
+                                    default.</doc></representation><representation
+                                element="WebApplicationException"
+                                status="403"><doc>This error occurs if you do not have
+                                    the permission to access this
+                                    resource.</doc></representation><representation
+                                element="OpenInfraWebException"
+                                status="500"><doc>An internal error occurs if the
+                                    backend runs into an unexpected
+                                    exception.</doc></representation></representations></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>sortOrder</paramName><commentText><![CDATA[The sort order for the list.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.QueryParam</annotationTypeName><attributes><attribute><name>value</name><value>sortOrder</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>orderBy</paramName><commentText><![CDATA[The element the list should be ordered by.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.QueryParam</annotationTypeName><attributes><attribute><name>value</name><value>orderBy</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>offset</paramName><commentText><![CDATA[The offset parameter for the elements of the list.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.QueryParam</annotationTypeName><attributes><attribute><name>value</name><value>offset</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>size</paramName><commentText><![CDATA[The count of elements the list should contain.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.QueryParam</annotationTypeName><attributes><attribute><name>value</name><value>size</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc></paramDocs></methodDoc><methodDoc><methodName>get</methodName><commentText><![CDATA[This resource provides a LoggerPojo for the specified UUID.
+ <ul>
+   <li>rest/v1/metadata/logger/[uuid]</li>
+ </ul>]]></commentText><responseDoc><returnDoc>The specified LoggerPojo.</returnDoc><representations><representation
+                                element="A specified LoggerPojo."
+                                status="200"><doc>This is the representation returned by
+                                    default.</doc></representation><representation
+                                element="WebApplicationException"
+                                status="403"><doc>This error occurs if you do not have
+                                    the permission to access this
+                                    resource.</doc></representation><representation
+                                element="OpenInfraWebException"
+                                status="500"><doc>An internal error occurs if the
+                                    backend runs into an unexpected
+                                    exception.</doc></representation></representations></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>loggerId</paramName><commentText><![CDATA[The UUID of the LoggerPojo that should be retrieved.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>loggerId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc></paramDocs></methodDoc><methodDoc><methodName>getCount</methodName><commentText><![CDATA[This resource provides the count of LoggerPojo's in the whole system.
+ <ul>
+   <li>rest/v1/metadata/logger/count</li>
+ </ul>]]></commentText><responseDoc><returnDoc>The count of LoggerPojo's.</returnDoc><representations><representation
+                                element="The count of LoggerPojo's as long."
+                                status="200"><doc>This is the representation returned by
+                                    default.</doc></representation><representation
+                                element="WebApplicationException"
+                                status="403"><doc>This error occurs if you do not have
+                                    the permission to access this
+                                    resource.</doc></representation><representation
+                                element="OpenInfraWebException"
+                                status="500"><doc>An internal error occurs if the
+                                    backend runs into an unexpected
+                                    exception.</doc></representation></representations></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc></paramDocs></methodDoc><methodDoc><methodName>create</methodName><commentText><![CDATA[This resource creates a new logger object. The specified LoggerPojo must
+ contain the logger as string. The parameter UUID and TRID of the
+ LoggerPojo must not be set.
+ <ul>
+   <li>rest/v1/metadata/logger</li>
+ </ul>]]></commentText><responseDoc><returnDoc>A Response with the UUID of the new created object or the
+                status code 204.</returnDoc><representations><representation
+                                element="Response"
+                                status="204"><doc>If the object could not be created.</doc></representation><representation
+                                element="Response"
+                                status="200"><doc>This is the representation returned by
+                                    default.</doc></representation><representation
+                                element="WebApplicationException"
+                                status="403"><doc>This error occurs if you do not have
+                                    the permission to access this
+                                    resource.</doc></representation><representation
+                                element="OpenInfraWebException"
+                                status="500"><doc>An internal error occurs if the
+                                    backend runs into an unexpected
+                                    exception.</doc></representation></representations></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>pojo</paramName><commentText><![CDATA[The LoggerPojo that represents the new object.]]></commentText></paramDoc></paramDocs></methodDoc><methodDoc><methodName>update</methodName><commentText><![CDATA[This resource updates the Logger object with the specified UUID. The
+ specified LoggerPojo must contain the UUID of the object that should be
+ updated, the TRID and the logger as string.<br/>
+ <ul>
+   <li>rest/v1/metadata/logger/[uuid]</li>
+ </ul>
+ <b>The object id in the LoggerPojo and in the URI that identifies the
+ logger must concur.</b>]]></commentText><responseDoc><returnDoc>A Response with the status code 200 for a successful
+                 update or 204 if the object could not be updated.</returnDoc><representations><representation
+                                element="OpenInfraEntityException"
+                                status="409"><doc>This error occurs if the parameters
+                                    are not configured as expected.</doc></representation><representation
+                                element="Response"
+                                status="204"><doc>If the object could not be updated.</doc></representation><representation
+                                element="Response"
+                                status="200"><doc>This is the representation returned by
+                                    default.</doc></representation><representation
+                                element="WebApplicationException"
+                                status="403"><doc>This error occurs if you do not have
+                                    the permission to access this
+                                    resource.</doc></representation><representation
+                                element="OpenInfraWebException"
+                                status="500"><doc>An internal error occurs if the
+                                    backend runs into an unexpected
+                                    exception.</doc></representation></representations></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>loggerId</paramName><commentText><![CDATA[The UUID of the LoggerPojo that should be updated.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>loggerId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>pojo</paramName><commentText><![CDATA[The LoggerPojo that represents the updated object.]]></commentText></paramDoc></paramDocs></methodDoc><methodDoc><methodName>delete</methodName><commentText><![CDATA[This resource deletes the Logger object with the specified UUID.
+ <ul>
+   <li>rest/v1/metadata/logger/[uuid]</li>
+ </ul>]]></commentText><responseDoc><returnDoc>A Response with the status code 200 for a successful
+                 deletion or 404 if the object was not found.</returnDoc><representations><representation
+                                element="Response"
+                                status="404"><doc>If the object could not be deleted
+                                    because it was not found.</doc></representation><representation
+                                element="Response"
+                                status="200"><doc>This is the representation returned by
+                                    default.</doc></representation><representation
+                                element="WebApplicationException"
+                                status="403"><doc>This error occurs if you do not have
+                                    the permission to access this
+                                    resource.</doc></representation><representation
+                                element="OpenInfraWebException"
+                                status="500"><doc>An internal error occurs if the
+                                    backend runs into an unexpected
+                                    exception.</doc></representation></representations></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>loggerId</paramName><commentText><![CDATA[The UUID of the Logger object that should be deleted.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>loggerId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc></paramDocs></methodDoc></methodDocs></classDoc><classDoc><className>de.btu.openinfra.backend.rest.meta.LevelResource</className><commentText><![CDATA[This class represents and implements the resource for levels in the meta data
+ schema. They are used to determine the level of a log event.]]></commentText><methodDocs><methodDoc><methodName>get</methodName><commentText><![CDATA[This resource provides a list of all LevelPojo's. This resource supports
+ sorting and pagination of the list.
+ <ul>
+   <li>rest/v1/metadata/level?orderBy=LEVEL&sortOrder=ASC&offset=0&size=10</li>
+ </ul>]]></commentText><responseDoc><returnDoc>A list of LevelPojo's</returnDoc><representations><representation
+                                element="OpenInfraEntityException"
+                                status="409"><doc>This error occurs if the parameters
+                                    are not configured as expected.</doc></representation><representation
+                                element="A list of LevelPojo's."
+                                status="200"><doc>This is the representation returned by
+                                    default.</doc></representation><representation
+                                element="WebApplicationException"
+                                status="403"><doc>This error occurs if you do not have
+                                    the permission to access this
+                                    resource.</doc></representation><representation
+                                element="OpenInfraWebException"
+                                status="500"><doc>An internal error occurs if the
+                                    backend runs into an unexpected
+                                    exception.</doc></representation></representations></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>sortOrder</paramName><commentText><![CDATA[The sort order for the list.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.QueryParam</annotationTypeName><attributes><attribute><name>value</name><value>sortOrder</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>orderBy</paramName><commentText><![CDATA[The element the list should be ordered by.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.QueryParam</annotationTypeName><attributes><attribute><name>value</name><value>orderBy</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>offset</paramName><commentText><![CDATA[The offset parameter for the elements of the list.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.QueryParam</annotationTypeName><attributes><attribute><name>value</name><value>offset</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>size</paramName><commentText><![CDATA[The count of elements the list should contain.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.QueryParam</annotationTypeName><attributes><attribute><name>value</name><value>size</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc></paramDocs></methodDoc><methodDoc><methodName>get</methodName><commentText><![CDATA[This resource provides a LevelPojo for the specified UUID.
+ <ul>
+   <li>rest/v1/metadata/level/[uuid]</li>
+ </ul>]]></commentText><responseDoc><returnDoc>The specified LevelPojo.</returnDoc><representations><representation
+                                element="A specified LevelPojo."
+                                status="200"><doc>This is the representation returned by
+                                    default.</doc></representation><representation
+                                element="WebApplicationException"
+                                status="403"><doc>This error occurs if you do not have
+                                    the permission to access this
+                                    resource.</doc></representation><representation
+                                element="OpenInfraWebException"
+                                status="500"><doc>An internal error occurs if the
+                                    backend runs into an unexpected
+                                    exception.</doc></representation></representations></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>levelId</paramName><commentText><![CDATA[The UUID of the LevelPojo that should be retrieved.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>levelId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc></paramDocs></methodDoc><methodDoc><methodName>getCount</methodName><commentText><![CDATA[This resource provides the count of LevelPojo's in the whole system.
+ <ul>
+   <li>rest/v1/metadata/level/count</li>
+ </ul>]]></commentText><responseDoc><returnDoc>The count of LevelPojo's.</returnDoc><representations><representation
+                                element="The count of LevelPojo's as long."
+                                status="200"><doc>This is the representation returned by
+                                    default.</doc></representation><representation
+                                element="WebApplicationException"
+                                status="403"><doc>This error occurs if you do not have
+                                    the permission to access this
+                                    resource.</doc></representation><representation
+                                element="OpenInfraWebException"
+                                status="500"><doc>An internal error occurs if the
+                                    backend runs into an unexpected
+                                    exception.</doc></representation></representations></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc></paramDocs></methodDoc><methodDoc><methodName>create</methodName><commentText><![CDATA[This resource creates a new Level object. The specified LevelPojo must
+ contain the level as string. The parameter UUID and TRID of the LevelPojo
+ must not be set.
+ <ul>
+   <li>rest/v1/metadata/level</li>
+ </ul>]]></commentText><responseDoc><returnDoc>A Response with the UUID of the new created object or the
+                status code 204.</returnDoc><representations><representation
+                                element="Response"
+                                status="204"><doc>If the object could not be created.</doc></representation><representation
+                                element="Response"
+                                status="200"><doc>This is the representation returned by
+                                    default.</doc></representation><representation
+                                element="WebApplicationException"
+                                status="403"><doc>This error occurs if you do not have
+                                    the permission to access this
+                                    resource.</doc></representation><representation
+                                element="OpenInfraWebException"
+                                status="500"><doc>An internal error occurs if the
+                                    backend runs into an unexpected
+                                    exception.</doc></representation></representations></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>pojo</paramName><commentText><![CDATA[The LevelPojo that represents the new object.]]></commentText></paramDoc></paramDocs></methodDoc><methodDoc><methodName>update</methodName><commentText><![CDATA[This resource updates the Level object with the specified UUID. The
+ specified LevelPojo must contain the UUID of the object that should be
+ updated, the TRID and the level as string.<br/>
+ <ul>
+   <li>rest/v1/metadata/level/[uuid]</li>
+ </ul>
+ <b>The object id in the LevelPojo and in the URI that identifies the
+ level must concur.</b>]]></commentText><responseDoc><returnDoc>A Response with the status code 200 for a successful
+                update or 204 if the object could not be updated.</returnDoc><representations><representation
+                                element="OpenInfraEntityException"
+                                status="409"><doc>This error occurs if the parameters
+                                    are not configured as expected.</doc></representation><representation
+                                element="Response"
+                                status="204"><doc>If the object could not be updated.</doc></representation><representation
+                                element="Response"
+                                status="200"><doc>This is the representation returned by
+                                    default.</doc></representation><representation
+                                element="WebApplicationException"
+                                status="403"><doc>This error occurs if you do not have
+                                    the permission to access this
+                                    resource.</doc></representation><representation
+                                element="OpenInfraWebException"
+                                status="500"><doc>An internal error occurs if the
+                                    backend runs into an unexpected
+                                    exception.</doc></representation></representations></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>levelId</paramName><commentText><![CDATA[The UUID of the LevelPojo that should be updated.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>levelId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>pojo</paramName><commentText><![CDATA[The LevelPojo that represents the updated object.]]></commentText></paramDoc></paramDocs></methodDoc><methodDoc><methodName>delete</methodName><commentText><![CDATA[This resource deletes the Level object with the specified UUID.
+ <ul>
+   <li>rest/v1/metadata/level/[uuid]</li>
+ </ul>]]></commentText><responseDoc><returnDoc>A Response with the status code 200 for a successful
+                deletion or 404 if the object was not found.</returnDoc><representations><representation
+                                element="Response"
+                                status="404"><doc>If the object could not be deleted
+                                    because it was not found.</doc></representation><representation
+                                element="Response"
+                                status="200"><doc>This is the representation returned by
+                                    default.</doc></representation><representation
+                                element="WebApplicationException"
+                                status="403"><doc>This error occurs if you do not have
+                                    the permission to access this
+                                    resource.</doc></representation><representation
+                                element="OpenInfraWebException"
+                                status="500"><doc>An internal error occurs if the
+                                    backend runs into an unexpected
+                                    exception.</doc></representation></representations></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>levelId</paramName><commentText><![CDATA[The UUID of the Level object that should be deleted.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>levelId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc></paramDocs></methodDoc></methodDocs></classDoc><classDoc><className>de.btu.openinfra.backend.rest.meta.DatabasesResource</className><commentText><![CDATA[This class represents and implements the resource for databases in the meta
+ data schema. They are used to determine the name of the database for a
+ database connection.]]></commentText><methodDocs><methodDoc><methodName>get</methodName><commentText><![CDATA[This resource provides a list of all DatabasesPojo's. This resource
  supports sorting and pagination of the list.
  <ul>
    <li>rest/v1/metadata/databases?orderBy=DATABASE&sortOrder=ASC&offset=0&size=10</li>
@@ -699,8 +1351,29 @@
                                 status="500"><doc>An internal error occurs if the
                                     backend runs into an unexpected
                                     exception.</doc></representation></representations></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>databasesId</paramName><commentText><![CDATA[The UUID of the Database object that should be
-                    deleted.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>databasesId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc></paramDocs></methodDoc></methodDocs></classDoc><classDoc><className>de.btu.openinfra.backend.rest.meta.DatabaseConnectionResource</className><commentText><![CDATA[]]></commentText><methodDocs><methodDoc><methodName>get</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>get</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>getCount</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>create</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>update</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>delete</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc></methodDocs></classDoc><classDoc><className>de.btu.openinfra.backend.rest.meta.CredentialsResource</className><commentText><![CDATA[This class represents and implements the resource for credentials in the
- meta data schema.]]></commentText><methodDocs><methodDoc><methodName>get</methodName><commentText><![CDATA[This resource provides a list of all CredentialsPojo's. This resource
+                    deleted.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>databasesId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc></paramDocs></methodDoc></methodDocs></classDoc><classDoc><className>de.btu.openinfra.backend.rest.meta.DatabaseConnectionResource</className><commentText><![CDATA[This class represents and implements the resource for database connections in
+ the meta data schema. They are used to determine a database connection that
+ contains the server, the port, the database, the schema and the credentials.]]></commentText><methodDocs><methodDoc><methodName>get</methodName><commentText><![CDATA[This resource provides a list of all DatabaseConnectionPojo's. This
+ resource supports sorting and pagination of the list.
+ <ul>
+   <li>rest/v1/metadata/dbconnections?orderBy=DATABASE&sortOrder=ASC&offset=0&size=10</li>
+ </ul>]]></commentText><responseDoc><returnDoc>A list of DatabaseConnectionPojo's</returnDoc><representations><representation
+                                element="OpenInfraEntityException"
+                                status="409"><doc>This error occurs if the parameters
+                                    are not configured as expected.</doc></representation><representation
+                                element="A list of DatabaseConnectionPojo's."
+                                status="200"><doc>This is the representation returned by
+                                    default.</doc></representation><representation
+                                element="WebApplicationException"
+                                status="403"><doc>This error occurs if you do not have
+                                    the permission to access this
+                                    resource.</doc></representation><representation
+                                element="OpenInfraWebException"
+                                status="500"><doc>An internal error occurs if the
+                                    backend runs into an unexpected
+                                    exception.</doc></representation></representations></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>sortOrder</paramName><commentText><![CDATA[The sort order for the list.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.QueryParam</annotationTypeName><attributes><attribute><name>value</name><value>sortOrder</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>orderBy</paramName><commentText><![CDATA[The element the list should be ordered by.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.QueryParam</annotationTypeName><attributes><attribute><name>value</name><value>orderBy</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>offset</paramName><commentText><![CDATA[The offset parameter for the elements of the list.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.QueryParam</annotationTypeName><attributes><attribute><name>value</name><value>offset</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>size</paramName><commentText><![CDATA[The count of elements the list should contain.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.QueryParam</annotationTypeName><attributes><attribute><name>value</name><value>size</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc></paramDocs></methodDoc><methodDoc><methodName>get</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>getCount</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>create</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>update</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc><methodDoc><methodName>delete</methodName><commentText><![CDATA[]]></commentText><responseDoc/></methodDoc></methodDocs></classDoc><classDoc><className>de.btu.openinfra.backend.rest.meta.CredentialsResource</className><commentText><![CDATA[This class represents and implements the resource for credentials in the meta
+ data schema. They are used to determine the user name and password for a
+ database connection.]]></commentText><methodDocs><methodDoc><methodName>get</methodName><commentText><![CDATA[This resource provides a list of all CredentialsPojo's. This resource
  supports sorting and pagination of the list.
  <ul>
    <li>rest/v1/metadata/credentials?orderBy=USERNAME&sortOrder=ASC&offset=0&size=10</li>
@@ -791,7 +1464,8 @@
                                 status="500"><doc>An internal error occurs if the
                                     backend runs into an unexpected
                                     exception.</doc></representation></representations></responseDoc><paramDocs><paramDoc><paramName>uriInfo</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>request</paramName><commentText><![CDATA[]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.core.Context</annotationTypeName></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>credentialsId</paramName><commentText><![CDATA[The UUID of the CredentialsPojo that should be
-                      updated.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>credentialsId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>pojo</paramName><commentText><![CDATA[The DatabasesPojo that represents the updated object.]]></commentText></paramDoc></paramDocs></methodDoc><methodDoc><methodName>delete</methodName><commentText><![CDATA[This resource deletes the Credential object with the specified UUID.
+                      updated.]]></commentText><annotationDocs><annotationDoc><annotationTypeName>javax.ws.rs.PathParam</annotationTypeName><attributes><attribute><name>value</name><value>credentialsId</value></attribute></attributes></annotationDoc></annotationDocs></paramDoc><paramDoc><paramName>pojo</paramName><commentText><![CDATA[The CredentialsPojo that represents the updated
+                      object.]]></commentText></paramDoc></paramDocs></methodDoc><methodDoc><methodName>delete</methodName><commentText><![CDATA[This resource deletes the Credential object with the specified UUID.
  <ul>
    <li>rest/v1/metadata/credentials/[uuid]</li>
  </ul>]]></commentText><responseDoc><returnDoc>A Response with the status code 200 for a successful
