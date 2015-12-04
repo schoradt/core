@@ -80,3 +80,6 @@ Adding a new schema can be done very easy by the following steps:
 # TODO
 - The JUnit tests have to be extended.
 - Logging isn't implemented appropriately.
+
+### Revision of REST-Resources and DAO-Classes
+The initial database schema didn't consider an UUID for the identification of associations. An association object was initally identified by the UUIDs of the related objects e.g. the 'attribute type' to 'attribute type group' association was identified by the UUID of the 'attribute type' and the 'attribute type group'. Each of the aforementioned objects relates to a POJO object. Thus, it became necessary to equip each POJO with an UUID in order to provide a generic API. However, the old access stratedgy is still available and should be revised.
