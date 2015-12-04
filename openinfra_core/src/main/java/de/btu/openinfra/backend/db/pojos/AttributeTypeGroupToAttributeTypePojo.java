@@ -11,7 +11,7 @@ public class AttributeTypeGroupToAttributeTypePojo extends OpenInfraPojo {
 
     private AttributeTypeGroupPojo attributeTypeGroup;
     private UUID attributeTypeId;
-    private UUID attributeTypeGroupToTopicCharacteristic;
+    private UUID attributeTypeGroupToTopicCharacteristicId;
     private MultiplicityPojo multiplicity;
     private ValueListValuePojo defaultValue;
     private Integer order;
@@ -21,7 +21,8 @@ public class AttributeTypeGroupToAttributeTypePojo extends OpenInfraPojo {
     }
 
     /* Constructor that will set the id and trid automatically */
-    public AttributeTypeGroupToAttributeTypePojo(OpenInfraModelObject modelObject) {
+    public AttributeTypeGroupToAttributeTypePojo(
+            OpenInfraModelObject modelObject) {
         super(modelObject);
     }
 
@@ -29,7 +30,8 @@ public class AttributeTypeGroupToAttributeTypePojo extends OpenInfraPojo {
         return attributeTypeGroup;
     }
 
-    public void setAttributeTypeGroup(AttributeTypeGroupPojo attributeTypeGroup) {
+    public void setAttributeTypeGroup(
+            AttributeTypeGroupPojo attributeTypeGroup) {
         this.attributeTypeGroup = attributeTypeGroup;
     }
 
@@ -65,13 +67,14 @@ public class AttributeTypeGroupToAttributeTypePojo extends OpenInfraPojo {
         this.order = order;
     }
 
-	public UUID getAttributeTypeGroupToTopicCharacteristic() {
-		return attributeTypeGroupToTopicCharacteristic;
+	public UUID getAttributeTypeGroupToTopicCharacteristicId() {
+		return attributeTypeGroupToTopicCharacteristicId;
 	}
 
-	public void setAttributeTypeGroupToTopicCharacteristic(
-			UUID attributeTypeGroupToTopicCharacteristic) {
-		this.attributeTypeGroupToTopicCharacteristic = attributeTypeGroupToTopicCharacteristic;
+	public void setAttributeTypeGroupToTopicCharacteristicId(
+			UUID attributeTypeGroupToTopicCharacteristicId) {
+		this.attributeTypeGroupToTopicCharacteristicId =
+		        attributeTypeGroupToTopicCharacteristicId;
 	}
 
 

@@ -51,7 +51,7 @@ public class AttributeTypeGroupToAttributeTypeDao extends
                     new AttributeTypeGroupToAttributeTypePojo(atgtat);
 
             pojo.setAttributeTypeId(atgtat.getAttributeType().getId());
-            pojo.setAttributeTypeGroupToTopicCharacteristic(
+            pojo.setAttributeTypeGroupToTopicCharacteristicId(
             		atgtat.getAttributeTypeGroupToTopicCharacteristic()
             		.getId());
             pojo.setAttributeTypeGroup(new AttributeTypeGroupDao(
@@ -85,7 +85,7 @@ public class AttributeTypeGroupToAttributeTypeDao extends
 				AttributeType.class, pojo.getAttributeTypeId()));
 		atg.setAttributeTypeGroupToTopicCharacteristic(em.find(
 				AttributeTypeGroupToTopicCharacteristic.class,
-				pojo.getAttributeTypeGroupToTopicCharacteristic()));
+				pojo.getAttributeTypeGroupToTopicCharacteristicId()));
 		if(pojo.getAttributeTypeGroup() != null) {
 			atg.setAttributeTypeGroup(em.find(AttributeTypeGroup.class,
 					pojo.getAttributeTypeGroup().getUuid()));
