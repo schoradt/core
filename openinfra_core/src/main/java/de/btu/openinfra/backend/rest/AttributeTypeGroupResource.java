@@ -234,7 +234,7 @@ public class AttributeTypeGroupResource {
                                 uriInfo,
                                 pojo,
                                 attributeTypeGroupId,
-                                pojo.getAttributTypeGroupId(),
+                                pojo.getAttributeTypeGroupId(),
                                 null,
                                 null));
     }
@@ -301,7 +301,7 @@ public class AttributeTypeGroupResource {
                                 uriInfo,
                                 pojo,
                                 attributeTypeGroupId,
-                                pojo.getAttributTypeGroupId(),
+                                pojo.getAttributeTypeGroupId(),
                                 topicCharacteristicId,
                                 pojo.getTopicCharacteristic().getUuid()));
 	}

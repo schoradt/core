@@ -9,7 +9,7 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 @XmlRootElement
 public class TopicCharacteristicToRelationshipTypePojo extends OpenInfraPojo {
 
-    private UUID relationshipType;
+    private UUID relationshipTypeId;
     private MultiplicityPojo multiplicity;
     private TopicCharacteristicPojo topicCharacteristic;
 
@@ -18,16 +18,17 @@ public class TopicCharacteristicToRelationshipTypePojo extends OpenInfraPojo {
     }
 
     /* Constructor that will set the id and trid automatically */
-    public TopicCharacteristicToRelationshipTypePojo(OpenInfraModelObject modelObject) {
+    public TopicCharacteristicToRelationshipTypePojo(
+            OpenInfraModelObject modelObject) {
         super(modelObject);
     }
 
-    public UUID getRelationshipe() {
-        return relationshipType;
+    public UUID getRelationshipTypeId() {
+        return relationshipTypeId;
     }
 
-    public void setRelationshipe(UUID relationShipe) {
-        this.relationshipType = relationShipe;
+    public void setRelationshipTypeId(UUID relationshipTypeId) {
+        this.relationshipTypeId = relationshipTypeId;
     }
 
     public MultiplicityPojo getMultiplicity() {
@@ -42,7 +43,8 @@ public class TopicCharacteristicToRelationshipTypePojo extends OpenInfraPojo {
         return topicCharacteristic;
     }
 
-    public void setTopicCharacteristic(TopicCharacteristicPojo topicCharacteristic) {
+    public void setTopicCharacteristic(
+            TopicCharacteristicPojo topicCharacteristic) {
         this.topicCharacteristic = topicCharacteristic;
     }
 
