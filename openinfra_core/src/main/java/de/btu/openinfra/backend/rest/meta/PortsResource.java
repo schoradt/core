@@ -208,7 +208,7 @@ public class PortsResource {
     /**
      * This resource updates the Ports object with the specified UUID. The
      * specified PortsPojo must contain the UUID of the object that should be
-     * updated, the TRID and the port as integer.<br/>
+     * updated, the TRID and the port as integer.
      * <ul>
      *   <li>rest/v1/metadata/ports/[uuid]</li>
      * </ul>
