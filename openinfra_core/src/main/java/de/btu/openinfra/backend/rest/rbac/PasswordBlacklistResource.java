@@ -26,6 +26,13 @@ import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
 import de.btu.openinfra.backend.db.rbac.rbac.PasswordBlacklistRbac;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
+/**
+ * This class refers to a set of strings which are not allowed to use as
+ * (black listed) passwords.
+ *
+ * @author <a href="http://www.b-tu.de">BTU</a> DBIS
+ *
+ */
 @Path(OpenInfraResponseBuilder.REST_URI_RBAC + "/passwordblacklist")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET,
@@ -34,6 +41,21 @@ import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class PasswordBlacklistResource {
 
+	/**
+	 * Delivers a list of all black listed passwords. This resource is paging
+	 * enabled.
+	 * <br/>
+	 * Currently, there exists no default maximum.
+	 *
+	 * @param uriInfo
+	 * @param request
+	 * @param language
+	 * @param sortOrder
+	 * @param orderBy
+	 * @param offset
+	 * @param size
+	 * @return a list of all black listed passwords
+	 */
 	@GET
 	public List<PasswordBlacklistPojo> get(
 			@Context UriInfo uriInfo,
@@ -53,6 +75,14 @@ public class PasswordBlacklistResource {
 				size);
 	}
 
+	/**
+	 * Creates a new string as black listed password.
+	 *
+	 * @param uriInfo
+	 * @param request
+	 * @param pojo
+	 * @return the UUID of the new object
+	 */
 	@POST
 	public Response create(
 			@Context UriInfo uriInfo,
@@ -64,6 +94,15 @@ public class PasswordBlacklistResource {
 						uriInfo, null, pojo));
 	}
 
+	/**
+	 * Delivers a specific black listed password.
+	 *
+	 * @param uriInfo
+	 * @param request
+	 * @param language
+	 * @param uuid the UUID of the requested password
+	 * @return a specific black listed password
+	 */
 	@GET
 	@Path("{id}")
 	public PasswordBlacklistPojo get(
@@ -78,6 +117,15 @@ public class PasswordBlacklistResource {
 				uuid);
 	}
 
+	/**
+	 * Changes a specific black listed password.
+	 *
+	 * @param uriInfo
+	 * @param request
+	 * @param uuid the UUID of the black listed password which should be changed
+	 * @param pojo the content to change
+	 * @return the UUID of the changed password
+	 */
 	@PUT
 	@Path("{id}")
 	public Response put(
@@ -91,6 +139,14 @@ public class PasswordBlacklistResource {
 						uriInfo, uuid, pojo));
 	}
 
+	/**
+	 * Deletes a specific black listed password.
+	 *
+	 * @param uriInfo
+	 * @param request
+	 * @param uuid the UUID of the black listed password which should be deleted
+	 * @return the UUID of the deleted object
+	 */
 	@DELETE
 	@Path("{id}")
 	public Response delete(
@@ -103,6 +159,13 @@ public class PasswordBlacklistResource {
 						uriInfo, uuid), uuid);
 	}
 
+	/**
+	 * Delivers the number of black listed passwords.
+	 *
+	 * @param uriInfo
+	 * @param request
+	 * @return the number of black listed passwords
+	 */
 	@GET
 	@Path("count")
 	@Produces({MediaType.TEXT_PLAIN})
