@@ -12,6 +12,8 @@ import de.btu.openinfra.backend.db.jpa.model.AttributeTypeToAttributeTypeGroup;
 import de.btu.openinfra.backend.db.jpa.model.Multiplicity;
 import de.btu.openinfra.backend.db.jpa.model.ValueListValue;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupToAttributeTypePojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 /**
  * This class represents the AttributeTypeGroupToAttributeType and is used to
@@ -81,21 +83,38 @@ public class AttributeTypeGroupToAttributeTypeDao extends
 			AttributeTypeGroupToAttributeTypePojo pojo,
 			AttributeTypeToAttributeTypeGroup atg) {
 
-		atg.setAttributeType(em.find(
-				AttributeType.class, pojo.getAttributeTypeId()));
-		atg.setAttributeTypeGroupToTopicCharacteristic(em.find(
-				AttributeTypeGroupToTopicCharacteristic.class,
-				pojo.getAttributeTypeGroupToTopicCharacteristicId()));
-		if(pojo.getAttributeTypeGroup() != null) {
-			atg.setAttributeTypeGroup(em.find(AttributeTypeGroup.class,
-					pojo.getAttributeTypeGroup().getUuid()));
-		}
-		atg.setMultiplicityBean(em.find(Multiplicity.class,
-				pojo.getMultiplicity().getUuid()));
-		if(pojo.getDefaultValue() != null) {
-			atg.setValueListValue(em.find(ValueListValue.class,
-					pojo.getDefaultValue().getUuid()));
-		}
+	    try {
+	        // set the attribute type
+	        atg.setAttributeType(em.find(
+	                AttributeType.class,
+	                pojo.getAttributeTypeId()));
+
+	        // set the attribute type group
+	        atg.setAttributeTypeGroup(em.find(
+	                AttributeTypeGroup.class,
+	                pojo.getAttributeTypeGroup().getUuid()));
+
+	        // set the attribute type group to topic characteristic
+	        atg.setAttributeTypeGroupToTopicCharacteristic(em.find(
+	                AttributeTypeGroupToTopicCharacteristic.class,
+	                pojo.getAttributeTypeGroupToTopicCharacteristicId()));
+
+	        // set the multiplicity
+	        atg.setMultiplicityBean(em.find(
+	                Multiplicity.class,
+	                pojo.getMultiplicity().getUuid()));
+	    } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_NAME_IN_POJO);
+        }
+
+	    // set the default value (optional)
+        if(pojo.getDefaultValue() != null) {
+            atg.setValueListValue(em.find(ValueListValue.class,
+                    pojo.getDefaultValue().getUuid()));
+        }
+
+		// set the order (optional)
 		atg.setOrder(pojo.getOrder());
 
         // return the model as mapping result
