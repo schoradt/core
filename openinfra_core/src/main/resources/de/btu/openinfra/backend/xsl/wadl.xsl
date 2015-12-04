@@ -390,10 +390,11 @@
 </xsl:template>
 
 <xsl:template name="getId">
-    <xsl:choose>
+    <!--  <xsl:choose>
         <xsl:when test="@id"><xsl:value-of select="@id"/></xsl:when>
         <xsl:otherwise><xsl:value-of select="generate-id()"/></xsl:otherwise>
-    </xsl:choose>
+    </xsl:choose>  -->
+    <xsl:value-of select="generate-id()"/>
 </xsl:template>
 
 <xsl:template name="getParamBlock">
