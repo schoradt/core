@@ -9,10 +9,13 @@ import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.OpenInfraValueValueDao;
 import de.btu.openinfra.backend.db.daos.RelationshipTypeDao;
+import de.btu.openinfra.backend.db.jpa.model.RelationshipType;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstanceXTopicInstance;
 import de.btu.openinfra.backend.db.pojos.project.TopicInstanceAssociationToPojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 /**
  * This class represents the TopicInstanceAssociation and is used to access the
@@ -98,7 +101,35 @@ public class TopicInstanceAssociationToDao extends OpenInfraValueValueDao<
 			TopicInstanceAssociationToPojo pojo,
 			TopicInstanceXTopicInstance txt) {
 
-        // TODO set the model values
+	    // set relationship type
+        try {
+            txt.setRelationshipType(em.find(
+                    RelationshipType.class,
+                    pojo.getRelationshipType().getUuid()));
+        } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
+        }
+
+        // set association instance
+        try {
+            txt.setTopicInstance1Bean(em.find(
+                    TopicInstance.class,
+                    pojo.getAssociationInstanceId()));
+        } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
+        }
+
+        // set associated instance
+        try {
+            txt.setTopicInstance2Bean(em.find(
+                    TopicInstance.class,
+                    pojo.getAssociatedInstance().getUuid()));
+        } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
+        }
 
         // return the model as mapping result
         return new MappingResult<TopicInstanceXTopicInstance>(
