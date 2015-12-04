@@ -53,7 +53,7 @@ public class TopicCharacteristicToAttributeTypeGroupDao extends
                             schema).mapToPojo(
                     				locale,
                     				atgttc.getTopicCharacteristic()));
-            pojo.setAttributTypeGroupId(
+            pojo.setAttributeTypeGroupId(
                     atgttc.getAttributeTypeGroup().getId());
             pojo.setMultiplicity(new MultiplicityDao(
                     currentProjectId,
