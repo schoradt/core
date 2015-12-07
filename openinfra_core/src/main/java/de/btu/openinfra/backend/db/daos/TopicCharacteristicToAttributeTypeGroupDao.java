@@ -7,8 +7,11 @@ import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.jpa.model.AttributeTypeGroup;
 import de.btu.openinfra.backend.db.jpa.model.AttributeTypeGroupToTopicCharacteristic;
+import de.btu.openinfra.backend.db.jpa.model.Multiplicity;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
 import de.btu.openinfra.backend.db.pojos.TopicCharacteristicToAttributeTypeGroupPojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 /**
  * This class represents the TopicCharacteristicToAttributeTypeGroup and is used
@@ -53,7 +56,7 @@ public class TopicCharacteristicToAttributeTypeGroupDao extends
                             schema).mapToPojo(
                     				locale,
                     				atgttc.getTopicCharacteristic()));
-            pojo.setAttributTypeGroupId(
+            pojo.setAttributeTypeGroupId(
                     atgttc.getAttributeTypeGroup().getId());
             pojo.setMultiplicity(new MultiplicityDao(
                     currentProjectId,
@@ -75,7 +78,28 @@ public class TopicCharacteristicToAttributeTypeGroupDao extends
 			TopicCharacteristicToAttributeTypeGroupPojo pojo,
 			AttributeTypeGroupToTopicCharacteristic att) {
 
-        // TODO set the model values
+	    try {
+            // set the attribute type group
+	        att.setAttributeTypeGroup(em.find(
+	                AttributeTypeGroup.class,
+	                pojo.getAttributeTypeGroupId()));
+
+	        // set the topic characteristic
+	        att.setTopicCharacteristic(em.find(
+	                TopicCharacteristic.class,
+	                pojo.getTopicCharacteristic().getUuid()));
+
+	        // set the multiplicity
+	        att.setMultiplicityBean(em.find(
+	                Multiplicity.class,
+	                pojo.getMultiplicity().getUuid()));
+        } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
+        }
+
+        // set the order (optional)
+        att.setOrder(pojo.getOrder());
 
         // return the model as mapping result
         return new MappingResult<AttributeTypeGroupToTopicCharacteristic>(

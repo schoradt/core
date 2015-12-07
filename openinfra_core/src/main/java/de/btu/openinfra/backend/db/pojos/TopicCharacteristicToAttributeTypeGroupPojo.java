@@ -10,7 +10,7 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 public class TopicCharacteristicToAttributeTypeGroupPojo extends OpenInfraPojo {
 
     private TopicCharacteristicPojo topicCharacteristic;
-    private UUID attributTypeGroupId;
+    private UUID attributeTypeGroupId;
     private MultiplicityPojo multiplicity;
     private int order;
 
@@ -31,12 +31,12 @@ public class TopicCharacteristicToAttributeTypeGroupPojo extends OpenInfraPojo {
         this.topicCharacteristic = topicCharacteristic;
     }
 
-    public UUID getAttributTypeGroupId() {
-        return attributTypeGroupId;
+    public UUID getAttributeTypeGroupId() {
+        return attributeTypeGroupId;
     }
 
-    public void setAttributTypeGroupId(UUID attributTypeGroupId) {
-        this.attributTypeGroupId = attributTypeGroupId;
+    public void setAttributeTypeGroupId(UUID attributeTypeGroupId) {
+        this.attributeTypeGroupId = attributeTypeGroupId;
     }
 
     public MultiplicityPojo getMultiplicity() {

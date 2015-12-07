@@ -108,7 +108,7 @@ CREATE TABLE "attribute_type_to_attribute_type_group" ("id" uuid NOT NULL PRIMAR
 
 
 -- contains the mapping of relationship types to topic characteristics
-CREATE TABLE "relationship_type_to_topic_characteristic" ("id" uuid NOT NULL PRIMARY KEY DEFAULT create_uuid(), "topic_characteristic_id" uuid NOT NULL REFERENCES "topic_characteristic" ("id"), "relationship_type_id" uuid REFERENCES "relationship_type" ("id"), "multiplicity" uuid NOT NULL REFERENCES "multiplicity" ("id"), CONSTRAINT rt_x_tc_unique_key UNIQUE ("topic_characteristic_id", "relationship_type_id"));
+CREATE TABLE "relationship_type_to_topic_characteristic" ("id" uuid NOT NULL PRIMARY KEY DEFAULT create_uuid(), "topic_characteristic_id" uuid NOT NULL REFERENCES "topic_characteristic" ("id"), "relationship_type_id" uuid NOT NULL REFERENCES "relationship_type" ("id"), "multiplicity" uuid NOT NULL REFERENCES "multiplicity" ("id"), CONSTRAINT rt_x_tc_unique_key UNIQUE ("topic_characteristic_id", "relationship_type_id"));
 
 
 -- relation table for topic instances, the direction of the relation is taken

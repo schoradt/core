@@ -29,7 +29,8 @@ import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
  * Thus, this class only provides GET methods. PUT, POST or DELETE are not
  * provided here!
  * <br/>
- * The initial idea was to introduce a security level for topic characteristics.
+ * The initial idea was to introduce a security level for 'topic
+ * characteristics'.
  *
  *
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
@@ -101,6 +102,7 @@ public class OpenInfraObjectResource {
 	/**
 	 * Delivers the number of OpenInfRA objects which can be secured by the RBAC
 	 * system.
+	 *
 	 * @param uriInfo
 	 * @param request
 	 * @return the number of OpenInfRA objects

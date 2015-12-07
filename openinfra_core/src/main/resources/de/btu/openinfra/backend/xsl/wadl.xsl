@@ -100,6 +100,7 @@
     </xsl:for-each>
     
     <xsl:for-each select="wadl:resources/wadl:resource">
+    <xsl:sort select="@path" />
         <xsl:call-template name="processResourceDetail">
             <xsl:with-param name="resourceBase" select="$g_resourcesBase"/>
             <xsl:with-param name="resourcePath" select="@path"/>
@@ -390,10 +391,11 @@
 </xsl:template>
 
 <xsl:template name="getId">
-    <xsl:choose>
+    <!--  <xsl:choose>
         <xsl:when test="@id"><xsl:value-of select="@id"/></xsl:when>
         <xsl:otherwise><xsl:value-of select="generate-id()"/></xsl:otherwise>
-    </xsl:choose>
+    </xsl:choose>  -->
+    <xsl:value-of select="generate-id()"/>
 </xsl:template>
 
 <xsl:template name="getParamBlock">

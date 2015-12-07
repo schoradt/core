@@ -134,7 +134,7 @@ public class RelationshipTypeResource {
                                 uriInfo,
                                 pojo,
                                 relationshipTypeId,
-                                pojo.getRelationshipe(),
+                                pojo.getRelationshipTypeId(),
                                 null,
                                 null));
     }
@@ -200,7 +200,7 @@ public class RelationshipTypeResource {
                                 uriInfo,
                                 pojo,
                                 relationshipTypeId,
-                                pojo.getRelationshipe(),
+                                pojo.getRelationshipTypeId(),
                                 topicCharacteristicId,
                                 pojo.getTopicCharacteristic().getUuid()));
     }
