@@ -182,6 +182,9 @@ public abstract class OpenInfraRbac<
     		int size) {
 		checkPermission(httpMethod, uriInfo);
 		try {
+			System.out.println("---> pid " + currentProjectId);
+			System.out.println("---> schema " + schema);
+			System.out.println("---> " + locale);
 			return dao.getDeclaredConstructor(constructorTypes).newInstance(
 					currentProjectId,
 					schema).read(locale, order, column, offset, size);

@@ -14,8 +14,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
-import de.btu.openinfra.backend.db.OpenInfraOrderBy;
-import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.rbac.OpenInfraObjectPojo;
 import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
@@ -62,16 +60,12 @@ public class OpenInfraObjectResource {
 			@Context UriInfo uriInfo,
 			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
-			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
-            @QueryParam("orderBy") OpenInfraOrderBy orderBy,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new OpenInfraObjectRbac().read(
 				OpenInfraHttpMethod.valueOf(request.getMethod()),
 				uriInfo,
-				PtLocaleDao.forLanguageTag(language),
-				sortOrder,
-				orderBy,
+				null,
 				offset,
 				size);
 	}

@@ -14,6 +14,7 @@ import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.jackson.JacksonFeature;
+import org.junit.Before;
 
 public abstract class OpenInfraTest {
 
@@ -115,5 +116,12 @@ public abstract class OpenInfraTest {
 		target = client.target(BASE_URI);
 		login("root", "root");
 	}
+
+	/**
+	 * This method should be implemented by all test classes. This could contain
+	 * a root login.
+	 */
+	@Before
+	public abstract void beforeTest();
 
 }
