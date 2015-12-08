@@ -160,6 +160,9 @@ public class FileResource {
 	 * the file reference is deleted from the users space. If there still exists
 	 * a reference to another user, the file isn't deleted physically. It is
 	 * still available. If there is no other reference it is deleted from disk.
+	 * <br/>
+	 * TODO Revise the delete method in the future. It should also be evaluated
+	 * if the file object is used in a view (e.g. as project title image).
 	 *
 	 * @param uriInfo
 	 * @param request

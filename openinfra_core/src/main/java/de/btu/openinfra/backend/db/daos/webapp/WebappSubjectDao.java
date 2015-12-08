@@ -1,19 +1,34 @@
 package de.btu.openinfra.backend.db.daos.webapp;
 
 import java.util.Locale;
+import java.util.UUID;
+
+import javax.persistence.NoResultException;
 
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
-import de.btu.openinfra.backend.db.daos.OpenInfraValueDao;
+import de.btu.openinfra.backend.db.daos.OpenInfraDao;
 import de.btu.openinfra.backend.db.jpa.model.webapp.Webapp;
 import de.btu.openinfra.backend.db.jpa.model.webapp.WebappSubject;
 import de.btu.openinfra.backend.db.pojos.webapp.WebappSubjectPojo;
 
 public class WebappSubjectDao
-	extends OpenInfraValueDao<WebappSubjectPojo, WebappSubject, Webapp> {
+	extends OpenInfraDao<WebappSubjectPojo, WebappSubject> {
 
 	public WebappSubjectDao() {
-		super(null, OpenInfraSchemas.WEBAPP, WebappSubject.class, Webapp.class);
+		super(null, OpenInfraSchemas.WEBAPP, WebappSubject.class);
+	}
+
+	public WebappSubjectPojo read(UUID webappId, UUID subjectId) {
+		try {
+			return mapToPojo(null, em.createNamedQuery(
+					"WebappSubject.findByWebappAndSubject", WebappSubject.class)
+					.setParameter("webapp", em.find(Webapp.class, webappId))
+					.setParameter("subjectId", subjectId)
+					.getSingleResult());
+		} catch(NoResultException ex) {
+			return null;
+		}
 	}
 
 	@Override
