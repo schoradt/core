@@ -16,6 +16,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
+import de.btu.openinfra.backend.db.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.daos.project.ProjectDao;
+import de.btu.openinfra.backend.db.daos.webapp.WebappDao;
 import de.btu.openinfra.backend.db.daos.webapp.WebappProjectDao;
 import de.btu.openinfra.backend.db.pojos.webapp.WebappProjectPojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
@@ -55,7 +58,8 @@ public class WebappProjectResource {
 
 	/**
 	 * A PUT method which also includes POST. It creates a new or replaces an
-	 * existing data object.
+	 * existing data object. It checks if the web-application is registered and
+	 * if the project really exists.
 	 *
 	 * @param uriInfo
 	 * @param request
@@ -75,15 +79,24 @@ public class WebappProjectResource {
 		WebappProjectPojo wpp =
 				new WebappProjectDao().read(webappId, projectId);
 		if(wpp == null) {
-			pojo.setProject(projectId);
-			pojo.setWebapp(webappId);
-			return OpenInfraResponseBuilder.postResponse(
-					new WebappProjectDao().createOrUpdate(pojo, null));
+			// Check if the requested web-application and the requested project
+			// really exists.
+			if(new WebappDao().read(null, webappId) != null &&
+					new ProjectDao(
+							projectId, OpenInfraSchemas.PROJECTS).read(
+									null, projectId) != null) {
+				pojo.setProject(projectId);
+				pojo.setWebapp(webappId);
+				return OpenInfraResponseBuilder.postResponse(
+						new WebappProjectDao().createOrUpdate(pojo, null));
+			} else {
+				throw new WebApplicationException(Status.NOT_FOUND);
+			}
 		} else {
-			pojo.setUuid(wpp.getUuid());
+			wpp.setData(pojo.getData());
 			return OpenInfraResponseBuilder.putResponse(
 					new WebappProjectDao()
-					.createOrUpdate(pojo, pojo.getUuid()));
+					.createOrUpdate(wpp, wpp.getUuid()));
 		}
 	}
 
