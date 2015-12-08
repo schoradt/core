@@ -20,10 +20,11 @@ public abstract class OpenInfraTest {
 	protected Cookie cookie = null;
 	protected WebTarget target = null;
 	protected UUID pId = null;
-	protected final String BASE_URI = "http://localhost:8080/";
-	protected final String REST_PATH = "openinfra_core/rest/v1/";
-	protected final String BAALBEK = "fd27a347-4e33-4ed7-aebc-eeff6dbf1054";
-	protected final String TEST = "e7d42bff-4e40-4f43-9d1b-1dc5a190cd75";
+	protected static final String BASE_URI = "http://localhost:8080/";
+	protected static final String REST_PATH = "openinfra_core/rest/v1/";
+	protected static final String BAALBEK =
+			"fd27a347-4e33-4ed7-aebc-eeff6dbf1054";
+	protected static final String TEST = "e7d42bff-4e40-4f43-9d1b-1dc5a190cd75";
 
 	/**
 	 * Performs the login
@@ -66,6 +67,26 @@ public abstract class OpenInfraTest {
 	 */
 	protected Builder build(String path, String mediaType) {
 		return target.path(REST_PATH + path).request(mediaType).cookie(cookie);
+	}
+
+	/**
+	 * Creates a JSON builder by path.
+	 *
+	 * @param path the path of the resource
+	 * @return a JSON builder
+	 */
+	protected Builder buildJson(String path) {
+		return build(path, MediaType.APPLICATION_JSON);
+	}
+
+	/**
+	 * Create an XML builder by path.
+	 *
+	 * @param path the path of the resource
+	 * @return an XML builder
+	 */
+	protected Builder buildXml(String path) {
+		return build(path, MediaType.APPLICATION_XML);
 	}
 
 	/**

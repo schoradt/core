@@ -7,16 +7,16 @@ import javax.persistence.NoResultException;
 
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
-import de.btu.openinfra.backend.db.daos.OpenInfraValueDao;
+import de.btu.openinfra.backend.db.daos.OpenInfraDao;
 import de.btu.openinfra.backend.db.jpa.model.webapp.Webapp;
 import de.btu.openinfra.backend.db.jpa.model.webapp.WebappProject;
 import de.btu.openinfra.backend.db.pojos.webapp.WebappProjectPojo;
 
 public class WebappProjectDao
-	extends OpenInfraValueDao<WebappProjectPojo, WebappProject, Webapp> {
+	extends OpenInfraDao<WebappProjectPojo, WebappProject> {
 
 	public WebappProjectDao() {
-		super(null, OpenInfraSchemas.WEBAPP, WebappProject.class, Webapp.class);
+		super(null, OpenInfraSchemas.WEBAPP, WebappProject.class);
 	}
 
 	public WebappProjectPojo read(UUID webappId, UUID projectId) {

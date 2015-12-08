@@ -16,7 +16,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
-import de.btu.openinfra.backend.db.daos.webapp.WebappProjectDao;
 import de.btu.openinfra.backend.db.daos.webapp.WebappSubjectDao;
 import de.btu.openinfra.backend.db.pojos.webapp.WebappSubjectPojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
@@ -79,10 +78,10 @@ public class WebappSubjectResource {
 			return OpenInfraResponseBuilder.postResponse(
 					new WebappSubjectDao().createOrUpdate(pojo, null));
 		} else {
-			pojo.setUuid(wsp.getUuid());
+			wsp.setData(pojo.getData());
 			return OpenInfraResponseBuilder.putResponse(
 					new WebappSubjectDao()
-					.createOrUpdate(pojo, pojo.getUuid()));
+					.createOrUpdate(wsp, wsp.getUuid()));
 		}
 	}
 
@@ -105,7 +104,7 @@ public class WebappSubjectResource {
 				new WebappSubjectDao().read(webappId, subjectId);
 		if(wsp != null) {
 			return OpenInfraResponseBuilder.deleteResponse(
-					new WebappProjectDao().delete(wsp.getUuid()),
+					new WebappSubjectDao().delete(wsp.getUuid()),
 					wsp.getUuid());
 		} else {
 			throw new WebApplicationException(Status.NOT_FOUND);
