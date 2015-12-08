@@ -113,7 +113,6 @@ public class OpenInfraResponseBuilder {
 			return Response.ok().entity(
 			        new OpenInfraResultMessage("Entity deleted", id)).build();
 		} else {
-			System.out.println("hier null");
 			return Response.status(Response.Status.NOT_FOUND).build();
 		} // end if else
 	}
