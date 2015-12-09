@@ -9,7 +9,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import de.btu.openinfra.backend.db.pojos.webapp.WebappPojo;
@@ -19,8 +18,6 @@ import de.btu.openinfra.backend.db.pojos.webapp.WebappSystemPojo;
 
 /**
  * This class is used to test classes related to the web-application schema.
- *
- * TODO rework and use a Test Framework
  *
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
@@ -65,12 +62,13 @@ public class OpenInfraWebappTest extends OpenInfraTest {
 		test.deleteWebappSubject();
 	}
 
-	// Webapp only
 
-	@Before
+	@Override
 	public void beforeTest() {
 		rootLogin();
 	}
+
+	// Webapp only
 
 	@Test
 	public void getWebapp() {

@@ -20,7 +20,7 @@ import org.im4java.process.ProcessStarter;
  * used to configure application specific stuff such as the Jersey JAX-RS and
  * HTML template engines. This class is referenced in the web.xml file and will
  * be called during application start.
- *
+ * <br/>
  * Moreover, this class creates the necessary directory structure and tests
  * if the external packages such as ImageMagick are available. An exception is
  * thrown when something goes wrong. This exception should be written to tomcat

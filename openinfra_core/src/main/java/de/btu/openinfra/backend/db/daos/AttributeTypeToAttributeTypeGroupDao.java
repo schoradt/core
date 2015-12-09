@@ -56,7 +56,7 @@ public class AttributeTypeToAttributeTypeGroupDao extends
 		        schema).mapToPojo(
 		                locale,
 		                attatg.getAttributeType()));
-		pojo.setAttributeTypeGroupId(attatg.getId());
+		pojo.setAttributeTypeGroupId(attatg.getAttributeTypeGroup().getId());
 		pojo.setDefaultValue(new ValueListValueDao(
 		        currentProjectId,
 		        schema).mapToPojo(
