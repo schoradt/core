@@ -208,7 +208,7 @@ public class SchemasResource {
     /**
      * This resource updates the Schemas object with the specified UUID. The
      * specified SchemasPojo must contain the UUID of the object that should be
-     * updated, the TRID and the schema name as string.<br/>
+     * updated, the TRID and the schema name as string.
      * <ul>
      *   <li>rest/v1/metadata/schemas/[uuid]</li>
      * </ul>

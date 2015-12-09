@@ -55,10 +55,13 @@ public class ProjectResource {
 	 * This method provides a list of all projects. The provided parameters are
 	 * used for paging.
 	 *
-	 * @param offset the number where to start
-	 * @param size   the size of items to provide
-	 * @return       a list of projects &lt;= size (window within offset
-	 *               and size)
+	 * @param uriInfo
+     * @param request
+     * @param language The language of the requested object.
+	 * @param offset   the number where to start
+	 * @param size     the size of items to provide
+	 * @return         a list of projects &lt;= size (window within offset
+	 *                 and size)
 	 */
 	@GET
 	public List<ProjectPojo> get(
@@ -73,6 +76,16 @@ public class ProjectResource {
 						PtLocaleDao.forLanguageTag(language));
 	}
 
+	/**
+	 * This resource provides the count of main projects.
+     * <ul>
+     *   <li>rest/v1/projects/[uuid]/count</li>
+     * </ul>
+	 *
+	 * @param uriInfo
+	 * @param request
+	 * @return        The count of main projects.
+	 */
 	@GET
 	@Path("count")
 	@Produces({MediaType.TEXT_PLAIN})
@@ -85,8 +98,14 @@ public class ProjectResource {
 	}
 
 	/**
-	 * This method provides a specific project.
-	 *
+	 * This method provides a ProjectPojo for a specific id.
+	 * <ul>
+     *   <li>rest/v1/projects/[uuid]</li>
+     * </ul>
+     *
+     * @param uriInfo
+     * @param request
+     * @param language  The language of the requested object.
 	 * @param projectId the id of the requested project
 	 * @return          the requested project
 	 */
@@ -111,8 +130,13 @@ public class ProjectResource {
 	/**
 	 * This method delivers a list of sub projects specified by the current
 	 * project id in only one hierarchy level.
+	 * <ul>
+     *   <li>rest/v1/projects/[uuid]/subprojects</li>
+     * </ul>
 	 *
-	 *
+	 * @param uriInfo
+     * @param request
+     * @param language  The language of the requested object.
 	 * @param projectId the id of the current project
 	 * @param offset    the number where to start
 	 * @param size      the size of items to provide
@@ -137,6 +161,16 @@ public class ProjectResource {
 						size);
 	}
 
+	/**
+	 * This resource provides the count of sub projects.
+     * <ul>
+     *   <li>rest/v1/projects/[uuid]/subprojects/count</li>
+     * </ul>
+	 * @param uriInfo
+	 * @param request
+	 * @param projectId The id of the project the sub projects belongs to.
+	 * @return          The count of sub projects
+	 */
 	@GET
 	@Path("{projectId}/subprojects/count")
 	@Produces({MediaType.TEXT_PLAIN})
@@ -152,23 +186,20 @@ public class ProjectResource {
 	}
 
 	/**
-	 * This method creates a new project.
+	 * This method creates a new project. To determine if we want a new main
+	 * project or only a subproject we will check the specified ProjectPojo. If
+	 * the subprojectOf id is specified, the new project will be a sub project
+	 * of the project with the specified id. Otherwise it will be a main project
+	 * that consists of an own database schema. It is also possible to create a
+	 * sub project for a sub project.
+	 * <ul>
+	 *   <li>rest/v1/projects</li>
+     *   <li>rest/v1/projects?createEmpty=true&loadIntitialData=false</li>
+     *   <li>rest/v1/projects?createEmpty=true&loadIntitialData=truee</li>
+     * </ul>
 	 *
-	 * You can access this method via curl. An example of the command line could
-	 * be as follows:
-	 *
-	 * curl.exe -X "POST" -H "Content-Type: application/xml"
-	 * -d &#64;path/to/file http://localhost:8080/openinfra_backend/projects
-	 *
-	 * Use the following command to crate an empty schema which is required by
-	 * the XML import/export interface:
-	 *
-	 * curl -i -b cookie.txt -X POST -H "Content-Type: application/json" -d
-	 * @NewProject.json "http://localhost:8080/openinfra_core/rest/v1/projects?
-	 * createEmpty=true&loadIntitialData=false"
-	 *
-	 * @param project a project object (JSON or XML representations are
-	 *                converted into real objects via the JAX-RS stack)
+	 * @param uriInfo
+     * @param request
 	 * @param createEmpty The application creates an empty new schema when true.
 	 *                    This is necessary by the external XML interface
 	 *                    (XML import/export interface by HTW Dresden)
@@ -176,7 +207,9 @@ public class ProjectResource {
 	 *                        There is no initial data stored in the new data
 	 *                        base when false. This is required by the
 	 *                        XML import/export interface.
-	 * @return        an UUID of the created project
+	 * @param project The ProjectPojo that represents the new object.
+	 * @return        A Response with the UUID of the new created object or the
+     *                status code 204.
 	 */
 	@POST
 	public Response createProject(
@@ -193,9 +226,6 @@ public class ProjectResource {
 		                loadInitialData,
 		                OpenInfraHttpMethod.valueOf(
 		                        request.getMethod()), uriInfo);
-
-		// TODO add informations to the meta data schema, this is necessary for
-		//      every REST end point this project should use
 		return OpenInfraResponseBuilder.postResponse(id);
 	}
 
@@ -204,15 +234,16 @@ public class ProjectResource {
 	 * definition of the HTTP PUT method, this method updates an existing
 	 * resource and doesn't replace  it. This should be discussed/fixed in
 	 * the future.
+	 * <ul>
+     *   <li>rest/v1/projects/[uuid]</li>
+     * </ul>
 	 *
-	 * You can access this method via curl. An example of the command line could
-	 * be as follows:
-	 *
-	 * curl.exe -X "PUT" -H "Content-Type: application/xml" -d
-	 * &#64;path/to/file http://localhost:8080/openinfra_backend/projects/{id}
-	 *
-	 * @param projectId the id of project which should be updated
-	 * @return          a response with the specific status
+	 * @param uriInfo
+     * @param request
+	 * @param projectId the id of the project which should be updated
+	 * @param project   The ProjectPojo that represents the updated object.
+	 * @return          A Response with the status code 200 for a successful
+	 *                  update or 204 if the object could not be updated.
 	 */
     @PUT
     @Path("{projectId}")
@@ -221,7 +252,6 @@ public class ProjectResource {
     		@Context HttpServletRequest request,
     		@PathParam("projectId") UUID projectId,
     		ProjectPojo project) {
-        // TODO compare projectId in createOrUpdate method?
     	UUID uuid = new ProjectRbac(
     			projectId,
     			OpenInfraSchemas.PROJECTS).createOrUpdate(
@@ -233,16 +263,16 @@ public class ProjectResource {
     }
 
 	/**
-	 * This method deletes a project resource.
+	 * This method deletes a project.
+	 * <ul>
+     *   <li>rest/v1/projects/[uuid]</li>
+     * </ul>
 	 *
-	 * You can access this method via curl. An example of the command line could
-	 * be as follows:
-	 *
-	 * curl.exe -I -X "DELETE"
-	 * http://localhost:8080/openinfra_backend/projects/{id}
-	 *
-	 * @param projectId the project which should be deleted
-	 * @return          a response with the specific status
+	 * @param uriInfo
+     * @param request
+	 * @param projectId The UUID of the Project object that should be deleted.
+     * @return          A Response with the status code 200 for a successful
+     *                  deletion or 404 if the object was not found.
 	 */
 	@DELETE
 	@Path("{projectId}")
@@ -259,6 +289,22 @@ public class ProjectResource {
                 projectId);
 	}
 
+	/**
+	 * This resource provides a list of all parent ProjectPojo's for the
+     * specified project id. The ProjectPojo for the specified id will also be
+     * part of the list. The list will be sorted bottom/top.
+     * <ul>
+     *   <li>rest/v1/projects/[uuid]/parents</li>
+     * </ul>
+     *
+	 * @param uriInfo
+	 * @param request
+	 * @param language  The language of the requested object.
+     * @param projectId The id of the current project we want to retrieve the
+     *                  parents.
+	 * @return          A list of ProjectPojo's that represent the parents of
+     *                  the requested project.
+	 */
 	@GET
 	@Path("{projectId}/parents")
 	public List<ProjectPojo> readParents(
@@ -274,6 +320,18 @@ public class ProjectResource {
 						PtLocaleDao.forLanguageTag(language));
 	}
 
+	/**
+	 * This resource provides a list of FilePojo's that are assigned to the
+     * specified project.
+     * <ul>
+     *   <li>rest/v1/projects/[uuid]/files</li>
+     * </ul>
+     *
+	 * @param uriInfo
+	 * @param request
+	 * @param projectId The id of the project the requested files belongs to.
+	 * @return          A list of FilePojo's.
+	 */
     @GET
 	@Path("{projectId}/files")
 	public List<FilePojo> readFilesByProject(
@@ -285,6 +343,20 @@ public class ProjectResource {
 				uriInfo, projectId);
 	}
 
+    /**
+     * This resource provides a list of sorting types for a specified class
+     * name. The sorting types can be used for the orderby parameter that
+     * different resources support.
+     * <ul>
+     *   <li>rest/v1/projects/orderby?class=AttributeType</li>
+     * </ul>
+     *
+     * @param schema      The schema name the sorting types should belong to.
+     * @param classObject The name of the object the sorting types should belong
+     *                    to.
+     * @return            A OrderByPojo for the specified object in
+     *                    specified schema.
+     */
 	@GET
     @Path("/orderby")
     public OrderByPojo getP(
@@ -293,6 +365,16 @@ public class ProjectResource {
         return OrderByDao.read(OpenInfraSchemas.PROJECTS, classObject);
     }
 
+	/**
+	 * This resource provides a OrderByNamesPojo for the project schema. This
+	 * Pojo contains a list of object names that support sorting.
+	 * <ul>
+     *   <li>rest/v1/projects/orderby/names</li>
+     * </ul>
+	 *
+	 * @param schema The schema name the sorting list should be retrieved for.
+	 * @return       The OrderByNamesPojo for the specified schema.
+	 */
     @GET
     @Path("/orderby/names")
     public OrderByNamesPojo getNamesP(

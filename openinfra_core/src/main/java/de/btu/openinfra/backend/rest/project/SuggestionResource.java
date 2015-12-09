@@ -57,6 +57,20 @@ public class SuggestionResource {
      * @return                      A list of strings that match to the
      *                              specified parameter or null if the locale
      *                              and / or the qString is not specified.
+     *
+     * @response.representation.200.qname A list of String's.
+     * @response.representation.200.doc   This is the representation returned by
+     *                                    default.
+     *
+     * @response.representation.403.qname WebApplicationException
+     * @response.representation.403.doc   This error occurs if you do not have
+     *                                    the permission to access this
+     *                                    resource.
+     *
+     * @response.representation.500.qname OpenInfraWebException
+     * @response.representation.500.doc   An internal error occurs if the
+     *                                    backend runs into an unexpected
+     *                                    exception.
      */
     @GET
     public List<String> getSuggestion(
