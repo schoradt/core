@@ -1,7 +1,15 @@
-package de.btu.openinfra.backend.db.pojos;
+package de.btu.openinfra.backend.db.pojos.project;
 
 import java.util.List;
 
+import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupPojo;
+
+/**
+ * This is a very speicial data container used in the TopicPojo class.
+ *
+ * @author <a href="http://www.b-tu.de">BTU</a> DBIS
+ *
+ */
 public class AttributeTypeGroupToValues {
 
 	private AttributeTypeGroupPojo attributeTypeGroup;

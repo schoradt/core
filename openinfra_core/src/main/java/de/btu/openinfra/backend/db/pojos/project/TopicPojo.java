@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupToValues;
-
 @XmlRootElement
 public class TopicPojo {
 	
