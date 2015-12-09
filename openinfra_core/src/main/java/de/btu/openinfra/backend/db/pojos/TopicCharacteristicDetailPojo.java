@@ -5,7 +5,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Read the fucking Quellltext.. it'll never {d|l}ie!
+ * Read the fucking Quelltext.. it'll never {d|l}ie!
  *
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
