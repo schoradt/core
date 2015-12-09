@@ -32,7 +32,6 @@ public class AttributeValueGeomzDao
 	 * This variable defines the default geometry type. The default type is
 	 * used to implement the default read methods {@see OpenInfraDao}.
 	 */
-	// TODO delete this
 	private AttributeValueGeomType defaultGeomType =
 			AttributeValueGeomType.TEXT;
 

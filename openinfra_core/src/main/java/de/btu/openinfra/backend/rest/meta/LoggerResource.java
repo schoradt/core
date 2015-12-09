@@ -208,7 +208,7 @@ public class LoggerResource {
     /**
      * This resource updates the Logger object with the specified UUID. The
      * specified LoggerPojo must contain the UUID of the object that should be
-     * updated, the TRID and the logger as string.<br/>
+     * updated, the TRID and the logger as string.
      * <ul>
      *   <li>rest/v1/metadata/logger/[uuid]</li>
      * </ul>
