@@ -5,7 +5,7 @@ import java.util.List;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupPojo;
 
 /**
- * This is a very speicial data container used in the TopicPojo class.
+ * This is a very special data container used in the TopicPojo class.
  *
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
