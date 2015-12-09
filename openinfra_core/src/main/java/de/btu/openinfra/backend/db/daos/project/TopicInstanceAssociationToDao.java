@@ -5,10 +5,19 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
+import org.eclipse.persistence.jpa.JpaQuery;
+
+import de.btu.openinfra.backend.OpenInfraProperties;
 import de.btu.openinfra.backend.db.MappingResult;
+import de.btu.openinfra.backend.db.OpenInfraOrderBy;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.OpenInfraSortOrder;
+import de.btu.openinfra.backend.db.daos.AttributeTypeDao;
+import de.btu.openinfra.backend.db.daos.AttributeValueTypes;
 import de.btu.openinfra.backend.db.daos.OpenInfraValueValueDao;
+import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.daos.RelationshipTypeDao;
+import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.jpa.model.RelationshipType;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
@@ -71,29 +80,125 @@ public class TopicInstanceAssociationToDao extends OpenInfraValueValueDao<
 
     public List<TopicInstanceAssociationToPojo> readAssociationToByTopchar(
     		Locale locale, UUID topicInstance, UUID topChar,
-    		int offset, int size) {
+    		int offset, int size, OpenInfraSortOrder sortOrder,
+            OpenInfraOrderBy orderBy) {
     	return readAssociation(locale, topicInstance, topChar,
     			"TopicInstanceXTopicInstance"
     			+ ".findAssociationToByTopicInstanceAndTopicCharacteristic",
-    			offset, size);
+    			offset, size, sortOrder, orderBy);
     }
 
     public List<TopicInstanceAssociationToPojo> readAssociation(
+            Locale locale, UUID topicInstance, UUID topChar, String queryName,
+            int offset, int size) {
+        List<TopicInstanceXTopicInstance> tixtiList = em.createNamedQuery(
+                queryName, TopicInstanceXTopicInstance.class)
+                .setParameter("topicInstance",
+                        em.find(TopicInstance.class, topicInstance))
+                .setParameter("topicCharacteristic",
+                        em.find(TopicCharacteristic.class, topChar))
+                .setFirstResult(offset).setMaxResults(size).getResultList();
+        List<TopicInstanceAssociationToPojo> pojoList =
+                new LinkedList<TopicInstanceAssociationToPojo>();
+        for(TopicInstanceXTopicInstance tixti : tixtiList) {
+            pojoList.add(mapToPojo(locale, tixti));
+        }
+        return pojoList;
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<TopicInstanceAssociationToPojo> readAssociation(
     		Locale locale, UUID topicInstance, UUID topChar, String queryName,
-    		int offset, int size) {
-    	List<TopicInstanceXTopicInstance> tixtiList = em.createNamedQuery(
-    			queryName, TopicInstanceXTopicInstance.class)
-    			.setParameter("topicInstance",
-    					em.find(TopicInstance.class, topicInstance))
-    			.setParameter("topicCharacteristic",
-    					em.find(TopicCharacteristic.class, topChar))
-    			.setFirstResult(offset).setMaxResults(size).getResultList();
-    	List<TopicInstanceAssociationToPojo> pojoList =
-    			new LinkedList<TopicInstanceAssociationToPojo>();
-    	for(TopicInstanceXTopicInstance tixti : tixtiList) {
-    		pojoList.add(mapToPojo(locale, tixti));
-    	}
-    	return pojoList;
+    		int offset, int size, OpenInfraSortOrder order,
+    		OpenInfraOrderBy column) {
+
+        // Define a list which holds the POJO objects
+        List<TopicInstanceAssociationToPojo> pojos =
+                new LinkedList<TopicInstanceAssociationToPojo>();
+
+        // Define a model object that contains the query result
+        List<TopicInstanceXTopicInstance> models = null;
+
+        // Use the default values for language and order when null.
+        if(locale == null) {
+            locale = OpenInfraProperties.DEFAULT_LANGUAGE;
+        }
+        if(order == null) {
+            order = OpenInfraProperties.DEFAULT_ORDER;
+        }
+
+        // get the locale id
+        UUID localeId = new PtLocaleDao(
+                currentProjectId, schema).read(locale).getId();
+
+        try {
+            if (column.isUuid()) {
+                // Get the attribute value types from the object with the passed
+                // attribute type id
+                AttributeValueTypes atType = new AttributeTypeDao(
+                        currentProjectId, schema).read(
+                                locale, UUID.fromString(
+                                        column.getContent().toString()))
+                                        .getType();
+
+                // Handle each attribute value type in a different way
+                switch (atType) {
+                case ATTRIBUTE_VALUE_VALUE:
+                    // Set native query name for attribute value value objects
+                    queryName += "ByLocaleAndOrderForValues";
+                    break;
+                case ATTRIBUTE_VALUE_DOMAIN:
+                    // Set native query name for attribute value domain objects
+                    queryName += "ByLocaleAndOrderForDomains";
+                    break;
+                default:
+                    // Sorting by geometry is not supported
+                    return readAssociation(locale, topicInstance, topChar,
+                            queryName, offset, size);
+                }
+
+                // Retrieve the uuid of the xx locale
+                UUID localeXXId = em.createNamedQuery(
+                        "PtLocale.xx",
+                        PtLocale.class)
+                        .getSingleResult().getId();
+
+                // Construct origin SQL-based named query and append sort order
+                String sqlString = em.createNamedQuery(queryName)
+                        .unwrap(JpaQuery.class).getDatabaseQuery()
+                        .getSQLString();
+                sqlString += " " + order.name();
+
+                // Retrieve the informations from the database
+                models = em.createNativeQuery(
+                                sqlString,
+                                modelClass)
+                            .setParameter(1, column.getContent())
+                            .setParameter(2, localeId)
+                            .setParameter(3, localeXXId)
+                            .setParameter(4, topicInstance)
+                            .setParameter(5, topChar)
+                            .setFirstResult(offset)
+                            .setMaxResults(size)
+                            .getResultList();
+            } else {
+                throw new OpenInfraEntityException(
+                        OpenInfraExceptionTypes.WRONG_SORT_TYPE);
+            }
+        } catch (NullPointerException | IllegalArgumentException e) {
+            // Accessing the column object will lead to a NullPointerException
+            // if no orderBy parameter was passed. If no NamedQuery exists in
+            // the model class an IllegalArgumentException is thrown. In both
+            // cases we can call the standard read method.
+            return readAssociation(locale, topicInstance, topChar, queryName,
+                    offset, size);
+        }
+
+        // Map the JPA model objects to POJO objects
+        for(TopicInstanceXTopicInstance modelItem : models) {
+            pojos.add(mapToPojo(locale, modelItem));
+        } // end for
+        return pojos;
     }
 
 	@Override
