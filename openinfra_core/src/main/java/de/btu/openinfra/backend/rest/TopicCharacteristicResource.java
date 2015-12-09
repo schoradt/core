@@ -25,11 +25,13 @@ import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.AttributeTypeGroupToTopicCharacteristicPojo;
 import de.btu.openinfra.backend.db.pojos.RelationshipTypeToTopicCharacteristicPojo;
+import de.btu.openinfra.backend.db.pojos.TopicCharacteristicDetailPojo;
 import de.btu.openinfra.backend.db.pojos.TopicCharacteristicPojo;
 import de.btu.openinfra.backend.db.rbac.AttributeTypeGroupToTopicCharacteristicRbac;
 import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
 import de.btu.openinfra.backend.db.rbac.RelationshipTypeRbac;
 import de.btu.openinfra.backend.db.rbac.RelationshipTypeToTopicCharacteristicRbac;
+import de.btu.openinfra.backend.db.rbac.TopicCharacteristicDetailRbac;
 import de.btu.openinfra.backend.db.rbac.TopicCharacteristicRbac;
 
 /**
@@ -141,6 +143,38 @@ public class TopicCharacteristicResource {
 			@PathParam("schema") String schema,
 			@PathParam("topicCharacteristicId") UUID topicCharacteristicId) {
 		return new TopicCharacteristicRbac(
+				projectId,
+				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
+						OpenInfraHttpMethod.valueOf(request.getMethod()),
+						uriInfo,
+						PtLocaleDao.forLanguageTag(language),
+						topicCharacteristicId);
+	}
+
+	/**
+	 * This method retrieves a special object which includes all attribute type
+	 * groups belonging to the requested topic characteristic. Additionally, all
+	 * attribute types are included which belong to the individual attribute
+	 * type groups.
+	 *
+	 * @param uriInfo
+	 * @param request
+	 * @param language
+	 * @param projectId the project id
+	 * @param schema the OpenInfRA schema
+	 * @param topicCharacteristicId the id of the topic characteristic
+	 * @return a special object which consists of attribute type groups
+	 */
+	@GET
+	@Path("{topicCharacteristicId}/detail")
+	public TopicCharacteristicDetailPojo getDetail(
+			@Context UriInfo uriInfo,
+			@Context HttpServletRequest request,
+			@QueryParam("language") String language,
+			@PathParam("projectId") UUID projectId,
+			@PathParam("schema") String schema,
+			@PathParam("topicCharacteristicId") UUID topicCharacteristicId) {
+		return new TopicCharacteristicDetailRbac(
 				projectId,
 				OpenInfraSchemas.valueOf(schema.toUpperCase())).read(
 						OpenInfraHttpMethod.valueOf(request.getMethod()),
