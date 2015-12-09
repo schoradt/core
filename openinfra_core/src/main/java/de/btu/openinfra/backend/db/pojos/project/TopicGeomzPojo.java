@@ -1,4 +1,4 @@
-package de.btu.openinfra.backend.db.pojos;
+package de.btu.openinfra.backend.db.pojos.project;
 
 import java.util.List;
 import java.util.UUID;

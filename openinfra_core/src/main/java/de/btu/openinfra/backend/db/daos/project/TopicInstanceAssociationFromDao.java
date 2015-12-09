@@ -1,4 +1,4 @@
-package de.btu.openinfra.backend.db.daos;
+package de.btu.openinfra.backend.db.daos.project;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -7,10 +7,15 @@ import java.util.UUID;
 
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.daos.OpenInfraValueValueDao;
+import de.btu.openinfra.backend.db.daos.RelationshipTypeDao;
+import de.btu.openinfra.backend.db.jpa.model.RelationshipType;
 import de.btu.openinfra.backend.db.jpa.model.TopicCharacteristic;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstanceXTopicInstance;
-import de.btu.openinfra.backend.db.pojos.project.TopicInstanceAssociationPojo;
+import de.btu.openinfra.backend.db.pojos.project.TopicInstanceAssociationFromPojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 /**
  * This class represents the TopicInstanceAssociation and is used to access the
@@ -19,8 +24,8 @@ import de.btu.openinfra.backend.db.pojos.project.TopicInstanceAssociationPojo;
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
  */
-public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
-	TopicInstanceAssociationPojo,
+public class TopicInstanceAssociationFromDao extends OpenInfraValueValueDao<
+	TopicInstanceAssociationFromPojo,
 	TopicInstanceXTopicInstance,
 	TopicInstance, TopicInstance> {
 
@@ -32,7 +37,7 @@ public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
 	 *                         the system schema is selected)
 	 * @param schema           the required schema
 	 */
-	public TopicInstanceAssociationDao(
+	public TopicInstanceAssociationFromDao(
 			UUID currentProjectId,
 			OpenInfraSchemas schema) {
 		super(
@@ -43,37 +48,29 @@ public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
 	}
 
 	@Override
-	public TopicInstanceAssociationPojo mapToPojo(
+	public TopicInstanceAssociationFromPojo mapToPojo(
 			Locale locale,
 			TopicInstanceXTopicInstance txt) {
         if (txt != null) {
-            TopicInstanceAssociationPojo pojo =
-                    new TopicInstanceAssociationPojo(txt);
-            pojo.setAssociationInstanceId(txt.getTopicInstance1Bean().getId());
+            TopicInstanceAssociationFromPojo pojo =
+                    new TopicInstanceAssociationFromPojo(txt);
+            pojo.setAssociationInstance(
+            		new TopicInstanceDao(currentProjectId, schema).mapToPojo(
+            		locale,
+            		txt.getTopicInstance1Bean()));
             pojo.setRelationshipType(
                     new RelationshipTypeDao(currentProjectId, schema).mapToPojo(
                             locale,
                             txt.getRelationshipType()));
-            pojo.setAssociatedInstance(
-                    new TopicInstanceDao(currentProjectId, schema).mapToPojo(
-                            locale,
-                            txt.getTopicInstance2Bean()));
+            pojo.setAssociatedInstanceId(
+                            txt.getTopicInstance2Bean().getId());
             return pojo;
         } else {
             return null;
         }
     }
 
-    public List<TopicInstanceAssociationPojo> readAssociationToByTopchar(
-    		Locale locale, UUID topicInstance, UUID topChar,
-    		int offset, int size) {
-    	return readAssociation(locale, topicInstance, topChar,
-    			"TopicInstanceXTopicInstance"
-    			+ ".findAssociationToByTopicInstanceAndTopicCharacteristic",
-    			offset, size);
-    }
-
-    public List<TopicInstanceAssociationPojo> readAssociationFromByTopchar(
+    public List<TopicInstanceAssociationFromPojo> readAssociationFromByTopchar(
     		Locale locale, UUID topicInstance, UUID topChar,
     		int offset, int size) {
     	return readAssociation(locale, topicInstance, topChar,
@@ -82,7 +79,7 @@ public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
     			offset, size);
     }
 
-    public List<TopicInstanceAssociationPojo> readAssociation(
+    public List<TopicInstanceAssociationFromPojo> readAssociation(
     		Locale locale, UUID topicInstance, UUID topChar, String queryName,
     		int offset, int size) {
     	List<TopicInstanceXTopicInstance> tixtiList = em.createNamedQuery(
@@ -92,8 +89,8 @@ public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
     			.setParameter("topicCharacteristic",
     					em.find(TopicCharacteristic.class, topChar))
     			.setFirstResult(offset).setMaxResults(size).getResultList();
-    	List<TopicInstanceAssociationPojo> pojoList =
-    			new LinkedList<TopicInstanceAssociationPojo>();
+    	List<TopicInstanceAssociationFromPojo> pojoList =
+    			new LinkedList<TopicInstanceAssociationFromPojo>();
     	for(TopicInstanceXTopicInstance tixti : tixtiList) {
     		pojoList.add(mapToPojo(locale, tixti));
     	}
@@ -102,10 +99,38 @@ public class TopicInstanceAssociationDao extends OpenInfraValueValueDao<
 
 	@Override
 	public MappingResult<TopicInstanceXTopicInstance> mapToModel(
-			TopicInstanceAssociationPojo pojo,
+			TopicInstanceAssociationFromPojo pojo,
 			TopicInstanceXTopicInstance txt) {
 
-        // TODO set the model values
+	    // set relationship type
+	    try {
+	        txt.setRelationshipType(em.find(
+	                RelationshipType.class,
+	                pojo.getRelationshipType().getUuid()));
+        } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
+        }
+
+	    // set association instance
+        try {
+            txt.setTopicInstance1Bean(em.find(
+                    TopicInstance.class,
+                    pojo.getAssociationInstance().getUuid()));
+        } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
+        }
+
+        // set associated instance
+        try {
+            txt.setTopicInstance2Bean(em.find(
+                    TopicInstance.class,
+                    pojo.getAssociatedInstanceId()));
+        } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
+        }
 
         // return the model as mapping result
         return new MappingResult<TopicInstanceXTopicInstance>(

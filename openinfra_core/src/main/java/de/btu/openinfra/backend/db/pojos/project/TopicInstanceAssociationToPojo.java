@@ -9,23 +9,21 @@ import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 import de.btu.openinfra.backend.db.pojos.RelationshipTypePojo;
 
 @XmlRootElement
-public class TopicInstanceAssociationPojo extends OpenInfraPojo {
+public class TopicInstanceAssociationToPojo extends OpenInfraPojo {
 
     private UUID associationInstanceId;
     private TopicInstancePojo associatedInstance;
     private RelationshipTypePojo relationshipType;
 
     /* Default constructor */
-    public TopicInstanceAssociationPojo() {
+    public TopicInstanceAssociationToPojo() {
     }
 
-    /* Constructor that will set the id and trid automatically */
-    public TopicInstanceAssociationPojo(OpenInfraModelObject modelObject) {
+    public TopicInstanceAssociationToPojo(OpenInfraModelObject modelObject) {
         super(modelObject);
     }
 
-    // TODO check what happens with the meta data?
-    public TopicInstanceAssociationPojo(
+    public TopicInstanceAssociationToPojo(
             UUID uuid,
             UUID assoId,
             TopicInstancePojo tip,

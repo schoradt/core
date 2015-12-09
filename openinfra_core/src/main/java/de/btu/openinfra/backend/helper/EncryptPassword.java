@@ -21,14 +21,15 @@ public class EncryptPassword {
 //			System.out.println(OpenInfraRealm.encrypt("projectguest_baal", UUID.fromString("2d38ac64-1242-490b-8569-18477bf18a9c")));
 //			System.out.println(OpenInfraRealm.encrypt("projecteditor_baal", UUID.fromString("64573585-8546-429c-98dc-e1b379744d42")));
 //			System.out.println(OpenInfraRealm.encrypt("siehstnix", UUID.fromString("db848094-0ead-4214-a850-d3c8cb23971c")));
-			System.out.println(OpenInfraRealm.encrypt("tino", UUID.fromString("f05d2d8a-7dec-44dc-83b2-eb9e00b8fc03")));
-			System.out.println(OpenInfraRealm.encrypt("frankh", UUID.fromString("9fa5e53e-95ff-4419-a618-6dc2c30ea82f")));
-			System.out.println(OpenInfraRealm.encrypt("franks", UUID.fromString("afdffe4e-b391-4ca1-a9bd-018c530754d9")));
-			System.out.println(OpenInfraRealm.encrypt("cornell", UUID.fromString("208bd57f-01ee-49b0-bdcb-23fb4ad685ff")));
-			System.out.println(OpenInfraRealm.encrypt("alex", UUID.fromString("f3eaa8f9-5fc2-486b-9eab-e9a90d5281a6")));
-			System.out.println(OpenInfraRealm.encrypt("philipp", UUID.fromString("3ffca723-6323-4181-84dd-d9f7e4fea5f2")));
-			System.out.println(OpenInfraRealm.encrypt("hanna", UUID.fromString("dab1a46c-436f-4b80-a8ed-8672742a6aed")));
-			System.out.println(OpenInfraRealm.encrypt("katja", UUID.fromString("1f53110a-5ccb-4713-8bac-8e49379bc688")));
+//			System.out.println(OpenInfraRealm.encrypt("tino", UUID.fromString("f05d2d8a-7dec-44dc-83b2-eb9e00b8fc03")));
+//			System.out.println(OpenInfraRealm.encrypt("frankh", UUID.fromString("9fa5e53e-95ff-4419-a618-6dc2c30ea82f")));
+//			System.out.println(OpenInfraRealm.encrypt("franks", UUID.fromString("afdffe4e-b391-4ca1-a9bd-018c530754d9")));
+//			System.out.println(OpenInfraRealm.encrypt("cornell", UUID.fromString("208bd57f-01ee-49b0-bdcb-23fb4ad685ff")));
+//			System.out.println(OpenInfraRealm.encrypt("alex", UUID.fromString("f3eaa8f9-5fc2-486b-9eab-e9a90d5281a6")));
+//			System.out.println(OpenInfraRealm.encrypt("philipp", UUID.fromString("3ffca723-6323-4181-84dd-d9f7e4fea5f2")));
+//			System.out.println(OpenInfraRealm.encrypt("hanna", UUID.fromString("dab1a46c-436f-4b80-a8ed-8672742a6aed")));
+//			System.out.println(OpenInfraRealm.encrypt("katja", UUID.fromString("1f53110a-5ccb-4713-8bac-8e49379bc688")));
+			System.out.println(OpenInfraRealm.encrypt("dörthe", UUID.fromString("58245dfc-29fc-4382-b826-b974d07ae255")));
 		}
 	}
 

@@ -24,7 +24,10 @@ import javax.persistence.Table;
     @NamedQuery(name="CharacterCode.findAll",
             query="SELECT c FROM CharacterCode c"),
     @NamedQuery(name="CharacterCode.count",
-            query="SELECT COUNT(c) FROM CharacterCode c ")
+            query="SELECT COUNT(c) FROM CharacterCode c "),
+    @NamedQuery(name="CharacterCode.findByString",
+    query="SELECT c FROM CharacterCode c "
+            + "WHERE c.characterCode = :value"),
 })
 @NamedNativeQueries({
     @NamedNativeQuery(name="CharacterCode.findAllByLocaleAndOrder",

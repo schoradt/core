@@ -1,0 +1,21 @@
+{
+  "uuid":null,
+  "attributeTypeId":"dfb84a2d-94a3-408b-9f8b-9fd7a4e47867",
+  "attributeValueType":"ATTRIBUTE_VALUE_VALUE",
+  "attributeValueValue":{
+    "uuid":null,
+	"topicInstanceId":"fab4e287-3b8e-48fa-9282-63fc123dff47",
+	"value":{
+	  "uuid":null,
+	  "localizedStrings":[
+	    {
+	      "characterString":"6c99301c-2672-4525-9dbe-13277093dd69",
+	      "locale":{
+	        "uuid":"bd0fcf55-547a-44da-b7c7-915e6e4ec40e"
+	      }
+	    }
+	  ]
+	},
+	"attributeTypeToAttributeTypeGroupId":"e1486f37-920e-4723-96be-669b2f62e40f"
+  }
+}

@@ -1,4 +1,4 @@
-package de.btu.openinfra.backend.db.daos;
+package de.btu.openinfra.backend.db.daos.project;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -12,6 +12,11 @@ import org.json.simple.parser.ParseException;
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraMetaDataEnum;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.daos.AttributeValueTypes;
+import de.btu.openinfra.backend.db.daos.MetaDataDao;
+import de.btu.openinfra.backend.db.daos.OpenInfraValueDao;
+import de.btu.openinfra.backend.db.daos.PtLocaleDao;
+import de.btu.openinfra.backend.db.daos.TopicCharacteristicDao;
 import de.btu.openinfra.backend.db.jpa.model.AttributeValueDomain;
 import de.btu.openinfra.backend.db.jpa.model.AttributeValueValue;
 import de.btu.openinfra.backend.db.jpa.model.PtLocale;
@@ -77,7 +82,7 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
 
             String metaData = null;
             // check if meta data exists for this topic instance
-            if (metaDataPojo.getData() != null) {
+            if (metaDataPojo != null && metaDataPojo.getData() != null) {
             	JSONObject jo = null;
 				try {
 					jo = (JSONObject)new JSONParser().parse(
@@ -87,9 +92,10 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
 				}
                 if (jo != null &&
                 		jo.containsKey(
-                				OpenInfraMetaDataEnum.LIST_VIEW_COLUMNS)) {
-                    metaData = jo.get(OpenInfraMetaDataEnum.LIST_VIEW_COLUMNS)
-                    		.toString();
+                				OpenInfraMetaDataEnum.LIST_VIEW_COLUMNS
+                				.getmetaDataDescriptor())) {
+                    metaData = jo.get(OpenInfraMetaDataEnum.LIST_VIEW_COLUMNS
+                            .getmetaDataDescriptor()).toString();
                 }
             }
 
@@ -105,8 +111,7 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
                 // 3.a Check if the current id is mentioned in the meta data
                 if( metaData != null && metaData.contains(
                         avd.getAttributeTypeToAttributeTypeGroup()
-                            .getAttributeType().getId().toString()) ||
-                        metaData == null ) {
+                            .getAttributeType().getId().toString()) ) {
                     AttributeValuePojo avPojo = new AttributeValuePojo(avd);
                     avPojo.setAttributeTypeId(
                             avd.getAttributeTypeToAttributeTypeGroup()
@@ -128,8 +133,7 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
                 // 4.a Check if the current id is mentioned in the settings
                 if( metaData != null && metaData.contains(
                         avv.getAttributeTypeToAttributeTypeGroup()
-                            .getAttributeType().getId().toString()) ||
-                        metaData == null ) {
+                            .getAttributeType().getId().toString()) ) {
                     AttributeValuePojo avPojo = new AttributeValuePojo(avv);
                     avPojo.setAttributeTypeId(
                             avv.getAttributeTypeToAttributeTypeGroup()
@@ -191,15 +195,15 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
 		return tip;
 	}
 
-   /**
-    * This method returns a topic instance model object for the specified id.
-    *
-    * @param id The id of the topic instance.
-    * @return   The model object or null if the topic instance does not exists.
-    */
-    public TopicInstance read(UUID id) {
-        return em.find(modelClass, id);
-    }
+	/**
+	 * This method returns a topic instance model object for the specified id.
+	 *
+	 * @param id The id of the topic instance.
+	 * @return   The model object or null if the topic instance does not exists.
+	 */
+	public TopicInstance read(UUID id) {
+	    return em.find(modelClass, id);
+	}
 
 	/**
      * This method retrieves a list of TopicInstance objects belonging to a
@@ -261,11 +265,12 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
 	    try {
 	        // set the topic characteristic the topic instance belongs to
 	        ti.setTopicCharacteristic(em.find(
-	                TopicCharacteristic.class, pojo.getTopicCharacteristic()));
+	                TopicCharacteristic.class,
+	                pojo.getTopicCharacteristic().getUuid()));
 	    } catch (NullPointerException npe) {
-	        throw new OpenInfraEntityException(
-	                OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
-	    }
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
+        }
 
         // return the model as mapping result
         return new MappingResult<TopicInstance>(ti.getId(), ti);

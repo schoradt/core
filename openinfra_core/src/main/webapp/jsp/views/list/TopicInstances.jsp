@@ -1,6 +1,6 @@
 <%@page import="org.json.simple.parser.JSONParser"%>
 <%@page import="de.btu.openinfra.backend.OpenInfraProperties"%>
-<%@page import="de.btu.openinfra.backend.db.daos.TopicInstanceDao"%>
+<%@page import="de.btu.openinfra.backend.db.daos.project.TopicInstanceDao"%>
 <%@page import="java.net.URLEncoder"%>
 <%@page import="de.btu.openinfra.backend.helper.ImgSize"%>
 <%@page import="de.btu.openinfra.backend.helper.ImgUrls"%>

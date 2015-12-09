@@ -1,5 +1,7 @@
 # Core
-This folder contains the core Java and Maven based implementation of OpenInfRA. The project page can be found [here](http://www.b-tu.de/openinfra/).
+This folder contains the core Java and Maven-based implementation of OpenInfRA. The project page can be found [here](http://www.b-tu.de/openinfra/).
+
+LOC (version 1.4.2): approx 25.000
 
 # Installation
 
@@ -7,7 +9,7 @@ To run OpenInfRA different prerequisites must be complied. At this point we will
 OpenInfRA consists of the following parts:
 
 ## Application
-The application is written in Java and must be compiled with Java 7. It must be packed into a _war_ file and run on a server. Currently, the application is optimezed for Apache Tomcat. There are only a few handles necessary to configure the application. The main [configuration file](openinfra_core/src/main/resources/de/btu/openinfra/backend/properties/OpenInfRA.properties) must be adapted to the current needs. The different configuration parameters are commented and need no further explanations. The prime configurations are the database connection and file path properties. These must be set correctly in order to run the application.
+The application is written in Java and must be compiled with Java 7. It must be packed into a _war_ file and run on a server. Currently, the application is optimized for Apache Tomcat. There are only a few handles necessary to configure the application. The main [configuration file](openinfra_core/src/main/resources/de/btu/openinfra/backend/properties/OpenInfRA.properties) must be adapted to the current needs. The different configuration parameters are commented and need no further explanations. The prime configurations are the database connection and file path properties. These must be set correctly in order to run the application.
 
 The OpenInfRA application is based on the following software stack:
 - JAX-RS: [Jersey](https://jersey.java.net/)
@@ -51,7 +53,7 @@ Database access is utilized by means of a _DAO_ _pattern_. There exists a DAO cl
 ![OpenInfRA DAO](https://github.com/OpenInfRA/core/blob/master/img/dao.png "OpenInfRA DAO")
 
 ## Entity Manager
-The _entity_ _manager_ is very impartant for the DAO classes and the reaction time of the application since it utilizes the database access. Each DAO class uses its own 'entity manager'. In order to provide fast access it exists an _EntityManagerFactoryCache_ which provides the administation of 'entity manager' objects for DAO classes.
+The _entity_ _manager_ is very important for the DAO classes and the reaction time of the application since it utilizes the database access. Each DAO class uses its own 'entity manager'. In order to provide fast access it exists an _EntityManagerFactoryCache_ which provides the administation of 'entity manager' objects for DAO classes.
 
 ![OpenInfRA EM](https://github.com/OpenInfRA/core/blob/master/img/em.png "OpenInfRA EM")
 
@@ -63,16 +65,21 @@ OpenInfRA provides different _database_ _schemas_. Each 'database schema' is opt
 - _rbac_: The 'rbac schema' contains information for the role-based access control system. This includes user information, roles and permissions.
 - _webapp_: The 'webapp schema' provides additional information for GUI applications.
 - _files_: The 'files schema' provides data of the file upload system.
-- _search_: The 'search schema' provides data of the search engine.
+- _search_: The 'search schema' is not a real database schema, it only provides an access point for the search engine.
 
 ![OpenInfRA Database Schemas](https://github.com/OpenInfRA/core/blob/master/img/schemas.png "OpenInfRA Database Schemas")
 
 Adding a new schema can be done very easy by the following steps:
 - 1. Create schema on the database level.
 - 2. Generate necessary model objects.
-- 3. Create POJO, DAO and RBAC classes.
-- 4. Register resources and URLs in the REST API.
+- 3. Register the new schema in the _OpenInfraSchemas_ enumeration
+- 4. Create POJO, DAO and RBAC classes.
+- 5. Register the new schema in the _EntityManagerFactoryCache_.
+- 6. Register resources and URLs in the REST API.
 
 # TODO
 - The JUnit tests have to be extended.
-- There is currently no Loggin-Framework available.
+- Logging isn't implemented appropriately.
+
+### Revision of REST-Resources and DAO-Classes
+The initial database schema didn't consider an UUID for the identification of associations. An association object was initally identified by the UUIDs of the related objects e.g. the 'attribute type' to 'attribute type group' association was identified by the UUID of the 'attribute type' and the 'attribute type group'. Each of the aforementioned objects relates to a POJO object. Thus, it became necessary to equip each POJO with an UUID (especially the association object) in order to provide a generic API. However, the old access stratedgy is still available and should be revised.

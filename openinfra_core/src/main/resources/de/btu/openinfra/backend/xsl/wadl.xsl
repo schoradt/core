@@ -64,7 +64,6 @@
     <h2>Summary</h2>
     <table>
         <tr>
-            <th>Resource</th>
             <th>Method</th>
             <th>Description</th>
         </tr>
@@ -101,6 +100,7 @@
     </xsl:for-each>
     
     <xsl:for-each select="wadl:resources/wadl:resource">
+    <xsl:sort select="@path" />
         <xsl:call-template name="processResourceDetail">
             <xsl:with-param name="resourceBase" select="$g_resourcesBase"/>
             <xsl:with-param name="resourcePath" select="@path"/>
@@ -121,7 +121,7 @@
     <xsl:if test="wadl:method">
         <tr>
             <!-- Resource -->
-            <td class="summary">
+            <td class="summary" colspan="2" style="padding-top: 10px; padding-bottom:10px;background-color:#F0F8FF;">
                 <xsl:variable name="id"><xsl:call-template name="getId"/></xsl:variable>
                 <a href="#{$id}">
                     <xsl:call-template name="getFullResourcePath">
@@ -130,28 +130,24 @@
                     </xsl:call-template>
                 </a>
             </td>
-            <!-- Method -->
-            <td class="summary">
-                <xsl:for-each select="wadl:method">
-                    <xsl:variable name="name" select="@name"/>
-                    <xsl:variable name="id2"><xsl:call-template name="getId"/></xsl:variable>
-                    <a href="#{$id2}"><xsl:value-of select="$name"/></a>
-                    <xsl:for-each select="wadl:doc"><br/></xsl:for-each>
-                    <xsl:if test="position() != last()"><br/></xsl:if>  <!-- Add a spacer -->
-                </xsl:for-each>
-                <br/>
-            </td>
+       </tr>
+       <xsl:for-each select="wadl:method">
+       	<tr>
+       		<!-- Method -->
+       		<td>
+	            <xsl:variable name="name" select="@name"/>
+	            <xsl:variable name="id2"><xsl:call-template name="getId"/></xsl:variable>
+	            <a href="#{$id2}"><xsl:value-of select="$name"/></a>
+	            <xsl:for-each select="wadl:doc"><br/></xsl:for-each>
+       		</td>
             <!-- Description -->
-            <td class="summary">
-                <xsl:for-each select="wadl:method">
-                    <xsl:call-template name="getDoc">
-                        <xsl:with-param name="base" select="$resourceBase"/>
-                    </xsl:call-template>
-                    <br/>
-                    <xsl:if test="position() != last()"><br/></xsl:if>  <!-- Add a spacer -->
-                </xsl:for-each>
-            </td>
-        </tr>
+            <td>
+                <xsl:call-template name="getDoc">
+                	<xsl:with-param name="base" select="$resourceBase"/>
+                </xsl:call-template>
+            </td>                           		
+       	</tr>
+       </xsl:for-each>
         <!-- Add separator if not the last resource -->
         <xsl:if test="wadl:method and not($lastResource)">
             <tr><td class="summarySeparator"></td><td class="summarySeparator"/><td class="summarySeparator"/></tr>
@@ -395,10 +391,11 @@
 </xsl:template>
 
 <xsl:template name="getId">
-    <xsl:choose>
+    <!--  <xsl:choose>
         <xsl:when test="@id"><xsl:value-of select="@id"/></xsl:when>
         <xsl:otherwise><xsl:value-of select="generate-id()"/></xsl:otherwise>
-    </xsl:choose>
+    </xsl:choose>  -->
+    <xsl:value-of select="generate-id()"/>
 </xsl:template>
 
 <xsl:template name="getParamBlock">

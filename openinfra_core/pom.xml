@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.btu.openinfra.core</groupId>
   <artifactId>openinfra_core</artifactId>
-  <version>1.4.2</version>
+  <version>1.4.8</version>
   <packaging>war</packaging>
   <name>openinfra_core</name>
   
@@ -35,44 +35,51 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.4</version>
+                <version>2.10.3</version>
                 <executions>
                     <execution>
+                    	<id>generate-extended-wadl</id>
+		                <configuration>
+		                    <encoding>UTF-8</encoding>
+		                    <verbose>false</verbose>
+		                    <show>public</show>
+		                    <doclet>com.sun.jersey.wadl.resourcedoc.ResourceDoclet</doclet>
+		                        <docletPath>${path.separator}${project.build.outputDirectory}</docletPath>
+		                        <docletArtifacts>
+		                        <docletArtifact>
+		                            <groupId>com.sun.jersey.contribs</groupId>
+		                            <artifactId>wadl-resourcedoc-doclet</artifactId>
+		                            <version>1.17.1</version>
+		                        </docletArtifact>
+		                        <docletArtifact>
+		                            <groupId>com.sun.jersey</groupId>
+		                            <artifactId>jersey-server</artifactId>
+		                            <version>1.17.1</version>
+		                        </docletArtifact>
+		                        <docletArtifact>
+		                            <groupId>xerces</groupId>
+		                            <artifactId>xercesImpl</artifactId>
+		                            <version>2.6.1</version>
+		                        </docletArtifact>
+		                    </docletArtifacts>
+		                    <!-- the following option is required as a work around for
+		                         version 2.5 of the javadoc plugin which will be used
+		                         by a maven version > 2.0.9 -->
+		                    <useStandardDocletOptions>false</useStandardDocletOptions>
+		                    <additionalparam>-output ${basedir}/src/main/resources/de/btu/openinfra/backend/wadl/resourcedoc.xml</additionalparam>
+		                </configuration>
                         <goals>
                             <goal>javadoc</goal>
                         </goals>
                         <phase>compile</phase>
                     </execution>
+                    <execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
                 </executions>
-                <configuration>
-                    <encoding>UTF-8</encoding>
-                    <verbose>false</verbose>
-                    <show>public</show>
-                    <doclet>com.sun.jersey.wadl.resourcedoc.ResourceDoclet</doclet>
-                        <docletPath>${path.separator}${project.build.outputDirectory}</docletPath>
-                        <docletArtifacts>
-                        <docletArtifact>
-                            <groupId>com.sun.jersey.contribs</groupId>
-                            <artifactId>wadl-resourcedoc-doclet</artifactId>
-                            <version>1.17.1</version>
-                        </docletArtifact>
-                        <docletArtifact>
-                            <groupId>com.sun.jersey</groupId>
-                            <artifactId>jersey-server</artifactId>
-                            <version>1.17.1</version>
-                        </docletArtifact>
-                        <docletArtifact>
-                            <groupId>xerces</groupId>
-                            <artifactId>xercesImpl</artifactId>
-                            <version>2.6.1</version>
-                        </docletArtifact>
-                    </docletArtifacts>
-                    <!-- the following option is required as a work around for
-                         version 2.5 of the javadoc plugin which will be used
-                         by a maven version > 2.0.9 -->
-                    <useStandardDocletOptions>false</useStandardDocletOptions>
-                    <additionalparam>-output ${basedir}/src/main/resources/resourcedoc.xml</additionalparam>
-                </configuration>
             </plugin>
             
             <!-- needed to build jar file when building war file, necessary for
@@ -102,7 +109,7 @@
         								<groupId>org.apache.maven.plugins</groupId>
         								<artifactId>maven-javadoc-plugin</artifactId>
         								<versionRange>
-        									[2.4,)
+        									[2.10.3,)
         								</versionRange>
         								<goals>
         									<goal>javadoc</goal>

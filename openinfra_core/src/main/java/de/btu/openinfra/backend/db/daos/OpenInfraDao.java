@@ -188,7 +188,7 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 		    PtLocale ptl = new PtLocaleDao(currentProjectId, schema)
 		        .read(locale);
 		    ptlId = ptl.getId().toString();
-		} catch (PersistenceException e) {
+		} catch (PersistenceException e ) {
 		    // The pt locale table only exists in projects and system schemas.
 		    // If a sorting is requested by another schema, we must catch the
 		    // exception and just do nothing.

@@ -1,4 +1,4 @@
-package de.btu.openinfra.backend.db.daos;
+package de.btu.openinfra.backend.db.daos.project;
 
 import java.util.Locale;
 import java.util.UUID;
@@ -9,10 +9,11 @@ import org.eclipse.persistence.jpa.JpaQuery;
 
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.daos.OpenInfraValueDao;
 import de.btu.openinfra.backend.db.jpa.model.AttributeTypeToAttributeTypeGroup;
 import de.btu.openinfra.backend.db.jpa.model.AttributeValueGeomz;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
-import de.btu.openinfra.backend.db.pojos.AttributeValueGeomzPojo;
+import de.btu.openinfra.backend.db.pojos.project.AttributeValueGeomzPojo;
 import de.btu.openinfra.backend.exception.OpenInfraEntityException;
 import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
@@ -31,7 +32,6 @@ public class AttributeValueGeomzDao
 	 * This variable defines the default geometry type. The default type is
 	 * used to implement the default read methods {@see OpenInfraDao}.
 	 */
-	// TODO delete this
 	private AttributeValueGeomType defaultGeomType =
 			AttributeValueGeomType.TEXT;
 

@@ -16,10 +16,10 @@ import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 
 /**
- * This class supports only the schemas system, rbac or metadata. For the
- * schema projects use the class
- * 'de.btu.openinfra.backend.rest.project/PrimerResource' instead.
- * The reason therefore lay in the fact that the regex expression
+ * This class provides Pojo primer objects. It does not supports the schema
+ * project. For the schema projects use the class
+ * 'de.btu.openinfra.backend.rest.project/PrimerResource' instead. The
+ * reason therefore lay in the fact that the regex expression
  * '/v1/{schema:(projects|system|rbac|metadata)}{optional:(/?)}
  * {projectId:([0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12})?}'
  * does not work for the schema projects.
@@ -35,6 +35,29 @@ import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class PrimerResource {
 
+    /**
+     * This resource provides a primer Pojo for the requested class. The primer
+     * is an empty image of the requested class Pojo. This can be used as a base
+     * for POST requests. Further the resource awaits a language definition to
+     * fill in the correct language informations whenever they are required.
+     * <ul>
+     *   <li>rest/v1/system/primer?language=de-DE&pojoClass=attributeType</li>
+     * </ul>
+     *
+     * @response.representation.200.qname The specified Pojo class.
+     * @response.representation.200.doc   This is the representation returned by
+     *                                    default.
+     *
+     * @response.representation.500.qname OpenInfraWebException
+     * @response.representation.500.doc   An internal error occurs if the
+     *                                    backend runs into an unexpected
+     *                                    exception.
+     *
+     * @param schema    The schema name the request should be processed at.
+     * @param pojoClass The name of the class a Pojo should be created for.
+     * @param language  A java locale as string.
+     * @return
+     */
     @GET
     public OpenInfraPojo primePojo(
             @PathParam("schema") String schema,
@@ -49,6 +72,25 @@ public class PrimerResource {
                 pojoClass);
     }
 
+    /**
+     * This resource provides a list of class names that can be used as value
+     * for the pojoClass parameter at the primer resource.
+     * <ul>
+     *   <li>rest/v1/system/primer?language=de-DE&pojoClass=attributeType</li>
+     * </ul>
+     *
+     * @param schema The schema name the request should be processed at.
+     * @return       A list of class names as string.
+     *
+     * @response.representation.200.qname A list of class names.
+     * @response.representation.200.doc   This is the representation returned by
+     *                                    default.
+     *
+     * @response.representation.500.qname OpenInfraWebException
+     * @response.representation.500.doc   An internal error occurs if the
+     *                                    backend runs into an unexpected
+     *                                    exception.
+     */
     @GET
     @Path("/names")
     public List<String> getPrimerNames(@PathParam("schema") String schema) {

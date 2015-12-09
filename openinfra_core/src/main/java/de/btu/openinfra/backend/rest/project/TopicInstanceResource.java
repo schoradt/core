@@ -17,18 +17,23 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import de.btu.openinfra.backend.OpenInfraProperties;
+import de.btu.openinfra.backend.db.OpenInfraOrderBy;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
-import de.btu.openinfra.backend.db.daos.AttributeValueGeomType;
+import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
+import de.btu.openinfra.backend.db.daos.project.AttributeValueGeomType;
 import de.btu.openinfra.backend.db.pojos.TopicCharacteristicPojo;
-import de.btu.openinfra.backend.db.pojos.TopicPojo;
 import de.btu.openinfra.backend.db.pojos.project.AttributeValuePojo;
-import de.btu.openinfra.backend.db.pojos.project.TopicInstanceAssociationPojo;
+import de.btu.openinfra.backend.db.pojos.project.TopicInstanceAssociationFromPojo;
+import de.btu.openinfra.backend.db.pojos.project.TopicInstanceAssociationToPojo;
 import de.btu.openinfra.backend.db.pojos.project.TopicInstancePojo;
+import de.btu.openinfra.backend.db.pojos.project.TopicPojo;
 import de.btu.openinfra.backend.db.rbac.AttributeValueRbac;
 import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
 import de.btu.openinfra.backend.db.rbac.TopicCharacteristicRbac;
-import de.btu.openinfra.backend.db.rbac.TopicInstanceAssociationRbac;
+import de.btu.openinfra.backend.db.rbac.TopicInstanceAssociationFromRbac;
+import de.btu.openinfra.backend.db.rbac.TopicInstanceAssociationToRbac;
 import de.btu.openinfra.backend.db.rbac.TopicInstanceRbac;
 import de.btu.openinfra.backend.db.rbac.TopicRbac;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
@@ -70,6 +75,22 @@ public class TopicInstanceResource {
 						PtLocaleDao.forLanguageTag(language),
 						topicInstanceId);
 	}
+
+	@POST
+    public Response create(
+            @Context UriInfo uriInfo,
+            @Context HttpServletRequest request,
+            @QueryParam("language") String language,
+            @PathParam("projectId") UUID projectId,
+            TopicInstancePojo pojo) {
+        UUID id = new TopicInstanceRbac(projectId,
+                OpenInfraSchemas.PROJECTS).createOrUpdate(
+                OpenInfraHttpMethod.valueOf(request.getMethod()),
+                uriInfo,
+                null,
+                pojo);
+        return OpenInfraResponseBuilder.postResponse(id);
+    }
 
 	@PUT
     @Path("{topicInstanceId}")
@@ -114,7 +135,7 @@ public class TopicInstanceResource {
 
 	@GET
 	@Path("{topicInstanceId}/associationsto")
-	public List<TopicInstanceAssociationPojo> getAssociations(
+	public List<TopicInstanceAssociationToPojo> getAssociations(
 			@Context UriInfo uriInfo,
 			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
@@ -122,7 +143,13 @@ public class TopicInstanceResource {
 			@PathParam("topicInstanceId") UUID topicInstanceId,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
-		return new TopicInstanceAssociationRbac(
+		// Define the specific parameters when not specified correctly
+		if(size == 0) {
+			offset = OpenInfraProperties.DEFAULT_OFFSET;
+			size = OpenInfraProperties.DEFAULT_SIZE;
+		} // end if
+
+		return new TopicInstanceAssociationToRbac(
 				projectId,
 				OpenInfraSchemas.PROJECTS).read(
 						OpenInfraHttpMethod.valueOf(request.getMethod()),
@@ -140,9 +167,9 @@ public class TopicInstanceResource {
             @Context HttpServletRequest request,
             @PathParam("projectId") UUID projectId,
             @PathParam("topicInstanceId") UUID topicInstanceId,
-            TopicInstanceAssociationPojo pojo) {
+            TopicInstanceAssociationToPojo pojo) {
 	    return OpenInfraResponseBuilder.postResponse(
-                new TopicInstanceAssociationRbac(
+                new TopicInstanceAssociationToRbac(
                         projectId,
                         OpenInfraSchemas.PROJECTS).createOrUpdate(
                                 OpenInfraHttpMethod.valueOf(
@@ -165,6 +192,12 @@ public class TopicInstanceResource {
 			@PathParam("topicInstanceId") UUID topicInstanceId,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
+		// Define the specific parameters when not specified correctly
+		if(size == 0) {
+			offset = OpenInfraProperties.DEFAULT_OFFSET;
+			size = OpenInfraProperties.DEFAULT_SIZE;
+		} // end if
+
 		return new TopicCharacteristicRbac(
 				projectId, OpenInfraSchemas.PROJECTS)
 		.readByTopicInstanceAssociationTo(
@@ -175,7 +208,7 @@ public class TopicInstanceResource {
 
 	@GET
 	@Path("{topicInstanceId}/associationsto/topiccharacteristics/{topCharId}")
-	public List<TopicInstanceAssociationPojo> getAssociationsToByTopchar(
+	public List<TopicInstanceAssociationToPojo> getAssociationsToByTopchar(
 			@Context UriInfo uriInfo,
 			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
@@ -183,18 +216,27 @@ public class TopicInstanceResource {
 			@PathParam("topicInstanceId") UUID topicInstanceId,
 			@PathParam("topCharId") UUID topCharId,
 			@QueryParam("offset") int offset,
-			@QueryParam("size") int size) {
-		return new TopicInstanceAssociationRbac(
+			@QueryParam("size") int size,
+			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
+            @QueryParam("orderBy") OpenInfraOrderBy orderBy) {
+		// Define the specific parameters when not specified correctly
+		if(size == 0) {
+			offset = OpenInfraProperties.DEFAULT_OFFSET;
+			size = OpenInfraProperties.DEFAULT_SIZE;
+		} // end if
+
+		return new TopicInstanceAssociationToRbac(
 				projectId, OpenInfraSchemas.PROJECTS)
 			.readAssociationToByTopchar(OpenInfraHttpMethod.valueOf(
 					request.getMethod()), uriInfo,
 					PtLocaleDao.forLanguageTag(language),
-					topicInstanceId, topCharId, offset, size);
+					topicInstanceId, topCharId, offset, size, sortOrder,
+					orderBy);
 	}
 
 	@GET
 	@Path("{topicInstanceId}/associationsfrom/topiccharacteristics/{topCharId}")
-	public List<TopicInstanceAssociationPojo> getAssociationsFromByTopchar(
+	public List<TopicInstanceAssociationFromPojo> getAssociationsFromByTopchar(
 			@Context UriInfo uriInfo,
 			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
@@ -203,7 +245,13 @@ public class TopicInstanceResource {
 			@PathParam("topCharId") UUID topCharId,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
-		return new TopicInstanceAssociationRbac(
+		// Define the specific parameters when not specified correctly
+		if(size == 0) {
+			offset = OpenInfraProperties.DEFAULT_OFFSET;
+			size = OpenInfraProperties.DEFAULT_SIZE;
+		} // end if
+
+		return new TopicInstanceAssociationFromRbac(
 				projectId, OpenInfraSchemas.PROJECTS)
 			.readAssociationFromByTopchar(OpenInfraHttpMethod.valueOf(
 					request.getMethod()), uriInfo,
@@ -221,6 +269,12 @@ public class TopicInstanceResource {
 			@PathParam("topicInstanceId") UUID topicInstanceId,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
+		// Define the specific parameters when not specified correctly
+		if(size == 0) {
+			offset = OpenInfraProperties.DEFAULT_OFFSET;
+			size = OpenInfraProperties.DEFAULT_SIZE;
+		} // end if
+
 		return new TopicCharacteristicRbac(
 				projectId, OpenInfraSchemas.PROJECTS)
 		.readByTopicInstanceAssociationFrom(
@@ -239,7 +293,7 @@ public class TopicInstanceResource {
 			@PathParam("projectId") UUID projectId,
 			@PathParam("topicInstanceId")
 				UUID topicInstanceId) {
-		return new TopicInstanceAssociationRbac(
+		return new TopicInstanceAssociationToRbac(
 				projectId,
 				OpenInfraSchemas.PROJECTS).getCount(
 						OpenInfraHttpMethod.valueOf(request.getMethod()),
@@ -249,7 +303,7 @@ public class TopicInstanceResource {
 
 	@GET
 	@Path("{topicInstanceId}/associationsto/{associatedTopicInstanceId}")
-	public List<TopicInstanceAssociationPojo> getAssociations(
+	public List<TopicInstanceAssociationToPojo> getAssociations(
 			@Context UriInfo uriInfo,
 			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
@@ -259,7 +313,13 @@ public class TopicInstanceResource {
 				UUID associatedTopicInstanceId,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
-		return new TopicInstanceAssociationRbac(
+		// Define the specific parameters when not specified correctly
+		if(size == 0) {
+			offset = OpenInfraProperties.DEFAULT_OFFSET;
+			size = OpenInfraProperties.DEFAULT_SIZE;
+		} // end if
+
+		return new TopicInstanceAssociationToRbac(
 				projectId,
 				OpenInfraSchemas.PROJECTS).read(
 						OpenInfraHttpMethod.valueOf(request.getMethod()),
@@ -278,9 +338,9 @@ public class TopicInstanceResource {
             @PathParam("topicInstanceId") UUID topicInstanceId,
             @PathParam("associatedTopicInstanceId")
                 UUID associatedTopicInstanceId,
-            TopicInstanceAssociationPojo pojo) {
+            TopicInstanceAssociationToPojo pojo) {
 	    return OpenInfraResponseBuilder.putResponse(
-                new TopicInstanceAssociationRbac(
+                new TopicInstanceAssociationToRbac(
                         projectId,
                         OpenInfraSchemas.PROJECTS).createOrUpdate(
                                 OpenInfraHttpMethod.valueOf(
@@ -303,7 +363,7 @@ public class TopicInstanceResource {
             @PathParam("associatedTopicInstanceId")
                 UUID associatedTopicInstanceId) {
 	    return OpenInfraResponseBuilder.deleteResponse(
-                new TopicInstanceAssociationRbac(
+                new TopicInstanceAssociationToRbac(
                         projectId,
                         OpenInfraSchemas.PROJECTS).delete(
                                 OpenInfraHttpMethod.valueOf(
@@ -345,6 +405,12 @@ public class TopicInstanceResource {
             @PathParam("attributeTypeId") UUID attributeTypeId,
             @QueryParam("offset") int offset,
             @QueryParam("size") int size) {
+		// Define the specific parameters when not specified correctly
+		if(size == 0) {
+			offset = OpenInfraProperties.DEFAULT_OFFSET;
+			size = OpenInfraProperties.DEFAULT_SIZE;
+		} // end if
+
         return new AttributeValueRbac(
                 projectId,
                 OpenInfraSchemas.PROJECTS).read(

@@ -111,9 +111,12 @@ public class TopicCharacteristicRbac extends OpenInfraValueRbac<
 			List<TopicCharacteristicPojo> pojos) {
 		Iterator<TopicCharacteristicPojo> it = pojos.iterator();
 		while(it.hasNext()) {
+		    UUID id = it.next().getUuid();
 			if(!user.isPermitted(
 					"/projects/" + currentProjectId +
-					"/topiccharacteristics/{id}:r:" + it.next().getUuid())) {
+					"/topiccharacteristics/{id}:r:" + id) &&
+				!user.isPermitted(
+			        "/system/topiccharacteristics/{id}:r:" + id)) {
 				it.remove();
 			}
 		}

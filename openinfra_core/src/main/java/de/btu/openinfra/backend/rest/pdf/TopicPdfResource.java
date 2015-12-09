@@ -26,30 +26,30 @@ import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
 
-import de.btu.openinfra.backend.db.daos.AttributeValueGeomType;
-import de.btu.openinfra.backend.db.pojos.TopicPojo;
+import de.btu.openinfra.backend.db.daos.project.AttributeValueGeomType;
+import de.btu.openinfra.backend.db.pojos.project.TopicPojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 import de.btu.openinfra.backend.rest.project.TopicInstanceResource;
 
 /**
  * This class transforms XML files into PDF files.
- * 
+ *
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
  */
 @Path(OpenInfraResponseBuilder.REST_URI_PROJECTS + "/topicinstances")
 public class TopicPdfResource {
-	
+
 	/**
 	 * This variable defines the path to the XSL file.
 	 */
-	private static final String XSL_FILE = 
-			"de/btu/openinfra/backend/xsl/TopicPdf.xsl"; 
-	
+	private static final String XSL_FILE =
+			"de/btu/openinfra/backend/xsl/TopicPdf.xsl";
+
 	/**
-	 * This method executes the transformation. 
+	 * This method executes the transformation.
 	 * http://www.e-zest.net/blog/integrating-apache-fop-with-java-project-to-generate-pdf-files/
-	 * 
+	 *
 	 * @param language
 	 * @param projectId
 	 * @param topicInstanceId
@@ -67,17 +67,17 @@ public class TopicPdfResource {
 			@PathParam("projectId") UUID projectId,
 			@PathParam("topicInstanceId") UUID topicInstanceId,
 			@QueryParam("geomType") AttributeValueGeomType geomType) {
-		
-		// Don't care about accessing the RBAC system classes. Just use the 
-		// resource class to retrieve the requested object. 
+
+		// Don't care about accessing the RBAC system classes. Just use the
+		// resource class to retrieve the requested object.
 		TopicPojo pojo = new TopicInstanceResource().get(
 				uriInfo,
 				request,
-				language, 
-				projectId, 
-				topicInstanceId, 
+				language,
+				projectId,
+				topicInstanceId,
 				geomType);
-		
+
 		// Use JAXB to retrieve XML output.
 		String xml = "";
 		StringWriter sw = new StringWriter();
@@ -85,28 +85,28 @@ public class TopicPdfResource {
 			JAXBContext jaxb = JAXBContext.newInstance(TopicPojo.class);
 			Marshaller m = jaxb.createMarshaller();
 			m.marshal(pojo , sw);
-			xml = sw.toString();			
+			xml = sw.toString();
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}
-		
-		// Use formatted objects (FOP) and a specific XSL file in order to 
+
+		// Use formatted objects (FOP) and a specific XSL file in order to
 		// generate PDF output.
 		Fop fop;
 		FopFactory fopf = FopFactory.newInstance();
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		Transformer xslfoTransformer;
-		
+
 		try {
 			fop = fopf.newFop(
-					MimeConstants.MIME_PDF, 
-					fopf.newFOUserAgent(), 
+					MimeConstants.MIME_PDF,
+					fopf.newFOUserAgent(),
 					stream);
-			
+
 			Result res = new SAXResult(fop.getDefaultHandler());
-			
+
 			TransformerFactory transfact = TransformerFactory.newInstance();
-			xslfoTransformer = 
+			xslfoTransformer =
 					transfact.newTransformer(
 							new StreamSource(
 									new TopicPdfResource().getClass()
@@ -114,11 +114,11 @@ public class TopicPdfResource {
 											XSL_FILE)));
 			xslfoTransformer.transform(
 					new StreamSource(new StringReader(xml)), res);
-			
+
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}
-		
+
 		return Response.ok().entity(stream.toByteArray())
 				.type("application/pdf").build();
 	}

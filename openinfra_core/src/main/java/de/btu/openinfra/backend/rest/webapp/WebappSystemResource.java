@@ -33,8 +33,16 @@ import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
     + OpenInfraResponseBuilder.UTF8_CHARSET,
     MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET})
-public class WebappSystem {
+public class WebappSystemResource {
 
+	/**
+	 * Delivers a web-application data object.
+	 *
+	 * @param uriInfo
+	 * @param request
+	 * @param webappId the id of the web-application
+	 * @return a web-application data object
+	 */
 	@GET
 	public WebappSystemPojo get(
 			@Context UriInfo uriInfo,
@@ -44,13 +52,23 @@ public class WebappSystem {
 		return new WebappSystemDao().read(null, webappId, 0, 1).get(0);
 	}
 
+	/**
+	 * Changes an existing web-application data object. It's not required to set
+	 * the UUID of the POJO.
+	 *
+	 * @param uriInfo
+	 * @param request
+	 * @param webappSystemId the id of the web-application
+	 * @param pojo the content to change
+	 * @return the UUID of the changed data object
+	 */
 	@PUT
-	@Path("/{webappSystemId}")
 	public Response put(
 			@Context UriInfo uriInfo,
 			@Context HttpServletRequest request,
 			@PathParam("webappSystemId") UUID webappSystemId,
 			WebappSystemPojo pojo) {
+		pojo.setUuid(webappSystemId);
 		return OpenInfraResponseBuilder.putResponse(
 				new WebappSystemDao().createOrUpdate(pojo, webappSystemId));
 	}

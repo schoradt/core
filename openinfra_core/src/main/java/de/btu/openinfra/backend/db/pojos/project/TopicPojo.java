@@ -1,10 +1,8 @@
-package de.btu.openinfra.backend.db.pojos;
+package de.btu.openinfra.backend.db.pojos.project;
 
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
-
-import de.btu.openinfra.backend.db.pojos.project.TopicInstancePojo;
 
 @XmlRootElement
 public class TopicPojo {

@@ -1,4 +1,5 @@
-<%@page import="de.btu.openinfra.backend.db.daos.ProjectDao"%>
+<%@page import="de.btu.openinfra.backend.servlet.OpenInfraVersion"%>
+<%@page import="de.btu.openinfra.backend.db.daos.project.ProjectDao"%>
 <%@page import="de.btu.openinfra.backend.helper.BreadCrumbNavigation"%>
 <%@page import="de.btu.openinfra.backend.OpenInfraApplication"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"

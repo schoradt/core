@@ -19,6 +19,13 @@ import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
 import de.btu.openinfra.backend.db.rbac.TopicCharacteristicRbac;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
+/**
+ * This class represents and implements the resource for suggestions in the
+ * project schema.
+ *
+ * @author <a href="http://www.b-tu.de">BTU</a> DBIS
+ *
+ */
 @Path(OpenInfraResponseBuilder.REST_URI_PROJECTS + "/topiccharacteristics/"
 		+ "{topicCharacteristicId}/attributetypes/{attributeTypeId}/suggest")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
@@ -26,11 +33,15 @@ import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
     MediaType.APPLICATION_XML + OpenInfraResponseBuilder.XML_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET})
 public class SuggestionResource {
+
     /**
      * This resource will return a list of attribute values for a given query
      * string. The list will only contain values that belong to a specified
      * topic characteristic and a specified attribute type. The localization of
      * the string will depend on the requested language.
+     * <ul>
+     *   <li>rest/v1/projects/[uuid]/topiccharacteristics/[uuid]/attributetypes/[uuid]/suggest?q=BAL</li>
+     * </ul>
      *
      * @param uriInfo
      * @param request
@@ -46,6 +57,20 @@ public class SuggestionResource {
      * @return                      A list of strings that match to the
      *                              specified parameter or null if the locale
      *                              and / or the qString is not specified.
+     *
+     * @response.representation.200.qname A list of String's.
+     * @response.representation.200.doc   This is the representation returned by
+     *                                    default.
+     *
+     * @response.representation.403.qname WebApplicationException
+     * @response.representation.403.doc   This error occurs if you do not have
+     *                                    the permission to access this
+     *                                    resource.
+     *
+     * @response.representation.500.qname OpenInfraWebException
+     * @response.representation.500.doc   An internal error occurs if the
+     *                                    backend runs into an unexpected
+     *                                    exception.
      */
     @GET
     public List<String> getSuggestion(

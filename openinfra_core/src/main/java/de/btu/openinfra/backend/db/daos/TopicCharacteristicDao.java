@@ -12,6 +12,7 @@ import de.btu.openinfra.backend.OpenInfraProperties;
 import de.btu.openinfra.backend.OpenInfraPropertyKeys;
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.daos.project.TopicInstanceDao;
 import de.btu.openinfra.backend.db.jpa.model.AttributeValueDomain;
 import de.btu.openinfra.backend.db.jpa.model.AttributeValueValue;
 import de.btu.openinfra.backend.db.jpa.model.Project;
@@ -139,15 +140,22 @@ public class TopicCharacteristicDao
 		if (tc != null) {
 		    TopicCharacteristicPojo pojo = new TopicCharacteristicPojo(tc);
 
-		    if (currentProjectId == null || schema == null) {
+		    // throw an exception if both is null, the schema and the project id
+		    if (currentProjectId == null && schema == null) {
     		    throw new NullPointerException(
 		    			"The project id and the schema must not be null!");
 		    }
 
-		    pojo.setTopicInstancesCount(
-    				new TopicInstanceDao(
-    		    			currentProjectId, schema)
-    		    	.getCount(tc.getId()));
+		    // only retrieve the topicInstanceCount if the request came from the
+		    // project schema
+		    if (schema.equals(OpenInfraSchemas.PROJECTS)) {
+    		    pojo.setTopicInstancesCount(
+        				new TopicInstanceDao(
+        		    			currentProjectId, schema)
+        		    	.getCount(tc.getId()));
+		    } else {
+		        pojo.setTopicInstancesCount(-1);
+		    }
 
             // set the project if exists
             try {
