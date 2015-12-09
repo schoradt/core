@@ -111,14 +111,15 @@ public class TopicCharacteristicResource {
 									PtLocaleDao.forLanguageTag(
 											language), filter);
 		} else {
-			TopicCharacteristicRbac rbac = new TopicCharacteristicRbac(
-					projectId, OpenInfraSchemas.valueOf(schema.toUpperCase()));
-			List<TopicCharacteristicPojo> list = rbac.read(
-					OpenInfraHttpMethod.valueOf(request.getMethod()),
-					uriInfo,
-					PtLocaleDao.forLanguageTag(language),
-					sortOrder, orderBy,	offset,	size);
-			return list;
+			return new TopicCharacteristicRbac(
+					projectId,
+					OpenInfraSchemas.valueOf(
+					        schema.toUpperCase())).read(
+					                OpenInfraHttpMethod.valueOf(
+					                        request.getMethod()),
+			                        uriInfo,
+			                        PtLocaleDao.forLanguageTag(language),
+			                        sortOrder, orderBy,	offset,	size);
 		} // end if else
 	}
 
