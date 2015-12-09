@@ -18,7 +18,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import de.btu.openinfra.backend.OpenInfraProperties;
+import de.btu.openinfra.backend.db.OpenInfraOrderBy;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.daos.project.AttributeValueGeomType;
 import de.btu.openinfra.backend.db.pojos.TopicCharacteristicPojo;
@@ -214,7 +216,9 @@ public class TopicInstanceResource {
 			@PathParam("topicInstanceId") UUID topicInstanceId,
 			@PathParam("topCharId") UUID topCharId,
 			@QueryParam("offset") int offset,
-			@QueryParam("size") int size) {
+			@QueryParam("size") int size,
+			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
+            @QueryParam("orderBy") OpenInfraOrderBy orderBy) {
 		// Define the specific parameters when not specified correctly
 		if(size == 0) {
 			offset = OpenInfraProperties.DEFAULT_OFFSET;
@@ -226,7 +230,8 @@ public class TopicInstanceResource {
 			.readAssociationToByTopchar(OpenInfraHttpMethod.valueOf(
 					request.getMethod()), uriInfo,
 					PtLocaleDao.forLanguageTag(language),
-					topicInstanceId, topCharId, offset, size);
+					topicInstanceId, topCharId, offset, size, sortOrder,
+					orderBy);
 	}
 
 	@GET

@@ -6,7 +6,9 @@ import java.util.UUID;
 
 import javax.ws.rs.core.UriInfo;
 
+import de.btu.openinfra.backend.db.OpenInfraOrderBy;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.project.TopicInstanceAssociationToDao;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstanceXTopicInstance;
@@ -29,11 +31,13 @@ public class TopicInstanceAssociationToRbac extends OpenInfraValueValueRbac<
 					Locale locale,
 					UUID topicInstance,
 					UUID topChar,
-					int offset, int size) {
+					int offset, int size,
+					OpenInfraSortOrder sortOrder,
+		            OpenInfraOrderBy orderBy) {
 		checkPermission(httpMethod, uriInfo);
 		return new TopicInstanceAssociationToDao(currentProjectId, schema)
 			.readAssociationToByTopchar(locale, topicInstance, topChar,
-					offset, size);
+					offset, size, sortOrder, orderBy);
 	}
 
 }
