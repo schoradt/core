@@ -18,14 +18,26 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import de.btu.openinfra.backend.db.OpenInfraOrderBy;
-import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.rbac.PermissionPojo;
 import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
+import de.btu.openinfra.backend.db.rbac.OpenInfraRbac;
+import de.btu.openinfra.backend.db.rbac.OpenInfraRealm;
 import de.btu.openinfra.backend.db.rbac.rbac.PermissionRbac;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
+/**
+ * This resource class can be used to manage permission strings which are
+ * directly processed by Apache Shiro. We distinguish between default and
+ * project related permissions. For more information please also consider
+ * the following classes:
+ *
+ * @see OpenInfraRealm
+ * @see OpenInfraRbac
+ *
+ * @author <a href="http://www.b-tu.de">BTU</a> DBIS
+ *
+ */
 @Path(OpenInfraResponseBuilder.REST_URI_RBAC + "/permissions")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET,
@@ -34,25 +46,38 @@ import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class PermissionResource {
 
+	/**
+	 * Delivers a list of all available permissions. This resource is paging
+	 * enabled.
+	 *
+	 * @param uriInfo
+	 * @param request
+	 * @param offset
+	 * @param size
+	 * @return a list of all available permissions
+	 */
 	@GET
 	public List<PermissionPojo> get(
 			@Context UriInfo uriInfo,
 			@Context HttpServletRequest request,
-			@QueryParam("language") String language,
-			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
-            @QueryParam("orderBy") OpenInfraOrderBy orderBy,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new PermissionRbac().read(
 				OpenInfraHttpMethod.valueOf(request.getMethod()),
 				uriInfo,
-				PtLocaleDao.forLanguageTag(language),
-				sortOrder,
-				orderBy,
+				null,
 				offset,
 				size);
 	}
 
+	/**
+	 * This method creates a new permission.
+	 *
+	 * @param uriInfo
+	 * @param request
+	 * @param pojo the content
+	 * @return the UUID of the newly created object
+	 */
 	@POST
 	public Response create(
 			@Context UriInfo uriInfo,
@@ -64,6 +89,15 @@ public class PermissionResource {
 						uriInfo, null, pojo));
 	}
 
+	/**
+	 * This resource changes an existing permission.
+	 *
+	 * @param uriInfo
+	 * @param request
+	 * @param uuid the UUID of the permission which should be changed
+	 * @param pojo the content to change
+	 * @return the UUID of the changed object
+	 */
 	@PUT
 	@Path("{id}")
 	public Response put(
@@ -77,6 +111,14 @@ public class PermissionResource {
 						uriInfo, uuid, pojo));
 	}
 
+	/**
+	 * This resource deletes an existing permission.
+	 *
+	 * @param uriInfo
+	 * @param request
+	 * @param uuid the UUID of the object which should be deleted
+	 * @return the UUID of the deleted object
+	 */
 	@DELETE
 	@Path("{id}")
 	public Response delete(
@@ -89,6 +131,15 @@ public class PermissionResource {
 						uriInfo, uuid), uuid);
 	}
 
+	/**
+	 * This resource retrieves a single permission.
+	 *
+	 * @param uriInfo
+	 * @param request
+	 * @param language
+	 * @param uuid the UUID of the requested object
+	 * @return a single permission
+	 */
 	@GET
 	@Path("{id}")
 	public PermissionPojo get(
@@ -103,6 +154,13 @@ public class PermissionResource {
 				uuid);
 	}
 
+	/**
+	 * This resource retrieves the number of all available permissions.
+	 *
+	 * @param uriInfo
+	 * @param request
+	 * @return the number of all available permissions
+	 */
 	@GET
 	@Path("count")
 	@Produces({MediaType.TEXT_PLAIN})
