@@ -14,13 +14,15 @@ import de.btu.openinfra.backend.exception.OpenInfraSolrException;
 import de.btu.openinfra.backend.exception.OpenInfraWebException;
 
 /**
- * This class creates a connection to the Solr server.
+ * This class creates a connection to the Solr server. It will be able to work
+ * with threads.
  *
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
  */
-public class SolrServer {
+public class SolrServer extends Thread {
 
+    protected Thread thread;
     private String url;
     private SolrClient solr;
 

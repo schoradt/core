@@ -38,7 +38,12 @@ import de.btu.openinfra.backend.solr.enums.SolrIndexEnum;
  */
 public class SolrIndexer extends SolrServer {
 
+    /*
+     * This variable will define the maximum window size of the document list
+     * that will be committed to the server at the indexing process at once.
+     */
     private final int DEFAULT_WINDOW_SIZE = 1000;
+
     /**
      * Default constructor
      */
@@ -46,7 +51,6 @@ public class SolrIndexer extends SolrServer {
         // connect to the Solr server
         super();
     }
-
 
     /**
      *
@@ -239,15 +243,19 @@ public class SolrIndexer extends SolrServer {
 
     /**
      * This method will be the access point to index a single topic instance.
+     * This method is thread-safe.
      *
      * @param projectId       The project id the topic instance contains to.
      * @param topicInstanceId The topic instance id that was updated.
      * @return
      */
-    public SolrInputDocument createOrUpdateDocument(
-            UUID projectId, UUID topicInstanceId) {
-        Collection<SolrInputDocument> docs = new ArrayList<SolrInputDocument>();
+    protected synchronized SolrInputDocument createOrUpdateDocument(
+            UUID projectId,
+            UUID topicInstanceId) {
 
+        Collection<SolrInputDocument> docs = new ArrayList<SolrInputDocument>();
+        System.out.println("Updating index for topic instance "
+                + topicInstanceId);
         // Get the topic instance model object for the specified topic instance
         // id and create the document
         docs.add(createOrUpdateDocument(
@@ -261,12 +269,13 @@ public class SolrIndexer extends SolrServer {
      }
 
     /**
-     * This method deletes a specific document from the Solr index.
+     * This method deletes a specific document from the Solr index. This method
+     * is thread-safe.
      *
      * @param topicInstanceId The id of the topic instance that should be
      *                        deleted.
      */
-    public void deleteDocument(UUID topicInstanceId) {
+    protected synchronized void deleteDocument(UUID topicInstanceId) {
         try {
             getSolr().deleteById(topicInstanceId.toString());
             getSolr().commit();
