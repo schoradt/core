@@ -4,11 +4,12 @@ import java.util.UUID;
 
 import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 import de.btu.openinfra.backend.exception.OpenInfraSolrException;
-import de.btu.openinfra.backend.solr.enums.SorlIndexOperationEnum;
+import de.btu.openinfra.backend.solr.enums.SolrIndexOperationEnum;
 
 /**
  * The class supports threaded indexing for single documents. This can be useful
- * for updating small parts of the index.
+ * for updating small parts of the index. To start the index process simply call
+ * <code>start()</code> on the SolrThreadedIndexer object.
  *
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
@@ -31,7 +32,7 @@ public class SolrThreadedIndexer extends SolrIndexer {
      * This operation will be specified by a special constructor. It is mainly
      * formulated for the thread based single indexing process.
      */
-    private SorlIndexOperationEnum operation = null;
+    private SolrIndexOperationEnum operation = null;
 
     /**
      * Constructor for dynamically indexing via threads. It supports only
@@ -41,11 +42,11 @@ public class SolrThreadedIndexer extends SolrIndexer {
      * @param projectId       The project id the topic instance belongs to.
      * @param topicInstanceId The topic instance id that should be processed.
      * @param operation       The operation of the type
-     *                        {@link SorlIndexOperationEnum} that should be
+     *                        {@link SolrIndexOperationEnum} that should be
      *                        executed on the index.
      */
     public SolrThreadedIndexer(UUID projectId, UUID topicInstanceId,
-            SorlIndexOperationEnum operation) {
+            SolrIndexOperationEnum operation) {
         // connect to the Solr server
         super();
         this.projectId = projectId;
@@ -76,7 +77,7 @@ public class SolrThreadedIndexer extends SolrIndexer {
         case DELETE:
             // check if the topic instance id is not null
             if (topicInstanceId != null) {
-             // delete the specified document
+                // delete the specified document
                 deleteDocument(topicInstanceId);
             } else {
                 throw new OpenInfraSolrException(

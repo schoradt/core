@@ -277,6 +277,8 @@ public class SolrIndexer extends SolrServer {
      */
     protected synchronized void deleteDocument(UUID topicInstanceId) {
         try {
+            System.out.println("Deleting document '" + topicInstanceId
+                    + "' from index.");
             getSolr().deleteById(topicInstanceId.toString());
             getSolr().commit();
         } catch (SolrServerException | IOException e) {
@@ -289,6 +291,7 @@ public class SolrIndexer extends SolrServer {
      */
     public void deleteAllDocuments() {
         try {
+            System.out.println("Deleting all documents from index");
             getSolr().deleteByQuery("*:*");
             getSolr().commit();
         } catch (SolrServerException | IOException e) {

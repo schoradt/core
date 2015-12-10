@@ -6,7 +6,7 @@ package de.btu.openinfra.backend.solr.enums;
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *
  */
-public enum SorlIndexOperationEnum {
+public enum SolrIndexOperationEnum {
     UPDATE,
     DELETE
 }

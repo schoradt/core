@@ -19,6 +19,7 @@ import de.btu.openinfra.backend.db.OpenInfraOrderBy;
 import de.btu.openinfra.backend.db.OpenInfraOrderByEnum;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.OpenInfraSortOrder;
+import de.btu.openinfra.backend.db.jpa.model.AttributeValue;
 import de.btu.openinfra.backend.db.jpa.model.MetaData;
 import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 import de.btu.openinfra.backend.db.jpa.model.PtLocale;
@@ -26,6 +27,8 @@ import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 import de.btu.openinfra.backend.exception.OpenInfraEntityException;
 import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 import de.btu.openinfra.backend.exception.OpenInfraWebException;
+import de.btu.openinfra.backend.solr.SolrThreadedIndexer;
+import de.btu.openinfra.backend.solr.enums.SolrIndexOperationEnum;
 
 /**
  * This class is used to provide a sophisticated way to manage the JPA entity
@@ -321,6 +324,9 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 			et.begin();
 			em.merge(result.getModelObject());
 			et.commit();
+			// update the corresponding document for the model class from the
+            // Solr index
+			updateIndex(pojo.getUuid(), SolrIndexOperationEnum.UPDATE);
 			return result.getId();
 		} catch(RuntimeException ex) {
 			if(et != null && et.isActive()) {
@@ -415,6 +421,9 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 				et.begin();
 				em.remove(o);
 				et.commit();
+				// delete the corresponding document for the model class from
+				// the Solr index
+				updateIndex(uuid, SolrIndexOperationEnum.DELETE);
 				return true;
 			} catch(RuntimeException ex) {
 				if(et != null && et.isActive()) {
@@ -526,6 +535,58 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
         if (wrongSortType) {
             throw new OpenInfraEntityException(
                     OpenInfraExceptionTypes.WRONG_SORT_TYPE);
+        }
+
+    }
+
+    /**
+     * This class starts an update of the Solr index. To interact with the index
+     * it is necessary to have the UUID of the topic instance, that is connected
+     * to the modified object (e.g. AttributeValue). This method will
+     * automatically retrieve the topic instance id for the current model class.
+     * <br/>
+     * <b>The index operation will be set automatically to UPDATE if we try to
+     * delete an attribute value because there can be still other values in the
+     * topic instance.</b>
+     * <br/><br/>
+     * At the moment the update and delete process is only supported for the
+     * following model classes:
+     * <ul>
+     *   <li>TopicInstance</li>
+     *   <li>AttributeValue</li>
+     * </ul>
+     *
+     * @param id        The id of the object that was modified.
+     * @param operation The operation that should be performed on the index.
+     */
+    protected void updateIndex(UUID id, SolrIndexOperationEnum operation) {
+
+        SolrThreadedIndexer indexThread = null;
+        UUID topicInstanceId = id;
+
+
+        // model classes need several steps do retrieve the topic instance id
+        switch (modelClass.getSimpleName()) {
+        case "AttributeValue":
+            // Set the index operation to UPDATE if we try to delete an
+            // attribute value because there can be still other values in the
+            // topic instance.
+            if (operation.equals(SolrIndexOperationEnum.DELETE)) {
+                operation = SolrIndexOperationEnum.UPDATE;
+            }
+            // retrieve the topic instance id
+            topicInstanceId =
+                em.find(AttributeValue.class, id).getTopicInstance().getId();
+        case "TopicInstance":
+            // update or delete the Solr index for the specified topic instance
+            // id
+            indexThread = new SolrThreadedIndexer(
+                    currentProjectId, topicInstanceId, operation);
+            indexThread.start();
+            break;
+
+        default:
+            return;
         }
 
     }
