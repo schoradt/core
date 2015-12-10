@@ -18,14 +18,19 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import de.btu.openinfra.backend.db.OpenInfraOrderBy;
-import de.btu.openinfra.backend.db.OpenInfraSortOrder;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.rbac.SubjectRolePojo;
 import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
 import de.btu.openinfra.backend.db.rbac.rbac.SubjectRoleRbac;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
+/**
+ * This resource class can be used to manage the relation between subjects and
+ * their roles.
+ *
+ * @author <a href="http://www.b-tu.de">BTU</a> DBIS
+ *
+ */
 @Path(OpenInfraResponseBuilder.REST_URI_RBAC + "/subjectroles")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET,
@@ -34,25 +39,41 @@ import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class SubjectRoleResource {
 
+	/**
+	 * This method is used to retrieve all available relations. This method is
+	 * paging enabled.
+	 *
+	 * @param uriInfo
+	 * @param request
+	 * @param language
+	 * @param offset
+	 * @param size
+	 * @return all available relations
+	 */
 	@GET
 	public List<SubjectRolePojo> get(
 			@Context UriInfo uriInfo,
 			@Context HttpServletRequest request,
 			@QueryParam("language") String language,
-			@QueryParam("sortOrder") OpenInfraSortOrder sortOrder,
-            @QueryParam("orderBy") OpenInfraOrderBy orderBy,
 			@QueryParam("offset") int offset,
 			@QueryParam("size") int size) {
 		return new SubjectRoleRbac().read(
 				OpenInfraHttpMethod.valueOf(request.getMethod()),
 				uriInfo,
-				PtLocaleDao.forLanguageTag(language),
-				sortOrder,
-				orderBy,
+				null,
 				offset,
 				size);
 	}
 
+	/**
+	 * This method retrieves a specific relation between a subject and a role.
+	 *
+	 * @param uriInfo
+	 * @param request
+	 * @param language
+	 * @param uuid the UUID of the requested object
+	 * @return a specific relation between a subject and a role
+	 */
 	@GET
 	@Path("{id}")
 	public SubjectRolePojo get(
@@ -67,6 +88,14 @@ public class SubjectRoleResource {
 				uuid);
 	}
 
+	/**
+	 * This method creates a new relation.
+	 *
+	 * @param uriInfo
+	 * @param request
+	 * @param pojo the content
+	 * @return the UUID of the newly created object
+	 */
 	@POST
 	public Response create(
 			@Context UriInfo uriInfo,
@@ -78,6 +107,15 @@ public class SubjectRoleResource {
 						uriInfo, null, pojo));
 	}
 
+	/**
+	 * This method changes an existing relation between a subject and a role.
+	 *
+	 * @param uriInfo
+	 * @param request
+	 * @param uuid the UUID of the object which should be changed
+	 * @param pojo the content
+	 * @return the UUID of the changed object
+	 */
 	@PUT
 	@Path("{id}")
 	public Response put(
@@ -91,6 +129,14 @@ public class SubjectRoleResource {
 						uriInfo, uuid, pojo));
 	}
 
+	/**
+	 * This method deletes an existing relation.
+	 *
+	 * @param uriInfo
+	 * @param request
+	 * @param uuid the UUID of the relation
+	 * @return the UUID of the deleted relation
+	 */
 	@DELETE
 	@Path("{id}")
 	public Response delete(
@@ -103,6 +149,13 @@ public class SubjectRoleResource {
 						uriInfo, uuid), uuid);
 	}
 
+	/**
+	 * This method retrieves the number of all available relations.
+	 *
+	 * @param uriInfo
+	 * @param request
+	 * @return the number of all available relations
+	 */
 	@GET
 	@Path("count")
 	@Produces({MediaType.TEXT_PLAIN})
