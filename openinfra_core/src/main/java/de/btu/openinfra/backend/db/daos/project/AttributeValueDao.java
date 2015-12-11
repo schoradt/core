@@ -29,6 +29,8 @@ import de.btu.openinfra.backend.db.pojos.project.AttributeValueGeomPojo;
 import de.btu.openinfra.backend.db.pojos.project.AttributeValueGeomzPojo;
 import de.btu.openinfra.backend.db.pojos.project.AttributeValuePojo;
 import de.btu.openinfra.backend.db.pojos.project.AttributeValueValuePojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 import de.btu.openinfra.backend.solr.enums.SolrIndexOperationEnum;
 
 /**
@@ -110,7 +112,7 @@ public class AttributeValueDao extends
 		if(av != null) {
 			// 1. Define the Attribute value POJO that will be returned at
 			// the end
-			AttributeValuePojo pojo = new AttributeValuePojo();
+			AttributeValuePojo pojo = new AttributeValuePojo(av);
 			// 2. Define the id which is used heavily throughout this method
 			UUID id = av.getId();
 			// 3. Retrieve the specific type of this attribute value
@@ -504,8 +506,9 @@ public class AttributeValueDao extends
 				// now we must update the Solr index
 				updateIndex(id, SolrIndexOperationEnum.UPDATE);
             } else {
-                // return null if the ids doesn't match
-                return null;
+                // throw an exception if the ids does not match
+                throw new OpenInfraEntityException(
+                        OpenInfraExceptionTypes.INCOMPATIBLE_UUIDS);
             }
         }
 
