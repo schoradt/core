@@ -20,6 +20,8 @@ import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 import org.reflections.util.FilterBuilder;
 
+import de.btu.openinfra.backend.OpenInfraProperties;
+import de.btu.openinfra.backend.OpenInfraPropertyKeys;
 import de.btu.openinfra.backend.Reflection;
 import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.jpa.model.PtLocale;
@@ -58,19 +60,28 @@ public class PojoPrimer {
 
     /**
      * Creates a primer object for the given schema and pojo class.
-     * @param schema the schema
-     * @param projectId the project id
-     * @param locale A Java.util locale objects.
-     * @param pojoClass the pojo class
-     * @return primer object if pojoClass and the schema exist in the pojo
-     * hash map otherwise throws OpenInfraWebException
+     *
+     * @param schema    The schema the pojo belongs to.
+     * @param projectId The project id if we have the schema project.
+     * @param language  The language as string.
+     * @param pojoClass The pojo class that is requested.
+     * @return          A primer object if pojoClass and the schema exist in the
+     *                  pojo hash map otherwise throws OpenInfraWebException
      * @throws OpenInfraWebException
      */
     public static OpenInfraPojo primePojoStatically(
             OpenInfraSchemas schema,
             UUID projectId,
-            Locale locale,
+            String language,
             String pojoClass) {
+        // check the language and set the default language if it is null
+        if (language == null) {
+            language = OpenInfraProperties.getProperty(
+                    OpenInfraPropertyKeys.DEFAULT_LANGUAGE.getKey());
+        }
+        // get the locale from the language
+        Locale locale = PtLocaleDao.forLanguageTag(language.toUpperCase());
+
         switch(schema) {
             case SYSTEM:
             case PROJECTS:

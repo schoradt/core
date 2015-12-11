@@ -13,7 +13,6 @@ import javax.ws.rs.core.MediaType;
 
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.PojoPrimer;
-import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
@@ -72,7 +71,7 @@ public class PrimerResource {
                     ? OpenInfraSchemas.META_DATA
                     : OpenInfraSchemas.valueOf(schema.toUpperCase()),
                 projectId,
-                PtLocaleDao.forLanguageTag(language.toUpperCase()),
+                language,
                 pojoClass);
     }
 
