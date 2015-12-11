@@ -49,8 +49,6 @@ public class OpenInfraObjectResource {
 	 * @param uriInfo
 	 * @param request
 	 * @param language
-	 * @param sortOrder
-	 * @param orderBy
 	 * @param offset
 	 * @param size
 	 * @return a list of OpenInfRA objects
