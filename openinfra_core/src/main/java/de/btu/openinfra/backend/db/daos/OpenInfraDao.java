@@ -317,6 +317,8 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
             return null;
         }
 
+        SolrThreadedIndexer thread = null;
+
 		// 2. Get the transaction and merge (create or replace) the JPA model
 		// object.
 		EntityTransaction et = em.getTransaction();
@@ -326,11 +328,12 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 			et.commit();
 			// update the corresponding document for the model class from the
             // Solr index
-			updateIndex(pojo.getUuid(), SolrIndexOperationEnum.UPDATE);
+			thread = updateIndex(pojo.getUuid(), SolrIndexOperationEnum.UPDATE);
 			return result.getId();
 		} catch(RuntimeException ex) {
 			if(et != null && et.isActive()) {
 				et.rollback();
+				thread.stopIndexing();
 			} // end if
 			throw new OpenInfraWebException(ex);
 		} // end try catch
@@ -416,18 +419,20 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
 	    // delete the common entity
 		TypeModel o = em.find(modelClass, uuid);
 		EntityTransaction et = em.getTransaction();
+		SolrThreadedIndexer thread = null;
 		if(o != null) {
 			try {
+			    // delete the corresponding document for the model class from
+                // the Solr index
+			    thread = updateIndex(uuid, SolrIndexOperationEnum.DELETE);
 				et.begin();
 				em.remove(o);
 				et.commit();
-				// delete the corresponding document for the model class from
-				// the Solr index
-				updateIndex(uuid, SolrIndexOperationEnum.DELETE);
 				return true;
 			} catch(RuntimeException ex) {
 				if(et != null && et.isActive()) {
 					et.rollback();
+					thread.stopIndexing();
 				} // end if
 				throw ex;
 			} // end try catch
@@ -558,12 +563,13 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
      *
      * @param id        The id of the object that was modified.
      * @param operation The operation that should be performed on the index.
+     * @return          The thread that was started for this index process.
      */
-    protected void updateIndex(UUID id, SolrIndexOperationEnum operation) {
+    protected SolrThreadedIndexer updateIndex(
+            UUID id, SolrIndexOperationEnum operation) {
 
         SolrThreadedIndexer indexThread = null;
         UUID topicInstanceId = id;
-
 
         // model classes need several steps do retrieve the topic instance id
         switch (modelClass.getSimpleName()) {
@@ -584,11 +590,9 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
                     currentProjectId, topicInstanceId, operation);
             indexThread.start();
             break;
-
         default:
-            return;
+            break;
         }
-
+        return indexThread;
     }
-
 }

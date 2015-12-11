@@ -2,8 +2,8 @@ package de.btu.openinfra.backend.solr;
 
 import java.util.UUID;
 
-import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
-import de.btu.openinfra.backend.exception.OpenInfraSolrException;
+import de.btu.openinfra.backend.OpenInfraProperties;
+import de.btu.openinfra.backend.OpenInfraPropertyKeys;
 import de.btu.openinfra.backend.solr.enums.SolrIndexOperationEnum;
 
 /**
@@ -57,10 +57,32 @@ public class SolrThreadedIndexer extends SolrIndexer {
     /**
      * This method contains the main logic. It will update or delete a single
      * document from the Solr index depending on the specified operation in the
-     * constructor.
+     * constructor. The thread will start delayed for at least 15 seconds or the
+     * time that is configured in the properties file. This is necessary while
+     * deleting objects that are no topic instances (e.g. attribute values). If
+     * we delete the
      */
     @Override
     public void run() {
+        try {
+            // this will be the minimum delay time for index threads
+            long defaultSleepTime = 15000;
+
+            // get the delay time from the properties
+            long propertySleepTime = Long.parseLong(
+                    OpenInfraProperties.getProperty(
+                            OpenInfraPropertyKeys.SOLR_INDEX_DELAY.getKey()));
+
+            // only use the property delay time if it is greater than the
+            // default delay time
+            if (propertySleepTime > defaultSleepTime) {
+                defaultSleepTime = propertySleepTime;
+            }
+            Thread.sleep(defaultSleepTime);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         // execute different indexing methods depending on the requested
         // operation
         switch (operation) {
@@ -73,9 +95,6 @@ public class SolrThreadedIndexer extends SolrIndexer {
                 if (!result) {
                     System.out.println("Updating enity in index failed.");
                 }
-            } else {
-                throw new OpenInfraSolrException(
-                        OpenInfraExceptionTypes.INTERNAL_SERVER_EXCEPTION);
             }
             break;
         case DELETE:
@@ -86,14 +105,11 @@ public class SolrThreadedIndexer extends SolrIndexer {
                 if (!result) {
                     System.out.println("Deleting enity in index failed.");
                 }
-            } else {
-                throw new OpenInfraSolrException(
-                        OpenInfraExceptionTypes.INTERNAL_SERVER_EXCEPTION);
             }
             break;
         default:
-            throw new OpenInfraSolrException(
-                    OpenInfraExceptionTypes.INTERNAL_SERVER_EXCEPTION);
+            stopIndexing();
+            break;
         }
     }
 
@@ -108,5 +124,13 @@ public class SolrThreadedIndexer extends SolrIndexer {
             thread = new Thread(this);
             thread.start();
         }
+    }
+
+    /**
+     * This method stops the currecnt indexing thread.
+     */
+    public void stopIndexing() {
+        System.out.println("Indexing process aborted.");
+        this.interrupt();
     }
 }

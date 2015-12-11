@@ -98,11 +98,11 @@ public class SolrIndexer extends SolrServer {
             for (Projects project : projectIndexList) {
                 // filter for main projects
                 if (!project.getIsSubproject()) {
-                    System.out.println("starting indexing of project "
-                            + project.getProjectId() + " ... ");
+                    System.out.println("starting indexing of project '"
+                            + project.getProjectId() + "' ... ");
                     indexProject(project.getProjectId());
-                    System.out.println("finished indexing of project "
-                            + project.getProjectId());
+                    System.out.println("finished indexing of project '"
+                            + project.getProjectId() + "'");
                 }
             }
             return true;
@@ -256,10 +256,14 @@ public class SolrIndexer extends SolrServer {
             UUID topicInstanceId) {
 
         if (getAlive()) {
+            // delete the document first because it seems that updating is not
+            // always performing the expected way
+            deleteDocument(topicInstanceId);
+
             Collection<SolrInputDocument> docs =
                     new ArrayList<SolrInputDocument>();
-            System.out.println("Updating index for topic instance "
-                    + topicInstanceId);
+            System.out.println("Updating index for topic instance '"
+                    + topicInstanceId + "'");
             // Get the topic instance model object for the specified topic
             // instance id and create the document
             docs.add(createOrUpdateDocument(
