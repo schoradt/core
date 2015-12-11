@@ -4,16 +4,19 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.PtFreeTextPojo;
 import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
 import de.btu.openinfra.backend.db.rbac.PtFreeTextRbac;
@@ -85,5 +88,51 @@ public class PtFreeTextResource {
                         null,
                         pojo);
         return OpenInfraResponseBuilder.postResponse(id);
+    }
+
+    /**
+     * This resource provides a PtFreeTextPojo for the specified UUID.
+     * <ul>
+     *   <li>rest/v1/system/ptfreetext/[uuid]</li>
+     * </ul>
+     *
+     * @param uriInfo
+     * @param request
+     * @param language     The language of requested PtFreeTextPojo.
+     * @param projectId    The project id the requested PtFreeTextPojo belongs
+     *                     to.
+     * @param ptFreeTextId The UUID of the PtFreeTextPojo that should be
+                           retrieved.
+     * @return             The specified PtFreeTextPojo.
+     *
+     * @response.representation.200.qname A specified PtFreeTextPojo.
+     * @response.representation.200.doc   This is the representation returned by
+     *                                    default.
+     *
+     * @response.representation.403.qname WebApplicationException
+     * @response.representation.403.doc   This error occurs if you do not have
+     *                                    the permission to access this
+     *                                    resource.
+     *
+     * @response.representation.500.qname OpenInfraWebException
+     * @response.representation.500.doc   An internal error occurs if the
+     *                                    backend runs into an unexpected
+     *                                    exception.
+     */
+    @GET
+    @Path("{ptFreeTextId}")
+    public PtFreeTextPojo get(
+            @Context UriInfo uriInfo,
+            @Context HttpServletRequest request,
+            @QueryParam("language") String language,
+            @PathParam("projectId") UUID projectId,
+            @PathParam("ptFreeTextId") UUID ptFreeTextId) {
+        return new PtFreeTextRbac(
+                projectId,
+                OpenInfraSchemas.PROJECTS).read(
+                        OpenInfraHttpMethod.valueOf(request.getMethod()),
+                        uriInfo,
+                        PtLocaleDao.forLanguageTag(language),
+                        ptFreeTextId);
     }
 }
