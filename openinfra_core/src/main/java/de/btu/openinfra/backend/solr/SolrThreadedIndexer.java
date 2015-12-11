@@ -68,7 +68,11 @@ public class SolrThreadedIndexer extends SolrIndexer {
             // check if the project id and topic instance id is not null
             if (projectId != null && topicInstanceId != null) {
                 // update the specified document
-                createOrUpdateDocument(projectId, topicInstanceId);
+                boolean result =
+                        createOrUpdateDocument(projectId, topicInstanceId);
+                if (!result) {
+                    System.out.println("Updating enity in index failed.");
+                }
             } else {
                 throw new OpenInfraSolrException(
                         OpenInfraExceptionTypes.INTERNAL_SERVER_EXCEPTION);
@@ -78,7 +82,10 @@ public class SolrThreadedIndexer extends SolrIndexer {
             // check if the topic instance id is not null
             if (topicInstanceId != null) {
                 // delete the specified document
-                deleteDocument(topicInstanceId);
+                boolean result = deleteDocument(topicInstanceId);
+                if (!result) {
+                    System.out.println("Deleting enity in index failed.");
+                }
             } else {
                 throw new OpenInfraSolrException(
                         OpenInfraExceptionTypes.INTERNAL_SERVER_EXCEPTION);

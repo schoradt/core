@@ -9,8 +9,6 @@ import org.apache.solr.client.solrj.impl.HttpSolrClient.RemoteSolrException;
 
 import de.btu.openinfra.backend.OpenInfraProperties;
 import de.btu.openinfra.backend.OpenInfraPropertyKeys;
-import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
-import de.btu.openinfra.backend.exception.OpenInfraSolrException;
 import de.btu.openinfra.backend.exception.OpenInfraWebException;
 
 /**
@@ -25,12 +23,13 @@ public class SolrServer extends Thread {
     protected Thread thread;
     private String url;
     private SolrClient solr;
+    private boolean alive = false;
 
     /**
      *  Default constructor that uses the Solr connection URL from the
      *  OpenInfra.properties file
      */
-    public SolrServer() {
+    protected SolrServer() {
         this(OpenInfraProperties.getProperty(
                 OpenInfraPropertyKeys.SOLR_URL.getKey())
                + "/" +
@@ -43,7 +42,7 @@ public class SolrServer extends Thread {
      *  Constructor that allows to override the Solr connection URL from the
      *  OpenInfra.properties file
      */
-    public SolrServer(String URL) {
+    protected SolrServer(String URL) {
         setUrl(URL);
         // initialize the server connection
         init();
@@ -57,12 +56,20 @@ public class SolrServer extends Thread {
         this.url = url;
     }
 
-    public SolrClient getSolr() {
+    protected SolrClient getSolr() {
         return solr;
     }
 
     private void setSolr(SolrClient solr) {
         this.solr = solr;
+    }
+
+    protected boolean getAlive() {
+        return alive;
+    }
+
+    private void setAlive(boolean alive) {
+        this.alive = alive;
     }
 
     /**
@@ -79,9 +86,11 @@ public class SolrServer extends Thread {
             // test the connection
             getSolr().ping();
 
+            // set the alive flag for the server connection to true
+            alive = true;
         } catch (SolrServerException | IOException | RemoteSolrException e) {
-            throw new OpenInfraSolrException(
-                    OpenInfraExceptionTypes.SOLR_SERVER_NOT_FOUND);
+            // set the alive flag for the server connection to false
+            alive = false;
         }
     }
 

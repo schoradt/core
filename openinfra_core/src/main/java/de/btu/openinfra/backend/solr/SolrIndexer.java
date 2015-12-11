@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import javax.ws.rs.core.Response.Status;
+
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.SolrInputDocument;
 
@@ -247,25 +249,28 @@ public class SolrIndexer extends SolrServer {
      *
      * @param projectId       The project id the topic instance contains to.
      * @param topicInstanceId The topic instance id that was updated.
-     * @return
+     * @return                True if everything works fine, else false.
      */
-    protected synchronized SolrInputDocument createOrUpdateDocument(
+    protected synchronized boolean createOrUpdateDocument(
             UUID projectId,
             UUID topicInstanceId) {
 
-        Collection<SolrInputDocument> docs = new ArrayList<SolrInputDocument>();
-        System.out.println("Updating index for topic instance "
-                + topicInstanceId);
-        // Get the topic instance model object for the specified topic instance
-        // id and create the document
-        docs.add(createOrUpdateDocument(
-                new TopicInstanceDao(projectId, OpenInfraSchemas.PROJECTS)
-                .read(topicInstanceId)));
+        if (getAlive()) {
+            Collection<SolrInputDocument> docs =
+                    new ArrayList<SolrInputDocument>();
+            System.out.println("Updating index for topic instance "
+                    + topicInstanceId);
+            // Get the topic instance model object for the specified topic
+            // instance id and create the document
+            docs.add(createOrUpdateDocument(
+                    new TopicInstanceDao(projectId, OpenInfraSchemas.PROJECTS)
+                    .read(topicInstanceId)));
 
-        // send the document to the Solr server
-        writeToIndex(docs);
-
-        return null;
+            // send the document to the Solr server
+            return writeToIndex(docs);
+        } else {
+            return false;
+        }
      }
 
     /**
@@ -275,14 +280,19 @@ public class SolrIndexer extends SolrServer {
      * @param topicInstanceId The id of the topic instance that should be
      *                        deleted.
      */
-    protected synchronized void deleteDocument(UUID topicInstanceId) {
+    protected synchronized boolean deleteDocument(UUID topicInstanceId) {
         try {
             System.out.println("Deleting document '" + topicInstanceId
                     + "' from index.");
             getSolr().deleteById(topicInstanceId.toString());
-            getSolr().commit();
+            if (getSolr().commit().getStatus() == Status.OK.getStatusCode()) {
+                return true;
+            } else {
+                return false;
+            }
         } catch (SolrServerException | IOException e) {
-            throw new OpenInfraWebException(e);
+            e.printStackTrace();
+            return false;
         }
     }
 
@@ -474,16 +484,19 @@ public class SolrIndexer extends SolrServer {
      *
      * @param docs A collection of SolrInputDocuments that should be written to
      *             the Solr index.
+     * @return     True if the index was written, else false.
      */
-    private void writeToIndex(Collection<SolrInputDocument> docs) {
+    private boolean writeToIndex(Collection<SolrInputDocument> docs) {
         // send the documents to the solr server
         try {
             // add the documents to solr
             getSolr().add(docs);
             // commit the changes to the server
             getSolr().commit();
+            return true;
         } catch (SolrServerException | IOException e) {
-            throw new OpenInfraWebException(e);
+            e.printStackTrace();
+            return false;
         }
     }
 }
