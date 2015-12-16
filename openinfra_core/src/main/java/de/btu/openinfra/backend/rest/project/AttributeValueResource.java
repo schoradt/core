@@ -152,6 +152,7 @@ public class AttributeValueResource {
                 OpenInfraSchemas.PROJECTS).distributeTypes(
                 		OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
+						PtLocaleDao.forLanguageTag(language),
 						pojo, projectId,
                         attributeValueId);
         return OpenInfraResponseBuilder.putResponse(id);
@@ -233,6 +234,7 @@ public class AttributeValueResource {
     public Response create(
     		@Context UriInfo uriInfo,
     		@Context HttpServletRequest request,
+    		@QueryParam("language") String language,
             @PathParam("projectId") UUID projectId,
             AttributeValuePojo pojo) {
 	    UUID id = new AttributeValueRbac(
@@ -240,6 +242,7 @@ public class AttributeValueResource {
                 OpenInfraSchemas.PROJECTS).distributeTypes(
                 		OpenInfraHttpMethod.valueOf(request.getMethod()),
 						uriInfo,
+						PtLocaleDao.forLanguageTag(language),
 						pojo, projectId,
                         null);
         return OpenInfraResponseBuilder.postResponse(id);

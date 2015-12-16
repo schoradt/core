@@ -26,6 +26,12 @@ public abstract class OpenInfraTest {
 	protected static final String BAALBEK =
 			"fd27a347-4e33-4ed7-aebc-eeff6dbf1054";
 	protected static final String TEST = "e7d42bff-4e40-4f43-9d1b-1dc5a190cd75";
+	protected static final String BAALBEK_PROJECT_PATH = "projects/" + BAALBEK;
+	protected static final String TEST_PROJECT_PATH = "projects/" + TEST;
+	protected static final String SYSTEM_PATH = "system/";
+	protected static final String PROJECT_PRIMER = TEST_PROJECT_PATH
+	        + "/primer?language=de-DE&pojoClass=";
+	protected static final String SYSTEM_PRIMER = "system/primer?pojoClass=";
 
 	/**
 	 * Performs the login
@@ -63,7 +69,7 @@ public abstract class OpenInfraTest {
 	 *
 	 * @param path the path of the resource
 	 * @param mediaType the media type of the request
-	 * @return a builder which can be used to execute an HHTP method on the
+	 * @return a builder which can be used to execute an HTTP method on the
 	 * 	specified path
 	 */
 	protected Builder build(String path, String mediaType) {

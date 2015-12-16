@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import javax.ws.rs.core.Response.Status;
+
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.SolrInputDocument;
 
@@ -38,7 +40,12 @@ import de.btu.openinfra.backend.solr.enums.SolrIndexEnum;
  */
 public class SolrIndexer extends SolrServer {
 
+    /*
+     * This variable will define the maximum window size of the document list
+     * that will be committed to the server at the indexing process at once.
+     */
     private final int DEFAULT_WINDOW_SIZE = 1000;
+
     /**
      * Default constructor
      */
@@ -46,7 +53,6 @@ public class SolrIndexer extends SolrServer {
         // connect to the Solr server
         super();
     }
-
 
     /**
      *
@@ -92,11 +98,11 @@ public class SolrIndexer extends SolrServer {
             for (Projects project : projectIndexList) {
                 // filter for main projects
                 if (!project.getIsSubproject()) {
-                    System.out.println("starting indexing of project "
-                            + project.getProjectId() + " ... ");
+                    System.out.println("starting indexing of project '"
+                            + project.getProjectId() + "' ... ");
                     indexProject(project.getProjectId());
-                    System.out.println("finished indexing of project "
-                            + project.getProjectId());
+                    System.out.println("finished indexing of project '"
+                            + project.getProjectId() + "'");
                 }
             }
             return true;
@@ -153,14 +159,7 @@ public class SolrIndexer extends SolrServer {
             System.out.println("sending Solr documents to Solr server");
 
             // send the documents to the solr server
-            try {
-                // add the documents to solr
-                getSolr().add(docs);
-                // commit the changes to the server
-                getSolr().commit();
-            } catch (SolrServerException | IOException e) {
-                throw new OpenInfraWebException(e);
-            }
+            writeToIndex(docs);
 
             // set the amount variable for the next run
             size = windowSize * i;
@@ -187,7 +186,7 @@ public class SolrIndexer extends SolrServer {
      * @param ti  The Topic Instance model that should be indexed.
      * @return SolrInputDocument the Solr document
      */
-    public SolrInputDocument createOrUpdateDocument(TopicInstance ti) {
+    private SolrInputDocument createOrUpdateDocument(TopicInstance ti) {
 
         UUID projectId = ti.getTopicCharacteristic().getProject().getId();
         SolrInputDocument doc = new SolrInputDocument();
@@ -245,26 +244,68 @@ public class SolrIndexer extends SolrServer {
     }
 
     /**
-     * This method deletes a specific document from the Solr index.
+     * This method will be the access point to index a single topic instance.
+     * This method is thread-safe.
      *
-     * @param ti The Topic Instance model that should be indexed.
+     * @param projectId       The project id the topic instance contains to.
+     * @param topicInstanceId The topic instance id that was updated.
+     * @return                True if everything works fine, else false.
      */
-    public void deleteDocument(TopicInstance ti) {
+    protected synchronized boolean createOrUpdateDocument(
+            UUID projectId,
+            UUID topicInstanceId) {
+
+        if (getAlive()) {
+            // delete the document first because it seems that updating is not
+            // always performing the expected way
+            deleteDocument(topicInstanceId);
+
+            Collection<SolrInputDocument> docs =
+                    new ArrayList<SolrInputDocument>();
+            System.out.println("Updating index for topic instance '"
+                    + topicInstanceId + "'");
+            // Get the topic instance model object for the specified topic
+            // instance id and create the document
+            docs.add(createOrUpdateDocument(
+                    new TopicInstanceDao(projectId, OpenInfraSchemas.PROJECTS)
+                    .read(topicInstanceId)));
+
+            // send the document to the Solr server
+            return writeToIndex(docs);
+        } else {
+            return false;
+        }
+     }
+
+    /**
+     * This method deletes a specific document from the Solr index. This method
+     * is thread-safe.
+     *
+     * @param topicInstanceId The id of the topic instance that should be
+     *                        deleted.
+     */
+    protected synchronized boolean deleteDocument(UUID topicInstanceId) {
         try {
-            getSolr().deleteById(ti.getId().toString());
-            getSolr().commit();
+            System.out.println("Deleting document '" + topicInstanceId
+                    + "' from index.");
+            getSolr().deleteById(topicInstanceId.toString());
+            if (getSolr().commit().getStatus() == Status.OK.getStatusCode()) {
+                return true;
+            } else {
+                return false;
+            }
         } catch (SolrServerException | IOException e) {
-            throw new OpenInfraWebException(e);
+            e.printStackTrace();
+            return false;
         }
     }
 
     /**
      * This method deletes all documents from the Solr index.
-     *
-     * @return True if the deletion was successful, else false.
      */
     public void deleteAllDocuments() {
         try {
+            System.out.println("Deleting all documents from index");
             getSolr().deleteByQuery("*:*");
             getSolr().commit();
         } catch (SolrServerException | IOException e) {
@@ -440,5 +481,26 @@ public class SolrIndexer extends SolrServer {
             }
         }
         return -1;
+    }
+
+    /**
+     * This method sends the Solr documents to the Server.
+     *
+     * @param docs A collection of SolrInputDocuments that should be written to
+     *             the Solr index.
+     * @return     True if the index was written, else false.
+     */
+    private boolean writeToIndex(Collection<SolrInputDocument> docs) {
+        // send the documents to the solr server
+        try {
+            // add the documents to solr
+            getSolr().add(docs);
+            // commit the changes to the server
+            getSolr().commit();
+            return true;
+        } catch (SolrServerException | IOException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

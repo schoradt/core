@@ -29,6 +29,9 @@ import de.btu.openinfra.backend.db.pojos.project.AttributeValueGeomPojo;
 import de.btu.openinfra.backend.db.pojos.project.AttributeValueGeomzPojo;
 import de.btu.openinfra.backend.db.pojos.project.AttributeValuePojo;
 import de.btu.openinfra.backend.db.pojos.project.AttributeValueValuePojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
+import de.btu.openinfra.backend.solr.enums.SolrIndexOperationEnum;
 
 /**
  * This class represents the AttributeValue and is used to access the underlying
@@ -109,7 +112,7 @@ public class AttributeValueDao extends
 		if(av != null) {
 			// 1. Define the Attribute value POJO that will be returned at
 			// the end
-			AttributeValuePojo pojo = new AttributeValuePojo();
+			AttributeValuePojo pojo = new AttributeValuePojo(av);
 			// 2. Define the id which is used heavily throughout this method
 			UUID id = av.getId();
 			// 3. Retrieve the specific type of this attribute value
@@ -379,13 +382,15 @@ public class AttributeValueDao extends
      * constraint. The appropriated AttributeValuePojo must be extracted
      * and distributed separately to their respective createOrUpdate methods.
      *
+     * @param locale
 	 * @param pojo
 	 * @param projectId the id of the project
+	 * @param attributeValueId
 	 * @return          the UUID of the created or updated object or null if an
 	 *                  error occurs or the geomType is unlike GeoJSON
 	 */
-	public UUID distributeTypes(AttributeValuePojo pojo, UUID projectId,
-	        UUID attributeValueId) {
+	public UUID distributeTypes(Locale locale, AttributeValuePojo pojo,
+	        UUID projectId, UUID attributeValueId) {
 
 	    UUID id = null;
 	    boolean checked = false;
@@ -409,11 +414,13 @@ public class AttributeValueDao extends
 
             // execute createOrUpdate if the preconditions match
             if (checked) {
-					id = new AttributeValueDomainDao(
-					        projectId,
-					        OpenInfraSchemas.PROJECTS).createOrUpdate(
-					                pojo.getAttributeValueDomain(),
-					                attributeValueId);
+				id = new AttributeValueDomainDao(
+				        projectId,
+				        OpenInfraSchemas.PROJECTS).createOrUpdate(
+				                pojo.getAttributeValueDomain(),
+				                attributeValueId);
+				// now we must update the Solr index
+                updateIndex(id, SolrIndexOperationEnum.UPDATE);
             } else {
                 // return null if the ids doesn't match
                 return null;
@@ -440,11 +447,11 @@ public class AttributeValueDao extends
 
             // execute createOrUpdate if the preconditions match
             if (checked) {
-					id = new AttributeValueGeomDao(
-					        projectId,
-					        OpenInfraSchemas.PROJECTS).createOrUpdate(
-					                pojo.getAttributeValueGeom(),
-					                attributeValueId);
+				id = new AttributeValueGeomDao(
+				        projectId,
+				        OpenInfraSchemas.PROJECTS).createOrUpdate(
+				                pojo.getAttributeValueGeom(),
+				                attributeValueId);
             }
             break;
         case ATTRIBUTE_VALUE_GEOMZ:
@@ -468,11 +475,11 @@ public class AttributeValueDao extends
 
             // execute createOrUpdate if the preconditions match
             if (checked) {
-					id = new AttributeValueGeomzDao(
-					        projectId,
-					        OpenInfraSchemas.PROJECTS).createOrUpdate(
-					                pojo.getAttributeValueGeomz(),
-					                attributeValueId);
+				id = new AttributeValueGeomzDao(
+				        projectId,
+				        OpenInfraSchemas.PROJECTS).createOrUpdate(
+				                pojo.getAttributeValueGeomz(),
+				                attributeValueId);
             }
             break;
         case ATTRIBUTE_VALUE_VALUE:
@@ -491,14 +498,17 @@ public class AttributeValueDao extends
 
             // execute createOrUpdate if the preconditions match
             if (checked) {
-					id = new AttributeValueValueDao(
-					        projectId,
-					        OpenInfraSchemas.PROJECTS).createOrUpdate(
-					                pojo.getAttributeValueValue(),
-					                attributeValueId);
+				id = new AttributeValueValueDao(
+				        projectId,
+				        OpenInfraSchemas.PROJECTS).createOrUpdate(
+				                pojo.getAttributeValueValue(),
+				                attributeValueId);
+				// now we must update the Solr index
+				updateIndex(id, SolrIndexOperationEnum.UPDATE);
             } else {
-                // return null if the ids doesn't match
-                return null;
+                // throw an exception if the ids does not match
+                throw new OpenInfraEntityException(
+                        OpenInfraExceptionTypes.INCOMPATIBLE_UUIDS);
             }
         }
 
