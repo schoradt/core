@@ -75,6 +75,8 @@ public class SearchResource {
      *
      * @param projects The SolrIndexPojo that contains the list of project ids
      *                 that should be indexed.
+     * @param clean    If true the index will be completely cleared before
+     *                 indexing.
      * @return         True if the process was successful.
      *
      * @response.representation.200.qname boolean
@@ -91,9 +93,10 @@ public class SearchResource {
     @POST
     @Path("/index")
     public boolean index(
+            @QueryParam("clean") boolean clean,
             SolrIndexPojo projects) {
         SolrIndexer indexer = new SolrIndexer();
-        return indexer.indexProjects(projects);
+        return indexer.indexProjects(projects, clean);
     }
 
     /**
