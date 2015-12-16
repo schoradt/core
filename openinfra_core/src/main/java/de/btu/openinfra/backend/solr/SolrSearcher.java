@@ -78,6 +78,18 @@ public class SolrSearcher extends SolrServer {
         // add the query string to the query object.
         query.setQuery(queryStr);
 
+        // set the project filter
+        for (UUID project : searchPojo.getProjectId()) {
+            query.setFilterQueries(SolrIndexEnum.PROJECT_ID + ":"
+                    + project.toString());
+        }
+
+        // set the topic characteristic filter
+        for (UUID tc : searchPojo.getTopicCharacteristicId()) {
+            query.setFilterQueries(SolrIndexEnum.TOPIC_CHARACTERISTIC_ID + ":"
+                    + tc.toString());
+        }
+
         // define the return value
         query.set("wt", "json");
 
