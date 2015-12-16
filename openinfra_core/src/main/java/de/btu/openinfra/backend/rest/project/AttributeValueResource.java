@@ -25,6 +25,12 @@ import de.btu.openinfra.backend.db.rbac.AttributeValueRbac;
 import de.btu.openinfra.backend.db.rbac.OpenInfraHttpMethod;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
+/**
+ * This class represents and implements the resources for attribute values in
+ * the project schema.
+ * @author <a href="http://www.b-tu.de">BTU</a> DBIS
+ *
+ */
 @Path(OpenInfraResponseBuilder.REST_URI_PROJECTS + "/attributevalues")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY
     + OpenInfraResponseBuilder.UTF8_CHARSET,

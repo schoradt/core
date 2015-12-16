@@ -152,10 +152,8 @@ public class ValueListResource {
 
 	/**
 	 * This resource provides a list of ValueListAssociationPojo's in the
-	 * specified project or system schema for the specified value list UUID. The
-	 * ValueListAssociationPojo contains UUID of the requesting value list, the
-	 * associated ValueListPojo and the relationship to the requesting
-	 * ValueListPojo. This resource supports pagination of the list.
+	 * specified project or system schema for the specified value list UUID.
+	 * This resource supports pagination of the list.
      * <ul>
      *   <li>rest/v1/projects/[uuid]/valuelists/[uuid]/associations?language=de-DE&offset=0&size=10</li>
      *   <li>rest/v1/system/valuelists/[uuid]/associations?language=de-DE&offset=0&size=10</li>
