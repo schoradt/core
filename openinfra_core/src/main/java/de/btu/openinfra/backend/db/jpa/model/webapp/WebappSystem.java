@@ -19,11 +19,11 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 @Table(name="webapp_system")
 @NamedQueries({
 	@NamedQuery(name="WebappSystem.findAll",
-			query="SELECT w FROM WebappSystem w"),
+			query="SELECT w FROM WebappSystem w ORDER BY w.id"),
 	@NamedQuery(name="WebappSystem.findByWebapp",
 			query="SELECT w "
 					+ "FROM WebappSystem w "
-					+ "WHERE w.webapp = :value")
+					+ "WHERE w.webapp = :value ORDER BY w.id")
 })
 public class WebappSystem extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;

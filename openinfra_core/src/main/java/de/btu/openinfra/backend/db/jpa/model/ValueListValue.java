@@ -23,11 +23,11 @@ import javax.persistence.Table;
 @Table(name="value_list_values")
 @NamedQueries({
 	@NamedQuery(name="ValueListValue.findAll",
-			query="SELECT v FROM ValueListValue v"),
+			query="SELECT v FROM ValueListValue v ORDER BY v.id"),
 	@NamedQuery(name="ValueListValue.findByValueList",
 			query="SELECT v "
 					+ "FROM ValueListValue v "
-					+ "WHERE v.valueList = :value"),
+					+ "WHERE v.valueList = :value ORDER BY v.id"),
 	@NamedQuery(name="ValueListValue.countByValueList",
 		query="SELECT COUNT(v) "
 			+ "FROM ValueListValue v "

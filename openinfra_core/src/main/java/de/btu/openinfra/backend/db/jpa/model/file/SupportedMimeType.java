@@ -21,7 +21,7 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 	@NamedQuery(name="SupportedMimeType.count",
 			query="SELECT COUNT(s) FROM SupportedMimeType s"),
 	@NamedQuery(name="SupportedMimeType.findAll",
-			query="SELECT s FROM SupportedMimeType s")
+			query="SELECT s FROM SupportedMimeType s ORDER BY s.id")
 })
 public class SupportedMimeType
 	extends OpenInfraModelObject implements Serializable {

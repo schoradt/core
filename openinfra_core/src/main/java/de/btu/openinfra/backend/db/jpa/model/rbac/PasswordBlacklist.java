@@ -20,7 +20,7 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 @Table(name="password_blacklist")
 @NamedQueries({
 	@NamedQuery(name="PasswordBlacklist.findAll",
-		query="SELECT p FROM PasswordBlacklist p"),
+		query="SELECT p FROM PasswordBlacklist p ORDER BY p.id"),
 	@NamedQuery(name="PasswordBlacklist.count",
 		query="SELECT COUNT(p) FROM PasswordBlacklist p")
 })

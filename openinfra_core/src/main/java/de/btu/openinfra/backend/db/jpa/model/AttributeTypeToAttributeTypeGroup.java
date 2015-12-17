@@ -15,36 +15,37 @@ import javax.persistence.Table;
 
 /**
  * The persistent class for the attribute_type_to_attribute_type_group database table.
- * 
+ *
  */
 @Entity
 @Table(name="attribute_type_to_attribute_type_group")
 @NamedQueries({
-	@NamedQuery(name="AttributeTypeToAttributeTypeGroup.findAll", 
-			query="SELECT a FROM AttributeTypeToAttributeTypeGroup a"),
-	@NamedQuery(name="AttributeTypeToAttributeTypeGroup.count", 
-			query="SELECT COUNT(a) FROM AttributeTypeToAttributeTypeGroup a"),			
+	@NamedQuery(name="AttributeTypeToAttributeTypeGroup.findAll",
+			query="SELECT a FROM AttributeTypeToAttributeTypeGroup a "
+			        + "ORDER BY a.id"),
+	@NamedQuery(name="AttributeTypeToAttributeTypeGroup.count",
+			query="SELECT COUNT(a) FROM AttributeTypeToAttributeTypeGroup a"),
 	@NamedQuery(
 			name="AttributeTypeToAttributeTypeGroup.findByAttributeTypeGroup",
 			query="SELECT a "
 					+ "FROM AttributeTypeToAttributeTypeGroup a "
-					+ "WHERE a.attributeTypeGroup = :value"),
+					+ "WHERE a.attributeTypeGroup = :value ORDER BY a.id"),
 	@NamedQuery(name="AttributeTypeToAttributeTypeGroup."
 			+ "findByAttributeTypeGroupAndAttributeType",
 			query="SELECT a "
 					+ "FROM AttributeTypeToAttributeTypeGroup a "
 					+ "WHERE a.attributeTypeGroup = :value AND "
-					+ "a.attributeType = :value2"),
+					+ "a.attributeType = :value2 ORDER BY a.id"),
 	@NamedQuery(name="AttributeTypeToAttributeTypeGroup.findByAttributeType",
 			query="SELECT a "
 					+ "FROM AttributeTypeToAttributeTypeGroup a "
-					+ "WHERE a.attributeType = :value"),
+					+ "WHERE a.attributeType = :value ORDER BY a.id"),
 	@NamedQuery(name="AttributeTypeToAttributeTypeGroup."
-			+ "findByAttributeTypeAndAttributeTypeGroup",
+			+ "findByAttributeTypeAndAttributeTypeGroup ORDER BY a.id",
 			query="SELECT a "
 					+ "FROM AttributeTypeToAttributeTypeGroup a "
 					+ "WHERE a.attributeType = :value AND "
-					+ "a.attributeTypeGroup = :value2"),
+					+ "a.attributeTypeGroup = :value2 ORDER BY a.id"),
 	@NamedQuery(name="AttributeTypeToAttributeTypeGroup.countByAttributeType",
 		query="SELECT COUNT(a) "
 				+ "FROM AttributeTypeToAttributeTypeGroup a "

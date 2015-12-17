@@ -22,7 +22,7 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 @Table(name="role_permissions")
 @NamedQueries({
 	@NamedQuery(name="RolePermission.findAll",
-			query="SELECT r FROM RolePermission r"),
+			query="SELECT r FROM RolePermission r ORDER BY r.id"),
 	@NamedQuery(name="RolePermission.count",
 			query="SELECT COUNT(r) FROM RolePermission r")
 })

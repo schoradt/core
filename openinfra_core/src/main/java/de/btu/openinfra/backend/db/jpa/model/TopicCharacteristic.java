@@ -25,10 +25,10 @@ import javax.persistence.Table;
 		query="SELECT COUNT(t) FROM TopicCharacteristic t "),
 	@NamedQuery(name="TopicCharacteristic.findAll",
 		query="SELECT t "
-				+ "FROM TopicCharacteristic t "),
+				+ "FROM TopicCharacteristic t ORDER BY t.id"),
 	@NamedQuery(name="TopicCharacteristic.findByProject",
 		query="SELECT t FROM TopicCharacteristic t "
-					+ "WHERE t.project = :value "),
+					+ "WHERE t.project = :value ORDER BY t.id"),
     // This query selects an ordered list of TopicCharacteristics by a like
 	// filter applied on LocalizedCharacterStrings
 	@NamedQuery(name="TopicCharacteristic.findByDescription",
@@ -51,7 +51,8 @@ import javax.persistence.Table;
 				+ "WHERE tis.id = ANY ("
 					+ "SELECT tixti.topicInstance2Bean.id "
 					+ "FROM TopicInstanceXTopicInstance tixti "
-					+ "WHERE tixti.topicInstance1Bean = :value )"),
+					+ "WHERE tixti.topicInstance1Bean = :value ) "
+				+ "ORDER BY t.id"),
 	@NamedQuery(name="TopicCharacteristic.findByTopicInstanceAssociationFrom",
 		query="SELECT DISTINCT t "
 				+ "FROM TopicCharacteristic t "
@@ -59,7 +60,8 @@ import javax.persistence.Table;
 				+ "WHERE tis.id = ANY ("
 					+ "SELECT tixti.topicInstance1Bean.id "
 					+ "FROM TopicInstanceXTopicInstance tixti "
-					+ "WHERE tixti.topicInstance2Bean = :value )")
+					+ "WHERE tixti.topicInstance2Bean = :value ) "
+				+ "ORDER BY t.id")
 })
 @NamedNativeQueries({
 	@NamedNativeQuery(name="TopicCharacteristic.findAllByLocaleAndOrder",

@@ -22,7 +22,7 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 @Table(name="openinfra_objects")
 @NamedQueries({
 	@NamedQuery(name="OpenInfraObject.findAll",
-			query="SELECT o FROM OpenInfraObject o"),
+			query="SELECT o FROM OpenInfraObject o ORDER BY o.id"),
 	@NamedQuery(name="OpenInfraObject.count",
 			query="SELECT COUNT(o) FROM OpenInfraObject o")
 })

@@ -16,7 +16,8 @@ import javax.persistence.OneToMany;
  *
  */
 @Entity
-@NamedQuery(name="Project.findAll", query="SELECT p FROM Project p")
+@NamedQuery(name="Project.findAll", query="SELECT p FROM Project p "
+        + "ORDER BY p.id")
 public class Project extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 

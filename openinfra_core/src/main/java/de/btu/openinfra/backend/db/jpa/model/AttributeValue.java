@@ -19,17 +19,17 @@ import javax.persistence.Table;
 @Table(name="attribute_value")
 @NamedQueries({
 	@NamedQuery(name="AttributeValue.findAll",
-			query="SELECT a FROM AttributeValue a"),
+			query="SELECT a FROM AttributeValue a ORDER BY a.id"),
 	@NamedQuery(name="AttributeValue.findByTopicInstance",
 			query="SELECT a "
 					+ "FROM AttributeValue a "
-					+ "WHERE a.topicInstance = :value"),
+					+ "WHERE a.topicInstance = :value ORDER BY a.id"),
 	@NamedQuery(name="AttributeValue.findByTopicInstanceAndAttributeType",
     query="SELECT a "
             + "FROM AttributeValue a, AttributeTypeToAttributeTypeGroup ag "
             + "WHERE a.topicInstance = :value AND "
             + "a.attributeTypeToAttributeTypeGroup = ag AND "
-            + "ag.attributeType = :value2")
+            + "ag.attributeType = :value2 ORDER BY a.id")
 })
 public class AttributeValue extends OpenInfraModelObject
     implements Serializable {

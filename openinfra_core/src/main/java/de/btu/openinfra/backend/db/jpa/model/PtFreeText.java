@@ -16,7 +16,8 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="pt_free_text")
-@NamedQuery(name="PtFreeText.findAll", query="SELECT p FROM PtFreeText p")
+@NamedQuery(name="PtFreeText.findAll",
+        query="SELECT p FROM PtFreeText p ORDER BY p.id")
 public class PtFreeText extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 

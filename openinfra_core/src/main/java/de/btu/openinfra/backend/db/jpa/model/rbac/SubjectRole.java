@@ -20,7 +20,7 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 @Table(name="subject_roles")
 @NamedQueries({
 	@NamedQuery(name="SubjectRole.findAll",
-			query="SELECT s FROM SubjectRole s"),
+			query="SELECT s FROM SubjectRole s ORDER BY s.id"),
 	@NamedQuery(name="SubjectRole.count",
 			query="SELECT COUNT(s) FROM SubjectRole s")
 })

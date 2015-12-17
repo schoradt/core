@@ -22,12 +22,12 @@ import javax.persistence.Table;
 
 @NamedQueries({
     @NamedQuery(name="CharacterCode.findAll",
-            query="SELECT c FROM CharacterCode c"),
+            query="SELECT c FROM CharacterCode c ORDER BY c.id"),
     @NamedQuery(name="CharacterCode.count",
             query="SELECT COUNT(c) FROM CharacterCode c "),
     @NamedQuery(name="CharacterCode.findByString",
     query="SELECT c FROM CharacterCode c "
-            + "WHERE c.characterCode = :value"),
+            + "WHERE c.characterCode = :value ORDER BY c.id"),
 })
 @NamedNativeQueries({
     @NamedNativeQuery(name="CharacterCode.findAllByLocaleAndOrder",

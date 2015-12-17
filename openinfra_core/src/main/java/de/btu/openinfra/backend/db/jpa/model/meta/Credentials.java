@@ -23,13 +23,13 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 @NamedQueries({
     @NamedQuery(
             name="Credentials.findAll",
-            query="SELECT c FROM Credentials c"),
+            query="SELECT c FROM Credentials c ORDER BY c.id"),
     @NamedQuery(name="Credentials.count",
             query="SELECT COUNT(c) FROM Credentials c"),
     @NamedQuery(
             name="Credentials.findByUsernameAndPassword",
             query="SELECT c FROM Credentials c WHERE c.username = :username "
-                    + "AND c.password = :password")
+                    + "AND c.password = :password ORDER BY c.id")
 })
 @NamedNativeQueries({
     @NamedNativeQuery(name="Credentials.findAllByLocaleAndOrder",

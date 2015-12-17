@@ -22,14 +22,14 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 @Table(name="subject_objects")
 @NamedQueries({
 	@NamedQuery(name="SubjectObject.findAll",
-			query="SELECT s FROM SubjectObject s"),
+			query="SELECT s FROM SubjectObject s ORDER BY s.id"),
 	@NamedQuery(name="SubjectObject.findBySubject",
 			query="SELECT s FROM SubjectObject s "
-					+ "WHERE s.subjectBean = :value"),
+					+ "WHERE s.subjectBean = :value ORDER BY s.id"),
 	@NamedQuery(name="SubjectObject.findBySubjectAndProject",
 			query="SELECT s FROM SubjectObject s "
 					+ "WHERE s.subjectBean.id = :subjectId "
-					+ "AND s.projectId = :projectId "),
+					+ "AND s.projectId = :projectId ORDER BY s.id"),
 	@NamedQuery(name="SubjectObject.count",
 			query="SELECT COUNT(s) FROM SubjectObject s")
 })

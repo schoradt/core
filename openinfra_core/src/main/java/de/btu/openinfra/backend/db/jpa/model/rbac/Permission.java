@@ -19,7 +19,8 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
  */
 @Entity
 @NamedQueries({
-	@NamedQuery(name="Permission.findAll", query="SELECT p FROM Permission p"),
+	@NamedQuery(name="Permission.findAll",
+	        query="SELECT p FROM Permission p ORDER BY p.id"),
 	@NamedQuery(name="Permission.count",
 		query="SELECT COUNT(p) FROM Permission p")
 })

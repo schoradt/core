@@ -18,7 +18,7 @@ import javax.persistence.Table;
 @Table(name="attribute_value_domain")
 @NamedQueries({
     @NamedQuery(name="AttributeValueDomain.findAll",
-        query="SELECT a FROM AttributeValueDomain a"),
+        query="SELECT a FROM AttributeValueDomain a ORDER BY a.id"),
     @NamedQuery(name="AttributeValueDomain.getSuggestion",
         query="SELECT a FROM AttributeValueDomain a "
                 + "JOIN a.attributeTypeToAttributeTypeGroup.attributeType at "

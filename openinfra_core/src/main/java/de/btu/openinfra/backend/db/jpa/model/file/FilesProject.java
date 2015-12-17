@@ -21,7 +21,7 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 @Table(name="files_projects")
 @NamedQueries({
 	@NamedQuery(name="FilesProject.findAll",
-			query="SELECT f FROM FilesProject f"),
+			query="SELECT f FROM FilesProject f ORDER BY f.id"),
 	@NamedQuery(name="FilesProject.countByProject",
 			query="SELECT COUNT(f) FROM "
 					+ "FilesProject f "
@@ -29,11 +29,11 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 	@NamedQuery(name="FilesProject.findByFile",
 			query="SELECT f FROM "
 					+ "FilesProject f "
-					+ "WHERE f.file = :value "),
+					+ "WHERE f.file = :value ORDER BY f.id"),
 	@NamedQuery(name="FilesProject.findByProject",
 					query="SELECT f "
 							+ "FROM FilesProject f "
-							+ "WHERE f.projectId = :value")
+							+ "WHERE f.projectId = :value ORDER BY f.id")
 })
 public class FilesProject extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;

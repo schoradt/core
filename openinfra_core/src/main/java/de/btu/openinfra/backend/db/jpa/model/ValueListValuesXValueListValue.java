@@ -12,26 +12,27 @@ import javax.persistence.Table;
 
 /**
  * The persistent class for the value_list_values_x_value_list_values database table.
- * 
+ *
  */
 @Entity
 @Table(name="value_list_values_x_value_list_values")
 @NamedQueries({
 	@NamedQuery(name="ValueListValuesXValueListValue.findAll",
-			query="SELECT v FROM ValueListValuesXValueListValue v"),
-	@NamedQuery(name="ValueListValuesXValueListValue.findByValueListValue", 
+			query="SELECT v FROM ValueListValuesXValueListValue v"
+			        + " ORDER BY v.id"),
+	@NamedQuery(name="ValueListValuesXValueListValue.findByValueListValue",
 			query="SELECT v FROM ValueListValuesXValueListValue v "
-					+ "WHERE v.valueListValue2 = :value "),
-	@NamedQuery(name="ValueListValuesXValueListValue.countByValueListValue", 
+					+ "WHERE v.valueListValue2 = :value ORDER BY v.id"),
+	@NamedQuery(name="ValueListValuesXValueListValue.countByValueListValue",
         query="SELECT count(v) FROM ValueListValuesXValueListValue v "
             + "WHERE v.valueListValue2 = :value "),
 	@NamedQuery(
 			name=
 				"ValueListValuesXValueListValue."
-				+ "findByValueListValueAndValueListValue", 
+				+ "findByValueListValueAndValueListValue",
 			query="SELECT v FROM ValueListValuesXValueListValue v "
 			+ "WHERE v.valueListValue2 = :value AND "
-			+ "v.valueListValue3 = :value2"),
+			+ "v.valueListValue3 = :value2 ORDER BY v.id"),
 })
 public class ValueListValuesXValueListValue extends OpenInfraModelObject
     implements Serializable {

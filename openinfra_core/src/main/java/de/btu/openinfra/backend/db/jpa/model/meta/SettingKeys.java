@@ -22,7 +22,7 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 @Table(schema="meta_data", name="setting_keys")
 @NamedQueries({
     @NamedQuery(name="SettingKeys.findAll",
-            query="SELECT s FROM SettingKeys s"),
+            query="SELECT s FROM SettingKeys s ORDER BY s.id"),
     @NamedQuery(name="SettingKeys.count",
             query="SELECT COUNT(s) FROM SettingKeys s")
 })

@@ -13,12 +13,12 @@ import javax.persistence.Table;
 
 /**
  * The persistent class for the localized_character_string database table.
- * 
+ *
  */
 @Entity
 @Table(name="localized_character_string")
-@NamedQuery(name="LocalizedCharacterString.findAll", 
-		query="SELECT l FROM LocalizedCharacterString l")
+@NamedQuery(name="LocalizedCharacterString.findAll",
+		query="SELECT l FROM LocalizedCharacterString l ORDER BY l.id")
 
 public class LocalizedCharacterString implements Serializable {
 	private static final long serialVersionUID = 1L;
