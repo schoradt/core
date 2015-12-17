@@ -79,15 +79,15 @@ public class SolrSearcher extends SolrServer {
         query.setQuery(queryStr);
 
         // set the project filter
-        for (UUID project : searchPojo.getProjectId()) {
+        if (searchPojo.getProjectId() != null) {
             query.setFilterQueries(SolrIndexEnum.PROJECT_ID + ":"
-                    + project.toString());
+                    + searchPojo.getProjectId());
         }
 
         // set the topic characteristic filter
-        for (UUID tc : searchPojo.getTopicCharacteristicId()) {
+        if (searchPojo.getTopicCharacteristicId() != null) {
             query.setFilterQueries(SolrIndexEnum.TOPIC_CHARACTERISTIC_ID + ":"
-                    + tc.toString());
+                    + searchPojo.getTopicCharacteristicId());
         }
 
         // define the return value
