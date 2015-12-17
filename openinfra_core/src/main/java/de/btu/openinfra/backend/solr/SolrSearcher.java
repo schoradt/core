@@ -14,6 +14,8 @@ import org.apache.solr.common.SolrDocumentList;
 
 import de.btu.openinfra.backend.OpenInfraProperties;
 import de.btu.openinfra.backend.OpenInfraPropertyKeys;
+import de.btu.openinfra.backend.db.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.daos.MetaDataDao;
 import de.btu.openinfra.backend.db.pojos.solr.SolrResultDbPojo;
 import de.btu.openinfra.backend.db.pojos.solr.SolrResultPojo;
 import de.btu.openinfra.backend.db.pojos.solr.SolrSearchPojo;
@@ -77,6 +79,18 @@ public class SolrSearcher extends SolrServer {
 
         // add the query string to the query object.
         query.setQuery(queryStr);
+
+        // set the project filter
+        if (searchPojo.getProjectId() != null) {
+            query.setFilterQueries(SolrIndexEnum.PROJECT_ID + ":"
+                    + searchPojo.getProjectId());
+        }
+
+        // set the topic characteristic filter
+        if (searchPojo.getTopicCharacteristicId() != null) {
+            query.setFilterQueries(SolrIndexEnum.TOPIC_CHARACTERISTIC_ID + ":"
+                    + searchPojo.getTopicCharacteristicId());
+        }
 
         // define the return value
         query.set("wt", "json");
@@ -158,6 +172,18 @@ public class SolrSearcher extends SolrServer {
                         solrResults.get(i).getFieldValue(
                                 SolrIndexEnum.PROJECT_ID.getString())
                                 .toString()));
+
+                // extract meta data of the result object
+                MetaDataDao mdDao = new MetaDataDao(
+                        rP.getProjectId(), OpenInfraSchemas.PROJECTS);
+
+                // read meta data for the topic instance
+                rP.setTopicInstanceMetaData(
+                        mdDao.read(rP.getTopicInstanceId()));
+
+                // read meta data for the topic characteristic
+                rP.setTopicCharacteristicMetaData(
+                        mdDao.read(rP.getTopicCharacteristicId()));
 
                 // only remove the default_search field if it is not the only
                 // entry in the highlight field

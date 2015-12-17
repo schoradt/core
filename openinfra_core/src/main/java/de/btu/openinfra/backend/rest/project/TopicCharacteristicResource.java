@@ -26,6 +26,13 @@ import de.btu.openinfra.backend.db.rbac.TopicGeomzRbac;
 import de.btu.openinfra.backend.db.rbac.TopicInstanceRbac;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
+/**
+ * This class represents and implements the resources for topic characteristics
+ * in the project schema.
+ *
+ * @author <a href="http://www.b-tu.de">BTU</a> DBIS
+ *
+ */
 @Path(OpenInfraResponseBuilder.REST_URI_PROJECTS + "/topiccharacteristics/"
 		+ "{topicCharacteristicId}/topicinstances/")
 @Produces({MediaType.APPLICATION_JSON + OpenInfraResponseBuilder.JSON_PRIORITY

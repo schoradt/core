@@ -61,14 +61,22 @@ public class SolrIndexer extends SolrServer {
      * can be found in the meta database will be indexed.
      *
      * @param projects A list of project UUIDs that should be indexed.
+     * @param clean    Determines if the index should be completely cleared
+     *                 before starting the index process.
      * @return True if indexing was successful.
      * @throws OpenInfraSolrException if something goes wrong
      */
-    public boolean indexProjects(SolrIndexPojo projectsPojo) {
+    public boolean indexProjects(SolrIndexPojo projectsPojo, boolean clean) {
 
         try {
 
             List<Projects> projectIndexList = new ArrayList<Projects>();
+
+            // clear index if necessary
+            if (clean) {
+                //deleteAllDocuments();
+                return false;
+            }
 
             // get all projects from the meta database
             List<Projects> metaProjects = new ProjectsDao(
@@ -303,7 +311,7 @@ public class SolrIndexer extends SolrServer {
     /**
      * This method deletes all documents from the Solr index.
      */
-    public void deleteAllDocuments() {
+    private void deleteAllDocuments() {
         try {
             System.out.println("Deleting all documents from index");
             getSolr().deleteByQuery("*:*");

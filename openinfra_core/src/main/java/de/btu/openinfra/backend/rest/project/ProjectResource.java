@@ -31,14 +31,7 @@ import de.btu.openinfra.backend.db.rbac.file.FileRbac;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
 /**
- * This class represents the project resource of the REST API. You can access
- * an overview of all available HTTP methods by calling the following link:
- * <a href="http://localhost:8080/openinfra_backend/rest/application.wadl">
- * http://localhost:8080/openinfra_backend/rest/application.wadl</a>
- *
- * The project resource is available by calling the following link:
- * <a href="http://localhost:8080/openinfra_backend/rest/projects">
- * http://localhost:8080/openinfra_backend/rest/projects</a>
+ * This class represents and implements the resource for projects.
  *
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  *

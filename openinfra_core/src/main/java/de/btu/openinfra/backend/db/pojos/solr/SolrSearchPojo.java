@@ -35,15 +35,14 @@ public class SolrSearchPojo extends OpenInfraPojo {
     private List<SolrComplexQueryPartPojo> complexQueryPart;
 
     /*
-     * This list contains projects where the results should be part of.
+     * This project id defines a filter for the results.
      */
-    private List<UUID> projectId;
+    private UUID projectId;
 
     /*
-     * This list contains topic characteristics where the result should be part
-     * of.
+     * This topic characteristics id defines a filter for the results.
      */
-    private List<UUID> topicCharacteristicId;
+    private UUID topicCharacteristicId;
 
     public String getRawSolrQuery() {
         return rawSolrQuery;
@@ -62,19 +61,19 @@ public class SolrSearchPojo extends OpenInfraPojo {
         this.complexQueryPart = complexSolrQuery;
     }
 
-    public List<UUID> getProjectId() {
+    public UUID getProjectId() {
         return projectId;
     }
 
-    public void setProjectId(List<UUID> projectId) {
+    public void setProjectId(UUID projectId) {
         this.projectId = projectId;
     }
 
-    public List<UUID> getTopicCharacteristicId() {
+    public UUID getTopicCharacteristicId() {
         return topicCharacteristicId;
     }
 
-    public void setTopicCharacteristicId(List<UUID> topicCharacteristicId) {
+    public void setTopicCharacteristicId(UUID topicCharacteristicId) {
         this.topicCharacteristicId = topicCharacteristicId;
     }
 }

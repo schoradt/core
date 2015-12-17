@@ -20,7 +20,7 @@ import de.btu.openinfra.backend.db.rbac.TopicCharacteristicRbac;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
 /**
- * This class represents and implements the resource for suggestions in the
+ * This class represents and implements the resources for suggestions in the
  * project schema.
  *
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
