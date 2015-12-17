@@ -12,28 +12,28 @@ import javax.persistence.Table;
 
 /**
  * The persistent class for the attribute_type_x_attribute_type database table.
- * 
+ *
  */
 @Entity
 @Table(name="attribute_type_x_attribute_type")
 @NamedQueries({
 	@NamedQuery(name="AttributeTypeXAttributeType.findAll",
-			query="SELECT a FROM AttributeTypeXAttributeType a"),
-	@NamedQuery(name="AttributeTypeXAttributeType.findByAttributeType", 
+			query="SELECT a FROM AttributeTypeXAttributeType a ORDER BY a.id"),
+	@NamedQuery(name="AttributeTypeXAttributeType.findByAttributeType",
 			query="SELECT a "
 					+ "FROM AttributeTypeXAttributeType a "
-					+ "WHERE a.attributeType1Bean = :value "),
-	@NamedQuery(name="AttributeTypeXAttributeType.countByAttributeType", 
+					+ "WHERE a.attributeType1Bean = :value ORDER BY a.id"),
+	@NamedQuery(name="AttributeTypeXAttributeType.countByAttributeType",
         query="SELECT count(a) "
                 + "FROM AttributeTypeXAttributeType a "
                 + "WHERE a.attributeType1Bean = :value "),
 	@NamedQuery(
 			name="AttributeTypeXAttributeType."
-					+ "findByAttributeTypeAndAttributeType", 
+					+ "findByAttributeTypeAndAttributeType",
 			query="SELECT a "
 					+ "FROM AttributeTypeXAttributeType a "
 					+ "WHERE a.attributeType1Bean = :value AND "
-					+ "a.attributeType2Bean = :value2"),
+					+ "a.attributeType2Bean = :value2 ORDER BY a.id"),
 })
 public class AttributeTypeXAttributeType extends OpenInfraModelObject
     implements Serializable {

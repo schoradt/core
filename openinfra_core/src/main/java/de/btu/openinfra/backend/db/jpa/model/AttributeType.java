@@ -22,7 +22,7 @@ import javax.persistence.Table;
 @Table(name="attribute_type")
 @NamedQueries({
 	@NamedQuery(name="AttributeType.findAll",
-		query="SELECT a FROM AttributeType a"),
+		query="SELECT a FROM AttributeType a ORDER BY a.id"),
 	@NamedQuery(name="AttributeType.findAllByLocale",
 		query="SELECT a "
 	            + "FROM AttributeType a "

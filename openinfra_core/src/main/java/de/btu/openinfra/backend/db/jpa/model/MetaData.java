@@ -22,18 +22,19 @@ import de.btu.openinfra.backend.db.converter.PostgresJsonConverter;
 @Entity
 @Table(name="meta_data")
 @NamedQueries({
-	@NamedQuery(name="MetaData.findAll", query="SELECT m FROM MetaData m"),
+	@NamedQuery(name="MetaData.findAll",
+	        query="SELECT m FROM MetaData m ORDER BY m.id"),
 	@NamedQuery(name="MetaData.count", query="SELECT COUNT(m) FROM MetaData m"),
 	@NamedQuery(
 	        name="MetaData.findByObjectId",
 	        query="SELECT m FROM MetaData m WHERE "
-	                + "m.objectId = :oId"),
+	                + "m.objectId = :oId ORDER BY m.id"),
 	@NamedQuery(
 	        name="MetaData.findByTableColumn",
 	        query="SELECT m FROM MetaData m WHERE "
 	                + "m.objectId = :oId AND "
 	                + "m.pkColumn = :column AND "
-	                + "m.tableName = :table")
+	                + "m.tableName = :table ORDER BY m.id")
 })
 public class MetaData extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;

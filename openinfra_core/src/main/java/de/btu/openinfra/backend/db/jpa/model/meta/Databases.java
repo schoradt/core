@@ -21,10 +21,12 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 @Entity
 @Table(schema="meta_data")
 @NamedQueries({
-    @NamedQuery(name="Databases.findAll", query="SELECT d FROM Databases d"),
+    @NamedQuery(name="Databases.findAll",
+            query="SELECT d FROM Databases d ORDER BY d.id"),
     @NamedQuery(
             name="Databases.findByDatabase",
-            query="SELECT d FROM Databases d WHERE d.database = :database"),
+            query="SELECT d FROM Databases d WHERE d.database = :database "
+                    + "ORDER BY d.id"),
     @NamedQuery(name="Databases.count",
         query="SELECT COUNT(d) FROM Databases d")
 })

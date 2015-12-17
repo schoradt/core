@@ -21,22 +21,23 @@ import javax.persistence.Table;
 @Entity
 @Table(name="pt_locale")
 @NamedQueries({
-	@NamedQuery(name="PtLocale.findAll", query="SELECT p FROM PtLocale p"),
+	@NamedQuery(name="PtLocale.findAll",
+	        query="SELECT p FROM PtLocale p ORDER BY p.id"),
 	@NamedQuery(name="PtLocale.count", query="SELECT COUNT(p) FROM PtLocale p"),
 	@NamedQuery(name="PtLocale.findByLocale", query=""
 			+ "SELECT p "
 			+ "FROM PtLocale p "
 			+ "WHERE p.countryCode = :countryCode "
-			+ "AND p.languageCode = :languageCode "),
+			+ "AND p.languageCode = :languageCode ORDER BY p.id"),
     @NamedQuery(name="PtLocale.noCountry", query=""
             + "SELECT p "
             + "FROM PtLocale p "
             + "WHERE p.countryCode IS NULL "
-            + "AND p.languageCode = :languageCode "),
+            + "AND p.languageCode = :languageCode ORDER BY p.id"),
 	@NamedQuery(name="PtLocale.xx", query=""
             + "SELECT p "
             + "FROM PtLocale p "
-            + "WHERE p.countryCode IS NULL ")
+            + "WHERE p.countryCode IS NULL ORDER BY p.id")
 })
 @NamedNativeQueries({
     @NamedNativeQuery(name="PtLocale.findAllByLocaleAndOrder",

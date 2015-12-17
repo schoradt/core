@@ -25,7 +25,7 @@ import javax.persistence.Table;
 	@NamedQuery(name="ValueList.count",
 		query="SELECT COUNT(v) FROM ValueList v "),
 	@NamedQuery(name="ValueList.findAll",
-		query="SELECT v FROM ValueList v")
+		query="SELECT v FROM ValueList v ORDER BY v.id")
 })
 @NamedNativeQueries({
 	@NamedNativeQuery(name="ValueList.findAllByLocaleAndOrder",

@@ -22,7 +22,7 @@ import javax.persistence.Table;
 @Table(name="relationship_type")
 @NamedQueries({
 	@NamedQuery(name="RelationshipType.findAll",
-			query="SELECT r FROM RelationshipType r"),
+			query="SELECT r FROM RelationshipType r ORDER BY r.id"),
 	@NamedQuery(name="RelationshipType.count",
 			query="SELECT COUNT(r) FROM RelationshipType r"),
 	@NamedQuery(name="RelationshipType.findByTopicCharacteristic",
@@ -32,7 +32,8 @@ import javax.persistence.Table;
 					+ "WHERE rttc.id = ANY ( "
 						+ "SELECT r.id "
 						+ "FROM RelationshipTypeToTopicCharacteristic r "
-						+ "WHERE r.topicCharacteristic = :value)"),
+						+ "WHERE r.topicCharacteristic = :value) "
+					+ "ORDER BY rt.id"),
 	@NamedQuery(name="RelationshipType.countByTopicCharacteristic",
 	query="SELECT COUNT(rt) "
 			+ "FROM RelationshipType rt "

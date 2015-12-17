@@ -21,11 +21,13 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 @Entity
 @Table(schema="meta_data")
 @NamedQueries({
-    @NamedQuery(name="Servers.findAll", query="SELECT s FROM Servers s"),
+    @NamedQuery(name="Servers.findAll",
+            query="SELECT s FROM Servers s ORDER BY s.id"),
     @NamedQuery(name="Servers.count", query="SELECT COUNT(s) FROM Servers s"),
     @NamedQuery(
             name="Servers.findByServer",
-            query="SELECT s FROM Servers s WHERE s.server = :server")
+            query="SELECT s FROM Servers s WHERE s.server = :server "
+                    + "ORDER BY s.id")
 })
 @NamedNativeQueries({
     @NamedNativeQuery(name="Servers.findAllByLocaleAndOrder",

@@ -29,11 +29,11 @@ import javax.persistence.Table;
 					+ "FROM TopicInstance t "
 					+ "WHERE t.topicCharacteristic = :value"),
 	@NamedQuery(name="TopicInstance.findAll",
-			query="SELECT t FROM TopicInstance t"),
+			query="SELECT t FROM TopicInstance t ORDER BY t.id"),
 	@NamedQuery(name="TopicInstance.findByTopicCharacteristic",
 			query="SELECT t "
 					+ "FROM TopicInstance t "
-					+ "WHERE t.topicCharacteristic = :value "),
+					+ "WHERE t.topicCharacteristic = :value ORDER BY t.id"),
 	@NamedQuery(name="TopicInstance.filterLikeAttributeValueValue",
 			query="SELECT t "
 					+ "FROM TopicInstance t "
@@ -45,11 +45,12 @@ import javax.persistence.Table;
 								+ "SELECT l.ptFreeText.id "
 								+ "FROM LocalizedCharacterString l "
 								+ "WHERE l.ptLocale = :ptl "
-								+ "AND l.freeText LIKE :filter) )"),
+								+ "AND l.freeText LIKE :filter) ) "
+						+ "ORDER BY t.id"),
     @NamedQuery(name="TopicInstance.findByTopicCharacteristicWithGeomz",
             query="SELECT t "
                     + "FROM AttributeValueGeomz a INNER JOIN a.topicInstance t "
-                    + "WHERE t.topicCharacteristic = :value"),
+                    + "WHERE t.topicCharacteristic = :value ORDER BY t.id"),
     @NamedQuery(name="TopicInstance.countByTopicGeomz",
             query="SELECT COUNT(t) "
                     + "FROM AttributeValueGeomz a INNER JOIN a.topicInstance t "

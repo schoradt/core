@@ -23,12 +23,13 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 @Entity
 @Table(name="files")
 @NamedQueries({
-	@NamedQuery(name="File.findAll", query="SELECT f FROM File f"),
+	@NamedQuery(name="File.findAll", query="SELECT f FROM File f"
+	        + " ORDER BY f.id"),
 	@NamedQuery(name="File.count", query="SELECT COUNT(f) FROM File f"),
 	@NamedQuery(name="File.findBySubject",
 		query="SELECT f "
 				+ "FROM File f "
-				+ "WHERE f.subject = :subject"),
+				+ "WHERE f.subject = :subject ORDER BY f.id"),
 	@NamedQuery(name="File.countBySubject",
 		query="SELECT COUNT(f) "
 				+ "FROM File f "
@@ -37,7 +38,7 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 			query="SELECT f "
 					+ "FROM File f "
 					+ "WHERE f.subject = :subject "
-					+ "AND f.signature = :signature"),
+					+ "AND f.signature = :signature ORDER BY f.id"),
 	@NamedQuery(name="File.countBySignature",
 		query="SELECT COUNT(f) "
 				+ "FROM File f "

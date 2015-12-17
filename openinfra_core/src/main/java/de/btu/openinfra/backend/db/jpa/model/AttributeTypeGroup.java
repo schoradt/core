@@ -22,7 +22,7 @@ import javax.persistence.Table;
 @Table(name="attribute_type_group")
 @NamedQueries({
 	@NamedQuery(name="AttributeTypeGroup.findAll",
-		query="SELECT a FROM AttributeTypeGroup a"),
+		query="SELECT a FROM AttributeTypeGroup a ORDER BY a.id"),
 	@NamedQuery(name="AttributeTypeGroup.count",
 		query="SELECT COUNT(a) FROM AttributeTypeGroup a")
 })

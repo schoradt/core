@@ -45,26 +45,26 @@ import javax.persistence.Table;
 							+ "FROM TopicInstanceXTopicInstance t "
 							+ "WHERE t.topicInstance1Bean = :topicInstance "
 							+ "AND t.topicInstance2Bean.topicCharacteristic = "
-							+ ":topicCharacteristic"),
+							+ ":topicCharacteristic ORDER BY t.id"),
 	@NamedQuery(name="TopicInstanceXTopicInstance"
 			+ ".findAssociationFromByTopicInstanceAndTopicCharacteristic",
 					query="SELECT t "
 							+ "FROM TopicInstanceXTopicInstance t "
 							+ "WHERE t.topicInstance2Bean = :topicInstance "
 							+ "AND t.topicInstance1Bean.topicCharacteristic = "
-							+ ":topicCharacteristic"),
+							+ ":topicCharacteristic ORDER BY t.id"),
 	@NamedQuery(name="TopicInstanceXTopicInstance.findAll",
-			query="SELECT t FROM TopicInstanceXTopicInstance t"),
+			query="SELECT t FROM TopicInstanceXTopicInstance t ORDER BY t.id"),
 	@NamedQuery(name="TopicInstanceXTopicInstance.findByTopicInstance",
 			query="SELECT t "
 					+ "FROM TopicInstanceXTopicInstance t "
-					+ "WHERE t.topicInstance1Bean = :value"),
+					+ "WHERE t.topicInstance1Bean = :value ORDER BY t.id"),
 	@NamedQuery(
 		name="TopicInstanceXTopicInstance.findByTopicInstanceAndTopicInstance",
 		query="SELECT t "
 			+ "FROM TopicInstanceXTopicInstance t "
 			+ "WHERE t.topicInstance1Bean = :value AND "
-			+ "t.topicInstance2Bean = :value2")
+			+ "t.topicInstance2Bean = :value2 ORDER BY t.id")
 })
 @NamedNativeQueries({
     @NamedNativeQuery(
