@@ -34,8 +34,12 @@ public class SearchResource {
 
     /**
      * This resource awaits a SolrSearchPojo that will be the base for a search
-     * request on the Solr index. The parameter UUID and TRID of the
-     * SolrSearchPojo must not be set.
+     * request on the Solr index. There are two kinds of filters for projects
+     * and topic characteristics. The first is a positive filter that will lead
+     * to results that belong to the defined filter. The second is a negative
+     * filter list that will lead to results that do not belong to the defined
+     * filters. The parameter UUID and TRID of the SolrSearchPojo must not be
+     * set.
      *
      * @param locale     The language of the search request as string.
      * @param start      The offset parameter for the results.

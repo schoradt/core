@@ -21,6 +21,7 @@ import de.btu.openinfra.backend.db.pojos.solr.SolrResultPojo;
 import de.btu.openinfra.backend.db.pojos.solr.SolrSearchPojo;
 import de.btu.openinfra.backend.exception.OpenInfraWebException;
 import de.btu.openinfra.backend.solr.enums.SolrIndexEnum;
+import de.btu.openinfra.backend.solr.enums.SolrMandatoryEnum;
 
 
 /**
@@ -81,15 +82,28 @@ public class SolrSearcher extends SolrServer {
         query.setQuery(queryStr);
 
         // set the project filter
-        if (searchPojo.getProjectId() != null) {
+        if (searchPojo.getPositiveProjectFilter() != null) {
+            // set the positive project filter
             query.setFilterQueries(SolrIndexEnum.PROJECT_ID + ":"
-                    + searchPojo.getProjectId());
+                    + searchPojo.getPositiveProjectFilter());
+        } else {
+            // set the negative project filter
+            for(UUID project : searchPojo.getNegativeProjectFilter()) {
+                query.setFilterQueries(SolrMandatoryEnum.MUST_NOT.getString()
+                        + SolrIndexEnum.PROJECT_ID + ":" + project);
+            }
         }
 
         // set the topic characteristic filter
-        if (searchPojo.getTopicCharacteristicId() != null) {
+        if (searchPojo.getPositiveTopicCharacteristicFilter() != null) {
             query.setFilterQueries(SolrIndexEnum.TOPIC_CHARACTERISTIC_ID + ":"
-                    + searchPojo.getTopicCharacteristicId());
+                    + searchPojo.getPositiveTopicCharacteristicFilter());
+        } else {
+            // set the negative topic characteristic filter
+            for(UUID ti : searchPojo.getNegativeTopicCharacteristicFilter()) {
+                query.setFilterQueries(SolrMandatoryEnum.MUST_NOT.getString()
+                        + SolrIndexEnum.TOPIC_CHARACTERISTIC_ID + ":" + ti);
+            }
         }
 
         // define the return value
