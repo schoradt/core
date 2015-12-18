@@ -43,7 +43,7 @@ import javax.persistence.Table;
 						+ "FROM LocalizedCharacterString l "
 						+ "WHERE l.ptLocale = :value "
 						+ "AND l.freeText LIKE :filter)) "
-				+ "ORDER BY lcs.freeText"),
+				+ "ORDER BY LOWER(lcs.freeText)"),
 	@NamedQuery(name="TopicCharacteristic.findByTopicInstanceAssociationTo",
 		query="SELECT DISTINCT t "
 				+ "FROM TopicCharacteristic t "
