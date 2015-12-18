@@ -2,6 +2,7 @@ package de.btu.openinfra.backend.solr;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -9,6 +10,7 @@ import java.util.UUID;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrClient.RemoteSolrException;
+import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
 
@@ -84,27 +86,50 @@ public class SolrSearcher extends SolrServer {
         // set the project filter
         if (searchPojo.getPositiveProjectFilter() != null) {
             // set the positive project filter
-            query.setFilterQueries(SolrIndexEnum.PROJECT_ID + ":"
+            query.setFilterQueries(SolrIndexEnum.PROJECT_ID.getString() + ":"
                     + searchPojo.getPositiveProjectFilter());
         } else {
             // set the negative project filter
-            for(UUID project : searchPojo.getNegativeProjectFilter()) {
-                query.setFilterQueries(SolrMandatoryEnum.MUST_NOT.getString()
-                        + SolrIndexEnum.PROJECT_ID + ":" + project);
+            if (searchPojo.getNegativeProjectFilter() != null) {
+                for(UUID project : searchPojo.getNegativeProjectFilter()) {
+                    query.setFilterQueries(
+                            SolrMandatoryEnum.MUST_NOT.getString()
+                            + SolrIndexEnum.PROJECT_ID.getString() + ":"
+                            + project);
+                }
             }
         }
 
         // set the topic characteristic filter
         if (searchPojo.getPositiveTopicCharacteristicFilter() != null) {
-            query.setFilterQueries(SolrIndexEnum.TOPIC_CHARACTERISTIC_ID + ":"
+            query.setFilterQueries(
+                    SolrIndexEnum.TOPIC_CHARACTERISTIC_ID.getString() + ":"
                     + searchPojo.getPositiveTopicCharacteristicFilter());
         } else {
             // set the negative topic characteristic filter
-            for(UUID ti : searchPojo.getNegativeTopicCharacteristicFilter()) {
-                query.setFilterQueries(SolrMandatoryEnum.MUST_NOT.getString()
-                        + SolrIndexEnum.TOPIC_CHARACTERISTIC_ID + ":" + ti);
+            if (searchPojo.getNegativeProjectFilter() != null) {
+                for(UUID ti :
+                        searchPojo.getNegativeTopicCharacteristicFilter()) {
+                    query.setFilterQueries(
+                            SolrMandatoryEnum.MUST_NOT.getString()
+                            + SolrIndexEnum.TOPIC_CHARACTERISTIC_ID.getString()
+                            + ":" + ti);
+                }
             }
         }
+
+        // define the facets
+        // activates faceting
+        query.setFacet(true);
+        // only include results that has at least one entry
+        query.setFacetMinCount(1);
+        // return unlimited count of facets
+        query.setFacetLimit(-1);
+        // sort the facets descending for the count
+        query.setFacetSort("count");
+        // define the field for the facets
+        query.set("facet.field",
+                SolrIndexEnum.TOPIC_CHARACTERISTIC_ID.getString());
 
         // define the return value
         query.set("wt", "json");
@@ -164,6 +189,16 @@ public class SolrSearcher extends SolrServer {
             // get the highlighting for the request
             Map<String, Map<String, List<String>>> hl =
                     response.getHighlighting();
+
+            // save the facets
+            Map<String, Long> facets = new LinkedHashMap<String, Long>();
+            for(FacetField ff : response.getFacetFields()) {
+                for (FacetField.Count ffCount : ff.getValues()) {
+                    facets.put(ffCount.getName(), ffCount.getCount());
+                }
+
+            }
+            result.setFacets(facets);
 
             // run through the results and add them to a list
             for (int i = 0; i < solrResults.size(); ++i) {

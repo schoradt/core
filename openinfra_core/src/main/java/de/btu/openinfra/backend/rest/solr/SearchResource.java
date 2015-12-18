@@ -45,8 +45,11 @@ public class SearchResource {
      * @param start      The offset parameter for the results.
      * @param rows       The count of results that should be returned.
      * @param searchPojo The SearchPojo that contains the request.
-     * @return           A SolrResultPojo that contains the result, a query time
-     *                   and a count of the retrieved results.
+     * @return           A SolrResultPojo that contains the result, a query
+     *                   time, a count of the retrieved results, meta data for
+     *                   the participated topic instances and topic
+     *                   characteristics and facets for the topic
+     *                   characteristics.
      *
      * @response.representation.200.qname SolrResultPojo
      * @response.representation.200.doc   This is the representation returned by
