@@ -74,7 +74,7 @@ import javax.persistence.Table;
 						+ "where a.%s = b.pt_free_text_id "
 						+ "and b.pt_locale_id = cast(? as uuid) ) as sq "
 						+ "on (tc.id = sq.id) "
-						+ "order by free_text ",
+						+ "order by lower(free_text) ",
 				resultClass=TopicCharacteristic.class)
 })
 public class TopicCharacteristic extends OpenInfraModelObject

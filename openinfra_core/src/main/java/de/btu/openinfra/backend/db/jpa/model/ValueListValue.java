@@ -45,7 +45,7 @@ import javax.persistence.Table;
                     + "AND b.pt_locale_id = cast(? as uuid) ) AS sq "
                     + "ON (vlv.id = sq.id) "
                     + "WHERE vlv.belongs_to_value_list = ? "
-                    + "ORDER BY free_text ",
+                    + "ORDER BY lower(free_text) ",
             resultClass=ValueListValue.class)
 })
 public class ValueListValue extends OpenInfraModelObject

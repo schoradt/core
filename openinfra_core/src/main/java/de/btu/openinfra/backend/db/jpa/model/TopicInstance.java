@@ -80,7 +80,7 @@ import javax.persistence.Table;
                         + "lcs.pt_locale_id = cast(? AS uuid))) AS b "
                         + "ON b.id = ti1.id "
                 + "WHERE ti1.topic_characteristic_id = cast(? AS uuid) "
-                + "ORDER BY b.free_text ",
+                + "ORDER BY lower(b.free_text) ",
             resultClass=ValueList.class),
     @NamedNativeQuery(name="TopicInstance.findAllByLocaleAndOrderForDomains",
         query="SELECT "
