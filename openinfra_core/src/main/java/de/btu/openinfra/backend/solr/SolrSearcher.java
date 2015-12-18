@@ -2,6 +2,7 @@ package de.btu.openinfra.backend.solr;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -9,6 +10,7 @@ import java.util.UUID;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrClient.RemoteSolrException;
+import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
 
@@ -21,6 +23,7 @@ import de.btu.openinfra.backend.db.pojos.solr.SolrResultPojo;
 import de.btu.openinfra.backend.db.pojos.solr.SolrSearchPojo;
 import de.btu.openinfra.backend.exception.OpenInfraWebException;
 import de.btu.openinfra.backend.solr.enums.SolrIndexEnum;
+import de.btu.openinfra.backend.solr.enums.SolrMandatoryEnum;
 
 
 /**
@@ -32,14 +35,6 @@ import de.btu.openinfra.backend.solr.enums.SolrIndexEnum;
  *
  */
 public class SolrSearcher extends SolrServer {
-
-    /*
-     * This variable defines the default start of the results and will be set if
-     * no start variable was passed for the search method.
-     * ATTENTION: Setting this variable greater than 0 will cut the results with
-     * the highest relevance!
-     */
-    private final int RESULT_WINDOW_START = 0;
 
     /**
      * Default constructor
@@ -62,12 +57,6 @@ public class SolrSearcher extends SolrServer {
     public SolrResultPojo search(SolrSearchPojo searchPojo,
             int start, int rows) {
 
-        // create the result object
-        SolrResultPojo result = new SolrResultPojo();
-
-        // create a list for the result objects
-        List<SolrResultDbPojo> resultList = new ArrayList<SolrResultDbPojo>();
-
         // create a Solr query object
         SolrQuery query = new SolrQuery();
 
@@ -80,24 +69,18 @@ public class SolrSearcher extends SolrServer {
         // add the query string to the query object.
         query.setQuery(queryStr);
 
-        // set the project filter
-        if (searchPojo.getProjectId() != null) {
-            query.setFilterQueries(SolrIndexEnum.PROJECT_ID + ":"
-                    + searchPojo.getProjectId());
-        }
+        // add filter
+        addFilter(searchPojo, query);
 
-        // set the topic characteristic filter
-        if (searchPojo.getTopicCharacteristicId() != null) {
-            query.setFilterQueries(SolrIndexEnum.TOPIC_CHARACTERISTIC_ID + ":"
-                    + searchPojo.getTopicCharacteristicId());
-        }
+        // define the facets
+        addFacets(query);
 
         // define the return value
         query.set("wt", "json");
 
-        // if the start variable is negative, set it to the default
+        // if the start variable is negative, set it to zero
         if (start < 0) {
-            start = RESULT_WINDOW_START;
+            start = 0;
         }
 
         // if the rows variable is negative or zero, set it to the default
@@ -111,6 +94,87 @@ public class SolrSearcher extends SolrServer {
         query.setStart(start);
         query.setRows(rows);
 
+        // add highlighting
+        addHighlighting(query, parser, queryStr);
+
+        try {
+            // extract the results
+            return mapResult(getSolr().query(query));
+        } catch (SolrServerException | IOException | RemoteSolrException e) {
+            throw new OpenInfraWebException(e);
+        }
+    }
+
+    /**
+     * This method adds filter to the search query. It will extract the filter
+     * from the corresponding fields in the SolrSearchPojo. It will always
+     * prefer the positive filter. Only if the positive filter is null the
+     * negative filter list will be used.
+     *
+     * @param searchPojo The SearchPojo that contains the filter.
+     * @param query      The SolrQuery that will be used to execute the search.
+     */
+    private void addFilter(SolrSearchPojo searchPojo, SolrQuery query) {
+
+        if (searchPojo.getPositiveProjectFilter() != null) {
+            // set the positive project filter
+            query.setFilterQueries(SolrIndexEnum.PROJECT_ID.getString() + ":"
+                    + searchPojo.getPositiveProjectFilter());
+        } else {
+            // set the negative project filter
+            if (searchPojo.getNegativeProjectFilter() != null) {
+                for(UUID project : searchPojo.getNegativeProjectFilter()) {
+                    query.setFilterQueries(
+                            SolrMandatoryEnum.MUST_NOT.getString()
+                            + SolrIndexEnum.PROJECT_ID.getString() + ":"
+                            + project);
+                }
+            }
+        }
+
+        if (searchPojo.getPositiveTopicCharacteristicFilter() != null) {
+            // set the positive topic characteristic filter
+            query.setFilterQueries(
+                    SolrIndexEnum.TOPIC_CHARACTERISTIC_ID.getString() + ":"
+                    + searchPojo.getPositiveTopicCharacteristicFilter());
+        } else {
+            // set the negative topic characteristic filter
+            if (searchPojo.getNegativeProjectFilter() != null) {
+                for(UUID ti :
+                        searchPojo.getNegativeTopicCharacteristicFilter()) {
+                    query.setFilterQueries(
+                            SolrMandatoryEnum.MUST_NOT.getString()
+                            + SolrIndexEnum.TOPIC_CHARACTERISTIC_ID.getString()
+                            + ":" + ti);
+                }
+            }
+        }
+    }
+
+    /**
+     * This method defines facets for the search result. It will only facet on
+     * topic characteristics. There will only be entries in the facet that has
+     * at least one match in the search result. The facets will be ordered by
+     * there count.
+     *
+     * @param query The SolrQuery that will be used to execute the search.
+     */
+    private void addFacets(SolrQuery query) {
+        // activates faceting
+        query.setFacet(true);
+        // only include results that has at least one entry
+        query.setFacetMinCount(1);
+        // return unlimited count of facets
+        query.setFacetLimit(-1);
+        // sort the facets descending for the count
+        query.setFacetSort("count");
+        // define the field for the facets
+        query.set("facet.field",
+                SolrIndexEnum.TOPIC_CHARACTERISTIC_ID.getString());
+    }
+
+    private void addHighlighting(SolrQuery query, SolrQueryParser parser,
+            String queryStr) {
         // enable highlighting
         query.setHighlight(true);
 
@@ -133,85 +197,106 @@ public class SolrSearcher extends SolrServer {
         // TODO add this to properties?
         query.setHighlightSimplePre("<b>");
         query.setHighlightSimplePost("</b>");
+    }
 
-        try {
-            // send the query to the Solr server
-            QueryResponse response = getSolr().query(query);
+    /**
+     * This method maps the Solr result to a SolrResultPojo.
+     *
+     * @param response The QueryResponse from the Solr request.
+     * @return         The SolrResultPojo that contains all necessary
+     *                 informations from the QueryResponse.
+     */
+    private SolrResultPojo mapResult(QueryResponse response) {
+        // get the result list from the Solr server
+        SolrDocumentList solrResults = response.getResults();
 
-            // get the result list from the Solr server
-            SolrDocumentList solrResults = response.getResults();
+        // create the result object
+        SolrResultPojo result = new SolrResultPojo();
 
-            // save the elapsed time for retrieving the results
-            result.setElapsedTime(response.getElapsedTime());
+        // create a list for the result objects
+        List<SolrResultDbPojo> resultList = new ArrayList<SolrResultDbPojo>();
 
-            // save the count of results
-            result.setResultCount(response.getResults().getNumFound());
+        // run through the results and add them to a list
+        for (int i = 0; i < solrResults.size(); ++i) {
+            SolrResultDbPojo rP = new SolrResultDbPojo();
+
+            // save the topic instance id from the result object
+            rP.setTopicInstanceId(UUID.fromString(
+                    solrResults.get(i).getFieldValue(
+                            SolrIndexEnum.TOPIC_INSTANCE_ID.getString())
+                            .toString()));
+
+            // save the topic characteristic id from the result object
+            rP.setTopicCharacteristicId(UUID.fromString(
+                    solrResults.get(i).getFieldValue(
+                            SolrIndexEnum.TOPIC_CHARACTERISTIC_ID
+                            .getString()).toString()));
+
+            // save the project id from the result object
+            rP.setProjectId(UUID.fromString(
+                    solrResults.get(i).getFieldValue(
+                            SolrIndexEnum.PROJECT_ID.getString())
+                            .toString()));
+
+            // extract meta data of the result object
+            MetaDataDao mdDao = new MetaDataDao(
+                    rP.getProjectId(), OpenInfraSchemas.PROJECTS);
+
+            // read meta data for the topic instance
+            rP.setTopicInstanceMetaData(
+                    mdDao.read(rP.getTopicInstanceId()));
+
+            // read meta data for the topic characteristic
+            rP.setTopicCharacteristicMetaData(
+                    mdDao.read(rP.getTopicCharacteristicId()));
 
             // get the highlighting for the request
             Map<String, Map<String, List<String>>> hl =
                     response.getHighlighting();
 
-            // run through the results and add them to a list
-            for (int i = 0; i < solrResults.size(); ++i) {
-                SolrResultDbPojo rP = new SolrResultDbPojo();
-
-                // save the topic instance id from the result object
-                rP.setTopicInstanceId(UUID.fromString(
-                        solrResults.get(i).getFieldValue(
-                                SolrIndexEnum.TOPIC_INSTANCE_ID.getString())
-                                .toString()));
-
-                // save the topic characteristic id from the result object
-                rP.setTopicCharacteristicId(UUID.fromString(
-                        solrResults.get(i).getFieldValue(
-                                SolrIndexEnum.TOPIC_CHARACTERISTIC_ID
-                                .getString()).toString()));
-
-                // save the project id from the result object
-                rP.setProjectId(UUID.fromString(
-                        solrResults.get(i).getFieldValue(
-                                SolrIndexEnum.PROJECT_ID.getString())
-                                .toString()));
-
-                // extract meta data of the result object
-                MetaDataDao mdDao = new MetaDataDao(
-                        rP.getProjectId(), OpenInfraSchemas.PROJECTS);
-
-                // read meta data for the topic instance
-                rP.setTopicInstanceMetaData(
-                        mdDao.read(rP.getTopicInstanceId()));
-
-                // read meta data for the topic characteristic
-                rP.setTopicCharacteristicMetaData(
-                        mdDao.read(rP.getTopicCharacteristicId()));
-
-                // only remove the default_search field if it is not the only
-                // entry in the highlight field
-                if (hl.get(rP.getTopicInstanceId().toString()).size() > 1 &&
-                        hl.get(rP.getTopicInstanceId().toString())
-                        .containsKey(SolrIndexEnum.DEFAULT_SEARCH_FIELD
-                                .getString())) {
-                    // remove the default_search field from the highlighting map
-                    // to avoid double entries
-                    hl.get(rP.getTopicInstanceId().toString()).remove(
-                            SolrIndexEnum.DEFAULT_SEARCH_FIELD.getString());
-                }
-
-                // remove the default_search field from the highlighting map to
-                // avoid double entries
+            // only remove the default_search field if it is not the only
+            // entry in the highlight field
+            if (hl.get(rP.getTopicInstanceId().toString()).size() > 1 &&
+                    hl.get(rP.getTopicInstanceId().toString())
+                    .containsKey(SolrIndexEnum.DEFAULT_SEARCH_FIELD
+                            .getString())) {
+                // remove the default_search field from the highlighting map
+                // to avoid double entries
                 hl.get(rP.getTopicInstanceId().toString()).remove(
-                        SolrIndexEnum.LOOKUP_FIELD.getString());
-
-                // add the highlighted fields
-                rP.setHighlight(hl.get(rP.getTopicInstanceId().toString()));
-
-                // add the current result to the result list
-                resultList.add(rP);
+                        SolrIndexEnum.DEFAULT_SEARCH_FIELD.getString());
             }
-            result.setDatabaseResult(resultList);
-            return result;
-        } catch (SolrServerException | IOException | RemoteSolrException e) {
-            throw new OpenInfraWebException(e);
+
+            // remove the default_search field from the highlighting map to
+            // avoid double entries
+            hl.get(rP.getTopicInstanceId().toString()).remove(
+                    SolrIndexEnum.LOOKUP_FIELD.getString());
+
+            // add the highlighted fields
+            rP.setHighlight(hl.get(rP.getTopicInstanceId().toString()));
+
+            // add the current result to the result list
+            resultList.add(rP);
         }
+
+        result.setDatabaseResult(resultList);
+
+        // save the elapsed time for retrieving the results
+        result.setElapsedTime(response.getElapsedTime());
+
+        // save the count of results
+        result.setResultCount(response.getResults().getNumFound());
+
+        // save the facets
+        Map<String, Long> facets = new LinkedHashMap<String, Long>();
+        for(FacetField ff : response.getFacetFields()) {
+            for (FacetField.Count ffCount : ff.getValues()) {
+                facets.put(ffCount.getName(), ffCount.getCount());
+            }
+        }
+
+        // add the facets to the result
+        result.setFacets(facets);
+
+        return result;
     }
 }
