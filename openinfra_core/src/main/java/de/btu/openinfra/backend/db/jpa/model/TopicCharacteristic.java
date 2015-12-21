@@ -43,7 +43,7 @@ import javax.persistence.Table;
 						+ "FROM LocalizedCharacterString l "
 						+ "WHERE l.ptLocale = :value "
 						+ "AND l.freeText LIKE :filter)) "
-				+ "ORDER BY lcs.freeText"),
+				+ "ORDER BY LOWER(lcs.freeText)"),
 	@NamedQuery(name="TopicCharacteristic.findByTopicInstanceAssociationTo",
 		query="SELECT DISTINCT t "
 				+ "FROM TopicCharacteristic t "
@@ -74,7 +74,7 @@ import javax.persistence.Table;
 						+ "where a.%s = b.pt_free_text_id "
 						+ "and b.pt_locale_id = cast(? as uuid) ) as sq "
 						+ "on (tc.id = sq.id) "
-						+ "order by free_text ",
+						+ "order by lower(free_text) ",
 				resultClass=TopicCharacteristic.class)
 })
 public class TopicCharacteristic extends OpenInfraModelObject

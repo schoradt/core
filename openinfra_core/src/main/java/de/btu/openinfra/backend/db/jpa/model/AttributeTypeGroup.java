@@ -37,7 +37,7 @@ import javax.persistence.Table;
                     + "WHERE a.%s = b.pt_free_text_id "
                     + "AND b.pt_locale_id = cast(? as uuid) ) AS sq "
                     + "ON (atg.id = sq.id) "
-                    + "ORDER BY free_text ",
+                    + "ORDER BY lower(free_text) ",
             resultClass=AttributeTypeGroup.class)
 })
 public class AttributeTypeGroup extends OpenInfraModelObject

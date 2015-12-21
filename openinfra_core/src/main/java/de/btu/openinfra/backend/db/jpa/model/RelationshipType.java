@@ -54,7 +54,7 @@ import javax.persistence.Table;
                         + "WHERE a.name = b.pt_free_text_id "
                         + "AND b.pt_locale_id = cast(? as uuid) ) AS sq "
                         + "ON (rt.%s = sq.id) "
-                        + "ORDER BY free_text ",
+                        + "ORDER BY lower(free_text) ",
                 resultClass=RelationshipType.class)
 })
 public class RelationshipType extends OpenInfraModelObject
