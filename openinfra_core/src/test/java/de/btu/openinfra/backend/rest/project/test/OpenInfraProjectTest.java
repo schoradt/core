@@ -87,6 +87,46 @@ public class OpenInfraProjectTest extends OpenInfraTest {
     }
 
     @Test
+    public void postAttributeValueValueByword() {
+        UUID topicInstanceId =
+                UUID.fromString("fab4e287-3b8e-48fa-9282-63fc123dff47");
+        UUID attributeTypeId =
+                UUID.fromString("48f06316-f5e6-441a-a5e7-77291f3879e7");
+        UUID attributeTypeToAttributeTypeGroupId =
+                UUID.fromString("c05bbd28-a61f-4e98-9553-0dd599f755c8");
+
+        // get a attribute value pojo
+        AttributeValuePojo avp = new AttributeValuePojo();
+
+        // get a attribute value value pojo
+        AttributeValueValuePojo avvp = new AttributeValueValuePojo();
+
+        // get the new free text we want to insert
+        PtFreeTextPojo pp = buildXml(PT_FREE_TEXT_PATH
+                + "/58d7f614-d7d1-4dd9-8116-506127736067")
+                .get(PtFreeTextPojo.class);
+
+        // set the data for the attribute value value pojo
+        avvp.setTopicInstanceId(topicInstanceId);
+        avvp.setValue(pp);
+        avvp.setAttributeTypeToAttributeTypeGroupId(
+                attributeTypeToAttributeTypeGroupId);
+
+        // set the data for the attribute value pojo
+        avp.setAttributeValueType(AttributeValueTypes.ATTRIBUTE_VALUE_VALUE);
+        avp.setAttributeTypeId(attributeTypeId);
+        avp.setAttributeValueValue(avvp);
+
+        // send the new object
+        Response res = buildJson(ATTRIBUTE_VALUE_POST_PATH)
+                .post(Entity.json(avp));
+        System.out.println(res);
+        // test the result
+        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(),
+                res.getStatus());
+    }
+
+    @Test
     public void putAttributeValueValue() {
         // attribute value id that should be changed
         UUID entity = UUID.fromString("faaac2c3-07f5-4c9b-bdd1-ed65f146d14d");
