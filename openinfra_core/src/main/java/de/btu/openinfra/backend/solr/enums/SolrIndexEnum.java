@@ -5,6 +5,9 @@ import de.btu.openinfra.backend.solr.SolrCharacterConverter;
 /**
  * This enum contains the standard Solr index fields.
  *
+ * ATTENTION: Changing the property of a enumeration can have unseen side
+ * effects for the search and suggestion.
+ *
  * @author <a href="http://www.b-tu.de">BTU</a> DBIS
  */
 public enum SolrIndexEnum {
@@ -43,7 +46,7 @@ public enum SolrIndexEnum {
      * This variable represents the Solr field for lookups. UUIDs will not be
      * added to this field.
      */
-    LOOKUP_FIELD("_lookupfield_"),
+    LOOKUP_FIELD("lookup_field"),
 
     /*
      * This variable represents the Solr field for the file name as hash.

@@ -226,7 +226,11 @@ public class SolrIndexer extends SolrServer {
         }
 
         // index the files
-        return writeToIndex(docs);
+        if (docs.size() > 0) {
+            return writeToIndex(docs);
+        } else {
+            return false;
+        }
 
         } catch (Exception e) {
             e.printStackTrace();

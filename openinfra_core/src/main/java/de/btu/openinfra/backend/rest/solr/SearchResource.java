@@ -40,6 +40,9 @@ public class SearchResource {
      * filter list that will lead to results that do not belong to the defined
      * filters. The parameter UUID and TRID of the SolrSearchPojo must not be
      * set.
+     * <ul>
+     *   <li>rest/v1/search</li>
+     * </ul>
      *
      * @param locale     The language of the search request as string.
      * @param start      The offset parameter for the results.
@@ -77,6 +80,9 @@ public class SearchResource {
     /**
      * This resource starts the process that generates the Solr index for
      * files.
+     * <ul>
+     *   <li>rest/v1/search/index/files</li>
+     * </ul>
      *
      * @return         True if the process was successful.
      *
@@ -103,6 +109,9 @@ public class SearchResource {
      * the index should created for. If the list is empty all projects will be
      * indexed. The parameter UUID and TRID of the SolrSearchPojo must not be
      * set.
+     * <ul>
+     *   <li>rest/v1/search/index/projects</li>
+     * </ul>
      *
      * @param projects The SolrIndexPojo that contains the list of project ids
      *                 that should be indexed.
@@ -128,6 +137,9 @@ public class SearchResource {
 
     /**
      * This resource starts the process that generates the Solr index.
+     * <ul>
+     *   <li>rest/v1/search/index?clean=true</li>
+     * </ul>
      *
      * @param clean    If true the index will be completely cleared before
      *                 indexing.
@@ -154,6 +166,9 @@ public class SearchResource {
     /**
      * This resource provides a suggestion on the Solr index for a specified
      * query string.
+     * <ul>
+     *   <li>rest/v1/search/suggest?q=ABC</li>
+     * </ul>
      *
      * @response.representation.200.qname A list of strings.
      * @response.representation.200.doc   This is the representation returned by
