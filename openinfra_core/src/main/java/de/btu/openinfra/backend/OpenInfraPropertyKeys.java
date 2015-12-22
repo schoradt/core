@@ -134,7 +134,14 @@ public enum OpenInfraPropertyKeys {
      * This property sets the index delay time after inserting, updating or
      * deleting defined objects in the database.
      */
-    SOLR_INDEX_DELAY("de.btu.openinfra.backend.solr.indexDelay");
+    SOLR_INDEX_DELAY("de.btu.openinfra.backend.solr.indexDelay"),
+
+    /**
+     * This property defines the file formats that will be included for document
+     * indexing.
+     */
+    SOLR_INDEXABLE_DOCUMENTS(
+            "de.btu.openinfra.backend.solr.indexableDocuments");
 
 	private String key;
 	private OpenInfraPropertyKeys(String key) {

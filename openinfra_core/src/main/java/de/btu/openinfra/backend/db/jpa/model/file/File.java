@@ -39,6 +39,10 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 					+ "FROM File f "
 					+ "WHERE f.subject = :subject "
 					+ "AND f.signature = :signature ORDER BY f.id"),
+	@NamedQuery(name="File.findBySignature",
+            query="SELECT f "
+                    + "FROM File f "
+                    + "WHERE f.signature = :signature ORDER BY f.id"),
 	@NamedQuery(name="File.countBySignature",
 		query="SELECT COUNT(f) "
 				+ "FROM File f "

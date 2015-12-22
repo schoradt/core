@@ -59,8 +59,7 @@ public class SolrThreadedIndexer extends SolrIndexer {
      * document from the Solr index depending on the specified operation in the
      * constructor. The thread will start delayed for at least 15 seconds or the
      * time that is configured in the properties file. This is necessary while
-     * deleting objects that are no topic instances (e.g. attribute values). If
-     * we delete the
+     * deleting objects that are no topic instances (e.g. attribute values).
      */
     @Override
     public void run() {

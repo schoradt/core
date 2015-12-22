@@ -75,13 +75,60 @@ public class SearchResource {
     }
 
     /**
-     * This resource starts the process that generates the Solr index. The
-     * specified SolrIndexPojo can contain a list of project ids the index
-     * should created for. If the list is empty all projects will be indexed.
-     * The parameter UUID and TRID of the SolrSearchPojo must not be set.
+     * This resource starts the process that generates the Solr index for
+     * files.
+     *
+     * @return         True if the process was successful.
+     *
+     * @response.representation.200.qname boolean
+     * @response.representation.200.doc   True is the representation returned by
+     *                                    default.
+     *
+     * @response.representation.500.qname OpenInfraSolrException
+     * @response.representation.500.doc   An internal error occurs while
+     *                                    indexing the database. This error can
+     *                                    not be specified because every server
+     *                                    side error will lead to this
+     *                                    exception.
+     */
+    @GET
+    @Path("/index/files")
+    public boolean index() {
+        return new SolrIndexer().indexFiles();
+    }
+
+    /**
+     * This resource starts the process that generates the Solr index for
+     * projects. The specified SolrIndexPojo can contain a list of project ids
+     * the index should created for. If the list is empty all projects will be
+     * indexed. The parameter UUID and TRID of the SolrSearchPojo must not be
+     * set.
      *
      * @param projects The SolrIndexPojo that contains the list of project ids
      *                 that should be indexed.
+     * @return         True if the process was successful.
+     *
+     * @response.representation.200.qname boolean
+     * @response.representation.200.doc   True is the representation returned by
+     *                                    default.
+     *
+     * @response.representation.500.qname OpenInfraSolrException
+     * @response.representation.500.doc   An internal error occurs while
+     *                                    indexing the database. This error can
+     *                                    not be specified because every server
+     *                                    side error will lead to this
+     *                                    exception.
+     */
+    @POST
+    @Path("/index/projects")
+    public boolean index(
+            SolrIndexPojo projects) {
+        return new SolrIndexer().indexProjects(projects);
+    }
+
+    /**
+     * This resource starts the process that generates the Solr index.
+     *
      * @param clean    If true the index will be completely cleared before
      *                 indexing.
      * @return         True if the process was successful.
@@ -97,13 +144,11 @@ public class SearchResource {
      *                                    side error will lead to this
      *                                    exception.
      */
-    @POST
+    @GET
     @Path("/index")
     public boolean index(
-            @QueryParam("clean") boolean clean,
-            SolrIndexPojo projects) {
-        SolrIndexer indexer = new SolrIndexer();
-        return indexer.indexProjects(projects, clean);
+            @QueryParam("clean") boolean clean) {
+        return new SolrIndexer().indexAll(clean);
     }
 
     /**
