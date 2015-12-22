@@ -1,6 +1,10 @@
 package de.btu.openinfra.backend.helper;
 
-import de.btu.openinfra.backend.OpenInfraTime;
+import de.btu.openinfra.backend.db.pojos.solr.SolrResultDbPojo;
+import de.btu.openinfra.backend.db.pojos.solr.SolrResultDocPojo;
+import de.btu.openinfra.backend.db.pojos.solr.SolrResultPojo;
+import de.btu.openinfra.backend.db.pojos.solr.SolrSearchPojo;
+import de.btu.openinfra.backend.solr.SolrSearcher;
 
 
 
@@ -68,8 +72,30 @@ public class TestClass {
 //            System.out.println(string);
 //        }
 
-	    System.out.println(OpenInfraTime.parse("2010-02-18T17:37:27"));
-	    System.out.println(OpenInfraTime.parse("2015-05-20 09:30:00+02"));
+	    SolrSearchPojo searchPojo = new SolrSearchPojo();
+	    searchPojo.setRawSolrQuery("Tino");
+	    SolrResultPojo r = new SolrSearcher().search(searchPojo, 0, Integer.MAX_VALUE);
+
+	    System.out.println("time: " + r.getElapsedTime());
+	    System.out.println("count: " + r.getResultCount());
+	    for (SolrResultDbPojo db : r.getDatabaseResult()) {
+	        System.out.println(db.getTopicInstanceId() + " -- " + db.getHighlight());
+	    }
+
+	    System.out.println("----------------------------");
+
+	    for (SolrResultDocPojo doc : r.getDocumentResult()) {
+            System.out.println(doc.getHashCode() + " -- " + doc.getHighlight());
+        }
+
+
+//	    SolrIndexer si = new SolrIndexer();
+//	    SolrIndexPojo p = new SolrIndexPojo();
+//	    List<UUID> lst = new ArrayList<UUID>();
+//	    lst.add(UUID.fromString("e7d42bff-4e40-4f43-9d1b-1dc5a190cd75"));
+//	    p.setProjects(lst);
+//	    si.indexAll(true);
+
 
 
 	}

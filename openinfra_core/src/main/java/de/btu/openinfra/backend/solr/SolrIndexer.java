@@ -1,20 +1,35 @@
 package de.btu.openinfra.backend.solr;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import javax.persistence.NoResultException;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.SolrInputDocument;
+import org.apache.tika.exception.TikaException;
+import org.apache.tika.metadata.Metadata;
+import org.apache.tika.parser.AutoDetectParser;
+import org.apache.tika.parser.ParseContext;
+import org.apache.tika.sax.BodyContentHandler;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
 
 import de.btu.openinfra.backend.OpenInfraProperties;
 import de.btu.openinfra.backend.OpenInfraPropertyKeys;
+import de.btu.openinfra.backend.OpenInfraPropertyValues;
 import de.btu.openinfra.backend.OpenInfraTime;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.daos.file.FileDao;
 import de.btu.openinfra.backend.db.daos.meta.ProjectsDao;
 import de.btu.openinfra.backend.db.daos.project.TopicInstanceDao;
 import de.btu.openinfra.backend.db.jpa.model.AttributeValueDomain;
@@ -22,11 +37,13 @@ import de.btu.openinfra.backend.db.jpa.model.AttributeValueValue;
 import de.btu.openinfra.backend.db.jpa.model.LocalizedCharacterString;
 import de.btu.openinfra.backend.db.jpa.model.TopicInstance;
 import de.btu.openinfra.backend.db.jpa.model.meta.Projects;
+import de.btu.openinfra.backend.db.pojos.file.FilePojo;
 import de.btu.openinfra.backend.db.pojos.solr.SolrIndexPojo;
 import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 import de.btu.openinfra.backend.exception.OpenInfraSolrException;
 import de.btu.openinfra.backend.exception.OpenInfraWebException;
 import de.btu.openinfra.backend.solr.enums.SolrDataTypeEnum;
+import de.btu.openinfra.backend.solr.enums.SolrDocumentTypeEnum;
 import de.btu.openinfra.backend.solr.enums.SolrIndexEnum;
 
 
@@ -56,27 +73,36 @@ public class SolrIndexer extends SolrServer {
 
     /**
      *
-     * This method starts the indexing process. It will accept a list of UUIDs
-     * that represents the project IDs. If the List is empty, all projects that
-     * can be found in the meta database will be indexed.
-     *
-     * @param projects A list of project UUIDs that should be indexed.
      * @param clean    Determines if the index should be completely cleared
      *                 before starting the index process.
-     * @return True if indexing was successful.
+     * @return
+     */
+    public boolean indexAll(boolean clean) {
+        // clear index if necessary
+        if (clean) {
+            deleteAllDocuments();
+        }
+
+        indexProjects(null);
+        indexFiles();
+
+        return false;
+    }
+
+    /**
+     * This method starts the indexing process for database entries. It will
+     * accept a list of UUIDs that represents the project IDs. If the List is
+     * empty, all projects that can be found in the meta database will be
+     * indexed.
+     *
+     * @param projects A list of project UUIDs that should be indexed.
+     * @return         True if indexing was successful.
      * @throws OpenInfraSolrException if something goes wrong
      */
-    public boolean indexProjects(SolrIndexPojo projectsPojo, boolean clean) {
+    public boolean indexProjects(SolrIndexPojo projectsPojo) {
 
         try {
-
             List<Projects> projectIndexList = new ArrayList<Projects>();
-
-            // clear index if necessary
-            if (clean) {
-                //deleteAllDocuments();
-                return false;
-            }
 
             // get all projects from the meta database
             List<Projects> metaProjects = new ProjectsDao(
@@ -176,6 +202,103 @@ public class SolrIndexer extends SolrServer {
     }
 
     /**
+     * This method starts the indexing process for files.
+     *
+     * @return True if indexing was successful.
+     * @throws OpenInfraSolrException if something goes wrong
+     */
+    public boolean indexFiles() {
+        try {
+        // construct path to documents
+        String filePath = OpenInfraPropertyValues.UPLOAD_PATH.getValue();
+
+        // get a list of all files in the upload folder
+        List<File> files = readFilesInDir(filePath);
+
+        List<SolrInputDocument> docs = new ArrayList<SolrInputDocument>();
+
+        // run through all files and create a SolrInputDocument
+        for (File file : files) {
+            if (file.isFile() && !file.isHidden()) {
+                System.out.println("indexing document " + file.getName());
+                docs.add(indexFile(file));
+            }
+        }
+
+        // index the files
+        return writeToIndex(docs);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new OpenInfraSolrException(
+                    OpenInfraExceptionTypes.SOLR_INDEX_FAILED);
+        }
+    }
+
+    /**
+     * This method will index a single file that was specified and return the
+     * SolrInputDocument.
+     *
+     * @param file The file that should be indexed.
+     * @return     The SolrInputDocument for the specified file.
+     */
+    private SolrInputDocument indexFile(File file) {
+        String fileName = FilenameUtils.getBaseName(file.getName());
+        FilePojo filePojo;
+
+        // get the entry from the file database for the file
+        try {
+            filePojo = new FileDao().readBySignature(fileName);
+        } catch (NoResultException e) {
+            return null;
+        }
+
+        // create objects for parsing process
+        ContentHandler handler = new BodyContentHandler();
+        Metadata metadata = new Metadata();
+        ParseContext context = new ParseContext();
+        InputStream input;
+        SolrInputDocument doc = new SolrInputDocument();
+
+        try {
+            input = new FileInputStream(file);
+
+            // let Tika detect the correct parser for the file
+            AutoDetectParser autoParser = new AutoDetectParser();
+
+            // parse the file
+            autoParser.parse(input, handler, metadata, context);
+
+            // add the file uuid
+            doc.addField(
+                    SolrIndexEnum.ID.getString(),
+                    filePojo.getUuid());
+
+            // add the signature as document id
+            doc.addField(
+                    SolrIndexEnum.FILE_HASH.getString(),
+                    fileName);
+
+            // add the original file name
+            doc.addField(
+                    SolrIndexEnum.DEFAULT_SEARCH_FIELD.getString(),
+                    handler);
+
+            // add the document type
+            doc.addField(
+                    SolrIndexEnum.DOC_TYPE.getString(),
+                    SolrDocumentTypeEnum.FILE);
+
+            // close the file stream
+            input.close();
+
+        } catch (IOException | SAXException | TikaException e) {
+            e.printStackTrace();
+        }
+        return doc;
+    }
+
+    /**
      * This method will create or update a Solr document from the passed topic
      * instance model. The document always have a unique id that is represented
      * by the topic instance id. Every Solr document will hold the information
@@ -200,7 +323,7 @@ public class SolrIndexer extends SolrServer {
         SolrInputDocument doc = new SolrInputDocument();
 
         // add the topic instance id as document id
-        doc.addField(SolrIndexEnum.TOPIC_INSTANCE_ID.getString(), ti.getId());
+        doc.addField(SolrIndexEnum.ID.getString(), ti.getId());
         addDefaultSearchField(
                 ti.getId().toString(),
                 doc);
@@ -217,6 +340,11 @@ public class SolrIndexer extends SolrServer {
         addDefaultSearchField(
                 ti.getTopicCharacteristic().getId().toString(),
                 doc);
+
+        // add the document type
+        doc.addField(
+                SolrIndexEnum.DOC_TYPE.getString(),
+                SolrDocumentTypeEnum.DATABASE);
 
         // run through all attribute values
         for (AttributeValueValue avv : ti.getAttributeValueValues()) {
@@ -289,14 +417,12 @@ public class SolrIndexer extends SolrServer {
      * This method deletes a specific document from the Solr index. This method
      * is thread-safe.
      *
-     * @param topicInstanceId The id of the topic instance that should be
-     *                        deleted.
+     * @param id The id of the document that should be deleted.
      */
-    protected synchronized boolean deleteDocument(UUID topicInstanceId) {
+    protected synchronized boolean deleteDocument(UUID id) {
         try {
-            System.out.println("Deleting document '" + topicInstanceId
-                    + "' from index.");
-            getSolr().deleteById(topicInstanceId.toString());
+            System.out.println("Deleting document '" + id + "' from index.");
+            getSolr().deleteById(id.toString());
             if (getSolr().commit().getStatus() == Status.OK.getStatusCode()) {
                 return true;
             } else {
@@ -510,5 +636,26 @@ public class SolrIndexer extends SolrServer {
             e.printStackTrace();
             return false;
         }
+    }
+
+    /**
+     * This method read all files from a specified directory and return them as
+     * a file list. There will only files included that fulfill the filter
+     * restriction from the properties file. Further it will ignore sub
+     * directories.
+     *
+     * @param dir The directory path as string
+     * @return    A list of files that were found in the specified directory.
+     */
+    private List<File> readFilesInDir(String dir) {
+        // get all files from the specified directory that will match the
+        // filter from the properties file
+        List<File> fileList = (List<File>) FileUtils.listFiles(
+                new File(dir),
+                OpenInfraProperties.getProperty(
+                        OpenInfraPropertyKeys.SOLR_INDEXABLE_DOCUMENTS
+                        .getKey()).split(","),
+                false);
+        return fileList;
     }
 }

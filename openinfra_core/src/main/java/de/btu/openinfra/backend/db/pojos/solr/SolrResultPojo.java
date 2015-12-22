@@ -21,6 +21,7 @@ public class SolrResultPojo extends OpenInfraPojo {
     private long elapsedTime;
     private long resultCount;
     private List<SolrResultDbPojo> databaseResult;
+    private List<SolrResultDocPojo> documentResult;
     private Map<String, Long> facets;
 
     public long getElapsedTime() {
@@ -45,6 +46,14 @@ public class SolrResultPojo extends OpenInfraPojo {
 
     public void setDatabaseResult(List<SolrResultDbPojo> databaseResult) {
         this.databaseResult = databaseResult;
+    }
+
+    public List<SolrResultDocPojo> getDocumentResult() {
+        return documentResult;
+    }
+
+    public void setDocumentResult(List<SolrResultDocPojo> documentResult) {
+        this.documentResult = documentResult;
     }
 
     public Map<String, Long> getFacets() {

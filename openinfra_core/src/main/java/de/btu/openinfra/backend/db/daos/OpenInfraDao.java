@@ -590,6 +590,9 @@ public abstract class OpenInfraDao<TypePojo extends OpenInfraPojo,
                     currentProjectId, topicInstanceId, operation);
             indexThread.start();
             break;
+        case "File":
+
+            break;
         default:
             break;
         }

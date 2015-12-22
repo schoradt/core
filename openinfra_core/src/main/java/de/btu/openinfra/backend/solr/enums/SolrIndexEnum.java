@@ -10,27 +10,28 @@ import de.btu.openinfra.backend.solr.SolrCharacterConverter;
 public enum SolrIndexEnum {
 
     /*
-     * This variable represents the Solr field that holds the topic instance id.
+     * This variable represents the Solr field that holds the id of the
+     * document.
      */
-    TOPIC_INSTANCE_ID("id"),
+    ID("id"),
 
     /*
      * This variable represents the Solr field that holds the topic
      * characteristic id.
      */
-    PROJECT_ID("projectId"),
+    PROJECT_ID("_projectid_"),
 
     /*
      * This variable represents the Solr field that holds the project id.
      */
-    TOPIC_CHARACTERISTIC_ID("topicCharacteristicId"),
+    TOPIC_CHARACTERISTIC_ID("_topiccharacteristicid_"),
 
     /*
      * This variable represents the Solr field that defines the default search
      * field. In this field all possible values of all other fields will be
      * added.
      */
-    DEFAULT_SEARCH_FIELD("default_search"),
+    DEFAULT_SEARCH_FIELD("_defaultsearch_"),
 
     /*
      * This variable represents the Solr field that holds all attribute values
@@ -39,10 +40,21 @@ public enum SolrIndexEnum {
     NO_TRANSLATION_FIELD("_notranslation_"),
 
     /*
-     * This variable represents the Solr field for lookups.UUIDs will not be
+     * This variable represents the Solr field for lookups. UUIDs will not be
      * added to this field.
      */
-    LOOKUP_FIELD("lookup_field");
+    LOOKUP_FIELD("_lookupfield_"),
+
+    /*
+     * This variable represents the Solr field for the file name as hash.
+     */
+    FILE_HASH("_filehash_"),
+
+    /*
+     * This variable represents the type of the indexed document e.g. database
+     * or file.
+     */
+    DOC_TYPE("_documenttype_");
 
     private String value;
 

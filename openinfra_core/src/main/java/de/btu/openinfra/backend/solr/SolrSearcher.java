@@ -12,6 +12,7 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrClient.RemoteSolrException;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 
 import de.btu.openinfra.backend.OpenInfraProperties;
@@ -19,9 +20,11 @@ import de.btu.openinfra.backend.OpenInfraPropertyKeys;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.daos.MetaDataDao;
 import de.btu.openinfra.backend.db.pojos.solr.SolrResultDbPojo;
+import de.btu.openinfra.backend.db.pojos.solr.SolrResultDocPojo;
 import de.btu.openinfra.backend.db.pojos.solr.SolrResultPojo;
 import de.btu.openinfra.backend.db.pojos.solr.SolrSearchPojo;
 import de.btu.openinfra.backend.exception.OpenInfraWebException;
+import de.btu.openinfra.backend.solr.enums.SolrDocumentTypeEnum;
 import de.btu.openinfra.backend.solr.enums.SolrIndexEnum;
 import de.btu.openinfra.backend.solr.enums.SolrMandatoryEnum;
 
@@ -173,6 +176,13 @@ public class SolrSearcher extends SolrServer {
                 SolrIndexEnum.TOPIC_CHARACTERISTIC_ID.getString());
     }
 
+    /**
+     * This method will add highlights to the query.
+     *
+     * @param query
+     * @param parser
+     * @param queryStr
+     */
     private void addHighlighting(SolrQuery query, SolrQueryParser parser,
             String queryStr) {
         // enable highlighting
@@ -210,75 +220,38 @@ public class SolrSearcher extends SolrServer {
         // get the result list from the Solr server
         SolrDocumentList solrResults = response.getResults();
 
+        // create lists for the result objects
+        List<SolrResultDbPojo> dbResultList = new ArrayList<SolrResultDbPojo>();
+        List<SolrResultDocPojo> docResultList =
+                new ArrayList<SolrResultDocPojo>();
+
         // create the result object
         SolrResultPojo result = new SolrResultPojo();
 
-        // create a list for the result objects
-        List<SolrResultDbPojo> resultList = new ArrayList<SolrResultDbPojo>();
-
         // run through the results and add them to a list
         for (int i = 0; i < solrResults.size(); ++i) {
-            SolrResultDbPojo rP = new SolrResultDbPojo();
-
-            // save the topic instance id from the result object
-            rP.setTopicInstanceId(UUID.fromString(
-                    solrResults.get(i).getFieldValue(
-                            SolrIndexEnum.TOPIC_INSTANCE_ID.getString())
-                            .toString()));
-
-            // save the topic characteristic id from the result object
-            rP.setTopicCharacteristicId(UUID.fromString(
-                    solrResults.get(i).getFieldValue(
-                            SolrIndexEnum.TOPIC_CHARACTERISTIC_ID
-                            .getString()).toString()));
-
-            // save the project id from the result object
-            rP.setProjectId(UUID.fromString(
-                    solrResults.get(i).getFieldValue(
-                            SolrIndexEnum.PROJECT_ID.getString())
-                            .toString()));
-
-            // extract meta data of the result object
-            MetaDataDao mdDao = new MetaDataDao(
-                    rP.getProjectId(), OpenInfraSchemas.PROJECTS);
-
-            // read meta data for the topic instance
-            rP.setTopicInstanceMetaData(
-                    mdDao.read(rP.getTopicInstanceId()));
-
-            // read meta data for the topic characteristic
-            rP.setTopicCharacteristicMetaData(
-                    mdDao.read(rP.getTopicCharacteristicId()));
-
-            // get the highlighting for the request
-            Map<String, Map<String, List<String>>> hl =
-                    response.getHighlighting();
-
-            // only remove the default_search field if it is not the only
-            // entry in the highlight field
-            if (hl.get(rP.getTopicInstanceId().toString()).size() > 1 &&
-                    hl.get(rP.getTopicInstanceId().toString())
-                    .containsKey(SolrIndexEnum.DEFAULT_SEARCH_FIELD
-                            .getString())) {
-                // remove the default_search field from the highlighting map
-                // to avoid double entries
-                hl.get(rP.getTopicInstanceId().toString()).remove(
-                        SolrIndexEnum.DEFAULT_SEARCH_FIELD.getString());
+            // if our result is a database document
+            if (solrResults.get(i).getFieldValue(
+                    SolrIndexEnum.DOC_TYPE.getString()).toString()
+                    .equals(SolrDocumentTypeEnum.DATABASE.toString())) {
+                // map it to a SolrResultDbPojo
+                dbResultList.add(mapDatabase(
+                        solrResults.get(i), response.getHighlighting()));
             }
 
-            // remove the default_search field from the highlighting map to
-            // avoid double entries
-            hl.get(rP.getTopicInstanceId().toString()).remove(
-                    SolrIndexEnum.LOOKUP_FIELD.getString());
-
-            // add the highlighted fields
-            rP.setHighlight(hl.get(rP.getTopicInstanceId().toString()));
-
-            // add the current result to the result list
-            resultList.add(rP);
+            // if our result is a file document
+            if (solrResults.get(i).getFieldValue(
+                    SolrIndexEnum.DOC_TYPE.getString()).toString()
+                    .equals(SolrDocumentTypeEnum.FILE.toString())) {
+                // map it to a SolrResultDocumentPojo
+                docResultList.add(mapFile(
+                        solrResults.get(i), response.getHighlighting()));
+            }
         }
 
-        result.setDatabaseResult(resultList);
+        // add the mapped lists to the result
+        result.setDatabaseResult(dbResultList);
+        result.setDocumentResult(docResultList);
 
         // save the elapsed time for retrieving the results
         result.setElapsedTime(response.getElapsedTime());
@@ -299,4 +272,119 @@ public class SolrSearcher extends SolrServer {
 
         return result;
     }
+
+    /**
+     * This method maps a database result to a SolrResultDbPojo.
+     *
+     * @param solrDocument The document that should be mapped.
+     * @param hl           The highlighted part.
+     * @return             The mapped SolrResultDbPojo.
+     */
+    private SolrResultDbPojo mapDatabase(
+            SolrDocument solrDocument,
+            Map<String, Map<String, List<String>>> hl) {
+        SolrResultDbPojo rP = new SolrResultDbPojo();
+
+        // save the topic instance id from the result object
+        rP.setTopicInstanceId(UUID.fromString(
+                solrDocument.getFieldValue(
+                        SolrIndexEnum.ID.getString())
+                        .toString()));
+
+        // save the topic characteristic id from the result object
+        rP.setTopicCharacteristicId(UUID.fromString(
+                solrDocument.getFieldValue(
+                        SolrIndexEnum.TOPIC_CHARACTERISTIC_ID
+                        .getString()).toString()));
+
+        // save the project id from the result object
+        rP.setProjectId(UUID.fromString(
+                solrDocument.getFieldValue(
+                        SolrIndexEnum.PROJECT_ID.getString())
+                        .toString()));
+
+        // extract meta data of the result object
+        MetaDataDao mdDao = new MetaDataDao(
+                rP.getProjectId(), OpenInfraSchemas.PROJECTS);
+
+        // read meta data for the topic instance
+        rP.setTopicInstanceMetaData(
+                mdDao.read(rP.getTopicInstanceId()));
+
+        // read meta data for the topic characteristic
+        rP.setTopicCharacteristicMetaData(
+                mdDao.read(rP.getTopicCharacteristicId()));
+
+        // only remove the default_search field if it is not the only
+        // entry in the highlight field
+        if (hl.get(rP.getTopicInstanceId().toString()).size() > 1 &&
+                hl.get(rP.getTopicInstanceId().toString())
+                .containsKey(SolrIndexEnum.DEFAULT_SEARCH_FIELD
+                        .getString())) {
+            // remove the default_search field from the highlighting map
+            // to avoid double entries
+            hl.get(rP.getTopicInstanceId().toString()).remove(
+                    SolrIndexEnum.DEFAULT_SEARCH_FIELD.getString());
+        }
+
+        // remove the lookup field from the highlighting map to avoid double
+        // entries
+        hl.get(rP.getTopicInstanceId().toString()).remove(
+                SolrIndexEnum.LOOKUP_FIELD.getString());
+
+        // add the highlighted fields
+        rP.setHighlight(hl.get(rP.getTopicInstanceId().toString()));
+
+        // return the result
+        return rP;
+    }
+
+    /**
+     * This method maps a database result to a SolrResultDocPojo.
+     *
+     * @param solrDocument The document that should be mapped.
+     * @param hl           The highlighted part.
+     * @return             The mapped SolrResultDocPojo.
+     */
+    private SolrResultDocPojo mapFile(
+            SolrDocument solrDocument,
+            Map<String, Map<String, List<String>>> hl) {
+
+        SolrResultDocPojo rP = new SolrResultDocPojo();
+
+        // save the id of the file
+        rP.setId(UUID.fromString(
+                solrDocument.getFieldValue(
+                        SolrIndexEnum.ID.getString())
+                        .toString()));
+
+        // save the hash code of the file
+        rP.setHashCode(solrDocument.getFieldValue(
+                SolrIndexEnum.FILE_HASH.getString()).toString());
+
+        // only remove the default_search field if it is not the only
+        // entry in the highlight field
+        if (hl.get(rP.getId().toString()).size() > 1 &&
+                hl.get(rP.getId().toString())
+                .containsKey(SolrIndexEnum.DEFAULT_SEARCH_FIELD
+                        .getString())) {
+            // remove the default_search field from the highlighting map
+            // to avoid double entries
+            hl.get(rP.getId().toString()).remove(
+                    SolrIndexEnum.DEFAULT_SEARCH_FIELD.getString());
+        }
+
+        // remove the lookup field from the highlighting map to avoid double
+        // entries
+        hl.get(rP.getId().toString()).remove(
+                SolrIndexEnum.LOOKUP_FIELD.getString());
+
+        // add the highlighted fields
+        rP.setHighlight(hl.get(rP.getId().toString()));
+
+        // return the result
+        return rP;
+    }
+
+
 }
