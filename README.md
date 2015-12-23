@@ -80,6 +80,16 @@ Adding a new schema can be done very easy by the following steps:
 # TODO
 - The JUnit tests have to be extended.
 - Logging isn't implemented appropriately.
+- Deleting a main project (project schema) leaves dead links in file and RBAC schema
+- The RBAC classes contains hard coded strings like 'project', 'schema' or 'topiccharacteristic'. This should be replaced somehow.
+- Retrieving a list of topic characteristics will deliver the same list for main projects as for their sub projects. The method that returns the list must respect the project id.
 
 ### Revision of REST-Resources and DAO-Classes
 The initial database schema didn't consider an UUID for the identification of associations. An association object was initally identified by the UUIDs of the related objects e.g. the 'attribute type' to 'attribute type group' association was identified by the UUID of the 'attribute type' and the 'attribute type group'. Each of the aforementioned objects relates to a POJO object. Thus, it became necessary to equip each POJO with an UUID (especially the association object) in order to provide a generic API. However, the old access stratedgy is still available and should be revised.
+
+### Known problems with the search implementation
+- Not all results deliver a highlighting for query matches e.g. search term *
+- The index process saves dates in a special format that could not directly be influenced. Maybe an own implementation of an analyser would fix the problem.
+- Executing a complete index process will fail on some servers because of a GC Overhead limit exceeded exception. The reason for this is the implementation of the indexing process. For more informations see the [official Java documentation](https://docs.oracle.com/javase/8/docs/technotes/guides/troubleshoot/memleaks002.html)
+- There are two kinds of data sources (database & documents) the core will use for indexing and searching. The current approach is not generic. It should be reworked to be more flexible.
+- The index will not be updated automatically if a new file was uploaded.
