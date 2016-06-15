@@ -22,7 +22,7 @@ import javax.persistence.OneToMany;
     @NamedQuery(name="Multiplicity.count",
         query="SELECT COUNT(m) FROM Multiplicity m "),
     @NamedQuery(name="Multiplicity.findAll",
-        query="SELECT m FROM Multiplicity m")
+        query="SELECT m FROM Multiplicity m ORDER BY m.id")
 })
 @NamedNativeQueries({
     @NamedNativeQuery(name="Multiplicity.findAllByLocaleAndOrder",

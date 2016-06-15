@@ -15,35 +15,36 @@ import javax.persistence.Table;
 
 /**
  * The persistent class for the attribute_type_group_to_topic_characteristic database table.
- * 
+ *
  */
 @Entity
 @Table(name="attribute_type_group_to_topic_characteristic")
 @NamedQueries({
-	@NamedQuery(name="AttributeTypeGroupToTopicCharacteristic.findAll", 
-			query="SELECT a FROM AttributeTypeGroupToTopicCharacteristic a"),
+	@NamedQuery(name="AttributeTypeGroupToTopicCharacteristic.findAll",
+			query="SELECT a FROM AttributeTypeGroupToTopicCharacteristic a "
+			        + "ORDER BY a.id"),
 	@NamedQuery(name="AttributeTypeGroupToTopicCharacteristic"
 			+ ".findByTopicCharacteristic",
 			query="SELECT a "
 					+ "FROM AttributeTypeGroupToTopicCharacteristic a "
-					+ "WHERE a.topicCharacteristic = :value"),
+					+ "WHERE a.topicCharacteristic = :value ORDER BY a.id"),
 	@NamedQuery(name="AttributeTypeGroupToTopicCharacteristic"
 			+ ".findByTopicCharacteristicAndAttributeTypeGroup",
 			query="SELECT a "
 					+ "FROM AttributeTypeGroupToTopicCharacteristic a "
 					+ "WHERE a.topicCharacteristic = :value AND "
-					+ "a.attributeTypeGroup = :value2"),	
+					+ "a.attributeTypeGroup = :value2 ORDER BY a.id"),
 	@NamedQuery(name="AttributeTypeGroupToTopicCharacteristic"
 			+ ".findByAttributeTypeGroup",
 			query="SELECT a "
 					+ "FROM AttributeTypeGroupToTopicCharacteristic a "
-					+ "WHERE a.attributeTypeGroup = :value"),
+					+ "WHERE a.attributeTypeGroup = :value ORDER BY a.id"),
 	@NamedQuery(name="AttributeTypeGroupToTopicCharacteristic"
 			+ ".findByAttributeTypeGroupAndTopicCharacteristic",
 			query="SELECT a "
 					+ "FROM AttributeTypeGroupToTopicCharacteristic a "
 					+ "WHERE a.attributeTypeGroup = :value AND "
-					+ "a.topicCharacteristic = :value2"),
+					+ "a.topicCharacteristic = :value2 ORDER BY a.id"),
 	@NamedQuery(
 	        name="AttributeTypeGroupToTopicCharacteristic."
 	                + "countByAttributeTypeGroup",

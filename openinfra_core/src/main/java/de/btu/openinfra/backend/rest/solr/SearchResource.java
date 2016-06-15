@@ -34,15 +34,25 @@ public class SearchResource {
 
     /**
      * This resource awaits a SolrSearchPojo that will be the base for a search
-     * request on the Solr index. The parameter UUID and TRID of the
-     * SolrSearchPojo must not be set.
+     * request on the Solr index. There are two kinds of filters for projects
+     * and topic characteristics. The first is a positive filter that will lead
+     * to results that belong to the defined filter. The second is a negative
+     * filter list that will lead to results that do not belong to the defined
+     * filters. The parameter UUID and TRID of the SolrSearchPojo must not be
+     * set.
+     * <ul>
+     *   <li>rest/v1/search</li>
+     * </ul>
      *
      * @param locale     The language of the search request as string.
      * @param start      The offset parameter for the results.
      * @param rows       The count of results that should be returned.
      * @param searchPojo The SearchPojo that contains the request.
-     * @return           A SolrResultPojo that contains the result, a query time
-     *                   and a count of the retrieved results.
+     * @return           A SolrResultPojo that contains the result, a query
+     *                   time, a count of the retrieved results, meta data for
+     *                   the participated topic instances and topic
+     *                   characteristics and facets for the topic
+     *                   characteristics.
      *
      * @response.representation.200.qname SolrResultPojo
      * @response.representation.200.doc   This is the representation returned by
@@ -68,10 +78,40 @@ public class SearchResource {
     }
 
     /**
-     * This resource starts the process that generates the Solr index. The
-     * specified SolrIndexPojo can contain a list of project ids the index
-     * should created for. If the list is empty all projects will be indexed.
-     * The parameter UUID and TRID of the SolrSearchPojo must not be set.
+     * This resource starts the process that generates the Solr index for
+     * files.
+     * <ul>
+     *   <li>rest/v1/search/index/files</li>
+     * </ul>
+     *
+     * @return         True if the process was successful.
+     *
+     * @response.representation.200.qname boolean
+     * @response.representation.200.doc   True is the representation returned by
+     *                                    default.
+     *
+     * @response.representation.500.qname OpenInfraSolrException
+     * @response.representation.500.doc   An internal error occurs while
+     *                                    indexing the database. This error can
+     *                                    not be specified because every server
+     *                                    side error will lead to this
+     *                                    exception.
+     */
+    @GET
+    @Path("/index/files")
+    public boolean index() {
+        return new SolrIndexer().indexFiles();
+    }
+
+    /**
+     * This resource starts the process that generates the Solr index for
+     * projects. The specified SolrIndexPojo can contain a list of project ids
+     * the index should created for. If the list is empty all projects will be
+     * indexed. The parameter UUID and TRID of the SolrSearchPojo must not be
+     * set.
+     * <ul>
+     *   <li>rest/v1/search/index/projects</li>
+     * </ul>
      *
      * @param projects The SolrIndexPojo that contains the list of project ids
      *                 that should be indexed.
@@ -89,16 +129,46 @@ public class SearchResource {
      *                                    exception.
      */
     @POST
-    @Path("/index")
+    @Path("/index/projects")
     public boolean index(
             SolrIndexPojo projects) {
-        SolrIndexer indexer = new SolrIndexer();
-        return indexer.indexProjects(projects);
+        return new SolrIndexer().indexProjects(projects);
+    }
+
+    /**
+     * This resource starts the process that generates the Solr index.
+     * <ul>
+     *   <li>rest/v1/search/index?clean=true</li>
+     * </ul>
+     *
+     * @param clean    If true the index will be completely cleared before
+     *                 indexing.
+     * @return         True if the process was successful.
+     *
+     * @response.representation.200.qname boolean
+     * @response.representation.200.doc   True is the representation returned by
+     *                                    default.
+     *
+     * @response.representation.500.qname OpenInfraSolrException
+     * @response.representation.500.doc   An internal error occurs while
+     *                                    indexing the database. This error can
+     *                                    not be specified because every server
+     *                                    side error will lead to this
+     *                                    exception.
+     */
+    @GET
+    @Path("/index")
+    public boolean index(
+            @QueryParam("clean") boolean clean) {
+        return new SolrIndexer().indexAll(clean);
     }
 
     /**
      * This resource provides a suggestion on the Solr index for a specified
      * query string.
+     * <ul>
+     *   <li>rest/v1/search/suggest?q=ABC</li>
+     * </ul>
      *
      * @response.representation.200.qname A list of strings.
      * @response.representation.200.doc   This is the representation returned by

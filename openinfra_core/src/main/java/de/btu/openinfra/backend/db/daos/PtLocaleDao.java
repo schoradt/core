@@ -5,10 +5,13 @@ import java.util.UUID;
 
 import de.btu.openinfra.backend.db.MappingResult;
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
+import de.btu.openinfra.backend.db.jpa.model.CharacterCode;
 import de.btu.openinfra.backend.db.jpa.model.CountryCode;
 import de.btu.openinfra.backend.db.jpa.model.LanguageCode;
 import de.btu.openinfra.backend.db.jpa.model.PtLocale;
 import de.btu.openinfra.backend.db.pojos.PtLocalePojo;
+import de.btu.openinfra.backend.exception.OpenInfraEntityException;
+import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 
 /**
  * This class represents the PtLocale and is used to access the underlying
@@ -94,7 +97,40 @@ public class PtLocaleDao extends OpenInfraDao<PtLocalePojo, PtLocale> {
 	@Override
 	public MappingResult<PtLocale> mapToModel(PtLocalePojo pojo, PtLocale ptl) {
 
-        // TODO set the model values
+        // set character code
+	    try {
+    	    ptl.setCharacterCode(em.createNamedQuery(
+    	            "CharacterCode.findByString",
+    	            CharacterCode.class).setParameter(
+    	                    "value",
+    	                    pojo.getCharacterCode()).getSingleResult());
+	    } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
+        }
+
+	    // set language code
+	    try {
+            ptl.setLanguageCode(em.createNamedQuery(
+                    "LanguageCode.findByString",
+                    LanguageCode.class).setParameter(
+                            "value",
+                            pojo.getLanguageCode()).getSingleResult());
+        } catch (NullPointerException npe) {
+            throw new OpenInfraEntityException(
+                    OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);
+        }
+
+	    // set country code
+        try {
+            ptl.setCountryCode(em.createNamedQuery(
+                    "CountryCode.findByString",
+                    CountryCode.class).setParameter(
+                            "value",
+                            pojo.getCountryCode()).getSingleResult());
+        } catch (NullPointerException npe) {
+            ptl.setCountryCode(null);
+        }
 
         // return the model as mapping result
         return new MappingResult<PtLocale>(ptl.getId(), ptl);

@@ -19,7 +19,7 @@ import javax.persistence.Table;
 @Table(name="attribute_value_value")
 @NamedQueries({
     @NamedQuery(name="AttributeValueValue.findAll",
-        query="SELECT a FROM AttributeValueValue a"),
+        query="SELECT a FROM AttributeValueValue a ORDER BY a.id"),
     @NamedQuery(name="AttributeValueValue.getSuggestion",
         query="SELECT a FROM AttributeValueValue a "
                 + "JOIN a.attributeTypeToAttributeTypeGroup.attributeType at "

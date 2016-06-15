@@ -22,7 +22,7 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 @Table(name="database_connection", schema="meta_data")
 @NamedQueries({
 	@NamedQuery(name="DatabaseConnection.findAll",
-		query="SELECT d FROM DatabaseConnection d"),
+		query="SELECT d FROM DatabaseConnection d ORDER BY d.id"),
     @NamedQuery(name="DatabaseConnection.count",
     	query="SELECT COUNT(d) FROM DatabaseConnection d")
 })

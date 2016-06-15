@@ -18,7 +18,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name="attribute_value_geom")
 @NamedQuery(name="AttributeValueGeom.findAll",
-    query="SELECT a FROM AttributeValueGeom a")
+    query="SELECT a FROM AttributeValueGeom a ORDER BY a.id")
 @NamedNativeQueries({
     @NamedNativeQuery(name="AttributeValueGeom.select",
             query="SELECT %s "

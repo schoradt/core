@@ -23,11 +23,13 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 @Entity
 @Table(schema="meta_data")
 @NamedQueries({
-	@NamedQuery(name="Projects.findAll", query="SELECT p FROM Projects p"),
+	@NamedQuery(name="Projects.findAll",
+	        query="SELECT p FROM Projects p ORDER BY p.id"),
     @NamedQuery(name="Projects.count",
     	query="SELECT COUNT(p) FROM Projects p"),
 	@NamedQuery(name="Projects.findByProject",
-	    query="SELECT p FROM Projects p WHERE p.projectId = :value")
+	    query="SELECT p FROM Projects p WHERE p.projectId = :value "
+	            + "ORDER BY p.id")
 })
 public class Projects extends OpenInfraModelObject implements Serializable {
 	private static final long serialVersionUID = 1L;

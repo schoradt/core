@@ -21,10 +21,10 @@ import javax.persistence.Table;
 @Table(name="country_code")
 @NamedQueries({
 	@NamedQuery(name="CountryCode.findAll",
-		query="SELECT c FROM CountryCode c"),
+		query="SELECT c FROM CountryCode c ORDER BY c.id"),
 	@NamedQuery(name="CountryCode.findByString",
 		query="SELECT c FROM CountryCode c "
-				+ "WHERE c.countryCode = :value"),
+				+ "WHERE c.countryCode = :value ORDER BY c.id"),
 	@NamedQuery(name="CountryCode.count",
         query="SELECT COUNT(c) FROM CountryCode c ")
 })

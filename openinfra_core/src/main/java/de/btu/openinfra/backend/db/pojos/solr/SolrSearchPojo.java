@@ -35,15 +35,29 @@ public class SolrSearchPojo extends OpenInfraPojo {
     private List<SolrComplexQueryPartPojo> complexQueryPart;
 
     /*
-     * This list contains projects where the results should be part of.
+     * This project id defines a positive filter for the results. This means
+     * that all results must belong to this project.
      */
-    private List<UUID> projectId;
+    private UUID positiveProjectFilter;
 
     /*
-     * This list contains topic characteristics where the result should be part
-     * of.
+     * This topic characteristic id defines a positive filter for the results.
+     * This means that all results must belong to this topic characteristic.
      */
-    private List<UUID> topicCharacteristicId;
+    private UUID positiveTopicCharacteristicFilter;
+
+    /*
+     * This list of project ids defines a negative filter list for the results.
+     * This means that all results do not belong to these projects.
+     */
+    private List<UUID> negativeProjectFilter;
+
+    /*
+     * This list of topic characteristic ids defines a negative filter list for
+     * the results. This means that all results do not belong to these topic
+     * characteristics.
+     */
+    private List<UUID> negativeTopicCharacteristicFilter;
 
     public String getRawSolrQuery() {
         return rawSolrQuery;
@@ -62,19 +76,39 @@ public class SolrSearchPojo extends OpenInfraPojo {
         this.complexQueryPart = complexSolrQuery;
     }
 
-    public List<UUID> getProjectId() {
-        return projectId;
+    public UUID getPositiveProjectFilter() {
+        return positiveProjectFilter;
     }
 
-    public void setProjectId(List<UUID> projectId) {
-        this.projectId = projectId;
+    public void setPositiveProjectFilter(UUID positiveProjectFilter) {
+        this.positiveProjectFilter = positiveProjectFilter;
     }
 
-    public List<UUID> getTopicCharacteristicId() {
-        return topicCharacteristicId;
+    public UUID getPositiveTopicCharacteristicFilter() {
+        return positiveTopicCharacteristicFilter;
     }
 
-    public void setTopicCharacteristicId(List<UUID> topicCharacteristicId) {
-        this.topicCharacteristicId = topicCharacteristicId;
+    public void setPositiveTopicCharacteristicFilter(
+            UUID positiveTopicCharacteristicFilter) {
+        this.positiveTopicCharacteristicFilter =
+                positiveTopicCharacteristicFilter;
+    }
+
+    public List<UUID> getNegativeProjectFilter() {
+        return negativeProjectFilter;
+    }
+
+    public void setNegativeProjectFilter(List<UUID> negativeProjectFilter) {
+        this.negativeProjectFilter = negativeProjectFilter;
+    }
+
+    public List<UUID> getNegativeTopicCharacteristicFilter() {
+        return negativeTopicCharacteristicFilter;
+    }
+
+    public void setNegativeTopicCharacteristicFilter(
+            List<UUID> negativeTopicCharacteristicFilter) {
+        this.negativeTopicCharacteristicFilter =
+                negativeTopicCharacteristicFilter;
     }
 }

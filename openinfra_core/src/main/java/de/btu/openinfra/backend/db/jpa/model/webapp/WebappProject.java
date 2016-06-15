@@ -21,16 +21,16 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 @Table(name="webapp_project")
 @NamedQueries({
 	@NamedQuery(name="WebappProject.findAll",
-			query="SELECT w FROM WebappProject w"),
+			query="SELECT w FROM WebappProject w ORDER BY w.id"),
 	@NamedQuery(name="WebappProject.findByWebapp",
 			query="SELECT w "
 					+ "FROM WebappProject w "
-					+ "WHERE w.webapp = :value"),
+					+ "WHERE w.webapp = :value ORDER BY w.id"),
 	@NamedQuery(name="WebappProject.findByWebappAndProject",
 			query="SELECT w "
 					+ "FROM WebappProject w "
 					+ "WHERE w.webapp = :webapp "
-					+ "AND w.projectId = :projectId")
+					+ "AND w.projectId = :projectId ORDER BY w.id")
 })
 public class WebappProject extends OpenInfraModelObject
 	implements Serializable {

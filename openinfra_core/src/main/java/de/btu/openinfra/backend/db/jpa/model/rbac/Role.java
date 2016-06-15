@@ -19,7 +19,8 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
  */
 @Entity
 @NamedQueries({
-	@NamedQuery(name="Role.findAll", query="SELECT r FROM Role r"),
+	@NamedQuery(name="Role.findAll",
+	        query="SELECT r FROM Role r ORDER BY r.id"),
 	@NamedQuery(name="Role.count", query="SELECT COUNT(r) FROM Role r")
 })
 @NamedNativeQueries({

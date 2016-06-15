@@ -20,11 +20,11 @@ import javax.persistence.Table;
 @Table(name="attribute_value_geomz")
 @NamedQueries({
     @NamedQuery(name="AttributeValueGeomz.findAll",
-            query="SELECT a FROM AttributeValueGeomz a"),
+            query="SELECT a FROM AttributeValueGeomz a ORDER BY a.id"),
     @NamedQuery(name="AttributeValueGeomz.findByTopicInstance",
             query="SELECT a "
                     + "FROM AttributeValueGeomz a "
-                    + "WHERE a.topicInstance = :value")})
+                    + "WHERE a.topicInstance = :value ORDER BY a.id")})
 @NamedNativeQueries({
     @NamedNativeQuery(name="AttributeValueGeomz.select",
             query="SELECT %s "

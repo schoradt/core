@@ -23,11 +23,11 @@ import javax.persistence.Table;
 @Table(name="value_list_values")
 @NamedQueries({
 	@NamedQuery(name="ValueListValue.findAll",
-			query="SELECT v FROM ValueListValue v"),
+			query="SELECT v FROM ValueListValue v ORDER BY v.id"),
 	@NamedQuery(name="ValueListValue.findByValueList",
 			query="SELECT v "
 					+ "FROM ValueListValue v "
-					+ "WHERE v.valueList = :value"),
+					+ "WHERE v.valueList = :value ORDER BY v.id"),
 	@NamedQuery(name="ValueListValue.countByValueList",
 		query="SELECT COUNT(v) "
 			+ "FROM ValueListValue v "
@@ -45,7 +45,7 @@ import javax.persistence.Table;
                     + "AND b.pt_locale_id = cast(? as uuid) ) AS sq "
                     + "ON (vlv.id = sq.id) "
                     + "WHERE vlv.belongs_to_value_list = ? "
-                    + "ORDER BY free_text ",
+                    + "ORDER BY lower(free_text) ",
             resultClass=ValueListValue.class)
 })
 public class ValueListValue extends OpenInfraModelObject

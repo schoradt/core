@@ -196,6 +196,16 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
 	}
 
 	/**
+	 * This method returns a topic instance model object for the specified id.
+	 *
+	 * @param id The id of the topic instance.
+	 * @return   The model object or null if the topic instance does not exists.
+	 */
+	public TopicInstance read(UUID id) {
+	    return em.find(modelClass, id);
+	}
+
+	/**
      * This method retrieves a list of TopicInstance objects belonging to a
      * specified topic characteristic and where the attribute value has a 3D
      * geometry.
@@ -253,9 +263,10 @@ public class TopicInstanceDao extends OpenInfraValueDao<TopicInstancePojo,
 			TopicInstance ti) {
 
 	    try {
-	        // set the topic characteristic
+	        // set the topic characteristic the topic instance belongs to
 	        ti.setTopicCharacteristic(em.find(
-	                TopicCharacteristic.class, pojo.getTopicCharacteristic().getUuid()));
+	                TopicCharacteristic.class,
+	                pojo.getTopicCharacteristic().getUuid()));
 	    } catch (NullPointerException npe) {
             throw new OpenInfraEntityException(
                     OpenInfraExceptionTypes.MISSING_DATA_IN_POJO);

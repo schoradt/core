@@ -12,41 +12,41 @@ import javax.persistence.Table;
 
 /**
  * The persistent class for the relationship_type_to_topic_characteristic database table.
- * 
+ *
  */
 @Entity
 @Table(name="relationship_type_to_topic_characteristic")
 @NamedQueries({
-	@NamedQuery(name="RelationshipTypeToTopicCharacteristic.findAll", 
-			query="SELECT r FROM RelationshipTypeToTopicCharacteristic r"),
+	@NamedQuery(name="RelationshipTypeToTopicCharacteristic.findAll",
+			query="SELECT r FROM RelationshipTypeToTopicCharacteristic r "
+			        + "ORDER BY r.id"),
 	@NamedQuery(name="RelationshipTypeToTopicCharacteristic"
-			+ ".findByTopicCharacteristic", 
+			+ ".findByTopicCharacteristic",
 			query="SELECT r "
 					+ "FROM RelationshipTypeToTopicCharacteristic r "
-					+ "WHERE r.topicCharacteristic = :value"),
+					+ "WHERE r.topicCharacteristic = :value ORDER BY r.id"),
 	@NamedQuery(name="RelationshipTypeToTopicCharacteristic"
-			+ ".findByTopicCharacteristicAndRelationshipType", 
+			+ ".findByTopicCharacteristicAndRelationshipType",
 			query="SELECT r "
 					+ "FROM RelationshipTypeToTopicCharacteristic r "
 					+ "WHERE r.topicCharacteristic = :value AND "
-					+ "r.relationshipType = :value2"),
-	
+					+ "r.relationshipType = :value2 ORDER BY r.id"),
 	@NamedQuery(name="RelationshipTypeToTopicCharacteristic"
-			+ ".findByRelationshipType", 
+			+ ".findByRelationshipType",
 			query="SELECT r "
 					+ "FROM RelationshipTypeToTopicCharacteristic r "
-					+ "WHERE r.relationshipType = :value"),
+					+ "WHERE r.relationshipType = :value ORDER BY r.id"),
 	@NamedQuery(name="RelationshipTypeToTopicCharacteristic"
-            + ".countByRelationshipType", 
-            query="SELECT count(r) "
+            + ".countByRelationshipType",
+            query="SELECT COUNT(r) "
                     + "FROM RelationshipTypeToTopicCharacteristic r "
                     + "WHERE r.relationshipType = :value"),
 	@NamedQuery(name="RelationshipTypeToTopicCharacteristic"
-			+ ".findByRelationshipTypeAndTopicCharacteristic", 
+			+ ".findByRelationshipTypeAndTopicCharacteristic",
 			query="SELECT r "
 					+ "FROM RelationshipTypeToTopicCharacteristic r "
 					+ "WHERE r.relationshipType = :value AND "
-					+ "r.topicCharacteristic = :value2"),
+					+ "r.topicCharacteristic = :value2 ORDER BY r.id"),
 })
 public class RelationshipTypeToTopicCharacteristic extends OpenInfraModelObject
     implements Serializable {

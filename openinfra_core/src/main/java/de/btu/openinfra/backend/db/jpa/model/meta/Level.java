@@ -21,7 +21,8 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 @Entity
 @Table(schema="meta_data")
 @NamedQueries({
-    @NamedQuery(name="Level.findAll", query="SELECT l FROM Level l"),
+    @NamedQuery(name="Level.findAll",
+            query="SELECT l FROM Level l ORDER BY l.id"),
     @NamedQuery(name="Level.count", query="SELECT COUNT(l) FROM Level l")
 })
 @NamedNativeQueries({

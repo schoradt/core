@@ -208,7 +208,7 @@ public class LevelResource {
     /**
      * This resource updates the Level object with the specified UUID. The
      * specified LevelPojo must contain the UUID of the object that should be
-     * updated, the TRID and the level as string.<br/>
+     * updated, the TRID and the level as string.
      * <ul>
      *   <li>rest/v1/metadata/level/[uuid]</li>
      * </ul>

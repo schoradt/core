@@ -12,7 +12,6 @@ import javax.ws.rs.core.MediaType;
 
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.PojoPrimer;
-import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 
 /**
@@ -39,7 +38,9 @@ public class PrimerResource {
      * This resource provides a primer Pojo for the requested class. The primer
      * is an empty image of the requested class Pojo. This can be used as a base
      * for POST requests. Further the resource awaits a language definition to
-     * fill in the correct language informations whenever they are required.
+     * fill in the correct language informations whenever they are required. If
+     * the language parameter is not set the default language parameter defined
+     * in the OpenInfRA.properties file will be used-
      * <ul>
      *   <li>rest/v1/system/primer?language=de-DE&pojoClass=attributeType</li>
      * </ul>
@@ -68,7 +69,7 @@ public class PrimerResource {
                     ? OpenInfraSchemas.META_DATA
                     : OpenInfraSchemas.valueOf(schema.toUpperCase()),
                 null,
-                PtLocaleDao.forLanguageTag(language.toUpperCase()),
+                language,
                 pojoClass);
     }
 

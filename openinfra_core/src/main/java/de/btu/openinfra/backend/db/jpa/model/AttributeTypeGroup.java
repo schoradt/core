@@ -22,7 +22,7 @@ import javax.persistence.Table;
 @Table(name="attribute_type_group")
 @NamedQueries({
 	@NamedQuery(name="AttributeTypeGroup.findAll",
-		query="SELECT a FROM AttributeTypeGroup a"),
+		query="SELECT a FROM AttributeTypeGroup a ORDER BY a.id"),
 	@NamedQuery(name="AttributeTypeGroup.count",
 		query="SELECT COUNT(a) FROM AttributeTypeGroup a")
 })
@@ -37,7 +37,7 @@ import javax.persistence.Table;
                     + "WHERE a.%s = b.pt_free_text_id "
                     + "AND b.pt_locale_id = cast(? as uuid) ) AS sq "
                     + "ON (atg.id = sq.id) "
-                    + "ORDER BY free_text ",
+                    + "ORDER BY lower(free_text) ",
             resultClass=AttributeTypeGroup.class)
 })
 public class AttributeTypeGroup extends OpenInfraModelObject

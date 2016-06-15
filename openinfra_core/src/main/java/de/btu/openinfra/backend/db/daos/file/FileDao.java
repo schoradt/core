@@ -16,6 +16,12 @@ import de.btu.openinfra.backend.db.jpa.model.file.File;
 import de.btu.openinfra.backend.db.pojos.file.FilePojo;
 import de.btu.openinfra.backend.db.pojos.file.FilesProjectPojo;
 
+/**
+ * A data access object used to manage file information.
+ *
+ * @author <a href="http://www.b-tu.de">BTU</a> DBIS
+ *
+ */
 public class FileDao extends OpenInfraDao<FilePojo, File> {
 
 	public FileDao() {
@@ -71,6 +77,14 @@ public class FileDao extends OpenInfraDao<FilePojo, File> {
 				.getSingleResult();
 		return mapToPojo(null, f);
 	}
+
+	public FilePojo readBySignature(String signature) {
+        File f = em.createNamedQuery("File.findBySignature",
+                File.class)
+                .setParameter("signature", signature)
+                .getSingleResult();
+        return mapToPojo(null, f);
+    }
 
 	/**
 	 * This method retrieves a list of FilesProject POJOs and uses this list

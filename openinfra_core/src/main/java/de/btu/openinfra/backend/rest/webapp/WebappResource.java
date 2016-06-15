@@ -62,7 +62,8 @@ public class WebappResource {
 	}
 
 	/**
-	 * Changes an already registered web-application.
+	 * Changes an already registered web-application. It's not required to set
+	 * the UUID of the POJO.
 	 *
 	 * @param uriInfo
 	 * @param request
@@ -71,11 +72,13 @@ public class WebappResource {
 	 * @return A response if the resource has changed.
 	 */
 	@PUT
+	@Path("/{id}")
 	public Response put(
 			@Context UriInfo uriInfo,
 			@Context HttpServletRequest request,
 			@PathParam("id") UUID id,
 			WebappPojo pojo) {
+		pojo.setUuid(id);
 		return OpenInfraResponseBuilder.postResponse(
 				new WebappDao().createOrUpdate(pojo, id));
 	}

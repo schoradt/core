@@ -208,7 +208,7 @@ public class ServersResource {
     /**
      * This resource updates the Servers object with the specified UUID. The
      * specified ServersPojo must contain the UUID of the object that should be
-     * updated, the TRID and the server name as string.<br/>
+     * updated, the TRID and the server name as string.
      * <ul>
      *   <li>rest/v1/metadata/servers/[uuid]</li>
      * </ul>

@@ -13,13 +13,12 @@ import javax.ws.rs.core.MediaType;
 
 import de.btu.openinfra.backend.db.OpenInfraSchemas;
 import de.btu.openinfra.backend.db.PojoPrimer;
-import de.btu.openinfra.backend.db.daos.PtLocaleDao;
 import de.btu.openinfra.backend.db.pojos.OpenInfraPojo;
 import de.btu.openinfra.backend.rest.OpenInfraResponseBuilder;
 
 /**
- * This class provides Pojo primer objects. It does only supports the schema
- * project. For the other schemas use the class
+ * This class represents and implements the resources for pojo primer in the
+ * project schema. For the other schemas use the class
  * 'de.btu.openinfra.backend.rest/PrimerResource' instead. The
  * reason therefore lay in the fact that the regex expression
  * '/v1/{schema:(projects|system|rbac|metadata)}{optional:(/?)}
@@ -72,7 +71,7 @@ public class PrimerResource {
                     ? OpenInfraSchemas.META_DATA
                     : OpenInfraSchemas.valueOf(schema.toUpperCase()),
                 projectId,
-                PtLocaleDao.forLanguageTag(language.toUpperCase()),
+                language,
                 pojoClass);
     }
 

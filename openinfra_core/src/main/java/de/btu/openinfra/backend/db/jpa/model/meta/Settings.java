@@ -24,10 +24,10 @@ import de.btu.openinfra.backend.db.jpa.model.OpenInfraModelObject;
 @Table(schema="meta_data")
 @NamedQueries({
     @NamedQuery(name="Settings.findAll",
-            query="SELECT s FROM Settings s"),
+            query="SELECT s FROM Settings s ORDER BY s.id"),
     @NamedQuery(name="Settings.findByKey",
             query="SELECT s FROM Settings s INNER JOIN s.settingKey sk WHERE "
-                    + " sk = :value"),
+                    + " sk = :value ORDER BY s.id"),
     @NamedQuery(name="Settings.count",
     	query="SELECT COUNT(s) FROM Settings s")
 })

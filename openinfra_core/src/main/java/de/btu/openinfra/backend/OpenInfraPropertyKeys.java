@@ -117,8 +117,7 @@ public enum OpenInfraPropertyKeys {
     /**
      * This variable defines the index window size for indexing projects.
      */
-    SOLR_INDEX_WINDOW(
-            "de.btu.openinfra.backend.solr.indexWindow"),
+    SOLR_INDEX_WINDOW("de.btu.openinfra.backend.solr.indexWindow"),
 
     /**
      * This variable defines the default fuzzy parameter.
@@ -129,7 +128,20 @@ public enum OpenInfraPropertyKeys {
      * This variable defines the default maximum number of results per request
      */
     SOLR_DEFAULT_RESULTS_PER_PAGE(
-            "de.btu.openinfra.backend.solr.defaultResultsPerPage");
+            "de.btu.openinfra.backend.solr.defaultResultsPerPage"),
+
+    /**
+     * This property sets the index delay time after inserting, updating or
+     * deleting defined objects in the database.
+     */
+    SOLR_INDEX_DELAY("de.btu.openinfra.backend.solr.indexDelay"),
+
+    /**
+     * This property defines the file formats that will be included for document
+     * indexing.
+     */
+    SOLR_INDEXABLE_DOCUMENTS(
+            "de.btu.openinfra.backend.solr.indexableDocuments");
 
 	private String key;
 	private OpenInfraPropertyKeys(String key) {
