@@ -176,7 +176,10 @@ public class PtFreeTextDao extends OpenInfraDao<PtFreeTextPojo, PtFreeText> {
     					     	* Write string - don't escape on input, 
  					     	* xss prevention must be done at string usage
 						*/
-    						lcs.setFreeText(ls.getCharacterString());
+                                                // write string and escape it to prevent XSS
+                                                // lcs.setFreeText(escapeString(
+                                                //ls.getCharacterString()));
+                                                lcs.setFreeText(ls.getCharacterString());
     					} // end if else
     					break;
     				} // end if
@@ -195,8 +198,8 @@ public class PtFreeTextDao extends OpenInfraDao<PtFreeTextPojo, PtFreeText> {
 				 * Write string - don't escape on input, 
 				 * xss prevention must be done at string usage
 				 */
+//    				lcs.setFreeText(escapeString(ls.getCharacterString()));
     				lcs.setFreeText(ls.getCharacterString());
-
     				lcs.setPtFreeText(ptf);
     				lcsList.add(lcs);
     			} // end if
