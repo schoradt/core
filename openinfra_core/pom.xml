@@ -313,7 +313,7 @@
         <dependency>
             <groupId>org.apache.tika</groupId>
             <artifactId>tika-core</artifactId>
-            <version>1.19.1</version>
+            <version>1.16</version>
         </dependency>
 		
         <!-- Read exif data -->
@@ -327,7 +327,7 @@
         <dependency>
             <groupId>org.apache.tika</groupId>
             <artifactId>tika-parsers</artifactId>
-            <version>1.19.1</version>
+            <version>1.16</version>
         </dependency>
 		
         <!-- necessary for Tika parser -->
