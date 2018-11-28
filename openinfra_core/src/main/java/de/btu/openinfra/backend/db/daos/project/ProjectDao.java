@@ -48,7 +48,8 @@ import de.btu.openinfra.backend.exception.OpenInfraDatabaseException;
 import de.btu.openinfra.backend.exception.OpenInfraEntityException;
 import de.btu.openinfra.backend.exception.OpenInfraExceptionTypes;
 import de.btu.openinfra.backend.exception.OpenInfraWebException;
-import jersey.repackaged.com.google.common.collect.Lists;
+
+import com.google.common.collect.Lists;
 
 /**
  * This class represents the Project and is used to access the underlying layer

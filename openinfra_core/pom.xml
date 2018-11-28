@@ -35,7 +35,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.10.3</version>
+                <version>3.0.1</version>
                 <executions>
                     <execution>
                         <id>generate-extended-wadl</id>
@@ -43,30 +43,48 @@
                             <encoding>UTF-8</encoding>
                             <verbose>false</verbose>
                             <show>public</show>
+                            <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
                             <doclet>com.sun.jersey.wadl.resourcedoc.ResourceDoclet</doclet>
                             <docletPath>${path.separator}${project.build.outputDirectory}</docletPath>
                             <docletArtifacts>
                                 <docletArtifact>
                                     <groupId>com.sun.jersey.contribs</groupId>
                                     <artifactId>wadl-resourcedoc-doclet</artifactId>
-                                    <version>1.17.1</version>
+                                    <version>1.19.4</version>
                                 </docletArtifact>
                                 <docletArtifact>
                                     <groupId>com.sun.jersey</groupId>
                                     <artifactId>jersey-server</artifactId>
-                                    <version>1.17.1</version>
+                                    <version>1.19.4</version>
                                 </docletArtifact>
                                 <docletArtifact>
                                     <groupId>xerces</groupId>
                                     <artifactId>xercesImpl</artifactId>
-                                    <version>2.6.1</version>
+                                    <version>2.12.0</version>
+                                </docletArtifact>
+                                <docletArtifact>
+                                    <groupId>javax.xml.bind</groupId>
+                                    <artifactId>jaxb-api</artifactId>
+                                    <version>2.3.1</version>
+                                </docletArtifact>
+                                <docletArtifact>
+                                    <groupId>com.sun.xml.bind</groupId>
+                                    <artifactId>jaxb-core</artifactId>
+                                    <version>2.3.0.1</version>
+                                </docletArtifact>
+                                <docletArtifact>
+                                    <groupId>com.sun.xml.bind</groupId>
+                                    <artifactId>jaxb-impl</artifactId>
+                                    <version>2.3.1</version>
                                 </docletArtifact>
                             </docletArtifacts>
                             <!-- the following option is required as a work around for
                             version 2.5 of the javadoc plugin which will be used
                             by a maven version > 2.0.9 -->
                             <useStandardDocletOptions>false</useStandardDocletOptions>
-                            <additionalparam>-output ${basedir}/src/main/resources/de/btu/openinfra/backend/wadl/resourcedoc.xml</additionalparam>
+                            <additionalOptions>
+                                <additionalOption>-output ${basedir}/src/main/resources/de/btu/openinfra/backend/wadl/resourcedoc.xml</additionalOption>
+                            </additionalOptions>
                         </configuration>
                         <goals>
                             <goal>javadoc</goal>
@@ -75,6 +93,12 @@
                     </execution>
                     <execution>
                         <id>attach-javadocs</id>
+                        <configuration>
+                            <encoding>UTF-8</encoding>
+                            <verbose>false</verbose>
+                            <show>public</show>
+                            <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
+                        </configuration>
                         <goals>
                             <goal>jar</goal>
                         </goals>
@@ -343,13 +367,33 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
-		
+        
+        <!-- Java 6 = JAXB version 2.0   -->
+        <!-- Java 7 = JAXB version 2.2.3 -->
+        <!-- Java 8 = JAXB version 2.2.8 -->
+        <!-- Java 9 = JAXB version 2.3.0 -->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-core</artifactId>
+            <version>2.3.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+            <version>2.3.1</version>
+        </dependency>
     </dependencies>
     <properties>
-        <jersey.version>2.22.1</jersey.version>
-        <slf4j.version>1.7.12</slf4j.version>
+        <jersey.version>2.27</jersey.version>
+        <slf4j.version>1.7.25</slf4j.version>
         <solr-solrj.version>5.3.1</solr-solrj.version>
-        <shiro.version>1.2.4</shiro.version>
+        <shiro.version>1.4.0</shiro.version>
+        <jxb.version>2.3.1</jxb.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
   
