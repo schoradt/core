@@ -11,8 +11,28 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.0.0-M2</version>
+                <executions>
+                    <execution>
+                        <id>enforce-maven</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <version>3.0.5</version>
+                                </requireMavenVersion>
+                            </rules>    
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.5.1</version>
+                <version>3.8.0</version>
                 <inherited>true</inherited>
                 <configuration>
                     <source>1.7</source>
@@ -23,7 +43,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.12.4</version>
+                <version>2.22.1</version>
                 <configuration>
                     <skipTests>true</skipTests>
                 </configuration>
@@ -106,6 +126,16 @@
                 </executions>
             </plugin>
             
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <inherited>false</inherited>
+                <configuration>
+                    <rulesUri>file:///${session.executionRootDirectory}/maven-version-rules.xml</rulesUri>
+                </configuration>
+            </plugin>
+            
+            
             <!-- needed to build jar file when building war file, necessary for
                      using backend classes in other maven projects (e.g. plugins)
                      http://eureka.ykyuen.info/2009/10/30/maven-dependency-on-jarwar-package/
@@ -168,14 +198,14 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>19.0-rc1</version>
+            <version>27.0.1-jre</version>
         </dependency>
 		
         <!-- Reflections is used to get the classes of a given package. -->
         <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
-            <version>0.9.9-RC1</version>
+            <version>0.9.11</version>
         </dependency>
 		
         <!-- EclipseLink is used as persistence API and for object relational 
@@ -183,7 +213,12 @@
         <dependency>
             <groupId>org.eclipse.persistence</groupId>
             <artifactId>eclipselink</artifactId>
-            <version>2.6.0</version>
+            <version>2.7.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>javax.persistence</artifactId>
+            <version>2.2.1</version>
         </dependency>
     
         <!-- The PostgreSQL JDBC driver (the PostGIS driver is currently not 
@@ -191,7 +226,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>9.4-1201-jdbc41</version>
+            <version>42.2.5.jre7</version>
         </dependency>
 	    
         <!-- The Servlet API is used to avoid a corresponding failure message in 
@@ -199,7 +234,7 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <version>3.1.0</version>
+            <version>4.0.1</version>
             <scope>provided</scope>
         </dependency>
 			    
@@ -207,6 +242,7 @@
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-servlet-core</artifactId>
+            <version>${jersey.version}</version>
             <!-- use the following artifactId if you don't need servlet 2.x 
             compatibility -->
             <!-- artifactId>jersey-container-servlet</artifactId -->
@@ -221,18 +257,21 @@
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-json-jackson</artifactId>
+            <version>${jersey.version}</version>
         </dependency>
 
         <!-- JSP as template engine -->
         <dependency>
             <groupId>org.glassfish.jersey.ext</groupId>
             <artifactId>jersey-mvc-jsp</artifactId>
+            <version>${jersey.version}</version>
         </dependency>
 
         <!-- Media multipart required for file upload -->		
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-multipart</artifactId>
+            <version>${jersey.version}</version>
         </dependency>
 		
         <!-- simple json string to object converter -->
@@ -260,7 +299,7 @@
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>fop</artifactId>
-            <version>1.1</version>
+            <version>2.3</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.apache.avalon.framework</groupId>
@@ -311,7 +350,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.4</version>
+            <version>3.8.1</version>
         </dependency>
 		
         <!-- Security context -->
@@ -337,21 +376,14 @@
         <dependency>
             <groupId>org.apache.tika</groupId>
             <artifactId>tika-core</artifactId>
-            <version>1.16</version>
+            <version>1.19.1</version>
         </dependency>
 		
         <!-- Read exif data -->
         <dependency>
             <groupId>com.drewnoakes</groupId>
             <artifactId>metadata-extractor</artifactId>
-            <version>2.8.1</version>
-        </dependency>
-		
-        <!-- Tika parser that are required for parsing files -->
-        <dependency>
-            <groupId>org.apache.tika</groupId>
-            <artifactId>tika-parsers</artifactId>
-            <version>1.16</version>
+            <version>2.11.0</version>
         </dependency>
 		
         <!-- necessary for Tika parser -->
@@ -375,16 +407,6 @@
         <dependency>
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
-            <version>2.3.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.xml.bind</groupId>
-            <artifactId>jaxb-core</artifactId>
-            <version>2.3.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.xml.bind</groupId>
-            <artifactId>jaxb-impl</artifactId>
             <version>2.3.1</version>
         </dependency>
     </dependencies>
