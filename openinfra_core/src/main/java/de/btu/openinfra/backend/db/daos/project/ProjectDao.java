@@ -630,7 +630,7 @@ public class ProjectDao extends OpenInfraDao<ProjectPojo, Project> {
 
                 // retrieve the default port
                 PortsPojo portsPojo = new PortsPojo();
-                portsPojo.setPort(new Integer(OpenInfraProperties.getProperty(
+                portsPojo.setPort(Integer.parseInt(OpenInfraProperties.getProperty(
                         OpenInfraPropertyKeys.PORT.getKey())));
                 // check if ports for the default port exists and save the id
                 // into the port POJO

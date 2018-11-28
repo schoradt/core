@@ -35,6 +35,9 @@
                 <version>3.8.0</version>
                 <inherited>true</inherited>
                 <configuration>
+                    <compilerArgs>
+                        <arg>-Xlint</arg>
+                    </compilerArgs>
                     <source>1.7</source>
                     <target>1.7</target>
                 </configuration>
@@ -130,6 +133,7 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
                 <inherited>false</inherited>
+                <version>2.7</version>
                 <configuration>
                     <rulesUri>file:///${session.executionRootDirectory}/maven-version-rules.xml</rulesUri>
                 </configuration>
@@ -189,6 +193,22 @@
                 <version>${jersey.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${cfjc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${cfjc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${cfjc.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -352,6 +372,12 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.8.1</version>
         </dependency>
+        
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>1.6</version>
+        </dependency>
 		
         <!-- Security context -->
         <dependency>
@@ -386,6 +412,13 @@
             <version>2.11.0</version>
         </dependency>
 		
+        <!-- Tika parser that are required for parsing files -->
+        <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-parsers</artifactId>
+            <version>1.19.1</version>
+        </dependency>
+		
         <!-- necessary for Tika parser -->
         <dependency>
             <groupId>commons-io</groupId>
@@ -409,6 +442,16 @@
             <artifactId>jaxb-api</artifactId>
             <version>2.3.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-core</artifactId>
+            <version>2.3.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+            <version>2.3.1</version>
+        </dependency>
     </dependencies>
     <properties>
         <jersey.version>2.27</jersey.version>
@@ -416,6 +459,7 @@
         <solr-solrj.version>5.3.1</solr-solrj.version>
         <shiro.version>1.4.0</shiro.version>
         <jxb.version>2.3.1</jxb.version>
+        <cfjc.version>2.9.7</cfjc.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
   
