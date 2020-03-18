@@ -464,7 +464,7 @@
         <solr-solrj.version>5.3.1</solr-solrj.version>
         <shiro.version>1.4.1</shiro.version>
         <jxb.version>2.3.1</jxb.version>
-        <cfjc.version>2.9.9</cfjc.version>
+        <cfjc.version>2.10.3</cfjc.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
   
