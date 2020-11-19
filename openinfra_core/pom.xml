@@ -218,7 +218,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>28.0-jre</version>
+            <version>30.0-jre</version>
         </dependency>
 		
         <!-- Reflections is used to get the classes of a given package. -->
@@ -233,7 +233,7 @@
         <dependency>
             <groupId>org.eclipse.persistence</groupId>
             <artifactId>eclipselink</artifactId>
-            <version>2.7.4</version>
+            <version>2.7.7</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.persistence</groupId>
@@ -246,7 +246,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.2.6.jre7</version>
+            <version>42.2.18.jre7</version>
         </dependency>
 	    
         <!-- The Servlet API is used to avoid a corresponding failure message in 
@@ -324,7 +324,7 @@
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>fop</artifactId>
-            <version>2.3</version>
+            <version>2.5</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.apache.avalon.framework</groupId>
@@ -375,13 +375,13 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.9</version>
+            <version>3.11</version>
         </dependency>
         
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-text</artifactId>
-            <version>1.6</version>
+            <version>1.9</version>
         </dependency>
 		
         <!-- Security context -->
@@ -414,7 +414,7 @@
         <dependency>
             <groupId>com.drewnoakes</groupId>
             <artifactId>metadata-extractor</artifactId>
-            <version>2.11.0</version>
+            <version>2.15.0</version>
         </dependency>
 		
         <!-- Tika parser that are required for parsing files -->
@@ -428,13 +428,13 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.6</version>
+            <version>2.8.0</version>
         </dependency>
 
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>4.13.1</version>
             <scope>test</scope>
         </dependency>
         
@@ -455,12 +455,12 @@
         <dependency>
             <groupId>com.sun.xml.bind</groupId>
             <artifactId>jaxb-impl</artifactId>
-            <version>2.3.2</version>
+            <version>2.3.3</version>
         </dependency>
     </dependencies>
     <properties>
-        <jersey.version>2.28</jersey.version>
-        <slf4j.version>1.7.26</slf4j.version>
+        <jersey.version>2.32</jersey.version>
+        <slf4j.version>1.7.30</slf4j.version>
         <solr-solrj.version>5.3.1</solr-solrj.version>
         <shiro.version>[1.4.2,)</shiro.version>
         <jxb.version>2.3.1</jxb.version>
